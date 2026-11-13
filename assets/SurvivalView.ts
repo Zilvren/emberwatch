@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Label, Node, Prefab, ResolutionPolicy, UITransform, Vec2, Vec3, view } from 'cc';
+import { _decorator, Component, instantiate, JsonAsset, Label, Node, Prefab, ResolutionPolicy, resources, UITransform, Vec2, Vec3, view } from 'cc';
 import { SurvivalGame, CARD, CardKind, ActionResult, NODE_NAMES, Phase, Route } from './SurvivalRules';
 import { GameAudio } from './GameAudio';
 import { UIAction } from './UIAction';
@@ -10,6 +10,7 @@ import { HandPresentation } from './HandPresentation';
 import { MapPointPresentation } from './MapPointPresentation';
 import { InventoryRowPresentation } from './InventoryRowPresentation';
 import { RewardChoice } from './RewardChoice';
+import { getCatalog, installCatalog } from './CardCatalog';
 const { ccclass, property } = _decorator;
 
 type Overlay = 'bag' | 'help' | 'restart' | 'discard' | 'repair-risk' | 'log' | null;
@@ -48,6 +49,20 @@ export class SurvivalView extends Component {
     private activeScreen: Node | null = null;
 
     onLoad(): void {
+        this.message('正在读取卡牌配置…');
+        void this.initialize().catch(error => { this.message(`卡牌配置读取失败：${String(error)}`); this.toastTime=0; console.error('[the end] catalog', error); });
+    }
+    private async initialize(): Promise<void> {
+        const live = typeof location !== 'undefined' && new URLSearchParams(location.search).get('cards') === 'live';
+        if (live) {
+            const response = await fetch('/api/cards', { cache: 'no-store' });
+            if (!response.ok) throw new Error('本地卡牌编辑器服务不可用，请通过编辑器的试玩入口打开。');
+            installCatalog((await response.json()).catalog);
+        } else {
+            const asset = await new Promise<JsonAsset>((resolve, reject) => resources.load('data/cards', JsonAsset, (error, asset) => error ? reject(error) : resolve(asset)));
+            installCatalog(asset.json);
+        }
+        if (!this.isValid) return;
         const seed = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('seed');
         this.game = new SurvivalGame(seed === null ? undefined : Number(seed));
         this.reduced = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -57,10 +72,12 @@ export class SurvivalView extends Component {
         UIEvents.on('action', this.onAction, this);
         UIEvents.on('card-drop', this.onCardDrop, this);
         this.refresh();
+        this.message('');
         Object.assign(globalThis, { __survivalGame: this.game, __emberUI: { snapshot: () => this.snapshot() } });
     }
     onDestroy(): void { UIEvents.off('action', this.onAction, this); UIEvents.off('card-drop', this.onCardDrop, this); this.audio.dispose(); }
     update(dt: number): void {
+        if (!this.game) return;
         if (!this.busy) this.game.advanceTime(dt);
         if (this.game.revision !== this.revision && !this.busy) this.refresh();
         if (this.toastTime > 0) { this.toastTime -= dt; if (this.toastTime <= 0 && this.toastRoot) this.toastRoot.active = false; }
@@ -102,8 +119,9 @@ export class SurvivalView extends Component {
         this.button(this.hud!, 'bag', `背包 ${g.baseWeight}/30`);
         this.button(this.hud!, 'audio', this.audio.muted ? '静音' : '声音');
         this.hud!.getComponentsInChildren(UIProgress).forEach(progress => progress.setRatio(g.armor / 10));
+        if (g.phase === 'journal') this.text(screen, { 'journal/text3': `物资 10 · 护甲 10 · 战斗牌 ${g.usableCards.length} 张\n初始总负重 ${g.baseWeight} / 30` });
         if (g.phase === 'map') {
-            this.text(screen, { 'banner/text2': g.currentNode === 'return' ? '路已走完。正在自动返回避难所……' : '前往亮起的地点。全程无法主动撤离。', 'map/text0': `负重 ${g.baseWeight}/30  ·  暂存 ${g.overflowWeight}/10`, 'map/text1': g.overflowWeight ? '消耗物资后，暂存卡可自动转入。' : '搜刮和出牌都会改变携带空间。' });
+            this.text(screen, { 'banner/text2': g.currentNode === 'return' ? '路已走完。正在自动返回避难所……' : '前往亮起的地点。全程无法主动撤离。', 'map/text0': `负重 ${g.baseWeight}/30  ·  暂存 ${g.overflowWeight}/10`, 'map/text1': g.overflowWeight ? '消耗物资后，暂存卡可自动转入。' : '搜刮和出牌都会改变携带空间。', 'map/fixedReward': `支付 2 物资 → 4 物资 + ${CARD[getCatalog().fixedReward].name}\n完成固定搜刮后，才能选择后续路线。` });
             screen.getChildByName('RouteGraph')!.active = g.fixedDone;
             screen.getChildByName('InitialHint')!.active = !g.fixedDone;
             screen.getComponentsInChildren(MapPointPresentation).forEach(point => point.refresh(g));
@@ -121,8 +139,8 @@ export class SurvivalView extends Component {
         }
         if (g.phase === 'rest') {
             const cash = g.cards.some(c => c.kind === 'cash');
-            this.text(screen, { 'banner/text2': g.critical ? '感染临界无法恢复护甲。趁现在整理行囊。' : '进入时已恢复最多 2 点护甲。物资不会恢复。', 'rest/text3': `${g.usableCards.length} 张可用牌 · ${g.cards.filter(c => c.zone === 'overflow').length} 张暂存\n移出战斗不释放负重，永久丢弃才释放。`, 'rest/text5': `护甲 ${g.armor}/10  ·  物资 ${g.supplies}  ·  负重 ${g.baseWeight}/30` });
-            this.button(screen, 'rest-cash', cash ? '丢弃现金 · 释放 10 负重' : '现金已丢弃', cash);
+            this.text(screen, { 'banner/text2': g.critical ? '感染临界无法恢复护甲。趁现在整理行囊。' : '进入时已恢复最多 2 点护甲。物资不会恢复。', 'rest/text1': `${CARD.cash.name}已经不再有用。\n丢弃后释放 ${CARD.cash.weight} 点负重，暂存卡会自动转入。`, 'rest/text3': `${g.usableCards.length} 张可用牌 · ${g.cards.filter(c => c.zone === 'overflow').length} 张暂存\n移出战斗不释放负重，永久丢弃才释放。`, 'rest/text5': `护甲 ${g.armor}/10  ·  物资 ${g.supplies}  ·  负重 ${g.baseWeight}/30` });
+            this.button(screen, 'rest-cash', cash ? `丢弃${CARD.cash.name} · 释放 ${CARD.cash.weight} 负重` : '现金已丢弃', cash);
         }
         if (g.phase === 'shelter') {
             const s = g.settlement!;
@@ -146,6 +164,7 @@ export class SurvivalView extends Component {
         this.text(screen, { 'banner/text0': `ENCOUNTER / ROUND ${b.turn}`, 'banner/text1': NODE_NAMES[b.enemy], 'battle/text0': attack ? `攻击 ${g.incomingDamage}` : '蓄势 · 准备', 'battle/text1': attack ? '结束回合后执行' : `下次攻击 ${b.strongAttack}`, 'battle/text3': `护甲 ${g.armor}/10`, 'battle/text4': `格挡 ${b.block}`, 'battle/text5': `敌人护甲 ${b.hp}/${b.maxHp}`, 'battle/text8': b.turn === b.equippedTurn ? '下回合生成挥砍' : '每回合生成挥砍', 'battle/text9': this.busy ? '正在行动…' : this.selectedCard ? '已选择攻击牌\n点击敌人或拖向敌人' : '点击或拖动攻击牌选择目标\n防御、修复、武器直接使用', 'battle/text10': `回合 ${b.turn}\n手牌 ${b.hand.length} / 6`, 'drawPile/text0': b.draw.length, 'discardPile/text0': b.discard.length });
         screen.getChildByName('CriticalWarning')!.active = g.critical;
         screen.getChildByName('WeaponSlot')!.active = !!b.weapon;
+        if (b.weapon) this.text(screen, { 'battle/text7': `${CARD[b.weapon.kind].name}已装备`, 'battle/text8': `每回合生成${CARD[CARD[b.weapon.kind].effect.generatedCard!].name}` });
         screen.getChildByName('TargetGuide')!.active = !!this.selectedCard;
         for (const progress of screen.getComponentsInChildren(UIProgress)) progress.setRatio(progress.key === 'armor' ? g.armor / 10 : b.hp / b.maxHp);
         this.hand?.refresh(g, this.selectedCard, this.busy || !!this.overlay, this.reduced);
@@ -174,7 +193,7 @@ export class SurvivalView extends Component {
         }
     }
     private onAction(event: UIActionEvent): void {
-        if (this.busy) return;
+        if (this.busy || !this.game) return;
         const id = event.id, g = this.game;
         if (id === 'card-select') { if (!this.overlay) this.selectCard(event.payload ?? ''); return; }
         if (id === 'bag' || id === 'rest-bag' || id === 'reward-bag') { this.overlay = 'bag'; this.page = 0; }
@@ -211,7 +230,7 @@ export class SurvivalView extends Component {
         else if (this.overlay === 'discard') { this.overlay = this.game.phase === 'rest' ? null : 'bag'; this.act(() => this.game.discardCard(this.discardId)); }
         else if (this.overlay === 'repair-risk') { this.overlay = null; this.act(() => this.game.repairAtShelter(true), 'heal'); this.effect('heal', this.hero, '+护甲'); }
     }
-    private attackKind(kind: CardKind): boolean { return kind === 'attack' || kind === 'heavy' || kind === 'slash'; }
+    private attackKind(kind: CardKind): boolean { return CARD[kind].effect.type === 'damage'; }
     private selectCard(id: string): void {
         const card = this.game.battle?.hand.find(c => c.id === id);
         if (!card) return;
@@ -241,13 +260,13 @@ export class SurvivalView extends Component {
             if (g.run !== run) return;
             const result = g.play(id);
             if (this.attackKind(card.kind)) { this.enemy?.playAction('hurt', this.reduced); this.effect('attack', this.enemy, `−${oldHp - (g.battle?.hp ?? 0)}`); }
-            else if (card.kind === 'repair') this.effect('heal', this.hero, `+${g.armor - oldArmor} 护甲`);
-            else this.effect('block', this.hero, card.kind === 'knife' ? '武器就绪' : `+${(g.battle?.block ?? oldBlock) - oldBlock} 格挡`);
+            else if (CARD[card.kind].effect.type === 'heal') this.effect('heal', this.hero, `+${g.armor - oldArmor} 护甲`);
+            else this.effect('block', this.hero, CARD[card.kind].effect.type === 'equip' ? '武器就绪' : `+${(g.battle?.block ?? oldBlock) - oldBlock} 格挡`);
             this.message(result.message);
         };
         const complete = () => { if (g.run !== run) return; this.busy = false; this.refresh(); };
         const presentation = this.hand?.getCard(id);
-        this.audio.play(this.attackKind(card.kind) ? 'attack' : card.kind === 'repair' ? 'heal' : 'block');
+        this.audio.play(this.attackKind(card.kind) ? 'attack' : CARD[card.kind].effect.type === 'heal' ? 'heal' : 'block');
         if (this.attackKind(card.kind) && this.hero) {
             presentation?.playAction(() => {}, () => {}, this.reduced);
             this.hero.playAction('attack', this.reduced, impact, complete);

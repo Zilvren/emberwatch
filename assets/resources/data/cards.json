@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "fixedReward": "heavy",
+  "cards": [
+    {
+      "id": "attack",
+      "name": "基础攻击",
+      "tag": "固有 · 攻击",
+      "cost": 0,
+      "weight": 0,
+      "text": "固有能力，永不丢失",
+      "color": "#c29060",
+      "art": "attack",
+      "role": "basic",
+      "initialCount": 2,
+      "reward": false,
+      "effect": {
+        "type": "damage",
+        "amount": 2
+      }
+    },
+    {
+      "id": "dodge",
+      "name": "基础躲避",
+      "tag": "固有 · 防御",
+      "cost": 0,
+      "weight": 0,
+      "text": "格挡在回合结束时清零",
+      "color": "#86a99c",
+      "art": "dodge",
+      "role": "basic",
+      "initialCount": 2,
+      "reward": false,
+      "effect": {
+        "type": "block",
+        "amount": 2
+      }
+    },
+    {
+      "id": "knife",
+      "name": "菜刀",
+      "tag": "武器 · 唯一装备槽",
+      "cost": 2,
+      "weight": 3,
+      "text": "占用唯一武器槽",
+      "color": "#c29060",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 1,
+      "reward": true,
+      "effect": {
+        "type": "equip",
+        "amount": 0,
+        "generatedCard": "slash"
+      }
+    },
+    {
+      "id": "evade",
+      "name": "强化躲避",
+      "tag": "技能 · 防御",
+      "cost": 1,
+      "weight": 2,
+      "text": "格挡可抵消再次受击",
+      "color": "#86a99c",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 1,
+      "reward": true,
+      "effect": {
+        "type": "block",
+        "amount": 5
+      }
+    },
+    {
+      "id": "repair",
+      "name": "修复",
+      "tag": "技能 · 恢复",
+      "cost": 2,
+      "weight": 2,
+      "text": "护甲为 0 时无法使用",
+      "color": "#9baf79",
+      "art": "repair",
+      "role": "normal",
+      "initialCount": 1,
+      "reward": true,
+      "effect": {
+        "type": "heal",
+        "amount": 3
+      }
+    },
+    {
+      "id": "heavy",
+      "name": "重击",
+      "tag": "技能 · 攻击",
+      "cost": 1,
+      "weight": 4,
+      "text": "使用后进入弃牌堆",
+      "color": "#cc795c",
+      "art": "heavy",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "effect": {
+        "type": "damage",
+        "amount": 5
+      }
+    },
+    {
+      "id": "cash",
+      "name": "旧世界现金",
+      "tag": "遗物 · 无战斗效果",
+      "cost": 0,
+      "weight": 10,
+      "text": "沉重的旧世界遗物",
+      "color": "#a59a78",
+      "art": "cash",
+      "role": "cash",
+      "initialCount": 1,
+      "reward": false,
+      "effect": {
+        "type": "none",
+        "amount": 0
+      }
+    },
+    {
+      "id": "slash",
+      "name": "挥砍",
+      "tag": "战斗临时牌",
+      "cost": 1,
+      "weight": 0,
+      "text": "战斗结束后消失",
+      "color": "#d89e64",
+      "art": "slash",
+      "role": "temporary",
+      "initialCount": 0,
+      "reward": false,
+      "effect": {
+        "type": "damage",
+        "amount": 4
+      }
+    }
+  ]
+}

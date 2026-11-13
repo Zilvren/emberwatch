@@ -1,6 +1,20 @@
 # the end
 
+项目：The end · 更新日期：2026-11-14 · 状态：可运行的教学原型与本地卡牌编辑器。
+
 使用 Pink / COCOS 4 制作的末日生存卡牌教学原型。流程从第 1 天日志开始，经过固定搜刮、A/B 路线、战斗、休整和避难所结算，在第 2 天日志结束。
+
+## 本地卡牌编辑器
+
+```powershell
+npm run cards
+```
+
+打开 <http://127.0.0.1:7460/>，可新增、复制、修改、删除卡牌，配置初始卡组和奖励池，预览卡面并实际试玩。数据保存到 `assets/resources/data/cards.json`。
+
+首次试玩或修改游戏脚本后先执行 `npm run build:web`。之后修改卡牌数据时，点击「保存并试玩」即可读取最新数据，不需要反复构建；当前对局保持原配置，独立预览与发布版本使用构建中打包的数据。
+
+错误数据和保存冲突不会覆盖文件，每次保存自动备份上一版。操作说明见 `docs/card-editor-usage.md`，设计与验证见 `docs/card-editor-design.md`、`docs/card-editor-verification.md`。
 
 ## 在 Pink 中编辑
 
@@ -82,7 +96,7 @@ node tools/mcp-check.cjs
 npm test
 ```
 
-32 条规则测试覆盖资源、负重、溢出、战斗、感染、随机、失败重试、返家和结算。浏览器驱动位于 `tools/browser-*.js.txt`，通过实际鼠标点击、拖动验证完整路线。`?seed=17` 可固定随机种子，不带参数时正常随机。
+40 条测试包含原有 32 条游戏规则测试和新增的配置、效果执行、保存服务测试。浏览器驱动位于 `tools/browser-*.js.txt`，通过实际点击、拖动验证卡牌编辑器和完整路线。`?seed=17` 可固定随机种子，不带参数时正常随机。
 
 本次原生场景迁移的验证记录见 `docs/native-ui-migration.md`；本地运行报告和截图位于 `output/`，构建日志位于 `temp/prefab-build.log`。
 

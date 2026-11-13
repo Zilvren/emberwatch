@@ -10,8 +10,9 @@
     "scripts": {
         "build:web": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-config.json",
         "preview": "node tools/preview.cjs",
+        "cards": "node tools/card-editor-server.cjs",
         "mcp": "node tools/pink.cjs start-mcp-server --project . --port 9527",
-        "test": "node --test --test-reporter=tap tests/survival.test.cjs"
+        "test": "node --test --test-reporter=tap tests/*.test.cjs"
     },
     "pink": {
         "uuid": "80d9c7ff-7595-4f1a-9094-c2a99f82e953",

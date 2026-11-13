@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17251e">
+  <title>the end · 卡牌工坊</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2317251e'/%3E%3Cpath d='M9 7h14v18H9z' fill='%23dcb775'/%3E%3Cpath d='M14 12h4v8h-4zM12 14h8v4h-8z' fill='%2317251e'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/editor.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="the end 卡牌工坊首页"><span class="brand-symbol" aria-hidden="true">▰</span><span><strong>the end<span class="brand-separator">/</span>卡牌工坊</strong><small>CARD WORKSHOP</small></span></a>
+    <div class="toolbar"><span id="save-state" class="save-state" role="status">正在连接…</span><button id="reload" class="button quiet">重新载入</button><button id="play" class="button outline">▷ 试玩游戏</button><button id="save" class="button primary" disabled>保存到项目 <kbd>Ctrl S</kbd></button></div>
+  </header>
+  <main id="workspace" class="workspace" aria-busy="true">
+    <aside class="library" aria-label="卡牌库">
+      <div class="library-header"><span class="eyebrow">COLLECTION</span><div class="section-line"><h1>卡牌库 <span id="card-count" class="count">0</span></h1><button id="add" class="icon-button" aria-label="新增卡牌" title="新增卡牌">＋</button></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="搜索卡牌" placeholder="搜索名称或 ID" autocomplete="off"></label><label class="sr-only" for="filter">筛选效果</label><select id="filter"><option value="all">全部卡牌</option><option value="damage">伤害</option><option value="block">格挡</option><option value="heal">修复</option><option value="equip">装备</option><option value="none">遗物</option></select></div>
+      <div id="card-list" class="card-list" role="list" aria-label="卡牌列表"></div>
+      <div class="library-footer"><span class="connection-dot"></span> 本地项目已连接<span id="library-note">项目配置</span></div>
+    </aside>
+    <section class="preview-area" aria-label="卡面预览">
+      <div class="preview-heading"><div><span class="eyebrow">LIVE PREVIEW</span><h2>卡面预览</h2></div><span class="subtle-badge">修改即时呈现</span></div>
+      <div class="preview-stage">
+        <div class="card-shadow"></div>
+        <article class="game-card" id="preview-card" aria-label="当前卡牌预览">
+          <div class="card-top"><div class="card-cost"><span id="preview-cost">0</span><small>费用</small></div><div class="card-title"><span id="preview-tag">生存卡牌</span><h3 id="preview-name">正在载入</h3></div></div>
+          <div class="card-illustration art-crop" id="preview-art"><img src="/art/card-art.png" alt="卡牌插画"></div>
+          <div class="card-body"><span id="preview-type" class="card-type">攻击</span><p id="preview-effect" class="card-effect">正在读取卡牌数据</p><p id="preview-description" class="card-description"></p></div>
+          <div class="card-bottom"><span id="preview-weight">负重 0</span><span id="preview-role">普通牌</span></div>
+        </article>
+        <div class="preview-caption"><span id="preview-id">—</span><span>编辑器预览 · 效果与游戏共用</span></div>
+      </div>
+      <div class="deck-summary"><div><span class="summary-icon">▤</span><span>初始卡组<strong id="deck-count">—</strong></span></div><div><span>初始负重<strong id="deck-weight">—</strong></span><div class="weight-track"><i id="weight-fill"></i></div></div><div><span>奖励池<strong id="reward-count">—</strong></span></div></div>
+      <p class="preview-hint">保存后重新打开试玩，即可使用新的卡牌配置。当前对局会保持原样。</p>
+    </section>
+    <aside class="inspector" aria-label="卡牌属性编辑">
+      <div class="inspector-heading"><div><span class="eyebrow">PROPERTIES</span><h2>卡牌属性</h2></div><div class="card-actions"><button id="duplicate" class="icon-button" aria-label="复制卡牌" title="复制卡牌">⧉</button><button id="delete" class="icon-button danger" aria-label="删除卡牌" title="删除卡牌">⌫</button></div></div>
+      <div id="inspector-content" class="inspector-content"></div>
+    </aside>
+  </main>
+  <div id="notice" class="notice" role="status" hidden></div>
+  <dialog id="confirm-dialog"><form method="dialog"><span class="eyebrow">CONFIRM CHANGE</span><h2 id="confirm-title"></h2><p id="confirm-body"></p><div class="dialog-actions"><button value="cancel" class="button outline">取消</button><button value="confirm" id="confirm-action" class="button primary">确认</button></div></form></dialog>
+  <dialog id="game-dialog" class="game-dialog"><div class="game-dialog-header"><strong>the end <span>游戏试玩</span></strong><div><button id="reload-game" class="button outline">重新载入</button><button id="close-game" class="button quiet">关闭试玩 ×</button></div></div><iframe id="game-frame" title="游戏试玩" allow="autoplay; fullscreen"></iframe></dialog>
+  <script type="module" src="/editor.js"></script>
+</body>
+</html>

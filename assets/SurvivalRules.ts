@@ -1,26 +1,9 @@
-export type CardKind = 'attack' | 'dodge' | 'knife' | 'evade' | 'repair' | 'heavy' | 'cash' | 'slash';
+import { CARD, REWARD_POOL, INITIAL_DECK, CardKind, getCatalog } from './CardCatalog';
+export { CARD, REWARD_POOL } from './CardCatalog';
+export type { CardKind, CardDefinition } from './CardCatalog';
 export type Phase = 'journal' | 'map' | 'battle' | 'rewards' | 'rest' | 'shelter' | 'day2' | 'failure';
 export type Route = 'A' | 'B';
 export type NodeKind = 'fixed' | 'scavenge' | 'enemy1' | 'rest' | 'enemy2';
-export interface CardDefinition {
-    name: string;
-    tag: string;
-    cost: number;
-    weight: number;
-    text: string;
-    color: string;
-}
-export const CARD: Record<CardKind, CardDefinition> = {
-    attack: { name: '基础攻击', tag: '固有 · 攻击', cost: 0, weight: 0, text: '造成 2 点伤害。\n无需物资，永不丢失。', color: '#c29060' },
-    dodge: { name: '基础躲避', tag: '固有 · 防御', cost: 0, weight: 0, text: '获得 2 点格挡。\n格挡在回合结束时清零。', color: '#86a99c' },
-    knife: { name: '菜刀', tag: '武器 · 唯一装备槽', cost: 2, weight: 3, text: '从下一回合起，\n每回合生成一张「挥砍」。', color: '#c29060' },
-    evade: { name: '强化躲避', tag: '技能 · 防御', cost: 1, weight: 2, text: '获得 5 点格挡。\n格挡可抵消致命的再次受击。', color: '#86a99c' },
-    repair: { name: '修复', tag: '技能 · 恢复', cost: 2, weight: 2, text: '恢复 3 点护甲，上限 10。\n护甲为 0 时无法使用。', color: '#9baf79' },
-    heavy: { name: '重击', tag: '技能 · 攻击', cost: 1, weight: 4, text: '造成 5 点伤害。\n使用后进入弃牌堆。', color: '#cc795c' },
-    cash: { name: '旧世界现金', tag: '遗物 · 无战斗效果', cost: 0, weight: 10, text: '沉重的旧世界遗物。\n只能在休整节点永久删除。', color: '#a59a78' },
-    slash: { name: '挥砍', tag: '战斗临时牌', cost: 1, weight: 0, text: '造成 4 点伤害。\n战斗结束后消失。', color: '#d89e64' },
-};
-export const REWARD_POOL: CardKind[] = ['knife', 'evade', 'repair', 'heavy'];
 export const ROUTES: Record<Route, NodeKind[]> = {
     A: ['enemy1', 'scavenge', 'rest', 'enemy2'], B: ['scavenge', 'enemy1', 'rest', 'enemy2'],
 };
@@ -115,6 +98,7 @@ export class SurvivalGame {
     private nextId = 0;
     readonly random: Random;
     constructor(public readonly seed = Math.floor(Math.random() * 0xffffffff)) {
+        getCatalog();
         this.random = new Random(seed);
         this.reset();
     }
@@ -144,8 +128,8 @@ export class SurvivalGame {
         this.returnElapsed = 0;
         this.logs = [];
         this.run++;
-        this.cards = (['attack', 'attack', 'dodge', 'dodge', 'knife', 'evade', 'repair', 'cash'] as CardKind[]).map(k => this.owned(k));
-        this.log('第 1 天 · 护甲 10，物资 10，背负 27 / 30。');
+        this.cards = INITIAL_DECK.map(k => this.owned(k));
+        this.log(`第 1 天 · 护甲 10，物资 10，背负 ${this.baseWeight} / 30。`);
         this.revision++;
     }
     get baseWeight(): number { return this.supplies + this.cards.filter(c => c.zone === 'base').reduce((n, c) => n + CARD[c.kind].weight, 0); }
@@ -190,7 +174,7 @@ export class SurvivalGame {
             this.spend(fee);
             this.phase = 'rewards';
             this.rewards = { source: node, supplies: node === 'fixed' ? 4 : this.random.int(4, 6),
-                cards: [node === 'fixed' ? 'heavy' : REWARD_POOL[this.random.int(0, 3)]], supplyTaken: false, cardTaken: false };
+                cards: [node === 'fixed' ? getCatalog().fixedReward : REWARD_POOL[this.random.int(0, REWARD_POOL.length - 1)]], supplyTaken: false, cardTaken: false };
             this.log(`${NODE_NAMES[node]}：支付 ${fee} 点物资。奖励需要主动领取。`);
         }
         else if (node === 'rest') {
@@ -240,7 +224,7 @@ export class SurvivalGame {
     private beginPlayerTurn(): void {
         const b = this.battle!;
         if (b.weapon && b.turn > b.equippedTurn) {
-            const slash: CombatCard = { id: `slash-${++this.nextId}`, kind: 'slash', temporary: true };
+            const slash: CombatCard = { id: `slash-${++this.nextId}`, kind: CARD[b.weapon.kind].effect.generatedCard!, temporary: true };
             if (b.hand.length < 6)
                 b.hand.push(slash);
             else
@@ -249,13 +233,16 @@ export class SurvivalGame {
         this.drawCards(3);
     }
     cardBlocked(card: CombatCard): string {
+        const effect = CARD[card.kind].effect;
         if (this.supplies < CARD[card.kind].cost)
             return '物资不足';
-        if (card.kind === 'knife' && this.battle?.weapon)
+        if (effect.type === 'none')
+            return '遗物不能在战斗中使用';
+        if (effect.type === 'equip' && this.battle?.weapon)
             return '武器槽已占用';
-        if (card.kind === 'repair' && this.armor === 0)
+        if (effect.type === 'heal' && this.armor === 0)
             return '感染临界，无法修复';
-        if (card.kind === 'repair' && this.armor === 10)
+        if (effect.type === 'heal' && this.armor === 10)
             return '护甲已满';
         return '';
     }
@@ -272,24 +259,16 @@ export class SurvivalGame {
             return this.result(false, reason);
         b.hand.splice(index, 1);
         this.spend(CARD[card.kind].cost);
-        if (card.kind === 'knife') {
+        const effect = CARD[card.kind].effect;
+        if (effect.type === 'equip') {
             b.weapon = card;
             b.equippedTurn = b.turn;
         }
         else {
             b.discard.push(card);
-            if (card.kind === 'attack')
-                b.hp = Math.max(0, b.hp - 2);
-            if (card.kind === 'heavy')
-                b.hp = Math.max(0, b.hp - 5);
-            if (card.kind === 'slash')
-                b.hp = Math.max(0, b.hp - 4);
-            if (card.kind === 'dodge')
-                b.block += 2;
-            if (card.kind === 'evade')
-                b.block += 5;
-            if (card.kind === 'repair')
-                this.armor = Math.min(10, this.armor + 3);
+            if (effect.type === 'damage') b.hp = Math.max(0, b.hp - effect.amount);
+            if (effect.type === 'block') b.block += effect.amount;
+            if (effect.type === 'heal') this.armor = Math.min(10, this.armor + effect.amount);
         }
         this.log(`第 ${b.turn} 回合 · 使用${CARD[card.kind].name}，消耗 ${CARD[card.kind].cost} 物资。`);
         if (b.hp === 0)
@@ -431,7 +410,7 @@ export class SurvivalGame {
     finishRest(): ActionResult {
         if (this.phase !== 'rest')
             return this.result(false, '当前不在营地。');
-        if (!this.usableCards.some(c => c.kind === 'attack' || c.kind === 'heavy' || c.kind === 'knife'))
+        if (!this.usableCards.some(c => CARD[c.kind].effect.type === 'damage' || (CARD[c.kind].effect.type === 'equip' && CARD[CARD[c.kind].effect.generatedCard!].effect.type === 'damage')))
             return this.result(false, '至少选择一张能够造成伤害的牌再出发。');
         this.visited.push('rest');
         this.pathIndex++;

@@ -1,5 +1,6 @@
 import { _decorator, Animation, AnimationClip, Color, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
 import { CARD, CardKind } from './SurvivalRules';
+import { effectSummary, titleColor } from './CardCatalog';
 const {ccclass,property}= _decorator;
 const order:CardKind[]=['attack','dodge','knife','evade','repair','heavy','slash','cash'];
 @ccclass('CardPresentation')
@@ -21,11 +22,11 @@ export class CardPresentation extends Component {
     onDestroy():void {this.getComponent(Animation)?.off(Animation.EventType.FINISHED,this.finished,this);}
     configure(kind:CardKind,blocked='',caption='点击 / 拖动',id=''):void {
         this.kind=kind;this.cardId=id;const data=CARD[kind];
-        if(this.costLabel)this.costLabel.string=String(data.cost);if(this.titleLabel)this.titleLabel.string=data.name;
-        const effect:Record<CardKind,string>={attack:'造成 2 点伤害',dodge:'获得 2 点格挡',knife:'下回合起\n每回合生成「挥砍」',evade:'获得 5 点格挡',repair:'恢复 3 点护甲\n护甲为 0 时禁用',heavy:'造成 5 点伤害',slash:'造成 4 点伤害',cash:'只能在休整时丢弃'};
-        if(this.descriptionLabel)this.descriptionLabel.string=effect[kind];if(this.statusLabel){this.statusLabel.string=blocked||caption;this.statusLabel.color=blocked?this.blockedText:this.normalText;}
-        if(this.weightLabel)this.weightLabel.string=kind==='slash'?'本场临时':`负重 ${data.weight}`;
-        if(this.artwork)this.artwork.spriteFrame=this.illustrations[order.indexOf(kind)]??this.illustrations[2];
+        if(this.costLabel)this.costLabel.string=String(data.cost);if(this.titleLabel){this.titleLabel.string=data.name;this.titleLabel.color=new Color().fromHEX(titleColor(data.color));}
+        if(this.descriptionLabel){this.descriptionLabel.string=effectSummary(data)+(data.text?'\n'+data.text:'');this.descriptionLabel.overflow=Label.Overflow.SHRINK;}
+        if(this.statusLabel){this.statusLabel.string=blocked||caption;this.statusLabel.color=blocked?this.blockedText:this.normalText;}
+        if(this.weightLabel)this.weightLabel.string=data.role==='temporary'?'本场临时':`负重 ${data.weight}`;
+        if(this.artwork)this.artwork.spriteFrame=this.illustrations[order.indexOf(data.art)]??this.illustrations[2];
         if(this.disabledOverlay)this.disabledOverlay.active=!!blocked;
     }
     playDraw(reduced:boolean):void {if(!reduced&&this.drawClip)this.play(this.drawClip);}

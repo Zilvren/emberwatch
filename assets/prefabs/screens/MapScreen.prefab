@@ -31434,6 +31434,9 @@
       },
       {
         "__id__": 1396
+      },
+      {
+        "__id__": 1405
       }
     ],
     "_prefab": {
@@ -31654,5 +31657,25 @@
         "__id__": 121
       }
     ]
+  },
+  {
+    "__type__": "71247XrM/FKQb4nmBUcjw7W",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1393
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 1406
+    },
+    "key": "map/fixedReward",
+    "format": "{value}",
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "d434bb9e-5f8a-4ba3-8f2f-d9a19b2f460f"
   }
 ]

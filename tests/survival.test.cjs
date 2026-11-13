@@ -2,15 +2,10 @@ const { test }=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const Module=require('node:module');
 const root=path.resolve(__dirname,'..');
-const settings=JSON.parse(fs.readFileSync(path.join(root,'.pink/settings.json'),'utf8'));
-const engine=path.join(process.env.APPDATA,'cocos-default',`cocos-${settings['cocos.engine.version']}`);
-const ts=require(path.join(engine,'node_modules/typescript'));
-const filename=path.join(root,'assets/SurvivalRules.ts');
-const compiled=ts.transpileModule(fs.readFileSync(filename,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2020,module:ts.ModuleKind.CommonJS}}).outputText;
-const rules=new Module(filename,module);rules._compile(compiled,filename);
-const {SurvivalGame,CARD,REWARD_POOL}=rules.exports;
+const load=require('../tools/load-ts.cjs').createLoader();
+load(path.join(root,'assets/CardCatalog.ts')).installCatalog(JSON.parse(fs.readFileSync(path.join(root,'assets/resources/data/cards.json'),'utf8')));
+const {SurvivalGame,CARD,REWARD_POOL}=load(path.join(root,'assets/SurvivalRules.ts'));
 const ok=r=>assert.equal(r.ok,true,r.message);
 const owned=(id,kind,zone='base')=>({id,kind,zone,selected:kind!=='cash',found:true});
 function combat(enemy='enemy1',seed=17){const g=new SurvivalGame(seed);g.start();g.fixedDone=true;g.route='A';g.pathIndex=enemy==='enemy1'?0:3;g.enterNode();return g;}
