@@ -1,0 +1,21 @@
+{
+    "name": "the-end",
+    "type": "3d",
+    "version": "1.0.0",
+    "uuid": "",
+    "creator": {
+        "version": "unknow"
+    },
+    "displayName": "the end",
+    "scripts": {
+        "build:web": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-config.json",
+        "preview": "node tools/preview.cjs",
+        "mcp": "node tools/pink.cjs start-mcp-server --project . --port 9527",
+        "test": "node --test --test-reporter=tap tests/survival.test.cjs"
+    },
+    "pink": {
+        "uuid": "80d9c7ff-7595-4f1a-9094-c2a99f82e953",
+        "version": "1.127.0",
+        "from": "pink"
+    }
+}

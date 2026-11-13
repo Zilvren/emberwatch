@@ -1,0 +1,13 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const {spawnSync}=require('node:child_process');
+const project=path.resolve(__dirname,'..');
+const cli=process.env.PLAYWRIGHT_CLI??'C:/Users/Knock/AppData/Local/npm-cache/_npx/31e32ef8478fbf80/node_modules/@playwright/cli/playwright-cli.js';
+const task=fs.readFileSync(path.resolve(project,process.argv[2]),'utf8');
+const helper=fs.readFileSync(path.join(__dirname,'browser-helper.js.txt'),'utf8');
+const code=`async (page) => { const runtimeErrors=[]; const onError=e=>runtimeErrors.push(String(e)); page.on('pageerror',onError); try { ${helper}\n${task} } finally { page.off('pageerror',onError); } }`;
+const result=spawnSync(process.execPath,[cli,'-s=emberwatch','run-code',code],{cwd:project,encoding:'utf8'});
+if(result.stdout)process.stdout.write(result.stdout);
+if(result.stderr)process.stderr.write(result.stderr);
+if(result.error)throw result.error;
+process.exit(/^### Error/m.test(result.stdout??'')?1:result.status??1);

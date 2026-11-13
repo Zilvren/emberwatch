@@ -1,0 +1,26 @@
+{
+  "name": "the-end",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "web-desktop",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": { "designWidth": 1440, "designHeight": 900 }
+    }
+  },
+  "startScene": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e",
+  "scenes": [
+    {
+      "url": "db://assets/TheEnd.scene",
+      "uuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

@@ -1,0 +1,9 @@
+await page.setViewportSize({width:1024,height:768});await page.emulateMedia({reducedMotion:'reduce'});
+await page.goto('http://127.0.0.1:7457/?seed=17');await idle();await screenshot('small-window-journal');
+await click('journal-start');await click('enter-fixed');await click('claim-supplies');await click('claim-card-0');await click('rewards-done');await click('route-A');await click('enter-enemy1');
+let s=await state();assert(s.heroPose==='survivor-unarmed-0','Unarmed stance does not match empty weapon slot');await screenshot('small-window-battle');
+const first=s.hand.find(c=>c.kind==='attack');await play(first,true);assert((await state()).battle.hp===4,'Reduced-motion attack failed');
+await click('help');assert((await state()).overlay==='help','Help did not open');await screenshot('small-window-help');await click('modal-close');
+await page.setViewportSize({width:1440,height:900});await page.emulateMedia({reducedMotion:'no-preference'});
+await page.goto('http://127.0.0.1:7457/?seed=17');await idle();
+return {passed:true,viewport:'1024x768',reducedMotion:true,unarmedPose:true,realDrag:true,runtimeErrors};

@@ -1,0 +1,7 @@
+await idle();assert((await state()).phase==='journal','Expected journal');
+await click('journal-start');assert((await state()).currentNode==='fixed','Must start at fixed scavenging');
+await click('enter-fixed');assert((await state()).supplies===8,'Scavenge fee not paid');
+await click('claim-supplies');await click('claim-card-0');assert((await state()).overflowWeight===4,'Heavy must enter overflow');
+await screenshot('v2-fixed-loot');await click('rewards-done');await click('route-A');await screenshot('v2-map');
+await click('enter-enemy1');await screenshot('v2-battle');
+return {phase:(await state()).phase,trace,runtimeErrors};

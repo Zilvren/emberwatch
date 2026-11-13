@@ -1,0 +1,26 @@
+await idle();let s=await state();assert(s.phase==='battle','Expected first battle');
+const attack=s.hand.find(c=>c.kind==='attack');assert(attack,'A free attack is required for drag test');
+const beforeCancel={revision:s.revision,supplies:s.supplies,hand:s.hand.map(c=>c.id).join(',')};
+await drag('card-'+attack.id,70,880);s=await state();
+assert(s.revision===beforeCancel.revision&&s.supplies===beforeCancel.supplies&&s.hand.map(c=>c.id).join(',')===beforeCancel.hand,'Cancelled drag changed game state');
+await click('card-'+attack.id);assert((await state()).selectedCard===attack.id,'Attack targeting not selected');
+const target=await hitPoint('enemy-target');await page.mouse.click(target.x,target.y);await page.waitForTimeout(200);
+const impactState=await state();assert(impactState.busy,'Attack feedback sequence did not start');assert(impactState.heroPose==='survivor-unarmed-1','Basic attack pose did not use unarmed animation');
+await page.screenshot({path:'output/playwright/v2-attack-impact.png'});await idle();assert((await state()).battle.hp===4,'Attack must do 2 damage');
+const first=await fight({basicOnly:true,capture:true});await screenshot('v2-first-victory');
+await click('claim-supplies');
+s=await state();const available=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(available)await click(available.id);
+await click('rewards-done');await click('enter-scavenge');assert((await state()).supplies>=0,'Scavenge fee invalid');
+await click('claim-supplies');s=await state();const found=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(found)await click(found.id);
+await click('rewards-done');await click('enter-rest');await screenshot('v2-rest');
+const beforeCash=await state();await click('rest-cash');assert((await state()).overlay==='discard','Cash confirmation missing');await click('modal-confirm');
+s=await state();assert(!s.cards.some(c=>c.kind==='cash'),'Cash was not removed');assert(s.overflowWeight<beforeCash.overflowWeight||s.overflowWeight===0,'Overflow not promoted');
+await click('rest-bag');s=await state();const basic=s.cards.find(c=>c.kind==='dodge');await click('toggle-'+basic.id);assert(!(await state()).cards.find(c=>c.id===basic.id).selected,'Deck toggle failed');await click('toggle-'+basic.id);await click('modal-close');
+await click('rest-done');await click('enter-enemy2');await screenshot('v2-boss');const second=await fight({preferWeapon:true,capture:true});
+await click('claim-supplies');s=await state();const reward=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(reward)await click(reward.id);
+await click('rewards-done');await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='shelter');await screenshot('v2-shelter');
+s=await state();assert(s.settlement.dailySpent===0,'Daily supplies deducted before final settlement');
+const repair=s.hits.find(h=>h.id==='shelter-repair');if(repair.enabled){await click('shelter-repair');if((await state()).overlay==='repair-risk')await click('modal-confirm');}
+s=await state();const beforeDay=s.supplies;await click('shelter-done');s=await state();assert(s.phase==='day2'&&s.day===2,'Day two was not reached');assert(s.supplies===Math.max(0,beforeDay-1),'Daily settlement order incorrect');
+await screenshot('v2-day2');assert(s.heroPose==='survivor-unarmed-0','Weapon pose did not clear after returning home');assert(runtimeErrors.length===0,'Browser runtime errors: '+runtimeErrors.join('\n'));
+return {passed:true,route:'A',first,second,dragCancelled:true,impactBusy:impactState.busy,final:{phase:s.phase,supplies:s.supplies,armor:s.armor,settlement:s.settlement},actions:trace.length,trace,runtimeErrors};

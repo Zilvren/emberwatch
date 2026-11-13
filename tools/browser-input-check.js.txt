@@ -1,0 +1,12 @@
+await idle();assert((await state()).phase==='journal','Expected normal random opening');
+await click('journal-start');await click('enter-fixed');await click('claim-supplies');await click('claim-card-0');await click('rewards-done');await click('route-A');await click('enter-enemy1');
+let s=await state();const attack=s.hand.find(c=>c.kind==='attack');await click('card-'+attack.id);
+const target=await hitPoint('enemy-target');for(let i=0;i<3;i++){await page.mouse.click(target.x,target.y);await page.waitForTimeout(15);}await idle();s=await state();assert(s.battle.hp===4&&s.supplies===12,'Rapid target clicks caused repeated attack or payment');
+const dodge=s.hand.find(c=>c.kind==='dodge');const p=await hitPoint('card-'+dodge.id);await page.mouse.move(p.x,p.y);await page.waitForTimeout(150);for(let i=0;i<3;i++){await page.mouse.click(p.x,p.y);await page.waitForTimeout(15);}await idle();s=await state();assert(s.battle.block===2,'Rapid defense clicks applied more than once');
+const held=s.hand.find(c=>!c.blocked),before={revision:s.revision,supplies:s.supplies,hand:s.hand.map(c=>c.id).join(',')};
+const begin=await hitPoint('card-'+held.id),middle=await point(730,410),cancel=await point(70,880);
+await page.mouse.move(begin.x,begin.y);await page.waitForTimeout(140);await page.mouse.down();await page.mouse.move(middle.x,middle.y,{steps:10});await page.waitForTimeout(3100);
+await page.screenshot({path:'output/playwright/final-held-card.png'});await page.mouse.move(cancel.x,cancel.y,{steps:10});await page.mouse.up();await page.waitForTimeout(180);s=await state();
+assert(s.revision===before.revision&&s.supplies===before.supplies&&s.hand.map(c=>c.id).join(',')===before.hand,'Toast timeout interfered with held card or cancellation');
+assert(runtimeErrors.length===0,runtimeErrors.join('\n'));await page.goto('http://127.0.0.1:7457/');await idle();await screenshot('handoff-journal');
+return {passed:true,rapidAttackSingleApply:true,rapidDefenseSingleApply:true,dragSurvivesToastExpiry:true,normalRandomMode:true,handoff:(await state()).phase,runtimeErrors};

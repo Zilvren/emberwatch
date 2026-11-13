@@ -1,0 +1,49 @@
+{
+  "generator": "built-in image_gen",
+  "purpose": "Original cohesive pixel-art game assets; user reference used for style only",
+  "assets": [
+    {
+      "name": "survivor",
+      "file": "assets/resources/art/survivor.png",
+      "prompt": "Original production game sprite sheet for EMBERWATCH, a warm muted post-apocalyptic pixel-art survival card battler. Cohesive palette: dusty ochre, rust orange, charcoal mauve, desaturated teal, warm beige highlights. Crisp deliberately visible pixel clusters, dark 1-pixel outlines, clear shaped anatomy, detailed clothing shading, authentic polished 16-bit indie game sprites. Not a vector icon, not a blocky stick figure. TRANSPARENT BACKGROUND. Canvas very wide 3:1, divided into EXACTLY THREE equally wide invisible cells in a single horizontal row. Each cell contains the SAME full-body character at the SAME scale with feet at exactly the same baseline at 90% of canvas height and generous transparent padding on all sides. Character fills about 78% of cell height. No overlapping cells, no labels, no text, no borders. Cell 1 idle combat stance; cell 2 active attack pose; cell 3 recoiling hurt pose. Three animation poses, NOT three different characters. Subject: a resourceful adult survivor facing RIGHT in all cells, dark cropped hair, faded mustard weatherproof jacket over dark teal clothes, leather satchel and bandaged forearm, sturdy boots. A rusty kitchen cleaver held in the right hand. Idle ready stance with bent knees; attacking is a forward cleaver slash with the blade extended RIGHT; hurt is a backward recoil. A grounded believable human survivor, no helmet and no guns.",
+      "notes": "A second built-in edit removed background haze while preserving all poses."
+    },
+    {
+      "name": "wanderer",
+      "file": "assets/resources/art/wanderer.png",
+      "prompt": "Original production game sprite sheet for EMBERWATCH, a warm muted post-apocalyptic pixel-art survival card battler. Cohesive palette: dusty ochre, rust orange, charcoal mauve, desaturated teal, warm beige highlights. Crisp deliberately visible pixel clusters, dark 1-pixel outlines, clear shaped anatomy, detailed clothing shading, authentic polished 16-bit indie game sprites. Not a vector icon, not a blocky stick figure. TRANSPARENT BACKGROUND. Canvas very wide 3:1, divided into EXACTLY THREE equally wide invisible cells in a single horizontal row. Each cell contains the SAME full-body character at the SAME scale with feet at exactly the same baseline at 90% of canvas height and generous transparent padding on all sides. Character fills about 78% of cell height. No overlapping cells, no labels, no text, no borders. Cell 1 idle combat stance; cell 2 active attack pose; cell 3 recoiling hurt pose. Three animation poses, NOT three different characters. Subject: a lanky infected scavenger facing LEFT in all cells, pale gray-olive face, a torn muted teal utility coat, rust colored scarf, shredded trousers, work boots, one faint orange eye, slack jaw. Idle leaning forward, attacking lunges LEFT with an arm swipe, hurt recoils away to RIGHT. Scary but non-graphic, no blood or gore. Detailed tattered clothes and clear pixel anatomy."
+    },
+    {
+      "name": "brute",
+      "file": "assets/resources/art/brute.png",
+      "prompt": "Original production game sprite sheet for EMBERWATCH, a warm muted post-apocalyptic pixel-art survival card battler. Cohesive palette: dusty ochre, rust orange, charcoal mauve, desaturated teal, warm beige highlights. Crisp deliberately visible pixel clusters, dark 1-pixel outlines, clear shaped anatomy, detailed clothing shading, authentic polished 16-bit indie game sprites. Not a vector icon, not a blocky stick figure. TRANSPARENT BACKGROUND. Canvas very wide 3:1, divided into EXACTLY THREE equally wide invisible cells in a single horizontal row. Each cell contains the SAME full-body character at the SAME scale with feet at exactly the same baseline at 90% of canvas height and generous transparent padding on all sides. Character fills about 78% of cell height. No overlapping cells, no labels, no text, no borders. Cell 1 idle combat stance; cell 2 active attack pose; cell 3 recoiling hurt pose. Three animation poses, NOT three different characters. Subject: a bulky heavy infected facing LEFT in all cells, massive stocky silhouette, cracked ochre industrial protective suit with scrap chest armor, frayed rust-red straps, dark gloves and reinforced boots, gray olive face half covered by broken respirator. Idle hunched imposing stance, attacking a huge downward LEFT fist slam, hurt recoils RIGHT. Distinct larger silhouette than a normal enemy, detailed equipment, no gore, no weapons held."
+    },
+    {
+      "name": "card-art",
+      "file": "assets/resources/art/card-art.png",
+      "prompt": "Original game card illustration atlas, perfectly regular 3 columns by 2 rows, SIX equally sized square cells, no gutter, no borders, no labels, no lettering, no UI. Cohesive polished 16-bit pixel art, visible pixel clusters, deep charcoal mauve backgrounds, dusty ochre, warm beige and rust orange, restrained teal highlights, consistent dramatic rim lighting. Each cell is a detailed symbolic ACTION illustration designed for a post-apocalyptic card battler, with clear readable silhouette. Top left: bandaged survivor fist striking a battered infected silhouette, dynamic diagonal. Top middle: survivor in mustard coat ducking behind a rough scrap-metal shield, incoming sparks. Top right: close-up rusty kitchen cleaver with wrapped handle on a worn utility belt, warm edge light. Bottom left: reinforced teal riot shield deflecting a fierce orange impact, strong defensive shape. Bottom middle: hands carefully repairing a cracked armored vest with wire and a medical patch, soft green glow. Bottom right: a heavy improvised sledgehammer crashing into rubble with angular orange impact rays. Original art, consistent craft across all 6 tiles, no realistic painting and no vector icons, strictly chunky pixel art, full bleed illustrations filling each cell. Landscape canvas 3:2."
+    },
+    {
+      "name": "battle-street",
+      "file": "assets/resources/art/battle-street.png",
+      "prompt": "Original production background for a 2D side-on post-apocalyptic card battle, 16:9 wide composition. Polished authentic 16-bit pixel art with crisp visible pixel clusters and restrained dithering. Warm muted dusk palette: dusty salmon, ochre, charcoal mauve shadows, rust orange, very subtle desaturated teal. A ruined urban street in front of abandoned brick workshops, broken concrete arches and dusty distant rooftops, faded sunlight cutting through haze. A broad, flat stone-and-asphalt combat stage occupies the lower third. Two clear open fighting spaces at 25% and 75% of image width, no obstructing props in those spaces. Layers of parallax depth: distant skyline, middle abandoned workshops, foreground rubble only at extreme lower corners. Beautiful atmospheric environmental detail, unified with a gritty survivor game, no characters, no cards, no interface, no text, no logos, no watermark. Not a screenshot; clean background asset."
+    },
+    {
+      "name": "shelter",
+      "file": "assets/resources/art/shelter.png",
+      "prompt": "Original production background for a 2D side-on post-apocalyptic survival game, 16:9 wide. Polished authentic 16-bit pixel art, visible deliberate pixel clusters, dark outlines on foreground props, same warm muted dusk palette of dusty ochre, charcoal mauve, rust orange, warm beige and subtle teal. Cozy improvised survivors' refuge in an abandoned rail maintenance shed: left side a small campfire in a metal brazier beside a canvas bedroll and a hanging warm lantern; center open floor and a patched wooden table with survival tools and a sealed supply crate; right side a battered workbench, small old radio and shelves. Broken windows reveal muted sunset outside. Rich handcrafted pixel details, quiet resilience, no characters, no lettering, no UI, no logos, no watermark. Compose for game interface overlays with readable large shapes and an open central area."
+    },
+    {
+      "name": "survivor-unarmed",
+      "file": "assets/resources/art/survivor-unarmed.png",
+      "source": "Built-in image_gen edit of the original survivor sheet",
+      "prompt": "Create the UNARMED version of this exact game sprite sheet. Keep the three character poses, face, clothes, satchel, palette, pixel edges, scale, cell locations, empty transparent space and canvas dimensions unchanged. Remove the cleaver from all three poses. Replace it with the survivor natural bandaged empty hand: first idle pose a relaxed clenched fist, second attack pose a forward clenched-fist punch to the RIGHT, third hurt pose a recoiling empty hand. No other weapons or props added. Preserve true alpha transparency: outside character silhouettes alpha must be exactly zero, no background, halo, shadows, haze, labels, borders or checkerboard."
+    },
+    {
+      "name": "dusk-depot",
+      "file": "assets/resources/art/dusk-depot.png",
+      "source": "Built-in image_gen",
+      "prompt": "Original 2D pixel-art background for a post-apocalyptic survival card game. Quiet abandoned urban supply depot at sunset, weathered concrete shelter, warm doorway, ruined street, broken utility poles, rusted shutters and distant city silhouettes. No people. Wide composition with calm sky, crisp hand-placed pixel clusters, restrained dithering, dusty salmon, ochre, rust orange, smoky mauve and dark brown shadows, small teal accents. No walking building, tower, logos, lettering, watermark, UI or cards."
+    }
+  ]
+}

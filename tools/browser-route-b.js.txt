@@ -1,0 +1,18 @@
+await page.goto('http://127.0.0.1:7457/?seed=42');await idle();await screenshot('final-journal');
+await click('journal-start');await click('enter-fixed');await click('claim-supplies');await click('claim-card-0');await click('rewards-done');await click('route-A');await click('enter-enemy1');
+let zeroSurvived=false;for(let i=0;i<10&&(await state()).phase==='battle';i++){await click('end-turn');const s=await state();if(s.armor===0&&s.phase==='battle'){zeroSurvived=true;await screenshot('final-infection-critical');}}
+let s=await state();assert(zeroSurvived,'Armor zero should not immediately fail');assert(s.phase==='failure','Next damaging attack should fail');assert(s.day===1&&s.supplies===10&&s.armor===10&&s.cards.length===8,'Failure did not completely reset day one');await screenshot('final-failure');
+await click('journal-start');assert((await state()).phase==='journal','Retry should show day one');await click('journal-start');await click('enter-fixed');
+await click('claim-supplies');await click('claim-card-0');await click('rewards-done');await click('route-B');await screenshot('final-route-b-map');await click('enter-scavenge');
+await click('claim-supplies');s=await state();let cardReward=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(cardReward)await click(cardReward.id);await click('rewards-done');await click('enter-enemy1');
+await screenshot('final-battle');const first=await fight({capture:true});await click('claim-supplies');s=await state();cardReward=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(cardReward)await click(cardReward.id);await click('rewards-done');await click('enter-rest');await screenshot('final-rest');
+await click('rest-cash');await click('modal-confirm');await click('rest-done');await click('enter-enemy2');await screenshot('final-boss');
+await click('end-turn');const second=await fight({preferWeapon:true,capture:true,skipRepair:true});
+s=await state();assert(s.armor<10,'Shortage test needs damaged armor');await click('claim-supplies');s=await state();const repairBudget=s.critical?2:1;
+await click('reward-bag');for(let n=0;n<40&&(await state()).supplies>repairBudget;n++)await click('discard-supply');await click('modal-close');
+assert((await state()).supplies===repairBudget,'Could not arrange exact repair budget through UI');await click('rewards-done');await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='shelter');
+s=await state();assert(s.settlement.dailySpent===0&&s.supplies===repairBudget,'Daily cost was deducted too early');await click('shelter-repair');
+assert((await state()).overlay==='repair-risk','Expected explicit shortage confirmation');await screenshot('final-repair-warning');await click('modal-cancel');assert((await state()).supplies===repairBudget,'Cancel should preserve resources');
+await click('shelter-repair');await click('modal-confirm');s=await state();assert(s.supplies===0&&s.armor===10&&s.day===1&&s.settlement.dailySpent===0,'Confirmed repair order incorrect');await screenshot('final-shelter');
+await click('shelter-done');s=await state();assert(s.phase==='day2'&&s.day===2&&s.supplies===0&&s.settlement.dailyShortfall===1,'Final shortage handling incorrect');await screenshot('final-day2');assert(runtimeErrors.length===0,runtimeErrors.join('\n'));
+return {passed:true,route:'B',failureRetry:true,zeroArmorSurvived:true,repairWarningAndCancel:true,shortfallConfirmed:true,first,second,final:{phase:s.phase,supplies:s.supplies,armor:s.armor,settlement:s.settlement},actions:trace.length,trace,runtimeErrors};

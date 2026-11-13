@@ -1,0 +1,35 @@
+const trace=[];
+const assert=(condition,message)=>{if(!condition)throw new Error(message);};
+const idle=async()=>{await page.waitForFunction(()=>globalThis.__emberUI?.snapshot().ready&&!globalThis.__emberUI.snapshot().busy,{},{timeout:12000});};
+const state=async()=>page.evaluate(()=>{
+  const u=globalThis.__emberUI.snapshot(),g=globalThis.__survivalGame,b=g.battle;
+  return {...u,battle:b?{enemy:b.enemy,hp:b.hp,turn:b.turn,intent:b.intent,damage:g.incomingDamage,block:b.block,weapon:b.weapon?.kind}:null,
+    rewards:g.rewards,settlement:g.settlement,cards:g.cards.map(c=>({id:c.id,kind:c.kind,zone:c.zone,selected:c.selected})),revision:g.revision};
+});
+const point=async(x,y)=>{const r=await page.locator('#GameCanvas').boundingBox();const scale=Math.min(r.width/1440,r.height/900);return {x:r.x+(r.width-1440*scale)/2+x*scale,y:r.y+(r.height-900*scale)/2+y*scale};};
+const hitPoint=async(id)=>{const s=await state(),h=s.hits.find(h=>h.id===id);assert(h&&h.enabled,'No enabled UI control '+id+' in '+s.phase);return point(h.x+h.width/2,h.y+h.height/2);};
+const click=async(id)=>{await idle();const before=await state(),p=await hitPoint(id);await page.mouse.move(p.x,p.y);await page.waitForTimeout(150);await page.mouse.click(p.x,p.y);await page.waitForTimeout(85);await idle();const after=await state();trace.push({action:id,from:before.phase,to:after.phase,supplies:after.supplies,armor:after.armor});return after;};
+const drag=async(id,x,y)=>{await idle();const p=await hitPoint(id),q=await point(x,y);await page.mouse.move(p.x,p.y);await page.waitForTimeout(140);await page.mouse.down();await page.mouse.move(q.x,q.y,{steps:14});await page.waitForTimeout(120);await page.mouse.up();await page.waitForTimeout(100);await idle();trace.push({action:'drag '+id,target:[x,y]});return state();};
+const screenshot=async(name)=>{await page.mouse.move(1410,890);await page.waitForTimeout(180);await page.screenshot({path:'output/playwright/'+name+'.png'});};
+const play=async(card,useDrag=false)=>{
+  if(useDrag)return drag('card-'+card.id,1030,390);
+  let s=await click('card-'+card.id);
+  if(['attack','heavy','slash'].includes(card.kind)){assert(s.selectedCard===card.id,'Attack card did not select');s=await click('enemy-target');}
+  return s;
+};
+const fight=async({basicOnly=false,preferWeapon=false,capture=false,skipRepair=false}={})=>{
+  let guard=0,weaponDemonstrated=false,dragged=false;
+  while((await state()).phase==='battle'&&guard++<100){
+    let s=await state();const b=s.battle;
+    if(preferWeapon&&!b.weapon&&b.turn<=3){const knife=s.hand.find(c=>c.kind==='knife'&&!c.blocked);if(knife){await play(knife);assert((await state()).heroPose==='survivor-0','Equipped knife did not change the survivor sprite');weaponDemonstrated=true;continue;}}
+    let card=s.hand.find(c=>c.kind==='repair'&&!c.blocked&&s.armor<=7&&!basicOnly&&!skipRepair);
+    if(!card)card=s.hand.find(c=>!c.blocked&&c.kind==='slash'&&!basicOnly);
+    if(!card&&!basicOnly&&!(preferWeapon&&b.weapon&&b.turn===1))card=s.hand.find(c=>!c.blocked&&c.kind==='heavy');
+    if(!card)card=s.hand.find(c=>c.kind==='attack'&&!c.blocked);
+    if(!card&&b.intent==='attack'&&b.block<b.damage)card=s.hand.find(c=>!c.blocked&&(c.kind==='dodge'||(!basicOnly&&c.kind==='evade')));
+    if(card){s=await play(card,capture&&!dragged&&['attack','slash','heavy'].includes(card.kind));if(['attack','slash','heavy'].includes(card.kind))dragged=true;}
+    else s=await click('end-turn');
+    if(capture&&s.phase==='battle'&&s.battle.weapon&&s.hand.some(c=>c.kind==='slash'))await screenshot('v2-weapon-generated-slash');
+  }
+  const s=await state();assert(s.phase==='rewards','Battle did not finish: '+s.phase);return {weaponDemonstrated,dragged,actions:guard};
+};
