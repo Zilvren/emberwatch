@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>cover</key>
+      <dict>
+        <key>frame</key>
+        <string>{{83,0},{1506,941}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false/>
+        <key>sourceSize</key>
+        <string>{1506,941}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>dusk-depot.png</string>
+      <key>realTextureFileName</key>
+      <string>dusk-depot.png</string>
+      <key>size</key>
+      <string>{1672,941}</string>
+    </dict>
+  </dict>
+</plist>

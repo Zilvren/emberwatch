@@ -1,0 +1,155 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "6fe4d": {
+      "importer": "sprite-frame",
+      "uuid": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6@6fe4d",
+      "displayName": "",
+      "id": "6fe4d",
+      "name": "wanderer-0",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 599,
+        "height": 724,
+        "rawWidth": 599,
+        "rawHeight": 724,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "002fd928-34eb-4b61-94c2-91320b2bcc48@6c48a",
+        "atlasUuid": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1beac": {
+      "importer": "sprite-frame",
+      "uuid": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6@1beac",
+      "displayName": "",
+      "id": "1beac",
+      "name": "wanderer-1",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 599,
+        "trimY": 0,
+        "width": 930,
+        "height": 724,
+        "rawWidth": 930,
+        "rawHeight": 724,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "002fd928-34eb-4b61-94c2-91320b2bcc48@6c48a",
+        "atlasUuid": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e873a": {
+      "importer": "sprite-frame",
+      "uuid": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6@e873a",
+      "displayName": "",
+      "id": "e873a",
+      "name": "wanderer-2",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 1529,
+        "trimY": 0,
+        "width": 643,
+        "height": 724,
+        "rawWidth": 643,
+        "rawHeight": 724,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "002fd928-34eb-4b61-94c2-91320b2bcc48@6c48a",
+        "atlasUuid": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "wanderer.png",
+    "format": 2,
+    "uuid": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6",
+    "textureUuid": "002fd928-34eb-4b61-94c2-91320b2bcc48@6c48a"
+  }
+}

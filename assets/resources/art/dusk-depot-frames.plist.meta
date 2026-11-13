@@ -1,0 +1,63 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "6e106fdc-242d-4e97-83cb-a0ab2c0a820c",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "49047": {
+      "importer": "sprite-frame",
+      "uuid": "6e106fdc-242d-4e97-83cb-a0ab2c0a820c@49047",
+      "displayName": "",
+      "id": "49047",
+      "name": "cover",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 83,
+        "trimY": 0,
+        "width": 1506,
+        "height": 941,
+        "rawWidth": 1506,
+        "rawHeight": 941,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "4c228f2f-f8ab-47a8-b0a1-002c88346761@6c48a",
+        "atlasUuid": "6e106fdc-242d-4e97-83cb-a0ab2c0a820c",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "dusk-depot.png",
+    "format": 2,
+    "uuid": "6e106fdc-242d-4e97-83cb-a0ab2c0a820c",
+    "textureUuid": "4c228f2f-f8ab-47a8-b0a1-002c88346761@6c48a"
+  }
+}

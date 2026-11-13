@@ -1,0 +1,13 @@
+{
+  "ver": "2.0.4",
+  "importer": "animation-clip",
+  "imported": true,
+  "uuid": "c8a1e9f5-ada5-418b-a8fd-1871e7b5ac39",
+  "files": [
+    ".bin"
+  ],
+  "subMetas": {},
+  "userData": {
+    "name": "WandererActorPrepare"
+  }
+}

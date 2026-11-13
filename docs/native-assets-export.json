@@ -1,0 +1,4760 @@
+[
+  {
+    "node": "HUD",
+    "asset": "assets/prefabs/ui/HUD.prefab",
+    "result": {
+      "nodeId": "0eDW7LXt5M1aY0ZUB/bzQn",
+      "path": "Canvas/UIBake/Library/HUD",
+      "name": "HUD",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": true
+      },
+      "prefab": {
+        "asset": {
+          "name": "HUD",
+          "uuid": "10e4dc33-e87c-4748-bff4-66c8e0b3b8e6",
+          "data": {
+            "nodeId": "0dKgKS1xpGCZ0qCL+h6QvH",
+            "path": "",
+            "name": "HUD"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "0eDW7LXt5M1aY0ZUB/bzQn",
+          "path": "Canvas/UIBake/Library/HUD",
+          "name": "HUD"
+        },
+        "instance": {
+          "fileId": "6dwyF9gbJL55EPhdnaDF39",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "edbGi59w5DlZfhPQvv0Imy"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "edbGi59w5DlZfhPQvv0Imy"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "edbGi59w5DlZfhPQvv0Imy"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "edbGi59w5DlZfhPQvv0Imy"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "edbGi59w5DlZfhPQvv0Imy",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "1a/IkYB2NLMIU8/pnlMq21",
+          "path": "Canvas/UIBake/Library/HUD/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2bUNTeBZxMAJLqlV0RdUwU",
+          "path": "Canvas/UIBake/Library/HUD/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "8dxwLyJNxNLqxCOOuroeTO",
+          "path": "Canvas/UIBake/Library/HUD/Pixel icon",
+          "name": "Pixel icon"
+        },
+        {
+          "nodeId": "e28PAF+pNFF6588AOVMxLG",
+          "path": "Canvas/UIBake/Library/HUD/header-text0",
+          "name": "header-text0"
+        },
+        {
+          "nodeId": "27a/hes3pPmqx1jgK8FHaS",
+          "path": "Canvas/UIBake/Library/HUD/header-text1",
+          "name": "header-text1"
+        },
+        {
+          "nodeId": "101TGHKVRIPpx0X5o4pGUB",
+          "path": "Canvas/UIBake/Library/HUD/header-text2",
+          "name": "header-text2"
+        },
+        {
+          "nodeId": "4blh0z2F9D7KlhW5cxqa00",
+          "path": "Canvas/UIBake/Library/HUD/header-text3",
+          "name": "header-text3"
+        },
+        {
+          "nodeId": "19o25itUxMwo9kgnMtwwGW",
+          "path": "Canvas/UIBake/Library/HUD/header-text4",
+          "name": "header-text4"
+        },
+        {
+          "nodeId": "70+wjcQ0xCKbqroMGefR2N",
+          "path": "Canvas/UIBake/Library/HUD/header-text5",
+          "name": "header-text5"
+        },
+        {
+          "nodeId": "a8yCui7TdK8pRXt/K1DGDr",
+          "path": "Canvas/UIBake/Library/HUD/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "64HI6ogVNOdoORhBgHELgh",
+          "path": "Canvas/UIBake/Library/HUD/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "77bHfwFWJCEKBa7Lfo8P5i",
+          "path": "Canvas/UIBake/Library/HUD/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "78y8MzehBIx5kKzJRp+UWV",
+          "path": "Canvas/UIBake/Library/HUD/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e89F8d0UNKeZKSZ3wRXzCQ",
+          "path": "Canvas/UIBake/Library/HUD/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "afu0yaN4xNKqQDkZqtIVBK",
+          "path": "Canvas/UIBake/Library/HUD/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "67B2LXjzhCep9JBcFW3MxJ",
+          "path": "Canvas/UIBake/Library/HUD/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "58mc2XYCVDi44D+1u+pf57",
+          "path": "Canvas/UIBake/Library/HUD/Panel_009",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "d2NMJ/icVNtJgncVPf5qHs",
+          "path": "Canvas/UIBake/Library/HUD/Panel_010",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "c2bnOF4jROaYwh/xe65J7+",
+          "path": "Canvas/UIBake/Library/HUD/Panel_011",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "5ccVydG+FAsJuwKNs4iTlZ",
+          "path": "Canvas/UIBake/Library/HUD/bag",
+          "name": "bag"
+        },
+        {
+          "nodeId": "a0cGWawvRJrYBVHN/qymZX",
+          "path": "Canvas/UIBake/Library/HUD/header-text6",
+          "name": "header-text6"
+        },
+        {
+          "nodeId": "b2ksnN7wpL9KhI9aEdZOSu",
+          "path": "Canvas/UIBake/Library/HUD/log",
+          "name": "log"
+        },
+        {
+          "nodeId": "a99najyF5J9rnefhGJt95h",
+          "path": "Canvas/UIBake/Library/HUD/help",
+          "name": "help"
+        },
+        {
+          "nodeId": "103dQD/4hLFYFqeKCKAYnv",
+          "path": "Canvas/UIBake/Library/HUD/audio",
+          "name": "audio"
+        },
+        {
+          "nodeId": "476QG2mPRF26G9vpFpQPty",
+          "path": "Canvas/UIBake/Library/HUD/restart",
+          "name": "restart"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/HUD/cc.UITransform",
+          "uuid": "50OIBVeHBC7oOBZUBQk1m3",
+          "name": "HUD<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "journal",
+    "asset": "assets/prefabs/screens/JournalScreen.prefab",
+    "result": {
+      "nodeId": "e3fTA8w/FMbrHEHyzGwsGF",
+      "path": "Canvas/UIBake/Library/JournalScreen",
+      "name": "JournalScreen",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "JournalScreen",
+          "uuid": "abe29384-2e47-41d5-89c8-32332694d3d0",
+          "data": {
+            "nodeId": "2bPQ2EDDFD7p43omzykKn5",
+            "path": "",
+            "name": "JournalScreen"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "e3fTA8w/FMbrHEHyzGwsGF",
+          "path": "Canvas/UIBake/Library/JournalScreen",
+          "name": "JournalScreen"
+        },
+        "instance": {
+          "fileId": "c6TCnuO7lKNoHCIjYbCnck",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "27kKPJkT9B8bsv4l8hMcvr"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "27kKPJkT9B8bsv4l8hMcvr"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "27kKPJkT9B8bsv4l8hMcvr"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "27kKPJkT9B8bsv4l8hMcvr"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "27kKPJkT9B8bsv4l8hMcvr",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "32TxEfdH5DAYmeSrTdG3t7",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "3ca6kdScZE65ZNjkQKunnO",
+          "path": "Canvas/UIBake/Library/JournalScreen/World",
+          "name": "World"
+        },
+        {
+          "nodeId": "b2QbRdPEJIp6bpEkAg/Qzy",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f6Z0LkZIRIfKOXCmdP3MVN",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "acNpArqXtLiKOqUqkHpbZY",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "8bKaiwDDdK9qpTQARYff/T",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b37Y05HqxLiKX2ico/Sm+w",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "c20EetGKBAn6mtXzxIj188",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "07CPVWE7FBXIUypwJoDtx9",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "9f53H2CeJCFKwNo+IDs9/g",
+          "path": "Canvas/UIBake/Library/JournalScreen/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "fahw4Bn/dCTKcaM3NmRpM9",
+          "path": "Canvas/UIBake/Library/JournalScreen/journal-text0",
+          "name": "journal-text0"
+        },
+        {
+          "nodeId": "94KKbOXtRBPL9FGsP2SpSa",
+          "path": "Canvas/UIBake/Library/JournalScreen/journal-text1",
+          "name": "journal-text1"
+        },
+        {
+          "nodeId": "6dwDGa8N1ILID8vo+M8NWF",
+          "path": "Canvas/UIBake/Library/JournalScreen/journal-text2",
+          "name": "journal-text2"
+        },
+        {
+          "nodeId": "bdHN5VDrRDq5QQJQiym2vE",
+          "path": "Canvas/UIBake/Library/JournalScreen/journal-text3",
+          "name": "journal-text3"
+        },
+        {
+          "nodeId": "f4WLtdfwZNnZ/LE+YZRjro",
+          "path": "Canvas/UIBake/Library/JournalScreen/journal-start",
+          "name": "journal-start"
+        },
+        {
+          "nodeId": "c5iDRE7mhA25W1yrfAwsP+",
+          "path": "Canvas/UIBake/Library/JournalScreen/journal-text4",
+          "name": "journal-text4"
+        },
+        {
+          "nodeId": "26k257ClFLLLYtOQcgAlOM",
+          "path": "Canvas/UIBake/Library/JournalScreen/journal-text5",
+          "name": "journal-text5"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/JournalScreen/cc.UITransform",
+          "uuid": "35DNbK839PILtAcdD7H8t/",
+          "name": "JournalScreen<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "map",
+    "asset": "assets/prefabs/screens/MapScreen.prefab",
+    "result": {
+      "nodeId": "9bifhuH9FB7LGig8DkJWE/",
+      "path": "Canvas/UIBake/Library/MapScreen",
+      "name": "MapScreen",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "MapScreen",
+          "uuid": "2cfc137d-fc79-4d46-8e22-c72a87f2909c",
+          "data": {
+            "nodeId": "a33iTjFNdCfaY4eVZDCa0A",
+            "path": "",
+            "name": "MapScreen"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "9bifhuH9FB7LGig8DkJWE/",
+          "path": "Canvas/UIBake/Library/MapScreen",
+          "name": "MapScreen"
+        },
+        "instance": {
+          "fileId": "e2on5nut1N56s1xszJgqMH",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "37LBoL/VRJuLobrHK213b5"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "37LBoL/VRJuLobrHK213b5"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "37LBoL/VRJuLobrHK213b5"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "37LBoL/VRJuLobrHK213b5"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "37LBoL/VRJuLobrHK213b5",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "27ZqjvZHtGhJnVbsNUVreY",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "73hqTzHRFILZwViYiagHWC",
+          "path": "Canvas/UIBake/Library/MapScreen/World",
+          "name": "World"
+        },
+        {
+          "nodeId": "cds59ami9JVJnJM1Xdm9K4",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "d2e8JK1ytDYaaAK/h1ZnDj",
+          "path": "Canvas/UIBake/Library/MapScreen/banner-text0",
+          "name": "banner-text0"
+        },
+        {
+          "nodeId": "c16RwYQb1HA69TcwNNE4lD",
+          "path": "Canvas/UIBake/Library/MapScreen/banner-text1",
+          "name": "banner-text1"
+        },
+        {
+          "nodeId": "eaV5YKv41FfZONjnIMhCMP",
+          "path": "Canvas/UIBake/Library/MapScreen/banner-text2",
+          "name": "banner-text2"
+        },
+        {
+          "nodeId": "85AkrWpNNH4LXC1Q3aIic2",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "31ZWrHnRlDuq0M/I0f16aM",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f355i1YgRN+ovuIQyLIu7N",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "22ZZZCnEZInYs6d0cJaAXX",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "d5rutW1otMopHoSAu1Kh+e",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f3sp2rZ2xK14cEZZRUBmSd",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "44baSH1j9DqKNVgkaahIcN",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "fdmZlpWEJONaAR7iA8KL+v",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text0",
+          "name": "map-text0"
+        },
+        {
+          "nodeId": "1fQcT3bdBOg5ps4ADruqIq",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text1",
+          "name": "map-text1"
+        },
+        {
+          "nodeId": "78o2IPJIJHI4pNhJwhQM+v",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_009",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "0eoTgIv4tNiY++uqrPPD8X",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_010",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f3nL7NrBFLeJQpb1XpxEtP",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_011",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "86VstYBKlLu7X4pU7zCrr3",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_012",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "85icGE8bNN4rXndKxhIcXI",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_013",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "30JAICcxpIyaliIA6OVWUC",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_014",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "dcmNEib7hED69JgPGu7OL4",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_015",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "89PF1RSxhIdKFDT8JoaM0f",
+          "path": "Canvas/UIBake/Library/MapScreen/Line",
+          "name": "Line"
+        },
+        {
+          "nodeId": "3cvc9SJ6tDWqq46PPNdbrH",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_001",
+          "name": "Line"
+        },
+        {
+          "nodeId": "c7oWBq9lhI9ZolGZ8hQOsf",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_002",
+          "name": "Line"
+        },
+        {
+          "nodeId": "98HDpimoRL4qHprAP8pA2q",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_003",
+          "name": "Line"
+        },
+        {
+          "nodeId": "639iK1bDRBpZPMM5jAzL+Y",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_004",
+          "name": "Line"
+        },
+        {
+          "nodeId": "71vZy3v/JMe47NzMWXqiDW",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_005",
+          "name": "Line"
+        },
+        {
+          "nodeId": "ecqoCETZ1DVLukPR83OQBH",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_006",
+          "name": "Line"
+        },
+        {
+          "nodeId": "9ax+LaJktO2qnqb7KbE4ER",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_007",
+          "name": "Line"
+        },
+        {
+          "nodeId": "d0hatPJ4xJKY9YG1HbOtPZ",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_008",
+          "name": "Line"
+        },
+        {
+          "nodeId": "8fntxVz51ExJWEUvdlDNIK",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_009",
+          "name": "Line"
+        },
+        {
+          "nodeId": "aaflfsxkBCTZfOn2MxA26Q",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_010",
+          "name": "Line"
+        },
+        {
+          "nodeId": "50ibRFhJJFmIdWQfHogqQb",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_011",
+          "name": "Line"
+        },
+        {
+          "nodeId": "7e5rt3wehM9qAGmanWThdx",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_012",
+          "name": "Line"
+        },
+        {
+          "nodeId": "58WN48Fy1MppyMrXgV+T7h",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_013",
+          "name": "Line"
+        },
+        {
+          "nodeId": "1eJaCRch1JQKlXS5zprXsa",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_014",
+          "name": "Line"
+        },
+        {
+          "nodeId": "00wkW7WBZOE4w43wJaIf8M",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_015",
+          "name": "Line"
+        },
+        {
+          "nodeId": "76YDj/MA5Pgp9e5IqNQDLi",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_016",
+          "name": "Line"
+        },
+        {
+          "nodeId": "34oj+UqEtKuonKwoC8BpL6",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_017",
+          "name": "Line"
+        },
+        {
+          "nodeId": "5cCYrKUThPWIFHR4n5Y65c",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_018",
+          "name": "Line"
+        },
+        {
+          "nodeId": "06Tn+XWWVIW4Wzy4LMX9Pb",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_019",
+          "name": "Line"
+        },
+        {
+          "nodeId": "a8B5rxLctEKo54mVNebKbD",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_020",
+          "name": "Line"
+        },
+        {
+          "nodeId": "a7Gih7H9xMgZSKdSwC+n9q",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_021",
+          "name": "Line"
+        },
+        {
+          "nodeId": "f2Y0FAqZJFWqxWW2l6bMX8",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_022",
+          "name": "Line"
+        },
+        {
+          "nodeId": "c0dBDDmx5MkIum67qgRyhK",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_023",
+          "name": "Line"
+        },
+        {
+          "nodeId": "c6GNag/JlDsZPPP7PZ3FHh",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_024",
+          "name": "Line"
+        },
+        {
+          "nodeId": "cecEEllMNPprZoGEoYpZoV",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_025",
+          "name": "Line"
+        },
+        {
+          "nodeId": "0f22pLQaFGaoWKcWNbFHMY",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_026",
+          "name": "Line"
+        },
+        {
+          "nodeId": "54oaEMcUJDXJzrIdJYHSjs",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_027",
+          "name": "Line"
+        },
+        {
+          "nodeId": "8by9kZCjJCLYd+2BoVed2p",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_028",
+          "name": "Line"
+        },
+        {
+          "nodeId": "4c/r6/zTNEvpG90K5hEhOK",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_029",
+          "name": "Line"
+        },
+        {
+          "nodeId": "eeXRCEgctGtaI044+b9XSw",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_030",
+          "name": "Line"
+        },
+        {
+          "nodeId": "ccEahtEYhM6bLFUP6+zVIb",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_031",
+          "name": "Line"
+        },
+        {
+          "nodeId": "8dPb3UL6xJ54CcQf8tAh1g",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_032",
+          "name": "Line"
+        },
+        {
+          "nodeId": "fbsGTkpwtCEJHiwwTyFSHQ",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_033",
+          "name": "Line"
+        },
+        {
+          "nodeId": "c0fxNN+QFL+6rPLurK2+At",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_034",
+          "name": "Line"
+        },
+        {
+          "nodeId": "62UDsfFKhEuYOWH5tQUYeT",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_035",
+          "name": "Line"
+        },
+        {
+          "nodeId": "c5ZN7BaU5NHJe/mbwee7bg",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_036",
+          "name": "Line"
+        },
+        {
+          "nodeId": "66fS/NujlBAI38wmEcdeOT",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_037",
+          "name": "Line"
+        },
+        {
+          "nodeId": "4bvuQpdG9LyKAfocEr/1xy",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_038",
+          "name": "Line"
+        },
+        {
+          "nodeId": "38Bods49tFo4LMOD6yrlS4",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_039",
+          "name": "Line"
+        },
+        {
+          "nodeId": "750nQQjDpPUpD+dqd9a757",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_040",
+          "name": "Line"
+        },
+        {
+          "nodeId": "50gj1U2AlKurtp3mti0TRC",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_041",
+          "name": "Line"
+        },
+        {
+          "nodeId": "66n81VIudFlZFTu7kFewUA",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_042",
+          "name": "Line"
+        },
+        {
+          "nodeId": "47vjZyK0ZBPKdUMew0qV2Y",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_043",
+          "name": "Line"
+        },
+        {
+          "nodeId": "bfx1JfTJ5A67/XFz/Ayrd0",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text2",
+          "name": "map-text2"
+        },
+        {
+          "nodeId": "b5dFalMsxMYZvfJq/gEFFL",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text3",
+          "name": "map-text3"
+        },
+        {
+          "nodeId": "10DpJt2AZHxrhEanKAtixk",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_016",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "d0sbD8hj5DBKyvVtfVqKbJ",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_017",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "94E8DusHtHHpTpcnnYMiRv",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_018",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "18WMJBAadH+ogGVJhyvKUH",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_019",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "303PWeuGdMW4Labsk851Tv",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_020",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "96HS8LJ1hOu7uRmdEpJBHs",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_021",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "82vXya2hJPsLWcNGE2cBXQ",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_022",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "c1MtjerwxMdaPeG0ikfjf9",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text4",
+          "name": "map-text4"
+        },
+        {
+          "nodeId": "95tQYP5yJDg5QK6tHsnwqV",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text5",
+          "name": "map-text5"
+        },
+        {
+          "nodeId": "a3pETc8b5NI4D9YhD/vRIj",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text6",
+          "name": "map-text6"
+        },
+        {
+          "nodeId": "21swBa+1lMFZi/9JQAh3Dw",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_044",
+          "name": "Line"
+        },
+        {
+          "nodeId": "caXwxCliBEUYcBYsTy/KsS",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_045",
+          "name": "Line"
+        },
+        {
+          "nodeId": "2dGZKZb/5AgrV9K30DHnuV",
+          "path": "Canvas/UIBake/Library/MapScreen/route-A",
+          "name": "route-A"
+        },
+        {
+          "nodeId": "a4kcZcNdFME6mPf+TQgQte",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_023",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b8oUOlLb5E/6SeY8wfJcL9",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_024",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "94prSNOKxOEYlPGsSfYmlg",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_025",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "84N+jrN61AsY7xy7abHbTh",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_026",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "34ZWBoe4xM+7ikyDwr3vvk",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_027",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "bf85MuFDlJzb2qDcDY2dB8",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_028",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "9aVm7ESXxAAaCYxspABrSS",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_029",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "c3dzERQNpIn6fEbFRaF/hi",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text7",
+          "name": "map-text7"
+        },
+        {
+          "nodeId": "43/WO1sFVHVavJW4FVSfv/",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text8",
+          "name": "map-text8"
+        },
+        {
+          "nodeId": "4fvsCxPSlEELdfCOUS0LHw",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text9",
+          "name": "map-text9"
+        },
+        {
+          "nodeId": "a4F8g4uXlIlayV63MFWQ03",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_046",
+          "name": "Line"
+        },
+        {
+          "nodeId": "1c7U6r3AhDYosBRxEC05O3",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_030",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "4dDjb0rVtJtaeT7Qs9dRtu",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_031",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "925nozrSFFvreehbEqe/uP",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_032",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ebVQClfaVPrq4upKr7njFY",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_033",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "77RJORvFtEiITLwMfdKEMw",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_034",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "46Hl84AbBDIoAtPuH5QLBX",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_035",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "eeeUg2FbZBkKQkYZVnLRB1",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_036",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "517UpJteBLspOjd2TtZe3w",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text10",
+          "name": "map-text10"
+        },
+        {
+          "nodeId": "aeUwJorYBDM71dvQEILbV8",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text11",
+          "name": "map-text11"
+        },
+        {
+          "nodeId": "5cJ09KOcVDr4THLhNlL30y",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text12",
+          "name": "map-text12"
+        },
+        {
+          "nodeId": "d9op5LJ69G3bq1ds4G4r17",
+          "path": "Canvas/UIBake/Library/MapScreen/route-B",
+          "name": "route-B"
+        },
+        {
+          "nodeId": "c3B6YjIwpETJ6tIiZNR/jS",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_037",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f1OmPRv/RGX6zp8yWRh+yT",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_038",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b29rXgR55FUagT26HNOoPE",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_039",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "6cUUY8mCBAf5GHUFa9HYrc",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_040",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "d1ErNxoJdAUaxM57zdNb0O",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_041",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "683dRq3UtHZ7qdEHG/jHJF",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_042",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "adDXyGgmxNoZNo+4gRglqw",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_043",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "dazcE89xZC97wvFeHHT3to",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text13",
+          "name": "map-text13"
+        },
+        {
+          "nodeId": "33MsTyUDhNBY8Jp9yWxbyU",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text14",
+          "name": "map-text14"
+        },
+        {
+          "nodeId": "bdoJJ6fjBH7qr//QWIZrQW",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text15",
+          "name": "map-text15"
+        },
+        {
+          "nodeId": "f0JkTdpyFM5ZZeK4g0aoXa",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_047",
+          "name": "Line"
+        },
+        {
+          "nodeId": "33JC+vn4ZLeooYzBZVEFEW",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_044",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ee2lsrI49LybD6j3dTRYjF",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_045",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "04hvygvedDDoE5cvczCAYO",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_046",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2ftvsLW5dERq10LCCM6Amn",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_047",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "daupq1FhJHZaYuSqNiENbg",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_048",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "36yjFnqvFH8p/T0Ylrfoyt",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_049",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "4bekjlFn5BBYH0Kx/4K5RO",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_050",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "5dd2Tx/EFFzZI5VI6GNqtH",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text16",
+          "name": "map-text16"
+        },
+        {
+          "nodeId": "b1Q84EvDxKMKQojOk0G7WP",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text17",
+          "name": "map-text17"
+        },
+        {
+          "nodeId": "73eGDR/0FAI6Zed7cW56xI",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text18",
+          "name": "map-text18"
+        },
+        {
+          "nodeId": "d6TpN9mARJzIUOqVp4ldtP",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_048",
+          "name": "Line"
+        },
+        {
+          "nodeId": "f5eAlXa4tMRrr8+oar1gFZ",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_049",
+          "name": "Line"
+        },
+        {
+          "nodeId": "9emqj43xpFubHXosWSl/3f",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_051",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2f0FAfW/9MdZ+NN6CXzzXq",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_052",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "379nNw9RxF/5r3SOtqH1AT",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_053",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "07am7jwY9N4YX1UeFT90Uu",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_054",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "57BQdr8clG4ZQ/UVmGy2zj",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_055",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "54oKqXYklKMqCLSpSG5CDw",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_056",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "95In7APFdIRrlqeRCCE6H3",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_057",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "88pv8J/cBMvpiCiN3hRvfM",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text19",
+          "name": "map-text19"
+        },
+        {
+          "nodeId": "b5euHDnglBkpY/OFfRS1lm",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text20",
+          "name": "map-text20"
+        },
+        {
+          "nodeId": "f0tvkSd2RNXb9p3w/VHILK",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text21",
+          "name": "map-text21"
+        },
+        {
+          "nodeId": "62f3nH/LVG05NEWlcqv40H",
+          "path": "Canvas/UIBake/Library/MapScreen/Line_050",
+          "name": "Line"
+        },
+        {
+          "nodeId": "65fcVGfyRPSqwJA/sMC9ud",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_058",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "36aynwD69JRaRS7cT3dN9z",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_059",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "76X/hZBGNIl5r5Mbrk0Wn/",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_060",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ad+7Cri+ROqbwYlTojbbJ1",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_061",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2fcckbtfFOjYwajLvXX8Iz",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_062",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "cfmB+ukExCVb1GLA9FofCw",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_063",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "d1QzxqED5P54AWv6DmXIor",
+          "path": "Canvas/UIBake/Library/MapScreen/Panel_064",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "426+IpLeFKIYaWaTpfUa0z",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text22",
+          "name": "map-text22"
+        },
+        {
+          "nodeId": "52uxUi43hE6q2Cg5P2Qj2g",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text23",
+          "name": "map-text23"
+        },
+        {
+          "nodeId": "ed/a0eQVJFkKwT5LDc2maN",
+          "path": "Canvas/UIBake/Library/MapScreen/map-text24",
+          "name": "map-text24"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/MapScreen/cc.UITransform",
+          "uuid": "18xCXOd/RDeKFC8+cuWwZE",
+          "name": "MapScreen<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "battle",
+    "asset": "assets/prefabs/screens/BattleScreen.prefab",
+    "result": {
+      "nodeId": "62cFFj6BtARbP0jpXg6ZXk",
+      "path": "Canvas/UIBake/Library/BattleScreen",
+      "name": "BattleScreen",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "BattleScreen",
+          "uuid": "6e8d8eff-81b8-407b-8e6a-ec469c809f8e",
+          "data": {
+            "nodeId": "feU3/5xZ9FapZEBwxWOnDq",
+            "path": "",
+            "name": "BattleScreen"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "62cFFj6BtARbP0jpXg6ZXk",
+          "path": "Canvas/UIBake/Library/BattleScreen",
+          "name": "BattleScreen"
+        },
+        "instance": {
+          "fileId": "46FQrCo3FFBa9HfPdZQCnK",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "c4L98jncBFrZ5iscLgRJWN"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "c4L98jncBFrZ5iscLgRJWN"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "c4L98jncBFrZ5iscLgRJWN"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "c4L98jncBFrZ5iscLgRJWN"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "c4L98jncBFrZ5iscLgRJWN",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "11goAXwrlLaI+EOTkk1uAF",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "46V43+kjVGkospH8+QMTac",
+          "path": "Canvas/UIBake/Library/BattleScreen/World",
+          "name": "World"
+        },
+        {
+          "nodeId": "3eM/UECFVPyoB3W+2AtE9Q",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f0VZWXMwRAtYMSM2LE2yYm",
+          "path": "Canvas/UIBake/Library/BattleScreen/banner-text0",
+          "name": "banner-text0"
+        },
+        {
+          "nodeId": "84Gq7n+C9Onqpzjj9O7VgQ",
+          "path": "Canvas/UIBake/Library/BattleScreen/banner-text1",
+          "name": "banner-text1"
+        },
+        {
+          "nodeId": "635vSrOYVBeIGT92prR/eX",
+          "path": "Canvas/UIBake/Library/BattleScreen/banner-text2",
+          "name": "banner-text2"
+        },
+        {
+          "nodeId": "27pjGK28ZCVaoIyN9JEPsp",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "60RB4wFclKOo9CblwXgldl",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "0duI9JM89C5om/KiCmA36h",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "43ixgwlf1ApKnKCc2dbgrg",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "49WNMNkFVC55zBjWbX/bDe",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "498MAna79Hqre7rGI4zepy",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "77MSqqF4lOyJOPq1cHe9MF",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "42drPNSbpN44IsUHYBFRRw",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text0",
+          "name": "battle-text0"
+        },
+        {
+          "nodeId": "7cMLedxtpIhrIBse70tbCj",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text1",
+          "name": "battle-text1"
+        },
+        {
+          "nodeId": "ebzwm8bUZLl7OjtfkhP3xr",
+          "path": "Canvas/UIBake/Library/BattleScreen/Aim guide",
+          "name": "Aim guide"
+        },
+        {
+          "nodeId": "e5jjxuSoJE0q9Jc9yYhgUk",
+          "path": "Canvas/UIBake/Library/BattleScreen/enemy-target",
+          "name": "enemy-target"
+        },
+        {
+          "nodeId": "e6c0EjZ0BCL7bBraFrRfMG",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_009",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "7aiLsGFYZC9rVPRvpB5gIc",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_010",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "6fgltw5xNEFZRhHtub00Up",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_011",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "80P+WUg5VLEJvn0pz1h5zS",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_012",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "a4EynGS3FLSqFCVpOWpViw",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_013",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "31IqhLIvFGeKCckNq2814O",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_014",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "26g3c7L1tL2IFsEoC9IC/c",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_015",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "6a2khUyIFKvaQmY0DZnzG1",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text3",
+          "name": "battle-text3"
+        },
+        {
+          "nodeId": "47h9vU1uZMe7myVAegyIsl",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text4",
+          "name": "battle-text4"
+        },
+        {
+          "nodeId": "71k0G60ShNFYMo+LmX3c0U",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_016",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "66kV2/W7FKH6Oit/NSmihx",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_017",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "941P7kCBVKnbFlNJDsSMZ5",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_018",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "37V4lGaWZHu66Eb4Pq5tdq",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_019",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "8bows2wHpFMKtLleqB1CHq",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_020",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f0yJefVJ1Mp5yE1dYza6JD",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_021",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "9dpDQqAo1HSLl/zykkNLX8",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_022",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b9AN7tIEBCs7gOiR6kJ8eX",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_023",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "30hb7NsdJACYrI8kjVR6TV",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_024",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "16FSiiISJM95FfXS3K9nDL",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text5",
+          "name": "battle-text5"
+        },
+        {
+          "nodeId": "a6rWwOM3dBgYZ0jFfIRl7F",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_025",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b05yPgYl1B2pO62KkRGiHe",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_026",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "9dD5vqhLdGzL9OjpvXI6nK",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text6",
+          "name": "battle-text6"
+        },
+        {
+          "nodeId": "99uVTqvaZM5aaA2rlcQ3mX",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_027",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "3bACbbrQdA64nz73beGvRU",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_028",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b0JqQy129Po5uyOBv4Uf1R",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_029",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "78yEXZBelNZ5O+0o91O4r7",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_030",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "efBpWfIK1GKrJZE/g06isO",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_031",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "45Fr9szmZIcodH7FoacjMf",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_032",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "0b+tHTRCZOVb2/CAoU6Y6d",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_033",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "57P9NEE5RAtKcT6FaFJZui",
+          "path": "Canvas/UIBake/Library/BattleScreen/Pixel icon",
+          "name": "Pixel icon"
+        },
+        {
+          "nodeId": "22xwnoacpENo7kphIEPzMP",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text7",
+          "name": "battle-text7"
+        },
+        {
+          "nodeId": "7cC5ik7P5EkoHXaIEGewfB",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text8",
+          "name": "battle-text8"
+        },
+        {
+          "nodeId": "7aZ5fN/iNIDJ8Cr5amPPTl",
+          "path": "Canvas/UIBake/Library/BattleScreen/Panel_034",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "a9PXMp93hAUJQ+n2EpsjFj",
+          "path": "Canvas/UIBake/Library/BattleScreen/Line",
+          "name": "Line"
+        },
+        {
+          "nodeId": "afmE7y2xBCj6OEwSKskdLx",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text9",
+          "name": "battle-text9"
+        },
+        {
+          "nodeId": "26rYX3wU5IsqlK08QFyp+b",
+          "path": "Canvas/UIBake/Library/BattleScreen/drawPile",
+          "name": "drawPile"
+        },
+        {
+          "nodeId": "b0e+YTVfhOI557c7yXwPiQ",
+          "path": "Canvas/UIBake/Library/BattleScreen/discardPile",
+          "name": "discardPile"
+        },
+        {
+          "nodeId": "0axFtz1BRFsoSv1gYjDfdJ",
+          "path": "Canvas/UIBake/Library/BattleScreen/Card 菜刀",
+          "name": "Card 菜刀"
+        },
+        {
+          "nodeId": "dbR5VCnT9Bbbd2pt/ZcQAR",
+          "path": "Canvas/UIBake/Library/BattleScreen/Card 基础躲避",
+          "name": "Card 基础躲避"
+        },
+        {
+          "nodeId": "28oEI+IuFAaoa9wQwTHVb5",
+          "path": "Canvas/UIBake/Library/BattleScreen/Card 基础躲避_001",
+          "name": "Card 基础躲避"
+        },
+        {
+          "nodeId": "b5Tklwq35KB5bLwIUaPK+3",
+          "path": "Canvas/UIBake/Library/BattleScreen/Card 修复",
+          "name": "Card 修复"
+        },
+        {
+          "nodeId": "31pQCxlUhI8Y9bfxTT+oGe",
+          "path": "Canvas/UIBake/Library/BattleScreen/Card 强化躲避",
+          "name": "Card 强化躲避"
+        },
+        {
+          "nodeId": "81K0Km729OU5JbewMwrlJb",
+          "path": "Canvas/UIBake/Library/BattleScreen/Card 基础攻击",
+          "name": "Card 基础攻击"
+        },
+        {
+          "nodeId": "04gB8DOElMV6nVk8n3tTvj",
+          "path": "Canvas/UIBake/Library/BattleScreen/end-turn",
+          "name": "end-turn"
+        },
+        {
+          "nodeId": "56YUkIBKVBWZHmBmZHNnEI",
+          "path": "Canvas/UIBake/Library/BattleScreen/battle-text10",
+          "name": "battle-text10"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/BattleScreen/cc.UITransform",
+          "uuid": "ecnKohD1lIDLkmx6FT35dG",
+          "name": "BattleScreen<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "rewards",
+    "asset": "assets/prefabs/screens/RewardScreen.prefab",
+    "result": {
+      "nodeId": "5aKGdfYGJLVI4A+/NxYiMR",
+      "path": "Canvas/UIBake/Library/RewardScreen",
+      "name": "RewardScreen",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "RewardScreen",
+          "uuid": "05a5df9c-76fa-4166-9c55-a7059e9b5c52",
+          "data": {
+            "nodeId": "5e51tbQWdLipdMagrGyJzl",
+            "path": "",
+            "name": "RewardScreen"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "5aKGdfYGJLVI4A+/NxYiMR",
+          "path": "Canvas/UIBake/Library/RewardScreen",
+          "name": "RewardScreen"
+        },
+        "instance": {
+          "fileId": "7d8IPlCLlFG5SdOdC7Zml4",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "20RY+FSvJIgqsr1MjWJfRU"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "20RY+FSvJIgqsr1MjWJfRU"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "20RY+FSvJIgqsr1MjWJfRU"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "20RY+FSvJIgqsr1MjWJfRU"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "20RY+FSvJIgqsr1MjWJfRU",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "50C17GSn9B06TwLx9kH8fX",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "48nTf5LHxJBJZropMn3SAS",
+          "path": "Canvas/UIBake/Library/RewardScreen/World",
+          "name": "World"
+        },
+        {
+          "nodeId": "2cG6GTbkZBYLNctpxv7x/o",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "9dQ1S85IZLkYSVUohb181B",
+          "path": "Canvas/UIBake/Library/RewardScreen/banner-text0",
+          "name": "banner-text0"
+        },
+        {
+          "nodeId": "130TUrdylAcJ1qtiKkOE7G",
+          "path": "Canvas/UIBake/Library/RewardScreen/banner-text1",
+          "name": "banner-text1"
+        },
+        {
+          "nodeId": "1dyH+VvyBICq0B/SnVx+sV",
+          "path": "Canvas/UIBake/Library/RewardScreen/banner-text2",
+          "name": "banner-text2"
+        },
+        {
+          "nodeId": "58OcTDSuhJi6jOmyWXpa2b",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "3aKEb5g2FCPI3EGxmQuHpc",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f1p+nEfuBMl7EXOSIqVOf6",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "5aDuLQaWFLMqKteJbHjw4X",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "7agL3ZVT5GqIbsq9zXLEB6",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e62SfZ5wRGhZ43/jPWELOx",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e4HMkqFnZKhJXekzxDbNC/",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "22VoaIudZNHooGC2WSp4Aa",
+          "path": "Canvas/UIBake/Library/RewardScreen/rewards-text0",
+          "name": "rewards-text0"
+        },
+        {
+          "nodeId": "53FQe41a9HAr6oyWKJTStm",
+          "path": "Canvas/UIBake/Library/RewardScreen/rewards-text1",
+          "name": "rewards-text1"
+        },
+        {
+          "nodeId": "e5N2SKzUVCH5uGWuD5jJaA",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_009",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "14HKjvn4ND8ZXue/T59V82",
+          "path": "Canvas/UIBake/Library/RewardScreen/Card 基础攻击",
+          "name": "Card 基础攻击"
+        },
+        {
+          "nodeId": "f08uHR6hdL0Z3m7M4M3a60",
+          "path": "Canvas/UIBake/Library/RewardScreen/claim-card-0",
+          "name": "claim-card-0"
+        },
+        {
+          "nodeId": "37ZlcJ4pBPyL6YkRttl8xg",
+          "path": "Canvas/UIBake/Library/RewardScreen/Card 基础躲避",
+          "name": "Card 基础躲避"
+        },
+        {
+          "nodeId": "61mDJF96FFaIIKGhLrnbl2",
+          "path": "Canvas/UIBake/Library/RewardScreen/claim-card-1",
+          "name": "claim-card-1"
+        },
+        {
+          "nodeId": "4e8bFdjZBNWbF80mPvOj4z",
+          "path": "Canvas/UIBake/Library/RewardScreen/Card 菜刀",
+          "name": "Card 菜刀"
+        },
+        {
+          "nodeId": "ab9V4LaJJMKaxPNFxp/e7H",
+          "path": "Canvas/UIBake/Library/RewardScreen/claim-card-2",
+          "name": "claim-card-2"
+        },
+        {
+          "nodeId": "84pdGS9kBJ66Nc3PCt46jC",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_010",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "95Cu0Tts9DFKPqR5toUGSu",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_011",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2b9nBZLxlBe7Hpj2NO0KmN",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_012",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e3x0bplm9BDJeh/mXEjMJK",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_013",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "845j1qedVJCYkyr+ARrVet",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_014",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "53Lwz60uJFy5pSEQFlc678",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_015",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "28/NHZDOhA66BGSvLv5vc2",
+          "path": "Canvas/UIBake/Library/RewardScreen/Panel_016",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "abL54HDn9GdoIkClQD2byn",
+          "path": "Canvas/UIBake/Library/RewardScreen/rewards-text2",
+          "name": "rewards-text2"
+        },
+        {
+          "nodeId": "d3Gr3OeGVPDrJ9lc8bvOa/",
+          "path": "Canvas/UIBake/Library/RewardScreen/rewards-text3",
+          "name": "rewards-text3"
+        },
+        {
+          "nodeId": "84hSOGOctIBbh18S9ZKJyl",
+          "path": "Canvas/UIBake/Library/RewardScreen/claim-supplies",
+          "name": "claim-supplies"
+        },
+        {
+          "nodeId": "a6/UPPm+FBxZVsjHoMSdWU",
+          "path": "Canvas/UIBake/Library/RewardScreen/reward-bag",
+          "name": "reward-bag"
+        },
+        {
+          "nodeId": "e0OoOJJCpC04vw20U5ASQG",
+          "path": "Canvas/UIBake/Library/RewardScreen/rewards-done",
+          "name": "rewards-done"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/RewardScreen/cc.UITransform",
+          "uuid": "6bREFgYTdM2qPyczDUERZz",
+          "name": "RewardScreen<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "rest",
+    "asset": "assets/prefabs/screens/RestScreen.prefab",
+    "result": {
+      "nodeId": "93vZR+kpVNwp/ESV1X8QeF",
+      "path": "Canvas/UIBake/Library/RestScreen",
+      "name": "RestScreen",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "RestScreen",
+          "uuid": "c48fbc8e-564e-47c2-9a10-f25af656a585",
+          "data": {
+            "nodeId": "a3fNBelZBF4rNJQOmGSh3T",
+            "path": "",
+            "name": "RestScreen"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "93vZR+kpVNwp/ESV1X8QeF",
+          "path": "Canvas/UIBake/Library/RestScreen",
+          "name": "RestScreen"
+        },
+        "instance": {
+          "fileId": "42aQZjQtBKdIfFDXSPzCdp",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "afr7IoZGRD3YH4L8N8Z74v"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "afr7IoZGRD3YH4L8N8Z74v"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "afr7IoZGRD3YH4L8N8Z74v"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "afr7IoZGRD3YH4L8N8Z74v"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "afr7IoZGRD3YH4L8N8Z74v",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "05qE5xvS1OFoRFaAFiwBik",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "34l+7pbAVAaJZJeyOAqMSL",
+          "path": "Canvas/UIBake/Library/RestScreen/World",
+          "name": "World"
+        },
+        {
+          "nodeId": "fdYqCSBw5M2orgteZ0l2yS",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "5agge6eGhCuZiv7v/2oTyQ",
+          "path": "Canvas/UIBake/Library/RestScreen/banner-text0",
+          "name": "banner-text0"
+        },
+        {
+          "nodeId": "c3ipRd2l9EYqcGXUFO7sje",
+          "path": "Canvas/UIBake/Library/RestScreen/banner-text1",
+          "name": "banner-text1"
+        },
+        {
+          "nodeId": "dbpb2m6RZDHoKJTmYbcaFX",
+          "path": "Canvas/UIBake/Library/RestScreen/banner-text2",
+          "name": "banner-text2"
+        },
+        {
+          "nodeId": "34hU4TkS1CfYXRtpCvO7yC",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "28bqnOKIpAIr9GrU8dHYFc",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "62QSHmCBlE2bjcfZZYWE9j",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "fbqFyzpLhIJrYUp5+gwsv1",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "43d455rL5DNKVAOao+5vOU",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "16ufYE31lFLa4Zt+jrwgy2",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "8eAdmSudxF4qk9KL+8wI68",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "61E0Ei4+hEK7u3dzKT7AIB",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-text0",
+          "name": "rest-text0"
+        },
+        {
+          "nodeId": "26HHRgBwZMyqRk9T6gpa7l",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-text1",
+          "name": "rest-text1"
+        },
+        {
+          "nodeId": "edgd2pjztKjI7L7hb45jk6",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-cash",
+          "name": "rest-cash"
+        },
+        {
+          "nodeId": "f3hzRaQM1Phrgb553lLX+r",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_009",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "6bvBwT5t5HMI+z1fPSQgtB",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_010",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "81WMfQSDpIWYJM5qVYY7ek",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_011",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "52051xOk1Aqq897ECUMmCG",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_012",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "7djp7NW+pLqKvnWhglruJP",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_013",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "0128JfYnNB7Y8ImmcicyX1",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_014",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "8fHDFFdq9Adru5Il/7vCvF",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_015",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ea00DNF5lJHpNnlifDwMsX",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-text2",
+          "name": "rest-text2"
+        },
+        {
+          "nodeId": "578/aIP+pNPryUeqr4gdkY",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-text3",
+          "name": "rest-text3"
+        },
+        {
+          "nodeId": "63wxgCZAVDyZc6u7/xuYVs",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-bag",
+          "name": "rest-bag"
+        },
+        {
+          "nodeId": "24E98GCrhA15/yjEJrFRsC",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-text4",
+          "name": "rest-text4"
+        },
+        {
+          "nodeId": "6aqsxp5U5K25IZmc5r4hHV",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-done",
+          "name": "rest-done"
+        },
+        {
+          "nodeId": "ed5om7TWhJp6bUUH2NC4oP",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_016",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2cBswo605CQ5bKob3UUQgW",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_017",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b40XesFZpMF4C2qx+azLM0",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_018",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "7dPkTu/r5HVYFS6pLQstoH",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_019",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "0bdB18ug1Djpj5/a9R3cZd",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_020",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "3eBfiqWrtOuZhuX90tsAcu",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_021",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "c6RXz/NXtMA4cGXvPrXOHm",
+          "path": "Canvas/UIBake/Library/RestScreen/Panel_022",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "23cuhkmT5Gl6rGdYP7kMmg",
+          "path": "Canvas/UIBake/Library/RestScreen/rest-text5",
+          "name": "rest-text5"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/RestScreen/cc.UITransform",
+          "uuid": "daQGjL3IBJA4WsPIZHFCTi",
+          "name": "RestScreen<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "shelter",
+    "asset": "assets/prefabs/screens/ShelterScreen.prefab",
+    "result": {
+      "nodeId": "d82i9ozZNKCq3CqhhKOBL9",
+      "path": "Canvas/UIBake/Library/ShelterScreen",
+      "name": "ShelterScreen",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "ShelterScreen",
+          "uuid": "a7f37ddd-4001-4d17-9e40-09f280bffd9e",
+          "data": {
+            "nodeId": "92HOKZGt9NUriS0lcfv2qa",
+            "path": "",
+            "name": "ShelterScreen"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "d82i9ozZNKCq3CqhhKOBL9",
+          "path": "Canvas/UIBake/Library/ShelterScreen",
+          "name": "ShelterScreen"
+        },
+        "instance": {
+          "fileId": "1aj4C28d9JRrA0ZrCNQGvW",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "dcGAZLLzZAmq8FUt2fxHhI"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "dcGAZLLzZAmq8FUt2fxHhI"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "dcGAZLLzZAmq8FUt2fxHhI"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "dcGAZLLzZAmq8FUt2fxHhI"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "dcGAZLLzZAmq8FUt2fxHhI",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "5fMlrBDxxFzom5tN/UtB2Z",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "d1ojs7TVJJg79VUgBpW02u",
+          "path": "Canvas/UIBake/Library/ShelterScreen/World",
+          "name": "World"
+        },
+        {
+          "nodeId": "b3Hq0ekmpDxo7XMKC+FKDQ",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "303LHQg1VC1JgIXvwUxlIu",
+          "path": "Canvas/UIBake/Library/ShelterScreen/banner-text0",
+          "name": "banner-text0"
+        },
+        {
+          "nodeId": "d62jdA3UdEuq+YPy8BlnzZ",
+          "path": "Canvas/UIBake/Library/ShelterScreen/banner-text1",
+          "name": "banner-text1"
+        },
+        {
+          "nodeId": "33TFT24wNKgIRuBrU0kXXt",
+          "path": "Canvas/UIBake/Library/ShelterScreen/banner-text2",
+          "name": "banner-text2"
+        },
+        {
+          "nodeId": "10D3IzOXxA8KxJC24axEzA",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "5c7ETQKqBIRJDmwPrFePJ4",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "dcQnL+biBEKLOzdCF5KgW+",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "facp3wJmFIh4/wDhWXm5ub",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "8bUUYUx0RBIaj84Za3odLQ",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ddYB0KDO1KVKzx0yc6fVUy",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "fdd706niZA14s2VpIEup0W",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "394kPbL4JEp55WXyk6uUk9",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text0",
+          "name": "shelter-text0"
+        },
+        {
+          "nodeId": "cfjjheacZFTpClxWqmipVi",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text1",
+          "name": "shelter-text1"
+        },
+        {
+          "nodeId": "09akq4iY1ElKpcvmauN6xz",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text2",
+          "name": "shelter-text2"
+        },
+        {
+          "nodeId": "f0KQv7PvZMF5i30RNQ9lee",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Line",
+          "name": "Line"
+        },
+        {
+          "nodeId": "81LfxoZuFOuJlChLQdY1ZK",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text3",
+          "name": "shelter-text3"
+        },
+        {
+          "nodeId": "efquGmGANGTbZ4LyorHF4O",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text4",
+          "name": "shelter-text4"
+        },
+        {
+          "nodeId": "d6Wszbv6BBBZyR8GoO9++j",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-repair",
+          "name": "shelter-repair"
+        },
+        {
+          "nodeId": "2bXrHlsx9GmLXoKqj9D44U",
+          "path": "Canvas/UIBake/Library/ShelterScreen/Line_001",
+          "name": "Line"
+        },
+        {
+          "nodeId": "bfBkybMT9F27+Fx0QA82ll",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text5",
+          "name": "shelter-text5"
+        },
+        {
+          "nodeId": "deUIt3MAZLq4ri3QWDbC79",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text6",
+          "name": "shelter-text6"
+        },
+        {
+          "nodeId": "e4N5MyWsVHLaYfgq+fI9w5",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text7",
+          "name": "shelter-text7"
+        },
+        {
+          "nodeId": "93HDFPLhpEHq0MMN26U73S",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-done",
+          "name": "shelter-done"
+        },
+        {
+          "nodeId": "08PYTLUDNNIJVVUSPqLnYF",
+          "path": "Canvas/UIBake/Library/ShelterScreen/shelter-text8",
+          "name": "shelter-text8"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/ShelterScreen/cc.UITransform",
+          "uuid": "d5h45A9vBIK7mYicnx2BO1",
+          "name": "ShelterScreen<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "day2",
+    "asset": "assets/prefabs/screens/DayTwoScreen.prefab",
+    "result": {
+      "nodeId": "d2NPyQE1dMApyZstt83mJB",
+      "path": "Canvas/UIBake/Library/DayTwoScreen",
+      "name": "DayTwoScreen",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "DayTwoScreen",
+          "uuid": "2004fe6a-d911-4fb3-bdaa-ae3998f67b8c",
+          "data": {
+            "nodeId": "aaAJLhZ4hCHpVGbYs5mVsd",
+            "path": "",
+            "name": "DayTwoScreen"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "d2NPyQE1dMApyZstt83mJB",
+          "path": "Canvas/UIBake/Library/DayTwoScreen",
+          "name": "DayTwoScreen"
+        },
+        "instance": {
+          "fileId": "a0cKhS/0xN7bScX6qSUdUb",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "d8XPXXy2ZJ1bdIHTwO5X2p"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "d8XPXXy2ZJ1bdIHTwO5X2p"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "d8XPXXy2ZJ1bdIHTwO5X2p"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "d8XPXXy2ZJ1bdIHTwO5X2p"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "d8XPXXy2ZJ1bdIHTwO5X2p",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "699YmZvEZBzKOFupFy9FMr",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f3Z3x8eqxEFqFN+6KC/8Yd",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/World",
+          "name": "World"
+        },
+        {
+          "nodeId": "dfVNWrH/VAaaGo3otZtKY1",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "deKa0guiVDhK0spOJ1hO8o",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "671I+zDwxMaaUBfDYbwFCq",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "10L2GnfjRANIF5fjF6K4N+",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2fPctqKJhFJaWrYELgGTBt",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f8G4VEXUtPiordjuCU/702",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b5Vi9t8gpAqIscB53GRk9D",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "a3NeHmKKNFqZrg0i027Ts/",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "693JPi/DVMO6UUQirqpw6f",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/journal-text0",
+          "name": "journal-text0"
+        },
+        {
+          "nodeId": "77fC5c8N9K6aJWg182s3w6",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/journal-text1",
+          "name": "journal-text1"
+        },
+        {
+          "nodeId": "ecE2PQ4Y1I/bnkccLPMsJE",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/journal-text2",
+          "name": "journal-text2"
+        },
+        {
+          "nodeId": "f8v12Q0eZFXIWeC1m13/AA",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/journal-text3",
+          "name": "journal-text3"
+        },
+        {
+          "nodeId": "1etrH6NblOOrTyuqghgyH/",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/journal-text4",
+          "name": "journal-text4"
+        },
+        {
+          "nodeId": "5bnsVT035AuYrHzMByXSPg",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/journal-start",
+          "name": "journal-start"
+        },
+        {
+          "nodeId": "d3HuRgqXpJzZQeYFGX9XTq",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/journal-text5",
+          "name": "journal-text5"
+        },
+        {
+          "nodeId": "17vvGeOyhKPYkf39WrfYkm",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/journal-text6",
+          "name": "journal-text6"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/DayTwoScreen/cc.UITransform",
+          "uuid": "78gyYyNL1NmI7wZJl1nOmq",
+          "name": "DayTwoScreen<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "failure",
+    "asset": "assets/prefabs/screens/FailureScreen.prefab",
+    "result": {
+      "nodeId": "96wCcv1h9E1rLSYLyPWcyb",
+      "path": "Canvas/UIBake/Library/FailureScreen",
+      "name": "FailureScreen",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "FailureScreen",
+          "uuid": "7701423c-3849-4cc3-b84c-5e80bdb2bff2",
+          "data": {
+            "nodeId": "7fnwLgCG5JtJsWjjEOMUqK",
+            "path": "",
+            "name": "FailureScreen"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "96wCcv1h9E1rLSYLyPWcyb",
+          "path": "Canvas/UIBake/Library/FailureScreen",
+          "name": "FailureScreen"
+        },
+        "instance": {
+          "fileId": "96sXHp7qJOKq2Ndq/aUIos",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "d9fMY6sVxKL73pbuoTdzqq"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "d9fMY6sVxKL73pbuoTdzqq"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "d9fMY6sVxKL73pbuoTdzqq"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "d9fMY6sVxKL73pbuoTdzqq"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "d9fMY6sVxKL73pbuoTdzqq",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "050+jj2L5NEqwlCiCdZGTq",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "a1St9ngTpIe76cPiPZ7SR+",
+          "path": "Canvas/UIBake/Library/FailureScreen/World",
+          "name": "World"
+        },
+        {
+          "nodeId": "5ajSzDjp5HdpDtrLSkvVYO",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e4kZZpom5Oa6ZEc/Fu+IRi",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ddsW995+ZGn4+y4g3IScfL",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "21OLh6ocNNILmDmCzJFhFT",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "27YW/th/RCabiC86UCFR1X",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "15/P866fdFT6jU9X9M4imi",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "bbs7GonwhDzaNmwon8CPGO",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "55y70vFc5KPL6gsZGAFewB",
+          "path": "Canvas/UIBake/Library/FailureScreen/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "64N0JJVQtBbabNT4y4HmuY",
+          "path": "Canvas/UIBake/Library/FailureScreen/journal-text0",
+          "name": "journal-text0"
+        },
+        {
+          "nodeId": "91aYeidsdEibeqbN8mT1P6",
+          "path": "Canvas/UIBake/Library/FailureScreen/journal-text1",
+          "name": "journal-text1"
+        },
+        {
+          "nodeId": "330+wUei5HepQ77NHwUxxL",
+          "path": "Canvas/UIBake/Library/FailureScreen/journal-text2",
+          "name": "journal-text2"
+        },
+        {
+          "nodeId": "4fyU5/1+tGc6TEuccq2git",
+          "path": "Canvas/UIBake/Library/FailureScreen/journal-text3",
+          "name": "journal-text3"
+        },
+        {
+          "nodeId": "35tujjQldP76p+4NfgusE6",
+          "path": "Canvas/UIBake/Library/FailureScreen/journal-start",
+          "name": "journal-start"
+        },
+        {
+          "nodeId": "00ImEYCQRPWrOb5rDFIJ+F",
+          "path": "Canvas/UIBake/Library/FailureScreen/journal-text4",
+          "name": "journal-text4"
+        },
+        {
+          "nodeId": "b4iuxwwMhKjatelG+0QNJI",
+          "path": "Canvas/UIBake/Library/FailureScreen/journal-text5",
+          "name": "journal-text5"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/FailureScreen/cc.UITransform",
+          "uuid": "0ffuoBGbFASqasBGL023J6",
+          "name": "FailureScreen<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "bag",
+    "asset": "assets/prefabs/ui/InventoryPopup.prefab",
+    "result": {
+      "nodeId": "162XhVzvFPpqf8O8VItFVR",
+      "path": "Canvas/UIBake/Library/InventoryPopup",
+      "name": "InventoryPopup",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "InventoryPopup",
+          "uuid": "72c2bfd1-4d0c-438a-b1bf-7fb512070ea6",
+          "data": {
+            "nodeId": "2f8YUsaoRIBZnlUxutqXv8",
+            "path": "",
+            "name": "InventoryPopup"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "162XhVzvFPpqf8O8VItFVR",
+          "path": "Canvas/UIBake/Library/InventoryPopup",
+          "name": "InventoryPopup"
+        },
+        "instance": {
+          "fileId": "50y0HL7EBH2ZvtgASmBKYC",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "01poGoG+JP3r9SvVTdzCv8"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "01poGoG+JP3r9SvVTdzCv8"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "01poGoG+JP3r9SvVTdzCv8"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "01poGoG+JP3r9SvVTdzCv8"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "01poGoG+JP3r9SvVTdzCv8",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "9dTkTIPcJNda/xWp20kXrf",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e26NjyDh5Ib7ajp+H3cZgq",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "214AZMABxO0Z1eVAag0A+R",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "785wDQFkVLRqveynzTI5xA",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ebnocBsm1MU5Emzt+C+Aey",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "d6aWuPg51E665VrWZ+0MWB",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b7DzLaop5DLZ2YPXChJYRV",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "101mXgp5pLsqCJDuPjh7re",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "32hcV+O8JES6BHU/Lh79pz",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text0",
+          "name": "bag-text0"
+        },
+        {
+          "nodeId": "92aGJBvupI/6YGwfx3dSw7",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text1",
+          "name": "bag-text1"
+        },
+        {
+          "nodeId": "c7A3K57YRDKIIGesYbmHvc",
+          "path": "Canvas/UIBake/Library/InventoryPopup/modal-close",
+          "name": "modal-close"
+        },
+        {
+          "nodeId": "5eoANlPhhB/JJrLP/fC3Yt",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_008",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "c46ScZb4BDHIJSlC8EuTkx",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_009",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "a1q/5GmnhC7ZwG+gidrCKM",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_010",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "fbfHY8z1ZA4LGbTv7wFP0A",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_011",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "36eNmsSydBFKzylJy3IJOe",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_012",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "9elF6QcYRDXay9U5jKz1lu",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_013",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f1+4ht/7BGxK7j/6YCESm6",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_014",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "96/074XUZPv6SeDB3Q0ibf",
+          "path": "Canvas/UIBake/Library/InventoryPopup/square-attack",
+          "name": "square-attack"
+        },
+        {
+          "nodeId": "a5ch6lNINPSbqrgti1/Rg/",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text2",
+          "name": "bag-text2"
+        },
+        {
+          "nodeId": "adAYscSaBCkrtYUOLam5DF",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text3",
+          "name": "bag-text3"
+        },
+        {
+          "nodeId": "d6BtRp0dNPL6EF0EnkHocN",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text4",
+          "name": "bag-text4"
+        },
+        {
+          "nodeId": "574i0uDllJF65wZqJSSVhI",
+          "path": "Canvas/UIBake/Library/InventoryPopup/toggle-card-1",
+          "name": "toggle-card-1"
+        },
+        {
+          "nodeId": "25xFfvTCFOTb7N1QsJ+/hK",
+          "path": "Canvas/UIBake/Library/InventoryPopup/discard-card-1",
+          "name": "discard-card-1"
+        },
+        {
+          "nodeId": "3e6b+6MpdIy5DCjAAJqkOE",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_015",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "66msU2IZpDJYE70z9d0mjc",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_016",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "33Ct7fjTtHBazQZOwbaBWj",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_017",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2aNKl0Vl1P6Ie9hN5EBbl1",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_018",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "12663oAu9KKr5XGCKVGTY1",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_019",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "0a1oOjvvpBk4FhqJDMT/60",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_020",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "fdfQTBG+pKNpJwZPlWY9Tv",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_021",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "16F9dFzMdDuKyi67muBOP4",
+          "path": "Canvas/UIBake/Library/InventoryPopup/square-attack_001",
+          "name": "square-attack"
+        },
+        {
+          "nodeId": "5b2rmnsKRNnIQmUQm3cuBO",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text5",
+          "name": "bag-text5"
+        },
+        {
+          "nodeId": "e8KK7jmSFEXb9ldtglQjgH",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text6",
+          "name": "bag-text6"
+        },
+        {
+          "nodeId": "70URWBzDdGIbYUGvRsLZbn",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text7",
+          "name": "bag-text7"
+        },
+        {
+          "nodeId": "42bfWeGuNJSrx3mPHAxCA7",
+          "path": "Canvas/UIBake/Library/InventoryPopup/toggle-card-2",
+          "name": "toggle-card-2"
+        },
+        {
+          "nodeId": "a6hPXadpRElYdL0L0LIYPe",
+          "path": "Canvas/UIBake/Library/InventoryPopup/discard-card-2",
+          "name": "discard-card-2"
+        },
+        {
+          "nodeId": "56cRUUdKxOmrXQ+MSBlBIv",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_022",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2908Vj425Jjqhvy2SZbZwS",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_023",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "3fQatVCyJEQq73UPl0c7ha",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_024",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "c7uxc7MMVGuaY/1G37Y1L/",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_025",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "50sFZCOgdGp4LSZNG2cLmF",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_026",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "61C8OStxBHwLMt9QewMyut",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_027",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "48rEnElrtPvK8sIIcggQ3S",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_028",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "5ehyT2sf1HeqS6f8Id8xQA",
+          "path": "Canvas/UIBake/Library/InventoryPopup/square-dodge",
+          "name": "square-dodge"
+        },
+        {
+          "nodeId": "e8X29+qPZKVqp2GHrmVJXi",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text8",
+          "name": "bag-text8"
+        },
+        {
+          "nodeId": "537Te9nCtMnr8XVEoUx8eF",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text9",
+          "name": "bag-text9"
+        },
+        {
+          "nodeId": "32JV/ueDJImrUmXZUlRgSR",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text10",
+          "name": "bag-text10"
+        },
+        {
+          "nodeId": "fch81+WDFJ0aZUyukLLfKe",
+          "path": "Canvas/UIBake/Library/InventoryPopup/toggle-card-3",
+          "name": "toggle-card-3"
+        },
+        {
+          "nodeId": "01SftuBQJDc6WpGxdUeJ8j",
+          "path": "Canvas/UIBake/Library/InventoryPopup/discard-card-3",
+          "name": "discard-card-3"
+        },
+        {
+          "nodeId": "87A6uFTWRMCqtDiumo5A6R",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_029",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "73e76mjLdD+qFNwJWh2o2U",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_030",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "2dBtF1lR5AJoI9NMLYmlrT",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_031",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "428N69L4xH5YXxTgKXO+zt",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_032",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "3bGQJKEj1NKrb2smFUrJqG",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_033",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "1fHyt7oDdKKpEnBNZSckNZ",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_034",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "83trTs+fBPHZP7b0XtllXN",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_035",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "92OfMKTYpCq5w5AR+JjwPM",
+          "path": "Canvas/UIBake/Library/InventoryPopup/square-dodge_001",
+          "name": "square-dodge"
+        },
+        {
+          "nodeId": "33HejFm/VEw5Ib0V3Iq9jJ",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text11",
+          "name": "bag-text11"
+        },
+        {
+          "nodeId": "b0FujYW7JJir0XcUPO7AbM",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text12",
+          "name": "bag-text12"
+        },
+        {
+          "nodeId": "5dIRowIztBCr5GXJq4Q8SU",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text13",
+          "name": "bag-text13"
+        },
+        {
+          "nodeId": "d6/FWCkQlAb4q4DM7+Dpsr",
+          "path": "Canvas/UIBake/Library/InventoryPopup/toggle-card-4",
+          "name": "toggle-card-4"
+        },
+        {
+          "nodeId": "8dfnkOGQlGo7cGDUOir8TL",
+          "path": "Canvas/UIBake/Library/InventoryPopup/discard-card-4",
+          "name": "discard-card-4"
+        },
+        {
+          "nodeId": "d09LohWiJLNLBgAHWdBE6H",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_036",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "6b0ydA3yFJcoybRw0wq2v2",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_037",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "93h5VXRShKVa6ngXR2G/xw",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_038",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "10I7na5ihLi49N1Rf1c8Ds",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_039",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ba6IR48OBOnprCBYo314PY",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_040",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ebMFV5EO1GIqNOUlEJfUyO",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_041",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "06UamgUMFJhp1+ssPDRASB",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_042",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "42wLFjXnpO/LrfqQfSmZYE",
+          "path": "Canvas/UIBake/Library/InventoryPopup/square-knife",
+          "name": "square-knife"
+        },
+        {
+          "nodeId": "15Ir0+wK5L25BELTsnzmsV",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text14",
+          "name": "bag-text14"
+        },
+        {
+          "nodeId": "b3QQEiGctAeJNol9Qx8OT6",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text15",
+          "name": "bag-text15"
+        },
+        {
+          "nodeId": "3033iJtclNR6IWJ+3czNpP",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text16",
+          "name": "bag-text16"
+        },
+        {
+          "nodeId": "b1FqjBRJ9ISYh+imjn7s3j",
+          "path": "Canvas/UIBake/Library/InventoryPopup/toggle-card-5",
+          "name": "toggle-card-5"
+        },
+        {
+          "nodeId": "d8jgXuKgJAT7y9eQxqEkt0",
+          "path": "Canvas/UIBake/Library/InventoryPopup/discard-card-5",
+          "name": "discard-card-5"
+        },
+        {
+          "nodeId": "66zrkgZWBH+YYiuEGVp+E1",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_043",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "63PTZDOehHyq5uJMCnfF/c",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_044",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "da0r1uA4BNAb+8w6oRkNg6",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_045",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "571TRl0mZEVLkIbgFb+ZLa",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_046",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "32OxFqhDZLC6///eHzQOuL",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_047",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "44/bkaVyNNUamydGeTrlln",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_048",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "acP6TQYeBMibyE6Eb4q931",
+          "path": "Canvas/UIBake/Library/InventoryPopup/Panel_049",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ec4dPpzFlKSLGcAmqyktUi",
+          "path": "Canvas/UIBake/Library/InventoryPopup/square-evade",
+          "name": "square-evade"
+        },
+        {
+          "nodeId": "4ccCR8p5RDhqUHyho4fVwF",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text17",
+          "name": "bag-text17"
+        },
+        {
+          "nodeId": "82zcu1UHVC6Y7Ncbp2yFgv",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text18",
+          "name": "bag-text18"
+        },
+        {
+          "nodeId": "1dB6u2kAZGsLAW9qMX6bQe",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text19",
+          "name": "bag-text19"
+        },
+        {
+          "nodeId": "c4DWGBUlFL1pjNw0n5C2p1",
+          "path": "Canvas/UIBake/Library/InventoryPopup/toggle-card-6",
+          "name": "toggle-card-6"
+        },
+        {
+          "nodeId": "14Gc4tC+dNi4wggDEUeUBJ",
+          "path": "Canvas/UIBake/Library/InventoryPopup/discard-card-6",
+          "name": "discard-card-6"
+        },
+        {
+          "nodeId": "46LGpzTKhBOLp1sUQjZb7N",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-prev",
+          "name": "bag-prev"
+        },
+        {
+          "nodeId": "aei3U3zNZNxIwHT4Oq9M+J",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text20",
+          "name": "bag-text20"
+        },
+        {
+          "nodeId": "79dCEDfRJGNrTZTY+bq6J/",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-next",
+          "name": "bag-next"
+        },
+        {
+          "nodeId": "48fILN1bhGXZm180c1aUs7",
+          "path": "Canvas/UIBake/Library/InventoryPopup/discard-supply",
+          "name": "discard-supply"
+        },
+        {
+          "nodeId": "9f2ewaiatAtJ8IR9euRdPL",
+          "path": "Canvas/UIBake/Library/InventoryPopup/bag-text21",
+          "name": "bag-text21"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/InventoryPopup/cc.UITransform",
+          "uuid": "42l4fROKdBQaFgbvF2HuQA",
+          "name": "InventoryPopup<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "help",
+    "asset": "assets/prefabs/ui/HelpPopup.prefab",
+    "result": {
+      "nodeId": "16HlP3ezpPIa3+zcNL+T/Y",
+      "path": "Canvas/UIBake/Library/HelpPopup",
+      "name": "HelpPopup",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "HelpPopup",
+          "uuid": "45dd7b5f-402a-4f09-bee6-ad447ffe9092",
+          "data": {
+            "nodeId": "9eiIMpErZBC4A9XTMI6Byv",
+            "path": "",
+            "name": "HelpPopup"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "16HlP3ezpPIa3+zcNL+T/Y",
+          "path": "Canvas/UIBake/Library/HelpPopup",
+          "name": "HelpPopup"
+        },
+        "instance": {
+          "fileId": "3cR1VsYVxBJ7qOhfxuRW2Y",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "25TyXd1hNGc76IE9az2kdd"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "25TyXd1hNGc76IE9az2kdd"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "25TyXd1hNGc76IE9az2kdd"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "25TyXd1hNGc76IE9az2kdd"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "25TyXd1hNGc76IE9az2kdd",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "01a+shc8tNe6hrqY2xxypR",
+          "path": "Canvas/UIBake/Library/HelpPopup/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e7kn0Mk1FNgKKzuGcERxyr",
+          "path": "Canvas/UIBake/Library/HelpPopup/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b521vuQUdLtbUusKoSQEwr",
+          "path": "Canvas/UIBake/Library/HelpPopup/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "74ABlMkaFBOpertoQK8dIm",
+          "path": "Canvas/UIBake/Library/HelpPopup/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e6RWE0qOdGSpEkyVAhNmDy",
+          "path": "Canvas/UIBake/Library/HelpPopup/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "b5M7AC/JpNXb1e72qW7nIR",
+          "path": "Canvas/UIBake/Library/HelpPopup/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "18bhmUemFCO6R7Myaone++",
+          "path": "Canvas/UIBake/Library/HelpPopup/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "9aM1/g9gtIa6XHuT5gIxV/",
+          "path": "Canvas/UIBake/Library/HelpPopup/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "c1FaxnjNxHNLYMyzAtDeSZ",
+          "path": "Canvas/UIBake/Library/HelpPopup/modal-text0",
+          "name": "modal-text0"
+        },
+        {
+          "nodeId": "f6ywM7gwlP0pyVaJoGBAtU",
+          "path": "Canvas/UIBake/Library/HelpPopup/modal-text1",
+          "name": "modal-text1"
+        },
+        {
+          "nodeId": "ccMTlhUH1BNocCiimYmyeb",
+          "path": "Canvas/UIBake/Library/HelpPopup/modal-close",
+          "name": "modal-close"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/HelpPopup/cc.UITransform",
+          "uuid": "ddj+sGcphHzbwjdiF+zKQN",
+          "name": "HelpPopup<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "log",
+    "asset": "assets/prefabs/ui/LogPopup.prefab",
+    "result": {
+      "nodeId": "55mUYGX2tBO5tr7im7M7jh",
+      "path": "Canvas/UIBake/Library/LogPopup",
+      "name": "LogPopup",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "LogPopup",
+          "uuid": "ff92a909-b034-46a7-90b4-4334188082ab",
+          "data": {
+            "nodeId": "792fy/IJ1CVbKFMH0CgEA/",
+            "path": "",
+            "name": "LogPopup"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "55mUYGX2tBO5tr7im7M7jh",
+          "path": "Canvas/UIBake/Library/LogPopup",
+          "name": "LogPopup"
+        },
+        "instance": {
+          "fileId": "44L7gI7x1HuL7AnvjIId+/",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "8cfYveRu1Ia65bLhuLHB0v"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "8cfYveRu1Ia65bLhuLHB0v"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "8cfYveRu1Ia65bLhuLHB0v"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "8cfYveRu1Ia65bLhuLHB0v"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "8cfYveRu1Ia65bLhuLHB0v",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "1fxS/OQIFH/IGL98Q+0FVX",
+          "path": "Canvas/UIBake/Library/LogPopup/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "0aNZ8Y4qdFL7jomMtRafXA",
+          "path": "Canvas/UIBake/Library/LogPopup/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "17UExnpkpO6peiiKrg6yUN",
+          "path": "Canvas/UIBake/Library/LogPopup/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "afDilgTDNB75PuHqQ0vBX7",
+          "path": "Canvas/UIBake/Library/LogPopup/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "ae2YlVM/BHL4h6a01Lk4Az",
+          "path": "Canvas/UIBake/Library/LogPopup/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "deDBDOTf1KPqQlzl3QXbjk",
+          "path": "Canvas/UIBake/Library/LogPopup/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "dbS9GGrsNKBYyNLklsjogL",
+          "path": "Canvas/UIBake/Library/LogPopup/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "04myUPdiFJBYZZiu/z/IAs",
+          "path": "Canvas/UIBake/Library/LogPopup/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "43g9SpRmRJJomOYNV3lWGp",
+          "path": "Canvas/UIBake/Library/LogPopup/modal-text0",
+          "name": "modal-text0"
+        },
+        {
+          "nodeId": "f7ZQ10vcVE1JKmZq73JCXp",
+          "path": "Canvas/UIBake/Library/LogPopup/modal-text1",
+          "name": "modal-text1"
+        },
+        {
+          "nodeId": "481bDj3lFMXbeSubXjT2OO",
+          "path": "Canvas/UIBake/Library/LogPopup/modal-close",
+          "name": "modal-close"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/LogPopup/cc.UITransform",
+          "uuid": "45uisg2PJJFoVmjEO4QhFR",
+          "name": "LogPopup<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "confirm",
+    "asset": "assets/prefabs/ui/ConfirmPopup.prefab",
+    "result": {
+      "nodeId": "a3Qscf1MNOfpQ3xbZMnptz",
+      "path": "Canvas/UIBake/Library/ConfirmPopup",
+      "name": "ConfirmPopup",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "ConfirmPopup",
+          "uuid": "4938bb32-ab8d-4c37-924b-367f74e6faa6",
+          "data": {
+            "nodeId": "7d74kggaNKv6DJ9tsZ1lR0",
+            "path": "",
+            "name": "ConfirmPopup"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "a3Qscf1MNOfpQ3xbZMnptz",
+          "path": "Canvas/UIBake/Library/ConfirmPopup",
+          "name": "ConfirmPopup"
+        },
+        "instance": {
+          "fileId": "32m6vAL81DVr/mRWFayRnW",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "1bvjxlD69Puat8GZkeKY0y"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "1bvjxlD69Puat8GZkeKY0y"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "1bvjxlD69Puat8GZkeKY0y"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "1bvjxlD69Puat8GZkeKY0y"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "1bvjxlD69Puat8GZkeKY0y",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "f8KnqK4Q9GFp3fa6kxHkHY",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/Panel",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "f51xjQthBMebskL1qCTFO6",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/Panel_001",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "37pSfKqTpGZqb7BPRgMd1m",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/Panel_002",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "e6x6rLTU9EUaU3PzTT72LP",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/Panel_003",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "6fMaV4wUhOZYutq91TJqco",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/Panel_004",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "24PvHPVqtIL7YLLHMcU79I",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/Panel_005",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "69ZjuaZFNKbKxDp0L+YxyW",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/Panel_006",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "3e4Zq8pVZFVJyrdQ485PXz",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/Panel_007",
+          "name": "Panel"
+        },
+        {
+          "nodeId": "96TJzYwitDAozHzOQokyTu",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/modal-text0",
+          "name": "modal-text0"
+        },
+        {
+          "nodeId": "24LklHEKpJq4ONqpBsy7A3",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/modal-text1",
+          "name": "modal-text1"
+        },
+        {
+          "nodeId": "4aRKyUYkJOCKIrrVwsZ4XR",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/modal-cancel",
+          "name": "modal-cancel"
+        },
+        {
+          "nodeId": "22fwo0CbFFPL6XvSpoQN0P",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/modal-confirm",
+          "name": "modal-confirm"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/ConfirmPopup/cc.UITransform",
+          "uuid": "96/nWpn0JBT5kpVvJ+AlwV",
+          "name": "ConfirmPopup<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "HandCard",
+    "asset": "assets/prefabs/cards/HandCard.prefab",
+    "result": {
+      "nodeId": "37cJ86MH9McI7CktOQco1U",
+      "path": "Canvas/UIBake/Library/HandCard",
+      "name": "HandCard",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "HandCard",
+          "uuid": "4f54bd4f-b5d2-4896-ad30-d119e062dcef",
+          "data": {
+            "nodeId": "dbqbef5b1BVaGPx08FjeTa",
+            "path": "",
+            "name": "HandCard"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "37cJ86MH9McI7CktOQco1U",
+          "path": "Canvas/UIBake/Library/HandCard",
+          "name": "HandCard"
+        },
+        "instance": {
+          "fileId": "e5SQHDFeFMxaSaswAUG6yt",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "ceHjbdqcdKzIv5VbsUUoN2"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "ceHjbdqcdKzIv5VbsUUoN2"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "ceHjbdqcdKzIv5VbsUUoN2"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "ceHjbdqcdKzIv5VbsUUoN2"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "ceHjbdqcdKzIv5VbsUUoN2",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "dfk0HUtCxFAZTM+z44HBTa",
+          "path": "Canvas/UIBake/Library/HandCard/Visual",
+          "name": "Visual"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/HandCard/cc.UITransform",
+          "uuid": "c6MyWrTb9GF7ZyBp6QLiXT",
+          "name": "HandCard<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        },
+        {
+          "cid": "b221bCz5KhJz6qkztvJBD+P",
+          "path": "Canvas/UIBake/Library/HandCard/CardPresentation",
+          "uuid": "f2rn7MY9BHLIcViNw5wqD9",
+          "name": "HandCard<CardPresentation>",
+          "type": "CardPresentation",
+          "enabled": true
+        },
+        {
+          "cid": "cc.Animation",
+          "path": "Canvas/UIBake/Library/HandCard/cc.Animation",
+          "uuid": "f1slt5d2RHgZ27C71A4Dbw",
+          "name": "HandCard<Animation>",
+          "type": "cc.Animation",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "RewardCard",
+    "asset": "assets/prefabs/cards/RewardCard.prefab",
+    "result": {
+      "nodeId": "8fQnocqmxHPZnAE5Ukufje",
+      "path": "Canvas/UIBake/Library/RewardCard",
+      "name": "RewardCard",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "RewardCard",
+          "uuid": "3fbf2492-8ca6-4a71-b85f-6b5c40aedba4",
+          "data": {
+            "nodeId": "6bYBchRhBHjrUbKfcH/qbX",
+            "path": "",
+            "name": "RewardCard"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "8fQnocqmxHPZnAE5Ukufje",
+          "path": "Canvas/UIBake/Library/RewardCard",
+          "name": "RewardCard"
+        },
+        "instance": {
+          "fileId": "16GpLUUKdEc7dRact7WLZZ",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "4acRdMAGFC64BQh4+ncTNg"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "4acRdMAGFC64BQh4+ncTNg"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "4acRdMAGFC64BQh4+ncTNg"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "4acRdMAGFC64BQh4+ncTNg"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "4acRdMAGFC64BQh4+ncTNg",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "67+ejy0oVGDoRmhdaQWAMi",
+          "path": "Canvas/UIBake/Library/RewardCard/Visual",
+          "name": "Visual"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/RewardCard/cc.UITransform",
+          "uuid": "35tgmwjVtMzpOyZv+lm/7B",
+          "name": "RewardCard<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        },
+        {
+          "cid": "b221bCz5KhJz6qkztvJBD+P",
+          "path": "Canvas/UIBake/Library/RewardCard/CardPresentation",
+          "uuid": "c5IVDkHklNH7cLRyvP26lR",
+          "name": "RewardCard<CardPresentation>",
+          "type": "CardPresentation",
+          "enabled": true
+        },
+        {
+          "cid": "cc.Animation",
+          "path": "Canvas/UIBake/Library/RewardCard/cc.Animation",
+          "uuid": "f8vZr7xoNAxZTKCVhfc+jQ",
+          "name": "RewardCard<Animation>",
+          "type": "cc.Animation",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "PlayerActor",
+    "asset": "assets/prefabs/actors/PlayerActor.prefab",
+    "result": {
+      "nodeId": "29Gjo24ytEfIi9fO6EAG0Y",
+      "path": "Canvas/UIBake/Library/PlayerActor",
+      "name": "PlayerActor",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "PlayerActor",
+          "uuid": "d1b86fa6-c05f-47c7-8f33-326f170de1a9",
+          "data": {
+            "nodeId": "d8qbw6OqdLEqBkizBMImSV",
+            "path": "",
+            "name": "PlayerActor"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "29Gjo24ytEfIi9fO6EAG0Y",
+          "path": "Canvas/UIBake/Library/PlayerActor",
+          "name": "PlayerActor"
+        },
+        "instance": {
+          "fileId": "bdSN2KHM9N5ogwu+fR+egV",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "05/7f1RaVHJa1vrt6lR/PA"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "05/7f1RaVHJa1vrt6lR/PA"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "05/7f1RaVHJa1vrt6lR/PA"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "05/7f1RaVHJa1vrt6lR/PA"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "05/7f1RaVHJa1vrt6lR/PA",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "24BymMVOpEaLb0CpRs2h2E",
+          "path": "Canvas/UIBake/Library/PlayerActor/Visual",
+          "name": "Visual"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/PlayerActor/cc.UITransform",
+          "uuid": "cf31NSwfFKCqu5SqSkkhA7",
+          "name": "PlayerActor<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        },
+        {
+          "cid": "cc.Animation",
+          "path": "Canvas/UIBake/Library/PlayerActor/cc.Animation",
+          "uuid": "d9csM/UkNEUq84mA2t3CBl",
+          "name": "PlayerActor<Animation>",
+          "type": "cc.Animation",
+          "enabled": true
+        },
+        {
+          "cid": "a0eaeatnr1D7o6vJyP4GNty",
+          "path": "Canvas/UIBake/Library/PlayerActor/ActorPresentation",
+          "uuid": "922zXizeJNxbYoMjJIXJEw",
+          "name": "PlayerActor<ActorPresentation>",
+          "type": "ActorPresentation",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "WandererActor",
+    "asset": "assets/prefabs/actors/WandererActor.prefab",
+    "result": {
+      "nodeId": "c2O0jnMZROgo1q4k75p6PU",
+      "path": "Canvas/UIBake/Library/WandererActor",
+      "name": "WandererActor",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "WandererActor",
+          "uuid": "4dc185a8-f58f-4472-858b-c78ee0906490",
+          "data": {
+            "nodeId": "e4m/5VdAZOfpXV52ESkOPT",
+            "path": "",
+            "name": "WandererActor"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "c2O0jnMZROgo1q4k75p6PU",
+          "path": "Canvas/UIBake/Library/WandererActor",
+          "name": "WandererActor"
+        },
+        "instance": {
+          "fileId": "e3qRCUOvhEz6O/N9j3ypqo",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "27h6XTI2VDN5X6xwc9t1F3"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "27h6XTI2VDN5X6xwc9t1F3"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "27h6XTI2VDN5X6xwc9t1F3"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "27h6XTI2VDN5X6xwc9t1F3"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "27h6XTI2VDN5X6xwc9t1F3",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "c5hAnPLvJA0KFnOREy7iuR",
+          "path": "Canvas/UIBake/Library/WandererActor/Visual",
+          "name": "Visual"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/WandererActor/cc.UITransform",
+          "uuid": "2e4VXdg7FJB7w1uKMEvEOf",
+          "name": "WandererActor<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        },
+        {
+          "cid": "cc.Animation",
+          "path": "Canvas/UIBake/Library/WandererActor/cc.Animation",
+          "uuid": "54538TvypGVIPERuzs/LDm",
+          "name": "WandererActor<Animation>",
+          "type": "cc.Animation",
+          "enabled": true
+        },
+        {
+          "cid": "a0eaeatnr1D7o6vJyP4GNty",
+          "path": "Canvas/UIBake/Library/WandererActor/ActorPresentation",
+          "uuid": "67jezTN6lHxYEG+m+t27jt",
+          "name": "WandererActor<ActorPresentation>",
+          "type": "ActorPresentation",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "BruteActor",
+    "asset": "assets/prefabs/actors/BruteActor.prefab",
+    "result": {
+      "nodeId": "aeJ+8BpKFLoL/VHh7DlmoP",
+      "path": "Canvas/UIBake/Library/BruteActor",
+      "name": "BruteActor",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "BruteActor",
+          "uuid": "ad93f99b-4f22-46fc-8c12-81b2550de5f9",
+          "data": {
+            "nodeId": "76HCo679FAaL7qJMK9bukK",
+            "path": "",
+            "name": "BruteActor"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "aeJ+8BpKFLoL/VHh7DlmoP",
+          "path": "Canvas/UIBake/Library/BruteActor",
+          "name": "BruteActor"
+        },
+        "instance": {
+          "fileId": "43sfcnkxpAMbpCVUg2buX8",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "76qqQVwmtLsJ7nPGsR6qn6"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "76qqQVwmtLsJ7nPGsR6qn6"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "76qqQVwmtLsJ7nPGsR6qn6"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "76qqQVwmtLsJ7nPGsR6qn6"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "76qqQVwmtLsJ7nPGsR6qn6",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "350L2h3DxPvbONgc8kXjOl",
+          "path": "Canvas/UIBake/Library/BruteActor/Visual",
+          "name": "Visual"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/BruteActor/cc.UITransform",
+          "uuid": "1ceJpon4tN85BdqPYD54O3",
+          "name": "BruteActor<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        },
+        {
+          "cid": "cc.Animation",
+          "path": "Canvas/UIBake/Library/BruteActor/cc.Animation",
+          "uuid": "87kSzZ3y9OpLuaVX+XMC4C",
+          "name": "BruteActor<Animation>",
+          "type": "cc.Animation",
+          "enabled": true
+        },
+        {
+          "cid": "a0eaeatnr1D7o6vJyP4GNty",
+          "path": "Canvas/UIBake/Library/BruteActor/ActorPresentation",
+          "uuid": "ebfH3uc1hPPaLj83sQlrC4",
+          "name": "BruteActor<ActorPresentation>",
+          "type": "ActorPresentation",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "node": "FloatingText",
+    "asset": "assets/prefabs/effects/FloatingText.prefab",
+    "result": {
+      "nodeId": "99baRUiYRN6YC+vpJZlvwm",
+      "path": "Canvas/UIBake/Library/FloatingText",
+      "name": "FloatingText",
+      "properties": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "mobility": 0,
+        "layer": 33554432,
+        "active": false
+      },
+      "prefab": {
+        "asset": {
+          "name": "FloatingText",
+          "uuid": "acf86f4c-1e6c-4f39-b905-32cd3aa4bd36",
+          "data": {
+            "nodeId": "4dkiFNc3lCzo8RdiK3TJRA",
+            "path": "",
+            "name": "FloatingText"
+          },
+          "optimizationPolicy": 0,
+          "persistent": false
+        },
+        "root": {
+          "nodeId": "99baRUiYRN6YC+vpJZlvwm",
+          "path": "Canvas/UIBake/Library/FloatingText",
+          "name": "FloatingText"
+        },
+        "instance": {
+          "fileId": "4epcI4/7BO5YOy2yGy/Fv6",
+          "mountedChildren": [],
+          "mountedComponents": [],
+          "propertyOverrides": [
+            {
+              "targetInfo": {
+                "localID": [
+                  "4c1WQxqidAgrKakoQmbVHR"
+                ]
+              },
+              "propertyPath": [
+                "_name"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "4c1WQxqidAgrKakoQmbVHR"
+                ]
+              },
+              "propertyPath": [
+                "_lpos"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "4c1WQxqidAgrKakoQmbVHR"
+                ]
+              },
+              "propertyPath": [
+                "_lrot"
+              ]
+            },
+            {
+              "targetInfo": {
+                "localID": [
+                  "4c1WQxqidAgrKakoQmbVHR"
+                ]
+              },
+              "propertyPath": [
+                "_euler"
+              ]
+            }
+          ],
+          "removedComponents": []
+        },
+        "fileId": "4c1WQxqidAgrKakoQmbVHR",
+        "targetOverrides": [],
+        "nestedPrefabInstanceRoots": []
+      },
+      "children": [
+        {
+          "nodeId": "eePUoeA5FI2q5njf16JMk3",
+          "path": "Canvas/UIBake/Library/FloatingText/Visual",
+          "name": "Visual"
+        }
+      ],
+      "components": [
+        {
+          "cid": "cc.UITransform",
+          "path": "Canvas/UIBake/Library/FloatingText/cc.UITransform",
+          "uuid": "3fjwg9wZhN+5OHFOvjvzFE",
+          "name": "FloatingText<UITransform>",
+          "type": "cc.UITransform",
+          "enabled": true
+        },
+        {
+          "cid": "cc.Animation",
+          "path": "Canvas/UIBake/Library/FloatingText/cc.Animation",
+          "uuid": "774KWum9xDVbhUtupJW1Ky",
+          "name": "FloatingText<Animation>",
+          "type": "cc.Animation",
+          "enabled": true
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,63 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "14bd49ec-371b-497a-b88b-6c1a38126dfe",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "49047": {
+      "importer": "sprite-frame",
+      "uuid": "14bd49ec-371b-497a-b88b-6c1a38126dfe@49047",
+      "displayName": "",
+      "id": "49047",
+      "name": "cover",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 83,
+        "trimY": 0,
+        "width": 1506,
+        "height": 941,
+        "rawWidth": 1506,
+        "rawHeight": 941,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "ad8c9e55-e68c-41f4-af07-77bd34baff58@6c48a",
+        "atlasUuid": "14bd49ec-371b-497a-b88b-6c1a38126dfe",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "battle-street.png",
+    "format": 2,
+    "uuid": "14bd49ec-371b-497a-b88b-6c1a38126dfe",
+    "textureUuid": "ad8c9e55-e68c-41f4-af07-77bd34baff58@6c48a"
+  }
+}

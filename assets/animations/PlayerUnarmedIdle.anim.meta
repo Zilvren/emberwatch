@@ -1,0 +1,13 @@
+{
+  "ver": "2.0.4",
+  "importer": "animation-clip",
+  "imported": true,
+  "uuid": "20dc7bba-655d-450d-89ac-9e12f5ce45d2",
+  "files": [
+    ".bin"
+  ],
+  "subMetas": {},
+  "userData": {
+    "name": "PlayerUnarmedIdle"
+  }
+}

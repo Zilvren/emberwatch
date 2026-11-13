@@ -1,0 +1,155 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "f4ab581f-f2fd-401f-ad2b-349b9fa5ec8d",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "339a4": {
+      "importer": "sprite-frame",
+      "uuid": "f4ab581f-f2fd-401f-ad2b-349b9fa5ec8d@339a4",
+      "displayName": "",
+      "id": "339a4",
+      "name": "survivor-unarmed-0",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 660,
+        "height": 724,
+        "rawWidth": 660,
+        "rawHeight": 724,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "97b70e11-dba8-44db-8eca-c2e744567b4b@6c48a",
+        "atlasUuid": "f4ab581f-f2fd-401f-ad2b-349b9fa5ec8d",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "2c724": {
+      "importer": "sprite-frame",
+      "uuid": "f4ab581f-f2fd-401f-ad2b-349b9fa5ec8d@2c724",
+      "displayName": "",
+      "id": "2c724",
+      "name": "survivor-unarmed-1",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 660,
+        "trimY": 0,
+        "width": 860,
+        "height": 724,
+        "rawWidth": 860,
+        "rawHeight": 724,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "97b70e11-dba8-44db-8eca-c2e744567b4b@6c48a",
+        "atlasUuid": "f4ab581f-f2fd-401f-ad2b-349b9fa5ec8d",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "58da7": {
+      "importer": "sprite-frame",
+      "uuid": "f4ab581f-f2fd-401f-ad2b-349b9fa5ec8d@58da7",
+      "displayName": "",
+      "id": "58da7",
+      "name": "survivor-unarmed-2",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 1520,
+        "trimY": 0,
+        "width": 652,
+        "height": 724,
+        "rawWidth": 652,
+        "rawHeight": 724,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "97b70e11-dba8-44db-8eca-c2e744567b4b@6c48a",
+        "atlasUuid": "f4ab581f-f2fd-401f-ad2b-349b9fa5ec8d",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "survivor-unarmed.png",
+    "format": 2,
+    "uuid": "f4ab581f-f2fd-401f-ad2b-349b9fa5ec8d",
+    "textureUuid": "97b70e11-dba8-44db-8eca-c2e744567b4b@6c48a"
+  }
+}

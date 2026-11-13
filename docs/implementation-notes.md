@@ -26,14 +26,14 @@
 - 幸存者分空手与持刀两套姿态；两种感染者各有待机、攻击、受击姿态。
 - 六格卡牌插画对应基础攻击、基础躲避、菜刀、强化躲避、修复、重击。挥砍复用刀具插画并标记本场临时。
 - 攻击牌可点击选择后点击敌人，或拖向敌人；拖出有效目标区域会取消。其他牌点击或拖入场地使用。
-- 出牌移动、发牌、攻击姿态、受击、伤害飘字、格挡、恢复、奖励入包和场景过渡由 Cocos Tween 实时驱动。
+- 发牌、出牌、角色待机、攻击、受击、蓄势、伤害飘字、格挡和恢复使用原生 Prefab 与 AnimationClip。悬停和拖拽由手牌组件处理。
 - 动画结算期间锁定重复输入，避免一次行动重复扣费。减少动态效果偏好会减少位移并缩短反馈。
 - 内置简短合成音效，可在顶部静音。不存在自动播放背景音乐或外部音频请求。
 
 ## 工程边界
 
-`SurvivalRules.ts` 独立保存规则，`SurvivalView.ts` 管理交互和呈现，`BattleCard.ts` 管理卡牌手势，`GameArt.ts` 管理精灵图帧，`PixelUI.ts` 提供绘制控件，`GameAudio.ts` 提供音效。
+`SurvivalRules.ts` 独立保存规则，`SurvivalView.ts` 只绑定界面数据并调度操作，`HandPresentation.ts` 管理手牌实例和手势，角色与卡牌组件播放原生动画。固定页面、按钮、图像、布局和可复用角色都保存为场景和 Prefab。`PixelGraphic.ts` 保存绘图属性并重画自身 Graphics；`GameAudio.ts` 提供音效。旧版页面生成代码移至 `tools/editor-authoring/` 留档，不参与运行。
 
-场景通过 Pink 配套 COCOS CLI 的官方 MCP 创建、挂载脚本、保存和构建；运行时界面节点不序列化进场景。桌面 Pink 窗口自身的原生 Agent Tools 与此独立 MCP 是不同入口。
+场景通过 Pink 配套 COCOS CLI 与官方 MCP 管理。入口场景直接引用八个页面、HUD 和弹窗的原生 Prefab 实例；运行时不销毁重建页面，只有手牌与临时效果按实际状态实例化。桌面 Pink 窗口自身的原生 Agent Tools 与此独立 MCP 是不同入口。
 
 AI 美术使用内置 image_gen 生成，已复制到 `assets/resources/art/`，具体提示词见 `art-manifest.json`。用户参考图片只用于风格方向，没有复用其中的建筑、角色、文字或标识。

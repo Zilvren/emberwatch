@@ -9,11 +9,17 @@ const engineRoot = path.join(process.env.APPDATA, 'cocos-default',
 const engineRequire = createRequire(path.join(engineRoot, 'package.json'));
 const { Client } = engineRequire('@modelcontextprotocol/sdk/client/index.js');
 const { StreamableHTTPClientTransport } = engineRequire('@modelcontextprotocol/sdk/client/streamableHttp.js');
+const { discoverProjectBackend } = engineRequire('./dist/core/project-backend/ownership.js');
 
 async function main() {
     const client = new Client({ name: 'the-end-scene-verification', version: '1.0.0' });
     try {
-        await client.connect(new StreamableHTTPClientTransport(new URL('http://127.0.0.1:9527/mcp')));
+        const backend = await discoverProjectBackend(project);
+        const endpoint = process.env.PINK_MCP_URL ?? backend?.mcpUrl;
+        if (!endpoint) throw new Error('Start npm run mcp first, or set PINK_MCP_URL.');
+        const url = new URL(endpoint);
+        if (url.hostname === 'localhost') url.hostname = '127.0.0.1';
+        await client.connect(new StreamableHTTPClientTransport(url));
         const result = await client.listTools();
         const sceneOpen = await client.callTool({ name: 'scene-open', arguments: {
             options: { dbURLOrUUID: 'db://assets/TheEnd.scene', includeChildren: true },
@@ -33,7 +39,7 @@ async function main() {
             gameNode: queried };
         fs.mkdirSync(path.join(project, 'output'), { recursive: true });
         fs.writeFileSync(path.join(project, 'output/game-mcp.json'), JSON.stringify(report, null, 2) + '\n');
-        console.log(JSON.stringify(report, null, 2));
+        console.log(JSON.stringify({ connected: true, toolCount: report.toolCount, scene: opened.data.assetUrl, gameRootChildren: queried.data.children?.length, report: 'output/game-mcp.json' }, null, 2));
     } finally {
         await client.close();
     }

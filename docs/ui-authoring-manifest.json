@@ -1,0 +1,2779 @@
+{
+  "pages": {
+    "journal": {
+      "labels": [
+        {
+          "key": "journal/text0",
+          "text": "SURVIVAL JOURNAL",
+          "node": "journal-text0",
+          "position": {
+            "x": 1047.5,
+            "y": 681,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text1",
+          "text": "第 1 天 · 离开庇护",
+          "node": "journal-text1",
+          "position": {
+            "x": 1045.5,
+            "y": 614,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text2",
+          "text": "收音机只剩下沙沙声。\n最后一箱补给，撑不过太久。\n\n你带上菜刀、急救零件，\n还有一叠早已失去价值的现金。\n\n今天，必须出去走一趟。",
+          "node": "journal-text2",
+          "position": {
+            "x": 1046,
+            "y": 434.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text3",
+          "text": "物资 10 · 护甲 10 · 战斗牌 7 张\n强制携带现金，总负重 27 / 30",
+          "node": "journal-text3",
+          "position": {
+            "x": 1046,
+            "y": 255.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text4",
+          "text": "余烬之中，仍有人守夜。",
+          "node": "journal-text4",
+          "position": {
+            "x": 371,
+            "y": 95.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text5",
+          "text": "A SINGLE DAY. A CHANCE TO SURVIVE.",
+          "node": "journal-text5",
+          "position": {
+            "x": 374,
+            "y": 45.50000000000006,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "journal-start",
+          "node": "journal-start"
+        }
+      ],
+      "nodes": 35
+    },
+    "HUD": {
+      "labels": [
+        {
+          "key": "header/text0",
+          "text": "the end",
+          "node": "header-text0",
+          "position": {
+            "x": 162,
+            "y": 868,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text1",
+          "text": "SURVIVAL CARD GAME",
+          "node": "header-text1",
+          "position": {
+            "x": 165,
+            "y": 841.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text2",
+          "text": "第 1 天",
+          "node": "header-text2",
+          "position": {
+            "x": 328,
+            "y": 859,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text3",
+          "text": "物资 10",
+          "node": "header-text3",
+          "position": {
+            "x": 471,
+            "y": 867,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text4",
+          "text": "出牌费用 / 生存补给",
+          "node": "header-text4",
+          "position": {
+            "x": 491,
+            "y": 839,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text5",
+          "text": "护甲 10/10",
+          "node": "header-text5",
+          "position": {
+            "x": 684.5,
+            "y": 866,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text6",
+          "text": "暂无溢出",
+          "node": "header-text6",
+          "position": {
+            "x": 1046.5,
+            "y": 859.5,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "bag",
+          "node": "bag"
+        },
+        {
+          "id": "log",
+          "node": "log"
+        },
+        {
+          "id": "help",
+          "node": "help"
+        },
+        {
+          "id": "audio",
+          "node": "audio"
+        },
+        {
+          "id": "restart",
+          "node": "restart"
+        }
+      ],
+      "nodes": 31
+    },
+    "map": {
+      "labels": [
+        {
+          "key": "banner/text0",
+          "text": "EXPEDITION / ASHFALL DISTRICT",
+          "node": "banner-text0",
+          "position": {
+            "x": 368,
+            "y": 767,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text1",
+          "text": "灰烬街区",
+          "node": "banner-text1",
+          "position": {
+            "x": 366,
+            "y": 730.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text2",
+          "text": "前往亮起的地点。全程无法主动撤离。",
+          "node": "banner-text2",
+          "position": {
+            "x": 374,
+            "y": 693.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text0",
+          "text": "负重 27/30  ·  暂存 0/10",
+          "node": "map-text0",
+          "position": {
+            "x": 197,
+            "y": 123.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text1",
+          "text": "搜刮和出牌都会改变携带空间。",
+          "node": "map-text1",
+          "position": {
+            "x": 197,
+            "y": 81.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text2",
+          "text": "N ↑",
+          "node": "map-text2",
+          "position": {
+            "x": 1322,
+            "y": 621.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text3",
+          "text": "旧城区 · 行动路线",
+          "node": "map-text3",
+          "position": {
+            "x": 636,
+            "y": 618,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text4",
+          "text": "✓",
+          "node": "map-text4",
+          "position": {
+            "x": 781,
+            "y": 546.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text5",
+          "text": "废弃补给站",
+          "node": "map-text5",
+          "position": {
+            "x": 895.5,
+            "y": 557.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text6",
+          "text": "已完成",
+          "node": "map-text6",
+          "position": {
+            "x": 895,
+            "y": 530,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text7",
+          "text": "◆",
+          "node": "map-text7",
+          "position": {
+            "x": 513,
+            "y": 377.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text8",
+          "text": "游荡感染者",
+          "node": "map-text8",
+          "position": {
+            "x": 627.5,
+            "y": 388.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text9",
+          "text": "待探索",
+          "node": "map-text9",
+          "position": {
+            "x": 627,
+            "y": 361.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text10",
+          "text": "◆",
+          "node": "map-text10",
+          "position": {
+            "x": 513,
+            "y": 283.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text11",
+          "text": "旧街搜刮",
+          "node": "map-text11",
+          "position": {
+            "x": 627.5,
+            "y": 294.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text12",
+          "text": "待探索",
+          "node": "map-text12",
+          "position": {
+            "x": 627,
+            "y": 267.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text13",
+          "text": "◆",
+          "node": "map-text13",
+          "position": {
+            "x": 1044,
+            "y": 377.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text14",
+          "text": "旧街搜刮",
+          "node": "map-text14",
+          "position": {
+            "x": 1158.5,
+            "y": 388.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text15",
+          "text": "待探索",
+          "node": "map-text15",
+          "position": {
+            "x": 1158,
+            "y": 361.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text16",
+          "text": "◆",
+          "node": "map-text16",
+          "position": {
+            "x": 1044,
+            "y": 283.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text17",
+          "text": "游荡感染者",
+          "node": "map-text17",
+          "position": {
+            "x": 1158.5,
+            "y": 294.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text18",
+          "text": "待探索",
+          "node": "map-text18",
+          "position": {
+            "x": 1158,
+            "y": 267.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text19",
+          "text": "◆",
+          "node": "map-text19",
+          "position": {
+            "x": 781,
+            "y": 174.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text20",
+          "text": "临时营地",
+          "node": "map-text20",
+          "position": {
+            "x": 895.5,
+            "y": 185.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text21",
+          "text": "恢复 / 整理 / 丢弃现金",
+          "node": "map-text21",
+          "position": {
+            "x": 895,
+            "y": 158.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text22",
+          "text": "◆",
+          "node": "map-text22",
+          "position": {
+            "x": 781,
+            "y": 91.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text23",
+          "text": "重度感染者",
+          "node": "map-text23",
+          "position": {
+            "x": 895.5,
+            "y": 102.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "map/text24",
+          "text": "待探索",
+          "node": "map-text24",
+          "position": {
+            "x": 895,
+            "y": 75.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text0",
+          "text": "the end",
+          "node": "header-text0",
+          "position": {
+            "x": 162,
+            "y": 868,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text1",
+          "text": "SURVIVAL CARD GAME",
+          "node": "header-text1",
+          "position": {
+            "x": 165,
+            "y": 841.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text2",
+          "text": "第 1 天",
+          "node": "header-text2",
+          "position": {
+            "x": 328,
+            "y": 859,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text3",
+          "text": "物资 10",
+          "node": "header-text3",
+          "position": {
+            "x": 471,
+            "y": 867,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text4",
+          "text": "出牌费用 / 生存补给",
+          "node": "header-text4",
+          "position": {
+            "x": 491,
+            "y": 839,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text5",
+          "text": "护甲 10/10",
+          "node": "header-text5",
+          "position": {
+            "x": 684.5,
+            "y": 866,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text6",
+          "text": "暂无溢出",
+          "node": "header-text6",
+          "position": {
+            "x": 1046.5,
+            "y": 859.5,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "route-A",
+          "node": "route-A"
+        },
+        {
+          "id": "route-B",
+          "node": "route-B"
+        },
+        {
+          "id": "bag",
+          "node": "bag"
+        },
+        {
+          "id": "log",
+          "node": "log"
+        },
+        {
+          "id": "help",
+          "node": "help"
+        },
+        {
+          "id": "audio",
+          "node": "audio"
+        },
+        {
+          "id": "restart",
+          "node": "restart"
+        }
+      ],
+      "nodes": 197
+    },
+    "battle": {
+      "labels": [
+        {
+          "key": "banner/text0",
+          "text": "ENCOUNTER / ROUND 2",
+          "node": "banner-text0",
+          "position": {
+            "x": 368,
+            "y": 767,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text1",
+          "text": "重度感染者",
+          "node": "banner-text1",
+          "position": {
+            "x": 366,
+            "y": 730.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text2",
+          "text": "先行动，看意图，决定把物资花在哪里。",
+          "node": "banner-text2",
+          "position": {
+            "x": 374,
+            "y": 693.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text0",
+          "text": "攻击 3",
+          "node": "battle-text0",
+          "position": {
+            "x": 1058.5,
+            "y": 741.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text1",
+          "text": "结束回合后执行",
+          "node": "battle-text1",
+          "position": {
+            "x": 1058.5,
+            "y": 710,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text2",
+          "text": "点击敌人 · 打出攻击",
+          "node": "battle-text2",
+          "position": {
+            "x": 1036,
+            "y": 645.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text3",
+          "text": "护甲 0/10",
+          "node": "battle-text3",
+          "position": {
+            "x": 332,
+            "y": 306.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text4",
+          "text": "格挡 0",
+          "node": "battle-text4",
+          "position": {
+            "x": 459,
+            "y": 306.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text5",
+          "text": "敌人护甲 10/10",
+          "node": "battle-text5",
+          "position": {
+            "x": 1034,
+            "y": 306.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text6",
+          "text": "感染临界：再次实际受伤即失败",
+          "node": "battle-text6",
+          "position": {
+            "x": 395,
+            "y": 351.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text7",
+          "text": "菜刀已装备",
+          "node": "battle-text7",
+          "position": {
+            "x": 173.5,
+            "y": 371.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text8",
+          "text": "每回合生成挥砍",
+          "node": "battle-text8",
+          "position": {
+            "x": 173.5,
+            "y": 333.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text9",
+          "text": "已选择攻击牌\n点击敌人或拖向敌人",
+          "node": "battle-text9",
+          "position": {
+            "x": 715,
+            "y": 301.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "drawPile/text0",
+          "text": "1",
+          "node": "drawPile-text0",
+          "position": {
+            "x": 72,
+            "y": 73.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "drawPile/text1",
+          "text": "抽牌堆",
+          "node": "drawPile-text1",
+          "position": {
+            "x": 76,
+            "y": 30.500000000000057,
+            "z": 0
+          }
+        },
+        {
+          "key": "discardPile/text0",
+          "text": "0",
+          "node": "discardPile-text0",
+          "position": {
+            "x": 1341,
+            "y": 163.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "discardPile/text1",
+          "text": "弃牌堆",
+          "node": "discardPile-text1",
+          "position": {
+            "x": 1345,
+            "y": 120.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "2",
+          "node": "card-text0",
+          "position": {
+            "x": 243.68427597256195,
+            "y": 220.53303873838672,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "菜刀",
+          "node": "card-text1",
+          "position": {
+            "x": 316.7979736762895,
+            "y": 228.07539964780676,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "下回合起\n每回合生成「挥砍」",
+          "node": "card-text2",
+          "position": {
+            "x": 310.6242287578867,
+            "y": 73.09015107981398,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "武器槽已占用",
+          "node": "card-text3",
+          "position": {
+            "x": 313.7698863556005,
+            "y": 40.42124784940319,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 3",
+          "node": "card-text4",
+          "position": {
+            "x": 315.4951099009645,
+            "y": 22.504116278793973,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "0",
+          "node": "card-text0",
+          "position": {
+            "x": 413.1472540800844,
+            "y": 229.82119025464846,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "基础躲避",
+          "node": "card-text1",
+          "position": {
+            "x": 486.4965955877357,
+            "y": 234.55131714448368,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "获得 2 点格挡",
+          "node": "card-text2",
+          "position": {
+            "x": 474.3778571019874,
+            "y": 79.91730220108886,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "点击 / 拖动",
+          "node": "card-text3",
+          "position": {
+            "x": 476.2671084668004,
+            "y": 47.151723779816464,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 0",
+          "node": "card-text4",
+          "position": {
+            "x": 477.3032609520726,
+            "y": 29.18157108076396,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "0",
+          "node": "card-text0",
+          "position": {
+            "x": 582.695516806843,
+            "y": 238.97471906951174,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "基础躲避",
+          "node": "card-text1",
+          "position": {
+            "x": 656.172372926584,
+            "y": 240.88563894194974,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "获得 2 点格挡",
+          "node": "card-text2",
+          "position": {
+            "x": 638.1265059200138,
+            "y": 86.83081401270195,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "点击 / 拖动",
+          "node": "card-text3",
+          "position": {
+            "x": 638.7565659795716,
+            "y": 54.01686234086961,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 0",
+          "node": "card-text4",
+          "position": {
+            "x": 639.102119942766,
+            "y": 36.02017952268001,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "2",
+          "node": "card-text0",
+          "position": {
+            "x": 752.3238334203844,
+            "y": 240.99045052147915,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "修复",
+          "node": "card-text1",
+          "position": {
+            "x": 825.8198869825251,
+            "y": 240.07934636116278,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "恢复 3 点护甲\n护甲为 0 时禁用",
+          "node": "card-text2",
+          "position": {
+            "x": 801.8734940799862,
+            "y": 86.83081401270195,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "感染临界，无法修复",
+          "node": "card-text3",
+          "position": {
+            "x": 801.2434340204284,
+            "y": 54.01686234086961,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 2",
+          "node": "card-text4",
+          "position": {
+            "x": 800.897880057234,
+            "y": 36.02017952268001,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "1",
+          "node": "card-text0",
+          "position": {
+            "x": 922.0268551754426,
+            "y": 235.86541308540302,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "强化躲避",
+          "node": "card-text1",
+          "position": {
+            "x": 995.4337607100534,
+            "y": 232.13362801218182,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "获得 5 点格挡",
+          "node": "card-text2",
+          "position": {
+            "x": 965.6221428980126,
+            "y": 79.91730220108886,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "点击 / 拖动",
+          "node": "card-text3",
+          "position": {
+            "x": 963.7328915331996,
+            "y": 47.151723779816464,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 2",
+          "node": "card-text4",
+          "position": {
+            "x": 962.6967390479274,
+            "y": 29.18157108076396,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "0",
+          "node": "card-text0",
+          "position": {
+            "x": 1091.7991231988842,
+            "y": 230.5968427530102,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "基础攻击",
+          "node": "card-text1",
+          "position": {
+            "x": 1165.008666655132,
+            "y": 224.04987804195736,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "造成 2 点伤害",
+          "node": "card-text2",
+          "position": {
+            "x": 1129.3757712421132,
+            "y": 73.09015107981398,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "点击 / 拖动",
+          "node": "card-text3",
+          "position": {
+            "x": 1126.2301136443996,
+            "y": 40.42124784940319,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 0",
+          "node": "card-text4",
+          "position": {
+            "x": 1124.5048900990355,
+            "y": 22.504116278793973,
+            "z": 0
+          }
+        },
+        {
+          "key": "battle/text10",
+          "text": "回合 2\n手牌 6 / 6",
+          "node": "battle-text10",
+          "position": {
+            "x": 1323.5,
+            "y": 20.000000000000057,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text0",
+          "text": "the end",
+          "node": "header-text0",
+          "position": {
+            "x": 162,
+            "y": 868,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text1",
+          "text": "SURVIVAL CARD GAME",
+          "node": "header-text1",
+          "position": {
+            "x": 165,
+            "y": 841.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text2",
+          "text": "第 1 天",
+          "node": "header-text2",
+          "position": {
+            "x": 328,
+            "y": 859,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text3",
+          "text": "物资 10",
+          "node": "header-text3",
+          "position": {
+            "x": 471,
+            "y": 867,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text4",
+          "text": "出牌费用 / 生存补给",
+          "node": "header-text4",
+          "position": {
+            "x": 491,
+            "y": 839,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text5",
+          "text": "护甲 0/10",
+          "node": "header-text5",
+          "position": {
+            "x": 684.5,
+            "y": 866,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text6",
+          "text": "暂无溢出",
+          "node": "header-text6",
+          "position": {
+            "x": 1046.5,
+            "y": 859.5,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "enemy-target",
+          "node": "enemy-target"
+        },
+        {
+          "id": "end-turn",
+          "node": "end-turn"
+        },
+        {
+          "id": "bag",
+          "node": "bag"
+        },
+        {
+          "id": "log",
+          "node": "log"
+        },
+        {
+          "id": "help",
+          "node": "help"
+        },
+        {
+          "id": "audio",
+          "node": "audio"
+        },
+        {
+          "id": "restart",
+          "node": "restart"
+        }
+      ],
+      "nodes": 289
+    },
+    "rewards": {
+      "labels": [
+        {
+          "key": "banner/text0",
+          "text": "VICTORY / SALVAGE",
+          "node": "banner-text0",
+          "position": {
+            "x": 368,
+            "y": 767,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text1",
+          "text": "威胁已清除",
+          "node": "banner-text1",
+          "position": {
+            "x": 366,
+            "y": 730.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text2",
+          "text": "最多选择一张卡牌。物资需要单独领取。",
+          "node": "banner-text2",
+          "position": {
+            "x": 374,
+            "y": 693.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "rewards/text0",
+          "text": "携带 27/30  ·  暂存 0/10",
+          "node": "rewards-text0",
+          "position": {
+            "x": 217.5,
+            "y": 116.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "rewards/text1",
+          "text": "新卡超重可暂存，物资不能溢出。",
+          "node": "rewards-text1",
+          "position": {
+            "x": 217.5,
+            "y": 78.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "0",
+          "node": "card-text0",
+          "position": {
+            "x": 577.5,
+            "y": 589.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "基础攻击",
+          "node": "card-text1",
+          "position": {
+            "x": 691,
+            "y": 590,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "造成 2 点伤害",
+          "node": "card-text2",
+          "position": {
+            "x": 670,
+            "y": 380.70000000000005,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "固有 · 攻击",
+          "node": "card-text3",
+          "position": {
+            "x": 670,
+            "y": 300.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 0",
+          "node": "card-text4",
+          "position": {
+            "x": 670,
+            "y": 282.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "0",
+          "node": "card-text0",
+          "position": {
+            "x": 842.5,
+            "y": 589.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "基础躲避",
+          "node": "card-text1",
+          "position": {
+            "x": 956,
+            "y": 590,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "获得 2 点格挡",
+          "node": "card-text2",
+          "position": {
+            "x": 935,
+            "y": 380.70000000000005,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "固有 · 防御",
+          "node": "card-text3",
+          "position": {
+            "x": 935,
+            "y": 300.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 0",
+          "node": "card-text4",
+          "position": {
+            "x": 935,
+            "y": 282.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text0",
+          "text": "2",
+          "node": "card-text0",
+          "position": {
+            "x": 1107.5,
+            "y": 589.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "菜刀",
+          "node": "card-text1",
+          "position": {
+            "x": 1221,
+            "y": 590,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "下回合起\n每回合生成「挥砍」",
+          "node": "card-text2",
+          "position": {
+            "x": 1200,
+            "y": 380.70000000000005,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "武器 · 唯一装备槽",
+          "node": "card-text3",
+          "position": {
+            "x": 1200,
+            "y": 300.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 3",
+          "node": "card-text4",
+          "position": {
+            "x": 1200,
+            "y": 282.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "rewards/text2",
+          "text": "物资 +3",
+          "node": "rewards-text2",
+          "position": {
+            "x": 614.5,
+            "y": 164.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "rewards/text3",
+          "text": "可装入 3 点",
+          "node": "rewards-text3",
+          "position": {
+            "x": 854,
+            "y": 164.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text0",
+          "text": "the end",
+          "node": "header-text0",
+          "position": {
+            "x": 162,
+            "y": 868,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text1",
+          "text": "SURVIVAL CARD GAME",
+          "node": "header-text1",
+          "position": {
+            "x": 165,
+            "y": 841.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text2",
+          "text": "第 1 天",
+          "node": "header-text2",
+          "position": {
+            "x": 328,
+            "y": 859,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text3",
+          "text": "物资 10",
+          "node": "header-text3",
+          "position": {
+            "x": 471,
+            "y": 867,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text4",
+          "text": "出牌费用 / 生存补给",
+          "node": "header-text4",
+          "position": {
+            "x": 491,
+            "y": 839,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text5",
+          "text": "护甲 10/10",
+          "node": "header-text5",
+          "position": {
+            "x": 684.5,
+            "y": 866,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text6",
+          "text": "暂无溢出",
+          "node": "header-text6",
+          "position": {
+            "x": 1046.5,
+            "y": 859.5,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "claim-card-0",
+          "node": "claim-card-0"
+        },
+        {
+          "id": "claim-card-1",
+          "node": "claim-card-1"
+        },
+        {
+          "id": "claim-card-2",
+          "node": "claim-card-2"
+        },
+        {
+          "id": "claim-supplies",
+          "node": "claim-supplies"
+        },
+        {
+          "id": "reward-bag",
+          "node": "reward-bag"
+        },
+        {
+          "id": "rewards-done",
+          "node": "rewards-done"
+        },
+        {
+          "id": "bag",
+          "node": "bag"
+        },
+        {
+          "id": "log",
+          "node": "log"
+        },
+        {
+          "id": "help",
+          "node": "help"
+        },
+        {
+          "id": "audio",
+          "node": "audio"
+        },
+        {
+          "id": "restart",
+          "node": "restart"
+        }
+      ],
+      "nodes": 142
+    },
+    "rest": {
+      "labels": [
+        {
+          "key": "banner/text0",
+          "text": "REST / A MOMENT OF PEACE",
+          "node": "banner-text0",
+          "position": {
+            "x": 368,
+            "y": 767,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text1",
+          "text": "临时营地",
+          "node": "banner-text1",
+          "position": {
+            "x": 366,
+            "y": 730.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text2",
+          "text": "进入时已恢复最多 2 点护甲。物资不会恢复。",
+          "node": "banner-text2",
+          "position": {
+            "x": 374,
+            "y": 693.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "rest/text0",
+          "text": "放下旧世界的重量",
+          "node": "rest-text0",
+          "position": {
+            "x": 1058,
+            "y": 585.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "rest/text1",
+          "text": "现金已经不再有用。\n丢弃后释放 10 点负重，暂存卡会自动转入。",
+          "node": "rest-text1",
+          "position": {
+            "x": 1058,
+            "y": 514,
+            "z": 0
+          }
+        },
+        {
+          "key": "rest/text2",
+          "text": "检查下一场战斗的卡组",
+          "node": "rest-text2",
+          "position": {
+            "x": 1058,
+            "y": 364.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "rest/text3",
+          "text": "7 张可用牌 · 0 张暂存\n移出战斗不释放负重，永久丢弃才释放。",
+          "node": "rest-text3",
+          "position": {
+            "x": 1058,
+            "y": 310.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "rest/text4",
+          "text": "下一站：重度感染者\n护甲 10 · 攻击 3 · 准备后攻击 6",
+          "node": "rest-text4",
+          "position": {
+            "x": 1057,
+            "y": 161.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "rest/text5",
+          "text": "护甲 10/10  ·  物资 10  ·  负重 27/30",
+          "node": "rest-text5",
+          "position": {
+            "x": 350,
+            "y": 90.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text0",
+          "text": "the end",
+          "node": "header-text0",
+          "position": {
+            "x": 162,
+            "y": 868,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text1",
+          "text": "SURVIVAL CARD GAME",
+          "node": "header-text1",
+          "position": {
+            "x": 165,
+            "y": 841.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text2",
+          "text": "第 1 天",
+          "node": "header-text2",
+          "position": {
+            "x": 328,
+            "y": 859,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text3",
+          "text": "物资 10",
+          "node": "header-text3",
+          "position": {
+            "x": 471,
+            "y": 867,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text4",
+          "text": "出牌费用 / 生存补给",
+          "node": "header-text4",
+          "position": {
+            "x": 491,
+            "y": 839,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text5",
+          "text": "护甲 10/10",
+          "node": "header-text5",
+          "position": {
+            "x": 684.5,
+            "y": 866,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text6",
+          "text": "暂无溢出",
+          "node": "header-text6",
+          "position": {
+            "x": 1046.5,
+            "y": 859.5,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "rest-cash",
+          "node": "rest-cash"
+        },
+        {
+          "id": "rest-bag",
+          "node": "rest-bag"
+        },
+        {
+          "id": "rest-done",
+          "node": "rest-done"
+        },
+        {
+          "id": "bag",
+          "node": "bag"
+        },
+        {
+          "id": "log",
+          "node": "log"
+        },
+        {
+          "id": "help",
+          "node": "help"
+        },
+        {
+          "id": "audio",
+          "node": "audio"
+        },
+        {
+          "id": "restart",
+          "node": "restart"
+        }
+      ],
+      "nodes": 87
+    },
+    "shelter": {
+      "labels": [
+        {
+          "key": "banner/text0",
+          "text": "SHELTER / RETURN HOME",
+          "node": "banner-text0",
+          "position": {
+            "x": 368,
+            "y": 767,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text1",
+          "text": "门后的片刻安稳",
+          "node": "banner-text1",
+          "position": {
+            "x": 366,
+            "y": 730.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "banner/text2",
+          "text": "先清点战利品，再决定修复。每日消耗在最后执行。",
+          "node": "banner-text2",
+          "position": {
+            "x": 374,
+            "y": 693.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text0",
+          "text": "01  带回的物品已入库",
+          "node": "shelter-text0",
+          "position": {
+            "x": 978.5,
+            "y": 595.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text1",
+          "text": "物资 10  ·  卡牌 10 张",
+          "node": "shelter-text1",
+          "position": {
+            "x": 978.5,
+            "y": 546,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text2",
+          "text": "没有溢出损失。临时战斗牌与装备状态已清除。",
+          "node": "shelter-text2",
+          "position": {
+            "x": 978.5,
+            "y": 500.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text3",
+          "text": "02  护甲修复（可选）",
+          "node": "shelter-text3",
+          "position": {
+            "x": 978.5,
+            "y": 430.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text4",
+          "text": "护甲 7/10  ·  完全修复需要 1 点物资",
+          "node": "shelter-text4",
+          "position": {
+            "x": 978.5,
+            "y": 380.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text5",
+          "text": "03  最后：每日生存消耗",
+          "node": "shelter-text5",
+          "position": {
+            "x": 978.5,
+            "y": 238.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text6",
+          "text": "10 物资  →  每日需求 1  →  剩余 9",
+          "node": "shelter-text6",
+          "position": {
+            "x": 978.5,
+            "y": 181.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text7",
+          "text": "每日物资尚未扣除。下方按钮完成最后这一步。",
+          "node": "shelter-text7",
+          "position": {
+            "x": 978.5,
+            "y": 122.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "shelter/text8",
+          "text": "不修复时，直接结束结算即可。",
+          "node": "shelter-text8",
+          "position": {
+            "x": 765,
+            "y": 34.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text0",
+          "text": "the end",
+          "node": "header-text0",
+          "position": {
+            "x": 162,
+            "y": 868,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text1",
+          "text": "SURVIVAL CARD GAME",
+          "node": "header-text1",
+          "position": {
+            "x": 165,
+            "y": 841.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text2",
+          "text": "第 1 天",
+          "node": "header-text2",
+          "position": {
+            "x": 328,
+            "y": 859,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text3",
+          "text": "物资 10",
+          "node": "header-text3",
+          "position": {
+            "x": 471,
+            "y": 867,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text4",
+          "text": "出牌费用 / 生存补给",
+          "node": "header-text4",
+          "position": {
+            "x": 491,
+            "y": 839,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text5",
+          "text": "护甲 7/10",
+          "node": "header-text5",
+          "position": {
+            "x": 684.5,
+            "y": 866,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text6",
+          "text": "暂无溢出",
+          "node": "header-text6",
+          "position": {
+            "x": 1046.5,
+            "y": 859.5,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "shelter-repair",
+          "node": "shelter-repair"
+        },
+        {
+          "id": "shelter-done",
+          "node": "shelter-done"
+        },
+        {
+          "id": "bag",
+          "node": "bag"
+        },
+        {
+          "id": "log",
+          "node": "log"
+        },
+        {
+          "id": "help",
+          "node": "help"
+        },
+        {
+          "id": "audio",
+          "node": "audio"
+        },
+        {
+          "id": "restart",
+          "node": "restart"
+        }
+      ],
+      "nodes": 76
+    },
+    "day2": {
+      "labels": [
+        {
+          "key": "journal/text0",
+          "text": "A NEW DAWN",
+          "node": "journal-text0",
+          "position": {
+            "x": 1047.5,
+            "y": 681,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text1",
+          "text": "第 2 天 · 天亮了",
+          "node": "journal-text1",
+          "position": {
+            "x": 1045.5,
+            "y": 614,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text2",
+          "text": "门闩重新落下，外面的脚步声渐渐远去。\n\n你带回的不只是物资，\n还有下一次出发的底气。\n\n教学图的完整日循环，到此结束。",
+          "node": "journal-text2",
+          "position": {
+            "x": 1046,
+            "y": 434.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text3",
+          "text": "带回 10 张卡牌  /  物资剩余 10",
+          "node": "journal-text3",
+          "position": {
+            "x": 1046,
+            "y": 272.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text4",
+          "text": "修复花费 0，最后扣除每日物资 0。",
+          "node": "journal-text4",
+          "position": {
+            "x": 1046,
+            "y": 221.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text5",
+          "text": "余烬之中，仍有人守夜。",
+          "node": "journal-text5",
+          "position": {
+            "x": 371,
+            "y": 95.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text6",
+          "text": "A SINGLE DAY. A CHANCE TO SURVIVE.",
+          "node": "journal-text6",
+          "position": {
+            "x": 374,
+            "y": 45.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text0",
+          "text": "the end",
+          "node": "header-text0",
+          "position": {
+            "x": 162,
+            "y": 868,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text1",
+          "text": "SURVIVAL CARD GAME",
+          "node": "header-text1",
+          "position": {
+            "x": 165,
+            "y": 841.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text2",
+          "text": "第 2 天",
+          "node": "header-text2",
+          "position": {
+            "x": 328,
+            "y": 859,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text3",
+          "text": "物资 10",
+          "node": "header-text3",
+          "position": {
+            "x": 471,
+            "y": 867,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text4",
+          "text": "出牌费用 / 生存补给",
+          "node": "header-text4",
+          "position": {
+            "x": 491,
+            "y": 839,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text5",
+          "text": "护甲 7/10",
+          "node": "header-text5",
+          "position": {
+            "x": 684.5,
+            "y": 866,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text6",
+          "text": "暂无溢出",
+          "node": "header-text6",
+          "position": {
+            "x": 1046.5,
+            "y": 859.5,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "journal-start",
+          "node": "journal-start"
+        },
+        {
+          "id": "bag",
+          "node": "bag"
+        },
+        {
+          "id": "log",
+          "node": "log"
+        },
+        {
+          "id": "help",
+          "node": "help"
+        },
+        {
+          "id": "audio",
+          "node": "audio"
+        },
+        {
+          "id": "restart",
+          "node": "restart"
+        }
+      ],
+      "nodes": 67
+    },
+    "failure": {
+      "labels": [
+        {
+          "key": "journal/text0",
+          "text": "EXPLORATION FAILED",
+          "node": "journal-text0",
+          "position": {
+            "x": 1047.5,
+            "y": 681,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text1",
+          "text": "还不是终点",
+          "node": "journal-text1",
+          "position": {
+            "x": 1045.5,
+            "y": 614,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text2",
+          "text": "感染临界时再次受到实际伤害。\n\n本次教学探索已完整重置。\n卡牌没有永久损失，\n每日生存物资也没有扣除。",
+          "node": "journal-text2",
+          "position": {
+            "x": 1046,
+            "y": 434.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text3",
+          "text": "物资 10 · 护甲 10 · 战斗牌 7 张\n强制携带现金，总负重 27 / 30",
+          "node": "journal-text3",
+          "position": {
+            "x": 1046,
+            "y": 255.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text4",
+          "text": "余烬之中，仍有人守夜。",
+          "node": "journal-text4",
+          "position": {
+            "x": 371,
+            "y": 95.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "journal/text5",
+          "text": "A SINGLE DAY. A CHANCE TO SURVIVE.",
+          "node": "journal-text5",
+          "position": {
+            "x": 374,
+            "y": 45.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text0",
+          "text": "the end",
+          "node": "header-text0",
+          "position": {
+            "x": 162,
+            "y": 868,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text1",
+          "text": "SURVIVAL CARD GAME",
+          "node": "header-text1",
+          "position": {
+            "x": 165,
+            "y": 841.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text2",
+          "text": "第 1 天",
+          "node": "header-text2",
+          "position": {
+            "x": 328,
+            "y": 859,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text3",
+          "text": "物资 10",
+          "node": "header-text3",
+          "position": {
+            "x": 471,
+            "y": 867,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text4",
+          "text": "出牌费用 / 生存补给",
+          "node": "header-text4",
+          "position": {
+            "x": 491,
+            "y": 839,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text5",
+          "text": "护甲 10/10",
+          "node": "header-text5",
+          "position": {
+            "x": 684.5,
+            "y": 866,
+            "z": 0
+          }
+        },
+        {
+          "key": "header/text6",
+          "text": "暂无溢出",
+          "node": "header-text6",
+          "position": {
+            "x": 1046.5,
+            "y": 859.5,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "journal-start",
+          "node": "journal-start"
+        },
+        {
+          "id": "bag",
+          "node": "bag"
+        },
+        {
+          "id": "log",
+          "node": "log"
+        },
+        {
+          "id": "help",
+          "node": "help"
+        },
+        {
+          "id": "audio",
+          "node": "audio"
+        },
+        {
+          "id": "restart",
+          "node": "restart"
+        }
+      ],
+      "nodes": 66
+    },
+    "bag": {
+      "labels": [
+        {
+          "key": "bag/text0",
+          "text": "背包 / 本次探索风险区",
+          "node": "bag-text0",
+          "position": {
+            "x": 678,
+            "y": 729,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text1",
+          "text": "基础 27/30  ·  暂存 0/10  ·  可战斗 7 张",
+          "node": "bag-text1",
+          "position": {
+            "x": 684,
+            "y": 680,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text2",
+          "text": "基础攻击",
+          "node": "bag-text2",
+          "position": {
+            "x": 407,
+            "y": 611.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text3",
+          "text": "重 0",
+          "node": "bag-text3",
+          "position": {
+            "x": 556,
+            "y": 612.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text4",
+          "text": "已入卡组",
+          "node": "bag-text4",
+          "position": {
+            "x": 693,
+            "y": 612.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text5",
+          "text": "基础攻击",
+          "node": "bag-text5",
+          "position": {
+            "x": 407,
+            "y": 544.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text6",
+          "text": "重 0",
+          "node": "bag-text6",
+          "position": {
+            "x": 556,
+            "y": 545.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text7",
+          "text": "已入卡组",
+          "node": "bag-text7",
+          "position": {
+            "x": 693,
+            "y": 545.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text8",
+          "text": "基础躲避",
+          "node": "bag-text8",
+          "position": {
+            "x": 407,
+            "y": 477.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text9",
+          "text": "重 0",
+          "node": "bag-text9",
+          "position": {
+            "x": 556,
+            "y": 478.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text10",
+          "text": "已入卡组",
+          "node": "bag-text10",
+          "position": {
+            "x": 693,
+            "y": 478.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text11",
+          "text": "基础躲避",
+          "node": "bag-text11",
+          "position": {
+            "x": 407,
+            "y": 410.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text12",
+          "text": "重 0",
+          "node": "bag-text12",
+          "position": {
+            "x": 556,
+            "y": 411.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text13",
+          "text": "已入卡组",
+          "node": "bag-text13",
+          "position": {
+            "x": 693,
+            "y": 411.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text14",
+          "text": "菜刀",
+          "node": "bag-text14",
+          "position": {
+            "x": 407,
+            "y": 343.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text15",
+          "text": "重 3",
+          "node": "bag-text15",
+          "position": {
+            "x": 556,
+            "y": 344.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text16",
+          "text": "已入卡组",
+          "node": "bag-text16",
+          "position": {
+            "x": 693,
+            "y": 344.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text17",
+          "text": "强化躲避",
+          "node": "bag-text17",
+          "position": {
+            "x": 407,
+            "y": 276.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text18",
+          "text": "重 2",
+          "node": "bag-text18",
+          "position": {
+            "x": 556,
+            "y": 277.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text19",
+          "text": "已入卡组",
+          "node": "bag-text19",
+          "position": {
+            "x": 693,
+            "y": 277.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text20",
+          "text": "1 / 2",
+          "node": "bag-text20",
+          "position": {
+            "x": 445,
+            "y": 194.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "bag/text21",
+          "text": "移出战斗不释放负重；基础能力永久保留。",
+          "node": "bag-text21",
+          "position": {
+            "x": 720.5,
+            "y": 122.00000000000006,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "modal-close",
+          "node": "modal-close"
+        },
+        {
+          "id": "toggle-card-1",
+          "node": "toggle-card-1"
+        },
+        {
+          "id": "discard-card-1",
+          "node": "discard-card-1"
+        },
+        {
+          "id": "toggle-card-2",
+          "node": "toggle-card-2"
+        },
+        {
+          "id": "discard-card-2",
+          "node": "discard-card-2"
+        },
+        {
+          "id": "toggle-card-3",
+          "node": "toggle-card-3"
+        },
+        {
+          "id": "discard-card-3",
+          "node": "discard-card-3"
+        },
+        {
+          "id": "toggle-card-4",
+          "node": "toggle-card-4"
+        },
+        {
+          "id": "discard-card-4",
+          "node": "discard-card-4"
+        },
+        {
+          "id": "toggle-card-5",
+          "node": "toggle-card-5"
+        },
+        {
+          "id": "discard-card-5",
+          "node": "discard-card-5"
+        },
+        {
+          "id": "toggle-card-6",
+          "node": "toggle-card-6"
+        },
+        {
+          "id": "discard-card-6",
+          "node": "discard-card-6"
+        },
+        {
+          "id": "bag-prev",
+          "node": "bag-prev"
+        },
+        {
+          "id": "bag-next",
+          "node": "bag-next"
+        },
+        {
+          "id": "discard-supply",
+          "node": "discard-supply"
+        }
+      ],
+      "nodes": 111
+    },
+    "help": {
+      "labels": [
+        {
+          "key": "modal/text0",
+          "text": "生存手册",
+          "node": "modal-text0",
+          "position": {
+            "x": 720,
+            "y": 663,
+            "z": 0
+          }
+        },
+        {
+          "key": "modal/text1",
+          "text": "攻击牌：点击卡牌后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n物资是出牌费用，也占负重。基础负重 30，溢出 10。\n溢出卡不能战斗，释放空间后按顺序转入。\n护甲到 0 不立即失败，再次实际受伤才失败。\n格挡仅在当前回合有效，完全格挡可保护感染临界者。\n奖励处理后才检查物资是否归零。\n每日 1 点物资在结算最后处理。",
+          "node": "modal-text1",
+          "position": {
+            "x": 720,
+            "y": 437.50000000000006,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "modal-close",
+          "node": "modal-close"
+        }
+      ],
+      "nodes": 13
+    },
+    "log": {
+      "labels": [
+        {
+          "key": "modal/text0",
+          "text": "本日行动记录",
+          "node": "modal-text0",
+          "position": {
+            "x": 720,
+            "y": 663,
+            "z": 0
+          }
+        },
+        {
+          "key": "modal/text1",
+          "text": "第 1 天 · 护甲 10，物资 10，背负 27 / 30。",
+          "node": "modal-text1",
+          "position": {
+            "x": 720,
+            "y": 437.50000000000006,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "modal-close",
+          "node": "modal-close"
+        }
+      ],
+      "nodes": 13
+    },
+    "confirm": {
+      "labels": [
+        {
+          "key": "modal/text0",
+          "text": "重新开始第 1 天？",
+          "node": "modal-text0",
+          "position": {
+            "x": 720,
+            "y": 620,
+            "z": 0
+          }
+        },
+        {
+          "key": "modal/text1",
+          "text": "当前教学探索将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。",
+          "node": "modal-text1",
+          "position": {
+            "x": 720,
+            "y": 445.00000000000006,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [
+        {
+          "id": "modal-cancel",
+          "node": "modal-cancel"
+        },
+        {
+          "id": "modal-confirm",
+          "node": "modal-confirm"
+        }
+      ],
+      "nodes": 15
+    },
+    "HandCard": {
+      "labels": [
+        {
+          "key": "card/text0",
+          "text": "0",
+          "node": "CostLabel",
+          "position": {
+            "x": 667.5,
+            "y": 544.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "基础攻击",
+          "node": "NameLabel",
+          "position": {
+            "x": 741,
+            "y": 545,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "造成 2 点伤害",
+          "node": "DescriptionLabel",
+          "position": {
+            "x": 720,
+            "y": 391.32000000000005,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "点击 / 拖动",
+          "node": "StatusLabel",
+          "position": {
+            "x": 720,
+            "y": 358.50000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 0",
+          "node": "WeightLabel",
+          "position": {
+            "x": 720,
+            "y": 340.50000000000006,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [],
+      "nodes": 21
+    },
+    "RewardCard": {
+      "labels": [
+        {
+          "key": "card/text0",
+          "text": "0",
+          "node": "CostLabel",
+          "position": {
+            "x": 627.5,
+            "y": 596,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text1",
+          "text": "基础攻击",
+          "node": "NameLabel",
+          "position": {
+            "x": 741,
+            "y": 596.5,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text2",
+          "text": "造成 2 点伤害",
+          "node": "DescriptionLabel",
+          "position": {
+            "x": 720,
+            "y": 387.20000000000005,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text3",
+          "text": "点击 / 拖动",
+          "node": "StatusLabel",
+          "position": {
+            "x": 720,
+            "y": 307.00000000000006,
+            "z": 0
+          }
+        },
+        {
+          "key": "card/text4",
+          "text": "负重 0",
+          "node": "WeightLabel",
+          "position": {
+            "x": 720,
+            "y": 289.00000000000006,
+            "z": 0
+          }
+        }
+      ],
+      "buttons": [],
+      "nodes": 21
+    },
+    "PlayerActor": {
+      "labels": [],
+      "buttons": [],
+      "nodes": 2
+    },
+    "WandererActor": {
+      "labels": [],
+      "buttons": [],
+      "nodes": 2
+    },
+    "BruteActor": {
+      "labels": [],
+      "buttons": [],
+      "nodes": 2
+    },
+    "FloatingText": {
+      "labels": [],
+      "buttons": [],
+      "nodes": 2
+    }
+  },
+  "templates": [],
+  "clips": [
+    "PlayerUnarmedIdle",
+    "PlayerUnarmedAttack",
+    "PlayerUnarmedHurt",
+    "PlayerArmedIdle",
+    "PlayerArmedAttack",
+    "PlayerArmedHurt",
+    "WandererIdle",
+    "WandererAttack",
+    "WandererHurt",
+    "BruteIdle",
+    "BruteAttack",
+    "BruteHurt",
+    "CardDraw",
+    "CardPlay",
+    "FloatUp",
+    "EffectFade",
+    "ScreenReveal"
+  ]
+}

@@ -12,11 +12,13 @@ const { discoverProjectBackend } = load('./dist/core/project-backend/ownership.j
 
 async function main() {
     const backend = await discoverProjectBackend(project);
-    if (!backend || backend.state !== 'ready' || !backend.mcpUrl) {
+    if (!process.env.PINK_MCP_URL && (!backend || backend.state !== 'ready' || !backend.mcpUrl)) {
         throw new Error('This project has no ready MCP backend. Start npm run mcp first.');
     }
+    const endpoint = new URL(process.env.PINK_MCP_URL ?? backend.mcpUrl);
+    if (endpoint.hostname === 'localhost') endpoint.hostname = '127.0.0.1';
     const client = new Client({ name: 'pink-game-development', version: '1.0.0' });
-    await client.connect(new StreamableHTTPClientTransport(new URL(backend.mcpUrl)));
+    await client.connect(new StreamableHTTPClientTransport(endpoint));
     try {
         const [command, name, inputFile] = process.argv.slice(2);
         if (command === 'list' || command === 'schema') {
