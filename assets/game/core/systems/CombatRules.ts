@@ -4,6 +4,7 @@ import { Random } from '../Random';
 import { ActionResult, CombatCard, NODE_NAMES, OwnedCard } from '../RulesTypes';
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, RuleState } from './RuleContext';
+import { entryTier } from '../content/EntryTiers';
 export class CombatRules {
     constructor(
         private readonly state: RuleState,
@@ -27,6 +28,11 @@ export class CombatRules {
             definition = this.scenario.enemies[enemy];
         this.state.phase = 'battle';
         this.state.battle = {
+            stamina: 0,
+            maxStamina:
+                this.scenario.battleResource === 'stamina'
+                    ? (entryTier(this.state.entryTier)?.stamina ?? 1)
+                    : 0,
             enemy,
             hp: definition.hp,
             maxHp: definition.hp,
@@ -74,6 +80,7 @@ export class CombatRules {
     }
     beginPlayerTurn(): void {
         const b = this.state.battle!;
+        b.stamina = b.maxStamina;
         if (b.weapon && b.turn > b.equippedTurn) {
             const slash: CombatCard = {
                 id: this.newId('slash'),
@@ -87,7 +94,12 @@ export class CombatRules {
     }
     cardBlocked(card: CombatCard): string {
         const effect = this.content.cards[card.kind].effect;
-        if (this.state.supplies < this.content.cards[card.kind].cost) return '物资不足';
+        const stamina = this.scenario.battleResource === 'stamina';
+        if (
+            (stamina ? (this.state.battle?.stamina ?? 0) : this.state.supplies) <
+            this.content.cards[card.kind].cost
+        )
+            return stamina ? '体力不足' : '物资不足';
         if (effect.type === 'none') return '遗物不能在战斗中使用';
         if (effect.type === 'equip' && this.state.battle?.weapon) return '武器槽已占用';
         if (effect.type === 'heal' && this.state.armor === 0) return '感染临界，无法修复';
@@ -104,7 +116,9 @@ export class CombatRules {
         const reason = this.cardBlocked(card);
         if (reason) return this.feedback.result(false, reason);
         b.hand.splice(index, 1);
-        this.inventory.spend(this.content.cards[card.kind].cost);
+        if (this.scenario.battleResource === 'stamina')
+            b.stamina -= this.content.cards[card.kind].cost;
+        else this.inventory.spend(this.content.cards[card.kind].cost);
         const effect = this.content.cards[card.kind].effect;
         if (effect.type === 'equip') {
             b.weapon = card;
@@ -117,7 +131,7 @@ export class CombatRules {
                 this.state.armor = Math.min(10, this.state.armor + effect.amount);
         }
         this.feedback.log(
-            `第 ${b.turn} 回合 · 使用${this.content.cards[card.kind].name}，消耗 ${this.content.cards[card.kind].cost} 物资。`
+            `第 ${b.turn} 回合 · 使用${this.content.cards[card.kind].name}，消耗 ${this.content.cards[card.kind].cost} ${this.scenario.battleResource === 'stamina' ? '体力' : '物资'}。`
         );
         if (b.hp === 0) this.winBattle();
         return this.feedback.result(true, `${this.content.cards[card.kind].name}已生效。`);
@@ -126,6 +140,7 @@ export class CombatRules {
         if (this.state.phase !== 'battle' || !this.state.battle)
             return this.feedback.result(false, '当前不在战斗中。');
         const b = this.state.battle;
+        b.stamina = 0;
         b.discard.push(...b.hand);
         b.hand = [];
         if (b.intent === 'attack') {

@@ -73,7 +73,7 @@ function renderInspector() {
         <span class="field-label">卡牌插画</span><div class="art-options">${ART_IDS.map(art => `<label class="art-option"><input type="radio" name="illustration" data-field="art" value="${art}" ${card.art === art ? 'checked' : ''} aria-label="插画：${artNames[art]}"><span class="art-crop">${artMarkup(art)}</span><small>${artNames[art]}</small></label>`).join('')}</div>
       </div></fieldset>
       <fieldset class="property-group"><legend><span>02</span>战斗效果</legend><div>
-        <div class="field-grid">${field('物资费用', 'cost', card.cost, { type: 'number', min: 0, max: 99, readonly: card.role === 'basic' || card.role === 'cash' })}${field('卡牌重量', 'weight', card.weight, { type: 'number', min: 0, max: 30, readonly: card.role === 'basic' || card.role === 'temporary' })}</div>
+        <div class="field-grid">${field('体力费用', 'cost', card.cost, { type: 'number', min: 0, max: 99, readonly: card.role === 'basic' || card.role === 'cash' })}${field('卡牌重量', 'weight', card.weight, { type: 'number', min: 0, max: 30, readonly: card.role === 'basic' || card.role === 'temporary' })}</div>
         ${select('效果类型', 'effect.type', card.effect.type, allowedEffects.map(type => [type, EFFECT_NAMES[type]]))}
         ${card.effect.type === 'equip' ? select('每回合生成', 'effect.generatedCard', card.effect.generatedCard, draft.cards.filter(card => card.role === 'temporary').map(card => [card.id, card.name])) : card.effect.type === 'none' ? '<p class="field-note">遗物不进入战斗。现金可以在营地丢弃。</p>' : field('效果数值', 'effect.amount', card.effect.amount, { type: 'number', min: 1, max: 999 })}
         <label class="field"><span>补充说明<small>效果数值会自动生成</small></span><textarea aria-label="补充说明" data-field="text" maxlength="80" rows="2">${escape(card.text)}</textarea></label>
@@ -82,7 +82,7 @@ function renderInspector() {
         ${field('初始携带数量', 'initialCount', card.initialCount, { type: 'number', min: card.role === 'basic' ? 1 : 0, max: 8, readonly: card.role === 'cash' || card.role === 'temporary' })}
         <label class="check-field"><input type="checkbox" aria-label="加入随机奖励池" data-field="reward" ${card.reward ? 'checked' : ''} ${card.role !== 'normal' ? 'disabled' : ''}>加入随机奖励池</label>
         ${select('固定搜刮奖励', 'fixedReward', draft.fixedReward, draft.cards.filter(card => card.role === 'normal').map(card => [card.id, card.name]))}
-        <p class="field-note">初始负重包含 10 点物资，上限 30。新卡加入卡组或奖励池后，会在下次试玩中出现。</p>
+        <p class="field-note">初始卡牌负重上限 30，避难所物资点不占探索负重。新卡加入卡组或奖励池后，会在下次试玩中出现。</p>
       </div></fieldset>
       <div id="references" class="references"></div><div id="validation" class="validation" role="status"></div>`;
     $('#delete').disabled = system;
@@ -92,7 +92,7 @@ function renderInspector() {
 function renderVisual() {
     const card = current();
     if (!card) return;
-    const model = cardViewModel(card, definitions());
+    const model = cardViewModel(card, definitions(),"体力");
     if (previewedCard !== card) { previewedCard = card; previewExpanded = false; }
     setPreviewExpanded(previewExpanded);
     for (const [name, value] of Object.entries(uiTheme.colors)) $('#preview-card').style.setProperty('--card-' + name.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase()), value);

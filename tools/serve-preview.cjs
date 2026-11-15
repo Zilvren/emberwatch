@@ -8,8 +8,10 @@ function servePreview({directory,port,label}){
   const file=path.resolve(root,'.'+(pathname==='/'?'/index.html':pathname));
   if(!file.startsWith(root+path.sep)){response.writeHead(403).end();return;}
   const stream=fs.createReadStream(file);
+  request.on('aborted',()=>stream.destroy());
+  response.on('close',()=>stream.destroy());
   stream.on('error',()=>{if(!response.headersSent)response.writeHead(404);response.end();});
-  stream.on('open',()=>{response.writeHead(200,{'Content-Type':types[path.extname(file)]??'application/octet-stream','Cache-Control':'no-store'});if(request.method==='HEAD'){stream.destroy();response.end();}else stream.pipe(response);});
+  stream.on('open',()=>{if(response.destroyed){stream.destroy();return;}response.writeHead(200,{'Content-Type':types[path.extname(file)]??'application/octet-stream','Cache-Control':'no-store'});if(request.method==='HEAD'){stream.destroy();response.end();}else stream.pipe(response);});
  }).listen(port,'127.0.0.1',()=>console.log(`${label}: http://127.0.0.1:${port}/`));
 }
 module.exports={servePreview};

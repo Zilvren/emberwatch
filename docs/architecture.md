@@ -52,9 +52,9 @@
 
 用户提供的正式系统表规定物资点、战斗体力、物资卡分离，并包含独立战斗资格、多关键词、消耗品、仓库、实例升级、遗物与蓝图配方。正式口径见 `formal-system-reference.md`。
 
-当前可玩教学路径明确标为 `tutorial-v1`。其出牌扣物资、物资占负重和教学失败重置继续用于回归，不能视为正式版通用规则。`CardCatalog` v1 是该教学路径的兼容校验，并非正式版卡牌模型的全部边界。
+新开局默认 `stamina-v1`，按确认档位扣一次入场费并提供回合体力，物资点不占负重。`tutorial-v1` 的出牌扣物资、物资占负重继续服务旧存档和明确的兼容回归，不能视为正式版通用规则。`CardCatalog` v1 校验通用卡库与 30 点实体携带上限，并非正式版卡牌模型的全部边界。
 
-正式表卡牌数据现在用于组件参考预览，位于 `assets/resources/ui/card-reference.json`，不直接替换可玩卡库。正式运行规则、仓库与制作等按后续授权逐项迁移，本轮不增加新流程。
+正式表卡牌数据用于组件参考预览，位于 `assets/resources/ui/card-reference.json`，不直接替换可玩卡库。体力规则已按最新要求迁移；仓库、制作、正式失败代价和多日循环等继续逐项设计，不随本次费用单位切换自动启用。
 
 状态栏已将 `header/textN` 迁移为 StatusBar 的日期、保存、物资、护甲与携带字段，使用纯展示模型和容器几何计算。原生 HUD.prefab 的 UUID 和原操作 fileId 保留；GameRenderer 只传入只读数据。卡牌组件已经采用 Title、Cost、CostUnit、Keywords、Effect、Description、Weight 等明确字段，其他旧绑定键随对应 UI 组件继续迁移。
 
@@ -69,3 +69,23 @@ presentation/platform/WebViewport.ts 负责当前桌面全窗口宿主的尺寸�
 自动测试、类型检查、原生构建、规则重构前后状态对照，以及实际 Canvas 交互记录见 `refactor-verification.json`。它们证明相应技术行为，不代替用户对美术和界面的评审。
 
 2026-11-15 完整作品复审补充：UiActionRouter 在应用命令之前处理部分物资领取、放弃奖励及教学重玩的确认；取消不写入规则状态。UiState 记录丢弃窗口是否来自背包，保证返回原背包页。规则模块和存档格式不变。GameDirector 动态订阅减少动态效果偏好，ButtonPresentation 仅给透明 HUD 文字保留场景描边。背包与路线的原生资源由 tools/apply-review-polish.cjs 显式修订当前文件，不加载旧基线，也不参与普通构建。详细证据见 full-game-review.md 和 full-game-review-verification.json。
+
+## 2026-11-15 整卡与路线视图
+
+InventoryViewModel 提供只读筛选、排序与操作资格；InventoryGrid 管理整卡实例、滚动和大卡阅读，SelectableCard 复用完整卡面并发送选择意图。RewardSelection 将比较和领取分开，比较只更新 UiState，确认仍使用 GameSession 的领取命令。UiState 的筛选、排序、阅读、编组模式和候选索引不进入存档。
+
+RouteMapModel 把当前 scenario.routes 投影为点和边，RouteMap/RoutePoint 负责原生绘制、节点、滚动定位和只读查看。地图覆盖层使用稳定场景容器作为第五个 popup，保留实际游戏阶段。ContactShadow 为场景拥有的地面接触表现，不修改演员、动画或规则。
+
+原生作者工具 build-deck-map-ui.cjs 维护模板、屏幕与主场景绑定；显式登记嵌套预制体根，控制器通过普通容器解析内部视图，迁移保留根资源身份。所有作者工具均不在常规构建脚本中执行。组件合同及验证见 designs/ui/deck-map-components.md 与 deck-map-verification.json。
+
+## 2026-11-15 体力接入
+
+EntryTiers 是档位内容表，ExplorationRules 扣一次入场费，CombatRules 在回合边界刷新/清空体力；InventoryRules 按当前情景决定物资点是否占负重。GameSession 默认使用 stamina-v1，恢复时尊重存档所带情景；只有玩家确认 new-game 才把旧局切换为新规则。SurvivalGame 为每局复制情景，重开在同一状态对象上更新配置，避免组件持有的只读引用失效。
+
+存档增加 entryTier 与 battle.stamina/maxStamina，按档位验证预算。EntrySelection 负责四档展示，临时比较不写规则；主场景第六个 popup 是独立进入档位窗口。卡牌费用单位来自当前情景，编辑器使用新规则口径。每日消耗与风险修复仍由原 SettlementRules 处理，详细边界见 designs/stamina-system.md 与 stamina-verification.json。
+
+## 2026-11-15 手牌与返家显示精修
+
+CardPresentation.compact 是原生卡面显示变体，由 HandCard.prefab 开启，减少战斗常态元信息；背包/奖励等完整卡面保持默认变体。几何与字体仍由 Prefab 编写，CardInteraction 沿用原手势和应用命令路径。
+
+ShelterSummaryModel 从 GameReadModel 投影带回、护甲、修复资格和每日余额预测，替代 GameRenderer 中大段结算文案；它不支付、不修改状态、不保存。GameRenderer 将投影绑定到具有明确含义的 shelter/returned、armor、repair-hint、daily-summary 等键，原 ButtonAction 和 GameSession 继续负责修复与结算。验证见 hand-shelter-verification.json。

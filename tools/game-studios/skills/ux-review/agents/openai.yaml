@@ -1,0 +1,6 @@
+interface:
+  display_name: "UX Review · Pink/Cocos"
+  short_description: "Review native game usability with actual evidence"
+  default_prompt: "Use $ux-review to inspect this Pink/Cocos game's current screen and report actionable UX findings."
+policy:
+  allow_implicit_invocation: true

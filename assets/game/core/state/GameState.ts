@@ -1,5 +1,6 @@
 import { CARD, CardDefinition } from '../content/CardCatalog';
 import { getScenario, NodeKind, Route } from '../content/GameScenario';
+import { EntryTierId, entryTier } from '../content/EntryTiers';
 import type { Battle, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
 export interface GameState {
     scenarioId: string;
@@ -10,6 +11,7 @@ export interface GameState {
     phase: Phase;
     day: number;
     supplies: number;
+    entryTier: EntryTierId | null;
     armor: number;
     critical: boolean;
     cards: OwnedCard[];
@@ -67,7 +69,13 @@ export function validateGameState(
     integer(s.revision, 0, 1000000000, 'revision');
     integer(s.run, 1, 1000000000, 'run');
     integer(s.day, 1, 100000, 'day');
-    integer(s.supplies, 0, 30, 'supplies');
+    integer(s.supplies, 0, scenario.suppliesHaveWeight === false ? 1000000000 : 30, 'supplies');
+    const savedTier = s.entryTier ?? null;
+    if (scenario.battleResource === 'stamina') {
+        requireValue(savedTier, savedTier === null || !!entryTier(savedTier), 'entry tier');
+        if (s.phase !== 'journal' && s.phase !== 'failure')
+            requireValue(savedTier, !!entryTier(savedTier), 'entry tier for active expedition');
+    } else requireValue(savedTier, savedTier === null, 'legacy entry tier');
     integer(s.armor, 0, 10, 'armor');
     flag(s.critical, 'critical');
     flag(s.fixedDone, 'fixedDone');
@@ -117,7 +125,7 @@ export function validateGameState(
         requireValue(card.zone, card.zone === 'base' || card.zone === 'overflow', 'zone');
     });
     const baseWeight =
-        s.supplies +
+        (scenario.suppliesHaveWeight === false ? 0 : s.supplies) +
         s.cards
             .filter((c) => c.zone === 'base')
             .reduce((n, c) => n + definitions[c.kind].weight, 0);
@@ -137,6 +145,14 @@ export function validateGameState(
         integer(b.turn, 1, 1000000, 'turn');
         integer(b.block, 0, 100000, 'block');
         integer(b.equippedTurn, 0, b.turn, 'equippedTurn');
+        if (scenario.battleResource === 'stamina') {
+            const budget = entryTier(savedTier)!.stamina;
+            integer(b.maxStamina, budget, budget, 'maxStamina');
+            integer(b.stamina, 0, budget, 'stamina');
+        } else {
+            integer(b.maxStamina ?? 0, 0, 0, 'legacy maxStamina');
+            integer(b.stamina ?? 0, 0, 0, 'legacy stamina');
+        }
         flag(b.boosted, 'boosted');
         requireValue(b.intent, b.intent === 'attack' || b.intent === 'prepare', 'intent');
         for (const [name, cards] of [
@@ -203,6 +219,7 @@ export function validateGameState(
         phase: s.phase,
         day: s.day,
         supplies: s.supplies,
+        entryTier: savedTier,
         armor: s.armor,
         critical: s.critical,
         cards: s.cards,
@@ -210,7 +227,9 @@ export function validateGameState(
         fixedDone: s.fixedDone,
         pathIndex: s.pathIndex,
         visited: s.visited,
-        battle: s.battle,
+        battle: s.battle
+            ? { ...s.battle, stamina: s.battle.stamina ?? 0, maxStamina: s.battle.maxStamina ?? 0 }
+            : null,
         rewards: s.rewards,
         settlement: s.settlement,
         logs: s.logs,

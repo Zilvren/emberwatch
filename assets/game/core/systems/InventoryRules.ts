@@ -2,19 +2,21 @@ import { CardKind } from '../content/CardCatalog';
 import { CardSet } from '../content/ContentRegistry';
 import { ActionResult, OwnedCard } from '../RulesTypes';
 import { RuleFeedback, RuleState } from './RuleContext';
+import { GameScenario, TUTORIAL_SCENARIO } from '../content/GameScenario';
 export class InventoryRules {
     constructor(
         private readonly state: RuleState,
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
-        private readonly newId: (prefix: string) => string
+        private readonly newId: (prefix: string) => string,
+        private readonly scenario: GameScenario = TUTORIAL_SCENARIO
     ) {}
     owned(kind: CardKind, found = false, zone: 'base' | 'overflow' = 'base'): OwnedCard {
         return { id: this.newId('card'), kind, found, zone, selected: kind !== 'cash' };
     }
     get baseWeight(): number {
         return (
-            this.state.supplies +
+            (this.scenario.suppliesHaveWeight === false ? 0 : this.state.supplies) +
             this.state.cards
                 .filter((c) => c.zone === 'base')
                 .reduce((n, c) => n + this.content.cards[c.kind].weight, 0)
@@ -70,6 +72,8 @@ export class InventoryRules {
         return this.feedback.result(true, '卡牌已从本次探索中永久移除。');
     }
     discardSupplies(amount: number): ActionResult {
+        if (this.scenario.suppliesHaveWeight === false)
+            return this.feedback.result(false, '避难所物资不占探索负重，无需丢弃。');
         if (this.state.phase !== 'rewards' && this.state.phase !== 'rest')
             return this.feedback.result(false, '只能在奖励或休整时丢弃物资。');
         if (!Number.isInteger(amount) || amount <= 0 || amount > this.state.supplies)

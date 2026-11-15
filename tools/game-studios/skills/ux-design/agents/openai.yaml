@@ -1,0 +1,6 @@
+interface:
+  display_name: "UX Design · Pink/Cocos"
+  short_description: "Design scene-led HUDs and native game interactions"
+  default_prompt: "Use $ux-design to update this Pink/Cocos game's screen layout and interaction specification."
+policy:
+  allow_implicit_invocation: true

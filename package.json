@@ -24,7 +24,12 @@
         "build:panels": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-panel-review.json",
         "panels": "node tools/panel-preview.cjs",
         "build:status": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-status-review.json",
-        "status": "node tools/status-preview.cjs"
+        "status": "node tools/status-preview.cjs",
+        "skills:inspect": "node tools/game-studios/inspect.cjs --project .",
+        "skills:install": "node tools/game-studios/install.cjs",
+        "skills:check": "node tools/game-studios/install.cjs --check",
+        "typecheck": "node tools/game-studios/typecheck.cjs",
+        "skills:playtest": "node tools/game-studios/playtest.cjs"
     },
     "pink": {
         "uuid": "80d9c7ff-7595-4f1a-9094-c2a99f82e953",

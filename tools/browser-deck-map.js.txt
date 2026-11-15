@@ -1,0 +1,19 @@
+await page.setViewportSize({width:1440,height:900});await page.goto('http://127.0.0.1:7457/?seed=17&save=off&review=deck-map-01');await idle();
+const uiView=async()=>page.evaluate(()=>{
+ const root=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot');
+ const grid=root.getComponentsInChildren('InventoryGrid').find(c=>c.node.activeInHierarchy);
+ const map=root.getComponentsInChildren('RouteMap').filter(c=>c.node.activeInHierarchy);
+ return {grid:grid?{reader:grid.reader.active,cards:grid.content.children.filter(c=>c.active).map(c=>c.getComponent('SelectableCard').card.inspect()),scroll:grid.scroll.getScrollOffset()}:null,maps:map.map(c=>c.inspect())};
+});
+await click('bag');assert((await uiView()).grid.cards.length===8,'Inventory did not show all card instances');await screenshot('inventory-grid');
+let s=await state();await click('inspect-'+s.cards[0].id);assert((await uiView()).grid.reader,'Large card reader did not open');await screenshot('card-reader');
+await page.keyboard.press('Escape');await page.waitForTimeout(150);assert(!(await uiView()).grid.reader&&(await state()).overlay==='bag','Escape did not return to grid');
+await page.keyboard.press('Escape');await page.waitForTimeout(150);assert(!(await state()).overlay,'Second Escape did not close inventory');
+await click('map');assert((await state()).overlay==='map','Map overlay did not open');await screenshot('map-readonly');await click('modal-close');
+await click('journal-start');await screenshot('map-start');await click('enter-fixed');
+const before=await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()));
+await click('reward-select-0');assert(await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()))===before,'Comparing a reward changed rules');await screenshot('reward-selection');
+await claimSupplies();await click('claim-card-0');await click('reward-bag');await click('bag-filter-overflow');assert((await uiView()).grid.cards.length===1,'Overflow filter is incorrect');await screenshot('inventory-overflow');
+await click('bag-filter-all');await click('bag-sort');await click('modal-close');await leaveRewards();await click('route-A');await screenshot('map-route');await click('enter-enemy1');
+assert((await state()).phase==='battle','Map node did not enter the existing encounter');await screenshot('battle-preserved');
+assert(!runtimeErrors.length,runtimeErrors.join('\n'));return{passed:true,grid:true,reader:true,escapeStack:true,readonlyMap:true,rewardComparisonDoesNotMutate:true,confirmedReward:true,overflowFilter:true,routeEntry:true,actions:trace.length,runtimeErrors};

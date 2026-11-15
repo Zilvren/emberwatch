@@ -26,6 +26,8 @@ export interface CombatCard {
     temporary: boolean;
 }
 export interface Battle {
+    stamina: number;
+    maxStamina: number;
     enemy: 'enemy1' | 'enemy2';
     hp: number;
     maxHp: number;

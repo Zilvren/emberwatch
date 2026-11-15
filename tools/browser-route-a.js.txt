@@ -9,15 +9,15 @@ const impactState=await state();assert(impactState.busy,'Attack feedback sequenc
 await page.screenshot({path:'output/playwright/v2-attack-impact.png'});await idle();assert((await state()).battle.hp===4,'Attack must do 2 damage');
 const first=await fight({basicOnly:true,capture:true});await screenshot('v2-first-victory');
 await claimSupplies();
-s=await state();const available=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(available)await click(available.id);
+await claimAvailableCard();
 await leaveRewards();await click('enter-scavenge');assert((await state()).supplies>=0,'Scavenge fee invalid');
-await claimSupplies();s=await state();const found=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(found)await click(found.id);
+await claimSupplies();await claimAvailableCard();
 await leaveRewards();await click('enter-rest');await screenshot('v2-rest');
 const beforeCash=await state();await click('rest-cash');assert((await state()).overlay==='discard','Cash confirmation missing');await click('modal-confirm');
 s=await state();assert(!s.cards.some(c=>c.kind==='cash'),'Cash was not removed');assert(s.overflowWeight<beforeCash.overflowWeight||s.overflowWeight===0,'Overflow not promoted');
 await click('rest-bag');s=await state();const basic=s.cards.find(c=>c.kind==='dodge');await click('toggle-'+basic.id);assert(!(await state()).cards.find(c=>c.id===basic.id).selected,'Deck toggle failed');await click('toggle-'+basic.id);await click('modal-close');
 await click('rest-done');await click('enter-enemy2');await screenshot('v2-boss');const second=await fight({preferWeapon:true,capture:true});
-await claimSupplies();s=await state();const reward=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(reward)await click(reward.id);
+await claimSupplies();await claimAvailableCard();
 await leaveRewards();await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='shelter');await screenshot('v2-shelter');
 s=await state();assert(s.settlement.dailySpent===0,'Daily supplies deducted before final settlement');
 const repair=s.hits.find(h=>h.id==='shelter-repair');if(repair.enabled){await click('shelter-repair');if((await state()).overlay==='repair-risk')await click('modal-confirm');}

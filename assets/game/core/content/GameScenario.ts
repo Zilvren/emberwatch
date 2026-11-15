@@ -2,7 +2,10 @@
 export type Route = 'A' | 'B';
 export type NodeKind = 'fixed' | 'scavenge' | 'enemy1' | 'rest' | 'enemy2';
 export interface GameScenario {
-    ruleset: 'tutorial-v1';
+    ruleset: 'tutorial-v1' | 'stamina-v1';
+    battleResource?: 'supplies' | 'stamina';
+    suppliesHaveWeight?: boolean;
+    scavengeFees?: { fixed: number; scavenge: number };
     id: string;
     version: number;
     title: string;
@@ -17,6 +20,9 @@ export interface GameScenario {
 // Existing teaching content is the first authored scenario, not a global game limit.
 export const TUTORIAL_SCENARIO: GameScenario = {
     ruleset: 'tutorial-v1',
+    battleResource: 'supplies',
+    suppliesHaveWeight: true,
+    scavengeFees: { fixed: 2, scavenge: 3 },
     id: 'first-expedition',
     version: 1,
     title: '第一次探索',
@@ -34,8 +40,19 @@ export const TUTORIAL_SCENARIO: GameScenario = {
     completionDay: 2,
 };
 
+export const STAMINA_SCENARIO: GameScenario = {
+    ...TUTORIAL_SCENARIO,
+    ruleset: 'stamina-v1',
+    id: 'stamina-expedition',
+    title: '灰烬街区',
+    battleResource: 'stamina',
+    suppliesHaveWeight: false,
+    scavengeFees: { fixed: 0, scavenge: 0 },
+};
 export function getScenario(id: string, version: number): GameScenario {
-    if (id !== TUTORIAL_SCENARIO.id || version !== TUTORIAL_SCENARIO.version)
-        throw new Error('此存档使用的章节版本尚不受支持，已保留原存档。');
-    return TUTORIAL_SCENARIO;
+    const scenario = [TUTORIAL_SCENARIO, STAMINA_SCENARIO].find(
+        (s) => s.id === id && s.version === version
+    );
+    if (!scenario) throw new Error('此存档使用的章节版本尚不受支持，已保留原存档。');
+    return scenario;
 }

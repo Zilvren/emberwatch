@@ -57,7 +57,8 @@ export class HandPresentation extends Component {
                 game.cardBlocked(entry),
                 selected === entry.id ? '选择敌人为目标' : '点击 / 拖动',
                 entry.id,
-                game.content.cards
+                game.content.cards,
+                game.scenario.battleResource === 'stamina' ? '体力' : '物资'
             );
             card.setSelected(selected === entry.id);
             card.node.getComponent(CardInteraction)?.sync();

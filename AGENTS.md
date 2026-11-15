@@ -9,6 +9,13 @@
 - 正式版新增系统、失败代价和跨局成长等具体规则，需要区分用户已确认的需求与工程建议，不能把尚未确认的方案写成既定玩法。
 - 当前事实、演进优先级和待设计事项见 `docs/production-direction.md`；相关资料遵守下方 OpenViking 归档约定。
 
+## 美术、UX 与品质技能
+
+- 已选用 `art-bible`、`asset-spec`、`ux-design`、`ux-review`、`vertical-slice`、`test-evidence-review` 六个技能的 Pink/Cocos 适配版。项目维护源位于 `tools/game-studios/skills/`；Codex 本地安装与校验见 `docs/game-studios-skills.md`。
+- 处理相应任务时，读取对应 `SKILL.md` 和 `tools/game-studios/pink-cocos.project.json`，以当前代码、原生资源与用户最新决定确认实际情况。`npm run skills:inspect` 只读盘点引擎、资源和受保护文件，不会重建或改写游戏。
+- 统一美术、整屏布局、可玩片段和验收沿用同一组项目文档路径与 OpenViking URI。技术通过、视觉观察和用户最终认可分别记录；本次安装不意味着整体美术或非待机动作已经定稿。
+- 主游戏继续使用 Pink/Cocos 的 Scene、Prefab、Animation、`.meta` 和原生命令链。普通构建不执行素材或布局生成工具；浏览器导出不等于另做 HTML 游戏。
+
 ## 文档与设计保存到 OpenViking
 
 - 本项目新增或更新的需求文档、游戏规则、技术方案、架构说明、界面与交互设计、设计决策和验证记录，都必须保存到 OpenViking，不能只留在聊天或本地文件中。

@@ -1,71 +1,239 @@
-const {test}=require('node:test'), assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-const load=require('../tools/load-ts.cjs').createLoader(),root=path.resolve(__dirname,'..');
-const catalog=load(path.join(root,'assets/game/core/content/CardCatalog.ts'));
-const original=JSON.parse(fs.readFileSync(path.join(root,'assets/resources/data/cards.json'),'utf8'));
+const { test } = require('node:test'),
+    assert = require('node:assert/strict'),
+    fs = require('node:fs'),
+    path = require('node:path');
+const load = require('../tools/load-ts.cjs').createLoader(),
+    root = path.resolve(__dirname, '..');
+const catalog = load(path.join(root, 'assets/game/core/content/CardCatalog.ts'));
+const original = JSON.parse(
+    fs.readFileSync(path.join(root, 'assets/resources/data/cards.json'), 'utf8')
+);
 catalog.installCatalog(original);
-const {SurvivalGame}=load(path.join(root,'assets/game/core/SurvivalGame.ts'));
-const {GameSession}=load(path.join(root,'assets/game/application/GameSession.ts'));
-const {SaveRepository}=load(path.join(root,'assets/game/infrastructure/SaveRepository.ts'));
-const {TUTORIAL_SCENARIO}=load(path.join(root,'assets/game/core/content/GameScenario.ts'));
-const memory=()=>({data:new Map(),getItem(key){return this.data.get(key)??null},setItem(key,value){this.data.set(key,value)}});
-const ok=result=>assert.equal(result.ok,true,result.message);
-const restore=g=>SurvivalGame.fromState(JSON.parse(JSON.stringify(g.exportState())));
-function battle(seed=17){const g=new SurvivalGame(seed);g.start();g.fixedDone=true;g.route='A';g.enterNode();return g;}
+const { SurvivalGame } = load(path.join(root, 'assets/game/core/SurvivalGame.ts'));
+const { GameSession } = load(path.join(root, 'assets/game/application/GameSession.ts'));
+const { TUTORIAL_SCENARIO } = load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
+class LegacySession extends GameSession {
+    constructor(seed, saves) {
+        super(seed, saves, TUTORIAL_SCENARIO);
+    }
+}
+const { SaveRepository } = load(path.join(root, 'assets/game/infrastructure/SaveRepository.ts'));
+const memory = () => ({
+    data: new Map(),
+    getItem(key) {
+        return this.data.get(key) ?? null;
+    },
+    setItem(key, value) {
+        this.data.set(key, value);
+    },
+});
+const ok = (result) => assert.equal(result.ok, true, result.message);
+const restore = (g) => SurvivalGame.fromState(JSON.parse(JSON.stringify(g.exportState())));
+function battle(seed = 17) {
+    const g = new SurvivalGame(seed);
+    g.start();
+    g.fixedDone = true;
+    g.route = 'A';
+    g.enterNode();
+    return g;
+}
 
-test('commands persist progress and another session continues without replaying a node cost',()=>{
- const storage=memory(),s=new GameSession(17,new SaveRepository(storage));ok(s.execute({type:'start'}));ok(s.execute({type:'enter-node'}));
- const loaded=new GameSession(42,new SaveRepository(storage));assert.equal(loaded.restored,true);assert.deepEqual(loaded.game.exportState(),s.game.exportState());assert.equal(loaded.game.supplies,8);assert.equal(loaded.game.phase,'rewards');
- ok(loaded.execute({type:'claim-supplies'}));assert.equal(new GameSession(1,new SaveRepository(storage)).game.rewards.supplyTaken,true);
+test('commands persist progress and another session continues without replaying a node cost', () => {
+    const storage = memory(),
+        s = new LegacySession(17, new SaveRepository(storage));
+    ok(s.execute({ type: 'start' }));
+    ok(s.execute({ type: 'enter-node' }));
+    const loaded = new LegacySession(42, new SaveRepository(storage));
+    assert.equal(loaded.restored, true);
+    assert.deepEqual(loaded.game.exportState(), s.game.exportState());
+    assert.equal(loaded.game.supplies, 8);
+    assert.equal(loaded.game.phase, 'rewards');
+    ok(loaded.execute({ type: 'claim-supplies' }));
+    assert.equal(new LegacySession(1, new SaveRepository(storage)).game.rewards.supplyTaken, true);
 });
-test('battle roundtrip preserves random generator, piles, equipment and future draws',()=>{
- const g=battle(17);for(let turn=0;turn<4&&g.phase==='battle';turn++){
-  const loaded=restore(g);assert.deepEqual(loaded.exportState(),g.exportState());ok(g.endTurn());ok(loaded.endTurn());assert.deepEqual(loaded.exportState(),g.exportState());
- }
+test('battle roundtrip preserves random generator, piles, equipment and future draws', () => {
+    const g = battle(17);
+    for (let turn = 0; turn < 4 && g.phase === 'battle'; turn++) {
+        const loaded = restore(g);
+        assert.deepEqual(loaded.exportState(), g.exportState());
+        ok(g.endTurn());
+        ok(loaded.endTurn());
+        assert.deepEqual(loaded.exportState(), g.exportState());
+    }
 });
-test('equipped weapons and generated temporary card ids survive restore without duplicates',()=>{
- let g;for(let seed=1;seed<200;seed++){const next=battle(seed);if(next.battle.hand.some(c=>c.kind==='knife')){g=next;break;}}
- assert.ok(g);ok(g.play(g.battle.hand.find(c=>c.kind==='knife').id));ok(g.endTurn());const loaded=restore(g);assert.equal(loaded.battle.weapon.kind,'knife');
- ok(g.endTurn());ok(loaded.endTurn());assert.deepEqual(loaded.exportState(),g.exportState());
- const cards=[...loaded.battle.hand,...loaded.battle.draw,...loaded.battle.discard,loaded.battle.weapon];assert.equal(new Set(cards.map(c=>c.id)).size,cards.length);
+test('equipped weapons and generated temporary card ids survive restore without duplicates', () => {
+    let g;
+    for (let seed = 1; seed < 200; seed++) {
+        const next = battle(seed);
+        if (next.battle.hand.some((c) => c.kind === 'knife')) {
+            g = next;
+            break;
+        }
+    }
+    assert.ok(g);
+    ok(g.play(g.battle.hand.find((c) => c.kind === 'knife').id));
+    ok(g.endTurn());
+    const loaded = restore(g);
+    assert.equal(loaded.battle.weapon.kind, 'knife');
+    ok(g.endTurn());
+    ok(loaded.endTurn());
+    assert.deepEqual(loaded.exportState(), g.exportState());
+    const cards = [
+        ...loaded.battle.hand,
+        ...loaded.battle.draw,
+        ...loaded.battle.discard,
+        loaded.battle.weapon,
+    ];
+    assert.equal(new Set(cards.map((c) => c.id)).size, cards.length);
 });
-test('restoration makes independent copies of inventory and battle state',()=>{
- const g=battle(),state=g.exportState(),loaded=SurvivalGame.fromState(state);state.cards[0].selected=false;state.battle.hand.length=0;assert.ok(loaded.battle.hand.length>0);assert.equal(loaded.cards[0].selected,true);
+test('restoration makes independent copies of inventory and battle state', () => {
+    const g = battle(),
+        state = g.exportState(),
+        loaded = SurvivalGame.fromState(state);
+    state.cards[0].selected = false;
+    state.battle.hand.length = 0;
+    assert.ok(loaded.battle.hand.length > 0);
+    assert.equal(loaded.cards[0].selected, true);
 });
-test('settlement keeps repair warning and daily consumption strictly last across save/load',()=>{
- const g=new SurvivalGame(2);g.fixedDone=true;g.route='A';g.pathIndex=4;g.phase='map';g.supplies=1;g.armor=5;g.advanceTime(1);
- const loaded=restore(g);const warning=loaded.repairAtShelter();assert.equal(warning.warning,true);assert.equal(loaded.supplies,1);ok(loaded.repairAtShelter(true));assert.equal(loaded.supplies,0);
- const afterRepair=restore(loaded);assert.equal(afterRepair.settlement.dailySpent,0);ok(afterRepair.finishDay());assert.equal(afterRepair.settlement.dailyShortfall,1);assert.deepEqual(restore(afterRepair).exportState(),afterRepair.exportState());
+test('settlement keeps repair warning and daily consumption strictly last across save/load', () => {
+    const g = new SurvivalGame(2);
+    g.fixedDone = true;
+    g.route = 'A';
+    g.pathIndex = 4;
+    g.phase = 'map';
+    g.supplies = 1;
+    g.armor = 5;
+    g.advanceTime(1);
+    const loaded = restore(g);
+    const warning = loaded.repairAtShelter();
+    assert.equal(warning.warning, true);
+    assert.equal(loaded.supplies, 1);
+    ok(loaded.repairAtShelter(true));
+    assert.equal(loaded.supplies, 0);
+    const afterRepair = restore(loaded);
+    assert.equal(afterRepair.settlement.dailySpent, 0);
+    ok(afterRepair.finishDay());
+    assert.equal(afterRepair.settlement.dailyShortfall, 1);
+    assert.deepEqual(restore(afterRepair).exportState(), afterRepair.exportState());
 });
-test('automatic return-to-shelter transition is saved by the application session',()=>{
- const storage=memory(),s=new GameSession(2,new SaveRepository(storage));s.game.start();s.game.fixedDone=true;s.game.route='A';s.game.pathIndex=4;s.advanceTime(1);
- const loaded=new GameSession(99,new SaveRepository(storage));assert.equal(loaded.game.phase,'shelter');assert.deepEqual(loaded.game.exportState(),s.game.exportState());
+test('automatic return-to-shelter transition is saved by the application session', () => {
+    const storage = memory(),
+        s = new LegacySession(2, new SaveRepository(storage));
+    s.game.start();
+    s.game.fixedDone = true;
+    s.game.route = 'A';
+    s.game.pathIndex = 4;
+    s.advanceTime(1);
+    const loaded = new LegacySession(99, new SaveRepository(storage));
+    assert.equal(loaded.game.phase, 'shelter');
+    assert.deepEqual(loaded.game.exportState(), s.game.exportState());
 });
-test('a damaged primary save recovers its previous valid checkpoint and retains that backup',()=>{
- const storage=memory(),repo=new SaveRepository(storage),s=new GameSession(2,repo);s.execute({type:'start'});const checkpoint=storage.getItem(repo.key);s.execute({type:'enter-node'});storage.setItem(repo.key,'damaged');
- const loaded=new GameSession(99,new SaveRepository(storage));assert.equal(loaded.game.phase,'map');assert.match(loaded.startupMessage,/备份/);loaded.execute({type:'enter-node'});assert.equal(storage.getItem(repo.key+'.backup'),checkpoint);assert.equal(new GameSession(3,new SaveRepository(storage)).game.phase,'rewards');
+test('a damaged primary save recovers its previous valid checkpoint and retains that backup', () => {
+    const storage = memory(),
+        repo = new SaveRepository(storage),
+        s = new LegacySession(2, repo);
+    s.execute({ type: 'start' });
+    const checkpoint = storage.getItem(repo.key);
+    s.execute({ type: 'enter-node' });
+    storage.setItem(repo.key, 'damaged');
+    const loaded = new LegacySession(99, new SaveRepository(storage));
+    assert.equal(loaded.game.phase, 'map');
+    assert.match(loaded.startupMessage, /备份/);
+    loaded.execute({ type: 'enter-node' });
+    assert.equal(storage.getItem(repo.key + '.backup'), checkpoint);
+    assert.equal(new LegacySession(3, new SaveRepository(storage)).game.phase, 'rewards');
 });
-test('unsupported save versions are preserved until the player explicitly starts a new game',()=>{
- const storage=memory(),repo=new SaveRepository(storage),s=new GameSession(2,repo);s.execute({type:'start'});const envelope=JSON.parse(storage.getItem(repo.key));envelope.version=99;const future=JSON.stringify(envelope);storage.setItem(repo.key,future);
- const loaded=new GameSession(99,new SaveRepository(storage));assert.equal(loaded.restored,false);assert.match(loaded.startupMessage,/版本/);loaded.execute({type:'start'});assert.equal(storage.getItem(repo.key),future);
- ok(loaded.execute({type:'new-game'}));assert.notEqual(storage.getItem(repo.key),future);assert.equal(new GameSession(3,new SaveRepository(storage)).game.phase,'journal');
+test('unsupported save versions are preserved until the player explicitly starts a new game', () => {
+    const storage = memory(),
+        repo = new SaveRepository(storage),
+        s = new LegacySession(2, repo);
+    s.execute({ type: 'start' });
+    const envelope = JSON.parse(storage.getItem(repo.key));
+    envelope.version = 99;
+    const future = JSON.stringify(envelope);
+    storage.setItem(repo.key, future);
+    const loaded = new LegacySession(99, new SaveRepository(storage));
+    assert.equal(loaded.restored, false);
+    assert.match(loaded.startupMessage, /版本/);
+    loaded.execute({ type: 'start' });
+    assert.equal(storage.getItem(repo.key), future);
+    ok(loaded.execute({ type: 'new-game' }));
+    assert.notEqual(storage.getItem(repo.key), future);
+    assert.equal(new LegacySession(3, new SaveRepository(storage)).game.phase, 'journal');
 });
-test('changed card definitions block overwrite instead of silently dropping owned cards',()=>{
- const storage=memory(),repo=new SaveRepository(storage),s=new GameSession(2,repo);s.execute({type:'start'});const before=storage.getItem(repo.key);
- const changed=JSON.parse(JSON.stringify(original));changed.cards[0].name+='（测试）';catalog.installCatalog(changed);
- try{const loaded=new GameSession(3,new SaveRepository(storage));assert.equal(loaded.restored,false);assert.match(loaded.startupMessage,/卡牌配置/);loaded.execute({type:'start'});assert.equal(storage.getItem(repo.key),before);}finally{catalog.installCatalog(original);}
+test('changed card definitions block overwrite instead of silently dropping owned cards', () => {
+    const storage = memory(),
+        repo = new SaveRepository(storage),
+        s = new LegacySession(2, repo);
+    s.execute({ type: 'start' });
+    const before = storage.getItem(repo.key);
+    const changed = JSON.parse(JSON.stringify(original));
+    changed.cards[0].name += '（测试）';
+    catalog.installCatalog(changed);
+    try {
+        const loaded = new LegacySession(3, new SaveRepository(storage));
+        assert.equal(loaded.restored, false);
+        assert.match(loaded.startupMessage, /卡牌配置/);
+        loaded.execute({ type: 'start' });
+        assert.equal(storage.getItem(repo.key), before);
+    } finally {
+        catalog.installCatalog(original);
+    }
 });
-test('storage quota failure does not crash gameplay or replace the last valid save',()=>{
- const storage=memory(),repo=new SaveRepository(storage),s=new GameSession(2,repo);s.execute({type:'start'});const before=storage.getItem(repo.key);storage.setItem=()=>{throw Error('quota')};
- ok(s.execute({type:'enter-node'}));assert.equal(s.game.phase,'rewards');assert.equal(storage.getItem(repo.key),before);assert.match(s.saveStatus,/保存失败/);
+test('storage quota failure does not crash gameplay or replace the last valid save', () => {
+    const storage = memory(),
+        repo = new SaveRepository(storage),
+        s = new LegacySession(2, repo);
+    s.execute({ type: 'start' });
+    const before = storage.getItem(repo.key);
+    storage.setItem = () => {
+        throw Error('quota');
+    };
+    ok(s.execute({ type: 'enter-node' }));
+    assert.equal(s.game.phase, 'rewards');
+    assert.equal(storage.getItem(repo.key), before);
+    assert.match(s.saveStatus, /保存失败/);
 });
-test('invalid or unknown input commands do not mutate progress or write a new save',()=>{
- const storage=memory(),repo=new SaveRepository(storage),s=new GameSession(2,repo);s.execute({type:'start'});const before=storage.getItem(repo.key),state=s.game.exportState();
- assert.equal(s.execute({type:'choose-route',route:'C'}).ok,false);assert.equal(s.execute({type:'unknown'}).ok,false);assert.deepEqual(s.game.exportState(),state);assert.equal(storage.getItem(repo.key),before);
+test('invalid or unknown input commands do not mutate progress or write a new save', () => {
+    const storage = memory(),
+        repo = new SaveRepository(storage),
+        s = new LegacySession(2, repo);
+    s.execute({ type: 'start' });
+    const before = storage.getItem(repo.key),
+        state = s.game.exportState();
+    assert.equal(s.execute({ type: 'choose-route', route: 'C' }).ok, false);
+    assert.equal(s.execute({ type: 'unknown' }).ok, false);
+    assert.deepEqual(s.game.exportState(), state);
+    assert.equal(storage.getItem(repo.key), before);
 });
-test('saved state validation rejects broken phase relationships, missing cards, duplicate ids and non-finite numbers',()=>{
- const g=battle(),good=g.exportState();
- for(const mutate of [s=>s.battle=null,s=>s.cards[0].kind='missing',s=>s.cards[1].id=s.cards[0].id,s=>s.supplies=NaN,s=>s.nextId=0,s=>s.randomState=0,s=>s.battle.hand.push(s.battle.hand[0])]){const bad=JSON.parse(JSON.stringify(good));mutate(bad);assert.throws(()=>SurvivalGame.fromState(bad),/存档/);}
+test('saved state validation rejects broken phase relationships, missing cards, duplicate ids and non-finite numbers', () => {
+    const g = battle(),
+        good = g.exportState();
+    for (const mutate of [
+        (s) => (s.battle = null),
+        (s) => (s.cards[0].kind = 'missing'),
+        (s) => (s.cards[1].id = s.cards[0].id),
+        (s) => (s.supplies = NaN),
+        (s) => (s.nextId = 0),
+        (s) => (s.randomState = 0),
+        (s) => s.battle.hand.push(s.battle.hand[0]),
+    ]) {
+        const bad = JSON.parse(JSON.stringify(good));
+        mutate(bad);
+        assert.throws(() => SurvivalGame.fromState(bad), /存档/);
+    }
 });
-test('existing tutorial content is a scenario configuration and enemy stats are read from it',()=>{
- const definition={...TUTORIAL_SCENARIO,enemies:{...TUTORIAL_SCENARIO.enemies,enemy1:{hp:8,attack:1,strongAttack:3}}};const g=new SurvivalGame(3,definition);g.start();g.fixedDone=true;g.route='A';g.enterNode();assert.equal(g.battle.hp,8);assert.equal(g.incomingDamage,1);assert.equal(TUTORIAL_SCENARIO.enemies.enemy1.hp,6);
+test('existing tutorial content is a scenario configuration and enemy stats are read from it', () => {
+    const definition = {
+        ...TUTORIAL_SCENARIO,
+        enemies: { ...TUTORIAL_SCENARIO.enemies, enemy1: { hp: 8, attack: 1, strongAttack: 3 } },
+    };
+    const g = new SurvivalGame(3, definition);
+    g.start();
+    g.fixedDone = true;
+    g.route = 'A';
+    g.enterNode();
+    assert.equal(g.battle.hp, 8);
+    assert.equal(g.incomingDamage, 1);
+    assert.equal(TUTORIAL_SCENARIO.enemies.enemy1.hp, 6);
 });

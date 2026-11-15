@@ -100,6 +100,9 @@
         "__id__": 3
       },
       {
+        "__id__": 134
+      },
+      {
         "__id__": 9
       },
       {
@@ -211,7 +214,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1440,
+      "width": 1438.9112903225807,
       "height": 900
     },
     "_anchorPoint": {
@@ -248,7 +251,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "80d9dd95-bebf-43f0-a34f-4d11780e56c0@49047",
+      "__uuid__": "41c6c23c-ea4f-4af4-8991-66831295ca39@49047",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -456,6 +459,9 @@
       },
       {
         "__id__": 22
+      },
+      {
+        "__id__": 133
       }
     ],
     "removedComponents": []
@@ -717,10 +723,17 @@
     "__prefab": {
       "__id__": 34
     },
-    "top": 185,
-    "bottom": 210,
-    "right": 230,
-    "_id": "682c8WAo6gnXuIFVDcY/WZN"
+    "top": 150,
+    "bottom": 145,
+    "right": 110,
+    "_id": "682c8WAo6gnXuIFVDcY/WZN",
+    "tint": {
+      "__type__": "cc.Color",
+      "r": 35,
+      "g": 37,
+      "b": 31,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -834,9 +847,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "第一次探索 / 教学已完成",
@@ -902,9 +915,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1028,9 +1041,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "第 2 天 · 天亮了",
@@ -1096,9 +1109,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1222,9 +1235,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "门闩重新落下，外面的脚步声渐渐远去。\n\n你带回的不只是物资，\n还有下一次出发的底气。\n\n这一夜，终于熬过去了。",
@@ -1290,9 +1303,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1416,9 +1429,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "带回 10 张卡牌  /  物资剩余 10",
@@ -1484,9 +1497,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1610,9 +1623,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "修复花费 0，最后扣除每日物资 0。",
@@ -1678,9 +1691,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1916,9 +1929,9 @@
     },
     "fill": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "line": {
@@ -1930,9 +1943,9 @@
     },
     "innerLine": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "lineWidth": 1.6,
@@ -2105,9 +2118,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "重玩第 1 天",
@@ -2268,9 +2281,9 @@
     },
     "innerLine": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "lineWidth": 1.1,
@@ -2644,9 +2657,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "余烬之中，仍有人守夜。",
@@ -2712,9 +2725,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -2838,9 +2851,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "正式多日流程尚未开放 · 可重玩第 1 天",
@@ -2906,9 +2919,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -2976,5 +2989,188 @@
         "__id__": 15
       }
     ]
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "867f83Oyk1IjJw/BPlMFA/M"
+    ]
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 132
+    },
+    "propertyPath": [
+      "_active"
+    ],
+    "value": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "ContactShadow-15",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "_parent": {
+      "__id__": 2
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 135
+      },
+      {
+        "__id__": 138
+      },
+      {
+        "__id__": 140
+      }
+    ],
+    "_prefab": {
+      "__id__": 137
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 33554432,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": "487bcyVKy/5nVSrbnznEwj4"
+  },
+  {
+    "__type__": "cc.UITransform",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 134
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 136
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 221.42857142857142,
+      "height": 26.19047619047619
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_id": "0d108w3Hlt6g1w/DPHEsfzv"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "91891CTdAma0relMwxbvVHh"
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "9d2b29fGIYadJGnHX8Z/Eb5"
+  },
+  {
+    "__type__": "cc.Graphics",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 134
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 139
+    },
+    "_customMaterial": null,
+    "_srcBlendFactor": 2,
+    "_dstBlendFactor": 4,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_lineWidth": 0,
+    "_strokeColor": {
+      "__type__": "cc.Color",
+      "r": 33,
+      "g": 27,
+      "b": 38,
+      "a": 255
+    },
+    "_lineJoin": 2,
+    "_lineCap": 0,
+    "_fillColor": {
+      "__type__": "cc.Color",
+      "r": 33,
+      "g": 27,
+      "b": 38,
+      "a": 244
+    },
+    "_miterLimit": 10,
+    "_id": "20122DGUma83IRKtzxrtRy7"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "0be6e9M89cUoDOBB4bDoPjZ"
+  },
+  {
+    "__type__": "0ed79fnCKhJaoZuQdEUs4ga",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 134
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 141
+    },
+    "target": {
+      "__id__": 15
+    },
+    "tint": {
+      "__type__": "cc.Color",
+      "r": 55,
+      "g": 58,
+      "b": 47,
+      "a": 255
+    },
+    "opacity": 110,
+    "offsetY": -2,
+    "_id": "80883hSoTmvxSWmcuRvgLGT"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "95ec1AjG3vo1nKTpTruwm8D"
   }
 ]

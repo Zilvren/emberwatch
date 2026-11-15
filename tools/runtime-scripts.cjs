@@ -1,5 +1,12 @@
 // Central paths used by native asset authoring tools.
 const scripts={"DeckStackGraphic":"assets/game/presentation/primitives/DeckStackGraphic.ts","SceneShade":"assets/game/presentation/primitives/SceneShade.ts","SceneAtmosphere":"assets/game/presentation/effects/SceneAtmosphere.ts","FieldPanel":"assets/game/presentation/primitives/FieldPanel.ts","WebViewport":"assets/game/presentation/platform/WebViewport.ts","StatusBarDesignReview":"assets/game/presentation/ui/StatusBarDesignReview.ts","StatusBarLayout":"assets/game/presentation/ui/StatusBarLayout.ts","StatusBarModel":"assets/game/presentation/ui/StatusBarModel.ts","StatusBar":"assets/game/presentation/ui/StatusBar.ts","PanelLayout":"assets/game/presentation/ui/PanelLayout.ts","PanelDesignReview":"assets/game/presentation/ui/PanelDesignReview.ts","ModalPanel":"assets/game/presentation/ui/ModalPanel.ts","CommonPanel":"assets/game/presentation/ui/CommonPanel.ts","ButtonPresentation":"assets/game/presentation/ui/ButtonPresentation.ts","ButtonFocusGroup":"assets/game/presentation/ui/ButtonFocusGroup.ts","ButtonDesignReview":"assets/game/presentation/ui/ButtonDesignReview.ts","PaperPanel":"assets/game/presentation/primitives/PaperPanel.ts","CardInteraction":"assets/game/presentation/cards/CardInteraction.ts","CardDesignReview":"assets/game/presentation/cards/CardDesignReview.ts",
+  "ContactShadow": "assets/game/presentation/primitives/ContactShadow.ts",
+  "EntrySelection": "assets/game/presentation/ui/EntrySelection.ts",
+  "SelectableCard": "assets/game/presentation/cards/SelectableCard.ts",
+  "InventoryGrid": "assets/game/presentation/cards/InventoryGrid.ts",
+  "RewardSelection": "assets/game/presentation/cards/RewardSelection.ts",
+  "RouteMap": "assets/game/presentation/map/RouteMap.ts",
+  "RoutePoint": "assets/game/presentation/map/RoutePoint.ts",
   "CardCatalog": "assets/game/core/content/CardCatalog.ts",
   "GameScenario": "assets/game/core/content/GameScenario.ts",
   "GameState": "assets/game/core/state/GameState.ts",

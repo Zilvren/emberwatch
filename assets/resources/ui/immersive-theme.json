@@ -2,16 +2,16 @@
   "version": 1,
   "name": "immersive-field-hud",
   "colors": {
-    "canvas": "#e8e2d5",
+    "canvas": "#e9e4d9",
     "paper": "#263329",
     "paperShade": "#46523c",
     "paperSelected": "#ece0ca",
-    "ink": "#eddfc6",
-    "muted": "#c5c1ab",
-    "line": "#6f6757",
-    "lineSoft": "#b3a68e",
-    "ochre": "#bb9b6d",
-    "olive": "#afbc8c",
+    "ink": "#eee7d8",
+    "muted": "#d0cdbf",
+    "line": "#727263",
+    "lineSoft": "#b3b09a",
+    "ochre": "#b69b70",
+    "olive": "#a4ad90",
     "brown": "#aa9278",
     "danger": "#e4b08a",
     "disabled": "#c8c2b4"
@@ -45,20 +45,20 @@
     "disabledText": "#a6ac96",
     "variants": {
       "primary": {
-        "fill": "#b39a65",
-        "hover": "#c7ad76",
-        "pressed": "#99814f",
-        "line": "#d9c18b",
-        "activeLine": "#ead3a1",
-        "text": "#1b281e"
+        "fill": "#c1ae87",
+        "hover": "#cfbd98",
+        "pressed": "#a89470",
+        "line": "#857b61",
+        "activeLine": "#665f4a",
+        "text": "#252c24"
       },
       "secondary": {
-        "fill": "#383d2d",
-        "hover": "#4a5039",
-        "pressed": "#2b3327",
-        "line": "#777d60",
-        "activeLine": "#c8b17a",
-        "text": "#e8ddc3"
+        "fill": "#e2dac7",
+        "hover": "#eae2d0",
+        "pressed": "#cfc6b2",
+        "line": "#88836d",
+        "activeLine": "#716d58",
+        "text": "#3e4237"
       },
       "quiet": {
         "fill": "#263329",
@@ -66,7 +66,7 @@
         "pressed": "#46533b",
         "line": "#00000000",
         "activeLine": "#9ca77e",
-        "text": "#e8ddc3"
+        "text": "#eee7d8"
       },
       "danger": {
         "fill": "#4c3329",
@@ -83,7 +83,7 @@
     "darkQuietHover": "#514d41",
     "darkQuietPressed": "#69604e",
     "darkFocusLine": "#bb9b6d",
-    "darkQuietText": "#e8ddc3"
+    "darkQuietText": "#f1ecdf"
   },
   "panel": {
     "padding": 24,

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Evidence Review · Pink/Cocos"
+  short_description: "Audit rules, native runtime and visual acceptance"
+  default_prompt: "Use $test-evidence-review to audit the evidence and unresolved acceptance criteria for this Pink/Cocos change."
+policy:
+  allow_implicit_invocation: true

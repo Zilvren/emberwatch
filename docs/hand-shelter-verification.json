@@ -1,0 +1,455 @@
+{
+  "project": "The end",
+  "recordedAt": "2026-11-15T12:23:05.250Z",
+  "timezone": "Asia/Shanghai",
+  "status": "native-implemented-and-verified-user-visual-approval-open",
+  "scope": [
+    "Compact readable battle hand",
+    "Shelter return and settlement hierarchy"
+  ],
+  "skills": [
+    "ux-design",
+    "ux-review",
+    "test-evidence-review"
+  ],
+  "engine": {
+    "name": "Pink/Cocos",
+    "version": "4.0.0-beta.1",
+    "sdkCliAvailable": true,
+    "typeScriptCompiler": "C:\\Users\\Knock\\AppData\\Roaming\\cocos-default\\cocos-4.0.0-beta.1\\node_modules\\typescript\\bin\\tsc"
+  },
+  "platform": "web-desktop",
+  "mainSceneUuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e",
+  "tests": {
+    "passed": 107,
+    "failed": 0,
+    "log": "temp/hand-shelter-tests.log",
+    "logSha256": "82d8d7638cef1e07faace1daac4ed6b0e13743d722d2ea6739369dfca985e8c9"
+  },
+  "typecheck": {
+    "passed": true,
+    "exitCode": 0,
+    "log": "temp/hand-shelter-typecheck.log"
+  },
+  "build": {
+    "passed": true,
+    "exitCode": 0,
+    "command": "npm run build:web",
+    "log": "temp/hand-shelter-build-recovered.log",
+    "sha256": "a8270a2de3a9b404eb3e536bd7da99f2a3ebd61e824f9770443b9e20b61b74e9",
+    "output": "build/web-desktop",
+    "recovery": "Initial ENOTEMPTY was resolved by restarting only the identified project preview process; editor and other preview services were preserved."
+  },
+  "browser": {
+    "passed": true,
+    "scenarios": 5,
+    "registeredTotal": 13,
+    "allRegisteredScenariosRerun": false,
+    "report": "output/playwright/hand-shelter-final/browser-report.json",
+    "checks": {
+      "browser-hand-shelter": {
+        "passed": true,
+        "compactHand": true,
+        "fontSizes": [
+          {
+            "kind": "dodge",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "evade",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "dodge",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "knife",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "heavy",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "repair",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          }
+        ],
+        "fullReadingWithoutMutation": true,
+        "cancelledDrag": true,
+        "realDrag": true,
+        "damagedShelter": true,
+        "fullArmorBarHidden": true,
+        "dailyLast": true,
+        "actions": 33,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-stamina-system": {
+        "passed": true,
+        "productionStamina": true,
+        "entrySelectionAndCancel": true,
+        "entryPaidOnce": true,
+        "noSupplyCarryWeight": true,
+        "cardUnit": "体力",
+        "paidCardDoesNotSpendSupplies": true,
+        "turnRefresh": true,
+        "saveResume": true,
+        "cancelledDragFree": true,
+        "newBattleRefresh": true,
+        "dailyLast": true,
+        "fullRouteA": true,
+        "smallViewport": true,
+        "actions": 53,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-accessibility": {
+        "passed": true,
+        "viewport": "1024x768",
+        "reducedMotion": true,
+        "unarmedPose": true,
+        "realDrag": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-route-b": {
+        "passed": true,
+        "route": "B",
+        "failureRetry": true,
+        "zeroArmorSurvived": true,
+        "repairWarningAndCancel": true,
+        "shortfallConfirmed": true,
+        "first": {
+          "weaponDemonstrated": false,
+          "dragged": true,
+          "actions": 2
+        },
+        "second": {
+          "weaponDemonstrated": false,
+          "dragged": true,
+          "actions": 3
+        },
+        "final": {
+          "phase": "day2",
+          "supplies": 0,
+          "armor": 10,
+          "settlement": {
+            "returnedSupplies": 1,
+            "returnedCards": 10,
+            "lostOverflow": [],
+            "wasCritical": false,
+            "repairCost": 1,
+            "repaired": true,
+            "repairSpent": 1,
+            "dailySpent": 0,
+            "dailyShortfall": 1
+          }
+        },
+        "actions": 66,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-input-check": {
+        "passed": true,
+        "rapidAttackSingleApply": true,
+        "rapidDefenseSingleApply": true,
+        "dragSurvivesToastExpiry": true,
+        "normalRandomMode": true,
+        "handoff": "day2",
+        "runtimeErrors": [],
+        "consoleErrors": []
+      }
+    }
+  },
+  "implementation": {
+    "hand": {
+      "size": {
+        "width": 174,
+        "height": 258
+      },
+      "compactMetadata": true,
+      "titleFont": 22,
+      "costFont": 26,
+      "effectFont": 20,
+      "fullReadingRetained": true
+    },
+    "shelter": {
+      "repairButton": {
+        "width": 300,
+        "height": 48
+      },
+      "doneButton": {
+        "width": 370,
+        "height": 56
+      },
+      "fullArmorRepairBarHidden": true,
+      "forecastDoesNotSpend": true,
+      "model": "assets/game/presentation/ui/ShelterSummaryModel.ts"
+    },
+    "authoring": {
+      "command": "node tools/polish-hand-shelter.cjs",
+      "ordinaryBuildRunsIt": false,
+      "repeatedAuthoringByteIdentical": true
+    }
+  },
+  "preservation": {
+    "beforeFiles": 456,
+    "afterFiles": 458,
+    "changed": [
+      "assets/game/presentation/GameRenderer.ts",
+      "assets/game/presentation/cards/CardPresentation.ts",
+      "assets/prefabs/cards/HandCard.prefab",
+      "assets/prefabs/screens/BattleScreen.prefab",
+      "assets/prefabs/screens/ShelterScreen.prefab"
+    ],
+    "unchanged": 451,
+    "existingMetadata": 244,
+    "metadataChanged": [],
+    "prefabIdentities": [
+      {
+        "file": "assets/prefabs/cards/HandCard.prefab",
+        "uuid": "4f54bd4f-b5d2-4896-ad30-d119e062dcef",
+        "rootFileId": "ceHjbdqcdKzIv5VbsUUoN2",
+        "preserved": true
+      },
+      {
+        "file": "assets/prefabs/screens/BattleScreen.prefab",
+        "uuid": "6e8d8eff-81b8-407b-8e6a-ec469c809f8e",
+        "rootFileId": "c4L98jncBFrZ5iscLgRJWN",
+        "preserved": true
+      },
+      {
+        "file": "assets/prefabs/screens/ShelterScreen.prefab",
+        "uuid": "a7f37ddd-4001-4d17-9e40-09f280bffd9e",
+        "rootFileId": "dcGAZLLzZAmq8FUt2fxHhI",
+        "preserved": true
+      }
+    ],
+    "actorInstances": [
+      {
+        "file": "assets/prefabs/screens/BattleScreen.prefab",
+        "actorInstances": 3,
+        "allOverridesPreserved": true
+      },
+      {
+        "file": "assets/prefabs/screens/ShelterScreen.prefab",
+        "actorInstances": 1,
+        "allOverridesPreserved": true
+      }
+    ],
+    "coreRulesAndPersistenceChanged": false,
+    "newFiles": [
+      "assets/game/presentation/ui/ShelterSummaryModel.ts",
+      "assets/game/presentation/ui/ShelterSummaryModel.ts.meta"
+    ],
+    "nativeAssets": {
+      ".scene": 6,
+      ".prefab": 37,
+      ".anim": 36,
+      ".meta": 256
+    },
+    "missingMetadata": []
+  },
+  "readability": {
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "measurement": "Actual Cocos Label font size multiplied by displayed GameCanvas scale; current six default hand cards only.",
+    "minimumCssPixels": {
+      "title": 16.355555555555558,
+      "cost": 18.48888888888889,
+      "effect": 14.933333333333334
+    },
+    "customLongCardNameGuarantee": false
+  },
+  "evidenceMatrix": {
+    "rulesPreservation": {
+      "status": "SUPPORTED",
+      "evidence": "Unchanged core/persistence hashes, tests and stamina/risk repair native flows"
+    },
+    "nativeIntegration": {
+      "status": "SUPPORTED",
+      "evidence": "Final native build and actual current scene interactions"
+    },
+    "handAndShelterBehavior": {
+      "status": "SUPPORTED",
+      "evidence": "Reading/close, drag/cancel, full-armor hide, repair-before-daily"
+    },
+    "visualReadability": {
+      "status": "SUPPORTED",
+      "limit": "Six viewed native screenshots and measured current default content at two desktop sizes"
+    },
+    "userOverallVisualApproval": {
+      "status": "NEEDS EVIDENCE"
+    },
+    "nonIdleAnimation": {
+      "status": "NOT APPLICABLE",
+      "reason": "Unchanged assets; separate motion review remains open"
+    }
+  },
+  "visualReview": {
+    "viewed": [
+      "output/playwright/hand-shelter-final/hand-1440.png",
+      "output/playwright/hand-shelter-final/hand-1024.png",
+      "output/playwright/hand-shelter-final/hand-reading-1024.png",
+      "output/playwright/hand-shelter-final/shelter-damaged-1440.png",
+      "output/playwright/hand-shelter-final/shelter-damaged-1024.png",
+      "output/playwright/hand-shelter-final/shelter-repaired-1024.png"
+    ],
+    "notes": [
+      "Combat fields are visibly larger; full collection cards keep metadata",
+      "Shelter has smaller section headings, compact repair control and explicit unpaid balance forecast",
+      "Scene, approved08 identity and display proportions remain unchanged"
+    ],
+    "remaining": [
+      "Short stale node notification can briefly survive automatic return; future phase-feedback cleanup",
+      "Non-idle character actions still need separate timed review",
+      "Overall visual acceptance remains with the user"
+    ]
+  },
+  "excludedAttempts": [
+    {
+      "file": "temp/hand-shelter-tests-initial.log",
+      "reason": "Three new model fixtures omitted catalog initialization; corrected setup, then all 107 tests passed."
+    },
+    {
+      "file": "temp/hand-shelter-build.log",
+      "reason": "ENOTEMPTY during output cleanup, before actual build."
+    },
+    {
+      "file": "output/playwright/hand-shelter/browser-report.json",
+      "reason": "Capture assumed a basic attack in first hand. Changed to the actual affordable damage card; no game-state injection."
+    }
+  ],
+  "baselineImages": [
+    {
+      "file": "output/playwright/hand-shelter-before/hand-1024.png",
+      "source": "output/playwright/stamina-art-verified/stamina-battle-1024.png",
+      "sha256": "d33251ae0d0ab0a74e27a74246d7eace9d1e9068b2ad05641e40d2905cb0aee4"
+    },
+    {
+      "file": "output/playwright/hand-shelter-before/shelter-1440.png",
+      "source": "output/playwright/stamina-art-verified/stamina-shelter.png",
+      "sha256": "83212e4575f866e4a6b5c95132b844242771f9f9e0e2f3e6d9e31febe35362fe"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "output/playwright/hand-shelter-final/hand-1440.png",
+      "bytes": 1283091,
+      "sha256": "3e89f3d1a6b1d782f9421f3007728cb76237c515484641c87b6d580950a3f337",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "d3f968dc-5b4a-4064-a028-f6abb9a278b9",
+        "source_path": "hand-1440.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-1440",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-1440/hand-1440.png",
+        "readBackVerified": true,
+        "bytes": 1283091,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/hand-shelter-final/hand-1024.png",
+      "bytes": 831232,
+      "sha256": "7e175ebf00daa86cdf6b1add1f1b265c8d9fac20ff0e3d98f2ea9807451d71e1",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "b66b6078-d759-44b4-a59d-cd7175fd9a35",
+        "source_path": "hand-1024.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-1024",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-1024/hand-1024.png",
+        "readBackVerified": true,
+        "bytes": 831232,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/hand-shelter-final/hand-reading-1024.png",
+      "bytes": 812804,
+      "sha256": "44315e1768eb549e8f27012e1a30474ac2fd5b910fa696da57663eca31f7276f",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "a22e9535-b73b-475c-85da-02b131954f7d",
+        "source_path": "hand-reading-1024.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-reading-1024",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-reading-1024/hand-reading-1024.png",
+        "readBackVerified": true,
+        "bytes": 812804,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/hand-shelter-final/shelter-damaged-1440.png",
+      "bytes": 1487352,
+      "sha256": "38e37d4b75e3b4d44f884e769d212707db8fc40557ee04a8ba84e09d2c2e67aa",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "01943d45-88c7-4aa6-af36-7e0e74c3723d",
+        "source_path": "shelter-damaged-1440.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-damaged-1440",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-damaged-1440/shelter-damaged-1440.png",
+        "readBackVerified": true,
+        "bytes": 1487352,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/hand-shelter-final/shelter-damaged-1024.png",
+      "bytes": 867911,
+      "sha256": "4828b11d4a2b4a36f1fa733922ba915718b9e923784fa4f0968aae5efdd0c43f",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "0c9d7a27-b0cf-41d3-9249-508d079e0914",
+        "source_path": "shelter-damaged-1024.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-damaged-1024",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-damaged-1024/shelter-damaged-1024.png",
+        "readBackVerified": true,
+        "bytes": 867911,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/hand-shelter-final/shelter-repaired-1024.png",
+      "bytes": 875696,
+      "sha256": "f743ef2590767ebab28e717809531e4f8f412ce610c61e481d4228ea013be3db",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "9f7c5ef4-9359-496d-999d-816511eb6389",
+        "source_path": "shelter-repaired-1024.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-repaired-1024",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-repaired-1024/shelter-repaired-1024.png",
+        "readBackVerified": true,
+        "bytes": 875696,
+        "semanticIndexing": "background-not-verified"
+      }
+    }
+  ],
+  "openViking": {
+    "verification": "viking://~/resources/projects/the-end/docs/hand-shelter-verification.json",
+    "uxSpecification": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+    "review": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+    "semanticIndexing": "Background processing submitted; storage and readback verified, semantic completion not asserted"
+  }
+}

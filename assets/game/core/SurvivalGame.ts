@@ -14,6 +14,7 @@ import { CardKind } from './content/CardCatalog';
 import { CardSet, createCardSet } from './content/ContentRegistry';
 import { GameScenario, TUTORIAL_SCENARIO, getScenario } from './content/GameScenario';
 import { GameState, validateGameState } from './state/GameState';
+import { EntryTierId } from './content/EntryTiers';
 import { CombatRules } from './systems/CombatRules';
 import { ExplorationRules } from './systems/ExplorationRules';
 import { InventoryRules } from './systems/InventoryRules';
@@ -34,6 +35,7 @@ export class SurvivalGame {
     phase: Phase = 'journal';
     day = 1;
     supplies = 10;
+    entryTier: EntryTierId | null = null;
     armor = 10;
     critical = false;
     cards: OwnedCard[] = [];
@@ -56,11 +58,18 @@ export class SurvivalGame {
         public readonly scenario: GameScenario = TUTORIAL_SCENARIO,
         public readonly content: CardSet = createCardSet()
     ) {
+        this.scenario = JSON.parse(JSON.stringify(scenario));
         this.random = new Random(seed);
         this.feedback = new RuleFeedback(this);
         const newId = (prefix: string) => prefix + '-' + ++this.nextId,
             fail = (reason: string) => this.fail(reason);
-        this.inventoryRules = new InventoryRules(this, this.feedback, this.content, newId);
+        this.inventoryRules = new InventoryRules(
+            this,
+            this.feedback,
+            this.content,
+            newId,
+            this.scenario
+        );
         this.combatRules = new CombatRules(
             this,
             this.feedback,
@@ -82,7 +91,8 @@ export class SurvivalGame {
             this.feedback,
             this.content,
             this.inventoryRules,
-            fail
+            fail,
+            this.scenario
         );
         this.explorationRules = new ExplorationRules(
             this,
@@ -108,6 +118,7 @@ export class SurvivalGame {
                 phase: this.phase,
                 day: this.day,
                 supplies: this.supplies,
+                entryTier: this.entryTier,
                 armor: this.armor,
                 critical: this.critical,
                 cards: this.cards,
@@ -139,10 +150,12 @@ export class SurvivalGame {
         game.random.state = randomState;
         return game;
     }
-    reset(): void {
+    reset(scenario?: GameScenario): void {
+        if (scenario) Object.assign(this.scenario, JSON.parse(JSON.stringify(scenario)));
         this.phase = 'journal';
         this.day = this.scenario.initialDay;
         this.supplies = this.scenario.initialSupplies;
+        this.entryTier = null;
         this.armor = this.scenario.initialArmor;
         this.critical = false;
         this.route = null;
@@ -175,8 +188,8 @@ export class SurvivalGame {
     get incomingDamage(): number {
         return this.combatRules.incomingDamage;
     }
-    start(): ActionResult {
-        return this.explorationRules.start();
+    start(tier?: EntryTierId): ActionResult {
+        return this.explorationRules.start(tier);
     }
     chooseRoute(route: Route): ActionResult {
         return this.explorationRules.chooseRoute(route);

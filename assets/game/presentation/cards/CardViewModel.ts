@@ -57,7 +57,8 @@ export type CardDisplayModel = ReturnType<typeof displayModel>;
 /** Compatibility adapter for the existing teaching catalog and web editor. */
 export function cardViewModel(
     data: CardDefinition,
-    definitions: Readonly<Record<string, CardDefinition>> = CARD
+    definitions: Readonly<Record<string, CardDefinition>> = CARD,
+    costUnit = '物资'
 ): CardDisplayModel {
     const effect = effectSummary(data, definitions),
         detail = data.text === effect ? '' : data.text;
@@ -70,7 +71,7 @@ export function cardViewModel(
         title: data.name,
         tag: data.tag,
         cost: data.cost,
-        costUnit: '物资',
+        costUnit,
         showCost: data.role !== 'cash',
         effect: primary,
         description: (data.effect.type === 'equip' ? '从下回合起，每回合 1 张。' : '') + detail,

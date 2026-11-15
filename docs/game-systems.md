@@ -2,7 +2,7 @@
 
 - 项目：The end，`C:\Users\Knock\Desktop\The end`
 - 日期：2026-11-14（Asia/Shanghai）
-- 状态：旧表描述兼容教学内容；本轮已增加分层、存档和卡牌组件，最新实现及验证见 architecture.md、formal-system-reference.md 与 refactor-verification.json。
+- 状态：下方旧表保留兼容教学记录；2026-11-15 新开局已实现 stamina-v1 进入档位、回合体力和独立物资点。最新实现及验证见 architecture.md、designs/stamina-system.md 与 stamina-verification.json。
 - OpenViking：`viking://~/resources/projects/the-end/docs/game-systems.md`；实际保存与回读记录见 docs/openviking-sync-status.json。
 - 相关代码：`assets/SurvivalRules.ts`、`assets/SurvivalView.ts`、`assets/CardCatalog.ts`、`assets/resources/data/cards.json`、`assets/TheEnd.scene`、`tools/card-editor-server.cjs`、`tools/card-editor/`。
 
@@ -12,7 +12,7 @@
 
 当前可玩内容为单日教学原型：第 1 天日志、固定搜刮、A/B 路线、两场战斗、随机搜刮、休整、自动返家、避难所结算，最终显示第 2 天日志。第 2 天日志是本次原型终点。
 
-本轮按用户最新要求先统一画风、架构与组件，没有延长该兼容关卡。正式表的资源口径与这里不同：物资点属于避难所、出牌使用体力、物资卡是战利品。正式运行规则尚未整体迁移，不能将下表教学处理视为正式版全部规则。
+本轮没有延长该兼容关卡。后续按用户要求实现紧急/低投入/标准/高投入四档，入场 0/4/8/14 物资点，每回合 1/2/3/4 体力；出牌不扣物资点，物资点不占负重。旧存档保留旧规则，确认重开后启用新规则。物资卡兑换、仓库和其他正式系统尚未整体迁移，不能将下表教学处理视为正式版全部规则。
 
 当前源码已移动到 assets/game/ 下：纯规则拆分为 CombatRules、InventoryRules、RewardRules、ExplorationRules、SettlementRules；GameSession 负责命令与持久化，GameDirector/GameRenderer/UiActionRouter 分别承担场景协调、显示和输入转换。卡牌组件复用原生预制体、主题、插画与展示模型。
 

@@ -1,0 +1,58 @@
+{
+  "project": "The end",
+  "date": "2026-11-15",
+  "status": "implemented-and-native-verified-user-visual-approval-open",
+  "mode": "built-in image_gen edit",
+  "characters": "Approved master08-thin.png is a reference only and is unchanged.",
+  "notes": [
+    "Generated PNG pixels copied unchanged into the project; no external image API or pixel postprocessing.",
+    "Street and depot were returned at 1585x992; shelter at 1586x992. Atlas rectangles use actual sizes; native backdrop preserves aspect ratio."
+  ],
+  "assets": [
+    {
+      "name": "street",
+      "file": "assets/resources/art/field-sketch-street-v2.png",
+      "width": 1585,
+      "height": 992,
+      "sha256": "8f32df9dee4e96f2ed30410dc1b5b2d4feef977d400d1dfb7f029eb7f4b577f9",
+      "frame": "84c6cd46-0869-469b-b1c5-889623e6c8d2@49047",
+      "inputTarget": "assets/resources/art/field-sketch-street-v1.png",
+      "referenceImages": [
+        "assets/resources/actors/sketch08/master08-thin.png"
+      ],
+      "prompt": "Use case: style-transfer. Asset type: production background for the existing Pink/Cocos 2D wasteland game The end. EDIT TARGET: image 1, the empty ruined street background. STYLE AND COLOR REFERENCE ONLY: image 2, the approved 08 muted field-sketch characters. Do not put any characters, UI, typography, titles or sample panels into the output. Preserve image 1's location and full composition: broken shop window on left, narrow central distant alley, workshop shutter opening on right, very broad flat playable street ground in the lower quarter, quiet central fighting spaces, same camera/horizon, same proportions and main landmarks. Improve coherence with image 2: much finer restrained irregular ink contours, simple angular hand-drawn shapes and sparse flat cel-shading. Reduce small cracks, brick seams, repeated shutter lines, grain and rust spots by about two thirds, especially behind the two fighting positions at x 25% and 73%. Keep structural edges crisp and deliberate, never blurred or smudged. Background lines should be lower contrast and finer than character outlines. Use low-saturation gray olive, pale earth yellow and light brown with neutral cool overcast diffuse daylight; subdued gray-green shutter, light gray-beige plaster, taupe stone pavement, small faded ochre cloth/foliage accents. Remove the overall orange/sepia wash and photographic paper noise. Match the matte fabric/ink/value language of the approved reference characters, with enough muted midvalue contrast to separate their pale faces and ochre clothing. Foreground few restrained contour marks; no piles of new clutter, no dramatic shadows, no heavy vignette, no fog, no painted spotlight. Keep ground clearly usable and believable for feet/contact shadows. Output one clean opaque full-bleed environment texture, landscape 16:10, ideally preserve original 1586 x 992 pixel dimensions. No border, no text, no watermark, no grids. This image will be used as a real engine background, not a presentation or concept sheet.",
+      "archiveUri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-street-v2/field-sketch-street-v2.png"
+    },
+    {
+      "name": "depot",
+      "file": "assets/resources/art/field-sketch-depot-v2.png",
+      "width": 1585,
+      "height": 992,
+      "sha256": "9f30e2e8e3dbbf711fa84749dc892772f41ea38b03d9ced1b07b87a242409b02",
+      "frame": "3fd723d7-d69e-41fa-8aac-fe01a750a21c@49047",
+      "inputTarget": "assets/resources/art/field-sketch-depot-v1.png",
+      "referenceImages": [
+        "assets/resources/art/field-sketch-street-v2.png",
+        "assets/resources/actors/sketch08/master08-thin.png"
+      ],
+      "prompt": "Use case: style-transfer. Production background edit for the existing Pink/Cocos 2D wasteland game The end. IMAGE 1 is the EDIT TARGET: preserve its location, camera, main landmarks, proportions, playable ground and composition. IMAGE 2 is the newly unified street and is the exact shared LINE/VALUE/MATERIAL reference. IMAGE 3 is the approved 08 character sheet, STYLE/PALETTE REFERENCE ONLY. Never draw characters, labels, UI, sample panels, borders or text. Match image 2's sparse fine irregular pen contours, simple angular hand-drawn shapes and clean restrained cel shading. Remove two thirds of incidental cracks, tiny seams, spots and grain. Crisp deliberate edges, no blur, no haze, no smudges. Low saturation gray olive, pale earth yellow, light brown, neutral cool diffuse daylight. Background lines must be finer and lower contrast than the approved characters. Avoid global orange/sepia wash; lamps may keep only small local warm glows. Leave readable quiet regions for actors and in-game information, no new clutter or dramatic shadows. Keep the whole 16:10 landscape composition and ideally original 1586 x 992 dimensions. Full-bleed opaque environment texture, no logos or watermark. Keep the abandoned supply depot exterior: low concrete flat-roof shed and hanging tarp on left, open entrance, existing crates, fence, distant ruined street and telephone lines on right. Simplify the fence hatch and distant windows, preserve the broad empty foreground road. Keep current entry lamp as a subtle local point only. Use gray-beige concrete, gray olive storage boxes, muted taupe ground and faded ochre tarp.",
+      "archiveUri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-depot-v2/field-sketch-depot-v2.png"
+    },
+    {
+      "name": "shelter",
+      "file": "assets/resources/art/field-sketch-shelter-v2.png",
+      "width": 1586,
+      "height": 992,
+      "sha256": "83747e90dafee4d4b0018595d1b49b40c67b2911dcea28e5bc34a33d373ba7a9",
+      "frame": "41c6c23c-ea4f-4af4-8991-66831295ca39@49047",
+      "inputTarget": "assets/resources/art/field-sketch-shelter-v1.png",
+      "referenceImages": [
+        "assets/resources/art/field-sketch-street-v2.png",
+        "assets/resources/actors/sketch08/master08-thin.png"
+      ],
+      "prompt": "Use case: style-transfer. Production background edit for the existing Pink/Cocos 2D wasteland game The end. IMAGE 1 is the EDIT TARGET: preserve its location, camera, main landmarks, proportions, playable ground and composition. IMAGE 2 is the newly unified street and is the exact shared LINE/VALUE/MATERIAL reference. IMAGE 3 is the approved 08 character sheet, STYLE/PALETTE REFERENCE ONLY. Never draw characters, labels, UI, sample panels, borders or text. Match image 2's sparse fine irregular pen contours, simple angular hand-drawn shapes and clean restrained cel shading. Remove two thirds of incidental cracks, tiny seams, spots and grain. Crisp deliberate edges, no blur, no haze, no smudges. Low saturation gray olive, pale earth yellow, light brown, neutral cool diffuse daylight. Background lines must be finer and lower contrast than the approved characters. Avoid global orange/sepia wash; lamps may keep only small local warm glows. Leave readable quiet regions for actors and in-game information, no new clutter or dramatic shadows. Keep the whole 16:10 landscape composition and ideally original 1586 x 992 dimensions. Full-bleed opaque environment texture, no logos or watermark. Keep the shelter workshop interior: sleeping tarp and small stove at left, broken rear windows with rail-yard view, central table and storage chest, tool bench and shelves at right, foreground rail and broad empty floor. Simplify repeated roof planks, wall seams, tools and jar details while keeping the recognizable main objects. Do not add furniture. Use matte gray olive metal, muted pale tan fabric, neutral taupe floor and light brown timber. The diffuse window daylight dominates the actors' space; existing lamps/stove have small local warm accents only.",
+      "archiveUri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-shelter-v2/field-sketch-shelter-v2.png"
+    }
+  ],
+  "openViking": "viking://~/resources/projects/the-end/designs/ui/material-coherence.prompt.json"
+}

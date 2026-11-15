@@ -1,0 +1,6 @@
+interface:
+  display_name: "Asset Spec · Pink/Cocos"
+  short_description: "Specify native assets and stable character animation"
+  default_prompt: "Use $asset-spec to define production and import specifications for the next Pink/Cocos game asset."
+policy:
+  allow_implicit_invocation: true

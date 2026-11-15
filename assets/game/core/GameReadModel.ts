@@ -13,6 +13,7 @@ export type GameReadModel = ReadonlyValue<
         | 'phase'
         | 'day'
         | 'supplies'
+        | 'entryTier'
         | 'armor'
         | 'critical'
         | 'cards'

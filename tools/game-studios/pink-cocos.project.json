@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "project": "The end",
+  "engine": {
+    "name": "Pink/Cocos",
+    "settings": ".pink/settings.json",
+    "validatedVersion": "4.0.0-beta.1",
+    "platform": "web-desktop"
+  },
+  "paths": {
+    "code": "assets/game",
+    "rules": "assets/game/core",
+    "application": "assets/game/application",
+    "presentation": "assets/game/presentation",
+    "persistence": "assets/game/infrastructure",
+    "tests": "tests",
+    "mainScene": "assets/TheEnd.scene",
+    "prefabs": "assets/prefabs",
+    "animations": "assets/animations",
+    "resources": "assets/resources",
+    "buildConfig": "build-config.json",
+    "buildOutput": "build/web-desktop"
+  },
+  "commands": {
+    "inspect": "node tools/game-studios/inspect.cjs --project .",
+    "test": "npm test",
+    "typecheck": "npm run typecheck",
+    "build": "npm run build:web",
+    "preview": "npm run preview",
+    "actorBuild": "npm run build:actors",
+    "actorPreview": "npm run actors",
+    "browserRegression": "npm run skills:playtest"
+  },
+  "browser": {
+    "config": "tools/playwright.config.json",
+    "qaSession": "the-end-skills",
+    "baseUrl": "http://127.0.0.1:7457/",
+    "temporaryBattle": "?seed=17&save=off&preview=encounter",
+    "designResolution": { "width": 1440, "height": 900 },
+    "supportedSmallerViewport": { "width": 1024, "height": 768 },
+    "evidenceDirectory": "output/playwright"
+  },
+  "artifacts": {
+    "artBible": "docs/designs/art-bible.md",
+    "assetSpec": "docs/designs/production-asset-spec.md",
+    "uxSpec": "docs/designs/ui/wasteland-page-redesign.md",
+    "uxReview": "docs/designs/ui/ux-review.md",
+    "verticalSlice": "docs/vertical-slice.md",
+    "evidenceReview": "docs/game-studios-evidence.json",
+    "installation": "docs/game-studios-skills.md"
+  },
+  "openViking": {
+    "root": "viking://~/resources/projects/the-end/",
+    "designs": "viking://~/resources/projects/the-end/designs/",
+    "docs": "viking://~/resources/projects/the-end/docs/"
+  },
+  "confirmedConstraints": [
+    "Keep approved 08 character identity, colors, equipment and established display proportions; thinner outlines remain the approved direction.",
+    "Current visual priority is character/background/material coherence and scene-led whole-screen composition.",
+    "Daily supplies are consumed last during settlement. Repair may still be confirmed after a daily-consumption risk warning.",
+    "New sessions use stamina-v1 with confirmed entry tiers and per-turn stamina. Preserve tutorial-v1 for old saves and regression; full multi-day systems and unconfirmed content remain pending."
+  ],
+  "protectedPaths": [
+    "assets/game",
+    "assets/animations",
+    "assets/prefabs",
+    "assets/resources",
+    "assets/TheEnd.scene",
+    "assets/TheEnd.scene.meta"
+  ],
+  "referenceImages": [
+    "assets/resources/actors/sketch08/master08-thin.png",
+    "assets/resources/art/field-sketch-street-v2.png",
+    "assets/resources/art/field-sketch-depot-v2.png",
+    "assets/resources/art/field-sketch-shelter-v2.png"
+  ],
+  "skills": [
+    "art-bible",
+    "asset-spec",
+    "ux-design",
+    "ux-review",
+    "vertical-slice",
+    "test-evidence-review"
+  ],
+  "upstream": {
+    "repository": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+    "commit": "abc0de79d6ceb0b5d7aa693945849b3937afbe6a",
+    "license": "MIT"
+  }
+}

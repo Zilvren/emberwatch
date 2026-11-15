@@ -112,6 +112,9 @@
         "__id__": 3
       },
       {
+        "__id__": 224
+      },
+      {
         "__id__": 9
       },
       {
@@ -223,7 +226,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1440,
+      "width": 1438.9112903225807,
       "height": 900
     },
     "_anchorPoint": {
@@ -260,7 +263,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "80d9dd95-bebf-43f0-a34f-4d11780e56c0@49047",
+      "__uuid__": "41c6c23c-ea4f-4af4-8991-66831295ca39@49047",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -468,6 +471,9 @@
       },
       {
         "__id__": 22
+      },
+      {
+        "__id__": 223
       }
     ],
     "removedComponents": []
@@ -729,10 +735,17 @@
     "__prefab": {
       "__id__": 34
     },
-    "top": 185,
-    "bottom": 210,
-    "right": 230,
-    "_id": "83d34SbtUq/i2iqYkNnNhto"
+    "top": 150,
+    "bottom": 145,
+    "right": 110,
+    "_id": "83d34SbtUq/i2iqYkNnNhto",
+    "tint": {
+      "__type__": "cc.Color",
+      "r": 35,
+      "g": 37,
+      "b": 31,
+      "a": 255
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -846,9 +859,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "REST / A MOMENT OF PEACE",
@@ -914,9 +927,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1040,9 +1053,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "临时营地",
@@ -1108,9 +1121,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1234,9 +1247,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "进入时已恢复最多 2 点护甲。物资不会恢复。",
@@ -1302,9 +1315,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1428,9 +1441,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "放下旧世界的重量",
@@ -1496,9 +1509,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1622,9 +1635,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "现金已经不再有用。\n丢弃后释放 10 点负重，暂存卡会自动转入。",
@@ -1690,9 +1703,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -1928,9 +1941,9 @@
     },
     "fill": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "line": {
@@ -1942,9 +1955,9 @@
     },
     "innerLine": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "lineWidth": 1.6,
@@ -2117,9 +2130,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "丢弃现金 · 释放 10 负重",
@@ -2266,23 +2279,23 @@
     },
     "fill": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 255
     },
     "line": {
       "__type__": "cc.Color",
-      "r": 111,
-      "g": 103,
-      "b": 87,
+      "r": 114,
+      "g": 114,
+      "b": 99,
       "a": 255
     },
     "innerLine": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "lineWidth": 1.1,
@@ -2656,9 +2669,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "检查下一场战斗的卡组",
@@ -2724,9 +2737,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -2850,9 +2863,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "7 张可用牌 · 0 张暂存\n移出战斗不释放负重，永久丢弃才释放。",
@@ -2918,9 +2931,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -3156,9 +3169,9 @@
     },
     "fill": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "line": {
@@ -3170,9 +3183,9 @@
     },
     "innerLine": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "lineWidth": 1.6,
@@ -3345,9 +3358,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "整理出手卡组",
@@ -3494,23 +3507,23 @@
     },
     "fill": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 255
     },
     "line": {
       "__type__": "cc.Color",
-      "r": 111,
-      "g": 103,
-      "b": 87,
+      "r": 114,
+      "g": 114,
+      "b": 99,
       "a": 255
     },
     "innerLine": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "lineWidth": 1.1,
@@ -3884,9 +3897,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "下一站：重度感染者\n护甲 10 · 攻击 3 · 准备后攻击 6",
@@ -3952,9 +3965,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -4190,9 +4203,9 @@
     },
     "fill": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "line": {
@@ -4204,9 +4217,9 @@
     },
     "innerLine": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "lineWidth": 1.6,
@@ -4379,9 +4392,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "离开营地，继续探索",
@@ -4542,9 +4555,9 @@
     },
     "innerLine": {
       "__type__": "cc.Color",
-      "r": 242,
-      "g": 234,
-      "b": 219,
+      "r": 226,
+      "g": 218,
+      "b": 199,
       "a": 0
     },
     "lineWidth": 1.1,
@@ -4918,9 +4931,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "_string": "护甲 10/10  ·  物资 10  ·  负重 27/30",
@@ -4986,9 +4999,9 @@
     "_id": "",
     "normalColor": {
       "__type__": "cc.Color",
-      "r": 234,
-      "g": 223,
-      "b": 199,
+      "r": 238,
+      "g": 231,
+      "b": 216,
       "a": 255
     },
     "alertColor": {
@@ -5056,5 +5069,188 @@
         "__id__": 15
       }
     ]
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "867f83Oyk1IjJw/BPlMFA/M"
+    ]
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 222
+    },
+    "propertyPath": [
+      "_active"
+    ],
+    "value": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "ContactShadow-15",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "_parent": {
+      "__id__": 2
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 225
+      },
+      {
+        "__id__": 228
+      },
+      {
+        "__id__": 230
+      }
+    ],
+    "_prefab": {
+      "__id__": 227
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 33554432,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": "a8bbfY6c21HJjJHwTgC9uIt"
+  },
+  {
+    "__type__": "cc.UITransform",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 224
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 226
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 186,
+      "height": 22
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_id": "3614dm9IXrtel4z68WDAZbX"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "d103blE9smWeI88VOGMHc1O"
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "d31031c4bz7yz9dAt7nCq/g"
+  },
+  {
+    "__type__": "cc.Graphics",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 224
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 229
+    },
+    "_customMaterial": null,
+    "_srcBlendFactor": 2,
+    "_dstBlendFactor": 4,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_lineWidth": 0,
+    "_strokeColor": {
+      "__type__": "cc.Color",
+      "r": 33,
+      "g": 27,
+      "b": 38,
+      "a": 255
+    },
+    "_lineJoin": 2,
+    "_lineCap": 0,
+    "_fillColor": {
+      "__type__": "cc.Color",
+      "r": 33,
+      "g": 27,
+      "b": 38,
+      "a": 244
+    },
+    "_miterLimit": 10,
+    "_id": "d6208XEN56zFdJaTRZdPYpq"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "0a105gtrha3t1xdhXSv75fi"
+  },
+  {
+    "__type__": "0ed79fnCKhJaoZuQdEUs4ga",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 224
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 231
+    },
+    "target": {
+      "__id__": 15
+    },
+    "tint": {
+      "__type__": "cc.Color",
+      "r": 55,
+      "g": 58,
+      "b": 47,
+      "a": 255
+    },
+    "opacity": 110,
+    "offsetY": -2,
+    "_id": "323edAQLwu8EuHSjJ/lns64"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "3d8fcci5GxrnFMyqBxh8SIs"
   }
 ]

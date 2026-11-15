@@ -1,0 +1,541 @@
+{
+  "project": "The end",
+  "recordedAt": "2026-11-15T10:21:28.177Z",
+  "timezone": "Asia/Shanghai",
+  "status": "native-implemented-and-verified-visual-approval-open",
+  "engine": "Pink/Cocos 4.0.0-beta.1",
+  "platform": "web-desktop",
+  "tests": {
+    "passed": 93,
+    "failed": 0,
+    "log": "temp/deck-map-tests.log"
+  },
+  "typecheck": {
+    "passed": true,
+    "log": "temp/deck-map-typecheck.log"
+  },
+  "build": {
+    "passed": true,
+    "exitCode": 0,
+    "command": "npm run build:web",
+    "log": "temp/deck-map-build.log",
+    "output": "build/web-desktop"
+  },
+  "browser": {
+    "passed": true,
+    "scenarios": 11,
+    "report": "output/playwright/deck-map-final/combined-report.json",
+    "checks": {
+      "browser-review-round3": {
+        "passed": true,
+        "round": 3,
+        "closeIcon": "×",
+        "closeWithoutMutation": true,
+        "inventoryDetails": [
+          {
+            "kind": "attack",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "基础攻击",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "基础牌"
+            ],
+            "effect": "造成 2 点伤害",
+            "weight": "负重 0",
+            "illustration": "ui-card-attack",
+            "fullDescription": "造成 2 点伤害\n\n固有能力，永不丢失\n\n基础牌：永久属于主角，不会因失败被删除。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          },
+          {
+            "kind": "attack",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "基础攻击",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "基础牌"
+            ],
+            "effect": "造成 2 点伤害",
+            "weight": "负重 0",
+            "illustration": "ui-card-attack",
+            "fullDescription": "造成 2 点伤害\n\n固有能力，永不丢失\n\n基础牌：永久属于主角，不会因失败被删除。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          },
+          {
+            "kind": "dodge",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "基础躲避",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "基础牌"
+            ],
+            "effect": "获得 2 点格挡",
+            "weight": "负重 0",
+            "illustration": "ui-card-dodge",
+            "fullDescription": "获得 2 点格挡\n\n格挡在回合结束时清零\n\n基础牌：永久属于主角，不会因失败被删除。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          },
+          {
+            "kind": "dodge",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "基础躲避",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "基础牌"
+            ],
+            "effect": "获得 2 点格挡",
+            "weight": "负重 0",
+            "illustration": "ui-card-dodge",
+            "fullDescription": "获得 2 点格挡\n\n格挡在回合结束时清零\n\n基础牌：永久属于主角，不会因失败被删除。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          },
+          {
+            "kind": "knife",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "菜刀",
+            "cost": "2",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "武器"
+            ],
+            "effect": "生成「挥砍」",
+            "weight": "负重 3",
+            "illustration": "ui-card-knife",
+            "fullDescription": "下回合起每回合生成「挥砍」\n\n占用唯一武器槽\n\n武器：打出后进入武器槽，并按武器规则生成攻击牌。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          },
+          {
+            "kind": "evade",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "强化躲避",
+            "cost": "1",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [],
+            "effect": "获得 5 点格挡",
+            "weight": "负重 2",
+            "illustration": "ui-card-evade",
+            "fullDescription": "获得 5 点格挡\n\n格挡可抵消再次受击",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          },
+          {
+            "kind": "repair",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "修复",
+            "cost": "2",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [],
+            "effect": "恢复 3 点护甲",
+            "weight": "负重 2",
+            "illustration": "ui-card-repair",
+            "fullDescription": "恢复 3 点护甲\n\n护甲为 0 时无法使用",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          },
+          {
+            "kind": "cash",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "旧世界现金",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": false,
+            "keywords": [],
+            "effect": "只能在休整时丢弃",
+            "weight": "负重 10",
+            "illustration": "ui-card-cash",
+            "fullDescription": "只能在休整时丢弃\n\n沉重的旧世界遗物",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          },
+          {
+            "kind": "heavy",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "重击",
+            "cost": "1",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [],
+            "effect": "造成 5 点伤害",
+            "weight": "负重 4",
+            "illustration": "ui-card-heavy",
+            "fullDescription": "造成 5 点伤害\n\n使用后进入弃牌堆",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21
+          }
+        ],
+        "smallWindow": {
+          "width": 1024,
+          "height": 768,
+          "realClick": true,
+          "escape": true
+        },
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final"
+      },
+      "browser-first-battle": {
+        "phase": "battle",
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "passed": true,
+        "evidenceRoot": "output/playwright/deck-map-final"
+      },
+      "browser-route-a": {
+        "passed": true,
+        "route": "A",
+        "first": {
+          "weaponDemonstrated": false,
+          "dragged": true,
+          "actions": 5
+        },
+        "second": {
+          "weaponDemonstrated": true,
+          "dragged": true,
+          "actions": 8
+        },
+        "dragCancelled": true,
+        "impactBusy": true,
+        "final": {
+          "phase": "day2",
+          "supplies": 9,
+          "armor": 10,
+          "settlement": {
+            "returnedSupplies": 10,
+            "returnedCards": 10,
+            "lostOverflow": [],
+            "wasCritical": false,
+            "repairCost": 0,
+            "repaired": false,
+            "repairSpent": 0,
+            "dailySpent": 1,
+            "dailyShortfall": 0
+          }
+        },
+        "actions": 43,
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final"
+      },
+      "browser-route-b": {
+        "passed": true,
+        "route": "B",
+        "failureRetry": true,
+        "zeroArmorSurvived": true,
+        "repairWarningAndCancel": true,
+        "shortfallConfirmed": true,
+        "first": {
+          "weaponDemonstrated": false,
+          "dragged": true,
+          "actions": 2
+        },
+        "second": {
+          "weaponDemonstrated": false,
+          "dragged": true,
+          "actions": 3
+        },
+        "final": {
+          "phase": "day2",
+          "supplies": 0,
+          "armor": 10,
+          "settlement": {
+            "returnedSupplies": 1,
+            "returnedCards": 10,
+            "lostOverflow": [],
+            "wasCritical": false,
+            "repairCost": 1,
+            "repaired": true,
+            "repairSpent": 1,
+            "dailySpent": 0,
+            "dailyShortfall": 1
+          }
+        },
+        "actions": 66,
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final/remaining"
+      },
+      "browser-session-save": {
+        "passed": true,
+        "pendingRewardResume": true,
+        "noDuplicateClaim": true,
+        "battleResume": true,
+        "nextTurnAndRngResume": true,
+        "restartConfirmation": true,
+        "automaticSave": true,
+        "nativeActorSource": "master08-thin",
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final/remaining"
+      },
+      "browser-accessibility": {
+        "passed": true,
+        "viewport": "1024x768",
+        "reducedMotion": true,
+        "unarmedPose": true,
+        "realDrag": true,
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final/remaining"
+      },
+      "browser-input-check": {
+        "passed": true,
+        "rapidAttackSingleApply": true,
+        "rapidDefenseSingleApply": true,
+        "dragSurvivesToastExpiry": true,
+        "normalRandomMode": true,
+        "handoff": "journal",
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final/remaining"
+      },
+      "browser-coherence-check": {
+        "passed": true,
+        "previewDoesNotWriteSave": true,
+        "reducedMotion": true,
+        "resumesMotion": true,
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final/remaining"
+      },
+      "browser-page-overlays": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final/remaining"
+      },
+      "browser-material-coherence": {
+        "passed": true,
+        "allThreeNativeBackgrounds": true,
+        "neutralBackdropTint": true,
+        "readOnlyRouteOpacity": true,
+        "source08Preserved": true,
+        "contactShadowTracksFeet": true,
+        "inactiveEnemyShadowHidden": true,
+        "sharedDeckPaper": true,
+        "realDragAttack": true,
+        "smallViewport": true,
+        "actions": 49,
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final/remaining"
+      },
+      "browser-deck-map": {
+        "passed": true,
+        "grid": true,
+        "reader": true,
+        "escapeStack": true,
+        "readonlyMap": true,
+        "rewardComparisonDoesNotMutate": true,
+        "confirmedReward": true,
+        "overflowFilter": true,
+        "routeEntry": true,
+        "actions": 17,
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "evidenceRoot": "output/playwright/deck-map-final/remaining"
+      }
+    }
+  },
+  "preservation": {
+    "coreRulesActorArtAndMotionFiles": 183,
+    "changed": [],
+    "actorInstancePositionAndScaleOverridesChecked": 24,
+    "actorInstanceTransformsUnchanged": true,
+    "master08Sha256": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+    "mainSceneUuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e"
+  },
+  "scope": {
+    "newGameplaySystems": false,
+    "newCharacterArt": false,
+    "newCharacterAnimationFrames": false,
+    "confirmedSettlementRulesPreserved": true
+  },
+  "nativeAssets": {
+    ".scene": 6,
+    ".prefab": 36,
+    ".anim": 36,
+    ".meta": 252
+  },
+  "evidence": [
+    {
+      "file": "output/playwright/deck-map-final/remaining/inventory-grid.png",
+      "sha256": "675420428949fed361125b3292b84bc9df263394329665e3564208c63b1312ef",
+      "bytes": 350040,
+      "viewed": true
+    },
+    {
+      "file": "output/playwright/deck-map-final/remaining/card-reader.png",
+      "sha256": "691b3f1448d6c2791c11827c7ffa41cd16b8547b352ee16273df684438b94390",
+      "bytes": 177912,
+      "viewed": true
+    },
+    {
+      "file": "output/playwright/deck-map-final/remaining/reward-selection.png",
+      "sha256": "979c24ceea1ba3519c021297fd26564538f7bf3a2883eb58ab7b6aaa08b4cb27",
+      "bytes": 566584,
+      "viewed": true
+    },
+    {
+      "file": "output/playwright/deck-map-final/remaining/map-start.png",
+      "sha256": "8658aaf6ad77838f1962b1f01cd6d0901ed4f86c3ae325642205bb1102ca8386",
+      "bytes": 385714,
+      "viewed": true
+    },
+    {
+      "file": "output/playwright/deck-map-final/remaining/map-route.png",
+      "sha256": "d0591dae47e68963bcf4939690e9169fa751839b415155bef7f8e9e964ff01d6",
+      "bytes": 384087,
+      "viewed": true
+    },
+    {
+      "file": "output/playwright/deck-map-final/remaining/coherent-battle-final.png",
+      "sha256": "047807b1d2f8f7230a2a321540251edf5a56fcd4924c6fa0d03f9352d1cdfbb3",
+      "bytes": 1331619,
+      "viewed": true
+    },
+    {
+      "file": "output/playwright/deck-map-final/remaining/coherent-boss.png",
+      "sha256": "f1c665f91451ff18b74cb83e3373dd7ce53690dc77415e6f36f58fbea45f747d",
+      "bytes": 1381112,
+      "viewed": true
+    },
+    {
+      "file": "output/playwright/deck-map-final/remaining/coherent-rest.png",
+      "sha256": "df9fd2bb0ec977b68dc02179dfced74024d395baa04b44dac136c731b925720b",
+      "bytes": 1502125,
+      "viewed": true
+    }
+  ],
+  "visualAcceptance": {
+    "status": "pending-user-review",
+    "technicalPassingIsNotVisualApproval": true
+  },
+  "preview": "http://127.0.0.1:7457/?seed=17&save=off&ui=deck-map-03",
+  "task": "Rework inventory, reward selection, camp deck selection and in-run map with Slay the Spire 2 layout references",
+  "features": {
+    "inventory": "Full native card grid, instance-aware sorting and all/deck/overflow filters",
+    "reader": "Large card and full text; Escape returns to grid before closing inventory",
+    "campDeck": "Existing toggle-card command; no new battle eligibility rules",
+    "rewards": "Transient comparison then explicit claim; separate supplies and leave confirmation",
+    "map": "ScrollView, native ink icons and dotted route graph projected from scenario.routes",
+    "mapOverlay": "Read-only HUD access without changing the game phase"
+  },
+  "implementation": {
+    "components": [
+      "InventoryViewModel",
+      "InventoryGrid",
+      "SelectableCard",
+      "RewardSelection",
+      "RouteMapModel",
+      "RouteMap",
+      "RoutePoint"
+    ],
+    "prefabs": [
+      "assets/prefabs/cards/SelectableCard.prefab",
+      "assets/prefabs/ui/InventoryPopup.prefab",
+      "assets/prefabs/screens/RewardScreen.prefab",
+      "assets/prefabs/screens/MapScreen.prefab",
+      "assets/prefabs/ui/RouteMapPanel.prefab",
+      "assets/prefabs/ui/RouteMapPopup.prefab",
+      "assets/prefabs/ui/RoutePoint.prefab"
+    ],
+    "authoring": "tools/build-deck-map-ui.cjs",
+    "revision": "deck-map-03",
+    "ordinaryBuildRegeneratesLayout": false
+  },
+  "referenceSources": [
+    "https://www.megacrit.com/press-kits/slay-the-spire-2/",
+    "https://store.steampowered.com/app/2868840/Slay_the_Spire_2/",
+    "https://www.megacrit.com/news/2024-11-07-neowsletter-issue-4/"
+  ],
+  "limitations": [
+    "Current playable scenario still supplies the existing routes; no procedural map, warehouse, stamina or multi-day rules were enabled.",
+    "Desktop mouse and the recorded Escape cases were verified; full controller/mobile/keyboard coverage was not established.",
+    "Final visual signoff belongs to the user."
+  ],
+  "openViking": {
+    "uri": "viking://~/resources/projects/the-end/docs/deck-map-verification.json",
+    "sync": "docs/deck-map-sync.json"
+  },
+  "stage": "material-and-deck-map-before-stamina",
+  "latestVerification": "docs/stamina-verification.json",
+  "stageNote": "This record describes the pre-stamina material/deck-map stage. Core rules were intentionally changed afterward; use stamina-verification.json for the current build and final evidence."
+}

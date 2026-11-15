@@ -6,6 +6,7 @@ import { CombatRules } from './CombatRules';
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, RuleState } from './RuleContext';
 import { SettlementRules } from './SettlementRules';
+import { EntryTierId, entryTier, affordableEntryTier } from '../content/EntryTiers';
 export class ExplorationRules {
     constructor(
         private readonly state: RuleState,
@@ -23,10 +24,26 @@ export class ExplorationRules {
         if (!this.state.route) return 'choice';
         return this.scenario.routes[this.state.route][this.state.pathIndex] ?? 'return';
     }
-    start(): ActionResult {
+    start(tierId?: EntryTierId): ActionResult {
         if (this.state.phase !== 'journal') return this.feedback.result(false, '当前不能出发。');
+        if (this.scenario.battleResource === 'stamina') {
+            const tier = entryTier(tierId ?? affordableEntryTier(this.state.supplies));
+            if (!tier) return this.feedback.result(false, '进入档位不存在。');
+            if (this.state.supplies < tier.cost)
+                return this.feedback.result(false, '物资不足以支付该档位入场费。');
+            this.inventory.spend(tier.cost);
+            this.state.entryTier = tier.id;
+            this.feedback.log(
+                `${tier.name}档出发：支付 ${tier.cost} 物资，每回合体力 ${tier.stamina}。`
+            );
+        }
         this.state.phase = 'map';
-        return this.feedback.result(true, '教学探索开始。完成补给站后选择路线。');
+        return this.feedback.result(
+            true,
+            this.scenario.battleResource === 'stamina'
+                ? '探索开始。战斗费用消耗体力，物资留作避难所储备。'
+                : '教学探索开始。完成补给站后选择路线。'
+        );
     }
     chooseRoute(route: Route): ActionResult {
         if (this.state.phase !== 'map' || this.currentNode !== 'choice')
@@ -43,7 +60,7 @@ export class ExplorationRules {
         if (node === 'choice') return this.feedback.result(false, '选择一条路线。');
         if (node === 'return') return this.feedback.result(false, '正在返回避难所。');
         if (node === 'fixed' || node === 'scavenge') {
-            const fee = node === 'fixed' ? 2 : 3;
+            const fee = this.scenario.scavengeFees?.[node] ?? (node === 'fixed' ? 2 : 3);
             if (this.state.supplies < fee)
                 return this.feedback.result(
                     false,
@@ -92,7 +109,8 @@ export class ExplorationRules {
         this.state.visited.push('rest');
         this.state.pathIndex++;
         this.state.phase = 'map';
-        if (this.state.supplies === 0) this.fail('休整结束时物资为 0。');
+        if (this.scenario.battleResource !== 'stamina' && this.state.supplies === 0)
+            this.fail('休整结束时物资为 0。');
         return this.feedback.result(true, '休整结束。');
     }
     advanceTime(seconds: number): void {

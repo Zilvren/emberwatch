@@ -2,19 +2,24 @@ import { CardSet } from '../content/ContentRegistry';
 import { ActionResult } from '../RulesTypes';
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, RuleState } from './RuleContext';
+import { GameScenario, TUTORIAL_SCENARIO } from '../content/GameScenario';
 export class RewardRules {
     constructor(
         private readonly state: RuleState,
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
         private readonly inventory: InventoryRules,
-        private readonly fail: (reason: string) => void
+        private readonly fail: (reason: string) => void,
+        private readonly scenario: GameScenario = TUTORIAL_SCENARIO
     ) {}
     claimSupplies(): ActionResult {
         const r = this.state.rewards;
         if (this.state.phase !== 'rewards' || !r || r.supplyTaken)
             return this.feedback.result(false, '没有可领取的物资。');
-        const amount = Math.min(r.supplies, Math.max(0, 30 - this.inventory.baseWeight));
+        const amount =
+            this.scenario.suppliesHaveWeight === false
+                ? r.supplies
+                : Math.min(r.supplies, Math.max(0, 30 - this.inventory.baseWeight));
         this.state.supplies += amount;
         r.supplyTaken = true;
         this.feedback.log(
@@ -55,7 +60,7 @@ export class RewardRules {
         else this.state.pathIndex++;
         this.state.rewards = null;
         this.state.phase = 'map';
-        const depleted = this.state.supplies === 0;
+        const depleted = this.scenario.battleResource !== 'stamina' && this.state.supplies === 0;
         if (depleted) this.fail('节点奖励处理后，物资仍为 0。');
         return this.feedback.result(
             true,

@@ -1,0 +1,356 @@
+{
+  "project": "The end",
+  "recordedAt": "2026-11-15T11:47:48.559Z",
+  "timezone": "Asia/Shanghai",
+  "status": "stored-and-read-back-verified",
+  "root": "viking://~/resources/projects/the-end/",
+  "scope": "08 character/background/material coherence, inventory/reward/deck/map native UI, and stamina system",
+  "documents": [
+    {
+      "file": "AGENTS.md",
+      "uri": "viking://~/resources/projects/the-end/docs/agent-conventions.md",
+      "sha256": "4e71b84e055186e1d7cb814d7e3a62816c4c3fe6d0476d98a28fa0647d1bfc55",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/art-bible.md",
+      "uri": "viking://~/resources/projects/the-end/designs/art-bible.md",
+      "sha256": "b67f26894ef001976d37c44a22752f882841cc7f3cc5a1bba65cdbe824b3542a",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/production-asset-spec.md",
+      "uri": "viking://~/resources/projects/the-end/designs/production-asset-spec.md",
+      "sha256": "09d53f2ff0e0ecb96d971c115db23bdb88878598cb1b496b1208248e26736859",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/ui/wasteland-page-redesign.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+      "sha256": "c0e1d530dd44cab4c5fc0b9773708d17ae8d002cf919e6223abb4222a962804f",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/ui/ux-review.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+      "sha256": "35faa432efb0547cafbc1e48762c4c8289538d45a77d84e142902d982f59f790",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/ui/deck-map-components.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/deck-map-components.md",
+      "sha256": "f19ed86f57e65907b4581db4fd3680c1c86c15bf0d2020127481ab4ba4270fec",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/ui/material-coherence.prompt.json",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/material-coherence.prompt.json",
+      "sha256": "ef0590c106bea27fd3f354d6e3914db7820b7d12b9fbbb4258ea6497ca969f0c",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/stamina-system.md",
+      "uri": "viking://~/resources/projects/the-end/designs/stamina-system.md",
+      "sha256": "faa0d3ca29f62a6203069d46e57773b2a567ef8a53aff357dd9db166de0b5eab",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/formal-system-reference.md",
+      "uri": "viking://~/resources/projects/the-end/designs/formal-system-reference.md",
+      "sha256": "9440e536b2fe9b88546f30eb1608d1f50f38628196808551d53a05a61f35bce2",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/production-direction.md",
+      "uri": "viking://~/resources/projects/the-end/designs/production-direction.md",
+      "sha256": "defdb987d8b56b7b3891221ec934dde1565a4030361c10c74bb2ee9994a02b31",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/game-design.md",
+      "uri": "viking://~/resources/projects/the-end/designs/game-design.md",
+      "sha256": "1044d8624625ca5878eb4caf5ccd0627fd0e33220856ce10252b802193170789",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/game-systems.md",
+      "uri": "viking://~/resources/projects/the-end/docs/game-systems.md",
+      "sha256": "fae3c66ae311e6890018e1f433a51bedf6e3da1944380494b5620777984bc01a",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/architecture.md",
+      "uri": "viking://~/resources/projects/the-end/docs/architecture.md",
+      "sha256": "bccc440670dc87643957610afe68058f4fb87ecdc8ea7d23a1fc281d78640e30",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/vertical-slice.md",
+      "uri": "viking://~/resources/projects/the-end/docs/vertical-slice.md",
+      "sha256": "12957c0df5a3fa007df45c028df758a8d3a8c4dd8e79064187d89d140543193e",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/card-editor-usage.md",
+      "uri": "viking://~/resources/projects/the-end/docs/card-editor-usage.md",
+      "sha256": "915030190aa3a751be2b5d9fa3150044f73dcd28ae2d03b4c73c6d48a79397ff",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/game-studios-skills.md",
+      "uri": "viking://~/resources/projects/the-end/docs/game-studios-skills.md",
+      "sha256": "08bd6c4b89b08614d35b3f912a352559424862126c4d38bd934e3cbc4dbf31e6",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/coherence-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/coherence-verification.json",
+      "sha256": "2fc01cf1edcd624801d2ec5a1e20d50efed6f0b8a97a949433979639ce1f5c7e",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/deck-map-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/deck-map-verification.json",
+      "sha256": "891253dfcdddc384678031f6150d62b250ef3e8e965ce829594ddfd0e89254ad",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/stamina-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/stamina-verification.json",
+      "sha256": "7d804c75a34543fdc282716c94783a24c988abef23c4e05a5e858d4ceb795962",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "tools/game-studios/pink-cocos.project.json",
+      "uri": "viking://~/resources/projects/the-end/docs/pink-cocos-skill-adapter.json",
+      "sha256": "b804fc395dde7207c588877a879549fe15518ce9ff439d0dc96048d673123a40",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "backgroundImages": [
+    {
+      "name": "street",
+      "file": "assets/resources/art/field-sketch-street-v2.png",
+      "width": 1585,
+      "height": 992,
+      "sha256": "8f32df9dee4e96f2ed30410dc1b5b2d4feef977d400d1dfb7f029eb7f4b577f9",
+      "frame": "84c6cd46-0869-469b-b1c5-889623e6c8d2@49047",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-street-v2/field-sketch-street-v2.png",
+      "readBackVerified": true,
+      "bytes": 1964881,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "name": "depot",
+      "file": "assets/resources/art/field-sketch-depot-v2.png",
+      "width": 1585,
+      "height": 992,
+      "sha256": "9f30e2e8e3dbbf711fa84749dc892772f41ea38b03d9ced1b07b87a242409b02",
+      "frame": "3fd723d7-d69e-41fa-8aac-fe01a750a21c@49047",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-depot-v2/field-sketch-depot-v2.png",
+      "readBackVerified": true,
+      "bytes": 1717380,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "name": "shelter",
+      "file": "assets/resources/art/field-sketch-shelter-v2.png",
+      "width": 1586,
+      "height": 992,
+      "sha256": "83747e90dafee4d4b0018595d1b49b40c67b2911dcea28e5bc34a33d373ba7a9",
+      "frame": "41c6c23c-ea4f-4af4-8991-66831295ca39@49047",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-shelter-v2/field-sketch-shelter-v2.png",
+      "readBackVerified": true,
+      "bytes": 2080669,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "previousDeckMapScreenshots": [
+    {
+      "status": "success",
+      "task_id": "e592132d-629c-4184-b1c6-ce3d7cd0e6c7",
+      "source_path": "inventory-grid.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/inventory-grid",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/inventory-grid/inventory-grid.png",
+      "readBackVerified": true,
+      "bytes": 350040,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "5e38294a-48d6-426c-947f-36cbbd7e7988",
+      "source_path": "card-reader.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/card-reader",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/card-reader/card-reader.png",
+      "readBackVerified": true,
+      "bytes": 177912,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "bf4bcfd9-a177-40c3-8382-77e9117fef2b",
+      "source_path": "reward-selection.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/reward-selection",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/reward-selection/reward-selection.png",
+      "readBackVerified": true,
+      "bytes": 566584,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "f626eb8d-a85f-4679-83c1-44b1959eb074",
+      "source_path": "map-start.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/map-start",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/map-start/map-start.png",
+      "readBackVerified": true,
+      "bytes": 385714,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "a531a2d5-5a3b-4917-b889-3b54d66f2a21",
+      "source_path": "map-route.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/map-route",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/map-route/map-route.png",
+      "readBackVerified": true,
+      "bytes": 384087,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "3f28a33e-9049-46eb-b212-d7ac3767f493",
+      "source_path": "coherent-battle-final.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-battle-final",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-battle-final/coherent-battle-final.png",
+      "readBackVerified": true,
+      "bytes": 1331619,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "122f01c2-8041-4f99-b97c-89d8c261f254",
+      "source_path": "coherent-boss.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-boss",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-boss/coherent-boss.png",
+      "readBackVerified": true,
+      "bytes": 1381112,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "699fe5a8-9451-44b2-8b5d-704bac46a18f",
+      "source_path": "coherent-rest.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-rest",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-rest/coherent-rest.png",
+      "readBackVerified": true,
+      "bytes": 1502125,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "staminaScreenshots": [
+    {
+      "status": "success",
+      "task_id": "a25a6b83-ac9a-4630-a0a8-df075e5be58f",
+      "source_path": "stamina-entry.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-entry",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-entry/stamina-entry.png",
+      "readBackVerified": true,
+      "readBackBytes": 256545,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "ac6d4b87-67c8-408e-b1ed-98e4ab95e247",
+      "source_path": "stamina-final.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-final",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-final/stamina-final.png",
+      "readBackVerified": true,
+      "readBackBytes": 1323654,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "a8f4ebb8-5654-4cf1-88a7-c8a7342689c7",
+      "source_path": "stamina-reward-selection.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-reward-selection",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-reward-selection/stamina-reward-selection.png",
+      "readBackVerified": true,
+      "readBackBytes": 520421,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "17b0ef9a-0830-4f4c-99be-189fc9352ac2",
+      "source_path": "stamina-deck-selection.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-deck-selection",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-deck-selection/stamina-deck-selection.png",
+      "readBackVerified": true,
+      "readBackBytes": 421188,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "bea085b1-d817-47e1-9a2e-6872d49bad81",
+      "source_path": "stamina-map-route.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-map-route",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-map-route/stamina-map-route.png",
+      "readBackVerified": true,
+      "readBackBytes": 383264,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "2f795ecf-02a2-49ce-88cc-e1e1c1329615",
+      "source_path": "stamina-card-reader.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-card-reader",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-card-reader/stamina-card-reader.png",
+      "readBackVerified": true,
+      "readBackBytes": 190076,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "3b526ce2-13de-4b7a-8f37-a11c5fd1686a",
+      "source_path": "stamina-battle-1024.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-battle-1024",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-battle-1024/stamina-battle-1024.png",
+      "readBackVerified": true,
+      "readBackBytes": 852203,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "f7b1c899-c01e-47be-b111-6c69cccbd7de",
+      "source_path": "stamina-shelter.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-shelter",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-shelter/stamina-shelter.png",
+      "readBackVerified": true,
+      "readBackBytes": 1520129,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "mediaVerification": "Local source hashes are recorded in verification files; remote image availability and decoded byte length were checked. No remote SHA equivalence is claimed.",
+  "semanticIndexing": "Background processing tasks were submitted. Storage and read-back verification do not assert semantic indexing completion.",
+  "currentVerification": "viking://~/resources/projects/the-end/docs/stamina-verification.json",
+  "self": "viking://~/resources/projects/the-end/docs/deck-map-sync.json"
+}

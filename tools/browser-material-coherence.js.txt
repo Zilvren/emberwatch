@@ -1,0 +1,48 @@
+// Real controls and current imported native assets; no direct game-state mutation.
+const expectedFrames={street:'84c6cd46-0869-469b-b1c5-889623e6c8d2@49047',depot:'3fd723d7-d69e-41fa-8aac-fe01a750a21c@49047',shelter:'41c6c23c-ea4f-4af4-8991-66831295ca39@49047'};
+const nativeSurface=async()=>page.evaluate(()=>{
+ const root=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot');
+ const atmosphere=root.getComponentsInChildren('SceneAtmosphere').find(c=>c.node.activeInHierarchy);
+ const sprite=atmosphere.backdrop.getComponent('cc.Sprite');
+ return {frame:sprite.spriteFrame._uuid,tint:sprite.color.toHEX(),
+  shadows:root.getComponentsInChildren('ContactShadow').filter(c=>c.node.activeInHierarchy).map(c=>({target:c.target?.name,visible:c.getComponent('cc.Graphics').enabled,actorActive:c.target?.activeInHierarchy,sameParent:c.target?.parent===c.node.parent,dx:c.node.position.x-c.target.position.x,dy:c.node.position.y-c.target.position.y})),
+  rigs:root.getComponentsInChildren('StableActorSprite').filter(c=>c.node.activeInHierarchy).map(c=>c.rigSnapshot()),
+  decks:root.getComponentsInChildren('DeckStackGraphic').filter(c=>c.node.activeInHierarchy).map(c=>c.theme?.json.colors.paper),
+  points:root.getComponentsInChildren('RoutePoint').filter(c=>c.node.activeInHierarchy).map(c=>({action:c.action.actionId,opacity:c.action.getComponent('cc.UIOpacity')?.opacity}))};
+});
+const checkSurface=async kind=>{
+ const surface=await nativeSurface();
+ assert(surface.frame===expectedFrames[kind],'Wrong in-engine background: '+surface.frame);
+ assert(surface.tint==='ffffff','Old background tint is still applied');
+ for(const shadow of surface.shadows){
+  assert(shadow.target&&shadow.sameParent,'Native contact shadow target did not resolve');
+  assert(shadow.visible===shadow.actorActive,'Inactive actor left a visible shadow');
+  if(shadow.actorActive)assert(Math.abs(shadow.dx)<.05&&Math.abs(shadow.dy+2)<.05,'Contact shadow drifted from the feet');
+ }
+ assert(surface.rigs.every(r=>r.source==='42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f'),'08 artwork source changed');
+ return surface;
+};
+await page.setViewportSize({width:1440,height:900});await page.emulateMedia({reducedMotion:'no-preference'});
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&review=materials-04');await idle();
+await checkSurface('depot');await screenshot('coherent-journal');
+await click('journal-start');await click('enter-fixed');await claimSupplies();await click('claim-card-0');await leaveRewards();await click('route-A');
+const map=await checkSurface('street');assert(map.points.length&&map.points.every(p=>p.opacity===255),'Read-only route information was faded');await screenshot('coherent-route');
+await click('enter-enemy1');const battle=await checkSurface('street');
+assert(battle.shadows.length===3&&battle.shadows.filter(s=>s.visible).length===2,'Battle shadow visibility is inconsistent');
+assert(battle.decks.length===2&&battle.decks.every(p=>p==='#e2dac7'),'Decks and cards use different paper materials');
+await screenshot('coherent-battle');
+let s=await state();const attack=s.hand.find(c=>c.kind==='attack'&&!c.blocked);assert(attack,'Expected a free attack for the material playthrough');
+const enemyBefore=s.battle.hp;await play(attack,true);assert((await state()).battle.hp===enemyBefore-2,'Real drag attack did not settle once');await checkSurface('street');
+await fight({basicOnly:true});await checkSurface('depot');await screenshot('coherent-reward');
+await click('reward-bag');await screenshot('coherent-inventory');await click('modal-close');
+await claimSupplies();await claimAvailableCard();await leaveRewards();
+await click('enter-scavenge');await claimSupplies();await claimAvailableCard();await leaveRewards();await click('enter-rest');
+const shelter=await checkSurface('shelter');await screenshot('coherent-rest');
+await click('rest-cash');await click('modal-confirm');await click('rest-done');await click('enter-enemy2');
+const boss=await checkSurface('street');assert(boss.shadows.find(s=>s.target==='Brute')?.visible&&!boss.shadows.find(s=>s.target==='Wanderer')?.visible,'Enemy shadow did not switch with the boss');await screenshot('coherent-boss');
+await fight({preferWeapon:true});await claimSupplies();await claimAvailableCard();await leaveRewards();
+await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='shelter');await idle();await checkSurface('shelter');await screenshot('coherent-shelter');
+await page.setViewportSize({width:1024,height:768});await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&design=materials-04');await idle();await checkSurface('street');await screenshot('coherent-battle-1024');
+await page.setViewportSize({width:1440,height:900});await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&design=materials-04');await idle();await screenshot('coherent-battle-final');
+assert(!runtimeErrors.length,runtimeErrors.join('\n'));
+return {passed:true,allThreeNativeBackgrounds:true,neutralBackdropTint:true,readOnlyRouteOpacity:true,source08Preserved:true,contactShadowTracksFeet:true,inactiveEnemyShadowHidden:true,sharedDeckPaper:true,realDragAttack:true,smallViewport:true,actions:trace.length,runtimeErrors};

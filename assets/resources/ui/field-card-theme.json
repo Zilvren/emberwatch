@@ -2,19 +2,19 @@
   "version": 1,
   "name": "field-canvas-cards",
   "colors": {
-    "canvas": "#e8e2d5",
-    "paper": "#ded2b6",
-    "paperShade": "#c5bea2",
-    "paperSelected": "#e2d1a8",
-    "ink": "#454637",
-    "muted": "#686b52",
-    "line": "#6b6553",
-    "lineSoft": "#b0a68b",
-    "ochre": "#bb9b6d",
-    "olive": "#90957c",
-    "brown": "#aa9278",
+    "canvas": "#e9e4d9",
+    "paper": "#e2dac7",
+    "paperShade": "#c7c1af",
+    "paperSelected": "#e8d7ad",
+    "ink": "#3e4237",
+    "muted": "#5c6354",
+    "line": "#727263",
+    "lineSoft": "#b3b09a",
+    "ochre": "#b69b70",
+    "olive": "#8c927a",
+    "brown": "#aa947e",
     "danger": "#8c5547",
-    "disabled": "#c8c2b4"
+    "disabled": "#cac7bc"
   },
   "card": {
     "width": 224,
@@ -40,26 +40,26 @@
     "pressOffset": 2,
     "pressScale": 0.99,
     "pressDuration": 0.1,
-    "focusLine": "#7f6b47",
+    "focusLine": "#b69b70",
     "disabledFill": "#e2ddcf",
     "disabledLine": "#aaa18f",
     "disabledText": "#5e6252",
     "variants": {
       "primary": {
-        "fill": "#c5ae88",
-        "hover": "#d0bb99",
-        "pressed": "#b39770",
-        "line": "#8b7553",
-        "activeLine": "#77613f",
-        "text": "#2d3028"
+        "fill": "#c1ae87",
+        "hover": "#cfbd98",
+        "pressed": "#a89470",
+        "line": "#857b61",
+        "activeLine": "#665f4a",
+        "text": "#252c24"
       },
       "secondary": {
-        "fill": "#f2eadb",
-        "hover": "#ece0ca",
-        "pressed": "#ded1bb",
-        "line": "#6f6757",
-        "activeLine": "#8b754e",
-        "text": "#454238"
+        "fill": "#e2dac7",
+        "hover": "#eae2d0",
+        "pressed": "#cfc6b2",
+        "line": "#88836d",
+        "activeLine": "#716d58",
+        "text": "#3e4237"
       },
       "quiet": {
         "fill": "#f2eadb",
@@ -83,7 +83,8 @@
     "darkDisabledText": "#c6c4b2",
     "darkQuietHover": "#514d41",
     "darkQuietPressed": "#69604e",
-    "darkFocusLine": "#bb9b6d"
+    "darkFocusLine": "#bb9b6d",
+    "darkQuietText": "#f1ecdf"
   },
   "panel": {
     "padding": 24,

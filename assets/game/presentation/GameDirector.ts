@@ -28,6 +28,7 @@ import { ButtonAction } from './ui/ButtonAction';
 import { StatusBar } from './ui/StatusBar';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { enterEncounterPreview } from './dev/EncounterPreview';
+import { STAMINA_SCENARIO, TUTORIAL_SCENARIO } from '../core/content/GameScenario';
 import { UiActionRouter } from './ui/UiActionRouter';
 import { ACTION_EVENT, ActionInputEvent, CARD_DROP_EVENT, CardDropInputEvent } from './ui/UIEvents';
 import { initialUiState } from './ui/UiState';
@@ -48,6 +49,9 @@ export class GameDirector extends Component {
     }
     private refresh(): void {
         this.renderer.render();
+        // Keep transient feedback clear of overlay headings and the map's paper sheet.
+        const toastY = this.ui.overlay ? 388 : this.game.phase === 'map' ? -416 : 345;
+        this.toastRoot?.setPosition(0, toastY, 0);
     }
     private refreshBattle(screen: Node): void {
         this.renderer.renderBattle(screen);
@@ -67,7 +71,11 @@ export class GameDirector extends Component {
         tooltip: 'journal, map, battle, rewards, rest, shelter, day2, failure',
     })
     screens: Node[] = [];
-    @property({ type: [Node], tooltip: 'inventory, help, log, confirmation' }) popups: Node[] = [];
+    @property({
+        type: [Node],
+        tooltip: 'inventory, help, log, confirmation, route map, entry tier',
+    })
+    popups: Node[] = [];
     @property(Prefab) floatTemplate: Prefab | null = null;
     @property(Prefab) attackTemplate: Prefab | null = null;
     @property(Prefab) blockTemplate: Prefab | null = null;
@@ -117,7 +125,10 @@ export class GameDirector extends Component {
             query?.get('save') !== 'off' && (seed === null || query?.get('save') === 'on');
         this.session = new GameSession(
             seed === null ? undefined : Number(seed),
-            saving ? new SaveRepository(sys.localStorage) : undefined
+            saving ? new SaveRepository(sys.localStorage) : undefined,
+            seed !== null && query?.get('ruleset') === 'tutorial-v1'
+                ? TUTORIAL_SCENARIO
+                : STAMINA_SCENARIO
         );
         if (!saving && seed !== null && query?.get('preview') === 'encounter')
             enterEncounterPreview(this.session);
@@ -405,6 +416,15 @@ export class GameDirector extends Component {
                 ?.inspect(),
             busy: this.ui.busy,
             overlay: this.ui.overlay,
+            inventoryMode: this.ui.deckEdit ? 'deck' : 'inspect',
+            inventoryReader: this.ui.bagReader,
+            inspectedCard: this.ui.inspectedCard,
+            inventoryFilter: this.ui.bagFilter,
+            rewardSelection: this.ui.rewardSelection,
+            ruleset: g.scenario.ruleset,
+            entryTier: g.entryTier,
+            stamina: g.battle?.stamina,
+            maxStamina: g.battle?.maxStamina,
             selectedCard: this.ui.selectedCard,
             day: g.day,
             supplies: g.supplies,

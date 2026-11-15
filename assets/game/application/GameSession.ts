@@ -1,11 +1,11 @@
 import type { GameReadModel } from '../core/GameReadModel';
 import { ActionResult, SurvivalGame } from '../core/SurvivalGame';
-import { Route } from '../core/content/GameScenario';
+import { Route, GameScenario, STAMINA_SCENARIO } from '../core/content/GameScenario';
+import { EntryTierId } from '../core/content/EntryTiers';
 import { SaveRepository } from '../infrastructure/SaveRepository';
 export type GameCommand =
     | {
           type:
-              | 'start'
               | 'enter-node'
               | 'end-turn'
               | 'claim-supplies'
@@ -14,6 +14,7 @@ export type GameCommand =
               | 'finish-day'
               | 'new-game';
       }
+    | { type: 'start'; tier?: EntryTierId }
     | { type: 'choose-route'; route: Route }
     | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
@@ -30,14 +31,22 @@ export class GameSession {
     }
     constructor(
         seed?: number,
-        private readonly saves?: SaveRepository
+        private readonly saves?: SaveRepository,
+        private readonly defaultScenario: GameScenario = STAMINA_SCENARIO
     ) {
         const loaded = saves?.load();
         this.game = loaded?.state
             ? SurvivalGame.fromState(loaded.state, saves?.content)
-            : new SurvivalGame(seed, undefined, saves?.content);
+            : new SurvivalGame(seed, this.defaultScenario, saves?.content);
         this.restored = !!loaded?.state;
-        this.startupMessage = loaded?.warning || (this.restored ? '已继续上次的探索进度。' : '');
+        this.startupMessage =
+            loaded?.warning ||
+            (this.restored
+                ? this.game.scenario.ruleset === 'tutorial-v1' &&
+                  this.defaultScenario.ruleset === 'stamina-v1'
+                    ? '已恢复旧规则探索，进度已保留。重开新探索后启用体力系统。'
+                    : '已继续上次的探索进度。'
+                : '');
     }
     get saveStatus(): string {
         return this.saves?.status ?? '调试模式 · 不存档';
@@ -51,7 +60,7 @@ export class GameSession {
         let result: ActionResult;
         switch (command.type) {
             case 'start':
-                result = g.start();
+                result = g.start(command.tier);
                 break;
             case 'choose-route':
                 result =
@@ -96,7 +105,7 @@ export class GameSession {
                 result = g.finishDay();
                 break;
             case 'new-game':
-                g.reset();
+                g.reset(this.defaultScenario);
                 this.saves?.allowNewGame();
                 result = { ok: true, message: '已开始新的探索。' };
                 break;

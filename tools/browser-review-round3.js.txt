@@ -9,8 +9,8 @@ const before=await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.ex
 await click('modal-close');assert(!(await state()).overlay,'Close icon did not cancel');
 assert(await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()))===before,'Closing partial claim spent resources');
 await click('reward-bag');
-const details=await page.evaluate(()=>{const g=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot');return g.getComponentsInChildren('InventoryRowPresentation').filter(r=>r.node.activeInHierarchy).map(r=>({effect:r.detailLabel.string,size:r.detailLabel.fontSize,alignment:r.detailLabel.horizontalAlign,color:r.detailLabel.color.toHEX()}));});
-assert(details.length===6&&details.every(d=>d.effect&&d.size===14&&d.alignment===0),'Inventory effect descriptions are missing or misaligned');
+const details=await page.evaluate(()=>{const root=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot'),grid=root.getComponentsInChildren('InventoryGrid').find(c=>c.node.activeInHierarchy);return grid.content.children.filter(c=>c.active).map(c=>c.getComponent('SelectableCard').card.inspect());});
+assert(details.length===(await state()).cards.length&&details.every(d=>d.effect&&d.title&&d.cost!==undefined),'Inventory grid is missing full card data');
 await screenshot('review-03-bag');await click('modal-close');
 await claimSupplies();await leaveRewards();await screenshot('review-03-route');
 await click('route-A');await click('enter-enemy1');await screenshot('review-03-battle');

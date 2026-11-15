@@ -4,8 +4,8 @@ let zeroSurvived=false;for(let i=0;i<10&&(await state()).phase==='battle';i++){a
 let s=await state();assert(zeroSurvived,'Armor zero should not immediately fail');assert(s.phase==='failure','Next damaging attack should fail');assert(s.day===1&&s.supplies===10&&s.armor===10&&s.cards.length===8,'Failure did not completely reset day one');await screenshot('final-failure');
 await click('journal-start');assert((await state()).phase==='journal','Retry should show day one');await click('journal-start');await click('enter-fixed');
 await claimSupplies();await click('claim-card-0');await leaveRewards();await click('route-B');await screenshot('final-route-b-map');await click('enter-scavenge');
-await claimSupplies();s=await state();let cardReward=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(cardReward)await click(cardReward.id);await leaveRewards();await click('enter-enemy1');
-await screenshot('final-battle');const first=await fight({capture:true});await claimSupplies();s=await state();cardReward=s.hits.find(h=>h.id.startsWith('claim-card-')&&h.enabled);if(cardReward)await click(cardReward.id);await leaveRewards();await click('enter-rest');await screenshot('final-rest');
+await claimSupplies();await claimAvailableCard();await leaveRewards();await click('enter-enemy1');
+await screenshot('final-battle');const first=await fight({capture:true});await claimSupplies();await claimAvailableCard();await leaveRewards();await click('enter-rest');await screenshot('final-rest');
 await click('rest-cash');await click('modal-confirm');await click('rest-done');await click('enter-enemy2');await screenshot('final-boss');
 await click('end-turn');const second=await fight({preferWeapon:true,capture:true,skipRepair:true});
 s=await state();assert(s.armor<10,'Shortage test needs damaged armor');await claimSupplies();s=await state();const repairBudget=s.critical?2:1;

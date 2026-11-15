@@ -1,11 +1,12 @@
-import { _decorator, Color, Component, Graphics, Node, UITransform } from 'cc';
-const { ccclass, requireComponent, executeInEditMode } = _decorator;
+import { _decorator, Color, Component, Graphics, JsonAsset, Node, UITransform } from 'cc';
+const { ccclass, property, requireComponent, executeInEditMode } = _decorator;
 
 /** The deck is a small stack of worn cards, using the same ink and canvas as the actors. */
 @ccclass('DeckStackGraphic')
 @executeInEditMode
 @requireComponent(Graphics)
 export class DeckStackGraphic extends Component {
+    @property(JsonAsset) theme: JsonAsset | null = null;
     onEnable(): void {
         this.node.on(Node.EventType.SIZE_CHANGED, this.redraw, this);
         this.redraw();
@@ -18,14 +19,18 @@ export class DeckStackGraphic extends Component {
             size = this.getComponent(UITransform)?.contentSize;
         if (!g || !size) return;
         const w = size.width / 2 - 5,
-            h = size.height / 2 - 5;
+            h = size.height / 2 - 5,
+            colors = this.theme?.json.colors,
+            paper = new Color().fromHEX(colors?.paper ?? '#e2dac7'),
+            shade = new Color().fromHEX(colors?.paperShade ?? '#c7c1af'),
+            ink = new Color().fromHEX(colors?.line ?? '#727263');
         g.clear();
         for (let layer = 2; layer >= 0; layer--) {
             const x = layer * 2,
                 y = layer * 2;
-            g.fillColor = new Color(layer ? 154 : 196, layer ? 147 : 185, layer ? 116 : 150, 255);
-            g.strokeColor = new Color(78, 77, 59, 255);
-            g.lineWidth = 1.3;
+            g.fillColor = layer ? shade : paper;
+            g.strokeColor = ink;
+            g.lineWidth = 1;
             g.moveTo(-w + x + 3, -h + y);
             g.lineTo(w + x, -h + y + 0.4);
             g.lineTo(w + x, h + y - 3);
@@ -35,16 +40,23 @@ export class DeckStackGraphic extends Component {
             g.fill();
             g.stroke();
         }
-        g.strokeColor = new Color(111, 112, 81, 210);
+        g.strokeColor = new Color().fromHEX(colors?.lineSoft ?? '#b3b09a');
         g.lineWidth = 0.8;
         g.rect(-w + 5, -h + 5, w * 2 - 10, h * 2 - 10);
         g.stroke();
-        g.fillColor = new Color(99, 108, 73, 255);
-        g.rect(-4, 1, 8, 23);
-        g.fill();
-        g.rect(-12, 8, 24, 8);
-        g.fill();
-        g.strokeColor = new Color(132, 127, 97, 150);
+        g.strokeColor = ink;
+        g.lineWidth = 1.1;
+        for (let card = 2; card >= 0; card--) {
+            const x = card * 3 - 11,
+                y = card * 2 + 3;
+            g.moveTo(x, y);
+            g.lineTo(x + 15, y + 2);
+            g.lineTo(x + 13, y + 22);
+            g.lineTo(x - 2, y + 20);
+            g.close();
+            g.stroke();
+        }
+        g.strokeColor = new Color().fromHEX(colors?.lineSoft ?? '#b3b09a');
         g.moveTo(-w + 7, -h + 10);
         g.lineTo(-w + 18, -h + 9);
         g.stroke();

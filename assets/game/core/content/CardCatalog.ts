@@ -181,8 +181,8 @@ export function validateCatalog(raw: unknown): Catalog {
     if (typeof input.fixedReward !== 'string' || definitions[input.fixedReward]?.role !== 'normal')
         issues.push('固定搜刮奖励必须引用一张存在的普通牌。');
     if (!cards.some((card) => card.reward)) issues.push('奖励池至少需要一张普通牌。');
-    const weight = cards.reduce((sum, card) => sum + card.weight * card.initialCount, 10);
-    if (weight > 30) issues.push(`初始负重为 ${weight}/30，请减少初始数量或重量（含 10 点物资）。`);
+    const weight = cards.reduce((sum, card) => sum + card.weight * card.initialCount, 0);
+    if (weight > 30) issues.push(`初始卡牌负重为 ${weight}/30，请减少初始数量或重量。`);
     if (cards.reduce((sum, card) => sum + card.initialCount, 0) > 30)
         issues.push('初始卡牌数量不能超过 30 张。');
     if (issues.length) throw new CatalogError(issues);

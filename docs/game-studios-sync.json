@@ -1,0 +1,133 @@
+{
+  "project": "The end",
+  "recordedAt": "2026-11-15T05:49:03.162Z",
+  "status": "saved-and-readback-verified",
+  "documents": [
+    {
+      "file": "docs/designs/art-bible.md",
+      "uri": "viking://~/resources/projects/the-end/designs/art-bible.md",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/production-asset-spec.md",
+      "uri": "viking://~/resources/projects/the-end/designs/production-asset-spec.md",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/ui/wasteland-page-redesign.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/ui/ux-review.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/vertical-slice.md",
+      "uri": "viking://~/resources/projects/the-end/docs/vertical-slice.md",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/game-studios-skills.md",
+      "uri": "viking://~/resources/projects/the-end/docs/game-studios-skills.md",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/game-studios-evidence.json",
+      "uri": "viking://~/resources/projects/the-end/docs/game-studios-evidence.json",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/game-studios-skills-assessment.md",
+      "uri": "viking://~/resources/projects/the-end/docs/game-studios-skills-assessment.md",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "AGENTS.md",
+      "uri": "viking://~/resources/projects/the-end/docs/agent-conventions.md",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "tools/game-studios/pink-cocos.project.json",
+      "uri": "viking://~/resources/projects/the-end/docs/pink-cocos-skill-adapter.json",
+      "saved": true,
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "images": [
+    {
+      "file": "output/playwright/game-studios/review-03-battle.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/game-studios-review/review-03-battle/review-03-battle.png",
+      "readBack": true,
+      "bytes": 1535039,
+      "mimeType": "image/png",
+      "semanticIndexing": "asynchronous-not-verified"
+    },
+    {
+      "file": "output/playwright/game-studios/small-window-battle.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/game-studios-review/small-window-battle/small-window-battle.png",
+      "readBack": true,
+      "bytes": 994597,
+      "mimeType": "image/png",
+      "semanticIndexing": "asynchronous-not-verified"
+    },
+    {
+      "file": "output/playwright/game-studios/review-03-bag.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/game-studios-review/review-03-bag/review-03-bag.png",
+      "readBack": true,
+      "bytes": 555269,
+      "mimeType": "image/png",
+      "semanticIndexing": "asynchronous-not-verified"
+    },
+    {
+      "file": "output/playwright/game-studios/final-repair-warning.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/game-studios-review/final-repair-warning/final-repair-warning.png",
+      "readBack": true,
+      "bytes": 836974,
+      "mimeType": "image/png",
+      "semanticIndexing": "asynchronous-not-verified"
+    },
+    {
+      "file": "output/playwright/game-studios/review-03-route.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/game-studios-review/review-03-route/review-03-route.png",
+      "readBack": true,
+      "bytes": 1602981,
+      "mimeType": "image/png",
+      "semanticIndexing": "asynchronous-not-verified"
+    },
+    {
+      "file": "output/playwright/game-studios/final-held-card.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/game-studios-review/final-held-card/final-held-card.png",
+      "readBack": true,
+      "bytes": 1558931,
+      "mimeType": "image/png",
+      "semanticIndexing": "asynchronous-not-verified"
+    }
+  ],
+  "semanticIndexing": "Writes and imported PNG bytes are readable. Background semantic/index processing was not independently verified; upload submission is not reported as completed search indexing.",
+  "self": {
+    "file": "docs/game-studios-sync.json",
+    "uri": "viking://~/resources/projects/the-end/docs/game-studios-sync.json",
+    "note": "This record lists the completed checks for other artifacts. Its own final write/readback is verified in the tool trace, outside this self-referential record."
+  }
+}

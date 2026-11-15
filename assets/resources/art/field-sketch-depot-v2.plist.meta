@@ -1,0 +1,63 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "3fd723d7-d69e-41fa-8aac-fe01a750a21c",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "49047": {
+      "importer": "sprite-frame",
+      "uuid": "3fd723d7-d69e-41fa-8aac-fe01a750a21c@49047",
+      "displayName": "",
+      "id": "49047",
+      "name": "cover",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 1585,
+        "height": 992,
+        "rawWidth": 1585,
+        "rawHeight": 992,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "f4a26d74-ba3c-4459-aeb0-c1a0b837d675@6c48a",
+        "atlasUuid": "3fd723d7-d69e-41fa-8aac-fe01a750a21c",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "field-sketch-depot-v2.png",
+    "format": 2,
+    "uuid": "3fd723d7-d69e-41fa-8aac-fe01a750a21c",
+    "textureUuid": "f4a26d74-ba3c-4459-aeb0-c1a0b837d675@6c48a"
+  }
+}

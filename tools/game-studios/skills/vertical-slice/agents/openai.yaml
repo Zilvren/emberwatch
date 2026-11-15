@@ -1,0 +1,6 @@
+interface:
+  display_name: "Vertical Slice · Pink/Cocos"
+  short_description: "Assess a complete playable loop in the real engine"
+  default_prompt: "Use $vertical-slice to validate the existing Pink/Cocos playable loop against the project's quality goals."
+policy:
+  allow_implicit_invocation: true

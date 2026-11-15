@@ -2,6 +2,7 @@ import { GameCommand, GameSession } from '../../application/GameSession';
 import type { CardKind, Route } from '../../core/SurvivalGame';
 import type { ButtonActionEvent } from './UIEvents';
 import type { UiState } from './UiState';
+import { entryTier, affordableEntryTier } from '../../core/content/EntryTiers';
 export type UiSound = 'tap' | 'loot' | 'heal';
 export interface UiActions {
     act(command: GameCommand, sound?: UiSound): void;
@@ -31,8 +32,65 @@ export class UiActionRouter {
         if (id === 'bag' || id === 'rest-bag' || id === 'reward-bag') {
             this.ui.overlay = 'bag';
             this.ui.page = 0;
+            this.ui.deckEdit = id === 'rest-bag';
+            this.ui.bagReader = false;
+            this.ui.bagDetails = false;
+        } else if (id === 'map') {
+            if (this.ui.overlay === 'map') this.ui.overlay = null;
+            else if (!this.ui.overlay) this.ui.overlay = 'map';
+            else return;
+        } else if (id.startsWith('bag-filter-') && this.ui.overlay === 'bag') {
+            const filter = id.slice(11);
+            if (filter === 'all' || filter === 'deck' || filter === 'overflow')
+                this.ui.bagFilter = filter;
+        } else if (id === 'bag-sort' && this.ui.overlay === 'bag') {
+            const sorts: UiState['bagSort'][] = ['original', 'name', 'cost', 'weight'];
+            this.ui.bagSort = sorts[(sorts.indexOf(this.ui.bagSort) + 1) % sorts.length];
+        } else if (id === 'bag-mode' && this.ui.overlay === 'bag' && g.phase === 'rest')
+            this.ui.deckEdit = !this.ui.deckEdit;
+        else if (id === 'bag-details' && this.ui.overlay === 'bag')
+            this.ui.bagDetails = !this.ui.bagDetails;
+        else if (id === 'bag-reader-close' && this.ui.overlay === 'bag') this.ui.bagReader = false;
+        else if (id.startsWith('inspect-') && this.ui.overlay === 'bag') {
+            const card = g.cards.find((card) => card.id === id.slice(8));
+            if (!card) return;
+            this.ui.inspectedCard = card.id;
+            this.ui.bagDetails = false;
+            if (this.ui.deckEdit && g.phase === 'rest') {
+                if (card.zone !== 'base' || card.kind === 'cash')
+                    this.actions.message('此卡不能编入出战牌组');
+                else {
+                    this.actions.act({ type: 'toggle-card', id: card.id });
+                    return;
+                }
+            } else this.ui.bagReader = true;
+        } else if (
+            id.startsWith('reward-select-') &&
+            !this.ui.overlay &&
+            g.phase === 'rewards' &&
+            !g.rewards?.cardTaken
+        ) {
+            const index = Number(id.slice(14));
+            if (!Number.isInteger(index) || !g.rewards?.cards[index]) return;
+            this.ui.rewardSelection = index;
+        } else if (id.startsWith('entry-tier-') && this.ui.overlay === 'entry') {
+            const tier = entryTier(id.slice(11));
+            if (!tier || g.supplies < tier.cost) return;
+            this.ui.entryTier = tier.id;
+        } else if (id === 'entry-confirm' && this.ui.overlay === 'entry') {
+            const result = this.session.execute({ type: 'start', tier: this.ui.entryTier });
+            if (result.ok) this.ui.overlay = null;
+            this.actions.message(result.message);
+            this.actions.refresh();
+            return;
         } else if (id === 'help' || id === 'log' || id === 'restart') this.ui.overlay = id;
         else if (id === 'audio') this.actions.toggleAudio();
+        else if (
+            (id === 'modal-close' || id === 'modal-cancel') &&
+            this.ui.overlay === 'bag' &&
+            this.ui.bagReader
+        )
+            this.ui.bagReader = false;
         else if (id === 'modal-close' || id === 'modal-cancel')
             this.ui.overlay =
                 this.ui.overlay === 'discard' && this.ui.discardFromBag ? 'bag' : null;
@@ -53,8 +111,13 @@ export class UiActionRouter {
             return;
         } else if (this.ui.overlay) return;
         else if (id === 'journal-start') {
-            if (g.phase === 'journal') this.actions.act({ type: 'start' });
-            else if (g.phase === 'failure') {
+            if (g.phase === 'journal') {
+                if (g.scenario.battleResource === 'stamina') {
+                    this.ui.entryTier = affordableEntryTier(g.supplies);
+                    this.ui.overlay = 'entry';
+                    this.actions.refresh();
+                } else this.actions.act({ type: 'start' });
+            } else if (g.phase === 'failure') {
                 this.session.execute({ type: 'new-game' });
                 this.actions.refresh();
             } else if (g.phase === 'day2') {
@@ -65,7 +128,7 @@ export class UiActionRouter {
         } else if (id.startsWith('route-')) {
             this.actions.act({ type: 'choose-route', route: id.slice(6) as Route });
             return;
-        } else if (id.startsWith('enter-')) {
+        } else if (id.startsWith('enter-') || id === 'map-enter') {
             this.actions.act({ type: 'enter-node' });
             return;
         } else if (id === 'end-turn') {
@@ -77,6 +140,10 @@ export class UiActionRouter {
         } else if (id === 'claim-supplies') {
             const r = g.rewards;
             if (!r || r.supplyTaken) return;
+            if (g.scenario.suppliesHaveWeight === false) {
+                this.actions.act({ type: 'claim-supplies' }, 'loot');
+                return;
+            }
             const capacity = Math.max(0, 30 - g.baseWeight);
             if (capacity === 0) {
                 this.actions.message('背包已满，请先整理背包，再领取物资。');
@@ -131,6 +198,7 @@ export class UiActionRouter {
             this.actions.refresh();
         } else if (this.ui.overlay === 'discard') {
             this.ui.overlay = this.ui.discardFromBag ? 'bag' : null;
+            this.ui.bagReader = false;
             this.actions.act({ type: 'discard-card', id: this.ui.discardId });
         } else if (this.ui.overlay === 'reward-leave') {
             this.ui.overlay = null;

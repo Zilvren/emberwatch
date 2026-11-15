@@ -12,6 +12,11 @@ import { UIProgress } from './ui/UIProgress';
 import type { UiState } from './ui/UiState';
 import { UIValue } from './ui/UIValue';
 import { StatusBar } from './ui/StatusBar';
+import { InventoryGrid } from './cards/InventoryGrid';
+import { RewardSelection } from './cards/RewardSelection';
+import { RouteMap } from './map/RouteMap';
+import { EntrySelection } from './ui/EntrySelection';
+import { shelterSummary } from './ui/ShelterSummaryModel';
 const phases: Phase[] = [
     'journal',
     'map',
@@ -67,6 +72,10 @@ export class GameRenderer {
     render(): void {
         const g = this.game,
             phaseIndex = phases.indexOf(g.phase);
+        if (g.phase !== 'rewards') {
+            this.ui.rewardSelection = -1;
+            this.ui.rewardContext = '';
+        }
         this.scene.screens.forEach((screen, i) => (screen.active = i === phaseIndex));
         this.activeScreen = this.scene.screens[phaseIndex];
         const screen = this.activeScreen;
@@ -79,7 +88,7 @@ export class GameRenderer {
         this.renderStatusBar();
         if (g.phase === 'journal')
             this.text(screen, {
-                'journal/text3': `物资 10 · 护甲 10 · 战斗牌 ${g.usableCards.length} 张\n初始总负重 ${g.baseWeight} / 30`,
+                'journal/text3': `物资 ${g.supplies} · 护甲 ${g.armor} · 战斗牌 ${g.usableCards.length} 张\n${g.scenario.suppliesHaveWeight === false ? '物品负重' : '初始总负重'} ${g.baseWeight} / 30`,
             });
         if (g.phase === 'map') {
             this.text(screen, {
@@ -88,48 +97,72 @@ export class GameRenderer {
                         ? '路已走完。正在自动返回避难所……'
                         : '前往亮起的地点。全程无法主动撤离。',
                 'map/text0': `负重 ${g.baseWeight}/30  ·  暂存 ${g.overflowWeight}/10`,
-                'map/text1': g.overflowWeight
-                    ? '消耗物资后，暂存卡可自动转入。'
-                    : '搜刮和出牌都会改变携带空间。',
-                'map/fixedReward': `支付 2 物资 → 4 物资 + ${this.game.content.cards[this.game.content.catalog.fixedReward].name}\n完成固定搜刮后，才能选择后续路线。`,
+                'map/text1':
+                    g.scenario.suppliesHaveWeight === false
+                        ? '物资点不占负重；丢弃物品后，暂存卡可自动转入。'
+                        : g.overflowWeight
+                          ? '消耗物资后，暂存卡可自动转入。'
+                          : '搜刮和出牌都会改变携带空间。',
+                'map/fixedReward': `${g.scenario.scavengeFees?.fixed ? `支付 ${g.scenario.scavengeFees.fixed} 物资 → ` : ''}4 物资 + ${this.game.content.cards[this.game.content.catalog.fixedReward].name}\n完成固定搜刮后，才能选择后续路线。`,
             });
-            screen.getChildByName('RouteGraph')!.active = g.fixedDone;
-            screen.getChildByName('InitialHint')!.active = !g.fixedDone;
-            screen
-                .getComponentsInChildren(MapPointPresentation)
-                .forEach((point) => point.refresh(g));
-            this.button(screen, 'route-A', undefined, g.currentNode === 'choice');
-            this.button(screen, 'route-B', undefined, g.currentNode === 'choice');
+            const map = screen.getComponentInChildren(RouteMap);
+            if (map) map.refresh(g);
+            else {
+                screen.getChildByName('RouteGraph')!.active = g.fixedDone;
+                screen.getChildByName('InitialHint')!.active = !g.fixedDone;
+                screen
+                    .getComponentsInChildren(MapPointPresentation)
+                    .forEach((point) => point.refresh(g));
+                this.button(screen, 'route-A', undefined, g.currentNode === 'choice');
+                this.button(screen, 'route-B', undefined, g.currentNode === 'choice');
+            }
         }
         if (g.phase === 'battle') this.renderBattle(screen);
         if (g.phase === 'rewards') {
             const r = g.rewards!,
                 battle = r.source === 'enemy1' || r.source === 'enemy2',
-                claimable = Math.max(0, Math.min(r.supplies, 30 - g.baseWeight));
+                claimable =
+                    g.scenario.suppliesHaveWeight === false
+                        ? r.supplies
+                        : Math.max(0, Math.min(r.supplies, 30 - g.baseWeight));
             this.text(screen, {
                 'banner/text0': battle ? 'VICTORY / SALVAGE' : 'SCAVENGE / SALVAGE',
                 'banner/text1': battle ? '威胁已清除' : '废墟里，总有东西留下',
-                'banner/text2': battle
-                    ? '最多选择一张卡牌。物资需要单独领取。'
-                    : '整理背包后再领取，顺序会影响携带空间。',
+                'banner/text2':
+                    g.scenario.suppliesHaveWeight === false
+                        ? '最多选择一张卡牌；物资点单独领取，不占负重。'
+                        : battle
+                          ? '最多选择一张卡牌。物资需要单独领取。'
+                          : '整理背包后再领取，顺序会影响携带空间。',
                 'rewards/text0': `携带 ${g.baseWeight}/30  ·  暂存 ${g.overflowWeight}/10`,
                 'rewards/text2': `物资 +${r.supplies}`,
                 'rewards/text3': r.supplyTaken
                     ? '已领取'
-                    : claimable === 0
-                      ? '背包已满 · 先整理背包'
-                      : claimable < r.supplies
-                        ? `可装入 ${claimable} 点 · 其余 ${r.supplies - claimable} 点将放弃`
-                        : `可全部装入 ${claimable} 点`,
+                    : g.scenario.suppliesHaveWeight === false
+                      ? `可领取 ${claimable} 物资点 · 不占负重`
+                      : claimable === 0
+                        ? '背包已满 · 先整理背包'
+                        : claimable < r.supplies
+                          ? `可装入 ${claimable} 点 · 其余 ${r.supplies - claimable} 点将放弃`
+                          : `可全部装入 ${claimable} 点`,
             });
-            const choices = screen.getComponentsInChildren(RewardChoice);
-            choices.forEach((choice, i) =>
-                choice.refresh(
-                    r.cards.length === 1 ? (i === 1 ? r.cards[0] : undefined) : r.cards[i],
-                    r.cards.length === 1 ? 0 : i,
-                    g
-                )
-            );
+            const context = r.source + ':' + r.cards.join(',');
+            if (this.ui.rewardContext !== context) {
+                this.ui.rewardContext = context;
+                this.ui.rewardSelection = -1;
+            }
+            const selection = screen.getComponent(RewardSelection);
+            if (selection) selection.refresh(g, this.ui.rewardSelection);
+            else
+                screen
+                    .getComponentsInChildren(RewardChoice)
+                    .forEach((choice, i) =>
+                        choice.refresh(
+                            r.cards.length === 1 ? (i === 1 ? r.cards[0] : undefined) : r.cards[i],
+                            r.cards.length === 1 ? 0 : i,
+                            g
+                        )
+                    );
             this.button(
                 screen,
                 'claim-supplies',
@@ -166,24 +199,18 @@ export class GameRenderer {
             );
         }
         if (g.phase === 'shelter') {
-            const s = g.settlement!;
-            this.text(screen, {
-                'shelter/text1': `物资 ${s.returnedSupplies}  ·  卡牌 ${s.returnedCards} 张`,
-                'shelter/text2': s.lostOverflow.length
-                    ? `溢出失效：${s.lostOverflow.join('、')}`
-                    : '没有溢出损失。临时战斗牌与装备状态已清除。',
-                'shelter/text4': `护甲 ${g.armor}/10  ·  ${g.armor === 10 ? '无需付费' : `完全修复需要 ${s.repairCost} 点物资`}`,
-                'shelter/text6': `${g.supplies} 物资  →  每日需求 1  →  剩余 ${Math.max(0, g.supplies - 1)}`,
-                'shelter/text7': g.supplies
-                    ? '每日物资尚未扣除。下方按钮完成最后这一步。'
-                    : '物资不足，将在最后记录 1 点缺口，物资最低为 0。',
-            });
-            this.button(
-                screen,
-                'shelter-repair',
-                g.armor === 10 ? '护甲完整' : `支付 ${s.repairCost} 物资 · 完全修复`,
-                g.armor < 10 && g.supplies >= s.repairCost
-            );
+            const summary = shelterSummary(g);
+            this.text(screen, summary.values);
+            this.button(screen, 'shelter-repair', summary.repairCaption, summary.repairEnabled);
+            for (const action of screen.getComponentsInChildren(ButtonAction))
+                if (action.actionId === 'shelter-repair')
+                    action.node.active = summary.repairVisible;
+            for (const binding of screen.getComponentsInChildren(UIValue)) {
+                if (binding.key === 'shelter/repair-hint') binding.setAlert(summary.repairRisk);
+                if (binding.key === 'shelter/daily-summary')
+                    binding.setAlert(summary.dailyShortfall);
+            }
+            this.button(screen, 'shelter-done', summary.doneCaption);
         }
         if (g.phase === 'day2') {
             const s = g.settlement!;
@@ -225,6 +252,8 @@ export class GameRenderer {
             b = g.battle!,
             attack = b.intent === 'attack',
             world = screen.getChildByName('World')!;
+        const gauge = screen.getChildByName('StaminaGauge');
+        if (gauge) gauge.active = g.scenario.battleResource === 'stamina';
         world.getChildByName('Wanderer')!.active = b.enemy === 'enemy1';
         world.getChildByName('Brute')!.active = b.enemy === 'enemy2';
         this.enemy = world
@@ -251,6 +280,8 @@ export class GameRenderer {
             'battle/text10': `回合 ${b.turn} · 手牌 ${b.hand.length} / 6`,
             'drawPile/text0': b.draw.length,
             'discardPile/text0': b.discard.length,
+            'battle/stamina-value': `${b.stamina}/${b.maxStamina}`,
+            'battle/stamina-hint': `每回合 ${b.maxStamina}`,
         });
         screen.getChildByName('CriticalWarning')!.active = g.critical;
         screen.getChildByName('WeaponSlot')!.active = !!b.weapon;
@@ -279,9 +310,13 @@ export class GameRenderer {
                   ? 1
                   : this.ui.overlay === 'log'
                     ? 2
-                    : this.ui.overlay
-                      ? 3
-                      : -1;
+                    : this.ui.overlay === 'entry'
+                      ? 5
+                      : this.ui.overlay === 'map'
+                        ? 4
+                        : this.ui.overlay
+                          ? 3
+                          : -1;
         this.scene.popups.forEach((popup, i) => (popup.active = i === index));
         if (index === 0) {
             const popup = this.scene.popups[0],
@@ -294,12 +329,17 @@ export class GameRenderer {
                     g.phase === 'rest'
                         ? '移出战斗不释放负重。基础能力永久保留；现金可在这里丢弃。'
                         : g.phase === 'rewards'
-                          ? '物资不能暂存；可先丢弃普通物品腾出空间。基础能力保留，现金仅营地可丢弃。'
+                          ? g.scenario.suppliesHaveWeight === false
+                              ? '物资点不占负重；普通物品可丢弃腾出空间。基础能力保留，现金仅营地可丢弃。'
+                              : '物资不能暂存；可先丢弃普通物品腾出空间。基础能力保留，现金仅营地可丢弃。'
                           : '当前仅可查看。奖励和休整时可整理背包；调整战斗卡组需在营地进行。',
             });
-            popup
-                .getComponentsInChildren(InventoryRowPresentation)
-                .forEach((row, i) => row.refresh(g.cards[this.ui.page * 6 + i], g));
+            const grid = popup.getComponent(InventoryGrid);
+            if (grid) grid.refresh(g, this.ui);
+            else
+                popup
+                    .getComponentsInChildren(InventoryRowPresentation)
+                    .forEach((row, i) => row.refresh(g.cards[this.ui.page * 6 + i], g));
             this.button(popup, 'bag-prev', undefined, this.ui.page > 0);
             this.button(popup, 'bag-next', undefined, this.ui.page < max);
             this.button(
@@ -308,9 +348,22 @@ export class GameRenderer {
                 undefined,
                 (g.phase === 'rest' || g.phase === 'rewards') && g.supplies > 0
             );
+            for (const action of popup.getComponentsInChildren(ButtonAction))
+                if (action.actionId === 'discard-supply')
+                    action.node.active = g.scenario.suppliesHaveWeight !== false;
         }
+        if (index === 4) this.scene.popups[4]?.getComponentInChildren(RouteMap)?.refresh(g, true);
+        if (index === 5)
+            this.scene.popups[5]
+                ?.getComponentInChildren(EntrySelection)
+                ?.refresh(g, this.ui.entryTier);
         if (index === 2)
             this.text(this.scene.popups[2], { 'modal/text1': g.logs.slice(0, 9).join('\n\n') });
+        if (index === 1 && g.scenario.battleResource === 'stamina')
+            this.text(this.scene.popups[1], {
+                'modal/text1':
+                    '攻击牌：点击后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n卡牌消耗战斗体力，不扣避难所物资。\n进入档位决定每回合体力；回合结束余量清零，新回合重置。\n物资点不占探索负重，物品仍占负重，暂存物品不能战斗。\n护甲降至 0 不立即失败，再次受到实际伤害才失败。\n每日 1 点物资在返家结算最后执行。',
+            });
         if (index === 3) {
             const c = g.cards.find((c) => c.id === this.ui.discardId);
             let title = '修复后，生存补给将不足',
@@ -337,7 +390,7 @@ export class GameRenderer {
                         !r.cardTaken && r.cards.length ? '1 次选牌机会' : '',
                     ].filter(Boolean);
                 title = '放弃余下奖励，继续前进？';
-                body = `尚未领取：${pending.join('、')}。\n\n离开后无法返回领取。你也可以先整理背包，再决定带走什么。${g.supplies === 0 ? '\n\n当前物资为 0，直接离开会导致本次教学探索失败。' : ''}`;
+                body = `尚未领取：${pending.join('、')}。\n\n离开后无法返回领取。你也可以先整理背包，再决定带走什么。${g.scenario.battleResource !== 'stamina' && g.supplies === 0 ? '\n\n当前物资为 0，直接离开会导致本次教学探索失败。' : ''}`;
                 confirm = '放弃并离开';
                 cancel = '返回领取';
                 variant = 'danger';

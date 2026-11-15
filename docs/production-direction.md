@@ -4,7 +4,7 @@
 - 日期：2026-11-14（Asia/Shanghai）
 - 状态：正式游戏开发方向已由用户确认；下述系统拆分与实施次序为基于当前代码的工程建议，具体新玩法尚未确认。
 - 用户要求：面向成熟游戏开发，后续方案与实现不要受现有 demo 范围限制。
-- 最新范围（2026-11-15）：用户要求先统一画风和代码架构，UI 逐个组件设计，不继续扩展更多流程。当前已有规则/应用/存储/表现分层，以及卡牌、按钮、通用面板、状态栏可运行评审稿，正式系统表的对照见 formal-system-reference.md。
+- 最新范围（2026-11-15）：保留画风与架构统一方向；用户追加背包、奖励选牌、出战编组、局内地图重做，并明确先完成体力系统，再复查美术与界面。新开局已接入进入档位与回合体力；其他正式流程不随本次变更自动扩大。正式系统表对照见 formal-system-reference.md。
 - 当前代码依据：`assets/game/core/SurvivalGame.ts`、`assets/game/application/GameSession.ts`、`assets/game/presentation/GameDirector.ts`、`assets/game/presentation/ui/`、`assets/game/infrastructure/SaveRepository.ts`、`assets/resources/data/cards.json`、`assets/TheEnd.scene`。下方差距表中的旧名为重构起点记录。
 - 资料依据：`AGENTS.md`、`docs/tutorial-spec.md`、`docs/implementation-notes.md`、`docs/game-systems.md`。
 - OpenViking：`viking://~/resources/projects/the-end/designs/production-direction.md`；先前离线记录由恢复后的逐项归档替代，实际状态见 docs/openviking-sync-status.json。

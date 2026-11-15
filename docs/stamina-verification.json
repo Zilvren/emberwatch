@@ -1,0 +1,452 @@
+{
+  "project": "The end",
+  "recordedAt": "2026-11-15T11:39:29.366Z",
+  "timezone": "Asia/Shanghai",
+  "status": "implemented-native-verified-visual-approval-open",
+  "engine": {
+    "name": "Pink/Cocos",
+    "version": "4.0.0-beta.1",
+    "sdkCliAvailable": true,
+    "typeScriptCompiler": "C:\\Users\\Knock\\AppData\\Roaming\\cocos-default\\cocos-4.0.0-beta.1\\node_modules\\typescript\\bin\\tsc"
+  },
+  "platform": "web-desktop",
+  "sourceDesign": "docs/designs/stamina-system.md",
+  "sourceWorkbook": "docs/sources/formal-system-overview.xlsx",
+  "sourceWorkbookSha256": "02d963c7b0593c5e280fb9f427d2d66446727ee31cc17ce5c1169cf5657ded69",
+  "scenarios": {
+    "newDefault": "stamina-v1",
+    "legacySave": "tutorial-v1 until player confirms new-game",
+    "entryTiers": {
+      "emergency": {
+        "fee": 0,
+        "stamina": 1
+      },
+      "low": {
+        "fee": 4,
+        "stamina": 2
+      },
+      "standard": {
+        "fee": 8,
+        "stamina": 3
+      },
+      "high": {
+        "fee": 14,
+        "stamina": 4
+      }
+    },
+    "dailyLast": true,
+    "riskyRepairStillAllowed": true,
+    "physicalSupplyCardsAndExchangePrices": "not implemented by this change"
+  },
+  "tests": {
+    "passed": 104,
+    "failed": 0,
+    "log": "temp/stamina-tests-final.log",
+    "sha256": "bb11a743a1dd0972f60815de7bb539689bc0a213db32a543ebaf245aa72c12ef"
+  },
+  "typecheck": {
+    "passed": true,
+    "exitCode": 0,
+    "note": "Ran before final build in the same guarded shell; build only starts after typecheck exits 0."
+  },
+  "build": {
+    "passed": true,
+    "exitCode": 0,
+    "command": "npm run build:web",
+    "log": "temp/stamina-final-build.log",
+    "logSha256": "5a00d86c244ac7a88e711ea67b5103ba5d21bb1d1a3549ec867f01e8e578fc25",
+    "output": "build/web-desktop",
+    "mainSceneUuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e",
+    "workingAssetsFingerprint": "2fd61cf9de074fe6863425983ac7e3fcb73e114313ea35a984eebf82dc1c33e8"
+  },
+  "browser": {
+    "fullRegression": {
+      "passed": true,
+      "scenarios": 12,
+      "report": "output/playwright/stamina-regression/browser-report.json",
+      "scope": "Stamina implementation before final toast, map icon and wording corrections. Eleven legacy-regression scenarios and one stamina scenario."
+    },
+    "finalAffected": {
+      "passed": true,
+      "scenarios": 3,
+      "report": "output/playwright/stamina-art-verified/browser-report.json",
+      "checks": {
+        "browser-stamina-system": {
+          "passed": true,
+          "productionStamina": true,
+          "entrySelectionAndCancel": true,
+          "entryPaidOnce": true,
+          "noSupplyCarryWeight": true,
+          "cardUnit": "体力",
+          "paidCardDoesNotSpendSupplies": true,
+          "turnRefresh": true,
+          "saveResume": true,
+          "cancelledDragFree": true,
+          "newBattleRefresh": true,
+          "dailyLast": true,
+          "fullRouteA": true,
+          "smallViewport": true,
+          "actions": 53,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-deck-map": {
+          "passed": true,
+          "grid": true,
+          "reader": true,
+          "escapeStack": true,
+          "readonlyMap": true,
+          "rewardComparisonDoesNotMutate": true,
+          "confirmedReward": true,
+          "overflowFilter": true,
+          "routeEntry": true,
+          "actions": 17,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-material-coherence": {
+          "passed": true,
+          "allThreeNativeBackgrounds": true,
+          "neutralBackdropTint": true,
+          "readOnlyRouteOpacity": true,
+          "source08Preserved": true,
+          "contactShadowTracksFeet": true,
+          "inactiveEnemyShadowHidden": true,
+          "sharedDeckPaper": true,
+          "realDragAttack": true,
+          "smallViewport": true,
+          "actions": 49,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        }
+      }
+    },
+    "excludedAttempt": {
+      "report": "output/playwright/stamina-art-final/browser-report.json",
+      "reason": "Capture script clicked a close button behind the card reader. The modal blocked it; changed the script to the real reader close control and reran. No game-state injection."
+    }
+  },
+  "preservation": {
+    "actorAndMotionFiles": 154,
+    "changed": [],
+    "actorTransformOverrides": 20,
+    "changedTransforms": [],
+    "coreRules": "intentionally modified for stamina",
+    "nativeAssets": {
+      ".scene": 6,
+      ".prefab": 37,
+      ".anim": 36,
+      ".meta": 255
+    },
+    "metadataMissing": [],
+    "warnings": []
+  },
+  "visualReview": {
+    "source": "Actual native Cocos Canvas, real mouse input, 1440x900 and 1024x768",
+    "viewed": [
+      "output/playwright/stamina-art-verified/stamina-entry.png",
+      "output/playwright/stamina-art-verified/stamina-final.png",
+      "output/playwright/stamina-art-verified/stamina-reward-selection.png",
+      "output/playwright/stamina-art-verified/stamina-deck-selection.png",
+      "output/playwright/stamina-art-verified/stamina-map-route.png",
+      "output/playwright/stamina-art-verified/stamina-card-reader.png",
+      "output/playwright/stamina-art-verified/stamina-battle-1024.png",
+      "output/playwright/stamina-art-verified/stamina-shelter.png"
+    ],
+    "observedFixes": [
+      "Shared 08 character/background/material palette and native contact shadows",
+      "Independent stamina badge and card costs",
+      "Inventory/map toast titles no longer overlap",
+      "Map icons use restrained fills"
+    ],
+    "userFinalArtApproval": "pending",
+    "nonIdleMotionNaturalness": "not reassessed; no newly drawn frames",
+    "remaining": [
+      "Small-window hand-card secondary text remains dense; reader/long-press available",
+      "Shelter settlement text hierarchy still merits a focused component pass"
+    ]
+  },
+  "evidenceMatrix": {
+    "rules": {
+      "status": "SUPPORTED",
+      "evidence": "104 tests and stamina native run"
+    },
+    "nativeIntegration": {
+      "status": "SUPPORTED",
+      "evidence": "Final build and three affected browser runs"
+    },
+    "uiBehavior": {
+      "status": "SUPPORTED",
+      "evidence": "Real input, cancellation, reload, route and settlement assertions"
+    },
+    "visualCoherence": {
+      "status": "SUPPORTED",
+      "limit": "Bounded implementer observations from eight viewed native screenshots"
+    },
+    "finalUserVisualApproval": {
+      "status": "NEEDS EVIDENCE"
+    },
+    "nonIdleMotion": {
+      "status": "NOT APPLICABLE",
+      "reason": "Unchanged assets and not reassessed in this change"
+    }
+  },
+  "screenshots": [
+    {
+      "file": "output/playwright/stamina-art-verified/stamina-entry.png",
+      "bytes": 256545,
+      "sha256": "deeb96734b72d4248846f822efab262705403ba9ae13fb1008c4334c0ea69907",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "a25a6b83-ac9a-4630-a0a8-df075e5be58f",
+        "source_path": "stamina-entry.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-entry",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-entry/stamina-entry.png",
+        "readBackVerified": true,
+        "readBackBytes": 256545,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/stamina-art-verified/stamina-final.png",
+      "bytes": 1323654,
+      "sha256": "896f3651ab0c8a7d2c426fb002818dbc297d28f277a894db7573c23a45957237",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "ac6d4b87-67c8-408e-b1ed-98e4ab95e247",
+        "source_path": "stamina-final.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-final",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-final/stamina-final.png",
+        "readBackVerified": true,
+        "readBackBytes": 1323654,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/stamina-art-verified/stamina-reward-selection.png",
+      "bytes": 520421,
+      "sha256": "1c180180c4258d0f915a89d52e1785db01fbf3d21aad555465d77bafaaa5040a",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "a8f4ebb8-5654-4cf1-88a7-c8a7342689c7",
+        "source_path": "stamina-reward-selection.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-reward-selection",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-reward-selection/stamina-reward-selection.png",
+        "readBackVerified": true,
+        "readBackBytes": 520421,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/stamina-art-verified/stamina-deck-selection.png",
+      "bytes": 421188,
+      "sha256": "88b4dcdf54ab798514199dadfe88dab8962a899acb201cce8e7719d246331411",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "17b0ef9a-0830-4f4c-99be-189fc9352ac2",
+        "source_path": "stamina-deck-selection.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-deck-selection",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-deck-selection/stamina-deck-selection.png",
+        "readBackVerified": true,
+        "readBackBytes": 421188,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/stamina-art-verified/stamina-map-route.png",
+      "bytes": 383264,
+      "sha256": "c3669a5847c53a62c525370956f020ef6fde694651647606f37c09f640857234",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "bea085b1-d817-47e1-9a2e-6872d49bad81",
+        "source_path": "stamina-map-route.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-map-route",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-map-route/stamina-map-route.png",
+        "readBackVerified": true,
+        "readBackBytes": 383264,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/stamina-art-verified/stamina-card-reader.png",
+      "bytes": 190076,
+      "sha256": "a4ae31b021518ddb22089516153db3aca3cbb728174a72050788f3de85d10f0d",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "2f795ecf-02a2-49ce-88cc-e1e1c1329615",
+        "source_path": "stamina-card-reader.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-card-reader",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-card-reader/stamina-card-reader.png",
+        "readBackVerified": true,
+        "readBackBytes": 190076,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/stamina-art-verified/stamina-battle-1024.png",
+      "bytes": 852203,
+      "sha256": "d33251ae0d0ab0a74e27a74246d7eace9d1e9068b2ad05641e40d2905cb0aee4",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "3b526ce2-13de-4b7a-8f37-a11c5fd1686a",
+        "source_path": "stamina-battle-1024.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-battle-1024",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-battle-1024/stamina-battle-1024.png",
+        "readBackVerified": true,
+        "readBackBytes": 852203,
+        "semanticIndexing": "background-not-verified"
+      }
+    },
+    {
+      "file": "output/playwright/stamina-art-verified/stamina-shelter.png",
+      "bytes": 1520129,
+      "sha256": "83212e4575f866e4a6b5c95132b844242771f9f9e0e2f3e6d9e31febe35362fe",
+      "viewed": true,
+      "archive": {
+        "status": "success",
+        "task_id": "f7b1c899-c01e-47be-b111-6c69cccbd7de",
+        "source_path": "stamina-shelter.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-shelter",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/stamina-review/stamina-shelter/stamina-shelter.png",
+        "readBackVerified": true,
+        "readBackBytes": 1520129,
+        "semanticIndexing": "background-not-verified"
+      }
+    }
+  ],
+  "archives": {
+    "backgrounds": [
+      {
+        "name": "street",
+        "file": "assets/resources/art/field-sketch-street-v2.png",
+        "width": 1585,
+        "height": 992,
+        "sha256": "8f32df9dee4e96f2ed30410dc1b5b2d4feef977d400d1dfb7f029eb7f4b577f9",
+        "frame": "84c6cd46-0869-469b-b1c5-889623e6c8d2@49047",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-street-v2/field-sketch-street-v2.png",
+        "readBackVerified": true,
+        "bytes": 1964881,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "name": "depot",
+        "file": "assets/resources/art/field-sketch-depot-v2.png",
+        "width": 1585,
+        "height": 992,
+        "sha256": "9f30e2e8e3dbbf711fa84749dc892772f41ea38b03d9ced1b07b87a242409b02",
+        "frame": "3fd723d7-d69e-41fa-8aac-fe01a750a21c@49047",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-depot-v2/field-sketch-depot-v2.png",
+        "readBackVerified": true,
+        "bytes": 1717380,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "name": "shelter",
+        "file": "assets/resources/art/field-sketch-shelter-v2.png",
+        "width": 1586,
+        "height": 992,
+        "sha256": "83747e90dafee4d4b0018595d1b49b40c67b2911dcea28e5bc34a33d373ba7a9",
+        "frame": "41c6c23c-ea4f-4af4-8991-66831295ca39@49047",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-shelter-v2/field-sketch-shelter-v2.png",
+        "readBackVerified": true,
+        "bytes": 2080669,
+        "semanticIndexing": "background-not-verified"
+      }
+    ],
+    "previousDeckMapMedia": [
+      {
+        "status": "success",
+        "task_id": "e592132d-629c-4184-b1c6-ce3d7cd0e6c7",
+        "source_path": "inventory-grid.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/inventory-grid",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/inventory-grid/inventory-grid.png",
+        "readBackVerified": true,
+        "bytes": 350040,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "status": "success",
+        "task_id": "5e38294a-48d6-426c-947f-36cbbd7e7988",
+        "source_path": "card-reader.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/card-reader",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/card-reader/card-reader.png",
+        "readBackVerified": true,
+        "bytes": 177912,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "status": "success",
+        "task_id": "bf4bcfd9-a177-40c3-8382-77e9117fef2b",
+        "source_path": "reward-selection.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/reward-selection",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/reward-selection/reward-selection.png",
+        "readBackVerified": true,
+        "bytes": 566584,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "status": "success",
+        "task_id": "f626eb8d-a85f-4679-83c1-44b1959eb074",
+        "source_path": "map-start.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/map-start",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/map-start/map-start.png",
+        "readBackVerified": true,
+        "bytes": 385714,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "status": "success",
+        "task_id": "a531a2d5-5a3b-4917-b889-3b54d66f2a21",
+        "source_path": "map-route.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/map-route",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/map-route/map-route.png",
+        "readBackVerified": true,
+        "bytes": 384087,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "status": "success",
+        "task_id": "3f28a33e-9049-46eb-b212-d7ac3767f493",
+        "source_path": "coherent-battle-final.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-battle-final",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-battle-final/coherent-battle-final.png",
+        "readBackVerified": true,
+        "bytes": 1331619,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "status": "success",
+        "task_id": "122f01c2-8041-4f99-b97c-89d8c261f254",
+        "source_path": "coherent-boss.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-boss",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-boss/coherent-boss.png",
+        "readBackVerified": true,
+        "bytes": 1381112,
+        "semanticIndexing": "background-not-verified"
+      },
+      {
+        "status": "success",
+        "task_id": "699fe5a8-9451-44b2-8b5d-704bac46a18f",
+        "source_path": "coherent-rest.png",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-rest",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/deck-map-review/coherent-rest/coherent-rest.png",
+        "readBackVerified": true,
+        "bytes": 1502125,
+        "semanticIndexing": "background-not-verified"
+      }
+    ],
+    "documentsRoot": "viking://~/resources/projects/the-end/",
+    "currentDesign": "viking://~/resources/projects/the-end/designs/stamina-system.md",
+    "currentVerification": "viking://~/resources/projects/the-end/docs/stamina-verification.json",
+    "semanticIndexing": "Background tasks submitted; completion is not asserted by storage/readback."
+  },
+  "stage": "stamina-before-hand-shelter-polish",
+  "latestVerification": "docs/hand-shelter-verification.json"
+}

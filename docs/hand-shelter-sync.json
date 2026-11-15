@@ -1,0 +1,130 @@
+{
+  "project": "The end",
+  "recordedAt": "2026-11-15T12:28:39.297Z",
+  "timezone": "Asia/Shanghai",
+  "status": "stored-and-read-back-verified",
+  "scope": "Native battle hand readability and shelter settlement hierarchy",
+  "documents": [
+    {
+      "file": "docs/designs/ui/wasteland-page-redesign.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+      "sha256": "d845b39d647094906df7af837a44ba74987b74dc805cb82cf942d3e5887b8ea3",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/production-asset-spec.md",
+      "uri": "viking://~/resources/projects/the-end/designs/production-asset-spec.md",
+      "sha256": "159b3b9f16bb2523255532b0278c0f723e043dc15d116d916ba8468c5dd1d29e",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/ui/ux-review.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+      "sha256": "b05f1b4697b41379d038d18bea3e21b18b82c593c6c5811c9d41a33f1cfdd172",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/architecture.md",
+      "uri": "viking://~/resources/projects/the-end/docs/architecture.md",
+      "sha256": "e671aa0019652417879e138e225fa0c1090f479fede47c77eb5cfc4b1e165175",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/vertical-slice.md",
+      "uri": "viking://~/resources/projects/the-end/docs/vertical-slice.md",
+      "sha256": "39e0079e43efb475328c218d12793861313b42e52093732e34b1a2dbf49178f7",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/game-studios-skills.md",
+      "uri": "viking://~/resources/projects/the-end/docs/game-studios-skills.md",
+      "sha256": "cd28ea60ac1a1b7972397430eb3831e28211cd619022d643bbabbc3cb37eaed2",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/stamina-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/stamina-verification.json",
+      "sha256": "725894c7f3b841914f3e69548d426b5d23bd451d0eee47ceaac7098e55fc4adf",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/hand-shelter-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/hand-shelter-verification.json",
+      "sha256": "6403c16d4ff225485faf07a001bc0ed8f1d060084b80c0530cec8c9ef4185683",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "screenshots": [
+    {
+      "status": "success",
+      "task_id": "d3f968dc-5b4a-4064-a028-f6abb9a278b9",
+      "source_path": "hand-1440.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-1440",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-1440/hand-1440.png",
+      "readBackVerified": true,
+      "bytes": 1283091,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "b66b6078-d759-44b4-a59d-cd7175fd9a35",
+      "source_path": "hand-1024.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-1024",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-1024/hand-1024.png",
+      "readBackVerified": true,
+      "bytes": 831232,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "a22e9535-b73b-475c-85da-02b131954f7d",
+      "source_path": "hand-reading-1024.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-reading-1024",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/hand-reading-1024/hand-reading-1024.png",
+      "readBackVerified": true,
+      "bytes": 812804,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "01943d45-88c7-4aa6-af36-7e0e74c3723d",
+      "source_path": "shelter-damaged-1440.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-damaged-1440",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-damaged-1440/shelter-damaged-1440.png",
+      "readBackVerified": true,
+      "bytes": 1487352,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "0c9d7a27-b0cf-41d3-9249-508d079e0914",
+      "source_path": "shelter-damaged-1024.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-damaged-1024",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-damaged-1024/shelter-damaged-1024.png",
+      "readBackVerified": true,
+      "bytes": 867911,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "9f7c5ef4-9359-496d-999d-816511eb6389",
+      "source_path": "shelter-repaired-1024.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-repaired-1024",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/hand-shelter-review/shelter-repaired-1024/shelter-repaired-1024.png",
+      "readBackVerified": true,
+      "bytes": 875696,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "verification": "viking://~/resources/projects/the-end/docs/hand-shelter-verification.json",
+  "self": "viking://~/resources/projects/the-end/docs/hand-shelter-sync.json",
+  "semanticIndexing": "Background tasks submitted; read-back confirms stored contents, semantic indexing completion is not asserted."
+}
