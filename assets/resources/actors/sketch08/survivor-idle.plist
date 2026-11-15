@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>survivor-idle-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{82,11},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{338,11},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.3647,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{594,11},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{850,11},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1105,11},{165,238}}</string>
+        <key>offset</key>
+        <string>{7.0000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1362,11},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{82,267},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{338,267},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-08</key>
+      <dict>
+        <key>frame</key>
+        <string>{{594,267},{164,238}}</string>
+        <key>offset</key>
+        <string>{8.1412,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-09</key>
+      <dict>
+        <key>frame</key>
+        <string>{{850,267},{164,238}}</string>
+        <key>offset</key>
+        <string>{8.1446,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-10</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1106,267},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-11</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1362,267},{164,238}}</string>
+        <key>offset</key>
+        <string>{8.0000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-12</key>
+      <dict>
+        <key>frame</key>
+        <string>{{82,523},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-13</key>
+      <dict>
+        <key>frame</key>
+        <string>{{338,523},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-14</key>
+      <dict>
+        <key>frame</key>
+        <string>{{594,523},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-15</key>
+      <dict>
+        <key>frame</key>
+        <string>{{850,523},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-16</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1106,523},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.3647,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-17</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1362,523},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-18</key>
+      <dict>
+        <key>frame</key>
+        <string>{{82,779},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-19</key>
+      <dict>
+        <key>frame</key>
+        <string>{{338,779},{164,238}}</string>
+        <key>offset</key>
+        <string>{8.1446,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-20</key>
+      <dict>
+        <key>frame</key>
+        <string>{{594,779},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-21</key>
+      <dict>
+        <key>frame</key>
+        <string>{{850,779},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-22</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1106,779},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.5000,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>survivor-idle-23</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1362,779},{164,238}}</string>
+        <key>offset</key>
+        <string>{7.3647,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>survivor-idle.png</string>
+      <key>realTextureFileName</key>
+      <string>survivor-idle.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

@@ -1,0 +1,18 @@
+[
+  {
+    "file": "assets/prefabs/actors/PlayerActor.prefab",
+    "sha256": "8ce7e4ffc352ba21722c84f558cdc2e458b1d9b0ce7fe81f3dcf975fbbb9e434"
+  },
+  {
+    "file": "assets/prefabs/actors/WandererActor.prefab",
+    "sha256": "d4e7afcac45edf122a7503f17eb8c2cac3792fb9f72820792c68967aa1b90187"
+  },
+  {
+    "file": "assets/prefabs/actors/BruteActor.prefab",
+    "sha256": "1d20ab7a09aaf5ade85c5d7bf4bccaae1c07124d6511d9c2b92aabeb86bf8d40"
+  },
+  {
+    "file": "assets/resources/actors/sketch08/master08-thin.png",
+    "sha256": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f"
+  }
+]

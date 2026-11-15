@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "name": "immersive-field-hud",
+  "colors": {
+    "canvas": "#e8e2d5",
+    "paper": "#263329",
+    "paperShade": "#46523c",
+    "paperSelected": "#ece0ca",
+    "ink": "#eddfc6",
+    "muted": "#c5c1ab",
+    "line": "#6f6757",
+    "lineSoft": "#b3a68e",
+    "ochre": "#bb9b6d",
+    "olive": "#afbc8c",
+    "brown": "#aa9278",
+    "danger": "#e4b08a",
+    "disabled": "#c8c2b4"
+  },
+  "card": {
+    "width": 224,
+    "height": 340,
+    "padding": 16,
+    "radius": 5,
+    "lineWidth": 1.2,
+    "titleSize": 20,
+    "bodySize": 16,
+    "smallSize": 13,
+    "hoverLift": 12,
+    "hoverScale": 1.025,
+    "readingLift": 120
+  },
+  "button": {
+    "height": 48,
+    "compactHeight": 40,
+    "largeHeight": 56,
+    "paddingX": 16,
+    "fontSize": 18,
+    "lineWidth": 1.1,
+    "pressOffset": 2,
+    "pressScale": 0.99,
+    "pressDuration": 0.1,
+    "focusLine": "#ccb47c",
+    "disabledFill": "#2a3329",
+    "disabledLine": "#5c634e",
+    "disabledText": "#a6ac96",
+    "variants": {
+      "primary": {
+        "fill": "#b39a65",
+        "hover": "#c7ad76",
+        "pressed": "#99814f",
+        "line": "#d9c18b",
+        "activeLine": "#ead3a1",
+        "text": "#1b281e"
+      },
+      "secondary": {
+        "fill": "#383d2d",
+        "hover": "#4a5039",
+        "pressed": "#2b3327",
+        "line": "#777d60",
+        "activeLine": "#c8b17a",
+        "text": "#e8ddc3"
+      },
+      "quiet": {
+        "fill": "#263329",
+        "hover": "#354231",
+        "pressed": "#46533b",
+        "line": "#00000000",
+        "activeLine": "#9ca77e",
+        "text": "#e8ddc3"
+      },
+      "danger": {
+        "fill": "#4c3329",
+        "hover": "#624335",
+        "pressed": "#3f2a23",
+        "line": "#84644c",
+        "activeLine": "#be9470",
+        "text": "#edddc4"
+      }
+    },
+    "darkDisabledFill": "#4b4b40",
+    "darkDisabledLine": "#7f7d6e",
+    "darkDisabledText": "#c6c4b2",
+    "darkQuietHover": "#514d41",
+    "darkQuietPressed": "#69604e",
+    "darkFocusLine": "#bb9b6d",
+    "darkQuietText": "#e8ddc3"
+  },
+  "panel": {
+    "padding": 24,
+    "margin": 20,
+    "gap": 12,
+    "buttonHeight": 48,
+    "titleSize": 24,
+    "bodySize": 18,
+    "lineHeight": 30,
+    "subtitleSize": 14,
+    "lineWidth": 1.1,
+    "backdrop": "#282b25",
+    "backdropAlpha": 180
+  },
+  "hud": {
+    "height": 80,
+    "buttonHeight": 40,
+    "labelSize": 13,
+    "valueSize": 22,
+    "hintSize": 12,
+    "warning": "#dcbf86",
+    "wideMin": 1180,
+    "compactMin": 720
+  }
+}

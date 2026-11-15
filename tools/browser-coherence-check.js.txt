@@ -1,0 +1,6 @@
+const savedBefore=await page.evaluate(()=>localStorage.getItem('the-end.run.v1'));
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&design=coherence-03');await idle();
+assert((await state()).phase==='battle','Temporary encounter preview failed');assert(savedBefore===await page.evaluate(()=>localStorage.getItem('the-end.run.v1')),'Temporary preview changed player save');
+await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(150);let s=await state();assert(s.sceneMotion.reduced,'Reduced-motion change not received');const clock=s.sceneMotion.elapsed;await page.waitForTimeout(400);assert(Math.abs((await state()).sceneMotion.elapsed-clock)<.02,'Environment kept moving under reduced motion');
+await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForTimeout(400);assert((await state()).sceneMotion.elapsed>clock,'Environment did not resume');await page.waitForTimeout(2700);await screenshot('coherence-battle');
+assert(runtimeErrors.length===0,'Runtime errors');return{passed:true,previewDoesNotWriteSave:true,reducedMotion:true,resumesMotion:true,runtimeErrors};

@@ -1,0 +1,24 @@
+// This runs in the dedicated Playwright QA browser, separate from the user's browser profile.
+await page.goto('http://127.0.0.1:7457/?seed=17&save=on');await idle();
+await page.evaluate(()=>{localStorage.removeItem('the-end.run.v1');localStorage.removeItem('the-end.run.v1.backup');});
+await page.reload();await idle();assert((await state()).phase==='journal','Fresh QA session must start at the journal');
+await click('journal-start');await click('enter-fixed');
+const pendingReward=await page.evaluate(()=>globalThis.__survivalGame.exportState());
+await page.reload();await idle();
+assert(JSON.stringify(await page.evaluate(()=>globalThis.__survivalGame.exportState()))===JSON.stringify(pendingReward),'Reload replayed the scavenging fee or lost the pending reward');
+await click('claim-card-0');const afterClaim=await page.evaluate(()=>globalThis.__survivalGame.exportState());
+await page.reload();await idle();let s=await state();assert(s.rewards.cardTaken&&!s.rewards.supplyTaken,'Reward claim flags did not survive reload');
+assert(JSON.stringify(await page.evaluate(()=>globalThis.__survivalGame.exportState()))===JSON.stringify(afterClaim),'Reload duplicated or lost a reward card');
+assert(!s.hits.some(h=>h.id==='claim-card-0'&&h.enabled),'Previously claimed reward became available again');
+await claimSupplies();await leaveRewards();await click('route-A');await click('enter-enemy1');
+const firstBattle=await page.evaluate(()=>globalThis.__survivalGame.exportState());
+await page.reload();await idle();assert(JSON.stringify(await page.evaluate(()=>globalThis.__survivalGame.exportState()))===JSON.stringify(firstBattle),'Battle piles or RNG changed during reload');
+s=await state();assert(s.heroPose==='master08-thin'&&s.heroMotion==='idle','Restored battle did not use the fixed 08 actor');assert(s.saveStatus==='已恢复进度'&&!s.saveWarning,'Continue-game status is incorrect');
+await click('end-turn');const nextTurn=await page.evaluate(()=>globalThis.__survivalGame.exportState());assert(nextTurn.battle.turn===2,'Battle did not continue after restore');
+await page.reload();await idle();assert(JSON.stringify(await page.evaluate(()=>globalThis.__survivalGame.exportState()))===JSON.stringify(nextTurn),'Reload changed next-turn draw order, equipment or costs');
+await screenshot('production-resumed-battle');
+await click('restart');await click('modal-cancel');await page.reload();await idle();assert((await state()).phase==='battle','Cancelling new-game confirmation discarded progress');
+await click('restart');await click('modal-confirm');s=await state();assert(s.phase==='journal'&&s.day===1&&s.armor===10,'Confirmed new game did not reset progress');
+await page.reload();await idle();assert((await state()).phase==='journal','Confirmed new-game checkpoint was not saved');await screenshot('production-journal');
+assert(runtimeErrors.length===0,runtimeErrors.join('\n'));
+return {passed:true,pendingRewardResume:true,noDuplicateClaim:true,battleResume:true,nextTurnAndRngResume:true,restartConfirmation:true,automaticSave:true,nativeActorSource:s.heroPose,trace,runtimeErrors};

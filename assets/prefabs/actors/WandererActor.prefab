@@ -243,7 +243,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 189,
+      "y": 201.02564102564102,
       "z": 0
     },
     "_lrot": {
@@ -255,8 +255,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 0.580110497237569,
-      "y": 0.580110497237569,
+      "x": 1.794871794871795,
+      "y": 1.794871794871795,
       "z": 1
     },
     "_mobility": 0,
@@ -283,8 +283,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 599,
-      "height": 724
+      "width": 640,
+      "height": 256
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -298,7 +298,7 @@
     "fileId": "661ucVTgNKUImvL6Kue5qg"
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "37c46kmMclGmqCMkEzYO4r5",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -320,12 +320,12 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "b9e35d92-c697-47e3-ba3f-6920bf9e0ab6@6fe4d",
+      "__uuid__": "2c6b7084-ee2c-462c-94f5-0ebe77c24aca@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 2,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -333,10 +333,14 @@
     },
     "_fillStart": 0,
     "_fillRange": 0,
-    "_isTrimmedMode": true,
+    "_isTrimmedMode": false,
     "_useGrayscale": false,
     "_atlas": null,
-    "_id": ""
+    "_id": "",
+    "geometry": {
+      "__uuid__": "9c4564b2-76fc-40fa-84fc-11396abb24c9",
+      "__expectedType__": "cc.JsonAsset"
+    }
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -477,27 +481,31 @@
     "__prefab": {
       "__id__": 23
     },
-    "playOnLoad": true,
+    "playOnLoad": false,
     "_clips": [
       {
-        "__uuid__": "d5a8a86d-be16-498d-9546-c98ef08bfbe5",
+        "__uuid__": "df3c15e4-5b65-4de8-9ccb-6b7730af9987",
         "__expectedType__": "cc.AnimationClip"
       },
       {
-        "__uuid__": "9bf367f6-dc19-43bf-8a34-ffa3dfd80fcd",
+        "__uuid__": "d443cdb3-8f3f-448b-aad8-6b9b2681646f",
         "__expectedType__": "cc.AnimationClip"
       },
       {
-        "__uuid__": "c9408a83-4caa-4e48-b60c-bb41867d76c5",
+        "__uuid__": "a6f841bc-3932-4f35-a4c8-26a0177ccb6f",
         "__expectedType__": "cc.AnimationClip"
       },
       {
-        "__uuid__": "c8a1e9f5-ada5-418b-a8fd-1871e7b5ac39",
+        "__uuid__": "2617c887-17c5-4a26-9ce3-cd1b567eb15a",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "61d5e7b0-065c-4072-8bb3-050a29cdfc58",
         "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {
-      "__uuid__": "d5a8a86d-be16-498d-9546-c98ef08bfbe5",
+      "__uuid__": "df3c15e4-5b65-4de8-9ccb-6b7730af9987",
       "__expectedType__": "cc.AnimationClip"
     },
     "_id": ""
@@ -522,26 +530,39 @@
       "__id__": 13
     },
     "idle": {
-      "__uuid__": "d5a8a86d-be16-498d-9546-c98ef08bfbe5",
+      "__uuid__": "df3c15e4-5b65-4de8-9ccb-6b7730af9987",
       "__expectedType__": "cc.AnimationClip"
     },
     "attack": {
-      "__uuid__": "9bf367f6-dc19-43bf-8a34-ffa3dfd80fcd",
+      "__uuid__": "d443cdb3-8f3f-448b-aad8-6b9b2681646f",
       "__expectedType__": "cc.AnimationClip"
     },
     "hurt": {
-      "__uuid__": "c9408a83-4caa-4e48-b60c-bb41867d76c5",
+      "__uuid__": "a6f841bc-3932-4f35-a4c8-26a0177ccb6f",
       "__expectedType__": "cc.AnimationClip"
     },
-    "armedIdle": null,
-    "armedAttack": null,
-    "armedHurt": null,
+    "armedIdle": {
+      "__uuid__": "df3c15e4-5b65-4de8-9ccb-6b7730af9987",
+      "__expectedType__": "cc.AnimationClip"
+    },
+    "armedAttack": {
+      "__uuid__": "d443cdb3-8f3f-448b-aad8-6b9b2681646f",
+      "__expectedType__": "cc.AnimationClip"
+    },
+    "armedHurt": {
+      "__uuid__": "a6f841bc-3932-4f35-a4c8-26a0177ccb6f",
+      "__expectedType__": "cc.AnimationClip"
+    },
     "_id": "",
     "impactAnchor": {
       "__id__": 16
     },
     "prepare": {
-      "__uuid__": "c8a1e9f5-ada5-418b-a8fd-1871e7b5ac39",
+      "__uuid__": "61d5e7b0-065c-4072-8bb3-050a29cdfc58",
+      "__expectedType__": "cc.AnimationClip"
+    },
+    "death": {
+      "__uuid__": "2617c887-17c5-4a26-9ce3-cd1b567eb15a",
       "__expectedType__": "cc.AnimationClip"
     }
   },

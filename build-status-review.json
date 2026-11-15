@@ -1,0 +1,29 @@
+{
+  "name": "the-end-status-bar-design",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "ui-status",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "1719aa92-2759-411a-97d7-1451c2b52f7e",
+  "scenes": [
+    {
+      "url": "db://assets/StatusBarDesignReview.scene",
+      "uuid": "1719aa92-2759-411a-97d7-1451c2b52f7e"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

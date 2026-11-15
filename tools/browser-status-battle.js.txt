@@ -1,0 +1,6 @@
+await idle();let s=await state();assert(s.phase==='battle','Battle status regression starts in first battle');
+const attack=s.hand.find(c=>c.kind==='attack'&&!c.blocked);assert(attack,'Free attack required');await click('card-'+attack.id);
+const enemy=await hitPoint('enemy-target');await page.mouse.click(enemy.x,enemy.y);await page.waitForTimeout(100);s=await state();assert(s.busy&&!s.statusBar.values.actionsEnabled,'Toolbar must lock while authored action is playing');
+await idle();s=await state();assert(s.statusBar.values.actionsEnabled,'Toolbar did not unlock after action');assert(s.statusBar.input.supplies===s.supplies&&s.statusBar.input.armor===s.armor,'HUD stale after action');
+await click('end-turn');s=await state();assert(s.statusBar.input.supplies===s.supplies&&s.statusBar.input.armor===s.armor,'HUD stale after enemy turn');await screenshot('status-in-battle');
+assert(runtimeErrors.length===0,'Battle HUD runtime error');return{passed:true,busyLock:true,unlockedAfterAction:true,postImpactValues:true,enemyTurnValues:true,runtimeErrors};

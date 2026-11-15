@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>brute-attack-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{309,35},{200,227}}</string>
+        <key>offset</key>
+        <string>{-78.0000,3.6250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{605,242}</string>
+      </dict>
+      <key>brute-attack-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1049,58},{218,203}}</string>
+        <key>offset</key>
+        <string>{-84.0000,-8.3750}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{605,242}</string>
+      </dict>
+      <key>brute-attack-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{266,293},{256,217}}</string>
+        <key>offset</key>
+        <string>{-118.0000,-1.3750}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{605,242}</string>
+      </dict>
+      <key>brute-attack-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1013,290},{265,220}}</string>
+        <key>offset</key>
+        <string>{-115.5000,0.1250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{605,242}</string>
+      </dict>
+      <key>brute-attack-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{214,543},{339,203}}</string>
+        <key>offset</key>
+        <string>{-164.5000,-8.3750}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{605,242}</string>
+      </dict>
+      <key>brute-attack-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{952,559},{329,187}}</string>
+        <key>offset</key>
+        <string>{-160.5000,-16.3750}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{605,242}</string>
+      </dict>
+      <key>brute-attack-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{257,787},{277,214}}</string>
+        <key>offset</key>
+        <string>{-134.5000,-2.8750}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{605,242}</string>
+      </dict>
+      <key>brute-attack-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1049,775},{197,226}}</string>
+        <key>offset</key>
+        <string>{-77.5000,3.1250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{605,242}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>brute-attack.png</string>
+      <key>realTextureFileName</key>
+      <string>brute-attack.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

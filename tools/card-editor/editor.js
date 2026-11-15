@@ -1,4 +1,6 @@
 import { validateCatalog, effectSummary, titleColor, cardReferences, SYSTEM_ROLES, EFFECT_NAMES, ART_IDS } from '/shared/catalog.js';
+import { cardViewModel } from '/shared/card-view.js';
+const [uiTheme, uiArt] = await Promise.all(['/shared/ui-theme.json', '/shared/ui-art.json'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error('卡牌界面资源读取失败'); return response.json(); }));
 
 const $ = selector => document.querySelector(selector);
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -7,13 +9,22 @@ const artNames = { attack: '基础攻击', dodge: '基础躲避', knife: '刀具
 const roleNames = { basic: '固有能力', normal: '普通牌', temporary: '战斗临时牌', cash: '遗物' };
 let draft, baseline, revision, selectedId, selectedIndex = 0, saving = false, lastSaved = '', noticeTimer;
 let newCards = new WeakSet();
+let previewedCard, previewExpanded = false;
 const current = () => draft?.cards[selectedIndex];
 const dirty = () => !!draft && JSON.stringify(draft) !== JSON.stringify(baseline);
 const definitions = () => Object.fromEntries(draft.cards.map(card => [card.id, card]));
 
 function artMarkup(art) {
-    const cell = { attack: [0, 0], dodge: [1, 0], knife: [2, 0], evade: [0, 1], repair: [1, 1], heavy: [2, 1], slash: [2, 0], cash: [2, 0] }[art] ?? [0, 0];
-    return `<img src="/art/card-art.png" alt="${escape(artNames[art] ?? '卡牌插画')}" style="left:-${cell[0] * 100}%;top:-${cell[1] * 100}%">`;
+    const frame = uiArt.frames[art] ?? uiArt.frames.knife;
+    const image = frame.image ?? 'items.png', size = uiArt.images?.[image] ?? uiArt;
+    return `<svg viewBox="${frame.viewBox.join(' ')}" role="img" aria-label="${escape(artNames[art] ?? '卡牌插画')}"><image href="${image === 'materials.png' ? '/art/ui-card-materials.png' : '/art/ui-card-items.png'}" width="${size.width}" height="${size.height}"/></svg>`;
+}
+function setPreviewExpanded(value) {
+    previewExpanded = value;
+    $('#preview-card').dataset.expanded = String(value);
+    $('#preview-details').hidden = !value;
+    $('#preview-detail-toggle').textContent = value ? '收起说明' : '查看说明';
+    $('#preview-detail-toggle').setAttribute('aria-expanded', String(value));
 }
 function notify(message, error = false) {
     clearTimeout(noticeTimer);
@@ -81,14 +92,24 @@ function renderInspector() {
 function renderVisual() {
     const card = current();
     if (!card) return;
-    $('#preview-name').textContent = card.name || '未命名卡牌';
-    $('#preview-name').style.color = titleColor(card.color);
-    $('#preview-cost').textContent = card.cost;
-    $('#preview-tag').textContent = card.tag;
-    $('#preview-effect').textContent = effectSummary(card, definitions());
-    $('#preview-description').textContent = card.text;
+    const model = cardViewModel(card, definitions());
+    if (previewedCard !== card) { previewedCard = card; previewExpanded = false; }
+    setPreviewExpanded(previewExpanded);
+    for (const [name, value] of Object.entries(uiTheme.colors)) $('#preview-card').style.setProperty('--card-' + name.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase()), value);
+    $('#preview-name').textContent = model.displayTitle || '未命名卡牌';
+    $('#preview-card').setAttribute('aria-label', model.title || '未命名卡牌');
+    $('#preview-name').style.color = uiTheme.colors.ink;
+    $('#preview-cost').textContent = model.cost;
+    $('#preview-unit').textContent = model.costUnit;
+    $('#preview-card').dataset.hasCost = String(model.showCost);
+    $('#preview-keywords').textContent = model.keywords.join(' · ');
+    $('#preview-tag').textContent = model.tag;
+    $('#preview-tag').style.color = titleColor(card.color);
+    $('#preview-effect').textContent = model.effect;
+    $('#preview-description').textContent = model.description;
+    $('#preview-full-description').textContent = model.fullDescription;
     $('#preview-type').textContent = EFFECT_NAMES[card.effect.type];
-    $('#preview-weight').textContent = `负重 ${card.weight}`;
+    $('#preview-weight').textContent = model.weight;
     $('#preview-role').textContent = roleNames[card.role];
     $('#preview-id').textContent = card.id;
     $('#preview-art').innerHTML = artMarkup(card.art);
@@ -228,6 +249,7 @@ $('#inspector-content').addEventListener('input', event => {
     if (field === 'effect.type' || field === 'role') renderInspector(); else renderVisual();
 });
 $('#search').addEventListener('input', renderList);
+$('#preview-detail-toggle').addEventListener('click', () => setPreviewExpanded(!previewExpanded));
 $('#filter').addEventListener('change', renderList);
 $('#add').addEventListener('click', () => add());
 $('#duplicate').addEventListener('click', () => add(true));

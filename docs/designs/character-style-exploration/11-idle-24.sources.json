@@ -1,0 +1,38 @@
+{
+  "project": "The end",
+  "date": "2026-11-14",
+  "status": "motion-review-revision",
+  "reference": "10-08-thin-outline.png",
+  "tool": "built-in image_gen",
+  "layout": {
+    "columns": 6,
+    "rows": 4,
+    "framesPerActor": 24
+  },
+  "seconds": 3,
+  "sourcePixelsProgrammaticallyModified": false,
+  "sheets": [
+    {
+      "actor": "survivor",
+      "generated": "exec-5f833a2d-b731-46b4-8326-033bcd37c0ba.png",
+      "alphaExtracted": "exec-c4383296-dda0-4855-ae0a-220c98556f58.png",
+      "sourceDirectory": "C:/Users/Knock/.codex/generated_images/01a1c962-1a97-7773-bdc4-99108dda99ec",
+      "installed": "assets/resources/actors/sketch08/survivor-idle.png"
+    },
+    {
+      "actor": "wanderer",
+      "generated": "exec-096be9f1-6489-4cf0-9f03-ef28fb537a57.png",
+      "alphaExtracted": "exec-fc68215a-07ba-48f9-bf22-887b66c93edc.png",
+      "sourceDirectory": "C:/Users/Knock/.codex/generated_images/01a1c962-1a97-7773-bdc4-99108dda99ec",
+      "installed": "assets/resources/actors/sketch08/wanderer-idle.png"
+    },
+    {
+      "actor": "brute",
+      "generated": "exec-eb435222-33ab-4267-97c5-cf14090e1ec9.png",
+      "alphaExtracted": "exec-fed40667-4d81-45b2-a1c2-249ab39c4c51.png",
+      "sourceDirectory": "C:/Users/Knock/.codex/generated_images/01a1c962-1a97-7773-bdc4-99108dda99ec",
+      "installed": "assets/resources/actors/sketch08/brute-idle.png"
+    }
+  ],
+  "alphaExtractionPrompt": "Use case: background-extraction. EDIT TARGET is this exact 24-frame SIX COLUMN FOUR ROW sprite sheet. Do exactly ONE operation: remove all white or brown/gray/black background and background gradients between and around the sprites, replacing that background with actual alpha=0 transparency. Preserve the 1536x1024 size, exact grid arrangement, number of sprites, exact original coordinates, scale, every drawn line and every opaque interior color and texture. The pale skin and tan/gray/brown clothing INSIDE each character must stay completely opaque and unchanged. Do NOT redraw, redesign, move, enlarge, rotate or animate the characters. Do NOT add paper, glow, fog, shadows or a checkerboard. No change to character silhouette or pixels. Keep all24 full figures with at least3px clear empty gutter around them; do not crop the edge sprites. Output a true transparent PNG cutout sheet."
+}

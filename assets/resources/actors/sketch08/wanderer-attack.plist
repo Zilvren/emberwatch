@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>wanderer-attack-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{322,17},{125,235}}</string>
+        <key>offset</key>
+        <string>{-54.5000,3.6875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{627,251}</string>
+      </dict>
+      <key>wanderer-attack-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1078,33},{148,219}}</string>
+        <key>offset</key>
+        <string>{-55.0000,-4.3125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{627,251}</string>
+      </dict>
+      <key>wanderer-attack-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{277,284},{192,224}}</string>
+        <key>offset</key>
+        <string>{-77.0000,-1.8125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{627,251}</string>
+      </dict>
+      <key>wanderer-attack-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{964,293},{276,215}}</string>
+        <key>offset</key>
+        <string>{-134.0000,-6.3125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{627,251}</string>
+      </dict>
+      <key>wanderer-attack-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{160,546},{341,218}}</string>
+        <key>offset</key>
+        <string>{-166.5000,-4.8125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{627,251}</string>
+      </dict>
+      <key>wanderer-attack-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{919,557},{350,207}}</string>
+        <key>offset</key>
+        <string>{-171.0000,-10.3125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{627,251}</string>
+      </dict>
+      <key>wanderer-attack-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{278,799},{196,221}}</string>
+        <key>offset</key>
+        <string>{-87.0000,-3.3125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{627,251}</string>
+      </dict>
+      <key>wanderer-attack-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1091,785},{125,235}}</string>
+        <key>offset</key>
+        <string>{-53.5000,3.6875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{627,251}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>wanderer-attack.png</string>
+      <key>realTextureFileName</key>
+      <string>wanderer-attack.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

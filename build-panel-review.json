@@ -1,0 +1,29 @@
+{
+  "name": "the-end-panel-design",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "ui-panels",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "ffbb7451-61a3-47fd-86af-3a5367b69cf3",
+  "scenes": [
+    {
+      "url": "db://assets/PanelDesignReview.scene",
+      "uuid": "ffbb7451-61a3-47fd-86af-3a5367b69cf3"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

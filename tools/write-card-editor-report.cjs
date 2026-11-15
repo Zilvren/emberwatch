@@ -14,7 +14,7 @@ const tests = read('temp/card-editor-tests.log');
 if (!/# pass 40\b/.test(tests) || !/# fail 0\b/.test(tests)) throw new Error('Rules/API tests did not pass');
 if (!read('temp/card-editor-build.log').includes('Build completed successfully!')) throw new Error('Build did not pass');
 const { createLoader } = require('./load-ts.cjs');
-const { validateCatalog } = createLoader()(path.join(root, 'assets/CardCatalog.ts'));
+const { validateCatalog } = createLoader()(path.join(root, 'assets/game/core/content/CardCatalog.ts'));
 const current = validateCatalog(JSON.parse(read('assets/resources/data/cards.json')));
 const original = validateCatalog(JSON.parse(read('temp/card-editor-original-catalog.json')));
 if (JSON.stringify(current) !== JSON.stringify(original)) throw new Error('The original catalog was not restored');
@@ -25,7 +25,7 @@ const verification = `# 本地卡牌编辑器验证记录
 - 项目：The end，C:/Users/Knock/Desktop/The end
 - 日期：2026-11-14（Asia/Shanghai）
 - 状态：已实现并验证
-- 代码：assets/CardCatalog.ts、assets/SurvivalRules.ts、assets/SurvivalView.ts、tools/card-editor-server.cjs、tools/card-editor/
+- 代码：assets/game/core/content/CardCatalog.ts、assets/game/core/SurvivalGame.ts、assets/game/presentation/GameDirector.ts、tools/card-editor-server.cjs、tools/card-editor/
 - OpenViking：viking://~/resources/projects/the-end/docs/card-editor-verification.md
 
 ## 结果
@@ -54,7 +54,7 @@ const design = `# 卡牌 Web 编辑器设计与接入
 - 项目：The end，C:/Users/Knock/Desktop/The end
 - 日期：2026-11-14（Asia/Shanghai）；初稿日期：2026-11-13
 - 状态：已实现并验证。用户明确要求本地网页增删改，并在游戏中生效。
-- 代码：assets/CardCatalog.ts、assets/resources/data/cards.json、assets/SurvivalRules.ts、assets/SurvivalView.ts、assets/CardPresentation.ts、assets/InventoryRowPresentation.ts、tools/card-editor-server.cjs、tools/card-editor/
+- 代码：assets/game/core/content/CardCatalog.ts、assets/resources/data/cards.json、assets/game/core/SurvivalGame.ts、assets/game/presentation/GameDirector.ts、assets/game/presentation/cards/CardPresentation.ts、assets/game/presentation/cards/InventoryRowPresentation.ts、tools/card-editor-server.cjs、tools/card-editor/
 - OpenViking：viking://~/resources/projects/the-end/designs/card-editor.md
 
 ## 已实现的界面

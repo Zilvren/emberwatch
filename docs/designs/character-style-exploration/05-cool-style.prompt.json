@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-14",
+  "status": "earlier-cool-gray-study",
+  "generator": "built-in image_gen",
+  "references": [
+    "04-bold-shapes-sketch-lines.png",
+    "02-field-sketch.png"
+  ],
+  "output": "05-cool-field-sketch.png",
+  "prompt": "Use case: precise style and color edit of a wasteland character concept board. IMAGE 1 is the edit target: preserve its exact three characters, their compact sturdy proportions from option 1, head/body ratios, silhouettes, body sizes, poses, costume construction, backpacks, equipment, facial designs, relative scales, lineup and the four small action poses along the bottom. IMAGE 2 supplies the sparse irregular hand-sketch line language ONLY. The user's newest direction is a COOL COLOR PALETTE, overriding the warm colors of both references. Recolor the ENTIRE board into restrained, desaturated cool hues: slate blue and faded blue-gray for the survivor hood and poncho, cold gray-green for infected clothing, steel gray for the welding mask and armor, cool smoky gray for boots and straps, pale ashen skin, charcoal-blue hand-drawn outlines. Use a very light cool gray-blue paper background, faint sparse cold graphite marks and lightly uneven pale watercolor fills. Keep the sketch lines thin and imperfect, the color washes light and economical, large paper-colored negative spaces, simple minimal wasteland art that reads at small size. Preserve the large heavy monster as broad and massive, not slender; keep survivor as sturdy adult cartoon proportions, not elongated. Avoid orange, ochre, golden-brown, sepia, yellow paper, warm color casts, warm shadows, strongly saturated colors, thick uniform vector outlines, heavy painterly shading, photorealism, 3D or pixel art. Small wear marks can be dark neutral gray, not rusty orange. Keep all three full bodies uncropped on the same baseline and all four consistent survivor action poses at the bottom. Change only the color treatment, refine the sparse sketch linework, and replace the title with '05 / COOL FIELD SKETCH'. Keep labels SURVIVOR, WANDERER, BRUTE. Same clean landscape sample-board composition. This is a preview character art direction, not a finished sprite sheet."
+}

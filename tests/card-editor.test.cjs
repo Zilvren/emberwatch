@@ -8,11 +8,11 @@ const { createLoader } = require('../tools/load-ts.cjs');
 const { createEditorServer } = require('../tools/card-editor-server.cjs');
 const root = path.resolve(__dirname, '..');
 const base = () => JSON.parse(fs.readFileSync(path.join(root, 'assets/resources/data/cards.json'), 'utf8'));
-const schema = createLoader()(path.join(root, 'assets/CardCatalog.ts'));
+const schema = createLoader()(path.join(root, 'assets/game/core/content/CardCatalog.ts'));
 function gameWith(catalog) {
     const load = createLoader();
-    load(path.join(root, 'assets/CardCatalog.ts')).installCatalog(catalog);
-    return load(path.join(root, 'assets/SurvivalRules.ts'));
+    load(path.join(root, 'assets/game/core/content/CardCatalog.ts')).installCatalog(catalog);
+    return load(path.join(root, 'assets/game/core/SurvivalGame.ts'));
 }
 const newCard = (id = 'editor_test') => ({ id, name: '编辑器测试卡', tag: '技能 · 攻击', cost: 2, weight: 1, text: '配置驱动', color: '#c29060', art: 'heavy', role: 'normal', initialCount: 1, reward: true, effect: { type: 'damage', amount: 8 } });
 function battle(Game) { const game = new Game(17); game.start(); game.fixedDone = true; game.route = 'A'; game.enterNode(); return game; }
@@ -75,7 +75,7 @@ test('invalid definitions, dangling references and deleting system cards are rej
     for (const change of changes) { const catalog = base(); change(catalog); assert.throws(() => schema.validateCatalog(catalog), schema.CatalogError); }
 });
 test('invalid install does not replace the last valid catalog', () => {
-    const load = createLoader(), catalog = load(path.join(root, 'assets/CardCatalog.ts'));
+    const load = createLoader(), catalog = load(path.join(root, 'assets/game/core/content/CardCatalog.ts'));
     catalog.installCatalog(base()); const invalid = base(); invalid.cards[0].cost = -1;
     assert.throws(() => catalog.installCatalog(invalid)); assert.equal(catalog.CARD.attack.cost, 0); assert.equal(catalog.REWARD_POOL.length, 4);
 });

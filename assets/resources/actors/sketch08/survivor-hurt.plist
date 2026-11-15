@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>survivor-hurt-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{310,10},{174,242}}</string>
+        <key>offset</key>
+        <string>{2.4239,2.8125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{652,261}</string>
+      </dict>
+      <key>survivor-hurt-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1048,13},{182,239}}</string>
+        <key>offset</key>
+        <string>{4.3846,1.3125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{652,261}</string>
+      </dict>
+      <key>survivor-hurt-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{294,271},{208,234}}</string>
+        <key>offset</key>
+        <string>{5.4787,-1.1875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{652,261}</string>
+      </dict>
+      <key>survivor-hurt-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1006,275},{255,230}}</string>
+        <key>offset</key>
+        <string>{-13.7475,-3.1875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{652,261}</string>
+      </dict>
+      <key>survivor-hurt-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{301,523},{199,235}}</string>
+        <key>offset</key>
+        <string>{6.8333,-0.6875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{652,261}</string>
+      </dict>
+      <key>survivor-hurt-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1046,522},{187,236}}</string>
+        <key>offset</key>
+        <string>{2.3211,-0.1875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{652,261}</string>
+      </dict>
+      <key>survivor-hurt-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{302,776},{176,238}}</string>
+        <key>offset</key>
+        <string>{3.3077,0.8125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{652,261}</string>
+      </dict>
+      <key>survivor-hurt-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1054,776},{173,238}}</string>
+        <key>offset</key>
+        <string>{1.8889,0.8125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{652,261}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>survivor-hurt.png</string>
+      <key>realTextureFileName</key>
+      <string>survivor-hurt.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

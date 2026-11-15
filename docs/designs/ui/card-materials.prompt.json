@@ -1,0 +1,10 @@
+{
+  "project": "The end",
+  "date": "2026-11-14",
+  "status": "component-design-candidate",
+  "tool": "built-in image_gen",
+  "reference": "assets/resources/ui/cards/items.png",
+  "generatedSource": "C:/Users/Knock/.codex/generated_images/01a1c962-1a97-7773-bdc4-99108dda99ec/exec-564bca14-2e6b-42e6-87eb-19b6c5d5fb67.png",
+  "installed": "assets/resources/ui/cards/materials.png",
+  "prompt": "Use case: stylized-concept. Draw TWO additional wasteland item icons to belong to the exact same collection as reference image1: the existing muted field-sketch icon atlas. Match its thin gray-brown hand-drawn outlines, restrained tan, gray-olive and taupe palette, simple silhouettes, broad flat pigments and light worn texture. TWO COLUMNS x ONE ROW on a1536x1024 transparent canvas. Left cell768x1024 center384,512: one tidy coil of rough salvaged rope with one loose end, pale brown and muted ochre, clearly a craft material. Right cell center1152,512: one worn compact rectangular battery with two short terminal posts, desaturated gray-olive case and pale brown worn label area, no lettering or symbols. Each icon max400x400px, whole icon in the middle of its cell, generous empty surrounding space. Opaque interiors, true alpha-zero transparent background; no paper rectangles, fog, gradient, glow, checkerboard, floor or cast shadows. No words, numbers, labels, characters, people, borders or dividing lines. Keep thin crisp outlines and consistent visual scale with the existing icon collection. Do not modify or include any of the original eight icons; only the two new objects."
+}

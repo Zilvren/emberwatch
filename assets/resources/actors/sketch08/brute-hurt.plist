@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>brute-hurt-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{296,8},{200,239}}</string>
+        <key>offset</key>
+        <string>{7.4500,3.9375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{638,255}</string>
+      </dict>
+      <key>brute-hurt-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1048,16},{210,231}}</string>
+        <key>offset</key>
+        <string>{1.7851,-0.0625}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{638,255}</string>
+      </dict>
+      <key>brute-hurt-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{277,257},{230,247}}</string>
+        <key>offset</key>
+        <string>{4.2645,7.9375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{638,255}</string>
+      </dict>
+      <key>brute-hurt-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1037,259},{245,245}}</string>
+        <key>offset</key>
+        <string>{10.5323,6.9375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{638,255}</string>
+      </dict>
+      <key>brute-hurt-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{283,514},{223,246}}</string>
+        <key>offset</key>
+        <string>{9.9453,7.4375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{638,255}</string>
+      </dict>
+      <key>brute-hurt-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1041,523},{220,237}}</string>
+        <key>offset</key>
+        <string>{-0.6484,2.9375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{638,255}</string>
+      </dict>
+      <key>brute-hurt-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{286,777},{210,239}}</string>
+        <key>offset</key>
+        <string>{2.5366,3.9375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{638,255}</string>
+      </dict>
+      <key>brute-hurt-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1058,774},{200,242}}</string>
+        <key>offset</key>
+        <string>{6.9000,5.4375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{638,255}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>brute-hurt.png</string>
+      <key>realTextureFileName</key>
+      <string>brute-hurt.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

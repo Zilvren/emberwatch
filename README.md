@@ -21,7 +21,7 @@ npm run cards
 用 Pink 打开此项目，打开 `assets/TheEnd.scene`。展开 `Canvas/GameRoot`，可以看到已经保存的界面节点：
 
 ```text
-GameRoot (SurvivalView)
+GameRoot (GameDirector)
 ├─ Screens
 │  ├─ JournalScreen
 │  ├─ MapScreen
@@ -38,7 +38,7 @@ GameRoot (SurvivalView)
 └─ Toast
 ```
 
-页面与 HUD 都是真实的 Prefab 实例。双击 `assets/prefabs/screens/` 中的对应 Prefab，修改标题位置、Label 字号、面板颜色、Sprite 图片或按钮尺寸后保存即可。运行时会保留这些布局设置。数值标签由 `UIValue.key` 绑定游戏数据，按钮通过 `UIAction.actionId` 绑定操作；改布局时保留这两个标识。
+页面与 HUD 都是真实的 Prefab 实例。双击 `assets/prefabs/screens/` 中的对应 Prefab，修改标题位置、Label 字号、面板颜色、Sprite 图片或按钮尺寸后保存即可。运行时会保留这些布局设置。数值标签由 `UIValue.key` 绑定游戏数据，按钮通过 `ButtonAction.actionId` 绑定操作；改布局时保留这两个标识。
 
 | 编辑内容 | 原生资源 |
 | --- | --- |
@@ -52,7 +52,7 @@ GameRoot (SurvivalView)
 
 角色动画只修改 `Visual` 子节点，页面中角色实例的位置和缩放由编辑器保存。攻击动画里的 `notifyImpact` 事件负责结算命中，完成事件解除操作锁。编辑动作时保留事件。`HandPresentation` 负责按实际手牌数量摆放卡牌，间距、扇形角度、悬停高度与缩放可以在 Inspector 调整。
 
-`PixelGraphic` 是保存到 Prefab 的绘图组件，形状、颜色、边框和像素块均可在 Inspector 调整；它重画自己的 Graphics，不生成页面节点。固定界面不再由脚本整页重建。
+`ShapeGraphic` 是保存到 Prefab 的绘图组件，形状、颜色、边框和像素块均可在 Inspector 调整；它重画自己的 Graphics，不生成页面节点。固定界面不再由脚本整页重建。
 
 ## 运行
 
@@ -67,8 +67,10 @@ npm run preview
 - 防御、修复和武器牌：点击使用，或拖入战斗场地。
 - 拖出有效区域可以取消。动画结算期间锁定重复操作。
 - 奖励卡与物资分别领取；可以先打开背包整理空间。
+- 装不下的物资会先显示实际可领取量和损失确认；满背包时保留奖励供整理后领取。离开未领完的奖励需要确认。
 - 现金只在休整时丢弃；休整时也能调整出战卡组。
 - 顶部可打开背包、手册和记录，或关闭音效。
+- 长按手牌查看完整说明；第 2 天明确是当前教学终点，重玩第 1 天需要确认。
 
 ## 规则与实现
 
@@ -76,7 +78,7 @@ npm run preview
 
 修复后无法支付每日消耗时，先提示风险。玩家仍然可以确认修复。每日消耗在结算最后执行，不足部分记录为缺口，物资最低为 0。
 
-`SurvivalRules.ts` 保存独立的游戏规则，`SurvivalView.ts` 处理界面数据绑定与流程，`HandPresentation.ts` 处理卡牌实例和手势，`ActorPresentation.ts`、`CardPresentation.ts` 播放原生 AnimationClip，`GameAudio.ts` 提供合成音效。旧版绘制页面的代码已移至 `tools/editor-authoring/` 留档，不参与运行。
+当前实现位于 `assets/game/`：`core/SurvivalGame.ts` 委派各规则模块，`application/GameSession.ts` 执行命令与保存，`infrastructure/SaveRepository.ts` 管理进度存储。`presentation/GameDirector.ts` 协调场景和命中回调，`GameRenderer.ts` 绑定界面，`ui/UiActionRouter.ts` 转换输入意图；卡牌、角色和音效各在对应表现目录。根目录 `assets/SurvivalRules.ts` 是兼容导入入口，旧版页面绘制代码在 `tools/editor-authoring/` 留档。
 
 ## CLI 与 MCP
 
@@ -96,7 +98,9 @@ node tools/mcp-check.cjs
 npm test
 ```
 
-40 条测试包含原有 32 条游戏规则测试和新增的配置、效果执行、保存服务测试。浏览器驱动位于 `tools/browser-*.js.txt`，通过实际点击、拖动验证卡牌编辑器和完整路线。`?seed=17` 可固定随机种子，不带参数时正常随机。
+当前 86 条测试覆盖规则、配置、卡牌保存服务、玩家存档、展示模型及误操作保护。浏览器驱动位于 `tools/browser-*.js.txt`，通过实际点击、拖动验证卡牌编辑器和完整路线。`?seed=17` 可固定随机种子，不带参数时正常随机。
+
+完整作品的玩法与美术复审见 `docs/full-game-review.md`，机器可读验证见 `docs/full-game-review-verification.json`。本轮实机截图使用 `output/playwright/review-01-*`（改前）、`review-02-*` 和 `review-03-*`（改后）；`tools/run-full-review-suite.cjs` 复用独立的 `fullreview` Playwright 会话。普通构建不运行资源编写工具。
 
 本次原生场景迁移的验证记录见 `docs/native-ui-migration.md`；本地运行报告和截图位于 `output/`，构建日志位于 `temp/prefab-build.log`。
 

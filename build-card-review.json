@@ -1,0 +1,29 @@
+{
+  "name": "the-end-card-design",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "ui-cards",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "32eb1fd3-ec2f-46c2-8465-1801c2bcfecb",
+  "scenes": [
+    {
+      "url": "db://assets/CardDesignReview.scene",
+      "uuid": "32eb1fd3-ec2f-46c2-8465-1801c2bcfecb"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

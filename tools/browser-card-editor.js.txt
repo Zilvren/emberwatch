@@ -2,7 +2,7 @@ const errors=[];page.on('pageerror',e=>errors.push(String(e)));
 const assert=(condition,message)=>{if(!condition)throw Error(message);};
 const id='qa_workshop_strike';
 const save=async()=>{await page.getByRole('button',{name:/保存到项目/}).click();await page.waitForFunction(()=>document.querySelector('#save-state').textContent.startsWith('已保存'));};
-await page.goto('http://127.0.0.1:7460/');
+await page.goto(editorBase);
 await page.getByRole('button',{name:'新增卡牌',exact:true}).waitFor();
 await page.getByRole('button',{name:'新增卡牌',exact:true}).click();
 await page.getByLabel('卡牌名称',{exact:true}).fill('工坊试验重击');
@@ -40,18 +40,18 @@ async function testPlay(expectedCost,expectedDamage,expectedName){
   await page.waitForTimeout(100);await idle();
  };
  await click('journal-start');
- assert(await frame.evaluate(name=>{const controller=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('SurvivalView');return controller.screens[1].getComponentsInChildren('UIValue').find(v=>v.key==='map/fixedReward').getComponent(cc.Label).string.includes(name);},expectedName),'Fixed reward map hint was not updated');
+ assert(await frame.evaluate(name=>{const controller=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return controller.screens[1].getComponentsInChildren('UIValue').find(v=>v.key==='map/fixedReward').getComponent(cc.Label).string.includes(name);},expectedName),'Fixed reward map hint was not updated');
  await click('enter-fixed');assert((await state()).ui.phase==='rewards','Configured fixed reward did not open');
  assert(await frame.evaluate(id=>globalThis.__survivalGame.rewards.cards[0]===id,id),'Fixed reward did not use the custom ID');
- await click('claim-supplies');await click('rewards-done');await click('route-A');await click('enter-enemy1');
+ await claimSupplies();await leaveRewards();await click('route-A');await click('enter-enemy1');
  let s=await state(),custom=s.battle.hand.find(c=>c.kind===id);
  for(let turn=0;!custom&&turn<4;turn++){await click('end-turn');s=await state();custom=s.battle.hand.find(c=>c.kind===id);}
  assert(custom,'Configured card was not drawable');
  const display=await frame.evaluate(cardId=>{
-  const controller=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('SurvivalView');
-  const card=controller.hand.getCard(cardId);return {name:card.titleLabel.string,cost:card.costLabel.string,description:card.descriptionLabel.string,art:card.artwork.spriteFrame.name};
+  const controller=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');
+  const card=controller.hand.getCard(cardId);return {name:card.titleLabel.string,cost:card.costLabel.string,description:card.effectLabel.string+'\n'+card.descriptionLabel.string,fullDescription:card.detailsLabel.string,art:card.artwork.spriteFrame.name};
  },custom.id);
- assert(display.name===expectedName&&display.cost===String(expectedCost)&&display.description.includes(`造成 ${expectedDamage} 点伤害`),'Game card presentation differs from saved config: '+JSON.stringify(display));
+ assert(display.name===(expectedName.length>7?expectedName.slice(0,6)+'…':expectedName)&&display.cost===String(expectedCost)&&display.description.includes(`造成 ${expectedDamage} 点伤害`)&&(expectedName.length<=7||display.fullDescription.includes(expectedName)),'Game card presentation differs from saved config: '+JSON.stringify(display));
  const before={hp:s.battle.hp,supplies:s.ui.supplies};await click('card-'+custom.id);await click('enemy-target');s=await state();
  assert(s.battle.hp===before.hp-expectedDamage,'Configured damage was not applied');
  assert(s.ui.supplies===before.supplies-expectedCost,'Configured card cost was not charged');

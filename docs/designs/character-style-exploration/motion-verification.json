@@ -1,0 +1,156 @@
+{
+  "project": "The end",
+  "date": "2026-11-14",
+  "status": "fixed-original-idle-validated",
+  "runtime": {
+    "passed": true,
+    "renderer": "native COCOS cc.Animation with fixed-source local mesh",
+    "actors": 3,
+    "clips": 12,
+    "idleKeyframes": 24,
+    "idleSeconds": 3,
+    "idle": [
+      [
+        "master08-thin"
+      ],
+      [
+        "master08-thin"
+      ],
+      [
+        "master08-thin"
+      ]
+    ],
+    "breathing": [
+      {
+        "min": 0.00009950530640895003,
+        "max": 0.9953429698944092,
+        "maxStep": 0.031661929548891854
+      },
+      {
+        "min": 0.00009950530640895003,
+        "max": 0.9953429698944092,
+        "maxStep": 0.031661929548891854
+      },
+      {
+        "min": 0.00009950530640895003,
+        "max": 0.9953429698944092,
+        "maxStep": 0.031661929548891854
+      }
+    ],
+    "attack": [
+      [
+        "survivor-attack-00",
+        "survivor-attack-01",
+        "survivor-attack-02",
+        "survivor-attack-03",
+        "survivor-attack-04",
+        "survivor-attack-05",
+        "survivor-attack-06",
+        "survivor-attack-07"
+      ],
+      [
+        "wanderer-attack-00",
+        "wanderer-attack-01",
+        "wanderer-attack-02",
+        "wanderer-attack-03",
+        "wanderer-attack-04",
+        "wanderer-attack-05",
+        "wanderer-attack-06",
+        "wanderer-attack-07"
+      ],
+      [
+        "brute-attack-00",
+        "brute-attack-01",
+        "brute-attack-02",
+        "brute-attack-03",
+        "brute-attack-04",
+        "brute-attack-05",
+        "brute-attack-06",
+        "brute-attack-07"
+      ]
+    ],
+    "hurt": [
+      [
+        "survivor-hurt-00",
+        "survivor-hurt-01",
+        "survivor-hurt-02",
+        "survivor-hurt-03",
+        "survivor-hurt-04",
+        "survivor-hurt-05",
+        "survivor-hurt-06",
+        "survivor-hurt-07"
+      ],
+      [
+        "wanderer-hurt-00",
+        "wanderer-hurt-01",
+        "wanderer-hurt-02",
+        "wanderer-hurt-03",
+        "wanderer-hurt-04",
+        "wanderer-hurt-05",
+        "wanderer-hurt-06",
+        "wanderer-hurt-07"
+      ],
+      [
+        "brute-hurt-00",
+        "brute-hurt-01",
+        "brute-hurt-02",
+        "brute-hurt-03",
+        "brute-hurt-04",
+        "brute-hurt-05",
+        "brute-hurt-06",
+        "brute-hurt-07"
+      ]
+    ],
+    "death": [
+      [
+        "survivor-death-00",
+        "survivor-death-01",
+        "survivor-death-02",
+        "survivor-death-03",
+        "survivor-death-04",
+        "survivor-death-05",
+        "survivor-death-06",
+        "survivor-death-07"
+      ],
+      [
+        "wanderer-death-00",
+        "wanderer-death-01",
+        "wanderer-death-02",
+        "wanderer-death-03",
+        "wanderer-death-04",
+        "wanderer-death-05",
+        "wanderer-death-06",
+        "wanderer-death-07"
+      ],
+      [
+        "brute-death-00",
+        "brute-death-01",
+        "brute-death-02",
+        "brute-death-03",
+        "brute-death-04",
+        "brute-death-05",
+        "brute-death-06",
+        "brute-death-07"
+      ]
+    ],
+    "impactOncePerActor": true,
+    "deathHolds": true,
+    "pauseResume": true,
+    "sequence": true,
+    "runtimeErrors": []
+  },
+  "mainIntegration": true,
+  "originalSizes": [
+    430,
+    465,
+    500
+  ],
+  "source": "docs/designs/character-style-exploration/10-08-thin-outline.png",
+  "idle": "Fixed source texture, local mesh deformation, 24 native float keys, three seconds",
+  "otherActions": "Existing eight-frame sequences retained for subsequent review",
+  "openViking": {
+    "status": "pending-offline",
+    "reason": "No registered OpenViking tools; localhost:1933 refuses the connection.",
+    "intendedRoot": "viking://~/resources/projects/the-end/"
+  }
+}

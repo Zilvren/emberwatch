@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>ui-card-rope</key>
+      <dict>
+        <key>frame</key>
+        <string>{{183,349},{456,410}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{512,512}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+      <key>ui-card-battery</key>
+      <dict>
+        <key>frame</key>
+        <string>{{894,323},{451,396}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{512,512}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>materials.png</string>
+      <key>realTextureFileName</key>
+      <string>materials.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

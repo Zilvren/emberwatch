@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>wanderer-hurt-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{325,18},{124,231}}</string>
+        <key>offset</key>
+        <string>{-4.8421,3.4375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{616,247}</string>
+      </dict>
+      <key>wanderer-hurt-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1082,12},{139,237}}</string>
+        <key>offset</key>
+        <string>{-7.1753,6.4375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{616,247}</string>
+      </dict>
+      <key>wanderer-hurt-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{310,259},{158,247}}</string>
+        <key>offset</key>
+        <string>{-2.1688,11.4375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{616,247}</string>
+      </dict>
+      <key>wanderer-hurt-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1062,257},{199,249}}</string>
+        <key>offset</key>
+        <string>{10.6818,12.4375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{616,247}</string>
+      </dict>
+      <key>wanderer-hurt-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{303,525},{156,236}}</string>
+        <key>offset</key>
+        <string>{-9.5000,5.9375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{616,247}</string>
+      </dict>
+      <key>wanderer-hurt-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1084,525},{132,236}}</string>
+        <key>offset</key>
+        <string>{-9.8250,5.9375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{616,247}</string>
+      </dict>
+      <key>wanderer-hurt-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{322,782},{124,235}}</string>
+        <key>offset</key>
+        <string>{-8.8514,5.4375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{616,247}</string>
+      </dict>
+      <key>wanderer-hurt-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1092,785},{123,232}}</string>
+        <key>offset</key>
+        <string>{-7.0200,3.9375}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{616,247}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>wanderer-hurt.png</string>
+      <key>realTextureFileName</key>
+      <string>wanderer-hurt.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

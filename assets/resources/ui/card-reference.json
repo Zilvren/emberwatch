@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "usage": "component-design-reference",
+  "source": {
+    "file": "docs/sources/formal-system-overview.xlsx",
+    "sha256": "02d963c7b0593c5e280fb9f427d2d66446727ee31cc17ce5c1169cf5657ded69",
+    "sheet": "战斗与卡牌",
+    "range": "A5:I14"
+  },
+  "cards": [
+    {
+      "id": "basic_attack",
+      "name": "基础攻击",
+      "type": "基础牌",
+      "combatEligibility": "yes",
+      "staminaCost": 0,
+      "weight": 0,
+      "afterUse": "弃牌堆",
+      "combatText": "造成2点伤害",
+      "utilityText": "固有能力",
+      "keywords": [
+        "basic"
+      ],
+      "art": "attack",
+      "sourceRow": 5
+    },
+    {
+      "id": "basic_dodge",
+      "name": "基础躲避",
+      "type": "基础牌",
+      "combatEligibility": "yes",
+      "staminaCost": 0,
+      "weight": 0,
+      "afterUse": "弃牌堆",
+      "combatText": "获得2点格挡",
+      "utilityText": "固有能力",
+      "keywords": [
+        "basic"
+      ],
+      "art": "dodge",
+      "sourceRow": 6
+    },
+    {
+      "id": "heavy_hit",
+      "name": "重击",
+      "type": "攻击牌",
+      "combatEligibility": "yes",
+      "staminaCost": 1,
+      "weight": 4,
+      "afterUse": "弃牌堆",
+      "combatText": "造成5点伤害",
+      "utilityText": "无",
+      "keywords": [],
+      "art": "heavy",
+      "sourceRow": 7
+    },
+    {
+      "id": "cleaver",
+      "name": "菜刀",
+      "type": "武器牌",
+      "combatEligibility": "yes",
+      "staminaCost": 2,
+      "weight": 3,
+      "afterUse": "装备区",
+      "combatText": "装备后从下一回合生成挥砍",
+      "utilityText": "可作为合成材料",
+      "keywords": [
+        "weapon"
+      ],
+      "art": "knife",
+      "sourceRow": 8
+    },
+    {
+      "id": "slash",
+      "name": "挥砍",
+      "type": "战斗临时牌",
+      "combatEligibility": "yes",
+      "staminaCost": 1,
+      "weight": 0,
+      "afterUse": "战斗结束消失",
+      "combatText": "造成4点伤害",
+      "utilityText": "由菜刀生成",
+      "keywords": [],
+      "art": "slash",
+      "sourceRow": 9
+    },
+    {
+      "id": "enhanced_dodge",
+      "name": "强化躲避",
+      "type": "功能牌",
+      "combatEligibility": "yes",
+      "staminaCost": 1,
+      "weight": 2,
+      "afterUse": "弃牌堆",
+      "combatText": "获得5点格挡",
+      "utilityText": "无",
+      "keywords": [],
+      "art": "evade",
+      "sourceRow": 10
+    },
+    {
+      "id": "repair",
+      "name": "修复",
+      "type": "功能牌",
+      "combatEligibility": "yes",
+      "staminaCost": 2,
+      "weight": 2,
+      "afterUse": "弃牌堆",
+      "combatText": "恢复3点护甲，护甲为0时不能使用",
+      "utilityText": "无",
+      "keywords": [],
+      "art": "repair",
+      "sourceRow": 11
+    },
+    {
+      "id": "rope",
+      "name": "绳子",
+      "type": "材料卡",
+      "combatEligibility": "no",
+      "staminaCost": null,
+      "weight": 2,
+      "afterUse": "保留",
+      "combatText": "不进入战斗抽牌",
+      "utilityText": "合成材料或兑换物资点",
+      "keywords": [],
+      "art": "rope",
+      "sourceRow": 12
+    },
+    {
+      "id": "battery",
+      "name": "电池",
+      "type": "材料卡",
+      "combatEligibility": "configurable",
+      "staminaCost": null,
+      "weight": 1,
+      "afterUse": "使用后消失",
+      "combatText": "可给电力武器充能",
+      "utilityText": "武器升级或兑换物资点",
+      "keywords": [
+        "consumable"
+      ],
+      "art": "battery",
+      "sourceRow": 13
+    },
+    {
+      "id": "cash",
+      "name": "现金",
+      "type": "特殊背包卡",
+      "combatEligibility": "no",
+      "staminaCost": null,
+      "weight": 10,
+      "afterUse": "休整时删除",
+      "combatText": "不进入战斗抽牌",
+      "utilityText": "教学图负重教学",
+      "keywords": [],
+      "art": "cash",
+      "sourceRow": 14
+    }
+  ]
+}

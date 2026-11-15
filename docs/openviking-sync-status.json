@@ -1,0 +1,437 @@
+{
+  "project": "The end",
+  "date": "2026-11-15",
+  "checkedAt": "2026-11-14T19:58:05.231Z",
+  "status": "synchronized",
+  "root": "viking://~/resources/projects/the-end/",
+  "authored": [
+    {
+      "file": "docs/architecture.md",
+      "uri": "viking://~/resources/projects/the-end/docs/architecture.md",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:53:04.268Z"
+    },
+    {
+      "file": "docs/formal-system-reference.md",
+      "uri": "viking://~/resources/projects/the-end/designs/formal-system-reference.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/refactor-scope.md",
+      "uri": "viking://~/resources/projects/the-end/designs/refactor-scope.md",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:45:17.817Z"
+    },
+    {
+      "file": "docs/production-direction.md",
+      "uri": "viking://~/resources/projects/the-end/designs/production-direction.md",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:45:23.166Z"
+    },
+    {
+      "file": "docs/game-systems.md",
+      "uri": "viking://~/resources/projects/the-end/docs/game-systems.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/ui/card-component.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/card-component.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/ui/card-items.prompt.json",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/card-items.prompt.json",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/ui/card-materials.prompt.json",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/card-materials.prompt.json",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/character-style-exploration/README.md",
+      "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/README.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/character-style-exploration/sketch08-sequence-plan.md",
+      "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/sketch08-sequence-plan.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/ui/button-component.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/button-component.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "AGENTS.md",
+      "uri": "viking://~/resources/projects/the-end/docs/agent-conventions.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/ui/panel-component.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/panel-component.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/refactor-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/refactor-verification.json",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:53:17.595Z"
+    },
+    {
+      "file": "docs/designs/character-style-exploration/motion-verification.json",
+      "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/motion-verification.json",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/button-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/button-verification.json",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/panel-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/panel-verification.json",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/ui/status-bar-component.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/status-bar-component.md",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T16:52:06.705Z"
+    },
+    {
+      "file": "docs/status-bar-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/status-bar-verification.json",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T16:52:13.593Z"
+    },
+    {
+      "file": "docs/game-design.md",
+      "uri": "viking://~/resources/projects/the-end/designs/game-design.md",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:44:43.650Z"
+    },
+    {
+      "file": "docs/designs/formal-content-draft.json",
+      "uri": "viking://~/resources/projects/the-end/designs/formal-content-draft.json",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:44:50.617Z"
+    },
+    {
+      "file": "docs/designs/ui/wasteland-page-redesign.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:44:55.863Z"
+    },
+    {
+      "file": "docs/designs/ui/coherence-backgrounds.prompt.json",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/coherence-backgrounds.prompt.json",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:45:01.555Z"
+    },
+    {
+      "file": "docs/coherence-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/coherence-verification.json",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-14T19:53:09.850Z"
+    }
+  ],
+  "imports": [
+    {
+      "file": "docs/designs/ui/button-states.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/button-states.png",
+      "taskId": "c05513eb-06d7-4d40-8ff4-1968384eaa20",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "C:/Users/Knock/Downloads/末日文字生存卡牌游戏_正式版系统简表 (1).xlsx",
+      "uri": "viking://user/default/resources/projects/the-end/docs/sources/formal-system-overview",
+      "taskId": "97ed242a-12c5-473e-b550-6184b849a8ff",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "assets/resources/ui/cards/items.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/card-items.png",
+      "taskId": "b81cb0c4-44c7-4cd2-98a9-dac46367615e",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "assets/resources/ui/cards/materials.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/card-materials.png",
+      "taskId": "2614ad20-97a5-4646-a18c-97359d9bbafe",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/card-states.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/card-states.png",
+      "taskId": "1ed4b883-684f-4e4b-9267-f88b0cc70159",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/card-details.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/card-details.png",
+      "taskId": "95664264-51b1-465a-bf0d-29063c01a858",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/card-material.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/card-material.png",
+      "taskId": "eabb20f1-b73a-4a88-9edb-b3f3274f137d",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/button-focus.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/button-focus.png",
+      "taskId": "6f864681-0c2d-4efb-a104-d7c17a130480",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/button-dark.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/button-dark.png",
+      "taskId": "ddf4a1ed-72ac-4793-89a5-92d59ea9c44a",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/button-in-game.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/button-in-game.png",
+      "taskId": "6309797a-17fb-486a-8e38-08ff5f7e10a7",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/panel-gallery.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/panel-gallery.png",
+      "taskId": "448eeb3e-8dea-4be7-97ce-f6229bf96426",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/panel-reading.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/panel-reading.png",
+      "taskId": "1df02207-623a-4b7e-afff-a3c30fb23175",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/panel-narrow.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/panel-narrow.png",
+      "taskId": "ac29c079-db68-4d4d-811b-64b96eeb6921",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/panel-wide.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/panel-wide.png",
+      "taskId": "90ae0ecb-f729-428f-b005-0d2e9fdea9a5",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/panel-in-game.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/panel-in-game.png",
+      "taskId": "517cfb2e-7feb-4945-80ee-5a8136a16eda",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/panel-confirm-in-game.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/panel-confirm-in-game.png",
+      "taskId": "1ae02bf2-c69f-4369-b265-c83ffa9a5d85",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/status-gallery.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/status-gallery.png",
+      "taskId": "d48882df-97bd-436d-af7a-9d590417d762",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/status-narrow.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/status-narrow.png",
+      "taskId": "a913b92d-5406-47df-8dae-b1b65d9186c1",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/status-compact.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/status-compact.png",
+      "taskId": "7c25b447-56e7-4c19-ba31-276e7d847074",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/status-in-game.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/status-in-game.png",
+      "taskId": "943c1961-f015-4d31-82e8-54161615ce2e",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/status-in-battle.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/status-in-battle.png",
+      "taskId": "011e7fd0-3625-4cdf-89e4-13f061d3e8d6",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "assets/resources/art/field-sketch-street-v1.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-street-v1.png",
+      "taskId": "0ad7f128-e7f8-4bb5-9a3c-d15160e9c51c",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "assets/resources/art/field-sketch-depot-v1.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-depot-v1.png",
+      "taskId": "da0863cb-8093-4b0a-9af4-12d6e9170ea7",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "assets/resources/art/field-sketch-shelter-v1.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/field-sketch-shelter-v1.png",
+      "taskId": "79495d81-af08-46b1-a1d0-690b9b60f831",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/coherence-battle.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/coherence-battle.png",
+      "taskId": "19e8480e-49ff-4ba6-b2b9-7335912c0a44",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/coherence-boss.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/coherence-boss.png",
+      "taskId": "c0e0b61a-500f-4a10-a188-4cc436ed7a4f",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/coherence-journal.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/coherence-journal.png",
+      "taskId": "1292d308-dae3-492d-b812-cecf010f1bc2",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/coherence-camp.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/coherence-camp.png",
+      "taskId": "a19b92f9-1019-40c4-ae79-739351af0605",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/coherence-inventory.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/coherence-inventory.png",
+      "taskId": "7484f24d-d1ba-464d-8612-c0a15537f548",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    },
+    {
+      "file": "docs/designs/ui/coherence-battle.webm",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/coherence-battle.webm",
+      "taskId": "2fb88531-76f4-42c2-8775-c2b24fa07c47",
+      "uploadAccepted": true,
+      "status": "completed",
+      "error": null
+    }
+  ],
+  "verification": {
+    "text": "All authored documents were read back and compared, normalizing CRLF only.",
+    "binary": {
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/button-states.png/button-states.png",
+      "sha256": "FA67CA37D73A5FA8464AA5842D999EDDBD573ABB74EE1F16A6A2BBD760D61ABA",
+      "matchesLocalSource": true
+    },
+    "workbookReadback": "viking://~/resources/projects/the-end/docs/sources/formal-system-overview/战斗与卡牌.md",
+    "coherentBackgrounds": [
+      {
+        "uri": "viking://~/resources/projects/the-end/designs/ui/field-sketch-street-v1.png/field-sketch-street-v1.png",
+        "sha256": "564308A9F2BC4433264938C9DD1CF7CD493A50A335F608B6658A7D1FC54836F0",
+        "matchesLocalSource": true
+      },
+      {
+        "uri": "viking://~/resources/projects/the-end/designs/ui/field-sketch-depot-v1.png/field-sketch-depot-v1.png",
+        "sha256": "E045B5C482D383AB471BB65C3D122EC55223EF0161E6E3D452D05404268C8559",
+        "matchesLocalSource": true
+      },
+      {
+        "uri": "viking://~/resources/projects/the-end/designs/ui/field-sketch-shelter-v1.png/field-sketch-shelter-v1.png",
+        "sha256": "4D2B0BC33055593E5AA2981D341F7D96689A466A73C469CBB790F6D5AD7E5607",
+        "matchesLocalSource": true
+      }
+    ]
+  },
+  "notes": [
+    "Source imports run asynchronously. Pending and running tasks are not completed indexes.",
+    "The workbook source path and existing local files remain preserved.",
+    "This is an observed snapshot, not a background watch."
+  ]
+}

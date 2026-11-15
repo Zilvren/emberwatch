@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>survivor-death-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{298,16},{184,264}}</string>
+        <key>offset</key>
+        <string>{3.1856,3.3125}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{712,285}</string>
+      </dict>
+      <key>survivor-death-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1059,34},{182,246}}</string>
+        <key>offset</key>
+        <string>{-4.8144,-5.6875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{712,285}</string>
+      </dict>
+      <key>survivor-death-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{304,312},{208,218}}</string>
+        <key>offset</key>
+        <string>{21.1856,-19.6875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{712,285}</string>
+      </dict>
+      <key>survivor-death-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1039,336},{236,195}}</string>
+        <key>offset</key>
+        <string>{2.1856,-31.1875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{712,285}</string>
+      </dict>
+      <key>survivor-death-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{286,584},{243,169}}</string>
+        <key>offset</key>
+        <string>{20.6856,-44.1875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{712,285}</string>
+      </dict>
+      <key>survivor-death-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1001,601},{286,147}}</string>
+        <key>offset</key>
+        <string>{-10.8144,-55.1875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{712,285}</string>
+      </dict>
+      <key>survivor-death-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{247,845},{278,133}}</string>
+        <key>offset</key>
+        <string>{-0.8144,-62.1875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{712,285}</string>
+      </dict>
+      <key>survivor-death-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1013,854},{282,125}}</string>
+        <key>offset</key>
+        <string>{-0.8144,-66.1875}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{712,285}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>survivor-death.png</string>
+      <key>realTextureFileName</key>
+      <string>survivor-death.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

@@ -1,0 +1,1 @@
+require('./serve-preview.cjs').servePreview({directory:require('node:path').join(__dirname,'../build/ui-panels'),port:Number(process.env.PANEL_PREVIEW_PORT??7465),label:'Common panel component design'});

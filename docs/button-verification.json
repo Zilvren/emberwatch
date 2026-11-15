@@ -1,0 +1,828 @@
+{
+  "project": "The end",
+  "date": "2026-11-14",
+  "timezone": "Asia/Shanghai",
+  "status": "button-component-technical-validation-passed-visual-review-open",
+  "scope": {
+    "newGameplayFlows": false,
+    "component": "button"
+  },
+  "variants": 4,
+  "states": 5,
+  "nativePrefabs": 4,
+  "adoptedButtons": 42,
+  "tests": {
+    "passed": 66,
+    "failed": 0
+  },
+  "typecheck": {
+    "passed": true
+  },
+  "format": {
+    "passed": true
+  },
+  "builds": {
+    "workshop": true,
+    "mainGame": true
+  },
+  "browser": {
+    "component": {
+      "passed": true,
+      "nativePrefabs": 4,
+      "variants": 4,
+      "states": 5,
+      "clickOnce": true,
+      "cancelOutside": true,
+      "disabled": true,
+      "tabOrder": true,
+      "reverseTab": true,
+      "keyboardNoMotion": true,
+      "noRepeat": true,
+      "reducedMotion": true,
+      "sizes": true,
+      "darkSurface": true,
+      "runtimeErrors": []
+    },
+    "routeA": {
+      "passed": true,
+      "route": "A",
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 5
+      },
+      "second": {
+        "weaponDemonstrated": true,
+        "dragged": true,
+        "actions": 8
+      },
+      "dragCancelled": true,
+      "impactBusy": true,
+      "final": {
+        "phase": "day2",
+        "supplies": 9,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 10,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 0,
+          "repaired": false,
+          "repairSpent": 0,
+          "dailySpent": 1,
+          "dailyShortfall": 0
+        }
+      },
+      "actions": 38,
+      "trace": [
+        {
+          "action": "drag card-card-2",
+          "target": [
+            70,
+            880
+          ]
+        },
+        {
+          "action": "card-card-2",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "card-card-3",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "drag card-card-1",
+          "target": [
+            1030,
+            390
+          ]
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "card-card-2",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "enemy-target",
+          "from": "battle",
+          "to": "rewards",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "claim-supplies",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "claim-card-0",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "rewards-done",
+          "from": "rewards",
+          "to": "map",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "enter-scavenge",
+          "from": "map",
+          "to": "rewards",
+          "supplies": 10,
+          "armor": 10
+        },
+        {
+          "action": "claim-supplies",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "rewards-done",
+          "from": "rewards",
+          "to": "map",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "enter-rest",
+          "from": "map",
+          "to": "rest",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "rest-cash",
+          "from": "rest",
+          "to": "rest",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "modal-confirm",
+          "from": "rest",
+          "to": "rest",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "rest-bag",
+          "from": "rest",
+          "to": "rest",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "toggle-card-3",
+          "from": "rest",
+          "to": "rest",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "toggle-card-3",
+          "from": "rest",
+          "to": "rest",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "modal-close",
+          "from": "rest",
+          "to": "rest",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "rest-done",
+          "from": "rest",
+          "to": "map",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "enter-enemy2",
+          "from": "map",
+          "to": "battle",
+          "supplies": 13,
+          "armor": 10
+        },
+        {
+          "action": "card-card-5",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 11,
+          "armor": 10
+        },
+        {
+          "action": "drag card-card-1",
+          "target": [
+            1030,
+            390
+          ]
+        },
+        {
+          "action": "card-card-2",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 11,
+          "armor": 10
+        },
+        {
+          "action": "enemy-target",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 11,
+          "armor": 10
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 11,
+          "armor": 7
+        },
+        {
+          "action": "card-slash-11",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 11,
+          "armor": 7
+        },
+        {
+          "action": "enemy-target",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 10,
+          "armor": 7
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 10,
+          "armor": 7
+        },
+        {
+          "action": "card-card-7",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 8,
+          "armor": 10
+        },
+        {
+          "action": "card-slash-12",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 8,
+          "armor": 10
+        },
+        {
+          "action": "enemy-target",
+          "from": "battle",
+          "to": "rewards",
+          "supplies": 7,
+          "armor": 10
+        },
+        {
+          "action": "claim-supplies",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 10,
+          "armor": 10
+        },
+        {
+          "action": "claim-card-0",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 10,
+          "armor": 10
+        },
+        {
+          "action": "rewards-done",
+          "from": "rewards",
+          "to": "map",
+          "supplies": 10,
+          "armor": 10
+        },
+        {
+          "action": "shelter-done",
+          "from": "shelter",
+          "to": "day2",
+          "supplies": 9,
+          "armor": 10
+        }
+      ],
+      "runtimeErrors": []
+    },
+    "routeB": {
+      "passed": true,
+      "route": "B",
+      "failureRetry": true,
+      "zeroArmorSurvived": true,
+      "repairWarningAndCancel": true,
+      "shortfallConfirmed": true,
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 2
+      },
+      "second": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 3
+      },
+      "final": {
+        "phase": "day2",
+        "supplies": 0,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 1,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 1,
+          "repaired": true,
+          "repairSpent": 1,
+          "dailySpent": 0,
+          "dailyShortfall": 1
+        }
+      },
+      "actions": 60,
+      "trace": [
+        {
+          "action": "journal-start",
+          "from": "journal",
+          "to": "map",
+          "supplies": 10,
+          "armor": 10
+        },
+        {
+          "action": "enter-fixed",
+          "from": "map",
+          "to": "rewards",
+          "supplies": 8,
+          "armor": 10
+        },
+        {
+          "action": "claim-supplies",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "claim-card-0",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "rewards-done",
+          "from": "rewards",
+          "to": "map",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "route-A",
+          "from": "map",
+          "to": "map",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "enter-enemy1",
+          "from": "map",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 8
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 8
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 4
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 4
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 0
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 12,
+          "armor": 0
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "failure",
+          "supplies": 10,
+          "armor": 10
+        },
+        {
+          "action": "journal-start",
+          "from": "failure",
+          "to": "journal",
+          "supplies": 10,
+          "armor": 10
+        },
+        {
+          "action": "journal-start",
+          "from": "journal",
+          "to": "map",
+          "supplies": 10,
+          "armor": 10
+        },
+        {
+          "action": "enter-fixed",
+          "from": "map",
+          "to": "rewards",
+          "supplies": 8,
+          "armor": 10
+        },
+        {
+          "action": "claim-supplies",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "claim-card-0",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "rewards-done",
+          "from": "rewards",
+          "to": "map",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "route-B",
+          "from": "map",
+          "to": "map",
+          "supplies": 12,
+          "armor": 10
+        },
+        {
+          "action": "enter-scavenge",
+          "from": "map",
+          "to": "rewards",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "claim-supplies",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "claim-card-0",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "rewards-done",
+          "from": "rewards",
+          "to": "map",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "enter-enemy1",
+          "from": "map",
+          "to": "battle",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "drag card-card-26",
+          "target": [
+            1030,
+            390
+          ]
+        },
+        {
+          "action": "card-card-19",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 8,
+          "armor": 10
+        },
+        {
+          "action": "enemy-target",
+          "from": "battle",
+          "to": "rewards",
+          "supplies": 8,
+          "armor": 10
+        },
+        {
+          "action": "claim-supplies",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "claim-card-0",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "rewards-done",
+          "from": "rewards",
+          "to": "map",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "enter-rest",
+          "from": "map",
+          "to": "rest",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "rest-cash",
+          "from": "rest",
+          "to": "rest",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "modal-confirm",
+          "from": "rest",
+          "to": "rest",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "rest-done",
+          "from": "rest",
+          "to": "map",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "enter-enemy2",
+          "from": "map",
+          "to": "battle",
+          "supplies": 9,
+          "armor": 10
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 9,
+          "armor": 7
+        },
+        {
+          "action": "drag card-card-28",
+          "target": [
+            1030,
+            390
+          ]
+        },
+        {
+          "action": "end-turn",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 8,
+          "armor": 7
+        },
+        {
+          "action": "card-card-28",
+          "from": "battle",
+          "to": "battle",
+          "supplies": 8,
+          "armor": 7
+        },
+        {
+          "action": "enemy-target",
+          "from": "battle",
+          "to": "rewards",
+          "supplies": 7,
+          "armor": 7
+        },
+        {
+          "action": "claim-supplies",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 10,
+          "armor": 7
+        },
+        {
+          "action": "reward-bag",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 10,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 9,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 8,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 7,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 6,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 5,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 4,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 3,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 2,
+          "armor": 7
+        },
+        {
+          "action": "discard-supply",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 1,
+          "armor": 7
+        },
+        {
+          "action": "modal-close",
+          "from": "rewards",
+          "to": "rewards",
+          "supplies": 1,
+          "armor": 7
+        },
+        {
+          "action": "rewards-done",
+          "from": "rewards",
+          "to": "map",
+          "supplies": 1,
+          "armor": 7
+        },
+        {
+          "action": "shelter-repair",
+          "from": "shelter",
+          "to": "shelter",
+          "supplies": 1,
+          "armor": 7
+        },
+        {
+          "action": "modal-cancel",
+          "from": "shelter",
+          "to": "shelter",
+          "supplies": 1,
+          "armor": 7
+        },
+        {
+          "action": "shelter-repair",
+          "from": "shelter",
+          "to": "shelter",
+          "supplies": 1,
+          "armor": 7
+        },
+        {
+          "action": "modal-confirm",
+          "from": "shelter",
+          "to": "shelter",
+          "supplies": 0,
+          "armor": 10
+        },
+        {
+          "action": "shelter-done",
+          "from": "shelter",
+          "to": "day2",
+          "supplies": 0,
+          "armor": 10
+        }
+      ],
+      "runtimeErrors": []
+    },
+    "input": {
+      "passed": true,
+      "rapidAttackSingleApply": true,
+      "rapidDefenseSingleApply": true,
+      "dragSurvivesToastExpiry": true,
+      "normalRandomMode": true,
+      "handoff": "journal",
+      "runtimeErrors": []
+    }
+  },
+  "preview": "http://127.0.0.1:7464/",
+  "source": "assets/ButtonDesignReview.scene",
+  "limitations": [
+    "Map nodes and other independent widgets are outside this component migration.",
+    "Keyboard behavior was verified in the web desktop build; other platforms require separate verification.",
+    "Paper feel and motion remain open to user design review."
+  ],
+  "openViking": {
+    "status": "tracked-separately",
+    "target": "viking://~/resources/projects/the-end/designs/ui/button-component.md",
+    "record": "docs/openviking-sync-status.json"
+  }
+}

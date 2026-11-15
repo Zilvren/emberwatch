@@ -1,0 +1,1 @@
+require('./serve-preview.cjs').servePreview({directory:require('node:path').join(__dirname,'../build/ui-status'),port:Number(process.env.STATUS_PREVIEW_PORT??7466),label:'Status bar component design'});

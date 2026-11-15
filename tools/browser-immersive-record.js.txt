@@ -1,0 +1,5 @@
+await idle();let s=await state();assert(s.phase==='battle','Encounter preview required');const before=s.sceneMotion?.elapsed??0;
+const attack=s.hand.find(c=>c.kind==='attack'&&!c.blocked);assert(attack,'Free attack required');const hover=await hitPoint('card-'+attack.id);await page.mouse.move(hover.x,hover.y);await page.waitForTimeout(900);
+await drag('card-'+attack.id,1060,350);await page.waitForTimeout(650);s=await state();assert(s.battle.hp===4,'Attack applied incorrectly');
+const defend=s.hand.find(c=>c.kind==='dodge'&&!c.blocked);if(defend)await play(defend);await page.waitForTimeout(650);await click('end-turn');await page.waitForTimeout(900);
+s=await state();assert((s.sceneMotion?.elapsed??0)>before,'Scene clock did not advance');assert(!s.busy,'Action did not finish');await screenshot('immersive-after-action');assert(runtimeErrors.length===0,'Runtime errors');return{passed:true,dragAttack:true,enemyHp:s.battle.hp,enemyTurn:true,ambientMotion:true,runtimeErrors};

@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-14",
+  "status": "latest-candidate-awaiting-review",
+  "generator": "built-in image_gen",
+  "userPalette": [
+    "浅土黄",
+    "灰橄榄",
+    "淡棕色"
+  ],
+  "geometry": "第1版比例",
+  "linework": "第2版手绘线条",
+  "references": [
+    "04-bold-shapes-sketch-lines.png",
+    "02-field-sketch.png"
+  ],
+  "output": "06-dust-and-olive.png",
+  "prompt": "Use case: precise color treatment edit. Create a new revision of the wasteland character concept board. IMAGE 1 is the master EDIT TARGET: preserve its exact three characters, sturdy survivor proportions, thin infected proportions, massive heavy infected proportions, head-to-body ratios, silhouettes, poses, costumes, backpacks, weapons, relative sizes, placement, baseline, and the four survivor action poses below. IMAGE 2 supplies the sparse hand-drawn pen treatment AND the intended muted wash palette. The user's exact palette is LIGHT EARTH OCHRE, GRAY OLIVE, AND PALE BROWN (浅土黄、灰橄榄、淡棕色). Follow these colors closely: chalky light sandy ochre around #C7BA94 for the human hood and poncho; desaturated gray olive around #8D9380 for monster coats and pants; cool-leaning pale gray-brown/taupe around #AB9E8C for backpacks, leather straps, boots, mask and salvaged armor. The atmosphere should remain reserved and slightly chilly through low saturation and gray undertones, rather than by using blue. Avoid blue casts, orange hoods, rich rust, deep chocolate shadows, golden-yellow lighting or uniformly sepia coloring. Use near-neutral pale ivory paper around #F0EFE7 with very subtle paper texture, no golden background wash. Thin uneven charcoal/gray-brown hand-sketched contours, sparse purposeful marks, flat pale watercolor-like fills, ONE very light gray shadow wash at most; do not let grain become visual noise. Simple readable animation-friendly figures, adult wasteland survival mood, original design, no 3D, no pixel art, no dense hatching, no additional characters or scenery. Keep full bodies uncropped. Main lineup SURVIVOR, WANDERER, BRUTE; bottom four poses idle, anticipation, forward strike, recovery. Title '06 / DUST & OLIVE'. This is a concept sample for user review, not production-ready animation."
+}

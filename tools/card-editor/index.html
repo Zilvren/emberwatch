@@ -7,6 +7,7 @@
   <title>the end · 卡牌工坊</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2317251e'/%3E%3Cpath d='M9 7h14v18H9z' fill='%23dcb775'/%3E%3Cpath d='M14 12h4v8h-4zM12 14h8v4h-8z' fill='%2317251e'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/editor.css">
+  <link rel="stylesheet" href="/card-component.css">
 </head>
 <body>
   <header class="topbar">
@@ -24,10 +25,12 @@
       <div class="preview-stage">
         <div class="card-shadow"></div>
         <article class="game-card" id="preview-card" aria-label="当前卡牌预览">
-          <div class="card-top"><div class="card-cost"><span id="preview-cost">0</span><small>费用</small></div><div class="card-title"><span id="preview-tag">生存卡牌</span><h3 id="preview-name">正在载入</h3></div></div>
-          <div class="card-illustration art-crop" id="preview-art"><img src="/art/card-art.png" alt="卡牌插画"></div>
+          <div class="card-top"><div class="card-cost"><span id="preview-cost">0</span><small id="preview-unit">物资</small></div><div class="card-title"><span id="preview-tag">生存卡牌</span><h3 id="preview-name">正在载入</h3></div></div>
+          <div class="card-illustration art-crop" id="preview-art"></div>
+          <div id="preview-keywords" class="card-keywords"></div>
           <div class="card-body"><span id="preview-type" class="card-type">攻击</span><p id="preview-effect" class="card-effect">正在读取卡牌数据</p><p id="preview-description" class="card-description"></p></div>
-          <div class="card-bottom"><span id="preview-weight">负重 0</span><span id="preview-role">普通牌</span></div>
+          <div id="preview-details" class="card-details" hidden><p id="preview-full-description"></p></div>
+          <div class="card-bottom"><button id="preview-detail-toggle" type="button" aria-expanded="false">查看说明</button><span id="preview-weight">负重 0</span><span id="preview-role" class="card-sr-only">普通牌</span></div>
         </article>
         <div class="preview-caption"><span id="preview-id">—</span><span>编辑器预览 · 效果与游戏共用</span></div>
       </div>

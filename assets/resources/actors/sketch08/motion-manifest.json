@@ -1,0 +1,4602 @@
+{
+  "version": 1,
+  "date": "2026-11-14",
+  "reference": "docs/designs/character-style-exploration/10-08-thin-outline.png",
+  "status": "motion-review",
+  "logicalSize": [
+    640,
+    256
+  ],
+  "actors": {
+    "survivor": {
+      "name": "幸存者",
+      "baseHeight": 232,
+      "actions": {
+        "idle": {
+          "image": "survivor-idle.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 6,
+          "alphaZeroRatio": 0.6531,
+          "rowCuts": [
+            0,
+            258,
+            514,
+            770,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                82,
+                11,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 103,
+                "right": 210,
+                "center": 156.5,
+                "y": 245
+              },
+              "contentHash": "7ef1ff1ad38bf9361b8d8e2d2ce898438839973ceef2c2847b623594d449d890",
+              "name": "survivor-idle-00",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 0,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@9dfd0"
+            },
+            {
+              "index": 1,
+              "rect": [
+                338,
+                11,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 359,
+                "right": 466,
+                "center": 412.63529411764705,
+                "y": 245
+              },
+              "contentHash": "8d3a0b74ea9db459972e4f660ebde8866c6a07936eb7de89fee240a153fe610b",
+              "name": "survivor-idle-01",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.3647,
+                3
+              ],
+              "time": 0.125,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@d8639"
+            },
+            {
+              "index": 2,
+              "rect": [
+                594,
+                11,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 615,
+                "right": 722,
+                "center": 668.5,
+                "y": 245
+              },
+              "contentHash": "e90ae892fe3231c238d447779fa1040376fd2bec886c9a5942ec196ff2a5c119",
+              "name": "survivor-idle-02",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 0.25,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@d0783"
+            },
+            {
+              "index": 3,
+              "rect": [
+                850,
+                11,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 871,
+                "right": 978,
+                "center": 924.5,
+                "y": 245
+              },
+              "contentHash": "766ecc99b7fa85440504b4b3ec47eaf3103275a2bc99b39e5f98965d87196fcf",
+              "name": "survivor-idle-03",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 0.375,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@08b51"
+            },
+            {
+              "index": 4,
+              "rect": [
+                1105,
+                11,
+                165,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1127,
+                "right": 1234,
+                "center": 1180.5,
+                "y": 245
+              },
+              "contentHash": "a305ec2e42f5aeb2af449146d6a44660dfc95690947bc0c758e9014f40dc1a40",
+              "name": "survivor-idle-04",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7,
+                3
+              ],
+              "time": 0.5,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@3422c"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1362,
+                11,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1383,
+                "right": 1490,
+                "center": 1436.5,
+                "y": 245
+              },
+              "contentHash": "e0e34487a64248fb23da0d5866e1171dbbd678a3af42917dbbc1720c75511e58",
+              "name": "survivor-idle-05",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 0.625,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@ffb94"
+            },
+            {
+              "index": 6,
+              "rect": [
+                82,
+                267,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 103,
+                "right": 210,
+                "center": 156.5,
+                "y": 501
+              },
+              "contentHash": "0fa9b633ab3498bfbb38064f9d124ace4e613a6d9336b04a888ceff74b4393ac",
+              "name": "survivor-idle-06",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 0.75,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@711a7"
+            },
+            {
+              "index": 7,
+              "rect": [
+                338,
+                267,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 359,
+                "right": 466,
+                "center": 412.5,
+                "y": 501
+              },
+              "contentHash": "52f55288d66576e70ee82756eb84ab2b1de0f34c9622f10dfb6fa0f4dd029d05",
+              "name": "survivor-idle-07",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 0.875,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@e8bae"
+            },
+            {
+              "index": 8,
+              "rect": [
+                594,
+                267,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 614,
+                "right": 722,
+                "center": 667.8588235294118,
+                "y": 501
+              },
+              "contentHash": "3094ffe4472fdba1b95f71657b4f754c6d3a67c950ad3c5588a4ee7f6fb776a5",
+              "name": "survivor-idle-08",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.1412,
+                3
+              ],
+              "time": 1,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@3e16d"
+            },
+            {
+              "index": 9,
+              "rect": [
+                850,
+                267,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 871,
+                "right": 977,
+                "center": 923.8554216867469,
+                "y": 501
+              },
+              "contentHash": "62ba3a9f1be437f9bc446bdc8945794cadd34ac257975bbf185c7fa8bdf727d3",
+              "name": "survivor-idle-09",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.1446,
+                3
+              ],
+              "time": 1.125,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@a573c"
+            },
+            {
+              "index": 10,
+              "rect": [
+                1106,
+                267,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1127,
+                "right": 1234,
+                "center": 1180.5,
+                "y": 501
+              },
+              "contentHash": "4afac6ec5320ff762149fdb69bdf6d3ad06ac002553db20ff72de3dc3d91460b",
+              "name": "survivor-idle-10",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 1.25,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@8307c"
+            },
+            {
+              "index": 11,
+              "rect": [
+                1362,
+                267,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1383,
+                "right": 1489,
+                "center": 1436,
+                "y": 501
+              },
+              "contentHash": "5b841f5d51ef374d98c95447abd964643cf91d510beb3f3ee61e6fa1aae19b8a",
+              "name": "survivor-idle-11",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8,
+                3
+              ],
+              "time": 1.375,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@03740"
+            },
+            {
+              "index": 12,
+              "rect": [
+                82,
+                523,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 103,
+                "right": 210,
+                "center": 156.5,
+                "y": 757
+              },
+              "contentHash": "084a348391c9347c72a181f5282f47bc3623830214b6a843d1d99aadd8e2b843",
+              "name": "survivor-idle-12",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 1.5,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@d65b4"
+            },
+            {
+              "index": 13,
+              "rect": [
+                338,
+                523,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 359,
+                "right": 466,
+                "center": 412.5,
+                "y": 757
+              },
+              "contentHash": "99f93985309ca052676b9f8cf09ecccdfe3d2a289a7ccb7ddfb24a9281bc4f13",
+              "name": "survivor-idle-13",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 1.625,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@2c08e"
+            },
+            {
+              "index": 14,
+              "rect": [
+                594,
+                523,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 615,
+                "right": 722,
+                "center": 668.5,
+                "y": 757
+              },
+              "contentHash": "286fb0ecd74b666ceed0dbaf6cf32e39b3800839f50ea579c673af350b9ea83a",
+              "name": "survivor-idle-14",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 1.75,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@51137"
+            },
+            {
+              "index": 15,
+              "rect": [
+                850,
+                523,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 871,
+                "right": 978,
+                "center": 924.5,
+                "y": 757
+              },
+              "contentHash": "feb92f57810a4847f7d0818e5168df34ea391d99414a85bef381d9c8561d4398",
+              "name": "survivor-idle-15",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 1.875,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@ca907"
+            },
+            {
+              "index": 16,
+              "rect": [
+                1106,
+                523,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1127,
+                "right": 1234,
+                "center": 1180.635294117647,
+                "y": 757
+              },
+              "contentHash": "a76d2733a58f6be48dc48b3392596ec6226c480b12a5bd4a29611f529e3ea863",
+              "name": "survivor-idle-16",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.3647,
+                3
+              ],
+              "time": 2,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@c3bed"
+            },
+            {
+              "index": 17,
+              "rect": [
+                1362,
+                523,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1383,
+                "right": 1490,
+                "center": 1436.5,
+                "y": 757
+              },
+              "contentHash": "0aaaaecc70e6fbebc1ccfd169d0969ec86a118edd8e5feeede4f5b619ac56d0a",
+              "name": "survivor-idle-17",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 2.125,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@3bbe6"
+            },
+            {
+              "index": 18,
+              "rect": [
+                82,
+                779,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 103,
+                "right": 210,
+                "center": 156.5,
+                "y": 1013
+              },
+              "contentHash": "7433b589498e6ac8a5ffecab56d609cd668192fa6b1257bc1cc113e64df31cfa",
+              "name": "survivor-idle-18",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 2.25,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@704a1"
+            },
+            {
+              "index": 19,
+              "rect": [
+                338,
+                779,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 359,
+                "right": 465,
+                "center": 411.855421686747,
+                "y": 1013
+              },
+              "contentHash": "f64f32778eedf69c8afb200c1d547083f08088e1ece29bc26aa597407518238f",
+              "name": "survivor-idle-19",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.1446,
+                3
+              ],
+              "time": 2.375,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@67650"
+            },
+            {
+              "index": 20,
+              "rect": [
+                594,
+                779,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 615,
+                "right": 722,
+                "center": 668.5,
+                "y": 1013
+              },
+              "contentHash": "ee9ae161fd1230af60905da260ea850f120119ed411201e868c7af6f99e282ad",
+              "name": "survivor-idle-20",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 2.5,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@cf94e"
+            },
+            {
+              "index": 21,
+              "rect": [
+                850,
+                779,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 871,
+                "right": 978,
+                "center": 924.5,
+                "y": 1013
+              },
+              "contentHash": "3381455a1c365b7144b5e6dc297b75133ce7c8ab5b59beb77e220eff775edb46",
+              "name": "survivor-idle-21",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 2.625,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@3b3b2"
+            },
+            {
+              "index": 22,
+              "rect": [
+                1106,
+                779,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1127,
+                "right": 1234,
+                "center": 1180.5,
+                "y": 1013
+              },
+              "contentHash": "870a3d07b9dd5c8c4cb75aac21112479de0c09c9f126bb7a16371f3e1f8ecd11",
+              "name": "survivor-idle-22",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.5,
+                3
+              ],
+              "time": 2.75,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@d811c"
+            },
+            {
+              "index": 23,
+              "rect": [
+                1362,
+                779,
+                164,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1383,
+                "right": 1490,
+                "center": 1436.635294117647,
+                "y": 1013
+              },
+              "contentHash": "e172fee25d765a6c3725ee73808f815de92d07f1937a81dc8974dbf78b917c67",
+              "name": "survivor-idle-23",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                7.3647,
+                3
+              ],
+              "time": 2.875,
+              "duration": 0.125,
+              "uuid": "0fcc59c2-a57d-4054-bf66-a20e9a23e127@7310f"
+            }
+          ],
+          "atlas": "survivor-idle.plist",
+          "duration": 3,
+          "loop": true,
+          "impactTime": null,
+          "uniqueFrames": 24
+        },
+        "attack": {
+          "image": "survivor-attack.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.8825,
+          "rowCuts": [
+            0,
+            275,
+            526,
+            769,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                304,
+                23,
+                171,
+                228
+              ],
+              "bodyHeight": 222,
+              "feet": {
+                "left": 331,
+                "right": 437,
+                "center": 385.64285714285717,
+                "y": 247
+              },
+              "contentHash": "172a52fbe70f64463a53c234c4b4401d8a1fb3501965d98a70c3fed03ecfe4d7",
+              "name": "survivor-attack-00",
+              "scale": 1.045045,
+              "sourceSize": [
+                613,
+                245
+              ],
+              "offset": [
+                58.5,
+                2.8125
+              ],
+              "time": 0,
+              "duration": 0.08,
+              "uuid": "9890a715-ea2a-4f67-9e5a-f3d4cfc6dcf3@78b55"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1059,
+                48,
+                171,
+                203
+              ],
+              "bodyHeight": 197,
+              "feet": {
+                "left": 1073,
+                "right": 1206,
+                "center": 1140.9666666666667,
+                "y": 247
+              },
+              "contentHash": "45a93feddb942ecb3e4655e93e781e4e57023409e2d2d3e117b95c4fc5108781",
+              "name": "survivor-attack-01",
+              "scale": 1.045045,
+              "sourceSize": [
+                613,
+                245
+              ],
+              "offset": [
+                71.5,
+                -9.6875
+              ],
+              "time": 0.08,
+              "duration": 0.07,
+              "uuid": "9890a715-ea2a-4f67-9e5a-f3d4cfc6dcf3@4f0f4"
+            },
+            {
+              "index": 2,
+              "rect": [
+                292,
+                299,
+                186,
+                205
+              ],
+              "bodyHeight": 199,
+              "feet": {
+                "left": 305,
+                "right": 458,
+                "center": 384.0531914893617,
+                "y": 500
+              },
+              "contentHash": "74efde354c0a8e9eccce7f4123b2eb2d9268fc1517214b9ba07e2ace96af387f",
+              "name": "survivor-attack-02",
+              "scale": 1.045045,
+              "sourceSize": [
+                613,
+                245
+              ],
+              "offset": [
+                80,
+                -8.6875
+              ],
+              "time": 0.15,
+              "duration": 0.07,
+              "uuid": "9890a715-ea2a-4f67-9e5a-f3d4cfc6dcf3@4e3b7"
+            },
+            {
+              "index": 3,
+              "rect": [
+                1034,
+                307,
+                208,
+                197
+              ],
+              "bodyHeight": 191,
+              "feet": {
+                "left": 1064,
+                "right": 1229,
+                "center": 1149.1157894736843,
+                "y": 500
+              },
+              "contentHash": "50cbb14a7dddb565055553c42c4d80ef036d6165427e0e2d867702c76377b584",
+              "name": "survivor-attack-03",
+              "scale": 1.045045,
+              "sourceSize": [
+                613,
+                245
+              ],
+              "offset": [
+                74,
+                -12.6875
+              ],
+              "time": 0.22,
+              "duration": 0.06,
+              "uuid": "9890a715-ea2a-4f67-9e5a-f3d4cfc6dcf3@666a7"
+            },
+            {
+              "index": 4,
+              "rect": [
+                247,
+                551,
+                309,
+                199
+              ],
+              "bodyHeight": 193,
+              "feet": {
+                "left": 250,
+                "right": 443,
+                "center": 352.8829787234043,
+                "y": 746
+              },
+              "contentHash": "8457aa7fe3ac5312cce129c0772554e44c216b82dbf34bdf0e7959d280c82abd",
+              "name": "survivor-attack-04",
+              "scale": 1.045045,
+              "sourceSize": [
+                613,
+                245
+              ],
+              "offset": [
+                151.5,
+                -11.6875
+              ],
+              "time": 0.28,
+              "duration": 0.05,
+              "uuid": "9890a715-ea2a-4f67-9e5a-f3d4cfc6dcf3@60e2b"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1035,
+                547,
+                258,
+                203
+              ],
+              "bodyHeight": 197,
+              "feet": {
+                "left": 1038,
+                "right": 1215,
+                "center": 1131.3052631578948,
+                "y": 746
+              },
+              "contentHash": "f3e8c9e65a0de1b468f57c143d8b2cd65b07343ae7a196a2816fe805d8e2f9a8",
+              "name": "survivor-attack-05",
+              "scale": 1.045045,
+              "sourceSize": [
+                613,
+                245
+              ],
+              "offset": [
+                126,
+                -9.6875
+              ],
+              "time": 0.33,
+              "duration": 0.06,
+              "uuid": "9890a715-ea2a-4f67-9e5a-f3d4cfc6dcf3@6a0c5"
+            },
+            {
+              "index": 6,
+              "rect": [
+                287,
+                793,
+                189,
+                222
+              ],
+              "bodyHeight": 216,
+              "feet": {
+                "left": 299,
+                "right": 431,
+                "center": 366.8,
+                "y": 1011
+              },
+              "contentHash": "e7de473b274efc29ad75bbfdc73592dd3d5f83ed072f369ce38a4ea31791b41e",
+              "name": "survivor-attack-06",
+              "scale": 1.045045,
+              "sourceSize": [
+                613,
+                245
+              ],
+              "offset": [
+                82.5,
+                -0.1875
+              ],
+              "time": 0.39,
+              "duration": 0.08,
+              "uuid": "9890a715-ea2a-4f67-9e5a-f3d4cfc6dcf3@ce268"
+            },
+            {
+              "index": 7,
+              "rect": [
+                1070,
+                788,
+                171,
+                227
+              ],
+              "bodyHeight": 221,
+              "feet": {
+                "left": 1098,
+                "right": 1205,
+                "center": 1152.9285714285716,
+                "y": 1011
+              },
+              "contentHash": "8c0c8a9ed548ce254fd84cc9e2577bdeba862944e165b1e0b820be62703c5ee9",
+              "name": "survivor-attack-07",
+              "scale": 1.045045,
+              "sourceSize": [
+                613,
+                245
+              ],
+              "offset": [
+                57.5,
+                2.3125
+              ],
+              "time": 0.47,
+              "duration": 0.09,
+              "uuid": "9890a715-ea2a-4f67-9e5a-f3d4cfc6dcf3@ab7cd"
+            }
+          ],
+          "atlas": "survivor-attack.plist",
+          "duration": 0.56,
+          "loop": false,
+          "impactTime": 0.28,
+          "uniqueFrames": 8
+        },
+        "hurt": {
+          "image": "survivor-hurt.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.7928,
+          "rowCuts": [
+            0,
+            262,
+            514,
+            767,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                310,
+                10,
+                174,
+                242
+              ],
+              "bodyHeight": 236,
+              "feet": {
+                "left": 333,
+                "right": 453,
+                "center": 394.57608695652175,
+                "y": 248
+              },
+              "contentHash": "7783feada1955883e0c4e8358245eb0450799c749cbd6484f22f9cafef65ddce",
+              "name": "survivor-hurt-00",
+              "scale": 0.983051,
+              "sourceSize": [
+                652,
+                261
+              ],
+              "offset": [
+                2.4239,
+                2.8125
+              ],
+              "time": 0,
+              "duration": 0.025,
+              "uuid": "8383999d-93a3-44c8-9e1f-4dd9d045a2e9@9a74a"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1048,
+                13,
+                182,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 1074,
+                "right": 1193,
+                "center": 1134.6153846153848,
+                "y": 248
+              },
+              "contentHash": "79fafc997bd7fd571b04b46c12cc65f5bf065e9f99158dd6d2dfd4178eccf1cf",
+              "name": "survivor-hurt-01",
+              "scale": 0.983051,
+              "sourceSize": [
+                652,
+                261
+              ],
+              "offset": [
+                4.3846,
+                1.3125
+              ],
+              "time": 0.025,
+              "duration": 0.035,
+              "uuid": "8383999d-93a3-44c8-9e1f-4dd9d045a2e9@fb5e0"
+            },
+            {
+              "index": 2,
+              "rect": [
+                294,
+                271,
+                208,
+                234
+              ],
+              "bodyHeight": 228,
+              "feet": {
+                "left": 329,
+                "right": 454,
+                "center": 392.52127659574467,
+                "y": 501
+              },
+              "contentHash": "7f2a1d78ac5b35ea8b5a05695c6051c7408558bcac7101988082c6c03849e007",
+              "name": "survivor-hurt-02",
+              "scale": 0.983051,
+              "sourceSize": [
+                652,
+                261
+              ],
+              "offset": [
+                5.4787,
+                -1.1875
+              ],
+              "time": 0.06,
+              "duration": 0.045,
+              "uuid": "8383999d-93a3-44c8-9e1f-4dd9d045a2e9@96fbd"
+            },
+            {
+              "index": 3,
+              "rect": [
+                1006,
+                275,
+                255,
+                230
+              ],
+              "bodyHeight": 224,
+              "feet": {
+                "left": 1078,
+                "right": 1214,
+                "center": 1147.2475247524753,
+                "y": 501
+              },
+              "contentHash": "d524a1f24a3319b43de66b4a84a191a2d47eea23e377a9beedb9eef1c86e933b",
+              "name": "survivor-hurt-03",
+              "scale": 0.983051,
+              "sourceSize": [
+                652,
+                261
+              ],
+              "offset": [
+                -13.7475,
+                -3.1875
+              ],
+              "time": 0.105,
+              "duration": 0.06,
+              "uuid": "8383999d-93a3-44c8-9e1f-4dd9d045a2e9@57955"
+            },
+            {
+              "index": 4,
+              "rect": [
+                301,
+                523,
+                199,
+                235
+              ],
+              "bodyHeight": 229,
+              "feet": {
+                "left": 327,
+                "right": 458,
+                "center": 393.6666666666667,
+                "y": 754
+              },
+              "contentHash": "eac16a4a22de30cbf9f640a82bf5421d03bf2548785659d56ba1bcd7bb8c3992",
+              "name": "survivor-hurt-04",
+              "scale": 0.983051,
+              "sourceSize": [
+                652,
+                261
+              ],
+              "offset": [
+                6.8333,
+                -0.6875
+              ],
+              "time": 0.165,
+              "duration": 0.045,
+              "uuid": "8383999d-93a3-44c8-9e1f-4dd9d045a2e9@7da43"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1046,
+                522,
+                187,
+                236
+              ],
+              "bodyHeight": 230,
+              "feet": {
+                "left": 1073,
+                "right": 1199,
+                "center": 1137.1789473684212,
+                "y": 754
+              },
+              "contentHash": "42e9bb269a21d8eec1282ccda235f5ff869143baae27978c6bd79b4b2098d0a5",
+              "name": "survivor-hurt-05",
+              "scale": 0.983051,
+              "sourceSize": [
+                652,
+                261
+              ],
+              "offset": [
+                2.3211,
+                -0.1875
+              ],
+              "time": 0.21,
+              "duration": 0.035,
+              "uuid": "8383999d-93a3-44c8-9e1f-4dd9d045a2e9@866f7"
+            },
+            {
+              "index": 6,
+              "rect": [
+                302,
+                776,
+                176,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 325,
+                "right": 446,
+                "center": 386.6923076923077,
+                "y": 1010
+              },
+              "contentHash": "83ea95a97dfc7224ffe1f575ae38fe54e11a03cc7e660f46515e51a007654858",
+              "name": "survivor-hurt-06",
+              "scale": 0.983051,
+              "sourceSize": [
+                652,
+                261
+              ],
+              "offset": [
+                3.3077,
+                0.8125
+              ],
+              "time": 0.245,
+              "duration": 0.025,
+              "uuid": "8383999d-93a3-44c8-9e1f-4dd9d045a2e9@6ec18"
+            },
+            {
+              "index": 7,
+              "rect": [
+                1054,
+                776,
+                173,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1078,
+                "right": 1196,
+                "center": 1138.611111111111,
+                "y": 1010
+              },
+              "contentHash": "7bdcd07c08aeabc3b3f72a0cd684fb29aa242ed30a528467a9dfebb0a7fbbec4",
+              "name": "survivor-hurt-07",
+              "scale": 0.983051,
+              "sourceSize": [
+                652,
+                261
+              ],
+              "offset": [
+                1.8889,
+                0.8125
+              ],
+              "time": 0.27,
+              "duration": 0.04,
+              "uuid": "8383999d-93a3-44c8-9e1f-4dd9d045a2e9@13160"
+            }
+          ],
+          "atlas": "survivor-hurt.plist",
+          "duration": 0.31,
+          "loop": false,
+          "impactTime": null,
+          "uniqueFrames": 8
+        },
+        "death": {
+          "image": "survivor-death.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.8675,
+          "rowCuts": [
+            0,
+            296,
+            558,
+            799,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                298,
+                16,
+                184,
+                264
+              ],
+              "bodyHeight": 258,
+              "feet": {
+                "left": 321,
+                "right": 449,
+                "center": 386.8144329896907,
+                "y": 276
+              },
+              "contentHash": "cb0a0dce7d3a61ba767cbeedd72d75be9427462ad93228feef7584bda998b6ff",
+              "name": "survivor-death-00",
+              "scale": 0.899225,
+              "sourceSize": [
+                712,
+                285
+              ],
+              "offset": [
+                3.1856,
+                3.3125
+              ],
+              "time": 0,
+              "duration": 0.07,
+              "uuid": "278c6781-1756-4221-82c1-10f9a30c6741@ae09f"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1059,
+                34,
+                182,
+                246
+              ],
+              "bodyHeight": 240,
+              "feet": {
+                "left": 1073,
+                "right": 1206,
+                "center": 1140.1904761904761,
+                "y": 276
+              },
+              "contentHash": "77379339a34620978db71db14afcc18bf37fe0e524e95c2f5aa79bc78ebcae95",
+              "name": "survivor-death-01",
+              "scale": 0.899225,
+              "sourceSize": [
+                712,
+                285
+              ],
+              "offset": [
+                -4.8144,
+                -5.6875
+              ],
+              "time": 0.07,
+              "duration": 0.08,
+              "uuid": "278c6781-1756-4221-82c1-10f9a30c6741@2c5e3"
+            },
+            {
+              "index": 2,
+              "rect": [
+                304,
+                312,
+                208,
+                218
+              ],
+              "bodyHeight": 212,
+              "feet": {
+                "left": 307,
+                "right": 448,
+                "center": 378.2843137254902,
+                "y": 526
+              },
+              "contentHash": "fb3ab273a7a61e2aee5dfb790505a5dde4091f32e4cdcf8d611db8740b76ca87",
+              "name": "survivor-death-02",
+              "scale": 0.899225,
+              "sourceSize": [
+                712,
+                285
+              ],
+              "offset": [
+                21.1856,
+                -19.6875
+              ],
+              "time": 0.15,
+              "duration": 0.09,
+              "uuid": "278c6781-1756-4221-82c1-10f9a30c6741@b34b5"
+            },
+            {
+              "index": 3,
+              "rect": [
+                1039,
+                336,
+                236,
+                195
+              ],
+              "bodyHeight": 189,
+              "feet": {
+                "left": 1082,
+                "right": 1205,
+                "center": 1153.3766233766235,
+                "y": 527
+              },
+              "contentHash": "ba84523fa9ab5ee9442ded677ee860b601c150dd736d00c643be53deffef464a",
+              "name": "survivor-death-03",
+              "scale": 0.899225,
+              "sourceSize": [
+                712,
+                285
+              ],
+              "offset": [
+                2.1856,
+                -31.1875
+              ],
+              "time": 0.24,
+              "duration": 0.1,
+              "uuid": "278c6781-1756-4221-82c1-10f9a30c6741@6d69e"
+            },
+            {
+              "index": 4,
+              "rect": [
+                286,
+                584,
+                243,
+                169
+              ],
+              "bodyHeight": 163,
+              "feet": {
+                "left": 328,
+                "right": 376,
+                "center": 351.3404255319149,
+                "y": 749
+              },
+              "contentHash": "6a2d1b4e70509b3c0b86f5c071b29d39448a087860cf954252e5ded1843a2a2b",
+              "name": "survivor-death-04",
+              "scale": 0.899225,
+              "sourceSize": [
+                712,
+                285
+              ],
+              "offset": [
+                20.6856,
+                -44.1875
+              ],
+              "time": 0.34,
+              "duration": 0.1,
+              "uuid": "278c6781-1756-4221-82c1-10f9a30c6741@d4d4e"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1001,
+                601,
+                286,
+                147
+              ],
+              "bodyHeight": 141,
+              "feet": {
+                "left": 1145,
+                "right": 1174,
+                "center": 1159.5,
+                "y": 744
+              },
+              "contentHash": "e1557ea9744f0c82af40239da36ca3308dda378d46b3811fc8b0e3ad8c7f8511",
+              "name": "survivor-death-05",
+              "scale": 0.899225,
+              "sourceSize": [
+                712,
+                285
+              ],
+              "offset": [
+                -10.8144,
+                -55.1875
+              ],
+              "time": 0.44,
+              "duration": 0.12,
+              "uuid": "278c6781-1756-4221-82c1-10f9a30c6741@a6922"
+            },
+            {
+              "index": 6,
+              "rect": [
+                247,
+                845,
+                278,
+                133
+              ],
+              "bodyHeight": 127,
+              "feet": {
+                "left": 251,
+                "right": 437,
+                "center": 339.3272727272727,
+                "y": 974
+              },
+              "contentHash": "0971240a7237d50616a788530ec80016ae1b91dd0bf7d47cdf6a0bfe4d3dc7e6",
+              "name": "survivor-death-06",
+              "scale": 0.899225,
+              "sourceSize": [
+                712,
+                285
+              ],
+              "offset": [
+                -0.8144,
+                -62.1875
+              ],
+              "time": 0.56,
+              "duration": 0.15,
+              "uuid": "278c6781-1756-4221-82c1-10f9a30c6741@f036c"
+            },
+            {
+              "index": 7,
+              "rect": [
+                1013,
+                854,
+                282,
+                125
+              ],
+              "bodyHeight": 119,
+              "feet": {
+                "left": 1017,
+                "right": 1126,
+                "center": 1070.462962962963,
+                "y": 975
+              },
+              "contentHash": "85abfd16daa88c6e212851dcfd452b5b3c0ad62979ffabc84284493c3d302f7f",
+              "name": "survivor-death-07",
+              "scale": 0.899225,
+              "sourceSize": [
+                712,
+                285
+              ],
+              "offset": [
+                -0.8144,
+                -66.1875
+              ],
+              "time": 0.71,
+              "duration": 0.2,
+              "uuid": "278c6781-1756-4221-82c1-10f9a30c6741@17b2a"
+            }
+          ],
+          "atlas": "survivor-death.plist",
+          "duration": 0.91,
+          "loop": false,
+          "impactTime": null,
+          "uniqueFrames": 8
+        }
+      }
+    },
+    "wanderer": {
+      "name": "游荡感染者",
+      "baseHeight": 234,
+      "actions": {
+        "idle": {
+          "image": "wanderer-idle.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 6,
+          "alphaZeroRatio": 0.6406,
+          "rowCuts": [
+            0,
+            258,
+            510,
+            766,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                101,
+                13,
+                126,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 113,
+                "right": 216,
+                "center": 164.9746835443038,
+                "y": 249
+              },
+              "contentHash": "3c197b940ba3dd1992060d3dc587a0cafab542c89e6c2da5f0499fe3b1f476a3",
+              "name": "wanderer-idle-00",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -0.9747,
+                4
+              ],
+              "time": 0,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@f8321"
+            },
+            {
+              "index": 1,
+              "rect": [
+                348,
+                13,
+                126,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 360,
+                "right": 464,
+                "center": 412.49367088607596,
+                "y": 249
+              },
+              "contentHash": "ebab698a9bb7c75d8d0a4e45cb3a2c4c8f90b82f65d3369b7f3c81bd189f9413",
+              "name": "wanderer-idle-01",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.4937,
+                4
+              ],
+              "time": 0.125,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@34d04"
+            },
+            {
+              "index": 2,
+              "rect": [
+                597,
+                13,
+                125,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 608,
+                "right": 711,
+                "center": 659.9746835443038,
+                "y": 249
+              },
+              "contentHash": "4d34849bb6fb2fb9975695329c32465fa87ec0b000007b9bdd6fd1bf21a1c457",
+              "name": "wanderer-idle-02",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -0.4747,
+                4
+              ],
+              "time": 0.25,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@d99eb"
+            },
+            {
+              "index": 3,
+              "rect": [
+                842,
+                13,
+                127,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 855,
+                "right": 958,
+                "center": 906.8333333333334,
+                "y": 249
+              },
+              "contentHash": "f1369a21d51d434dc90c4df78602494224cf5508a9aa698126896d6009913153",
+              "name": "wanderer-idle-03",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.3333,
+                4
+              ],
+              "time": 0.375,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@00fc3"
+            },
+            {
+              "index": 4,
+              "rect": [
+                1089,
+                13,
+                127,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 1102,
+                "right": 1205,
+                "center": 1153.8333333333333,
+                "y": 249
+              },
+              "contentHash": "d1a2cfb704fb50dd162ca64854acfc06819bc569d99452bf534101f100ce3474",
+              "name": "wanderer-idle-04",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.3333,
+                4
+              ],
+              "time": 0.5,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@2be3b"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1336,
+                13,
+                127,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 1349,
+                "right": 1453,
+                "center": 1401.493670886076,
+                "y": 249
+              },
+              "contentHash": "7a8b075bec5922949b374ef0f88cf9ac0a244eab10f4d745445e7f14ec243810",
+              "name": "wanderer-idle-05",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.9937,
+                4
+              ],
+              "time": 0.625,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@c1d5e"
+            },
+            {
+              "index": 6,
+              "rect": [
+                100,
+                262,
+                127,
+                242
+              ],
+              "bodyHeight": 236,
+              "feet": {
+                "left": 115,
+                "right": 217,
+                "center": 166.84415584415584,
+                "y": 500
+              },
+              "contentHash": "aac9678d603486e6adb8f697ccd57e7124b64766d1483341af7987c199a73a52",
+              "name": "wanderer-idle-06",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -3.3442,
+                5
+              ],
+              "time": 0.75,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@134ad"
+            },
+            {
+              "index": 7,
+              "rect": [
+                348,
+                263,
+                127,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 362,
+                "right": 465,
+                "center": 414.16666666666663,
+                "y": 500
+              },
+              "contentHash": "2b946fe87bda787908008ef71507308594bfa6b6c8912da80f286c10bf0e0f78",
+              "name": "wanderer-idle-07",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.6667,
+                4.5
+              ],
+              "time": 0.875,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@d0a83"
+            },
+            {
+              "index": 8,
+              "rect": [
+                596,
+                263,
+                126,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 609,
+                "right": 712,
+                "center": 660.9746835443038,
+                "y": 500
+              },
+              "contentHash": "d07655f4efe5d0658f084c25dc5101925ccfd6b80feb987cce946862c9b5cad1",
+              "name": "wanderer-idle-08",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.9747,
+                4.5
+              ],
+              "time": 1,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@c350a"
+            },
+            {
+              "index": 9,
+              "rect": [
+                842,
+                263,
+                127,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 856,
+                "right": 959,
+                "center": 907.9746835443038,
+                "y": 500
+              },
+              "contentHash": "1717a4ab70ff70e0071177342cec05b7fbf261ad8784d9372d7657f615ac7ac5",
+              "name": "wanderer-idle-09",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.4747,
+                4.5
+              ],
+              "time": 1.125,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@db620"
+            },
+            {
+              "index": 10,
+              "rect": [
+                1089,
+                263,
+                128,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 1103,
+                "right": 1206,
+                "center": 1154.8333333333333,
+                "y": 500
+              },
+              "contentHash": "742696fcfb1c846b443748e1d3e774aaa4e496846bbb2e29c330d7bcca81b92e",
+              "name": "wanderer-idle-10",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.8333,
+                4.5
+              ],
+              "time": 1.25,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@1163b"
+            },
+            {
+              "index": 11,
+              "rect": [
+                1335,
+                263,
+                128,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 1351,
+                "right": 1453,
+                "center": 1402.5064935064936,
+                "y": 500
+              },
+              "contentHash": "1cb2b0569b7c76279ad88246174e0e857e9ac8251a50e5c18aa9e3af9a61cc75",
+              "name": "wanderer-idle-11",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -3.5065,
+                4.5
+              ],
+              "time": 1.375,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@02557"
+            },
+            {
+              "index": 12,
+              "rect": [
+                100,
+                517,
+                127,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 114,
+                "right": 217,
+                "center": 165.9746835443038,
+                "y": 754
+              },
+              "contentHash": "1986088819240329612ca1f8b32623e14038f058a630ba2be4375970f2ad4909",
+              "name": "wanderer-idle-12",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.4747,
+                4.5
+              ],
+              "time": 1.5,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@9d688"
+            },
+            {
+              "index": 13,
+              "rect": [
+                349,
+                516,
+                126,
+                242
+              ],
+              "bodyHeight": 236,
+              "feet": {
+                "left": 362,
+                "right": 464,
+                "center": 413.5064935064935,
+                "y": 754
+              },
+              "contentHash": "d4611292d5996bcafd0e917e00befdbb92c10998887739270f2ed63cdcb6da88",
+              "name": "wanderer-idle-13",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.5065,
+                5
+              ],
+              "time": 1.625,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@cce3c"
+            },
+            {
+              "index": 14,
+              "rect": [
+                596,
+                517,
+                126,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 609,
+                "right": 712,
+                "center": 660.9746835443038,
+                "y": 754
+              },
+              "contentHash": "235d92eb5254d996f2048f36c37915d098de132ecee4a008e13fa99276a429d1",
+              "name": "wanderer-idle-14",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.9747,
+                4.5
+              ],
+              "time": 1.75,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@47db9"
+            },
+            {
+              "index": 15,
+              "rect": [
+                842,
+                516,
+                127,
+                242
+              ],
+              "bodyHeight": 236,
+              "feet": {
+                "left": 856,
+                "right": 959,
+                "center": 907.9746835443038,
+                "y": 754
+              },
+              "contentHash": "bbd0a61ff0004919dcbd2d8e6b02571d8989898e4a3de2961c87ac7029ae0933",
+              "name": "wanderer-idle-15",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.4747,
+                5
+              ],
+              "time": 1.875,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@411a2"
+            },
+            {
+              "index": 16,
+              "rect": [
+                1088,
+                517,
+                129,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 1103,
+                "right": 1206,
+                "center": 1155.025974025974,
+                "y": 754
+              },
+              "contentHash": "304708a5206431c6cd7a7b31e055bd197fc497178b0d75f77dae5effe4d4ede4",
+              "name": "wanderer-idle-16",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.526,
+                4.5
+              ],
+              "time": 2,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@3140a"
+            },
+            {
+              "index": 17,
+              "rect": [
+                1335,
+                517,
+                128,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 1350,
+                "right": 1454,
+                "center": 1402.625,
+                "y": 754
+              },
+              "contentHash": "af3702102a97a2fb50e71c0b984a56cda7474f53ba66fd0b88391f5c3ed2451b",
+              "name": "wanderer-idle-17",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -3.625,
+                4.5
+              ],
+              "time": 2.125,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@b312a"
+            },
+            {
+              "index": 18,
+              "rect": [
+                101,
+                774,
+                127,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 114,
+                "right": 218,
+                "center": 166.625,
+                "y": 1008
+              },
+              "contentHash": "2483f3ed2de7d14c72d47c6634ef1d041ac7ea37e4be6a6d31180d3cce06733b",
+              "name": "wanderer-idle-18",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.125,
+                3
+              ],
+              "time": 2.25,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@97dc2"
+            },
+            {
+              "index": 19,
+              "rect": [
+                348,
+                773,
+                127,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 362,
+                "right": 465,
+                "center": 414.16666666666663,
+                "y": 1008
+              },
+              "contentHash": "79ad599860f536e07e594c7c99c7c88d4bf0e94151609df06d2c7dec055c8358",
+              "name": "wanderer-idle-19",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.6667,
+                3.5
+              ],
+              "time": 2.375,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@38ed6"
+            },
+            {
+              "index": 20,
+              "rect": [
+                596,
+                774,
+                126,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 609,
+                "right": 712,
+                "center": 660.9746835443038,
+                "y": 1008
+              },
+              "contentHash": "33a001e42f7a81a720920ab6620fce1925f84b3ce5550d8f09eb84e9a7c28e90",
+              "name": "wanderer-idle-20",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -1.9747,
+                3
+              ],
+              "time": 2.5,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@99c49"
+            },
+            {
+              "index": 21,
+              "rect": [
+                843,
+                774,
+                128,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 856,
+                "right": 959,
+                "center": 907.9746835443038,
+                "y": 1008
+              },
+              "contentHash": "72aba6dba94228bee68ab232b457a64a72ff517a27f473f8d2400031a0807256",
+              "name": "wanderer-idle-21",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -0.9747,
+                3
+              ],
+              "time": 2.625,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@0f38d"
+            },
+            {
+              "index": 22,
+              "rect": [
+                1088,
+                774,
+                129,
+                238
+              ],
+              "bodyHeight": 232,
+              "feet": {
+                "left": 1103,
+                "right": 1207,
+                "center": 1155.493670886076,
+                "y": 1008
+              },
+              "contentHash": "f7de7316d194080fe5d9c5097d1d7ff4429cac07da87e7f2d0f14724bc3f853d",
+              "name": "wanderer-idle-22",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.9937,
+                3
+              ],
+              "time": 2.75,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@c99e2"
+            },
+            {
+              "index": 23,
+              "rect": [
+                1335,
+                773,
+                129,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 1350,
+                "right": 1454,
+                "center": 1402.493670886076,
+                "y": 1008
+              },
+              "contentHash": "9a5cd57da06b3f33c4537ac1633ded6f8728d6e364a6c8ed18955881d014e669",
+              "name": "wanderer-idle-23",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                -2.9937,
+                3.5
+              ],
+              "time": 2.875,
+              "duration": 0.125,
+              "uuid": "bda3c287-ed94-41b9-9071-285df03fae71@dfb9b"
+            }
+          ],
+          "atlas": "wanderer-idle.plist",
+          "duration": 3,
+          "loop": true,
+          "impactTime": null,
+          "uniqueFrames": 24
+        },
+        "attack": {
+          "image": "wanderer-attack.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.8682,
+          "rowCuts": [
+            0,
+            268,
+            527,
+            774,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                322,
+                17,
+                125,
+                235
+              ],
+              "bodyHeight": 229,
+              "feet": {
+                "left": 338,
+                "right": 439,
+                "center": 388.5,
+                "y": 248
+              },
+              "contentHash": "d858b6f653703be5bb83560a46de2553967cbda6a6c6bad5691ac65c89b7d441",
+              "name": "wanderer-attack-00",
+              "scale": 1.021834,
+              "sourceSize": [
+                627,
+                251
+              ],
+              "offset": [
+                -54.5,
+                3.6875
+              ],
+              "time": 0,
+              "duration": 0.08,
+              "uuid": "9d88278a-aa26-44f0-b864-9264b7d71b54@67276"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1078,
+                33,
+                148,
+                219
+              ],
+              "bodyHeight": 213,
+              "feet": {
+                "left": 1095,
+                "right": 1207,
+                "center": 1149.6190476190477,
+                "y": 248
+              },
+              "contentHash": "d1084decb73edbcbd3e5e109cef9777c134346911f17ca761eb8bd24c8140e00",
+              "name": "wanderer-attack-01",
+              "scale": 1.021834,
+              "sourceSize": [
+                627,
+                251
+              ],
+              "offset": [
+                -55,
+                -4.3125
+              ],
+              "time": 0.08,
+              "duration": 0.07,
+              "uuid": "9d88278a-aa26-44f0-b864-9264b7d71b54@2343d"
+            },
+            {
+              "index": 2,
+              "rect": [
+                277,
+                284,
+                192,
+                224
+              ],
+              "bodyHeight": 218,
+              "feet": {
+                "left": 330,
+                "right": 450,
+                "center": 388.5,
+                "y": 504
+              },
+              "contentHash": "1fc27db821bdf50276b911489c2ead783648173b726a9c925259ea0aeb1e4462",
+              "name": "wanderer-attack-02",
+              "scale": 1.021834,
+              "sourceSize": [
+                627,
+                251
+              ],
+              "offset": [
+                -77,
+                -1.8125
+              ],
+              "time": 0.15,
+              "duration": 0.07,
+              "uuid": "9d88278a-aa26-44f0-b864-9264b7d71b54@5f787"
+            },
+            {
+              "index": 3,
+              "rect": [
+                964,
+                293,
+                276,
+                215
+              ],
+              "bodyHeight": 209,
+              "feet": {
+                "left": 1079,
+                "right": 1236,
+                "center": 1155.0537634408602,
+                "y": 504
+              },
+              "contentHash": "aa9413a1daa95628d594bbd9faaaf4029aec15b1509fe10a29115272f01107d2",
+              "name": "wanderer-attack-03",
+              "scale": 1.021834,
+              "sourceSize": [
+                627,
+                251
+              ],
+              "offset": [
+                -134,
+                -6.3125
+              ],
+              "time": 0.22,
+              "duration": 0.06,
+              "uuid": "9d88278a-aa26-44f0-b864-9264b7d71b54@66ede"
+            },
+            {
+              "index": 4,
+              "rect": [
+                160,
+                546,
+                341,
+                218
+              ],
+              "bodyHeight": 212,
+              "feet": {
+                "left": 311,
+                "right": 497,
+                "center": 401.019801980198,
+                "y": 760
+              },
+              "contentHash": "c542180d66e358b4e3eda967ed7c0d0883cbb17694ed8e3fadaf49f2c6a34d3c",
+              "name": "wanderer-attack-04",
+              "scale": 1.021834,
+              "sourceSize": [
+                627,
+                251
+              ],
+              "offset": [
+                -166.5,
+                -4.8125
+              ],
+              "time": 0.28,
+              "duration": 0.05,
+              "uuid": "9d88278a-aa26-44f0-b864-9264b7d71b54@7ab60"
+            },
+            {
+              "index": 5,
+              "rect": [
+                919,
+                557,
+                350,
+                207
+              ],
+              "bodyHeight": 201,
+              "feet": {
+                "left": 1075,
+                "right": 1265,
+                "center": 1168.326923076923,
+                "y": 760
+              },
+              "contentHash": "8371abf66f86daf51eb604b7b40f30bbfe2439d2e222bd9e68ffee33c105e579",
+              "name": "wanderer-attack-05",
+              "scale": 1.021834,
+              "sourceSize": [
+                627,
+                251
+              ],
+              "offset": [
+                -171,
+                -10.3125
+              ],
+              "time": 0.33,
+              "duration": 0.06,
+              "uuid": "9d88278a-aa26-44f0-b864-9264b7d71b54@57ce9"
+            },
+            {
+              "index": 6,
+              "rect": [
+                278,
+                799,
+                196,
+                221
+              ],
+              "bodyHeight": 215,
+              "feet": {
+                "left": 326,
+                "right": 463,
+                "center": 394.3030303030303,
+                "y": 1016
+              },
+              "contentHash": "87bd7adac3871dd207fd7b2728b241fd07d2880560c47062ac310057006cb95a",
+              "name": "wanderer-attack-06",
+              "scale": 1.021834,
+              "sourceSize": [
+                627,
+                251
+              ],
+              "offset": [
+                -87,
+                -3.3125
+              ],
+              "time": 0.39,
+              "duration": 0.08,
+              "uuid": "9d88278a-aa26-44f0-b864-9264b7d71b54@f3abf"
+            },
+            {
+              "index": 7,
+              "rect": [
+                1091,
+                785,
+                125,
+                235
+              ],
+              "bodyHeight": 229,
+              "feet": {
+                "left": 1107,
+                "right": 1207,
+                "center": 1157,
+                "y": 1016
+              },
+              "contentHash": "49155b6d1a4fd9177f585bb7ab37efbda36877e138b0364034ac78daad823db1",
+              "name": "wanderer-attack-07",
+              "scale": 1.021834,
+              "sourceSize": [
+                627,
+                251
+              ],
+              "offset": [
+                -53.5,
+                3.6875
+              ],
+              "time": 0.47,
+              "duration": 0.09,
+              "uuid": "9d88278a-aa26-44f0-b864-9264b7d71b54@8ce7d"
+            }
+          ],
+          "atlas": "wanderer-attack.plist",
+          "duration": 0.56,
+          "loop": false,
+          "impactTime": 0.28,
+          "uniqueFrames": 8
+        },
+        "hurt": {
+          "image": "wanderer-hurt.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.8805,
+          "rowCuts": [
+            0,
+            253,
+            516,
+            772,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                325,
+                18,
+                124,
+                231
+              ],
+              "bodyHeight": 225,
+              "feet": {
+                "left": 341,
+                "right": 442,
+                "center": 391.8421052631579,
+                "y": 245
+              },
+              "contentHash": "bf69f7b3a916c8bf670d5949099fd64f21f4da3af08512df5cc2995ae877e3dd",
+              "name": "wanderer-hurt-00",
+              "scale": 1.04,
+              "sourceSize": [
+                616,
+                247
+              ],
+              "offset": [
+                -4.8421,
+                3.4375
+              ],
+              "time": 0,
+              "duration": 0.025,
+              "uuid": "7e663827-4eb8-46aa-80bb-f3418292713c@2aa6d"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1082,
+                12,
+                139,
+                237
+              ],
+              "bodyHeight": 231,
+              "feet": {
+                "left": 1107,
+                "right": 1210,
+                "center": 1158.6753246753246,
+                "y": 245
+              },
+              "contentHash": "30ddbd0eb6dec762e338b8ceb06a0f63ac5e884427edb36862c26631760499a7",
+              "name": "wanderer-hurt-01",
+              "scale": 1.04,
+              "sourceSize": [
+                616,
+                247
+              ],
+              "offset": [
+                -7.1753,
+                6.4375
+              ],
+              "time": 0.025,
+              "duration": 0.035,
+              "uuid": "7e663827-4eb8-46aa-80bb-f3418292713c@b6d34"
+            },
+            {
+              "index": 2,
+              "rect": [
+                310,
+                259,
+                158,
+                247
+              ],
+              "bodyHeight": 241,
+              "feet": {
+                "left": 340,
+                "right": 442,
+                "center": 391.16883116883116,
+                "y": 502
+              },
+              "contentHash": "2111fe021fe4f1e6a8f28621cc571c9f2991797285f4ea98d3b975af1767d62c",
+              "name": "wanderer-hurt-02",
+              "scale": 1.04,
+              "sourceSize": [
+                616,
+                247
+              ],
+              "offset": [
+                -2.1688,
+                11.4375
+              ],
+              "time": 0.06,
+              "duration": 0.045,
+              "uuid": "7e663827-4eb8-46aa-80bb-f3418292713c@564e6"
+            },
+            {
+              "index": 3,
+              "rect": [
+                1062,
+                257,
+                199,
+                249
+              ],
+              "bodyHeight": 243,
+              "feet": {
+                "left": 1093,
+                "right": 1208,
+                "center": 1150.8181818181818,
+                "y": 502
+              },
+              "contentHash": "377332fea62ee1add8b6e17ef67dcc3e020d990f7ff3627168693104a67145e2",
+              "name": "wanderer-hurt-03",
+              "scale": 1.04,
+              "sourceSize": [
+                616,
+                247
+              ],
+              "offset": [
+                10.6818,
+                12.4375
+              ],
+              "time": 0.105,
+              "duration": 0.06,
+              "uuid": "7e663827-4eb8-46aa-80bb-f3418292713c@cb751"
+            },
+            {
+              "index": 4,
+              "rect": [
+                303,
+                525,
+                156,
+                236
+              ],
+              "bodyHeight": 230,
+              "feet": {
+                "left": 338,
+                "right": 443,
+                "center": 390.5,
+                "y": 757
+              },
+              "contentHash": "adedf590da322ced5168d3b0bfffa05ce8bdb56d09cc56be179983679b585ec0",
+              "name": "wanderer-hurt-04",
+              "scale": 1.04,
+              "sourceSize": [
+                616,
+                247
+              ],
+              "offset": [
+                -9.5,
+                5.9375
+              ],
+              "time": 0.165,
+              "duration": 0.045,
+              "uuid": "7e663827-4eb8-46aa-80bb-f3418292713c@63fdb"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1084,
+                525,
+                132,
+                236
+              ],
+              "bodyHeight": 230,
+              "feet": {
+                "left": 1107,
+                "right": 1212,
+                "center": 1159.825,
+                "y": 757
+              },
+              "contentHash": "23e80273344737422209f1f855742d1fd5829955a58c3bdcdbe78fcfe445d543",
+              "name": "wanderer-hurt-05",
+              "scale": 1.04,
+              "sourceSize": [
+                616,
+                247
+              ],
+              "offset": [
+                -9.825,
+                5.9375
+              ],
+              "time": 0.21,
+              "duration": 0.035,
+              "uuid": "7e663827-4eb8-46aa-80bb-f3418292713c@c4ccd"
+            },
+            {
+              "index": 6,
+              "rect": [
+                322,
+                782,
+                124,
+                235
+              ],
+              "bodyHeight": 229,
+              "feet": {
+                "left": 343,
+                "right": 442,
+                "center": 392.85135135135135,
+                "y": 1013
+              },
+              "contentHash": "cbdfbd957b4a9df47b064861aba815836b8e4a2d25350775f9f1199e76386631",
+              "name": "wanderer-hurt-06",
+              "scale": 1.04,
+              "sourceSize": [
+                616,
+                247
+              ],
+              "offset": [
+                -8.8514,
+                5.4375
+              ],
+              "time": 0.245,
+              "duration": 0.025,
+              "uuid": "7e663827-4eb8-46aa-80bb-f3418292713c@d8548"
+            },
+            {
+              "index": 7,
+              "rect": [
+                1092,
+                785,
+                123,
+                232
+              ],
+              "bodyHeight": 226,
+              "feet": {
+                "left": 1110,
+                "right": 1210,
+                "center": 1160.52,
+                "y": 1013
+              },
+              "contentHash": "2885c3195e2114ea274771d2431f69615755773597d860aaf1681fdaec13574c",
+              "name": "wanderer-hurt-07",
+              "scale": 1.04,
+              "sourceSize": [
+                616,
+                247
+              ],
+              "offset": [
+                -7.02,
+                3.9375
+              ],
+              "time": 0.27,
+              "duration": 0.04,
+              "uuid": "7e663827-4eb8-46aa-80bb-f3418292713c@ed89a"
+            }
+          ],
+          "atlas": "wanderer-hurt.plist",
+          "duration": 0.31,
+          "loop": false,
+          "impactTime": null,
+          "uniqueFrames": 8
+        },
+        "death": {
+          "image": "wanderer-death.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.8696,
+          "rowCuts": [
+            0,
+            275,
+            552,
+            808,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                319,
+                10,
+                124,
+                243
+              ],
+              "bodyHeight": 237,
+              "feet": {
+                "left": 339,
+                "right": 430,
+                "center": 384.84,
+                "y": 249
+              },
+              "contentHash": "6bf0654ff658031f85d83067d2e0b61a9229157433b3f018a31122f04f8ff843",
+              "name": "wanderer-death-00",
+              "scale": 0.987342,
+              "sourceSize": [
+                649,
+                260
+              ],
+              "offset": [
+                -3.84,
+                3.75
+              ],
+              "time": 0,
+              "duration": 0.07,
+              "uuid": "dfbddefc-70bd-4efe-af3a-abdd19f241fe@064e0"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1077,
+                32,
+                132,
+                223
+              ],
+              "bodyHeight": 217,
+              "feet": {
+                "left": 1105,
+                "right": 1201,
+                "center": 1152.6891891891892,
+                "y": 251
+              },
+              "contentHash": "46e67455f325a40d943170ea62612ff6d802b0fbaab20c522f8e65162155e570",
+              "name": "wanderer-death-01",
+              "scale": 0.987342,
+              "sourceSize": [
+                649,
+                260
+              ],
+              "offset": [
+                -9.84,
+                -6.25
+              ],
+              "time": 0.07,
+              "duration": 0.08,
+              "uuid": "dfbddefc-70bd-4efe-af3a-abdd19f241fe@4ad7d"
+            },
+            {
+              "index": 2,
+              "rect": [
+                297,
+                295,
+                164,
+                214
+              ],
+              "bodyHeight": 208,
+              "feet": {
+                "left": 337,
+                "right": 457,
+                "center": 397,
+                "y": 505
+              },
+              "contentHash": "bfe2d55847e8103a573ba967ccdfaea12ea74e7d6265f8d38ebd4ac6ab080c13",
+              "name": "wanderer-death-02",
+              "scale": 0.987342,
+              "sourceSize": [
+                649,
+                260
+              ],
+              "offset": [
+                -5.84,
+                -10.75
+              ],
+              "time": 0.15,
+              "duration": 0.09,
+              "uuid": "dfbddefc-70bd-4efe-af3a-abdd19f241fe@6d93f"
+            },
+            {
+              "index": 3,
+              "rect": [
+                1050,
+                323,
+                206,
+                190
+              ],
+              "bodyHeight": 184,
+              "feet": {
+                "left": 1162,
+                "right": 1173,
+                "center": 1167.5,
+                "y": 509
+              },
+              "contentHash": "5179c87129b64ef1d3de1aa5ffebd78ff45e08f016a7e43b2aafc93860ddfe84",
+              "name": "wanderer-death-03",
+              "scale": 0.987342,
+              "sourceSize": [
+                649,
+                260
+              ],
+              "offset": [
+                0.16,
+                -22.75
+              ],
+              "time": 0.24,
+              "duration": 0.1,
+              "uuid": "dfbddefc-70bd-4efe-af3a-abdd19f241fe@888d7"
+            },
+            {
+              "index": 4,
+              "rect": [
+                262,
+                592,
+                245,
+                172
+              ],
+              "bodyHeight": 166,
+              "feet": {
+                "left": 373,
+                "right": 498,
+                "center": 434.811320754717,
+                "y": 760
+              },
+              "contentHash": "e40a7943c2f3263fea22b40fd8cfb25b0dfdd17ec3b21b7c94637c5f2a73a9e0",
+              "name": "wanderer-death-04",
+              "scale": 0.987342,
+              "sourceSize": [
+                649,
+                260
+              ],
+              "offset": [
+                -0.34,
+                -31.75
+              ],
+              "time": 0.34,
+              "duration": 0.1,
+              "uuid": "dfbddefc-70bd-4efe-af3a-abdd19f241fe@831ea"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1004,
+                611,
+                276,
+                154
+              ],
+              "bodyHeight": 148,
+              "feet": {
+                "left": 1007,
+                "right": 1158,
+                "center": 1072.8555555555556,
+                "y": 761
+              },
+              "contentHash": "3043f3f80cf43aee628deeffdaeb8c07ba9742b650ee85979b31304bf231b6ff",
+              "name": "wanderer-death-05",
+              "scale": 0.987342,
+              "sourceSize": [
+                649,
+                260
+              ],
+              "offset": [
+                -10.84,
+                -40.75
+              ],
+              "time": 0.44,
+              "duration": 0.12,
+              "uuid": "dfbddefc-70bd-4efe-af3a-abdd19f241fe@926e7"
+            },
+            {
+              "index": 6,
+              "rect": [
+                232,
+                884,
+                279,
+                111
+              ],
+              "bodyHeight": 105,
+              "feet": {
+                "left": 236,
+                "right": 497,
+                "center": 344.4963503649635,
+                "y": 991
+              },
+              "contentHash": "d433e33419adadc4903360ac947873d890b31a9f4777123590aa51885b45975a",
+              "name": "wanderer-death-06",
+              "scale": 0.987342,
+              "sourceSize": [
+                649,
+                260
+              ],
+              "offset": [
+                -13.34,
+                -62.25
+              ],
+              "time": 0.56,
+              "duration": 0.15,
+              "uuid": "dfbddefc-70bd-4efe-af3a-abdd19f241fe@41b27"
+            },
+            {
+              "index": 7,
+              "rect": [
+                982,
+                909,
+                299,
+                86
+              ],
+              "bodyHeight": 80,
+              "feet": {
+                "left": 985,
+                "right": 1263,
+                "center": 1094.7045454545455,
+                "y": 991
+              },
+              "contentHash": "cda36080d26bcba11ba74c1d423e6fa2a82b5c61a617db826b65af5163e1e4a1",
+              "name": "wanderer-death-07",
+              "scale": 0.987342,
+              "sourceSize": [
+                649,
+                260
+              ],
+              "offset": [
+                -21.34,
+                -74.75
+              ],
+              "time": 0.71,
+              "duration": 0.2,
+              "uuid": "dfbddefc-70bd-4efe-af3a-abdd19f241fe@db734"
+            }
+          ],
+          "atlas": "wanderer-death.plist",
+          "duration": 0.91,
+          "loop": false,
+          "impactTime": null,
+          "uniqueFrames": 8
+        }
+      }
+    },
+    "brute": {
+      "name": "重型感染者",
+      "baseHeight": 234,
+      "actions": {
+        "idle": {
+          "image": "brute-idle.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 6,
+          "alphaZeroRatio": 0.4301,
+          "rowCuts": [
+            0,
+            258,
+            513,
+            769,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                45,
+                9,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 56,
+                "right": 229,
+                "center": 140.6341463414634,
+                "y": 245
+              },
+              "contentHash": "8d85c3df3e8f3a671ec1d09b920fdc1447b386469b4ddd3451ed28245203a304",
+              "name": "brute-idle-00",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.8659,
+                4
+              ],
+              "time": 0,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@6a6bc"
+            },
+            {
+              "index": 1,
+              "rect": [
+                301,
+                8,
+                211,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 313,
+                "right": 485,
+                "center": 397.23333333333335,
+                "y": 245
+              },
+              "contentHash": "864f4454bea09039087c11b5e5ab8a59cb3b67780787379f544c2699a168a783",
+              "name": "brute-idle-01",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.2667,
+                4.5
+              ],
+              "time": 0.125,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@6bf63"
+            },
+            {
+              "index": 2,
+              "rect": [
+                557,
+                9,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 569,
+                "right": 740,
+                "center": 652.7666666666667,
+                "y": 245
+              },
+              "contentHash": "ed789fcaca3f796eb0984d553722b3c0c1ea26bf4097d6b6d7d565c4058045f3",
+              "name": "brute-idle-02",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.7333,
+                4
+              ],
+              "time": 0.25,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@f04f4"
+            },
+            {
+              "index": 3,
+              "rect": [
+                813,
+                8,
+                211,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 825,
+                "right": 997,
+                "center": 909.2333333333333,
+                "y": 245
+              },
+              "contentHash": "07d7742e4c66e69c27d29bddb778d0918f6935a785c948f8bdd5c53c0def2c55",
+              "name": "brute-idle-03",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.2667,
+                4.5
+              ],
+              "time": 0.375,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@cd30e"
+            },
+            {
+              "index": 4,
+              "rect": [
+                1069,
+                9,
+                210,
+                241
+              ],
+              "bodyHeight": 235,
+              "feet": {
+                "left": 1081,
+                "right": 1252,
+                "center": 1164.7666666666667,
+                "y": 246
+              },
+              "contentHash": "cef1705597f6deecc3c2875bf42fb410f3b36d1ab320f0f2eafed2c14c790018",
+              "name": "brute-idle-04",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.2333,
+                4.5
+              ],
+              "time": 0.5,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@947f0"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1325,
+                9,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 1337,
+                "right": 1509,
+                "center": 1421.2333333333333,
+                "y": 245
+              },
+              "contentHash": "3497a961d755962c7946f96aa341420333b39b6fc4ffaf9a21f32b3b72f2461c",
+              "name": "brute-idle-05",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.2667,
+                4
+              ],
+              "time": 0.625,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@054ef"
+            },
+            {
+              "index": 6,
+              "rect": [
+                45,
+                265,
+                210,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 57,
+                "right": 229,
+                "center": 141.23333333333332,
+                "y": 501
+              },
+              "contentHash": "f9b037a2533186cb1b30e166f95aef43c9f0a739595637b3d9dc010e832c99fc",
+              "name": "brute-idle-06",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.7667,
+                4
+              ],
+              "time": 0.75,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@4e2e0"
+            },
+            {
+              "index": 7,
+              "rect": [
+                301,
+                265,
+                210,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 313,
+                "right": 485,
+                "center": 397.23333333333335,
+                "y": 501
+              },
+              "contentHash": "ded55cda605c84240786f468bd501be5a0652996a5c205902af4efcd1fdd791c",
+              "name": "brute-idle-07",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.7667,
+                4
+              ],
+              "time": 0.875,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@0f8a4"
+            },
+            {
+              "index": 8,
+              "rect": [
+                557,
+                265,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 568,
+                "right": 740,
+                "center": 651.7916666666666,
+                "y": 501
+              },
+              "contentHash": "405370ca204063b8624c42f8431dcf2b9a67da02ec9c19c35a90628ba99eb812",
+              "name": "brute-idle-08",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                10.7083,
+                4
+              ],
+              "time": 1,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@9b67e"
+            },
+            {
+              "index": 9,
+              "rect": [
+                813,
+                265,
+                210,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 825,
+                "right": 997,
+                "center": 909.2333333333333,
+                "y": 501
+              },
+              "contentHash": "7ce5febb4ed0c98804f56b845a7ab7741fc434b149ed385f1b34e8744040c8ed",
+              "name": "brute-idle-09",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.7667,
+                4
+              ],
+              "time": 1.125,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@c13fc"
+            },
+            {
+              "index": 10,
+              "rect": [
+                1069,
+                265,
+                210,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 1081,
+                "right": 1252,
+                "center": 1164.4957983193276,
+                "y": 501
+              },
+              "contentHash": "7530914b9871ba68773caf8c6f1a531f19bec99b1012cc595a9dac31b55e7b4d",
+              "name": "brute-idle-10",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.5042,
+                4
+              ],
+              "time": 1.25,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@f9d0d"
+            },
+            {
+              "index": 11,
+              "rect": [
+                1325,
+                265,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 1336,
+                "right": 1509,
+                "center": 1420.3688524590164,
+                "y": 501
+              },
+              "contentHash": "9d2f01977e86054f68180ba9eee8f36cfdad773e9d63297114bdcd4b2a9ca09c",
+              "name": "brute-idle-11",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                10.1311,
+                4
+              ],
+              "time": 1.375,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@d6292"
+            },
+            {
+              "index": 12,
+              "rect": [
+                45,
+                521,
+                210,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 57,
+                "right": 229,
+                "center": 141.06611570247935,
+                "y": 757
+              },
+              "contentHash": "885e73f5a77bade150299b06f9adefddcf66ebdf4fbe9e8272112b390d2d10ba",
+              "name": "brute-idle-12",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.9339,
+                4
+              ],
+              "time": 1.5,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@76a77"
+            },
+            {
+              "index": 13,
+              "rect": [
+                301,
+                521,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 312,
+                "right": 484,
+                "center": 395.79166666666663,
+                "y": 757
+              },
+              "contentHash": "7ed36117877718e44a8851be4747be48a0e62221fdc9edcf25282c606745400f",
+              "name": "brute-idle-13",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                10.7083,
+                4
+              ],
+              "time": 1.625,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@dea2c"
+            },
+            {
+              "index": 14,
+              "rect": [
+                557,
+                522,
+                210,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 568,
+                "right": 740,
+                "center": 651.7916666666666,
+                "y": 757
+              },
+              "contentHash": "c834dece225393da5466483b34901bb98864d57719215ef2859e41f10171f01e",
+              "name": "brute-idle-14",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                10.2083,
+                3.5
+              ],
+              "time": 1.75,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@940f3"
+            },
+            {
+              "index": 15,
+              "rect": [
+                813,
+                521,
+                210,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 825,
+                "right": 997,
+                "center": 909.2333333333333,
+                "y": 757
+              },
+              "contentHash": "baacfcd1c52ea76e459fd27205efaa924111db8af9d25c22ea9e533b85790a74",
+              "name": "brute-idle-15",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.7667,
+                4
+              ],
+              "time": 1.875,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@a5b78"
+            },
+            {
+              "index": 16,
+              "rect": [
+                1069,
+                521,
+                210,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 1081,
+                "right": 1252,
+                "center": 1164.4957983193276,
+                "y": 757
+              },
+              "contentHash": "6d48b5d939a7ddd5782ecc4614036b390bbaf9f2255f21e484316b9940ead95a",
+              "name": "brute-idle-16",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.5042,
+                4
+              ],
+              "time": 2,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@bfd96"
+            },
+            {
+              "index": 17,
+              "rect": [
+                1325,
+                522,
+                211,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 1337,
+                "right": 1509,
+                "center": 1421.2333333333333,
+                "y": 757
+              },
+              "contentHash": "d12eadc22d5e2ac58ae59ed392be81a477727a8475be5e4dbe2ee96b3e89aad4",
+              "name": "brute-idle-17",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.2667,
+                3.5
+              ],
+              "time": 2.125,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@0c633"
+            },
+            {
+              "index": 18,
+              "rect": [
+                45,
+                777,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 57,
+                "right": 229,
+                "center": 141.06611570247935,
+                "y": 1013
+              },
+              "contentHash": "78f40c026743b03cf37b43ef0e57c83cadee93a42aebe47e65f2fcb4759cfb9e",
+              "name": "brute-idle-18",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.4339,
+                4
+              ],
+              "time": 2.25,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@a0674"
+            },
+            {
+              "index": 19,
+              "rect": [
+                301,
+                777,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 313,
+                "right": 485,
+                "center": 397.23333333333335,
+                "y": 1013
+              },
+              "contentHash": "490f273ee0e1ebf1cc5e1a18a879cf7cd09496b8a829311570f45ebb0932f9d7",
+              "name": "brute-idle-19",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.2667,
+                4
+              ],
+              "time": 2.375,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@bc75d"
+            },
+            {
+              "index": 20,
+              "rect": [
+                557,
+                777,
+                210,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 569,
+                "right": 740,
+                "center": 652.3333333333334,
+                "y": 1013
+              },
+              "contentHash": "b962bd181f691f5a5409b2500b5e2712dea60e2469db545e5580f730945d6fc1",
+              "name": "brute-idle-20",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.6667,
+                4
+              ],
+              "time": 2.5,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@d2681"
+            },
+            {
+              "index": 21,
+              "rect": [
+                813,
+                778,
+                210,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 825,
+                "right": 997,
+                "center": 909.2333333333333,
+                "y": 1013
+              },
+              "contentHash": "b76645f8252e4da48a7c6c8b284510ba8fda50c3366e3e2b2b05db36c65b4ce6",
+              "name": "brute-idle-21",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.7667,
+                3.5
+              ],
+              "time": 2.625,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@e36be"
+            },
+            {
+              "index": 22,
+              "rect": [
+                1069,
+                778,
+                210,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 1081,
+                "right": 1253,
+                "center": 1165.2333333333333,
+                "y": 1013
+              },
+              "contentHash": "f149fa5a09b806ef6b28706dad27ff54ecf8ecd879573989d094d5a088e9d8fc",
+              "name": "brute-idle-22",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                8.7667,
+                3.5
+              ],
+              "time": 2.75,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@0d2af"
+            },
+            {
+              "index": 23,
+              "rect": [
+                1325,
+                777,
+                211,
+                240
+              ],
+              "bodyHeight": 234,
+              "feet": {
+                "left": 1337,
+                "right": 1509,
+                "center": 1421.2333333333333,
+                "y": 1013
+              },
+              "contentHash": "14e594d3b7519f64d2f7cd9a9907def29c90dd4b50b532482659df7508c78b8a",
+              "name": "brute-idle-23",
+              "scale": 1,
+              "sourceSize": [
+                640,
+                256
+              ],
+              "offset": [
+                9.2667,
+                4
+              ],
+              "time": 2.875,
+              "duration": 0.125,
+              "uuid": "db964384-b35e-4d5e-b137-d5fcda238d70@4c0b5"
+            }
+          ],
+          "atlas": "brute-idle.plist",
+          "duration": 3,
+          "loop": true,
+          "impactTime": null,
+          "uniqueFrames": 24
+        },
+        "attack": {
+          "image": "brute-attack.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.8142,
+          "rowCuts": [
+            0,
+            276,
+            526,
+            760,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                309,
+                35,
+                200,
+                227
+              ],
+              "bodyHeight": 221,
+              "feet": {
+                "left": 320,
+                "right": 487,
+                "center": 402.88235294117646,
+                "y": 258
+              },
+              "contentHash": "c4aad329058f0c1d0c029fcdeec062fdf4269c0bc7253413fa0f34a0c073b426",
+              "name": "brute-attack-00",
+              "scale": 1.058824,
+              "sourceSize": [
+                605,
+                242
+              ],
+              "offset": [
+                -78,
+                3.625
+              ],
+              "time": 0,
+              "duration": 0.08,
+              "uuid": "ce6bcf3d-8928-4b63-87cd-30b464b26c07@3a9b9"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1049,
+                58,
+                218,
+                203
+              ],
+              "bodyHeight": 197,
+              "feet": {
+                "left": 1057,
+                "right": 1242,
+                "center": 1149.2314049586776,
+                "y": 257
+              },
+              "contentHash": "3026fdd4d12f812b86176529e8939334bb4a57e08de8240a1cec13bf2d414f01",
+              "name": "brute-attack-01",
+              "scale": 1.058824,
+              "sourceSize": [
+                605,
+                242
+              ],
+              "offset": [
+                -84,
+                -8.375
+              ],
+              "time": 0.08,
+              "duration": 0.07,
+              "uuid": "ce6bcf3d-8928-4b63-87cd-30b464b26c07@69e98"
+            },
+            {
+              "index": 2,
+              "rect": [
+                266,
+                293,
+                256,
+                217
+              ],
+              "bodyHeight": 211,
+              "feet": {
+                "left": 311,
+                "right": 512,
+                "center": 410.495867768595,
+                "y": 506
+              },
+              "contentHash": "b9371ead62c35ab1726bab234023728cff11ec4a5effb1ea4d3d87f2cef2a43e",
+              "name": "brute-attack-02",
+              "scale": 1.058824,
+              "sourceSize": [
+                605,
+                242
+              ],
+              "offset": [
+                -118,
+                -1.375
+              ],
+              "time": 0.15,
+              "duration": 0.07,
+              "uuid": "ce6bcf3d-8928-4b63-87cd-30b464b26c07@f5d58"
+            },
+            {
+              "index": 3,
+              "rect": [
+                1013,
+                290,
+                265,
+                220
+              ],
+              "bodyHeight": 214,
+              "feet": {
+                "left": 1053,
+                "right": 1261,
+                "center": 1155.992,
+                "y": 506
+              },
+              "contentHash": "bfb6c9a5648602851870666ea0866f2d2eea80bc5f01152f960bbc094b62603a",
+              "name": "brute-attack-03",
+              "scale": 1.058824,
+              "sourceSize": [
+                605,
+                242
+              ],
+              "offset": [
+                -115.5,
+                0.125
+              ],
+              "time": 0.22,
+              "duration": 0.06,
+              "uuid": "ce6bcf3d-8928-4b63-87cd-30b464b26c07@74303"
+            },
+            {
+              "index": 4,
+              "rect": [
+                214,
+                543,
+                339,
+                203
+              ],
+              "bodyHeight": 197,
+              "feet": {
+                "left": 304,
+                "right": 548,
+                "center": 426.77536231884056,
+                "y": 742
+              },
+              "contentHash": "34fc135078d877377ac49a373bf6a83d3651d32eea207a6cf26fc8628dc94ff7",
+              "name": "brute-attack-04",
+              "scale": 1.058824,
+              "sourceSize": [
+                605,
+                242
+              ],
+              "offset": [
+                -164.5,
+                -8.375
+              ],
+              "time": 0.28,
+              "duration": 0.05,
+              "uuid": "ce6bcf3d-8928-4b63-87cd-30b464b26c07@d3237"
+            },
+            {
+              "index": 5,
+              "rect": [
+                952,
+                559,
+                329,
+                187
+              ],
+              "bodyHeight": 181,
+              "feet": {
+                "left": 1035,
+                "right": 1277,
+                "center": 1155.6382978723404,
+                "y": 742
+              },
+              "contentHash": "f826c5bd3f47df98c4210060c60b25c320dca5841b26b576500cb5dc9ade6b4c",
+              "name": "brute-attack-05",
+              "scale": 1.058824,
+              "sourceSize": [
+                605,
+                242
+              ],
+              "offset": [
+                -160.5,
+                -16.375
+              ],
+              "time": 0.33,
+              "duration": 0.06,
+              "uuid": "ce6bcf3d-8928-4b63-87cd-30b464b26c07@2d530"
+            },
+            {
+              "index": 6,
+              "rect": [
+                257,
+                787,
+                277,
+                214
+              ],
+              "bodyHeight": 208,
+              "feet": {
+                "left": 307,
+                "right": 530,
+                "center": 418.1703703703704,
+                "y": 997
+              },
+              "contentHash": "3f5054bd581f8feb7208139ab631594981c44a084d2d7167d7212dc5515490c9",
+              "name": "brute-attack-06",
+              "scale": 1.058824,
+              "sourceSize": [
+                605,
+                242
+              ],
+              "offset": [
+                -134.5,
+                -2.875
+              ],
+              "time": 0.39,
+              "duration": 0.08,
+              "uuid": "ce6bcf3d-8928-4b63-87cd-30b464b26c07@41ec0"
+            },
+            {
+              "index": 7,
+              "rect": [
+                1049,
+                775,
+                197,
+                226
+              ],
+              "bodyHeight": 220,
+              "feet": {
+                "left": 1058,
+                "right": 1225,
+                "center": 1140.8823529411766,
+                "y": 997
+              },
+              "contentHash": "99a74c1a8ca689dd4a548a49c418e56586aa88da06c469fee582e88d4d256a0e",
+              "name": "brute-attack-07",
+              "scale": 1.058824,
+              "sourceSize": [
+                605,
+                242
+              ],
+              "offset": [
+                -77.5,
+                3.125
+              ],
+              "time": 0.47,
+              "duration": 0.09,
+              "uuid": "ce6bcf3d-8928-4b63-87cd-30b464b26c07@b7f42"
+            }
+          ],
+          "atlas": "brute-attack.plist",
+          "duration": 0.56,
+          "loop": false,
+          "impactTime": 0.28,
+          "uniqueFrames": 8
+        },
+        "hurt": {
+          "image": "brute-hurt.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.8109,
+          "rowCuts": [
+            0,
+            252,
+            509,
+            767,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                296,
+                8,
+                200,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 311,
+                "right": 468,
+                "center": 388.55,
+                "y": 243
+              },
+              "contentHash": "1869f6b481e8ab9f5f37d0c6034e18b144095bc5baf30f48f1ac18fa6665df6e",
+              "name": "brute-hurt-00",
+              "scale": 1.004292,
+              "sourceSize": [
+                638,
+                255
+              ],
+              "offset": [
+                7.45,
+                3.9375
+              ],
+              "time": 0,
+              "duration": 0.025,
+              "uuid": "f57004cc-0dce-4693-bc7e-a7ed9bfc06ba@71e3b"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1048,
+                16,
+                210,
+                231
+              ],
+              "bodyHeight": 225,
+              "feet": {
+                "left": 1073,
+                "right": 1231,
+                "center": 1151.2148760330579,
+                "y": 243
+              },
+              "contentHash": "a8bdf0318dc81d8560097fb192aa153c3d913106f5aae92373c5245264bae5cf",
+              "name": "brute-hurt-01",
+              "scale": 1.004292,
+              "sourceSize": [
+                638,
+                255
+              ],
+              "offset": [
+                1.7851,
+                -0.0625
+              ],
+              "time": 0.025,
+              "duration": 0.035,
+              "uuid": "f57004cc-0dce-4693-bc7e-a7ed9bfc06ba@58f9e"
+            },
+            {
+              "index": 2,
+              "rect": [
+                277,
+                257,
+                230,
+                247
+              ],
+              "bodyHeight": 241,
+              "feet": {
+                "left": 310,
+                "right": 467,
+                "center": 387.73553719008265,
+                "y": 500
+              },
+              "contentHash": "a2a09af265c5959bac61472c4adb1485ab79e2bcad82257e97d321b843547948",
+              "name": "brute-hurt-02",
+              "scale": 1.004292,
+              "sourceSize": [
+                638,
+                255
+              ],
+              "offset": [
+                4.2645,
+                7.9375
+              ],
+              "time": 0.06,
+              "duration": 0.045,
+              "uuid": "f57004cc-0dce-4693-bc7e-a7ed9bfc06ba@e886d"
+            },
+            {
+              "index": 3,
+              "rect": [
+                1037,
+                259,
+                245,
+                245
+              ],
+              "bodyHeight": 239,
+              "feet": {
+                "left": 1070,
+                "right": 1231,
+                "center": 1148.967741935484,
+                "y": 500
+              },
+              "contentHash": "8c800f805cf147be84bd62375fed83cff893c62858604e3768ed2abdbe0a5eeb",
+              "name": "brute-hurt-03",
+              "scale": 1.004292,
+              "sourceSize": [
+                638,
+                255
+              ],
+              "offset": [
+                10.5323,
+                6.9375
+              ],
+              "time": 0.105,
+              "duration": 0.06,
+              "uuid": "f57004cc-0dce-4693-bc7e-a7ed9bfc06ba@2fab3"
+            },
+            {
+              "index": 4,
+              "rect": [
+                283,
+                514,
+                223,
+                246
+              ],
+              "bodyHeight": 240,
+              "feet": {
+                "left": 304,
+                "right": 468,
+                "center": 384.5546875,
+                "y": 756
+              },
+              "contentHash": "10a0cc0c92bcb7772b697e9156541e5a54c27be89815c1ea57f2140038c60a91",
+              "name": "brute-hurt-04",
+              "scale": 1.004292,
+              "sourceSize": [
+                638,
+                255
+              ],
+              "offset": [
+                9.9453,
+                7.4375
+              ],
+              "time": 0.165,
+              "duration": 0.045,
+              "uuid": "f57004cc-0dce-4693-bc7e-a7ed9bfc06ba@80e40"
+            },
+            {
+              "index": 5,
+              "rect": [
+                1041,
+                523,
+                220,
+                237
+              ],
+              "bodyHeight": 231,
+              "feet": {
+                "left": 1066,
+                "right": 1238,
+                "center": 1151.6484375,
+                "y": 756
+              },
+              "contentHash": "f938304d498a50c9c689c1418f14aa9868e453cf3bb6c1e6737cf47044b2a7aa",
+              "name": "brute-hurt-05",
+              "scale": 1.004292,
+              "sourceSize": [
+                638,
+                255
+              ],
+              "offset": [
+                -0.6484,
+                2.9375
+              ],
+              "time": 0.21,
+              "duration": 0.035,
+              "uuid": "f57004cc-0dce-4693-bc7e-a7ed9bfc06ba@4369a"
+            },
+            {
+              "index": 6,
+              "rect": [
+                286,
+                777,
+                210,
+                239
+              ],
+              "bodyHeight": 233,
+              "feet": {
+                "left": 306,
+                "right": 472,
+                "center": 388.4634146341463,
+                "y": 1012
+              },
+              "contentHash": "919042d56185ef66a78008697fe24a8e733a84eb3b8728070502a1337aa673ed",
+              "name": "brute-hurt-06",
+              "scale": 1.004292,
+              "sourceSize": [
+                638,
+                255
+              ],
+              "offset": [
+                2.5366,
+                3.9375
+              ],
+              "time": 0.245,
+              "duration": 0.025,
+              "uuid": "f57004cc-0dce-4693-bc7e-a7ed9bfc06ba@49abb"
+            },
+            {
+              "index": 7,
+              "rect": [
+                1058,
+                774,
+                200,
+                242
+              ],
+              "bodyHeight": 236,
+              "feet": {
+                "left": 1068,
+                "right": 1236,
+                "center": 1151.1,
+                "y": 1012
+              },
+              "contentHash": "7ce6f1c63873743c0af88226afa00a7bca724839fee1b10434252bfcfbee35e7",
+              "name": "brute-hurt-07",
+              "scale": 1.004292,
+              "sourceSize": [
+                638,
+                255
+              ],
+              "offset": [
+                6.9,
+                5.4375
+              ],
+              "time": 0.27,
+              "duration": 0.04,
+              "uuid": "f57004cc-0dce-4693-bc7e-a7ed9bfc06ba@e5519"
+            }
+          ],
+          "atlas": "brute-hurt.plist",
+          "duration": 0.31,
+          "loop": false,
+          "impactTime": null,
+          "uniqueFrames": 8
+        },
+        "death": {
+          "image": "brute-death.png",
+          "width": 1536,
+          "height": 1024,
+          "columns": 2,
+          "alphaZeroRatio": 0.7798,
+          "rowCuts": [
+            0,
+            278,
+            542,
+            800,
+            1024
+          ],
+          "frames": [
+            {
+              "index": 0,
+              "rect": [
+                287,
+                9,
+                221,
+                252
+              ],
+              "bodyHeight": 246,
+              "feet": {
+                "left": 300,
+                "right": 485,
+                "center": 391.8702290076336,
+                "y": 257
+              },
+              "contentHash": "ebf9ccb9a0a357f689bdf3c7ca41f66b12252443b03b320d16c5eee90a629fd5",
+              "name": "brute-death-00",
+              "scale": 0.95122,
+              "sourceSize": [
+                673,
+                270
+              ],
+              "offset": [
+                5.6298,
+                3.875
+              ],
+              "time": 0,
+              "duration": 0.07,
+              "uuid": "8bb40cad-1066-4adb-974c-ef7212baf9a6@a4cf9"
+            },
+            {
+              "index": 1,
+              "rect": [
+                1029,
+                31,
+                222,
+                231
+              ],
+              "bodyHeight": 225,
+              "feet": {
+                "left": 1048,
+                "right": 1233,
+                "center": 1139.7238805970148,
+                "y": 258
+              },
+              "contentHash": "089d95927ed36618f43984ddc406bd2ebbcc23cb2f1ae512ce6b90c4fa8247f1",
+              "name": "brute-death-01",
+              "scale": 0.95122,
+              "sourceSize": [
+                673,
+                270
+              ],
+              "offset": [
+                -19.8702,
+                -6.625
+              ],
+              "time": 0.07,
+              "duration": 0.08,
+              "uuid": "8bb40cad-1066-4adb-974c-ef7212baf9a6@25db9"
+            },
+            {
+              "index": 2,
+              "rect": [
+                273,
+                294,
+                228,
+                221
+              ],
+              "bodyHeight": 215,
+              "feet": {
+                "left": 303,
+                "right": 493,
+                "center": 398.34507042253523,
+                "y": 511
+              },
+              "contentHash": "ccd68ae32bdece4971860dc64d7019d03172d5271c05e51c46e25b127d5ed0bb",
+              "name": "brute-death-02",
+              "scale": 0.95122,
+              "sourceSize": [
+                673,
+                270
+              ],
+              "offset": [
+                -4.8702,
+                -11.625
+              ],
+              "time": 0.15,
+              "duration": 0.09,
+              "uuid": "8bb40cad-1066-4adb-974c-ef7212baf9a6@33cd8"
+            },
+            {
+              "index": 3,
+              "rect": [
+                1008,
+                324,
+                270,
+                197
+              ],
+              "bodyHeight": 191,
+              "feet": {
+                "left": 1151,
+                "right": 1183,
+                "center": 1167,
+                "y": 517
+              },
+              "contentHash": "7e10b64bd7235fca38c7120a68e95977c677586044a1570ecb7b51ed7bcc56ca",
+              "name": "brute-death-03",
+              "scale": 0.95122,
+              "sourceSize": [
+                673,
+                270
+              ],
+              "offset": [
+                -16.8702,
+                -23.625
+              ],
+              "time": 0.24,
+              "duration": 0.1,
+              "uuid": "8bb40cad-1066-4adb-974c-ef7212baf9a6@30563"
+            },
+            {
+              "index": 4,
+              "rect": [
+                236,
+                564,
+                306,
+                203
+              ],
+              "bodyHeight": 197,
+              "feet": {
+                "left": 239,
+                "right": 476,
+                "center": 367.8452380952381,
+                "y": 763
+              },
+              "contentHash": "053322a3e24b5a48c8fb4e193ab8b7886b7464c73dc168ef7b1472725576256a",
+              "name": "brute-death-04",
+              "scale": 0.95122,
+              "sourceSize": [
+                673,
+                270
+              ],
+              "offset": [
+                -2.8702,
+                -20.625
+              ],
+              "time": 0.34,
+              "duration": 0.1,
+              "uuid": "8bb40cad-1066-4adb-974c-ef7212baf9a6@e5795"
+            },
+            {
+              "index": 5,
+              "rect": [
+                949,
+                581,
+                359,
+                185
+              ],
+              "bodyHeight": 179,
+              "feet": {
+                "left": 952,
+                "right": 1271,
+                "center": 1095.2147651006712,
+                "y": 762
+              },
+              "contentHash": "a7dbe4dec1592302f3be5d9af1e73a8b6e8296e2729b825565ab922c04331cd6",
+              "name": "brute-death-05",
+              "scale": 0.95122,
+              "sourceSize": [
+                673,
+                270
+              ],
+              "offset": [
+                -31.3702,
+                -29.625
+              ],
+              "time": 0.44,
+              "duration": 0.12,
+              "uuid": "8bb40cad-1066-4adb-974c-ef7212baf9a6@c98d0"
+            },
+            {
+              "index": 6,
+              "rect": [
+                212,
+                834,
+                346,
+                162
+              ],
+              "bodyHeight": 156,
+              "feet": {
+                "left": 216,
+                "right": 516,
+                "center": 363.68518518518516,
+                "y": 992
+              },
+              "contentHash": "e5d916d80539767151f16ef8b451ed2bca1be872e8c8b8c1496920f3ddf0c2e6",
+              "name": "brute-death-06",
+              "scale": 0.95122,
+              "sourceSize": [
+                673,
+                270
+              ],
+              "offset": [
+                -6.8702,
+                -41.125
+              ],
+              "time": 0.56,
+              "duration": 0.15,
+              "uuid": "8bb40cad-1066-4adb-974c-ef7212baf9a6@c7cee"
+            },
+            {
+              "index": 7,
+              "rect": [
+                950,
+                847,
+                352,
+                151
+              ],
+              "bodyHeight": 145,
+              "feet": {
+                "left": 964,
+                "right": 1263,
+                "center": 1134.603448275862,
+                "y": 994
+              },
+              "contentHash": "39333605c3dca15b823df279651fc7386b6f74211d03f2ccf6b2f8c2d736b2b5",
+              "name": "brute-death-07",
+              "scale": 0.95122,
+              "sourceSize": [
+                673,
+                270
+              ],
+              "offset": [
+                -33.8702,
+                -46.625
+              ],
+              "time": 0.71,
+              "duration": 0.2,
+              "uuid": "8bb40cad-1066-4adb-974c-ef7212baf9a6@94ff6"
+            }
+          ],
+          "atlas": "brute-death.plist",
+          "duration": 0.91,
+          "loop": false,
+          "impactTime": null,
+          "uniqueFrames": 8
+        }
+      }
+    }
+  }
+}

@@ -4,8 +4,8 @@ const fs=require('node:fs');
 const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const load=require('../tools/load-ts.cjs').createLoader();
-load(path.join(root,'assets/CardCatalog.ts')).installCatalog(JSON.parse(fs.readFileSync(path.join(root,'assets/resources/data/cards.json'),'utf8')));
-const {SurvivalGame,CARD,REWARD_POOL}=load(path.join(root,'assets/SurvivalRules.ts'));
+load(path.join(root,'assets/game/core/content/CardCatalog.ts')).installCatalog(JSON.parse(fs.readFileSync(path.join(root,'assets/resources/data/cards.json'),'utf8')));
+const {SurvivalGame,CARD,REWARD_POOL}=load(path.join(root,'assets/game/core/SurvivalGame.ts'));
 const ok=r=>assert.equal(r.ok,true,r.message);
 const owned=(id,kind,zone='base')=>({id,kind,zone,selected:kind!=='cash',found:true});
 function combat(enemy='enemy1',seed=17){const g=new SurvivalGame(seed);g.start();g.fixedDone=true;g.route='A';g.pathIndex=enemy==='enemy1'?0:3;g.enterNode();return g;}

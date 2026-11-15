@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>wanderer-death-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{319,10},{124,243}}</string>
+        <key>offset</key>
+        <string>{-3.8400,3.7500}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{649,260}</string>
+      </dict>
+      <key>wanderer-death-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1077,32},{132,223}}</string>
+        <key>offset</key>
+        <string>{-9.8400,-6.2500}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{649,260}</string>
+      </dict>
+      <key>wanderer-death-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{297,295},{164,214}}</string>
+        <key>offset</key>
+        <string>{-5.8400,-10.7500}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{649,260}</string>
+      </dict>
+      <key>wanderer-death-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1050,323},{206,190}}</string>
+        <key>offset</key>
+        <string>{0.1600,-22.7500}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{649,260}</string>
+      </dict>
+      <key>wanderer-death-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{262,592},{245,172}}</string>
+        <key>offset</key>
+        <string>{-0.3400,-31.7500}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{649,260}</string>
+      </dict>
+      <key>wanderer-death-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1004,611},{276,154}}</string>
+        <key>offset</key>
+        <string>{-10.8400,-40.7500}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{649,260}</string>
+      </dict>
+      <key>wanderer-death-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{232,884},{279,111}}</string>
+        <key>offset</key>
+        <string>{-13.3400,-62.2500}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{649,260}</string>
+      </dict>
+      <key>wanderer-death-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{982,909},{299,86}}</string>
+        <key>offset</key>
+        <string>{-21.3400,-74.7500}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{649,260}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>wanderer-death.png</string>
+      <key>realTextureFileName</key>
+      <string>wanderer-death.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

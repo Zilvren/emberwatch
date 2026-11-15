@@ -3,7 +3,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const project = path.resolve(__dirname, '..');
 const cli = process.env.PLAYWRIGHT_CLI ?? 'C:/Users/Knock/AppData/Local/npm-cache/_npx/31e32ef8478fbf80/node_modules/@playwright/cli/playwright-cli.js';
-const code = `async (page) => { ${fs.readFileSync(path.join(__dirname, 'browser-card-editor.js.txt'), 'utf8')} }`;
+const code = `async (page) => { const editorBase=${JSON.stringify(process.env.CARD_EDITOR_TEST_BASE_URL ?? 'http://127.0.0.1:7460/')}; ${fs.readFileSync(path.join(__dirname, 'browser-card-editor.js.txt'), 'utf8')} }`;
 const session = process.env.CARD_EDITOR_TEST_SESSION ?? 'cardeditor';
 const result = spawnSync(process.execPath, [cli, '-s=' + session, 'run-code', code], { cwd: project, encoding: 'utf8' });
 process.stdout.write(result.stdout ?? '');

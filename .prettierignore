@@ -1,0 +1,15 @@
+node_modules/
+library/
+temp/
+build/
+profiles/
+output/
+.cache-before-prefab-migration/
+.codegraph/
+.creator/
+tools/editor-authoring/
+**/*.meta
+**/*.scene
+**/*.prefab
+**/*.anim
+assets/resources/

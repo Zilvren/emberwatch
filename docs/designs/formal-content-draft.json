@@ -1,0 +1,895 @@
+{
+  "project": "The end",
+  "date": "2026-11-15",
+  "status": "proposal-not-runtime",
+  "runtimeImportAllowed": false,
+  "notes": [
+    "This is a complete reviewable content baseline, not user-confirmed gameplay.",
+    "Only workbook-baseline fields are sourced; new effects and all new content require implementation and review.",
+    "Map resources use carried items; shelter supply points are never spent inside events.",
+    "New basic-card copies are not rewarded or craftable in this baseline; permanent capacity and copy-count decisions remain proposals."
+  ],
+  "entryTiers": [
+    {
+      "id": "emergency",
+      "fee": 0,
+      "stamina": 1,
+      "status": "confirmed"
+    },
+    {
+      "id": "low",
+      "fee": 4,
+      "stamina": 2,
+      "status": "workbook-baseline"
+    },
+    {
+      "id": "standard",
+      "fee": 8,
+      "stamina": 3,
+      "status": "workbook-baseline"
+    },
+    {
+      "id": "high",
+      "fee": 14,
+      "stamina": 4,
+      "status": "workbook-baseline"
+    }
+  ],
+  "cards": [
+    {
+      "id": "basic_attack",
+      "name": "基础攻击",
+      "cost": 0,
+      "weight": 0,
+      "combatEligibility": true,
+      "keywords": [
+        "基础牌"
+      ],
+      "effect": {
+        "damage": 2
+      },
+      "status": "workbook-baseline",
+      "afterUse": "discard"
+    },
+    {
+      "id": "basic_dodge",
+      "name": "基础躲避",
+      "cost": 0,
+      "weight": 0,
+      "combatEligibility": true,
+      "keywords": [
+        "基础牌"
+      ],
+      "effect": {
+        "block": 2
+      },
+      "status": "workbook-baseline",
+      "afterUse": "discard"
+    },
+    {
+      "id": "heavy_hit",
+      "name": "重击",
+      "cost": 1,
+      "weight": 4,
+      "combatEligibility": true,
+      "keywords": [],
+      "effect": {
+        "damage": 5
+      },
+      "status": "workbook-baseline",
+      "afterUse": "discard"
+    },
+    {
+      "id": "cleaver",
+      "name": "菜刀",
+      "cost": 2,
+      "weight": 3,
+      "combatEligibility": true,
+      "keywords": [
+        "武器"
+      ],
+      "effect": {
+        "equip": "weapon",
+        "generate": "slash",
+        "starts": "next-turn"
+      },
+      "status": "workbook-baseline",
+      "afterUse": "equipment-slot"
+    },
+    {
+      "id": "slash",
+      "name": "挥砍",
+      "cost": 1,
+      "weight": 0,
+      "combatEligibility": true,
+      "keywords": [
+        "临时牌"
+      ],
+      "effect": {
+        "damage": 4,
+        "cleanup": "combat-end"
+      },
+      "status": "workbook-baseline",
+      "afterUse": "exhaust-combat"
+    },
+    {
+      "id": "enhanced_dodge",
+      "name": "强化躲避",
+      "cost": 1,
+      "weight": 2,
+      "combatEligibility": true,
+      "keywords": [],
+      "effect": {
+        "block": 5
+      },
+      "status": "workbook-baseline",
+      "afterUse": "discard"
+    },
+    {
+      "id": "repair",
+      "name": "修复",
+      "cost": 2,
+      "weight": 2,
+      "combatEligibility": true,
+      "keywords": [],
+      "effect": {
+        "healArmor": 3,
+        "requiresPositiveArmor": true
+      },
+      "status": "workbook-baseline",
+      "afterUse": "discard"
+    },
+    {
+      "id": "rope",
+      "name": "绳子",
+      "cost": null,
+      "weight": 2,
+      "combatEligibility": false,
+      "keywords": [
+        "材料"
+      ],
+      "effect": {
+        "exchangeValue": 1
+      },
+      "status": "workbook-fields-proposed-value",
+      "afterUse": "keep"
+    },
+    {
+      "id": "battery",
+      "name": "电池",
+      "cost": null,
+      "weight": 1,
+      "combatEligibility": false,
+      "keywords": [
+        "材料"
+      ],
+      "effect": {
+        "exchangeValue": 2
+      },
+      "status": "workbook-fields-proposed-default",
+      "sourceEligibility": "configurable",
+      "proposalEligibility": false,
+      "afterUse": "keep"
+    },
+    {
+      "id": "guard_shield",
+      "name": "加固挡板",
+      "cost": 1,
+      "weight": 4,
+      "combatEligibility": true,
+      "keywords": [],
+      "effect": {
+        "block": 7
+      },
+      "status": "proposal",
+      "afterUse": "discard"
+    },
+    {
+      "id": "armor_patch",
+      "name": "护甲补片",
+      "cost": 1,
+      "weight": 2,
+      "combatEligibility": true,
+      "keywords": [
+        "消耗品"
+      ],
+      "effect": {
+        "healArmor": 2,
+        "requiresPositiveArmor": true
+      },
+      "status": "proposal",
+      "afterUse": "consume-instance"
+    },
+    {
+      "id": "scrap_shiv",
+      "name": "废铁短刃",
+      "cost": 1,
+      "weight": 1,
+      "combatEligibility": true,
+      "keywords": [],
+      "effect": {
+        "damage": 3,
+        "draw": 1
+      },
+      "status": "proposal",
+      "afterUse": "discard"
+    },
+    {
+      "id": "improvised_spear",
+      "name": "绑柄长矛",
+      "cost": 2,
+      "weight": 4,
+      "combatEligibility": true,
+      "keywords": [],
+      "effect": {
+        "damage": 8
+      },
+      "status": "proposal",
+      "afterUse": "discard"
+    },
+    {
+      "id": "pipe_weapon",
+      "name": "钢管",
+      "cost": 2,
+      "weight": 5,
+      "combatEligibility": true,
+      "keywords": [
+        "武器"
+      ],
+      "effect": {
+        "equip": "weapon",
+        "generate": "crush",
+        "starts": "next-turn"
+      },
+      "status": "proposal",
+      "afterUse": "equipment-slot"
+    },
+    {
+      "id": "crush",
+      "name": "敲击",
+      "cost": 2,
+      "weight": 0,
+      "combatEligibility": true,
+      "keywords": [
+        "临时牌"
+      ],
+      "effect": {
+        "damage": 7,
+        "cleanup": "combat-end"
+      },
+      "status": "proposal",
+      "afterUse": "exhaust-combat"
+    },
+    {
+      "id": "salvage_trap",
+      "name": "绊索",
+      "cost": 1,
+      "weight": 2,
+      "combatEligibility": true,
+      "keywords": [
+        "消耗品"
+      ],
+      "effect": {
+        "nextEnemyDamageReduction": 3
+      },
+      "status": "proposal",
+      "afterUse": "consume-instance"
+    },
+    {
+      "id": "field_medicine",
+      "name": "野外急救包",
+      "cost": 2,
+      "weight": 2,
+      "combatEligibility": true,
+      "keywords": [
+        "消耗品"
+      ],
+      "effect": {
+        "healArmor": 5,
+        "requiresPositiveArmor": true
+      },
+      "status": "proposal",
+      "afterUse": "consume-instance"
+    },
+    {
+      "id": "crank_gun",
+      "name": "手摇电弩",
+      "cost": 3,
+      "weight": 6,
+      "combatEligibility": true,
+      "keywords": [
+        "武器"
+      ],
+      "effect": {
+        "equip": "weapon",
+        "generate": "charged_shot",
+        "starts": "next-turn"
+      },
+      "status": "proposal",
+      "afterUse": "equipment-slot"
+    },
+    {
+      "id": "charged_shot",
+      "name": "蓄能射击",
+      "cost": 1,
+      "weight": 0,
+      "combatEligibility": true,
+      "keywords": [
+        "临时牌"
+      ],
+      "effect": {
+        "damage": 7,
+        "spendCharge": 1,
+        "cleanup": "combat-end"
+      },
+      "status": "proposal",
+      "afterUse": "exhaust-combat"
+    },
+    {
+      "id": "battery_cell",
+      "name": "便携电芯",
+      "cost": 1,
+      "weight": 1,
+      "combatEligibility": true,
+      "keywords": [
+        "消耗品"
+      ],
+      "effect": {
+        "gainCharge": 2
+      },
+      "status": "proposal",
+      "afterUse": "consume-instance"
+    },
+    {
+      "id": "adrenaline",
+      "name": "提神剂",
+      "cost": 1,
+      "weight": 1,
+      "combatEligibility": true,
+      "keywords": [
+        "消耗品"
+      ],
+      "effect": {
+        "draw": 2
+      },
+      "status": "proposal",
+      "afterUse": "consume-instance"
+    },
+    {
+      "id": "supply_pouch",
+      "name": "小包补给",
+      "cost": null,
+      "weight": 1,
+      "combatEligibility": false,
+      "keywords": [
+        "物资"
+      ],
+      "effect": {
+        "exchangeValue": 2
+      },
+      "status": "proposal",
+      "afterUse": "keep"
+    },
+    {
+      "id": "supply_crate",
+      "name": "补给箱",
+      "cost": null,
+      "weight": 3,
+      "combatEligibility": false,
+      "keywords": [
+        "物资"
+      ],
+      "effect": {
+        "exchangeValue": 6
+      },
+      "status": "proposal",
+      "afterUse": "keep"
+    },
+    {
+      "id": "reserve_box",
+      "name": "整箱储备",
+      "cost": null,
+      "weight": 6,
+      "combatEligibility": false,
+      "keywords": [
+        "物资"
+      ],
+      "effect": {
+        "exchangeValue": 11
+      },
+      "status": "proposal",
+      "afterUse": "keep"
+    },
+    {
+      "id": "metal_scrap",
+      "name": "废金属",
+      "cost": null,
+      "weight": 1,
+      "combatEligibility": false,
+      "keywords": [
+        "材料"
+      ],
+      "effect": {
+        "exchangeValue": 1
+      },
+      "status": "proposal",
+      "afterUse": "keep"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "wanderer",
+      "name": "游荡感染者",
+      "armor": 8,
+      "intents": [
+        {
+          "attack": 2
+        },
+        {
+          "prepare": 5
+        },
+        {
+          "attack": 5
+        }
+      ],
+      "repeatFrom": 1,
+      "status": "workbook-teaching-baseline"
+    },
+    {
+      "id": "brute",
+      "name": "重型感染者",
+      "armor": 14,
+      "intents": [
+        {
+          "attack": 3
+        },
+        {
+          "prepare": 7
+        },
+        {
+          "attack": 7
+        }
+      ],
+      "repeatFrom": 1,
+      "status": "workbook-teaching-baseline"
+    },
+    {
+      "id": "rummager",
+      "name": "拾荒感染者",
+      "armor": 12,
+      "intents": [
+        {
+          "attack": 3
+        },
+        {
+          "attack": 3,
+          "discardFromHand": 1
+        },
+        {
+          "prepare": 6
+        },
+        {
+          "attack": 6
+        }
+      ],
+      "status": "proposal"
+    },
+    {
+      "id": "shielded",
+      "name": "护板感染者",
+      "armor": 18,
+      "intents": [
+        {
+          "block": 4
+        },
+        {
+          "attack": 4
+        },
+        {
+          "prepare": 8
+        },
+        {
+          "attack": 8
+        }
+      ],
+      "status": "proposal-using-workbook-normal-baseline"
+    },
+    {
+      "id": "spitter",
+      "name": "喷蚀者",
+      "armor": 16,
+      "intents": [
+        {
+          "attack": 2,
+          "hits": 2
+        },
+        {
+          "prepare": "4x2"
+        },
+        {
+          "attack": 4,
+          "hits": 2
+        }
+      ],
+      "status": "proposal"
+    },
+    {
+      "id": "prowler",
+      "name": "潜行者",
+      "armor": 14,
+      "intents": [
+        {
+          "prepare": 8
+        },
+        {
+          "attack": 8
+        },
+        {
+          "attack": 3
+        }
+      ],
+      "status": "proposal"
+    },
+    {
+      "id": "iron_brute",
+      "name": "铁甲重型感染者",
+      "armor": 24,
+      "intents": [
+        {
+          "block": 6
+        },
+        {
+          "attack": 5
+        },
+        {
+          "prepare": 10
+        },
+        {
+          "attack": 10
+        }
+      ],
+      "status": "proposal-using-workbook-elite-baseline"
+    },
+    {
+      "id": "relay_warden",
+      "name": "中继站守卫",
+      "armor": 32,
+      "intents": [
+        {
+          "attack": 2,
+          "hits": 3
+        },
+        {
+          "prepare": 10
+        },
+        {
+          "attack": 10
+        },
+        {
+          "block": 4
+        }
+      ],
+      "status": "proposal-boss"
+    }
+  ],
+  "blueprints": [
+    {
+      "id": "bound_spear",
+      "name": "绑柄长矛图纸",
+      "materials": {
+        "rope": 1,
+        "scrap_shiv": 1
+      },
+      "supplies": 3,
+      "result": {
+        "improvised_spear": 1
+      }
+    },
+    {
+      "id": "iron_guard",
+      "name": "加固挡板图纸",
+      "materials": {
+        "rope": 1,
+        "metal_scrap": 3
+      },
+      "supplies": 4,
+      "result": {
+        "guard_shield": 1
+      }
+    },
+    {
+      "id": "field_medkit",
+      "name": "急救包图纸",
+      "materials": {
+        "repair": 1,
+        "rope": 1
+      },
+      "supplies": 3,
+      "result": {
+        "field_medicine": 1
+      }
+    },
+    {
+      "id": "electric_crossbow",
+      "name": "手摇电弩图纸",
+      "materials": {
+        "pipe_weapon": 1,
+        "battery": 2,
+        "metal_scrap": 3
+      },
+      "supplies": 6,
+      "result": {
+        "crank_gun": 1
+      }
+    },
+    {
+      "id": "charging_pack",
+      "name": "便携电芯图纸",
+      "materials": {
+        "battery": 2,
+        "metal_scrap": 1
+      },
+      "supplies": 2,
+      "result": {
+        "battery_cell": 2
+      }
+    },
+    {
+      "id": "tripwire",
+      "name": "绊索图纸",
+      "materials": {
+        "rope": 2,
+        "metal_scrap": 1
+      },
+      "supplies": 2,
+      "result": {
+        "salvage_trap": 1
+      }
+    }
+  ],
+  "permanentRelics": [
+    {
+      "id": "survivor_journal",
+      "name": "幸存者手记",
+      "effect": "已遭遇敌人的完整意图循环可在图鉴回看"
+    },
+    {
+      "id": "survey_map",
+      "name": "勘测底图",
+      "effect": "路线预览多显示一层节点"
+    },
+    {
+      "id": "recipe_notebook",
+      "name": "配方笔记",
+      "effect": "每次探索可抄录一张已发现蓝图，使其不随本次失败丢失；此为带回登记规则的显式提案例外"
+    },
+    {
+      "id": "field_radio",
+      "name": "野外收音机",
+      "effect": "每次探索可提前查看一个事件的类型"
+    },
+    {
+      "id": "repair_manual",
+      "name": "维修手册",
+      "effect": "解锁特定工作台替代配方，不直接增加攻击或护甲上限"
+    },
+    {
+      "id": "blueprint_compass",
+      "name": "图纸线索板",
+      "effect": "每次探索可标记一处潜在蓝图线索，不保证掉落"
+    }
+  ],
+  "runRelics": [
+    {
+      "id": "rusted_badge",
+      "name": "锈蚀徽记",
+      "effect": "战斗首回合获得2格挡"
+    },
+    {
+      "id": "insulated_bottle",
+      "name": "保温水壶",
+      "effect": "休整额外恢复1护甲，临界时不生效"
+    },
+    {
+      "id": "sharpen_stone",
+      "name": "磨刀石",
+      "effect": "每场战斗首次攻击伤害+1"
+    },
+    {
+      "id": "spare_pocket",
+      "name": "外接袋",
+      "effect": "本次探索基础携带容量+2"
+    },
+    {
+      "id": "makeshift_scope",
+      "name": "简易瞄具",
+      "effect": "本次探索额外显示下一次敌人意图"
+    },
+    {
+      "id": "lucky_tag",
+      "name": "旧铭牌",
+      "effect": "本次探索首场战斗多提供一个卡牌候选，仍只可选一张"
+    },
+    {
+      "id": "cracked_battery",
+      "name": "残存电容",
+      "effect": "电力武器每场战斗初始充能+1"
+    },
+    {
+      "id": "spare_sling",
+      "name": "备用背带",
+      "effect": "每场战斗首次装备武器体力消耗-1，最低0"
+    }
+  ],
+  "events": [
+    {
+      "id": "abandoned_well",
+      "name": "废弃水井",
+      "choices": [
+        "搜寻：危险+1，获得小包补给",
+        "离开"
+      ]
+    },
+    {
+      "id": "broken_bridge",
+      "name": "断裂吊桥",
+      "choices": [
+        "消耗1绳子，安全通过并获得后续路线信息",
+        "绕路：危险+1"
+      ]
+    },
+    {
+      "id": "lost_traveler",
+      "name": "失联旅人",
+      "choices": [
+        "交出1护甲补片，记录救援线索",
+        "留下物品，仅交换消息",
+        "离开"
+      ]
+    },
+    {
+      "id": "sealed_door",
+      "name": "密封仓门",
+      "choices": [
+        "消耗1材料电池，获得蓝图候选",
+        "不打开"
+      ]
+    },
+    {
+      "id": "patrol",
+      "name": "警戒巡逻",
+      "choices": [
+        "迎战精英，获胜后增加战利品候选",
+        "绕路：危险+1"
+      ]
+    },
+    {
+      "id": "barter",
+      "name": "临时交易",
+      "choices": [
+        "用1小包补给换1绳子",
+        "用1绳子换1废金属",
+        "拒绝；地图内不花避难所物资点"
+      ]
+    },
+    {
+      "id": "medical_corner",
+      "name": "医护残站",
+      "choices": [
+        "危险+1，恢复2护甲；护甲0时显示不可用原因",
+        "离开"
+      ]
+    },
+    {
+      "id": "storm_notice",
+      "name": "风暴预警",
+      "choices": [
+        "记录风向，查看后续2个节点",
+        "忽略"
+      ]
+    },
+    {
+      "id": "narrow_passage",
+      "name": "狭窄通道",
+      "choices": [
+        "放弃至少3重量的非基础物品，走捷径",
+        "保持物品，走普通路线"
+      ]
+    },
+    {
+      "id": "radio_fragment",
+      "name": "广播残片",
+      "choices": [
+        "危险+1，记录主线线索",
+        "离开"
+      ]
+    },
+    {
+      "id": "abandoned_carriage",
+      "name": "弃置车厢",
+      "choices": [
+        "休息，护甲非0时恢复1",
+        "搜找1件材料，不恢复护甲"
+      ]
+    },
+    {
+      "id": "armory_cache",
+      "name": "旧军械柜",
+      "choices": [
+        "在3个装备候选中取1，危险+2",
+        "只记录位置并离开"
+      ]
+    }
+  ],
+  "compatibilityOnly": [
+    {
+      "id": "cash",
+      "name": "现金",
+      "weight": 10,
+      "combatEligibility": false,
+      "discardLocation": "rest",
+      "source": "workbook-teaching-item"
+    }
+  ],
+  "maps": [
+    {
+      "id": "old_district",
+      "name": "旧城区",
+      "allowedTiers": [
+        "emergency",
+        "low"
+      ],
+      "expectedReturnExchangeValue": [
+        7,
+        9
+      ],
+      "purpose": "基础能力、搜刮与撤离",
+      "emergencyVariant": {
+        "status": "proposal",
+        "maxNodes": 3,
+        "expectedReturnExchangeValue": [
+          2,
+          4
+        ],
+        "notes": "Only the short outer route; the full map at low investment retains its normal reward table."
+      }
+    },
+    {
+      "id": "abandoned_factory",
+      "name": "废弃工厂",
+      "allowedTiers": [
+        "low",
+        "standard"
+      ],
+      "expectedReturnExchangeValue": [
+        14,
+        17
+      ],
+      "purpose": "装备、蓝图与充能体系",
+      "expectedReturnNotes": "Target range is for its standard-investment content, not an automatic reward multiplier for paying more."
+    },
+    {
+      "id": "relay_outskirts",
+      "name": "中继区",
+      "allowedTiers": [
+        "standard",
+        "high"
+      ],
+      "expectedReturnExchangeValue": [
+        24,
+        29
+      ],
+      "purpose": "精英与主线目标",
+      "expectedReturnNotes": "Target range is for its high-risk content; higher entry alone does not secretly multiply rewards."
+    }
+  ],
+  "startingDeckProposal": {
+    "basic_attack": 2,
+    "basic_dodge": 2,
+    "cleaver": 1,
+    "repair": 1,
+    "enhanced_dodge": 1,
+    "heavy_hit": 1
+  },
+  "startingShelterSuppliesProposal": 10
+}

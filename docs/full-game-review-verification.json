@@ -1,0 +1,338 @@
+{
+  "project": "The end",
+  "date": "2026-11-14T20:39:48.390Z",
+  "timezone": "Etc/UTC",
+  "status": "verified-existing-teaching-scenario-formal-release-open",
+  "scope": {
+    "ruleset": "tutorial-v1",
+    "newGameplaySystems": false,
+    "preserveExistingWork": true,
+    "webDesktop": true,
+    "viewportSizes": [
+      "1440x900",
+      "1024x768"
+    ]
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "activity": "Baseline design/art review and full eight-phase playthrough",
+      "baselineTests": {
+        "passed": 78,
+        "failed": 0,
+        "total": 78
+      },
+      "fixes": "Loss disclosure, replay protection, inventory context, button ink, materials, routes and feedback"
+    },
+    {
+      "round": 2,
+      "activity": "65-action UI and route-A review",
+      "result": {
+        "passed": true,
+        "round": 2,
+        "buttonInk": [
+          {
+            "caption": "绂诲紑閬块毦鎵€",
+            "outline": false
+          }
+        ],
+        "partialSupplies": true,
+        "safeDefaultFocus": true,
+        "discardReturn": true,
+        "naturalFullBag": true,
+        "rewardLeaveConfirmation": true,
+        "cardReading": {
+          "font": 15.999999999999996,
+          "scale": 1.435897435897436
+        },
+        "dynamicReducedMotion": true,
+        "damagePreview": true,
+        "routeA": true,
+        "day2ReplayProtected": true,
+        "actions": 65,
+        "runtimeErrors": []
+      },
+      "followupFixes": [
+        "Independent close icon action",
+        "Aligned darker inventory effect summaries",
+        "Route connector contrast"
+      ]
+    },
+    {
+      "round": 3,
+      "activity": "Final visual inspection and complete browser regression",
+      "checks": 9,
+      "passed": true,
+      "newSubstantiveIssueFound": false
+    }
+  ],
+  "tests": {
+    "passed": 86,
+    "failed": 0,
+    "total": 86
+  },
+  "checks": {
+    "typecheck": {
+      "passed": true,
+      "log": "temp/full-review-typecheck.log"
+    },
+    "changedTypeScriptFormatting": {
+      "passed": true,
+      "files": 6,
+      "log": "temp/full-review-format.log"
+    },
+    "webDesktopBuild": {
+      "passed": true,
+      "log": "temp/full-review-build.log"
+    }
+  },
+  "browser": {
+    "browser-review-round3": {
+      "passed": true,
+      "round": 3,
+      "closeIcon": "×",
+      "closeWithoutMutation": true,
+      "inventoryDetails": [
+        {
+          "effect": "造成 2 点伤害",
+          "size": 14,
+          "alignment": 0,
+          "color": "535b43"
+        },
+        {
+          "effect": "造成 2 点伤害",
+          "size": 14,
+          "alignment": 0,
+          "color": "535b43"
+        },
+        {
+          "effect": "获得 2 点格挡",
+          "size": 14,
+          "alignment": 0,
+          "color": "535b43"
+        },
+        {
+          "effect": "获得 2 点格挡",
+          "size": 14,
+          "alignment": 0,
+          "color": "535b43"
+        },
+        {
+          "effect": "下回合起每回合生成「挥砍」",
+          "size": 14,
+          "alignment": 0,
+          "color": "535b43"
+        },
+        {
+          "effect": "获得 5 点格挡",
+          "size": 14,
+          "alignment": 0,
+          "color": "535b43"
+        }
+      ],
+      "smallWindow": {
+        "width": 1024,
+        "height": 768,
+        "realClick": true,
+        "escape": true
+      },
+      "runtimeErrors": []
+    },
+    "browser-first-battle": {
+      "phase": "battle",
+      "runtimeErrors": []
+    },
+    "browser-route-a": {
+      "passed": true,
+      "route": "A",
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 5
+      },
+      "second": {
+        "weaponDemonstrated": true,
+        "dragged": true,
+        "actions": 8
+      },
+      "dragCancelled": true,
+      "impactBusy": true,
+      "final": {
+        "phase": "day2",
+        "supplies": 9,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 10,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 0,
+          "repaired": false,
+          "repairSpent": 0,
+          "dailySpent": 1,
+          "dailyShortfall": 0
+        }
+      },
+      "actions": 41,
+      "runtimeErrors": []
+    },
+    "browser-route-b": {
+      "passed": true,
+      "route": "B",
+      "failureRetry": true,
+      "zeroArmorSurvived": true,
+      "repairWarningAndCancel": true,
+      "shortfallConfirmed": true,
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 2
+      },
+      "second": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 3
+      },
+      "final": {
+        "phase": "day2",
+        "supplies": 0,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 1,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 1,
+          "repaired": true,
+          "repairSpent": 1,
+          "dailySpent": 0,
+          "dailyShortfall": 1
+        }
+      },
+      "actions": 62,
+      "runtimeErrors": []
+    },
+    "browser-session-save": {
+      "passed": true,
+      "pendingRewardResume": true,
+      "noDuplicateClaim": true,
+      "battleResume": true,
+      "nextTurnAndRngResume": true,
+      "restartConfirmation": true,
+      "automaticSave": true,
+      "nativeActorSource": "master08-thin",
+      "runtimeErrors": []
+    },
+    "browser-accessibility": {
+      "passed": true,
+      "viewport": "1024x768",
+      "reducedMotion": true,
+      "unarmedPose": true,
+      "realDrag": true,
+      "runtimeErrors": []
+    },
+    "browser-input-check": {
+      "passed": true,
+      "rapidAttackSingleApply": true,
+      "rapidDefenseSingleApply": true,
+      "dragSurvivesToastExpiry": true,
+      "normalRandomMode": true,
+      "handoff": "journal",
+      "runtimeErrors": []
+    },
+    "browser-coherence-check": {
+      "passed": true,
+      "previewDoesNotWriteSave": true,
+      "reducedMotion": true,
+      "resumesMotion": true,
+      "runtimeErrors": []
+    },
+    "browser-page-overlays": {
+      "passed": true,
+      "runtimeErrors": []
+    }
+  },
+  "preservation": {
+    "date": "2026-11-14T20:33:56.805Z",
+    "baselineFiles": 626,
+    "removedExistingFiles": [],
+    "protectedFilesChecked": 135,
+    "modifiedProtectedFiles": [],
+    "changedExistingFiles": [
+      "assets/prefabs/screens/DayTwoScreen.prefab",
+      "assets/prefabs/screens/MapScreen.prefab",
+      "assets/prefabs/screens/ShelterScreen.prefab",
+      "assets/prefabs/ui/ConfirmPopup.prefab",
+      "assets/prefabs/ui/InventoryPopup.prefab",
+      "assets/game/presentation/GameDirector.ts",
+      "assets/game/presentation/GameRenderer.ts",
+      "assets/game/presentation/cards/InventoryRowPresentation.ts",
+      "assets/game/presentation/ui/ButtonPresentation.ts",
+      "assets/game/presentation/ui/UiActionRouter.ts",
+      "assets/game/presentation/ui/UiState.ts",
+      "tools/browser-accessibility.js.txt",
+      "tools/browser-card-editor.js.txt",
+      "tools/browser-card-reading.js.txt",
+      "tools/browser-first-battle.js.txt",
+      "tools/browser-helper.js.txt",
+      "tools/browser-input-check.js.txt",
+      "tools/browser-route-a.js.txt",
+      "tools/browser-route-b.js.txt",
+      "tools/browser-session-save.js.txt",
+      "tools/run-browser.cjs",
+      "docs/architecture.md",
+      "docs/designs/ui/wasteland-page-redesign.md"
+    ],
+    "authoringIdempotent": true
+  },
+  "evidence": [
+    {
+      "file": "output/playwright/review-01-bag-before.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-01-bag-before.png/review-01-bag-before.png",
+      "sha256": "AF3D9809DF7CC297159924CF0B96C08AF984AD3D0F7C8F0003A21743F94EE17C",
+      "matchesLocalSource": true
+    },
+    {
+      "file": "output/playwright/review-03-bag.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-03-bag.png/review-03-bag.png",
+      "sha256": "7ABAAB27B56795D743F2F90B9CADCF0DBDEDA34CE912A0F8D90466B4A0D4772F",
+      "matchesLocalSource": true
+    },
+    {
+      "file": "output/playwright/review-01-route-before.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-01-route-before.png/review-01-route-before.png",
+      "sha256": "93482D581894421C1A6E1D0CD28D5DA2782C91F0BCAD149B3670B98D74318A8D",
+      "matchesLocalSource": true
+    },
+    {
+      "file": "output/playwright/review-03-route.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-03-route.png/review-03-route.png",
+      "sha256": "981A101487D78B286196C72831E0A96F851437DD52E6F56E3AC876D4C967F61C",
+      "matchesLocalSource": true
+    },
+    {
+      "file": "output/playwright/review-03-battle.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-03-battle.png/review-03-battle.png",
+      "sha256": "23ABA5FEF5209A1E21EFDDAB255E2A0A9457D1B730D5E2D345D056D5C24BFF00",
+      "matchesLocalSource": true
+    },
+    {
+      "file": "output/playwright/review-03-partial-supplies.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-03-partial-supplies.png/review-03-partial-supplies.png",
+      "sha256": "0D4C36225F122AE7F76B7BF7FCCC90CD89FB874A53D53B581940F74C6EC71918",
+      "matchesLocalSource": true
+    }
+  ],
+  "remaining": [
+    "Formal multi-day loop, extraction, failure costs, warehouse/stamina systems require a confirmed production slice.",
+    "Proposed formal content and long-term balance are not implemented or evaluated as shipped rules.",
+    "Final character action art, scene layering and audio production still require dedicated review.",
+    "Full keyboard/controller/mobile support and longer player/performance studies are not verified."
+  ],
+  "openViking": {
+    "report": "viking://~/resources/projects/the-end/docs/full-game-review.md",
+    "verification": "viking://~/resources/projects/the-end/docs/full-game-review-verification.json",
+    "syncRecord": "docs/full-game-review-sync.json",
+    "status": "Tracked separately by observed write/readback results"
+  }
+}

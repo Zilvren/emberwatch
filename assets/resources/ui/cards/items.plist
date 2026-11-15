@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>ui-card-attack</key>
+      <dict>
+        <key>frame</key>
+        <string>{{79,139},{264,313}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{384,384}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+      <key>ui-card-dodge</key>
+      <dict>
+        <key>frame</key>
+        <string>{{433,147},{295,288}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{384,384}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+      <key>ui-card-knife</key>
+      <dict>
+        <key>frame</key>
+        <string>{{809,152},{310,279}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{384,384}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+      <key>ui-card-evade</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1192,117},{278,345}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{384,384}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+      <key>ui-card-repair</key>
+      <dict>
+        <key>frame</key>
+        <string>{{50,631},{305,271}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{384,384}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+      <key>ui-card-heavy</key>
+      <dict>
+        <key>frame</key>
+        <string>{{457,582},{260,332}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{384,384}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+      <key>ui-card-slash</key>
+      <dict>
+        <key>frame</key>
+        <string>{{801,627},{322,262}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{384,384}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+      <key>ui-card-cash</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1177,638},{320,233}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>sourceSize</key>
+        <string>{384,384}</string>
+        <key>rotated</key>
+        <false />
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>items.png</string>
+      <key>realTextureFileName</key>
+      <string>items.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

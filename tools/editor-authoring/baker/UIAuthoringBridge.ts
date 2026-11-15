@@ -4,7 +4,7 @@ import { SurvivalView } from './SurvivalView';
 import { SurvivalGame, CardKind } from './SurvivalRules';
 import { PixelUI } from './PixelUI';
 import { PixelGraphic } from './PixelGraphic';
-import { UIAction } from './UIAction';
+import { ButtonAction } from './ButtonAction';
 import { UIValue } from './UIValue';
 import { UIAuthoringScope } from './UIAuthoringScope';
 import { CardPresentation } from './CardPresentation';
@@ -33,7 +33,7 @@ export class UIAuthoringBridge extends Component {
         const manifest:any={pages:{},templates:[],clips:Object.keys(this.clips)};
         for(const root of this.library.children){
             const labels=root.getComponentsInChildren(UIValue).map(v=>({key:v.key,text:v.getComponent(Label)!.string,node:v.node.name,position:v.node.worldPosition}));
-            const buttons=root.getComponentsInChildren(UIAction).map(b=>({id:b.actionId,node:b.node.name}));
+            const buttons=root.getComponentsInChildren(ButtonAction).map(b=>({id:b.actionId,node:b.node.name}));
             manifest.pages[root.name]={labels,buttons,nodes:this.count(root)};
         }
         this.manifestJSON=JSON.stringify(manifest);this.clipsJSON=JSON.stringify(this.clips);this.status='ready';
@@ -41,9 +41,9 @@ export class UIAuthoringBridge extends Component {
     }
     private count(root:Node):number {return 1+root.children.reduce((n,c)=>n+this.count(c),0);}
     private container(name:string,parent:Node):Node {const n=new Node(name);n.layer=this.node.layer;parent.addChild(n);n.addComponent(UITransform).setContentSize(1440,900);return n;}
-    private makeAction(node:Node,id:string):UIAction {
+    private makeAction(node:Node,id:string):ButtonAction {
         node.name=id;const button=node.getComponent(Button)??node.addComponent(Button);button.transition=Button.Transition.SCALE;button.zoomScale=1.02;button.duration=.1;
-        const action=node.getComponent(UIAction)??node.addComponent(UIAction);action.actionId=id;action.caption=node.getChildByName('Caption')?.getComponent(Label)??null;return action;
+        const action=node.getComponent(ButtonAction)??node.addComponent(ButtonAction);action.actionId=id;action.caption=node.getChildByName('Caption')?.getComponent(Label)??null;return action;
     }
     private instrument():void {
         const source=this.source;

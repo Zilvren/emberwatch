@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>brute-idle-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{45,9},{211,240}}</string>
+        <key>offset</key>
+        <string>{9.8659,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{301,8},{211,241}}</string>
+        <key>offset</key>
+        <string>{9.2667,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{557,9},{211,240}}</string>
+        <key>offset</key>
+        <string>{9.7333,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{813,8},{211,241}}</string>
+        <key>offset</key>
+        <string>{9.2667,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1069,9},{210,241}}</string>
+        <key>offset</key>
+        <string>{9.2333,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1325,9},{211,240}}</string>
+        <key>offset</key>
+        <string>{9.2667,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{45,265},{210,240}}</string>
+        <key>offset</key>
+        <string>{8.7667,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{301,265},{210,240}}</string>
+        <key>offset</key>
+        <string>{8.7667,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-08</key>
+      <dict>
+        <key>frame</key>
+        <string>{{557,265},{211,240}}</string>
+        <key>offset</key>
+        <string>{10.7083,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-09</key>
+      <dict>
+        <key>frame</key>
+        <string>{{813,265},{210,240}}</string>
+        <key>offset</key>
+        <string>{8.7667,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-10</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1069,265},{210,240}}</string>
+        <key>offset</key>
+        <string>{9.5042,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-11</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1325,265},{211,240}}</string>
+        <key>offset</key>
+        <string>{10.1311,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-12</key>
+      <dict>
+        <key>frame</key>
+        <string>{{45,521},{210,240}}</string>
+        <key>offset</key>
+        <string>{8.9339,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-13</key>
+      <dict>
+        <key>frame</key>
+        <string>{{301,521},{211,240}}</string>
+        <key>offset</key>
+        <string>{10.7083,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-14</key>
+      <dict>
+        <key>frame</key>
+        <string>{{557,522},{210,239}}</string>
+        <key>offset</key>
+        <string>{10.2083,3.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-15</key>
+      <dict>
+        <key>frame</key>
+        <string>{{813,521},{210,240}}</string>
+        <key>offset</key>
+        <string>{8.7667,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-16</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1069,521},{210,240}}</string>
+        <key>offset</key>
+        <string>{9.5042,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-17</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1325,522},{211,239}}</string>
+        <key>offset</key>
+        <string>{9.2667,3.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-18</key>
+      <dict>
+        <key>frame</key>
+        <string>{{45,777},{211,240}}</string>
+        <key>offset</key>
+        <string>{9.4339,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-19</key>
+      <dict>
+        <key>frame</key>
+        <string>{{301,777},{211,240}}</string>
+        <key>offset</key>
+        <string>{9.2667,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-20</key>
+      <dict>
+        <key>frame</key>
+        <string>{{557,777},{210,240}}</string>
+        <key>offset</key>
+        <string>{9.6667,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-21</key>
+      <dict>
+        <key>frame</key>
+        <string>{{813,778},{210,239}}</string>
+        <key>offset</key>
+        <string>{8.7667,3.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-22</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1069,778},{210,239}}</string>
+        <key>offset</key>
+        <string>{8.7667,3.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>brute-idle-23</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1325,777},{211,240}}</string>
+        <key>offset</key>
+        <string>{9.2667,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>brute-idle.png</string>
+      <key>realTextureFileName</key>
+      <string>brute-idle.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-14",
+  "status": "thin-outline-candidate-awaiting-review",
+  "generator": "built-in image_gen",
+  "references": [
+    "08-muted-field-sketch.png",
+    "02-field-sketch.png"
+  ],
+  "output": "09-fine-line-field-sketch.png",
+  "userDirection": "保留第1版比例、第2版颜色与手绘感；不要粗的人物描边，线条保持清晰。",
+  "prompt": "Use case: precise line-weight edit of a character concept board. IMAGE 1 is the edit target. Preserve its exact three characters, body proportions, silhouettes, character identities, poses, costumes, equipment, selected muted tan/ochre and gray-olive/brown color placement, size relationships, full-body lineup and four small human action poses below. IMAGE 2 is a reference ONLY for the light economical hand-drawn line language, not its different proportions. The user explicitly says the character outlines are TOO THICK. Make a visibly dramatic reduction in contour width: redraw ALL figure contours, especially every OUTER SILHOUETTE around heads, bodies, hands, legs and boots, with fine delicate gray-brown pen lines roughly ONE QUARTER the thickness of image 1. At 1536px board width main body contours should read as a fine 1 to 1.5px pen, internal lines around 0.6 to 1px. No bold black comic/cartoon outline. Do not keep a heavy outer outline while only thinning inner detail. Use slightly lighter desaturated gray-brown ink, controlled small natural hand variation and crisp clear edges, not blurred low-opacity lines. Let the flat color shapes establish much of the silhouette, with sparse fine pen accents. Reduce redundant inner clothing folds and repeated wrinkle lines; retain only lines useful to recognize form and wear. Keep the reference-2 muted color harmony, especially the pale tan survivor hood/poncho AND pale tan heavy-monster coat, gray-olive pants and ordinary-monster clothing, pale taupe-brown equipment and cream skin. Use simple opaque lightly colored fills, minimal hard-edged shadow patches, a nearly plain light ivory background. No paper grain on the characters, watercolor bleeding, smudging, fuzzy edges, glow, heavy hatching or added detail. This should look like clean sparse FINE-LINER hand-drawn wasteland game art, NOT thick-marker cartoon art. Same composition, uncropped bodies, no new characters or props. Keep labels SURVIVOR, WANDERER, BRUTE. Title '09 / FINE LINE FIELD SKETCH'."
+}

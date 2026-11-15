@@ -1,0 +1,181 @@
+{
+  "project": "The end",
+  "date": "2026-11-15",
+  "timezone": "Asia/Shanghai",
+  "status": "status-bar-technical-validation-passed-visual-review-open",
+  "scope": {
+    "component": "status-bar",
+    "newGameplayFlows": false
+  },
+  "canonicalPrefab": "assets/prefabs/ui/HUD.prefab",
+  "linkedPreviewInstances": 4,
+  "nativeReferences": {
+    "assetUuid": "10e4dc33-e87c-4748-bff4-66c8e0b3b8e6",
+    "rootFileIdPreserved": true,
+    "actions": [
+      {
+        "name": "bag",
+        "preserved": true
+      },
+      {
+        "name": "log",
+        "preserved": true
+      },
+      {
+        "name": "help",
+        "preserved": true
+      },
+      {
+        "name": "audio",
+        "preserved": true
+      },
+      {
+        "name": "restart",
+        "preserved": true
+      }
+    ]
+  },
+  "tests": {
+    "passed": 78,
+    "failed": 0
+  },
+  "typecheck": {
+    "passed": true
+  },
+  "format": {
+    "passed": true
+  },
+  "builds": {
+    "workshop": true,
+    "mainGame": true
+  },
+  "browser": {
+    "component": {
+      "passed": true,
+      "nativePrefabInstances": 4,
+      "actionsOnce": true,
+      "lowSupply": true,
+      "criticalArmor": true,
+      "overflow": true,
+      "saveFailure": true,
+      "largeValuesExact": true,
+      "medium": true,
+      "narrow": true,
+      "keyboard": true,
+      "disabled": true,
+      "reducedMotion": true,
+      "scaledViewport": true,
+      "runtimeErrors": []
+    },
+    "main": {
+      "passed": true,
+      "originalHeaderHeight": true,
+      "gameValues": true,
+      "toolbarActions": true,
+      "modalLock": true,
+      "focusRestore": true,
+      "runtimeErrors": []
+    },
+    "panels": {
+      "passed": true,
+      "help": true,
+      "log": true,
+      "confirm": true,
+      "defaultCancel": true,
+      "hudBlocked": true,
+      "focusRestore": true,
+      "runtimeErrors": []
+    },
+    "battle": {
+      "passed": true,
+      "busyLock": true,
+      "unlockedAfterAction": true,
+      "postImpactValues": true,
+      "enemyTurnValues": true,
+      "runtimeErrors": []
+    },
+    "routeA": {
+      "passed": true,
+      "route": "A",
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 5
+      },
+      "second": {
+        "weaponDemonstrated": true,
+        "dragged": true,
+        "actions": 8
+      },
+      "dragCancelled": true,
+      "impactBusy": true,
+      "final": {
+        "phase": "day2",
+        "supplies": 9,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 10,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 0,
+          "repaired": false,
+          "repairSpent": 0,
+          "dailySpent": 1,
+          "dailyShortfall": 0
+        }
+      },
+      "actions": 38,
+      "runtimeErrors": []
+    },
+    "routeB": {
+      "passed": true,
+      "route": "B",
+      "failureRetry": true,
+      "zeroArmorSurvived": true,
+      "repairWarningAndCancel": true,
+      "shortfallConfirmed": true,
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 2
+      },
+      "second": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 3
+      },
+      "final": {
+        "phase": "day2",
+        "supplies": 0,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 1,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 1,
+          "repaired": true,
+          "repairSpent": 1,
+          "dailySpent": 0,
+          "dailyShortfall": 1
+        }
+      },
+      "actions": 60,
+      "runtimeErrors": []
+    }
+  },
+  "preview": "http://127.0.0.1:7466/",
+  "source": "assets/StatusBarDesignReview.scene",
+  "limitations": [
+    "Main game remains the tutorial-v1 compatibility scenario.",
+    "Container sizing does not complete a full mobile game layout.",
+    "The public screen.windowSize adapter is verified for current Web desktop builds; other platforms require validation.",
+    "Visual and motion approval remains open to user component review."
+  ],
+  "openViking": {
+    "status": "tracked-separately",
+    "record": "docs/openviking-sync-status.json",
+    "target": "viking://~/resources/projects/the-end/designs/ui/status-bar-component.md"
+  }
+}

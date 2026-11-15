@@ -1,0 +1,29 @@
+{
+  "name": "the-end-button-design",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "ui-buttons",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "34ba5199-9edb-46a7-bbc5-affc5b3cc8c8",
+  "scenes": [
+    {
+      "url": "db://assets/ButtonDesignReview.scene",
+      "uuid": "34ba5199-9edb-46a7-bbc5-affc5b3cc8c8"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

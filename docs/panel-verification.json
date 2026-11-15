@@ -1,0 +1,144 @@
+{
+  "project": "The end",
+  "date": "2026-11-15",
+  "started": "2026-11-14",
+  "timezone": "Asia/Shanghai",
+  "status": "panel-component-technical-validation-passed-visual-review-open",
+  "scope": {
+    "component": "common-panel",
+    "newGameplayFlows": false,
+    "adoptedPopups": [
+      "HelpPopup",
+      "LogPopup",
+      "ConfirmPopup"
+    ]
+  },
+  "nativePrefabs": 3,
+  "tests": {
+    "passed": 71,
+    "failed": 0
+  },
+  "typecheck": {
+    "passed": true
+  },
+  "format": {
+    "passed": true
+  },
+  "builds": {
+    "workshop": true,
+    "mainGame": true
+  },
+  "browser": {
+    "component": {
+      "passed": true,
+      "nativePrefabs": 3,
+      "adoptedPopups": 3,
+      "wheel": true,
+      "drag": true,
+      "keyboardReading": true,
+      "clip": true,
+      "fixedHeaderAndFooter": true,
+      "focusTrap": true,
+      "focusRestore": true,
+      "backdropBlocked": true,
+      "cancelAndConfirmSeparated": true,
+      "narrow": true,
+      "longTitle": true,
+      "scaledViewport": true,
+      "reducedMotion": true,
+      "runtimeErrors": []
+    },
+    "inGame": {
+      "passed": true,
+      "help": true,
+      "log": true,
+      "confirm": true,
+      "defaultCancel": true,
+      "hudBlocked": true,
+      "focusRestore": true,
+      "runtimeErrors": []
+    },
+    "routeA": {
+      "passed": true,
+      "route": "A",
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 5
+      },
+      "second": {
+        "weaponDemonstrated": true,
+        "dragged": true,
+        "actions": 8
+      },
+      "dragCancelled": true,
+      "impactBusy": true,
+      "final": {
+        "phase": "day2",
+        "supplies": 9,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 10,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 0,
+          "repaired": false,
+          "repairSpent": 0,
+          "dailySpent": 1,
+          "dailyShortfall": 0
+        }
+      },
+      "actions": 38,
+      "runtimeErrors": []
+    },
+    "routeB": {
+      "passed": true,
+      "route": "B",
+      "failureRetry": true,
+      "zeroArmorSurvived": true,
+      "repairWarningAndCancel": true,
+      "shortfallConfirmed": true,
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 2
+      },
+      "second": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 3
+      },
+      "final": {
+        "phase": "day2",
+        "supplies": 0,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 1,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 1,
+          "repaired": true,
+          "repairSpent": 1,
+          "dailySpent": 0,
+          "dailyShortfall": 1
+        }
+      },
+      "actions": 60,
+      "runtimeErrors": []
+    }
+  },
+  "preview": "http://127.0.0.1:7465/",
+  "source": "assets/PanelDesignReview.scene",
+  "limitations": [
+    "Inventory, HUD and map remain separate component work.",
+    "Current game still uses its desktop design resolution; panel sizing does not complete a mobile layout.",
+    "Runtime verification covers Web desktop. Other platforms and final visual approval remain open."
+  ],
+  "openViking": {
+    "status": "tracked-separately",
+    "record": "docs/openviking-sync-status.json",
+    "target": "viking://~/resources/projects/the-end/designs/ui/panel-component.md"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "date": "2026-11-14",
+  "status": "animation-review-candidate",
+  "master": "docs/designs/character-style-exploration/10-08-thin-outline.png",
+  "generator": "built-in image_gen",
+  "layout": {
+    "columns": 2,
+    "rows": 4,
+    "framesPerClip": 8
+  },
+  "sheets": [
+    {
+      "actor": "survivor",
+      "action": "idle",
+      "file": "survivor-idle.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-dd94f33b-4d6f-407f-8d1c-c7010cb5e5df.png"
+    },
+    {
+      "actor": "survivor",
+      "action": "attack",
+      "file": "survivor-attack.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-c3821338-386a-4a7f-96da-79e068b26ca8.png"
+    },
+    {
+      "actor": "survivor",
+      "action": "hurt",
+      "file": "survivor-hurt.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-f44b29bc-03f0-4f4a-ba56-c8845409f6b8.png"
+    },
+    {
+      "actor": "survivor",
+      "action": "death",
+      "file": "survivor-death.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-4e68ce9b-052c-4864-9243-6801006bb194.png"
+    },
+    {
+      "actor": "wanderer",
+      "action": "idle",
+      "file": "wanderer-idle.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-bec99fc0-71d2-4fa3-b5de-fbdf36327a9f.png"
+    },
+    {
+      "actor": "wanderer",
+      "action": "attack",
+      "file": "wanderer-attack.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-18d62518-5033-4612-85ed-149e745af860.png"
+    },
+    {
+      "actor": "wanderer",
+      "action": "hurt",
+      "file": "wanderer-hurt.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-698f7040-8caa-4543-83cd-c8bb0c8053f1.png"
+    },
+    {
+      "actor": "wanderer",
+      "action": "death",
+      "file": "wanderer-death.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-ab55fafc-28bd-4351-a6ac-d99992113ff5.png"
+    },
+    {
+      "actor": "brute",
+      "action": "idle",
+      "file": "brute-idle.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-08d645a8-d669-488f-b281-471afa00b809.png"
+    },
+    {
+      "actor": "brute",
+      "action": "attack",
+      "file": "brute-attack.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-9ccc556e-b073-4bff-9ad9-3070324678ed.png"
+    },
+    {
+      "actor": "brute",
+      "action": "hurt",
+      "file": "brute-hurt.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-dfdc79a0-353b-4f30-a661-3c7b19388271.png"
+    },
+    {
+      "actor": "brute",
+      "action": "death",
+      "file": "brute-death.png",
+      "generatedSource": "C:\\Users\\Knock\\.codex\\generated_images\\01a1c962-1a97-7773-bdc4-99108dda99ec\\exec-a7e4137b-89b5-4ee3-93b7-b33d23f27dde.png"
+    }
+  ],
+  "prompts": [
+    {
+      "key": "survivor",
+      "prompt": "Create a production 2D sprite sheet with EXACTLY EIGHT frames in TWO COLUMNS and FOUR ROWS. Canvas landscape 1536x1024; each cell is a VERY WIDE 768x256 animation canvas, so the frames are spaced far apart horizontally. The figure is only around 200 pixels tall within each cell, centered at x=384 relative to that cell, with feet baseline at y=235. Keep at least 160 pixels horizontal empty space to each cell edge, so fully stretched arms/blades stay inside the frame. This sparse wide-cell layout is intentional. Read order row-major: 0 top-left,1 top-right,2 second-row-left,3 second-row-right,4 third-row-left,5 third-row-right,6 bottom-left,7 bottom-right. Each pose has the SAME body size and ground level, all parts uncropped, no body scaling between poses. Genuine TRANSPARENT background (alpha 0), no white or brown matte, no background gradient, fog, drop shadow, ground, captions, borders, numbers, text, or checkerboard picture. Character interiors remain solid opaque with the SAME muted colors, subtle pigment texture, shadows and costume details as the selected character in the reference. Match the moderately thinner hand-drawn outlines, not the paper background. Preserve exact head/body proportions and identity. Eight distinct drawings for a continuous ATTACK: 0 original idle,1 knees bend and weight moves back,2 weapon/arm winds up,3 strong anticipation,4 forward contact strike,5 follow-through,6 partial recovery,7 original idle. Articulated elbows/shoulders/hips and cloth follow-through; not eight translated copies. The weapon can extend left/right inside its very wide cell. Do not put 4 or 8 figures in one row: ONLY TWO FIGURES PER ROW, FOUR ROWS. ONLY the LEFT HUMAN SURVIVOR. Facing RIGHT. Tan ochre pointed hood/poncho, gray scarf, brown square backpack and pouch, gray-olive trousers, forearm wraps, brown work boots, same short blade in right hand. ATTACK is a forward blade thrust matching the four bottom reference poses. Retain all original colors, texture and silhouette. No other characters."
+    },
+    {
+      "key": "wanderer",
+      "prompt": "Create a production 2D sprite sheet with EXACTLY EIGHT frames in TWO COLUMNS and FOUR ROWS. Canvas landscape 1536x1024; each cell is a VERY WIDE 768x256 animation canvas, so the frames are spaced far apart horizontally. The figure is only around 200 pixels tall within each cell, centered at x=384 relative to that cell, with feet baseline at y=235. Keep at least 160 pixels horizontal empty space to each cell edge, so fully stretched arms/blades stay inside the frame. This sparse wide-cell layout is intentional. Read order row-major: 0 top-left,1 top-right,2 second-row-left,3 second-row-right,4 third-row-left,5 third-row-right,6 bottom-left,7 bottom-right. Each pose has the SAME body size and ground level, all parts uncropped, no body scaling between poses. Genuine TRANSPARENT background (alpha 0), no white or brown matte, no background gradient, fog, drop shadow, ground, captions, borders, numbers, text, or checkerboard picture. Character interiors remain solid opaque with the SAME muted colors, subtle pigment texture, shadows and costume details as the selected character in the reference. Match the moderately thinner hand-drawn outlines, not the paper background. Preserve exact head/body proportions and identity. Eight distinct drawings for a continuous ATTACK: 0 original idle,1 knees bend and weight moves back,2 weapon/arm winds up,3 strong anticipation,4 forward contact strike,5 follow-through,6 partial recovery,7 original idle. Articulated elbows/shoulders/hips and cloth follow-through; not eight translated copies. The weapon can extend left/right inside its very wide cell. Do not put 4 or 8 figures in one row: ONLY TWO FIGURES PER ROW, FOUR ROWS. ONLY the MIDDLE LANKY ORDINARY INFECTED. Facing LEFT. Pale skin, messy hair, two dark hollow eyes, simple open mouth, gray-brown olive open ragged jacket, torn pants, long bare arms and brown boots. ATTACK is a long-arm claw swipe/lunge to the LEFT with the body coiling then leaning forward and recovering. No weapon and no other characters."
+    },
+    {
+      "key": "brute",
+      "prompt": "Create a production 2D sprite sheet with EXACTLY EIGHT frames in TWO COLUMNS and FOUR ROWS. Canvas landscape 1536x1024; each cell is a VERY WIDE 768x256 animation canvas, so the frames are spaced far apart horizontally. The figure is only around 200 pixels tall within each cell, centered at x=384 relative to that cell, with feet baseline at y=235. Keep at least 160 pixels horizontal empty space to each cell edge, so fully stretched arms/blades stay inside the frame. This sparse wide-cell layout is intentional. Read order row-major: 0 top-left,1 top-right,2 second-row-left,3 second-row-right,4 third-row-left,5 third-row-right,6 bottom-left,7 bottom-right. Each pose has the SAME body size and ground level, all parts uncropped, no body scaling between poses. Genuine TRANSPARENT background (alpha 0), no white or brown matte, no background gradient, fog, drop shadow, ground, captions, borders, numbers, text, or checkerboard picture. Character interiors remain solid opaque with the SAME muted colors, subtle pigment texture, shadows and costume details as the selected character in the reference. Match the moderately thinner hand-drawn outlines, not the paper background. Preserve exact head/body proportions and identity. Eight distinct drawings for a continuous ATTACK: 0 original idle,1 knees bend and weight moves back,2 weapon/arm winds up,3 strong anticipation,4 forward contact strike,5 follow-through,6 partial recovery,7 original idle. Articulated elbows/shoulders/hips and cloth follow-through; not eight translated copies. The weapon can extend left/right inside its very wide cell. Do not put 4 or 8 figures in one row: ONLY TWO FIGURES PER ROW, FOUR ROWS. ONLY the RIGHT BROAD HEAVY INFECTED. Facing LEFT. Massive stocky body, pale brown welding mask, LIGHT TAN OCHRE coat, gray-olive pants, pale brown gloves, boots and shoulder plate, exact reference colors and detailing. ATTACK is a heavy fist swing/punch to the LEFT with a clear windup, knee compression and torso follow-through; weighty slow settle. No other characters."
+    },
+    {
+      "key": "survivor",
+      "action": "death",
+      "prompt": "Production 2D game animation spritesheet. EXACTLY 8 separate full-body cutouts, TWO COLUMNS x FOUR ROWS, in row-major order. Landscape 1536x1024 canvas, cell 768x256, very wide empty cells are deliberate. Figure centered horizontally at x=384 inside each cell, height around 200-215px, feet/ground baseline y=235, preserve same body scale through the sequence. Leave ample transparent margin. No text, lines, headings, numbers, labels, grids, shadows, ground, fog, gradients, glow, white/brown matte, or scenery. Background must be genuine alpha 0. Skin, clothing, metal remain opaque. Reference gives the exact identities, proportions, moderately fine brown linework, muted tan and gray-olive palette, original texture, shadows and equipment details. Preserve that style and color distribution. No character redesign, no recolor, no thick outlines, no loss of detail. All eight frames are distinct, consistent drawings of the same character. ONLY the LEFT HUMAN survivor, facing RIGHT: same tan-ochre hood and short poncho, gray scarf, brown backpack and pouch, gray-olive pants, wraps and brown boots, short blade in right hand. DEFEAT sequence over eight frames: 0 initial standing idle,1 lose strength and bend knees,2 stagger lower,3 fall to a knee,4 put hand down and begin side collapse,5 sink onto side with knees bent,6 curled fallen body almost still,7 settled still fallen pose. No body shrink; use bent legs to keep corpse compact. All body parts remain uncropped in the wide cell. No gore."
+    },
+    {
+      "key": "wanderer",
+      "action": "death",
+      "prompt": "Production 2D game animation spritesheet. EXACTLY 8 separate full-body cutouts, TWO COLUMNS x FOUR ROWS, in row-major order. Landscape 1536x1024 canvas, cell 768x256, very wide empty cells are deliberate. Figure centered horizontally at x=384 inside each cell, height around 200-215px, feet/ground baseline y=235, preserve same body scale through the sequence. Leave ample transparent margin. No text, lines, headings, numbers, labels, grids, shadows, ground, fog, gradients, glow, white/brown matte, or scenery. Background must be genuine alpha 0. Skin, clothing, metal remain opaque. Reference gives the exact identities, proportions, moderately fine brown linework, muted tan and gray-olive palette, original texture, shadows and equipment details. Preserve that style and color distribution. No character redesign, no recolor, no thick outlines, no loss of detail. All eight frames are distinct, consistent drawings of the same character. ONLY the MIDDLE ordinary infected, facing LEFT: same pale face, messy hair, dark hollow eyes, long slender arms and torso, gray-brown olive torn jacket/pants, bare forearms and worn boots. No weapon. DEFEAT sequence over eight frames: 0 initial standing idle,1 lose strength and bend knees,2 stagger lower,3 fall to a knee,4 put hand down and begin side collapse,5 sink onto side with knees bent,6 curled fallen body almost still,7 settled still fallen pose. No body shrink; use bent legs to keep corpse compact. All body parts remain uncropped in the wide cell. No gore."
+    },
+    {
+      "key": "brute",
+      "action": "death",
+      "prompt": "Production 2D game animation spritesheet. EXACTLY 8 separate full-body cutouts, TWO COLUMNS x FOUR ROWS, in row-major order. Landscape 1536x1024 canvas, cell 768x256, very wide empty cells are deliberate. Figure centered horizontally at x=384 inside each cell, height around 200-215px, feet/ground baseline y=235, preserve same body scale through the sequence. Leave ample transparent margin. No text, lines, headings, numbers, labels, grids, shadows, ground, fog, gradients, glow, white/brown matte, or scenery. Background must be genuine alpha 0. Skin, clothing, metal remain opaque. Reference gives the exact identities, proportions, moderately fine brown linework, muted tan and gray-olive palette, original texture, shadows and equipment details. Preserve that style and color distribution. No character redesign, no recolor, no thick outlines, no loss of detail. All eight frames are distinct, consistent drawings of the same character. ONLY the RIGHT massive broad heavy infected, facing LEFT: same welding mask, light TAN OCHRE big coat, shoulder plate, gray-olive pants, pale brown gloves/boots/straps. Maintain its massive stocky proportions. No weapon. DEFEAT sequence over eight frames: 0 initial standing idle,1 lose strength and bend knees,2 stagger lower,3 fall to a knee,4 put hand down and begin side collapse,5 sink onto side with knees bent,6 curled fallen body almost still,7 settled still fallen pose. No body shrink; use bent legs to keep corpse compact. All body parts remain uncropped in the wide cell. No gore."
+    },
+    {
+      "key": "wanderer",
+      "action": "idle",
+      "prompt": "Production 2D game animation spritesheet. EXACTLY 8 separate full-body cutouts, TWO COLUMNS x FOUR ROWS, in row-major order. Landscape 1536x1024 canvas, cell 768x256, very wide empty cells are deliberate. Figure centered horizontally at x=384 inside each cell, height around 200-215px, feet/ground baseline y=235, preserve same body scale through the sequence. Leave ample transparent margin. No text, lines, headings, numbers, labels, grids, shadows, ground, fog, gradients, glow, white/brown matte, or scenery. Background must be genuine alpha 0. Skin, clothing, metal remain opaque. Reference gives the exact identities, proportions, moderately fine brown linework, muted tan and gray-olive palette, original texture, shadows and equipment details. Preserve that style and color distribution. No character redesign, no recolor, no thick outlines, no loss of detail. All eight frames are distinct, consistent drawings of the same character. ONLY the MIDDLE ordinary infected, facing LEFT: same pale face, messy hair, dark hollow eyes, long slender arms and torso, gray-brown olive torn jacket/pants, bare forearms and worn boots. No weapon. SEAMLESS IDLE breathing/sway loop over eight frames: 0 neutral hunch,1 breathe begins slight rib rise,2 chest gently rises,3 small inhale peak,4 exhale starts,5 chest relaxes,6 slight weight sway,7 smoothly returns toward initial hunch. Feet firmly planted; breathing amplitude only about 1-2 percent of body height, no whole-body grow/shrink, clothing and hair follow slightly. Keep animation subtle but draw intermediate poses."
+    },
+    {
+      "key": "wanderer",
+      "action": "hurt",
+      "prompt": "Production 2D game animation spritesheet. EXACTLY 8 separate full-body cutouts, TWO COLUMNS x FOUR ROWS, in row-major order. Landscape 1536x1024 canvas, cell 768x256, very wide empty cells are deliberate. Figure centered horizontally at x=384 inside each cell, height around 200-215px, feet/ground baseline y=235, preserve same body scale through the sequence. Leave ample transparent margin. No text, lines, headings, numbers, labels, grids, shadows, ground, fog, gradients, glow, white/brown matte, or scenery. Background must be genuine alpha 0. Skin, clothing, metal remain opaque. Reference gives the exact identities, proportions, moderately fine brown linework, muted tan and gray-olive palette, original texture, shadows and equipment details. Preserve that style and color distribution. No character redesign, no recolor, no thick outlines, no loss of detail. All eight frames are distinct, consistent drawings of the same character. ONLY the MIDDLE ordinary infected, facing LEFT: same pale face, messy hair, dark hollow eyes, long slender arms and torso, gray-brown olive torn jacket/pants, bare forearms and worn boots. No weapon. HURT sequence over eight frames: 0 small hit flinch,1 shoulders recoil,2 torso bends backward,3 peak recoil arms react,4 balance regained,5 weight settles,6 return,7 identical original idle. No gore, no new wound; articulate body joints naturally, never change figure size."
+    },
+    {
+      "key": "survivor",
+      "action": "idle",
+      "prompt": "Production 2D GAME spritesheet, exact EIGHT frames on TWO COLUMNS x FOUR ROWS, row-major order. Landscape 1536x1024, cell768x256. Each character centered x384 within its wide cell, around200px tall when standing, feet baseline y235, uniform scale, full figure within cell, generous empty transparent space. TRUE ALPHA-ZERO BACKGROUND with no fog, matte, paper, gradient, floor, shadows, labels, captions, outlines around cells or text. Interiors opaque. Keep exact selected character identity, original muted palette, textures, shadow shapes and costume details from the reference; only moderately finer brown character outlines. Never redesign or lighten the colors. ONLY the LEFT HUMAN facing RIGHT, tan pointed hood/short torn poncho, gray scarf, square brown backpack/pouch, gray-olive pants, wraps, boots and lowered right-hand short blade. EIGHT-FRAME SEAMLESS IDLE LOOP: neutral, inhale1, inhale2, inhalepeak, exhale1, exhale2, relaxedsway, returningneutral. Subtle shoulders, chest and cloth movement, ONLY 1-2 percent breathing amplitude, feet remain solidly planted and body size constant. First and last connect naturally. No body enlargement or drastic bobbing."
+    },
+    {
+      "key": "survivor",
+      "action": "hurt",
+      "prompt": "Production 2D GAME spritesheet, exact EIGHT frames on TWO COLUMNS x FOUR ROWS, row-major order. Landscape 1536x1024, cell768x256. Each character centered x384 within its wide cell, around200px tall when standing, feet baseline y235, uniform scale, full figure within cell, generous empty transparent space. TRUE ALPHA-ZERO BACKGROUND with no fog, matte, paper, gradient, floor, shadows, labels, captions, outlines around cells or text. Interiors opaque. Keep exact selected character identity, original muted palette, textures, shadow shapes and costume details from the reference; only moderately finer brown character outlines. Never redesign or lighten the colors. ONLY the LEFT HUMAN facing RIGHT, tan pointed hood/short torn poncho, gray scarf, square brown backpack/pouch, gray-olive pants, wraps, boots and lowered right-hand short blade. EIGHT-FRAME HURT: small flinch, initial recoil, torso recoil, peak recoil with arms reacting, regain balance, settle, return, original neutral. Gentle articulated joint changes, consistent body scale and planted feet, blade remains in survivor hand, mask stays on heavy monster. No gore or new props."
+    },
+    {
+      "key": "brute",
+      "action": "idle",
+      "prompt": "Production 2D GAME spritesheet, exact EIGHT frames on TWO COLUMNS x FOUR ROWS, row-major order. Landscape 1536x1024, cell768x256. Each character centered x384 within its wide cell, around200px tall when standing, feet baseline y235, uniform scale, full figure within cell, generous empty transparent space. TRUE ALPHA-ZERO BACKGROUND with no fog, matte, paper, gradient, floor, shadows, labels, captions, outlines around cells or text. Interiors opaque. Keep exact selected character identity, original muted palette, textures, shadow shapes and costume details from the reference; only moderately finer brown character outlines. Never redesign or lighten the colors. ONLY the RIGHT massive heavy infected facing LEFT, broad stocky body, welding mask, LIGHT TAN OCHRE big coat, salvaged shoulder plate, chest strap, gray-olive pants, pale brown gloves and boots. EIGHT-FRAME SEAMLESS IDLE LOOP: neutral, inhale1, inhale2, inhalepeak, exhale1, exhale2, relaxedsway, returningneutral. Subtle shoulders, chest and cloth movement, ONLY 1-2 percent breathing amplitude, feet remain solidly planted and body size constant. First and last connect naturally. No body enlargement or drastic bobbing."
+    },
+    {
+      "key": "brute",
+      "action": "hurt",
+      "prompt": "Production 2D GAME spritesheet, exact EIGHT frames on TWO COLUMNS x FOUR ROWS, row-major order. Landscape 1536x1024, cell768x256. Each character centered x384 within its wide cell, around200px tall when standing, feet baseline y235, uniform scale, full figure within cell, generous empty transparent space. TRUE ALPHA-ZERO BACKGROUND with no fog, matte, paper, gradient, floor, shadows, labels, captions, outlines around cells or text. Interiors opaque. Keep exact selected character identity, original muted palette, textures, shadow shapes and costume details from the reference; only moderately finer brown character outlines. Never redesign or lighten the colors. ONLY the RIGHT massive heavy infected facing LEFT, broad stocky body, welding mask, LIGHT TAN OCHRE big coat, salvaged shoulder plate, chest strap, gray-olive pants, pale brown gloves and boots. EIGHT-FRAME HURT: small flinch, initial recoil, torso recoil, peak recoil with arms reacting, regain balance, settle, return, original neutral. Gentle articulated joint changes, consistent body scale and planted feet, blade remains in survivor hand, mask stays on heavy monster. No gore or new props."
+    }
+  ]
+}

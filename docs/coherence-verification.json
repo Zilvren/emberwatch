@@ -1,0 +1,224 @@
+{
+  "project": "The end",
+  "date": "2026-11-15",
+  "timezone": "Asia/Shanghai",
+  "status": "technical-checks-passed-art-review-open",
+  "userFeedback": {
+    "rejected": "Sidebar, large panels and dashboard/PPT appearance",
+    "priority": "Characters, backgrounds and material coherence"
+  },
+  "scope": {
+    "newGameplayFlows": false,
+    "legacyScenarioPreserved": true
+  },
+  "tests": {
+    "passed": 78,
+    "failed": 0
+  },
+  "build": {
+    "webDesktop": true,
+    "typecheck": true
+  },
+  "actors": [
+    {
+      "file": "assets/prefabs/actors/PlayerActor.prefab",
+      "sha256": "8ce7e4ffc352ba21722c84f558cdc2e458b1d9b0ce7fe81f3dcf975fbbb9e434",
+      "unchanged": true
+    },
+    {
+      "file": "assets/prefabs/actors/WandererActor.prefab",
+      "sha256": "d4e7afcac45edf122a7503f17eb8c2cac3792fb9f72820792c68967aa1b90187",
+      "unchanged": true
+    },
+    {
+      "file": "assets/prefabs/actors/BruteActor.prefab",
+      "sha256": "1d20ab7a09aaf5ade85c5d7bf4bccaae1c07124d6511d9c2b92aabeb86bf8d40",
+      "unchanged": true
+    },
+    {
+      "file": "assets/resources/actors/sketch08/master08-thin.png",
+      "sha256": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+      "unchanged": true
+    }
+  ],
+  "backgrounds": [
+    {
+      "file": "assets/resources/art/field-sketch-street-v1.png",
+      "sha256": "564308a9f2bc4433264938c9dd1cf7cd493a50a335f608b6658a7d1fc54836f0",
+      "width": 1586,
+      "height": 992,
+      "frame": "0622e2f8-b8a6-4fd0-bc8d-e8f27bbf6540@49047"
+    },
+    {
+      "file": "assets/resources/art/field-sketch-depot-v1.png",
+      "sha256": "e045b5c482d383ab471bb65c3d122ec55223ef0161e6e3d452d05404268c8559",
+      "width": 1586,
+      "height": 992,
+      "frame": "a4f060a9-3c21-4851-a6a5-75d028438f4e@49047"
+    },
+    {
+      "file": "assets/resources/art/field-sketch-shelter-v1.png",
+      "sha256": "4d2b0bc33055593e5aa2981d341f7d96689a466a73c469cbb790f6d5ad7e5607",
+      "width": 1586,
+      "height": 992,
+      "frame": "80d9dd95-bebf-43f0-a34f-4d11780e56c0@49047"
+    }
+  ],
+  "scenes": [
+    {
+      "scene": "JournalScreen",
+      "frame": "a4f060a9-3c21-4851-a6a5-75d028438f4e@49047",
+      "actorScalesPreserved": true
+    },
+    {
+      "scene": "MapScreen",
+      "frame": "0622e2f8-b8a6-4fd0-bc8d-e8f27bbf6540@49047",
+      "actorScalesPreserved": true
+    },
+    {
+      "scene": "BattleScreen",
+      "frame": "0622e2f8-b8a6-4fd0-bc8d-e8f27bbf6540@49047",
+      "actorScalesPreserved": true
+    },
+    {
+      "scene": "RewardScreen",
+      "frame": "a4f060a9-3c21-4851-a6a5-75d028438f4e@49047",
+      "actorScalesPreserved": true
+    },
+    {
+      "scene": "RestScreen",
+      "frame": "80d9dd95-bebf-43f0-a34f-4d11780e56c0@49047",
+      "actorScalesPreserved": true
+    },
+    {
+      "scene": "ShelterScreen",
+      "frame": "80d9dd95-bebf-43f0-a34f-4d11780e56c0@49047",
+      "actorScalesPreserved": true
+    },
+    {
+      "scene": "DayTwoScreen",
+      "frame": "80d9dd95-bebf-43f0-a34f-4d11780e56c0@49047",
+      "actorScalesPreserved": true
+    },
+    {
+      "scene": "FailureScreen",
+      "frame": "a4f060a9-3c21-4851-a6a5-75d028438f4e@49047",
+      "actorScalesPreserved": true
+    }
+  ],
+  "browser": {
+    "overlays": {
+      "passed": true,
+      "runtimeErrors": []
+    },
+    "routeA": {
+      "passed": true,
+      "route": "A",
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 5
+      },
+      "second": {
+        "weaponDemonstrated": true,
+        "dragged": true,
+        "actions": 8
+      },
+      "dragCancelled": true,
+      "impactBusy": true,
+      "final": {
+        "phase": "day2",
+        "supplies": 9,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 10,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 0,
+          "repaired": false,
+          "repairSpent": 0,
+          "dailySpent": 1,
+          "dailyShortfall": 0
+        }
+      },
+      "actions": 38,
+      "runtimeErrors": []
+    },
+    "routeB": {
+      "passed": true,
+      "route": "B",
+      "failureRetry": true,
+      "zeroArmorSurvived": true,
+      "repairWarningAndCancel": true,
+      "shortfallConfirmed": true,
+      "first": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 2
+      },
+      "second": {
+        "weaponDemonstrated": false,
+        "dragged": true,
+        "actions": 3
+      },
+      "final": {
+        "phase": "day2",
+        "supplies": 0,
+        "armor": 10,
+        "settlement": {
+          "returnedSupplies": 1,
+          "returnedCards": 10,
+          "lostOverflow": [],
+          "wasCritical": false,
+          "repairCost": 1,
+          "repaired": true,
+          "repairSpent": 1,
+          "dailySpent": 0,
+          "dailyShortfall": 1
+        }
+      },
+      "actions": 60,
+      "runtimeErrors": []
+    },
+    "motion": {
+      "passed": true,
+      "previewDoesNotWriteSave": true,
+      "reducedMotion": true,
+      "resumesMotion": true,
+      "runtimeErrors": []
+    },
+    "interaction": {
+      "passed": true,
+      "dragAttack": true,
+      "enemyHp": 4,
+      "enemyTurn": true,
+      "ambientMotion": true,
+      "runtimeErrors": []
+    }
+  },
+  "preview": "http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&design=coherence-03&v=3",
+  "recording": "docs/designs/ui/coherence-battle.webm",
+  "design": {
+    "document": "docs/game-design.md",
+    "content": "docs/designs/formal-content-draft.json",
+    "status": "proposal-not-runtime",
+    "cards": 25,
+    "enemies": 8,
+    "events": 12,
+    "blueprints": 6,
+    "permanentRelics": 6,
+    "runRelics": 8
+  },
+  "limitations": [
+    "Final visual approval remains with the user.",
+    "Current gameplay remains tutorial-v1; proposed formal systems are not enabled.",
+    "Non-idle character actions and final layered-background/audio production need further review.",
+    "Runtime checks cover Web desktop."
+  ],
+  "openViking": {
+    "status": "tracked-separately",
+    "record": "docs/openviking-sync-status.json",
+    "target": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md"
+  }
+}

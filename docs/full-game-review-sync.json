@@ -1,0 +1,104 @@
+{
+  "project": "The end",
+  "date": "2026-11-14T20:42:55.063Z",
+  "status": "saved-readback-and-source-bytes-verified",
+  "root": "viking://~/resources/projects/the-end/",
+  "authored": [
+    {
+      "file": "docs/architecture.md",
+      "uri": "viking://~/resources/projects/the-end/docs/architecture.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/designs/ui/wasteland-page-redesign.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/full-game-review.md",
+      "uri": "viking://~/resources/projects/the-end/docs/full-game-review.md",
+      "saved": true,
+      "readbackVerified": true
+    },
+    {
+      "file": "docs/full-game-review-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/full-game-review-verification.json",
+      "saved": true,
+      "readbackVerified": true
+    }
+  ],
+  "readme": {
+    "source": "README.md",
+    "target": "viking://~/resources/projects/the-end/docs/repository-readme",
+    "taskId": "def0fc87-d3d2-4bd1-9142-2115feb2fee7",
+    "status": "parsed-readable-and-readback-verified",
+    "readbackUris": [
+      "viking://~/resources/projects/the-end/docs/repository-readme/the_end/the_end_3more_2e3c125a.md",
+      "viking://~/resources/projects/the-end/docs/repository-readme/the_end/运行_4more_e764335f.md"
+    ],
+    "verifiedContent": [
+      "GameRoot (GameDirector)",
+      "ButtonAction.actionId",
+      "86 tests and full-review references",
+      "Partial rewards and replay confirmation"
+    ]
+  },
+  "screenshots": [
+    {
+      "file": "output/playwright/review-01-bag-before.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-01-bag-before.png/review-01-bag-before.png",
+      "sha256": "AF3D9809DF7CC297159924CF0B96C08AF984AD3D0F7C8F0003A21743F94EE17C",
+      "matchesLocalSource": true,
+      "taskId": "e85d9820-f5d4-4b54-ae45-636a625a07f4",
+      "status": "available-and-downloaded-byte-verified"
+    },
+    {
+      "file": "output/playwright/review-03-bag.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-03-bag.png/review-03-bag.png",
+      "sha256": "7ABAAB27B56795D743F2F90B9CADCF0DBDEDA34CE912A0F8D90466B4A0D4772F",
+      "matchesLocalSource": true,
+      "taskId": "8620b6a6-9e8c-4e1e-8000-0a72afc2a7a4",
+      "status": "available-and-downloaded-byte-verified"
+    },
+    {
+      "file": "output/playwright/review-01-route-before.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-01-route-before.png/review-01-route-before.png",
+      "sha256": "93482D581894421C1A6E1D0CD28D5DA2782C91F0BCAD149B3670B98D74318A8D",
+      "matchesLocalSource": true,
+      "taskId": "e4a3a78a-ad40-4b4a-ba66-eda92955fc21",
+      "status": "available-and-downloaded-byte-verified"
+    },
+    {
+      "file": "output/playwright/review-03-route.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-03-route.png/review-03-route.png",
+      "sha256": "981A101487D78B286196C72831E0A96F851437DD52E6F56E3AC876D4C967F61C",
+      "matchesLocalSource": true,
+      "taskId": "80229cf7-7667-4646-9a26-36ffd941059d",
+      "status": "available-and-downloaded-byte-verified"
+    },
+    {
+      "file": "output/playwright/review-03-battle.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-03-battle.png/review-03-battle.png",
+      "sha256": "23ABA5FEF5209A1E21EFDDAB255E2A0A9457D1B730D5E2D345D056D5C24BFF00",
+      "matchesLocalSource": true,
+      "taskId": "a0754ad5-ef40-4419-a5aa-8af4a5edd33c",
+      "status": "available-and-downloaded-byte-verified"
+    },
+    {
+      "file": "output/playwright/review-03-partial-supplies.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/full-game-review/review-03-partial-supplies.png/review-03-partial-supplies.png",
+      "sha256": "0D4C36225F122AE7F76B7BF7FCCC90CD89FB874A53D53B581940F74C6EC71918",
+      "matchesLocalSource": true,
+      "taskId": "78f1c1ce-ea5b-485b-9387-fa46e88ad27f",
+      "status": "available-and-downloaded-byte-verified"
+    }
+  ],
+  "notes": [
+    "All four authored documents were read back and compared with local contents.",
+    "All six screenshot source files were downloaded from their final URIs and SHA-256 matched local source bytes.",
+    "Imported source parsing/readability was verified; vector index completion was not separately polled.",
+    "This is a completed review snapshot, not a recurring monitor."
+  ]
+}

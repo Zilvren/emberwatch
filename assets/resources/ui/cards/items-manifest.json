@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "image": "items.png",
+  "width": 1536,
+  "height": 1024,
+  "frames": {
+    "attack": {
+      "name": "ui-card-attack",
+      "rect": [
+        79,
+        139,
+        264,
+        313
+      ],
+      "viewBox": [
+        19.0,
+        103.5,
+        384,
+        384
+      ],
+      "image": "items.png"
+    },
+    "dodge": {
+      "name": "ui-card-dodge",
+      "rect": [
+        433,
+        147,
+        295,
+        288
+      ],
+      "viewBox": [
+        388.5,
+        99.0,
+        384,
+        384
+      ],
+      "image": "items.png"
+    },
+    "knife": {
+      "name": "ui-card-knife",
+      "rect": [
+        809,
+        152,
+        310,
+        279
+      ],
+      "viewBox": [
+        772.0,
+        99.5,
+        384,
+        384
+      ],
+      "image": "items.png"
+    },
+    "evade": {
+      "name": "ui-card-evade",
+      "rect": [
+        1192,
+        117,
+        278,
+        345
+      ],
+      "viewBox": [
+        1139.0,
+        97.5,
+        384,
+        384
+      ],
+      "image": "items.png"
+    },
+    "repair": {
+      "name": "ui-card-repair",
+      "rect": [
+        50,
+        631,
+        305,
+        271
+      ],
+      "viewBox": [
+        10.5,
+        574.5,
+        384,
+        384
+      ],
+      "image": "items.png"
+    },
+    "heavy": {
+      "name": "ui-card-heavy",
+      "rect": [
+        457,
+        582,
+        260,
+        332
+      ],
+      "viewBox": [
+        395.0,
+        556.0,
+        384,
+        384
+      ],
+      "image": "items.png"
+    },
+    "slash": {
+      "name": "ui-card-slash",
+      "rect": [
+        801,
+        627,
+        322,
+        262
+      ],
+      "viewBox": [
+        770.0,
+        566.0,
+        384,
+        384
+      ],
+      "image": "items.png"
+    },
+    "cash": {
+      "name": "ui-card-cash",
+      "rect": [
+        1177,
+        638,
+        320,
+        233
+      ],
+      "viewBox": [
+        1145.0,
+        562.5,
+        384,
+        384
+      ],
+      "image": "items.png"
+    },
+    "rope": {
+      "name": "ui-card-rope",
+      "image": "materials.png",
+      "rect": [
+        183,
+        349,
+        456,
+        410
+      ],
+      "viewBox": [
+        155.0,
+        298.0,
+        512,
+        512
+      ]
+    },
+    "battery": {
+      "name": "ui-card-battery",
+      "image": "materials.png",
+      "rect": [
+        894,
+        323,
+        451,
+        396
+      ],
+      "viewBox": [
+        863.5,
+        265.0,
+        512,
+        512
+      ]
+    }
+  },
+  "images": {
+    "items.png": {
+      "width": 1536,
+      "height": 1024
+    },
+    "materials.png": {
+      "width": 1536,
+      "height": 1024
+    }
+  }
+}

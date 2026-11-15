@@ -1,0 +1,29 @@
+{
+  "name": "the-end-actor-review",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "actor-review",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "5426ca0d-7b75-457c-b725-ba5a0669b471",
+  "scenes": [
+    {
+      "url": "db://assets/ActorMotionReview.scene",
+      "uuid": "5426ca0d-7b75-457c-b725-ba5a0669b471"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

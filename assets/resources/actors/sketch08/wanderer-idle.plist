@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>wanderer-idle-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{101,13},{126,240}}</string>
+        <key>offset</key>
+        <string>{-0.9747,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{348,13},{126,240}}</string>
+        <key>offset</key>
+        <string>{-1.4937,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{597,13},{125,240}}</string>
+        <key>offset</key>
+        <string>{-0.4747,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{842,13},{127,240}}</string>
+        <key>offset</key>
+        <string>{-1.3333,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1089,13},{127,240}}</string>
+        <key>offset</key>
+        <string>{-1.3333,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1336,13},{127,240}}</string>
+        <key>offset</key>
+        <string>{-1.9937,4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{100,262},{127,242}}</string>
+        <key>offset</key>
+        <string>{-3.3442,5.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{348,263},{127,241}}</string>
+        <key>offset</key>
+        <string>{-2.6667,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-08</key>
+      <dict>
+        <key>frame</key>
+        <string>{{596,263},{126,241}}</string>
+        <key>offset</key>
+        <string>{-1.9747,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-09</key>
+      <dict>
+        <key>frame</key>
+        <string>{{842,263},{127,241}}</string>
+        <key>offset</key>
+        <string>{-2.4747,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-10</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1089,263},{128,241}}</string>
+        <key>offset</key>
+        <string>{-1.8333,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-11</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1335,263},{128,241}}</string>
+        <key>offset</key>
+        <string>{-3.5065,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-12</key>
+      <dict>
+        <key>frame</key>
+        <string>{{100,517},{127,241}}</string>
+        <key>offset</key>
+        <string>{-2.4747,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-13</key>
+      <dict>
+        <key>frame</key>
+        <string>{{349,516},{126,242}}</string>
+        <key>offset</key>
+        <string>{-1.5065,5.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-14</key>
+      <dict>
+        <key>frame</key>
+        <string>{{596,517},{126,241}}</string>
+        <key>offset</key>
+        <string>{-1.9747,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-15</key>
+      <dict>
+        <key>frame</key>
+        <string>{{842,516},{127,242}}</string>
+        <key>offset</key>
+        <string>{-2.4747,5.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-16</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1088,517},{129,241}}</string>
+        <key>offset</key>
+        <string>{-2.5260,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-17</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1335,517},{128,241}}</string>
+        <key>offset</key>
+        <string>{-3.6250,4.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-18</key>
+      <dict>
+        <key>frame</key>
+        <string>{{101,774},{127,238}}</string>
+        <key>offset</key>
+        <string>{-2.1250,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-19</key>
+      <dict>
+        <key>frame</key>
+        <string>{{348,773},{127,239}}</string>
+        <key>offset</key>
+        <string>{-2.6667,3.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-20</key>
+      <dict>
+        <key>frame</key>
+        <string>{{596,774},{126,238}}</string>
+        <key>offset</key>
+        <string>{-1.9747,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-21</key>
+      <dict>
+        <key>frame</key>
+        <string>{{843,774},{128,238}}</string>
+        <key>offset</key>
+        <string>{-0.9747,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-22</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1088,774},{129,238}}</string>
+        <key>offset</key>
+        <string>{-2.9937,3.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+      <key>wanderer-idle-23</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1335,773},{129,239}}</string>
+        <key>offset</key>
+        <string>{-2.9937,3.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{640,256}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>wanderer-idle.png</string>
+      <key>realTextureFileName</key>
+      <string>wanderer-idle.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

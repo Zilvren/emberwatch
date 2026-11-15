@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "name": "wasteland-field-console",
+  "colors": {
+    "canvas": "#19221c",
+    "paper": "#2c382e",
+    "paperShade": "#44513e",
+    "paperSelected": "#43503b",
+    "ink": "#e6dfcc",
+    "muted": "#b0b8a1",
+    "line": "#657257",
+    "lineSoft": "#46533f",
+    "ochre": "#c3a46c",
+    "olive": "#a7b784",
+    "brown": "#b59b78",
+    "danger": "#dfa087",
+    "disabled": "#89957d"
+  },
+  "card": {
+    "width": 224,
+    "height": 340,
+    "padding": 16,
+    "radius": 5,
+    "lineWidth": 1.2,
+    "titleSize": 20,
+    "bodySize": 16,
+    "smallSize": 13,
+    "hoverLift": 12,
+    "hoverScale": 1.025,
+    "readingLift": 120,
+    "typeText": "#c3cda9",
+    "artFill": "#c2b79e"
+  },
+  "button": {
+    "height": 48,
+    "compactHeight": 40,
+    "largeHeight": 56,
+    "paddingX": 16,
+    "fontSize": 18,
+    "lineWidth": 1.1,
+    "pressOffset": 2,
+    "pressScale": 0.99,
+    "pressDuration": 0.1,
+    "focusLine": "#c3a46c",
+    "disabledFill": "#303b30",
+    "disabledLine": "#53634b",
+    "disabledText": "#a7b19b",
+    "variants": {
+      "primary": {
+        "fill": "#bea06a",
+        "hover": "#d0b47d",
+        "pressed": "#ac8d55",
+        "line": "#e0c18b",
+        "activeLine": "#f1d39f",
+        "text": "#19251b"
+      },
+      "secondary": {
+        "fill": "#354431",
+        "hover": "#43533c",
+        "pressed": "#2a3828",
+        "line": "#71815f",
+        "activeLine": "#c3a46c",
+        "text": "#e6dfcc"
+      },
+      "quiet": {
+        "fill": "#2c382e",
+        "hover": "#34432f",
+        "pressed": "#3d4c34",
+        "line": "#58694c",
+        "activeLine": "#9aa97c",
+        "text": "#cbd4bb"
+      },
+      "danger": {
+        "fill": "#5c3b32",
+        "hover": "#72493d",
+        "pressed": "#492f29",
+        "line": "#a8765e",
+        "activeLine": "#d69d7c",
+        "text": "#f0dfcf"
+      }
+    },
+    "darkDisabledFill": "#303b30",
+    "darkDisabledLine": "#53634b",
+    "darkDisabledText": "#a7b19b",
+    "darkQuietHover": "#34432f",
+    "darkQuietPressed": "#3d4c34",
+    "darkFocusLine": "#c3a46c",
+    "darkQuietText": "#cbd4bb"
+  },
+  "panel": {
+    "padding": 24,
+    "margin": 20,
+    "gap": 12,
+    "buttonHeight": 48,
+    "titleSize": 24,
+    "bodySize": 18,
+    "lineHeight": 30,
+    "subtitleSize": 14,
+    "lineWidth": 1.1,
+    "backdrop": "#282b25",
+    "backdropAlpha": 180
+  },
+  "hud": {
+    "height": 80,
+    "buttonHeight": 40,
+    "labelSize": 13,
+    "valueSize": 22,
+    "hintSize": 12,
+    "warning": "#dbb67c",
+    "wideMin": 1180,
+    "compactMin": 720
+  }
+}

@@ -6,7 +6,8 @@ const cli=process.env.PLAYWRIGHT_CLI??'C:/Users/Knock/AppData/Local/npm-cache/_n
 const task=fs.readFileSync(path.resolve(project,process.argv[2]),'utf8');
 const helper=fs.readFileSync(path.join(__dirname,'browser-helper.js.txt'),'utf8');
 const code=`async (page) => { const runtimeErrors=[]; const onError=e=>runtimeErrors.push(String(e)); page.on('pageerror',onError); try { ${helper}\n${task} } finally { page.off('pageerror',onError); } }`;
-const result=spawnSync(process.execPath,[cli,'-s=emberwatch','run-code',code],{cwd:project,encoding:'utf8'});
+const session=process.env.PLAYWRIGHT_SESSION??'emberwatch';
+const result=spawnSync(process.execPath,[cli,`-s=${session}`,'run-code',code],{cwd:project,encoding:'utf8'});
 if(result.stdout)process.stdout.write(result.stdout);
 if(result.stderr)process.stderr.write(result.stderr);
 if(result.error)throw result.error;

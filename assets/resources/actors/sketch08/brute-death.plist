@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>brute-death-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{287,9},{221,252}}</string>
+        <key>offset</key>
+        <string>{5.6298,3.8750}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{673,270}</string>
+      </dict>
+      <key>brute-death-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1029,31},{222,231}}</string>
+        <key>offset</key>
+        <string>{-19.8702,-6.6250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{673,270}</string>
+      </dict>
+      <key>brute-death-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{273,294},{228,221}}</string>
+        <key>offset</key>
+        <string>{-4.8702,-11.6250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{673,270}</string>
+      </dict>
+      <key>brute-death-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1008,324},{270,197}}</string>
+        <key>offset</key>
+        <string>{-16.8702,-23.6250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{673,270}</string>
+      </dict>
+      <key>brute-death-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{236,564},{306,203}}</string>
+        <key>offset</key>
+        <string>{-2.8702,-20.6250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{673,270}</string>
+      </dict>
+      <key>brute-death-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{949,581},{359,185}}</string>
+        <key>offset</key>
+        <string>{-31.3702,-29.6250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{673,270}</string>
+      </dict>
+      <key>brute-death-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{212,834},{346,162}}</string>
+        <key>offset</key>
+        <string>{-6.8702,-41.1250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{673,270}</string>
+      </dict>
+      <key>brute-death-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{950,847},{352,151}}</string>
+        <key>offset</key>
+        <string>{-33.8702,-46.6250}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{673,270}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>brute-death.png</string>
+      <key>realTextureFileName</key>
+      <string>brute-death.png</string>
+      <key>size</key>
+      <string>{1536,1024}</string>
+    </dict>
+  </dict>
+</plist>

@@ -1,0 +1,7 @@
+{
+  "date": "2026-11-14",
+  "status": "review-candidate",
+  "tool": "built-in image_gen",
+  "reference": "08-muted-field-sketch.png",
+  "prompt": "Use case: precise-object-edit, STRICT minimal change. This exact reference board 08 is the approved visual master. Make ONLY ONE CHANGE: reduce the CHARACTER LINE STROKE THICKNESS to about 60 percent of the original. Preserve EVERYTHING else: exact color values and distribution, tan coat and hood tones, gray-olive pants, pale brown equipment, skin colors, shadows, paper background, paper/pigment texture, worn marks, all fold lines, shapes, proportions, silhouettes, head sizes, faces, hair, equipment, poses, size relationships, composition, lettering and all four bottom action poses. Do NOT lighten colors, flatten shadows, simplify designs, remove texture or change clothes. The previous thin-line attempt changed too much; this time match board 08 exactly except the contours are moderately finer. Keep lines fully opaque and crisp, maintaining the same gray-brown ink hue and small natural hand variation; don't make very faint hairlines. Preserve the title '08 / MUTED FIELD SKETCH' and all labels verbatim. No new objects, no removal, no recoloring. Same landscape board."
+}

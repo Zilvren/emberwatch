@@ -4,7 +4,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { createLoader, ts } = require('./load-ts.cjs');
 const project = path.resolve(__dirname, '..');
-const schemaPath = path.join(project, 'assets/CardCatalog.ts');
+const schemaPath = path.join(project, 'assets/game/core/content/CardCatalog.ts');
 const { validateCatalog, CatalogError } = createLoader()(schemaPath);
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.wasm': 'application/wasm', '.ttf': 'font/ttf', '.ico': 'image/x-icon' };
 
@@ -62,6 +62,15 @@ function createEditorServer(options = {}) {
                 response.writeHead(200, { 'Content-Type': mime['.js'], 'Cache-Control': 'no-store' });
                 return response.end(ts.transpileModule(fs.readFileSync(schemaPath, 'utf8'), { compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ES2020 } }).outputText);
             }
+            if (address.pathname === '/shared/card-view.js') {
+                const source = fs.readFileSync(path.join(project, 'assets/game/presentation/cards/CardViewModel.ts'), 'utf8').replace(/from ['"][^'"]*CardCatalog['"]/g, "from '/shared/catalog.js'");
+                response.writeHead(200, { 'Content-Type': mime['.js'], 'Cache-Control': 'no-store' });
+                return response.end(ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ES2020 } }).outputText);
+            }
+            if (address.pathname === '/shared/ui-theme.json') return sendFile(response, path.join(project, 'assets/resources/ui/field-card-theme.json'));
+            if (address.pathname === '/shared/ui-art.json') return sendFile(response, path.join(project, 'assets/resources/ui/cards/items-manifest.json'));
+            if (address.pathname === '/art/ui-card-items.png') return sendFile(response, path.join(project, 'assets/resources/ui/cards/items.png'));
+            if (address.pathname === '/art/ui-card-materials.png') return sendFile(response, path.join(project, 'assets/resources/ui/cards/materials.png'));
             if (address.pathname === '/art/card-art.png') return sendFile(response, path.join(project, 'assets/resources/art/card-art.png'));
             if (address.pathname === '/play') { response.writeHead(302, { Location: '/play/?cards=live' }); return response.end(); }
             if (address.pathname.startsWith('/play/')) {
@@ -75,7 +84,7 @@ function createEditorServer(options = {}) {
                 }
                 return sendFile(response, resolved);
             }
-            const staticFiles = { '/': 'index.html', '/editor.css': 'editor.css', '/editor.js': 'editor.js' };
+            const staticFiles = { '/': 'index.html', '/editor.css': 'editor.css', '/card-component.css': 'card-component.css', '/editor.js': 'editor.js' };
             const name = staticFiles[address.pathname];
             if (name) return sendFile(response, path.join(project, 'tools/card-editor', name));
             return json(response, 404, { error: '页面不存在。' });
