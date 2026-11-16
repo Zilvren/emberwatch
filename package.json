@@ -21,6 +21,7 @@
         "buttons": "node tools/button-preview.cjs",
         "mcp": "node tools/pink.cjs start-mcp-server --project . --port 9527",
         "test": "node --test --test-reporter=tap tests/*.test.cjs",
+        "test:core-loop-browser": "node tools/test-core-loop-browser.cjs",
         "build:panels": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-panel-review.json",
         "panels": "node tools/panel-preview.cjs",
         "build:status": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-status-review.json",

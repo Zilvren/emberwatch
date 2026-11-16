@@ -11,7 +11,8 @@ export type GameCommand =
               | 'claim-supplies'
               | 'finish-rewards'
               | 'finish-rest'
-              | 'finish-day'
+              | 'continue-journal'
+              | 'retry'
               | 'new-game';
       }
     | { type: 'start'; tier?: EntryTierId }
@@ -19,7 +20,7 @@ export type GameCommand =
     | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
     | { type: 'discard-supplies'; amount: number }
-    | { type: 'repair'; confirmed?: boolean };
+    | { type: 'repair' };
 
 /** Application flow: commands -> pure rules -> persistence. No engine or UI dependencies. */
 export class GameSession {
@@ -102,10 +103,13 @@ export class GameSession {
                 result = g.finishRest();
                 break;
             case 'repair':
-                result = g.repairAtShelter(command.confirmed);
+                result = g.repairAtShelter();
                 break;
-            case 'finish-day':
-                result = g.finishDay();
+            case 'continue-journal':
+                result = g.continueJournal();
+                break;
+            case 'retry':
+                result = g.retry();
                 break;
             case 'new-game':
                 g.reset(this.defaultScenario);

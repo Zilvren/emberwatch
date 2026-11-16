@@ -2,6 +2,7 @@
 export type Route = 'A' | 'B';
 export type NodeKind = 'fixed' | 'scavenge' | 'enemy1' | 'rest' | 'enemy2';
 export interface GameScenario {
+    kind: 'tutorial' | 'expedition';
     ruleset: 'tutorial-v1' | 'stamina-v1';
     battleResource?: 'supplies' | 'stamina';
     suppliesHaveWeight?: boolean;
@@ -14,11 +15,11 @@ export interface GameScenario {
     initialArmor: number;
     routes: Record<Route, NodeKind[]>;
     enemies: Record<'enemy1' | 'enemy2', { hp: number; attack: number; strongAttack: number }>;
-    completionDay: number;
 }
 
 // Existing teaching content is the first authored scenario, not a global game limit.
 export const TUTORIAL_SCENARIO: GameScenario = {
+    kind: 'tutorial',
     ruleset: 'tutorial-v1',
     battleResource: 'supplies',
     suppliesHaveWeight: true,
@@ -37,11 +38,11 @@ export const TUTORIAL_SCENARIO: GameScenario = {
         enemy1: { hp: 6, attack: 2, strongAttack: 4 },
         enemy2: { hp: 10, attack: 3, strongAttack: 6 },
     },
-    completionDay: 2,
 };
 
 export const STAMINA_SCENARIO: GameScenario = {
     ...TUTORIAL_SCENARIO,
+    kind: 'expedition',
     ruleset: 'stamina-v1',
     id: 'stamina-expedition',
     title: '灰烬街区',

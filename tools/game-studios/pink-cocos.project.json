@@ -57,8 +57,9 @@
   "confirmedConstraints": [
     "Keep approved 08 character identity, colors, equipment and established display proportions; thinner outlines remain the approved direction.",
     "Current visual priority is character/background/material coherence and scene-led whole-screen composition.",
-    "Daily supplies are consumed last during settlement. Repair may still be confirmed after a daily-consumption risk warning.",
-    "New sessions use stamina-v1 with confirmed entry tiers and per-turn stamina. Preserve tutorial-v1 for old saves and regression; full multi-day systems and unconfirmed content remain pending."
+    "Daily settlement and daily survival supply costs are removed. Each formal map attempt advances one day on success or failure; tutorial failures remain on day 1.",
+    "Key journals use configured milestone conditions and prerequisite entries, record their actual trigger date, and appear once per campaign. Formal failure restores the existing initial loadout while preserving elapsed days and journal progress.",
+    "New sessions use stamina-v1 with confirmed entry tiers and per-turn stamina. Tutorial-v1 remains for compatible saves and regression, then continues to formal exploration after its completion journal. Further maps and unconfirmed content remain pending."
   ],
   "protectedPaths": [
     "assets/game",

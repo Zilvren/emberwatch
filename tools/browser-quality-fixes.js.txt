@@ -37,10 +37,10 @@ await page.emulateMedia({reducedMotion:'no-preference'});
 await claimSupplies();await claimAvailableCard();await leaveRewards();await click('enter-rest');await click('rest-bag');view=await rootInfo();
 assert(view.editing&&view.filter==='all'&&view.visibleCards>0&&!view.emptyVisible,'Camp deck entry inherited the overflow filter');await screenshot('fixed-camp-deck');await click('modal-close');
 await click('rest-cash');await click('modal-confirm');await click('rest-done');await click('enter-enemy2');await fight({preferWeapon:true});await claimSupplies();await claimAvailableCard();await leaveRewards();
-await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='shelter');await idle();
+await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='journal');await idle();
 const arrival=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return{visible:d.toastRoot.active,text:d.toastLabel.string};});
 assert(arrival.visible&&arrival.text.includes('已返回避难所')&&!arrival.text.includes('返回路线图'),'Arrival displays an obsolete node notification');await screenshot('fixed-shelter-arrival');
-assert((await state()).settlement.dailySpent===0,'Arrival charged the daily supplies early');await click('shelter-done');
+assert(!('dailySpent' in (await state()).settlement),'Arrival retained a daily payment');await click('journal-start');
 // This is the runner's isolated QA profile; previous scenarios may have left a modern fixture.
 await page.evaluate(()=>{localStorage.removeItem('the-end.run.v1');localStorage.removeItem('the-end.run.v1.backup');});
 await page.goto('http://127.0.0.1:7457/?seed=23&save=on&ruleset=tutorial-v1&review=compatibility-setup');await idle();

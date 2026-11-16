@@ -876,7 +876,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "SURVIVAL JOURNAL",
+    "_string": "SURVIVAL JOURNAL / 关键记录",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 16,
@@ -1953,7 +1953,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "离开避难所",
+    "_string": "整备出发",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -2686,7 +2686,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "A SINGLE DAY. A CHANCE TO SURVIVE.",
+    "_string": "",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 14,

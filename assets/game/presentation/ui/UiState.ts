@@ -3,7 +3,6 @@ export type Overlay =
     | 'help'
     | 'restart'
     | 'discard'
-    | 'repair-risk'
     | 'reward-leave'
     | 'supply-overflow'
     | 'log'

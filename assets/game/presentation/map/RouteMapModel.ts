@@ -69,7 +69,7 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
         const excluded = !!branch && !!game.route && game.route !== branch;
         const visited =
             kind === 'home'
-                ? game.phase === 'day2'
+                ? game.settlement !== null && (game.phase === 'shelter' || game.phase === 'journal')
                 : game.visited.indexOf(kind as NodeKind) >= 0 && (!branch || game.route === branch);
         const available =
             !excluded &&

@@ -1,9 +1,9 @@
 # The end 当前架构
 
 - 项目：The end。
-- 日期：2026-11-14，Asia/Shanghai。
+- 日期：2026-11-16，Asia/Hong_Kong。
 - 状态：本轮分层与组件基础已实现；正式版资源规则及其他 UI 组件继续按件设计。
-- 约束：本轮不增加玩法流程。现有教学关卡作为兼容样例和回归场景保留。
+- 最新流程：关键节点日志与连续探索已接入，取消每日结算。教学关卡作为兼容样例保留，失败仍第 1 天。
 - 同步地址：`viking://~/resources/projects/the-end/docs/architecture.md`；保存及回读记录见 `docs/openviking-sync-status.json`。
 
 ## 模块职责
@@ -15,7 +15,8 @@
 | `core/systems/InventoryRules.ts` | 携带容量、溢出转入、卡组选择与丢弃。 |
 | `core/systems/RewardRules.ts` | 奖励资格、领取与节点奖励结束。 |
 | `core/systems/ExplorationRules.ts` | 路线选择、节点进入、休整和自动返回。 |
-| `core/systems/SettlementRules.ts` | 返回避难所、修复风险确认，以及最后执行的每日消耗。 |
+| `core/systems/ShelterRules.ts` | 返回避难所、成功过天、提交通关事件与可选修复；没有每日扣费。 |
+| `core/systems/JournalRules.ts` | 进度事件、配置条件、日志前置、去重、触发日期与待阅读队列。 |
 | `core/content/` | 教学情景配置、卡牌配置校验、每局冻结的内容快照。 |
 | `core/state/GameState.ts` | 无引擎对象的存档数据与读取校验。 |
 | `core/GameReadModel.ts` | 表现层使用的深只读状态和查询接口，不暴露规则命令。 |
@@ -46,7 +47,7 @@
 
 每局使用冻结的卡牌配置快照。网页编辑器保存配置后，重新开始的试玩读取新配置，已运行的一局不受全局配置替换影响。存档记录卡牌实例 ID、牌堆、装备、随机状态、奖励领取标记和结算状态，不记录 Node、SpriteFrame 或临时动画。
 
-主存档损坏时尝试上一份有效备份；未来版本、不兼容卡牌配置或不可读取的原数据不会被一次新加载自动覆盖。玩家通过已有重开确认开始新进度后才允许替换。当前实现 v1 格式及不支持版本的保护，尚未实现未来格式的数据迁移。
+主存档损坏时尝试有效备份；未来版本、不兼容卡牌配置或不可读取的原数据不会自动覆盖。确认重开后才允许替换。当前写入 v2，并迁移 v1 的每日结算与固定 day2 终点，保存事件计数、日志 ID、实际日期和已读状态。详见 designs/key-node-journal-system.md。
 
 ## 正式系统表的边界
 
@@ -88,7 +89,7 @@ EntryTiers 是档位内容表，ExplorationRules 扣一次入场费，CombatRule
 
 CardPresentation.compact 是原生卡面显示变体，由 HandCard.prefab 开启，减少战斗常态元信息；背包/奖励等完整卡面保持默认变体。几何与字体仍由 Prefab 编写，CardInteraction 沿用原手势和应用命令路径。
 
-ShelterSummaryModel 从 GameReadModel 投影带回、护甲、修复资格和每日余额预测，替代 GameRenderer 中大段结算文案；它不支付、不修改状态、不保存。GameRenderer 将投影绑定到具有明确含义的 shelter/returned、armor、repair-hint、daily-summary 等键，原 ButtonAction 和 GameSession 继续负责修复与结算。验证见 hand-shelter-verification.json。
+ShelterSummaryModel 投影带回、护甲、修复资格和探索进度，不修改状态。2026-11-16 取消每日预测，daily-* 绑定改为 progress-*，主按钮直接整备出发。ButtonAction 和 GameSession 负责修复与出发。历史显示验证见 hand-shelter-verification.json，最新循环见 core-loop-verification.json。
 
 ## 2026-11-16 五项质量修复
 

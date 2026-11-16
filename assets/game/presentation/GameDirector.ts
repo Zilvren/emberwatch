@@ -16,6 +16,7 @@ import {
 } from 'cc';
 import { GameCommand, GameSession } from '../application/GameSession';
 import { installCatalog } from '../core/content/CardCatalog';
+import { installJournalCatalog } from '../core/content/JournalCatalog';
 import type { GameReadModel } from '../core/GameReadModel';
 import { CardKind } from '../core/SurvivalGame';
 import { SaveRepository } from '../infrastructure/SaveRepository';
@@ -75,7 +76,7 @@ export class GameDirector extends Component {
     @property(Label) toastLabel: Label | null = null;
     @property({
         type: [Node],
-        tooltip: 'journal, map, battle, rewards, rest, shelter, day2, failure',
+        tooltip: 'opening journal, map, battle, rewards, rest, shelter, milestone journal, failure',
     })
     screens: Node[] = [];
     @property({
@@ -104,7 +105,7 @@ export class GameDirector extends Component {
     onLoad(): void {
         this.message('正在读取卡牌配置…');
         void this.initialize().catch((error) => {
-            this.message(`卡牌配置读取失败：${String(error)}`);
+            this.message(`游戏配置读取失败：${String(error)}`);
             this.toastTime = 0;
             console.error('[the end] catalog', error);
         });
@@ -126,6 +127,12 @@ export class GameDirector extends Component {
             );
             installCatalog(asset.json);
         }
+        const journalAsset = await new Promise<JsonAsset>((resolve, reject) =>
+            resources.load('data/journals', JsonAsset, (error, asset) =>
+                error ? reject(error) : resolve(asset)
+            )
+        );
+        installJournalCatalog(journalAsset.json);
         if (!this.isValid) return;
         const seed =
             typeof location === 'undefined'
@@ -193,8 +200,15 @@ export class GameDirector extends Component {
         if (!this.game) return;
         const previousPhase = this.game.phase;
         if (!this.ui.busy) this.session.advanceTime(dt);
-        if (previousPhase === 'map' && this.game.phase === 'shelter')
-            this.message('已返回避难所。清点带回物资后，再结束今天。');
+        if (
+            previousPhase === 'map' &&
+            (this.game.phase === 'shelter' || this.game.phase === 'journal')
+        )
+            this.message(
+                this.game.phase === 'journal'
+                    ? '已返回避难所，有一篇新的关键日志。'
+                    : '已返回避难所，可以整备后再次出发。'
+            );
         if (this.game.revision !== this.renderer.revision && !this.ui.busy) this.refresh();
         if (this.toastTime > 0) {
             this.toastTime -= dt;
@@ -210,7 +224,7 @@ export class GameDirector extends Component {
         const result = this.session.execute(command);
         this.audio.play(result.ok ? sound : 'tap');
         this.message(result.message);
-        if (this.game.phase === 'failure' || this.game.phase === 'day2') this.ui.overlay = null;
+        if (this.game.phase === 'failure' || this.game.phase === 'journal') this.ui.overlay = null;
         this.ui.selectedCard = '';
         this.refresh();
     }

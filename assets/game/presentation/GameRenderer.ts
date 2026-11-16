@@ -18,16 +18,15 @@ import { RouteMap } from './map/RouteMap';
 import { EntrySelection } from './ui/EntrySelection';
 import { shelterSummary } from './ui/ShelterSummaryModel';
 import { rulesNotice } from './ui/RulesNoticeModel';
-const phases: Phase[] = [
-    'journal',
-    'map',
-    'battle',
-    'rewards',
-    'rest',
-    'shelter',
-    'day2',
-    'failure',
-];
+const screenIndices: Record<Phase, number> = {
+    journal: 0,
+    map: 1,
+    battle: 2,
+    rewards: 3,
+    rest: 4,
+    shelter: 5,
+    failure: 7,
+};
 export interface SceneBindings {
     hud: Node;
     screens: Node[];
@@ -73,7 +72,10 @@ export class GameRenderer {
     }
     render(): void {
         const g = this.game,
-            phaseIndex = phases.indexOf(g.phase);
+            phaseIndex =
+                g.phase === 'journal' && g.currentJournal?.id !== 'departure'
+                    ? 6
+                    : screenIndices[g.phase];
         if (g.phase !== 'rewards') {
             this.ui.rewardSelection = -1;
             this.ui.rewardContext = '';
@@ -88,10 +90,27 @@ export class GameRenderer {
                 ?.getComponent(ActorPresentation) ?? null;
         this.hero?.setArmed(g.phase === 'battle' && !!g.battle?.weapon);
         this.renderStatusBar();
-        if (g.phase === 'journal')
+        if (g.phase === 'journal' && g.currentJournal) {
+            const entry = g.currentJournal;
             this.text(screen, {
+                'journal/text0': 'SURVIVAL JOURNAL / 关键记录',
+                'journal/text1': `第 ${entry.day} 天 · ${entry.title}`,
+                'journal/text2': entry.body,
                 'journal/text3': `物资 ${g.supplies} · 护甲 ${g.armor} · 战斗牌 ${g.usableCards.length} 张\n${g.scenario.suppliesHaveWeight === false ? '物品负重' : '初始总负重'} ${g.baseWeight} / 30`,
+                'journal/text4': '余烬之中，仍有人守夜。',
+                'journal/text5': '',
+                'journal/text6': '',
             });
+            this.button(
+                screen,
+                'journal-start',
+                g.pendingJournalCount > 1
+                    ? '下一篇日志'
+                    : entry.id === 'departure'
+                      ? '整备出发'
+                      : '返回避难所'
+            );
+        }
         if (g.phase === 'map') {
             this.text(screen, {
                 'banner/text2':
@@ -207,26 +226,20 @@ export class GameRenderer {
             for (const action of screen.getComponentsInChildren(ButtonAction))
                 if (action.actionId === 'shelter-repair')
                     action.node.active = summary.repairVisible;
-            for (const binding of screen.getComponentsInChildren(UIValue)) {
-                if (binding.key === 'shelter/repair-hint') binding.setAlert(summary.repairRisk);
-                if (binding.key === 'shelter/daily-summary')
-                    binding.setAlert(summary.dailyShortfall);
-            }
             this.button(screen, 'shelter-done', summary.doneCaption);
         }
-        if (g.phase === 'day2') {
-            const s = g.settlement!;
+        if (g.phase === 'failure') {
             this.text(screen, {
-                'journal/text3': `带回 ${s.returnedCards} 张卡牌  /  物资剩余 ${g.supplies}`,
-                'journal/text4': s.dailyShortfall
-                    ? '最后结算：每日物资缺口 1。你选择优先修复。'
-                    : `修复花费 ${s.repairSpent}，最后扣除每日物资 ${s.dailySpent}。`,
+                'journal/text1':
+                    g.scenario.kind === 'tutorial'
+                        ? '第 1 天 · 再试一次'
+                        : `第 ${g.day} 天 · 还不是终点`,
+                'journal/text2': `${g.failureReason}\n\n初始补给、牌组和护甲已恢复。\n${g.scenario.kind === 'tutorial' ? '教学仍停留在第 1 天。' : '一天过去了，已经走过的时间和关键记录仍然保留。'}`,
+                'journal/text3': `物资 ${g.supplies} · 护甲 ${g.armor} · 战斗牌 ${g.usableCards.length} 张`,
+                'journal/text5': '',
             });
+            this.button(screen, 'journal-start', '返回避难所');
         }
-        if (g.phase === 'failure')
-            this.text(screen, {
-                'journal/text2': `${g.failureReason}\n\n本次教学探索已完整重置。\n卡牌没有永久损失，\n每日生存物资也没有扣除。`,
-            });
         this.renderPopups();
         this.hand?.setLocked(this.ui.busy || !!this.ui.overlay);
         this.revision = g.revision;
@@ -365,7 +378,7 @@ export class GameRenderer {
         if (index === 1 && g.scenario.battleResource === 'stamina')
             this.text(this.scene.popups[1], {
                 'modal/text1':
-                    '攻击牌：点击后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n卡牌消耗战斗体力，不扣避难所物资。\n进入档位决定每回合体力；回合结束余量清零，新回合重置。\n物资点不占探索负重，物品仍占负重，暂存物品不能战斗。\n护甲降至 0 不立即失败，再次受到实际伤害才失败。\n每日 1 点物资在返家结算最后执行。',
+                    '攻击牌：点击后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n卡牌消耗战斗体力，不扣避难所物资。\n进入档位决定每回合体力；回合结束余量清零，新回合重置。\n物资点不占探索负重，物品仍占负重，暂存物品不能战斗。\n护甲降至 0 不立即失败，再次受到实际伤害才失败。\n正式探索成功或失败都会过去一天；日志在关键进度达成时出现。',
             });
         if (index === 1 && g.scenario.battleResource !== 'stamina')
             this.text(this.scene.popups[1], {
@@ -373,16 +386,15 @@ export class GameRenderer {
             });
         if (index === 3) {
             const c = g.cards.find((c) => c.id === this.ui.discardId);
-            let title = '修复后，生存补给将不足',
-                body =
-                    '你仍然可以选择修复。\n\n修复费先支付，每日消耗仍在结算最后执行。\n如果届时物资不足，将记录缺口，物资最低为 0。',
-                confirm = '仍然修复',
+            let title = '',
+                body = '',
+                confirm = '确认',
                 cancel = '取消',
                 variant: ButtonVariant = 'primary';
             if (this.ui.overlay === 'restart') {
                 title = '重新开始第 1 天？';
                 body =
-                    '当前教学探索和本次结算记录将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。' +
+                    '累计天数、关键日志和当前探索进度将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。' +
                     rulesNotice(g.scenario.ruleset, this.newGameRuleset()).restart;
                 confirm = '重新开始';
                 variant = 'danger';

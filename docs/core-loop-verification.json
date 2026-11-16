@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "project": "The end",
+  "date": "2026-11-16",
+  "recordedAt": "2026-11-16T13:17:16.412Z",
+  "timezone": "Asia/Hong_Kong",
+  "task": "取消每日结算，改为累计探索天数与关键节点日志系统",
+  "taskOutcome": "SUPPORTED",
+  "scope": {
+    "engine": "Pink/Cocos 4.0.0-beta.1",
+    "platform": "web-desktop",
+    "design": "docs/designs/key-node-journal-system.md",
+    "rules": [
+      "正式地图每次探索结果推进一天；教学失败锁第 1 天。",
+      "移除每日生存费用，返家清点与可选修复保留。",
+      "关键日志按累计事件条件和前置条目触发一次，保存实际日期与已读状态。",
+      "正式失败恢复初始物资、牌组与护甲，保留累计天数和日志进度。",
+      "旧 v1 存档迁移为 v2；阅读、重试与读档不重复过天或重播日志。"
+    ],
+    "content": "当前 3 条日志为开局、教学通关和正式街区首次通关；未制作后续地图与完整主线。"
+  },
+  "source": {
+    "workspace": "D:/qsrizhi/emberwatch",
+    "baseCommit": "bdd7e369beebc08d55e3977d67f931a4771216bc",
+    "workingTreeUncommitted": true,
+    "manifest": "output/core-loop/source-manifest.json",
+    "manifestSha256": "ee1c669c9bebf00bd9e7bebfd2cb403c389adeb64675a713ecb4cdf7f69c64fd",
+    "runtimeFiles": 179
+  },
+  "checks": {
+    "tests": {
+      "command": "npm test",
+      "exitCode": 0,
+      "passed": 124,
+      "failed": 0,
+      "skipped": 0,
+      "log": "output/core-loop/tests.log"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "output/core-loop/typecheck.log"
+    },
+    "format": {
+      "scope": "All changed and new runtime TypeScript files",
+      "exitCode": 0,
+      "log": "output/core-loop/format-check.log"
+    },
+    "build": {
+      "command": "npm run build:web",
+      "executable": "D:/pink/PinK/PinK.exe",
+      "platform": "web-desktop",
+      "exitCode": 0,
+      "output": "build/web-desktop",
+      "log": "output/core-loop/build-final.log"
+    },
+    "nativeInspection": {
+      "report": "output/playwright/core-loop/project-inspection.json",
+      "exitCode": 0,
+      "engine": "4.0.0-beta.1",
+      "missingMetadata": [],
+      "warnings": []
+    },
+    "resourceIdentity": {
+      "renamedRuleMetadataUuidPreserved": true,
+      "approvedArtworkAnimationsAndMainSceneUnchangedFromBase": true,
+      "prefabChanges": "Existing four screen prefabs: text/action bindings only; metadata retained."
+    },
+    "browser": {
+      "command": "npm run test:core-loop-browser",
+      "exitCode": 0,
+      "report": "output/playwright/core-loop/browser-report.json",
+      "recordedAt": "2026-11-16T13:16:02.188Z",
+      "actions": 77,
+      "viewports": [
+        "1440x900",
+        "1024x768"
+      ],
+      "runtimeErrors": [],
+      "consoleErrors": [],
+      "checks": {
+        "passed": true,
+        "realButtonActions": 77,
+        "sameStoryDifferentDates": [
+          3,
+          11
+        ],
+        "dailySettlementRemoved": true,
+        "exactRepairCost": true,
+        "formalFailureRecovery": true,
+        "repeatClearDoesNotReplay": true,
+        "pendingAndReadSaveResume": true,
+        "teachingDayOneLock": true,
+        "teachingToFormalContinuation": true,
+        "viewports": [
+          "1440x900",
+          "1024x768"
+        ]
+      },
+      "preparation": "Isolated browser context; completed-map and fatal-damage fixtures; real native buttons for departure, enemy turn, reading, repair and retry.",
+      "sourceAttribution": "Final built runtime, after journal queue guard and renamed rule metadata UUID restoration."
+    },
+    "fullRoute": {
+      "command": "Set CORE_LOOP_BROWSER_SCENARIO=browser-stamina-system, then npm run test:core-loop-browser",
+      "exitCode": 0,
+      "report": "output/playwright/core-loop/browser-stamina-system/browser-report.json",
+      "recordedAt": "2026-11-16T13:01:17.632Z",
+      "actions": 55,
+      "checks": {
+        "passed": true,
+        "productionStamina": true,
+        "entrySelectionAndCancel": true,
+        "entryPaidOnce": true,
+        "noSupplyCarryWeight": true,
+        "cardUnit": "体力",
+        "paidCardDoesNotSpendSupplies": true,
+        "turnRefresh": true,
+        "saveResume": true,
+        "cancelledDragFree": true,
+        "newBattleRefresh": true,
+        "dailySettlementRemoved": true,
+        "fullRouteA": true,
+        "smallViewport": true,
+        "actions": 55,
+        "runtimeErrors": []
+      },
+      "runtimeErrors": [],
+      "consoleErrors": [],
+      "sourceAttribution": "Same worktree before final additional-opening-journal queue guard and metadata restoration; final browser above covers final build."
+    }
+  },
+  "observedScreenshots": {
+    "reviewer": "Codex",
+    "status": "SUPPORTED",
+    "files": [
+      "output/playwright/core-loop/core-loop-day-3.png",
+      "output/playwright/core-loop/core-loop-day-11-small.png",
+      "output/playwright/core-loop/core-loop-shelter-small.png"
+    ],
+    "observations": [
+      "相同节点正文与不同记录日期显示正确。",
+      "1440x900 和 1024x768 下，日志正文、返回/出发按钮及避难所进度可读，无阻断操作的遮挡。",
+      "原生场景与现有美术继续使用，避难所每日消耗区域已替换为探索进度。"
+    ],
+    "userFinalVisualApproval": "未请求；本次核心规则和对应界面修改不代表整体美术或动画定稿。"
+  },
+  "evidenceMatrix": [
+    {
+      "claim": "关键节点条件、队列、去重、日期和正式/教学失败规则",
+      "status": "SUPPORTED",
+      "evidence": [
+        "tests/journal-progression.test.cjs",
+        "output/core-loop/tests.log"
+      ]
+    },
+    {
+      "claim": "实际 Pink/Cocos 原生加载与构建",
+      "status": "SUPPORTED",
+      "evidence": [
+        "output/core-loop/build-final.log",
+        "output/playwright/core-loop/project-inspection.json"
+      ]
+    },
+    {
+      "claim": "原生按钮、重复探索、修复与两个桌面尺寸",
+      "status": "SUPPORTED",
+      "evidence": [
+        "output/playwright/core-loop/browser-report.json",
+        "output/playwright/core-loop/browser-stamina-system/browser-report.json"
+      ]
+    },
+    {
+      "claim": "隔离存储的未读/已读恢复和旧存档升级",
+      "status": "SUPPORTED",
+      "evidence": [
+        "tests/journal-progression.test.cjs",
+        "tests/session-save.test.cjs",
+        "output/playwright/core-loop/browser-report.json"
+      ]
+    },
+    {
+      "claim": "整体美术、动作手感、移动端与性能预算验收",
+      "status": "NOT APPLICABLE",
+      "reason": "超出本次核心循环修改范围。"
+    },
+    {
+      "claim": "本次资料已同步并回读 OpenViking",
+      "status": "NEEDS EVIDENCE",
+      "reason": "无可调用工具、客户端未配置且本地服务拒绝连接，已本地暂存并加入原待同步清单。"
+    }
+  ],
+  "limitations": [
+    "关键循环回归用隔离测试存档准备已完成地图和致命受击状态，再通过真实按钮检验结果；另以正式体力档位完整 A 路线补充实际战斗证据。",
+    "验证平台为 web-desktop；此次测试不推断微信、TapTap 或其他平台已验证。",
+    "全部数据在独立浏览器上下文测试，未操作用户已有存档。"
+  ],
+  "openViking": {
+    "status": "pending-server-unavailable",
+    "target": "viking://~/resources/projects/the-end/docs/core-loop-verification.json",
+    "pendingRecord": "docs/openviking-sync-pending.json",
+    "remoteWriteAttempted": false,
+    "remoteReadbackVerified": false
+  }
+}

@@ -2,8 +2,7 @@ import { CardKind } from './content/CardCatalog';
 import { NodeKind, TUTORIAL_SCENARIO } from './content/GameScenario';
 export type { CardDefinition, CardKind } from './content/CardCatalog';
 export type { NodeKind, Route } from './content/GameScenario';
-export type Phase =
-    'journal' | 'map' | 'battle' | 'rewards' | 'rest' | 'shelter' | 'day2' | 'failure';
+export type Phase = 'journal' | 'map' | 'battle' | 'rewards' | 'rest' | 'shelter' | 'failure';
 export const ROUTES = TUTORIAL_SCENARIO.routes;
 export const NODE_NAMES: Record<NodeKind, string> = {
     fixed: '废弃补给站',
@@ -55,6 +54,7 @@ export interface ActionResult {
     message: string;
     warning?: boolean;
 }
+/** Loot and maintenance from a return; there is no daily payment. */
 export interface Settlement {
     returnedSupplies: number;
     returnedCards: number;
@@ -63,6 +63,4 @@ export interface Settlement {
     repairCost: number;
     repaired: boolean;
     repairSpent: number;
-    dailySpent: number;
-    dailyShortfall: number;
 }

@@ -1,0 +1,121 @@
+const progress = () => page.evaluate(() => {
+    const game = globalThis.__survivalGame;
+    return { day: game.day, supplies: game.supplies, phase: game.phase,
+        current: game.currentJournal, entries: game.journalEntries, milestones: game.milestones };
+});
+const visibleText = () => page.evaluate(() => {
+    const root = cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot');
+    return Object.fromEntries(root.getComponentsInChildren('UIValue')
+        .filter(binding => binding.node.activeInHierarchy)
+        .map(binding => [binding.key, binding.node.getComponent(cc.Label)?.string ?? '']));
+});
+const startFormal = async (button) => {
+    await click(button);
+    assert((await state()).overlay === 'entry', 'Departure tier chooser did not open');
+    await click('entry-tier-emergency');
+    await click('entry-confirm');
+    assert((await state()).phase === 'map', 'Departure did not enter map');
+};
+const fatalBattle = async () => {
+    await page.evaluate(() => {
+        const game = globalThis.__survivalGame;
+        Object.assign(game, { fixedDone: true, route: 'A', pathIndex: 0 });
+        const result = game.enterNode();
+        if (!result.ok) throw new Error(result.message);
+        Object.assign(game, { armor: 0, critical: true });
+        Object.assign(game.battle, { block: 0, intent: 'attack' });
+        game.revision++;
+    });
+    await page.waitForFunction(() => globalThis.__emberUI.snapshot().hits.some(hit => hit.id === 'end-turn' && hit.enabled));
+    await click('end-turn');
+    assert((await state()).phase === 'failure', 'Fatal enemy turn did not show failure');
+};
+const finishPreparedMap = async (supplies, armor = 10) => {
+    await page.evaluate(({ supplies, armor }) => {
+        const game = globalThis.__survivalGame;
+        Object.assign(game, { fixedDone: true, route: 'A', pathIndex: game.scenario.routes.A.length,
+            visited: ['fixed', ...game.scenario.routes.A], supplies, armor, returnElapsed: 0 });
+        game.revision++;
+    }, { supplies, armor });
+    await page.waitForFunction(() => ['journal', 'shelter'].includes(globalThis.__emberUI.snapshot().phase));
+    await idle();
+};
+async function firstClear(attempt, save, bank, armor = 10) {
+    await page.goto(`http://127.0.0.1:7457/?seed=17&save=${save ? 'on' : 'off'}&qa=core-loop-${attempt}`);
+    await idle();
+    await startFormal('journal-start');
+    for (let index = 1; index < attempt; index++) {
+        await fatalBattle();
+        let result = await progress();
+        assert(result.day === index + 1 && result.entries.length === 1 && result.current === null,
+            'Ordinary failure changed journal progress or did not advance exactly one day');
+        assert((await state()).supplies === 10 && (await state()).armor === 10, 'Failure recovery changed');
+        await click('journal-start');
+        assert((await state()).phase === 'shelter', 'Retry did not return to shelter');
+        await startFormal('shelter-done');
+    }
+    await finishPreparedMap(bank, armor);
+    const result = await progress(), labels = await visibleText();
+    assert(result.current?.id === 'street-cleared' && result.current.day === attempt + 1, 'First clear has wrong journal date');
+    assert(labels['journal/text1'] === `第 ${attempt + 1} 天 · ${result.current.title}`, 'Native journal title did not bind actual date');
+    assert(labels['journal/text2'] === result.current.body, 'Native journal body differs from configured story');
+    assert(result.supplies === bank, 'Returning charged a daily supply fee');
+    await screenshot(`core-loop-day-${attempt + 1}`);
+    return result.current;
+}
+const fast = await firstClear(2, false, 1, 6);
+await click('journal-start');
+assert((await state()).phase === 'shelter', 'Reading a journal did not return to shelter');
+const repair = await click('shelter-repair');
+assert(repair.supplies === 0 && repair.armor === 10 && repair.overlay === null, 'Repair could not spend the last supply directly');
+assert(!/每日|今晚的生存消耗/.test(Object.values(await visibleText()).join('\n')), 'Shelter still shows daily settlement copy');
+const slow = await firstClear(10, true, 5);
+assert(slow.body === fast.body && slow.day !== fast.day, 'Story content depends on elapsed days');
+const pending = await page.evaluate(() => JSON.stringify(globalThis.__survivalGame.exportState()));
+await page.reload();
+await idle();
+assert(await page.evaluate(() => JSON.stringify(globalThis.__survivalGame.exportState())) === pending, 'Reload changed pending journal or advanced time');
+await page.setViewportSize({ width: 1024, height: 768 });
+await page.waitForTimeout(500);
+await screenshot('core-loop-day-11-small');
+assert((await visibleText())['journal/text1'] === `第 11 天 · ${slow.title}`, 'Small viewport lost dated journal title');
+await click('journal-start');
+await screenshot('core-loop-shelter-small');
+assert(!/每日|今晚的生存消耗/.test(Object.values(await visibleText()).join('\n')), 'Small shelter still shows daily copy');
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.waitForTimeout(300);
+await screenshot('core-loop-shelter');
+await page.reload();
+await idle();
+assert((await state()).phase === 'shelter' && (await progress()).current === null, 'Read journal replayed after reload');
+await startFormal('shelter-done');
+assert((await state()).currentNode === 'fixed', 'Next map retained completed-route state');
+await finishPreparedMap(5);
+assert((await state()).phase === 'shelter' && (await state()).day === 12, 'Repeat clear did not return directly to shelter');
+assert((await progress()).entries.length === 2 && (await state()).supplies === 5, 'Repeat clear replayed journal or charged supplies');
+await screenshot('core-loop-repeat-return');
+await startFormal('shelter-done');
+await fatalBattle();
+assert((await progress()).entries.find(entry => entry.id === 'street-cleared').day === 11, 'Later failure erased the original journal date');
+assert((await state()).day === 13, 'Later formal failure did not advance the day');
+
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&ruleset=tutorial-v1&qa=core-loop-teaching');
+await idle();
+for (let index = 0; index < 2; index++) {
+    await click(index === 0 ? 'journal-start' : 'shelter-done');
+    await fatalBattle();
+    assert((await state()).day === 1 && (await progress()).entries.length === 1, 'Teaching failure advanced time or created a daily journal');
+    if (index === 1) await screenshot('core-loop-teaching-failure');
+    await click('journal-start');
+}
+await click('shelter-done');
+await finishPreparedMap(4);
+assert((await progress()).current.id === 'tutorial-cleared' && (await state()).day === 2, 'Teaching clear did not unlock its key journal');
+await click('journal-start');
+assert((await state()).scenario === 'stamina-expedition', 'Teaching completion remained at an old terminal state');
+await startFormal('shelter-done');
+assert((await state()).phase === 'map', 'Could not continue formal exploration after teaching');
+return { passed: true, realButtonActions: trace.length, sameStoryDifferentDates: [fast.day, slow.day],
+    dailySettlementRemoved: true, exactRepairCost: true, formalFailureRecovery: true,
+    repeatClearDoesNotReplay: true, pendingAndReadSaveResume: true, teachingDayOneLock: true,
+    teachingToFormalContinuation: true, viewports: ['1440x900', '1024x768'] };

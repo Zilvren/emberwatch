@@ -18,9 +18,10 @@ s=await state();assert(!s.cards.some(c=>c.kind==='cash'),'Cash was not removed')
 await click('rest-bag');s=await state();const basic=s.cards.find(c=>c.kind==='dodge');await click('toggle-'+basic.id);assert(!(await state()).cards.find(c=>c.id===basic.id).selected,'Deck toggle failed');await click('toggle-'+basic.id);await click('modal-close');
 await click('rest-done');await click('enter-enemy2');await screenshot('v2-boss');const second=await fight({preferWeapon:true,capture:true});
 await claimSupplies();await claimAvailableCard();
-await leaveRewards();await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='shelter');await screenshot('v2-shelter');
-s=await state();assert(s.settlement.dailySpent===0,'Daily supplies deducted before final settlement');
-const repair=s.hits.find(h=>h.id==='shelter-repair');if(repair?.enabled){await click('shelter-repair');if((await state()).overlay==='repair-risk')await click('modal-confirm');}
-s=await state();const beforeDay=s.supplies;await click('shelter-done');s=await state();assert(s.phase==='day2'&&s.day===2,'Day two was not reached');assert(s.supplies===Math.max(0,beforeDay-1),'Daily settlement order incorrect');
-await screenshot('v2-day2');assert(!s.heroArmed&&s.heroMotion==='idle'&&s.heroPose==='master08-thin','Actor equipment state did not clear after returning home');assert(runtimeErrors.length===0,'Browser runtime errors: '+runtimeErrors.join('\n'));
+await leaveRewards();await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='journal');await screenshot('v2-key-journal');
+s=await state();assert(s.day===2&&!('dailySpent' in s.settlement),'Return did not remove daily settlement');
+await click('journal-start');s=await state();assert(s.phase==='shelter','Journal did not continue to shelter');
+const repair=s.hits.find(h=>h.id==='shelter-repair');if(repair?.enabled)await click('shelter-repair');
+s=await state();assert(s.day===2,'Reading or repairing advanced another day');
+await screenshot('v2-shelter');assert(!s.heroArmed&&s.heroMotion==='idle'&&s.heroPose==='master08-thin','Actor equipment state did not clear after returning home');assert(runtimeErrors.length===0,'Browser runtime errors: '+runtimeErrors.join('\n'));
 return {passed:true,route:'A',first,second,dragCancelled:true,impactBusy:impactState.busy,final:{phase:s.phase,supplies:s.supplies,armor:s.armor,settlement:s.settlement},actions:trace.length,trace,runtimeErrors};
