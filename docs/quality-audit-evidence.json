@@ -1,0 +1,1244 @@
+{
+  "project": "The end",
+  "reviewDate": "2026-11-16",
+  "evidenceRecordedOn": "2026-11-15",
+  "timezone": "Asia/Shanghai",
+  "status": "resolved-by-follow-up",
+  "request": "Use installed skills to review what still needs changing",
+  "skills": [
+    "ux-review",
+    "art-bible",
+    "test-evidence-review"
+  ],
+  "implementationChanged": false,
+  "engine": {
+    "name": "Pink/Cocos",
+    "version": "4.0.0-beta.1",
+    "sdkCliAvailable": true,
+    "typeScriptCompiler": "C:\\Users\\Knock\\AppData\\Roaming\\cocos-default\\cocos-4.0.0-beta.1\\node_modules\\typescript\\bin\\tsc"
+  },
+  "platform": "web-desktop",
+  "mainSceneUuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e",
+  "currentSource": {
+    "protectedFiles": 458,
+    "changedDuringReview": [],
+    "matchesPreviousVerifiedBuild": true,
+    "fingerprint": "12b38f22d2281903dfe26b2c934940fb29e2f1d9a3cc1284418a4abfb1ba246c"
+  },
+  "priorTechnicalEvidence": {
+    "record": "docs/hand-shelter-verification.json",
+    "tests": 107,
+    "testLogHashMatches": true,
+    "buildLogHashMatches": true,
+    "testsRerunThisReview": false,
+    "buildRerunThisReview": false
+  },
+  "currentNativeReview": {
+    "qaSession": "the-end-quality-audit",
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "width": 1024,
+        "height": 768
+      }
+    ],
+    "input": "real mouse with browser media emulation for preference checks",
+    "primaryActions": 45,
+    "executionCompleted": true,
+    "runtimeErrors": [],
+    "consoleErrors": [],
+    "executionSuccessDoesNotMeanUxPassed": true,
+    "routeB": {
+      "phase": "day2",
+      "ruleset": "stamina-v1",
+      "dailySpent": 1
+    },
+    "map": {
+      "viewport": {
+        "x": 170,
+        "y": 181,
+        "width": 1100,
+        "height": 580
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "available": [
+        {
+          "id": "fixed",
+          "title": {
+            "x": 630,
+            "y": 708,
+            "width": 180,
+            "height": 26
+          },
+          "status": {
+            "x": 630,
+            "y": 735,
+            "width": 180,
+            "height": 22
+          },
+          "titleFullyVisible": true,
+          "statusFullyVisible": true
+        }
+      ]
+    },
+    "observations": {
+      "entry": {
+        "selection": "standard",
+        "focus": "entry-tier-emergency",
+        "summary": "避难所物资 10 · 物资与战斗体力独立",
+        "detail": "标准档：入场只扣一次 8 物资，余下 2。\n每回合体力重置为 3，未用部分不累积。"
+      },
+      "rewardOverflowFilter": {
+        "filter": "overflow",
+        "deckEdit": false,
+        "visibleCards": 0,
+        "owned": 9,
+        "usable": 8
+      },
+      "normalBreathing": [
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.017427639233354705,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.017427639233354705,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        },
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.09955846808735971,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.09955846808735971,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        },
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.22686411408235002,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.22686411408235002,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        },
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.39923651297900054,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.39923651297900054,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        },
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.5877730613439422,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.5877730613439422,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        }
+      ],
+      "afterReducingMotion": [
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.9022226280465082,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.9022226280465082,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        },
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.9817440299468991,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.9817440299468991,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        },
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.9944747399089399,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.9944747399089399,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        },
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.9289637509345822,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.9289637509345822,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        },
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.8027002489674279,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": true
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0.8027002489674279,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": true
+            }
+          ]
+        }
+      ],
+      "attackSamples": [
+        {
+          "elapsed": 464,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "attack",
+              "pose": "survivor-attack-06"
+            },
+            {
+              "name": "Wanderer",
+              "motion": "hurt",
+              "pose": "wanderer-hurt-03"
+            }
+          ],
+          "phase": "battle"
+        },
+        {
+          "elapsed": 1111,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin"
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin"
+            }
+          ],
+          "phase": "battle"
+        },
+        {
+          "elapsed": 1671,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin"
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin"
+            }
+          ],
+          "phase": "battle"
+        },
+        {
+          "elapsed": 2158,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin"
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin"
+            }
+          ],
+          "phase": "battle"
+        },
+        {
+          "elapsed": 2643,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin"
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin"
+            }
+          ],
+          "phase": "battle"
+        },
+        {
+          "elapsed": 3139,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin"
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin"
+            }
+          ],
+          "phase": "battle"
+        }
+      ],
+      "campDeckEntry": {
+        "filter": "overflow",
+        "deckEdit": true,
+        "visibleCards": 0,
+        "owned": 11,
+        "usable": 10
+      },
+      "campDeckRecovered": {
+        "filter": "all",
+        "deckEdit": true,
+        "visibleCards": 11,
+        "owned": 11,
+        "usable": 10
+      },
+      "arrivalToast": {
+        "phase": "shelter",
+        "visible": true,
+        "text": "节点完成，返回路线图。"
+      },
+      "routeBNewRules": {
+        "phase": "day2",
+        "ruleset": "stamina-v1",
+        "dailySpent": 1
+      },
+      "legacyAfterToast": {
+        "ruleset": "tutorial-v1",
+        "toastVisible": false,
+        "visibleLabels": [
+          "第 1 天 · 灰烬街区",
+          "废弃补给站",
+          "点击进入",
+          "游荡感染者",
+          "旧街搜刮",
+          "旧街搜刮",
+          "游荡感染者",
+          "临时营地",
+          "重度感染者",
+          "避难所",
+          "滚动查看路线 · 废弃补给站",
+          "战斗　·　搜刮　·　营地　·　强敌　·　避难所",
+          "前往 · 废弃补给站",
+          "THE END",
+          "已恢复进度",
+          "生存日",
+          "第 1 天",
+          "物资",
+          "10",
+          "生存补给",
+          "护甲",
+          "10 / 10",
+          "背包 27 / 30",
+          "剩余 3 负重",
+          "记录",
+          "帮助",
+          "声音开",
+          "重开",
+          "地图"
+        ],
+        "visibleLegacyExplanation": false
+      },
+      "startedReduced": [
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        },
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        },
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        },
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        },
+        {
+          "reduced": true,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        }
+      ],
+      "afterRestoringMotion": [
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        },
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        },
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        },
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        },
+        {
+          "reduced": false,
+          "actors": [
+            {
+              "name": "Player",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 628
+              },
+              "playing": false
+            },
+            {
+              "name": "Wanderer",
+              "motion": "idle",
+              "pose": "master08-thin",
+              "rig": {
+                "active": true,
+                "breath": 0,
+                "source": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+                "vertices": 749
+              },
+              "playing": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "QA-01",
+      "priority": "P2",
+      "category": "observed-ux-defect",
+      "title": "Camp deck editor inherits an empty overflow filter",
+      "status": "RESOLVED",
+      "code": [
+        "assets/game/presentation/ui/UiActionRouter.ts:31",
+        "assets/game/presentation/cards/InventoryGrid.ts:39"
+      ],
+      "evidence": [
+        "camp-deck-filter.png",
+        "camp-deck-all.png"
+      ],
+      "observed": {
+        "filter": "overflow",
+        "deckEdit": true,
+        "visibleCards": 0,
+        "owned": 11,
+        "usable": 10
+      },
+      "recovered": {
+        "filter": "all",
+        "deckEdit": true,
+        "visibleCards": 11,
+        "owned": 11,
+        "usable": 10
+      },
+      "acceptance": "Camp deck entry uses a meaningful filter or a clear empty-state recovery without changing selected cards.",
+      "originalStatus": "OPEN",
+      "resolutionRecord": "docs/quality-fixes-verification.json"
+    },
+    {
+      "id": "QA-02",
+      "priority": "P2",
+      "category": "observed-usability-gap",
+      "title": "Legacy rules explanation disappears without a persistent entry point",
+      "status": "RESOLVED",
+      "code": [
+        "assets/game/application/GameSession.ts:42",
+        "assets/game/presentation/GameDirector.ts:189",
+        "assets/game/presentation/GameRenderer.ts:232"
+      ],
+      "evidence": [
+        "legacy-after-toast.png"
+      ],
+      "observed": {
+        "ruleset": "tutorial-v1",
+        "toastVisible": false,
+        "visibleLabels": [
+          "第 1 天 · 灰烬街区",
+          "废弃补给站",
+          "点击进入",
+          "游荡感染者",
+          "旧街搜刮",
+          "旧街搜刮",
+          "游荡感染者",
+          "临时营地",
+          "重度感染者",
+          "避难所",
+          "滚动查看路线 · 废弃补给站",
+          "战斗　·　搜刮　·　营地　·　强敌　·　避难所",
+          "前往 · 废弃补给站",
+          "THE END",
+          "已恢复进度",
+          "生存日",
+          "第 1 天",
+          "物资",
+          "10",
+          "生存补给",
+          "护甲",
+          "10 / 10",
+          "背包 27 / 30",
+          "剩余 3 负重",
+          "记录",
+          "帮助",
+          "声音开",
+          "重开",
+          "地图"
+        ],
+        "visibleLegacyExplanation": false
+      },
+      "acceptance": "Preserve legacy gameplay and saves, but keep the active ruleset and confirmed-new-game upgrade path discoverable after the toast expires.",
+      "originalStatus": "OPEN",
+      "resolutionRecord": "docs/quality-fixes-verification.json"
+    },
+    {
+      "id": "QA-03",
+      "priority": "P2",
+      "category": "observed-animation-preference-defect",
+      "title": "Actor idle does not synchronize on dynamic reduced-motion changes",
+      "status": "RESOLVED",
+      "code": [
+        "assets/game/presentation/GameDirector.ts:88",
+        "assets/game/presentation/actors/ActorPresentation.ts:57"
+      ],
+      "evidence": [
+        "normalBreathing",
+        "afterReducingMotion",
+        "startedReduced",
+        "afterRestoringMotion"
+      ],
+      "acceptance": "Both toggle directions stop/resume idle consistently without restarting battle actions or repeating impacts.",
+      "originalStatus": "OPEN",
+      "resolutionRecord": "docs/quality-fixes-verification.json"
+    },
+    {
+      "id": "QA-04",
+      "priority": "P2",
+      "category": "observed-visual-production-issue",
+      "title": "Survivor attack clarity is softer than fixed-source idle",
+      "status": "RESOLVED",
+      "code": [
+        "assets/resources/actors/sketch08/survivor-rig.json",
+        "assets/resources/actors/sketch08/survivor-attack.png",
+        "assets/resources/actors/sketch08/motion-manifest.json",
+        "assets/game/presentation/actors/ActorPresentation.ts:69"
+      ],
+      "evidence": [
+        "battle-neutral.png",
+        "attack-0.png"
+      ],
+      "sourcePixels": {
+        "idleBodyHeight": 539,
+        "attackBodyHeightRange": [
+          191,
+          222
+        ],
+        "attackFrames": 8,
+        "scaleConstantAcrossAttack": true
+      },
+      "acceptance": "At the approved display size, align effective detail/line weight and preserve identity/registration, then complete normal/half-speed motion review. Frame count alone is not a verdict.",
+      "originalStatus": "OPEN",
+      "resolutionRecord": "docs/quality-fixes-verification.json"
+    },
+    {
+      "id": "QA-05",
+      "priority": "P3",
+      "category": "observed-context-feedback-defect",
+      "title": "Previous node notification survives automatic shelter arrival",
+      "status": "RESOLVED",
+      "code": [
+        "assets/game/presentation/GameDirector.ts:180"
+      ],
+      "evidence": [
+        "shelter-arrival.png"
+      ],
+      "observed": {
+        "phase": "shelter",
+        "visible": true,
+        "text": "节点完成，返回路线图。"
+      },
+      "acceptance": "Arrival feedback belongs to shelter without changing travel or settlement timing.",
+      "originalStatus": "OPEN",
+      "resolutionRecord": "docs/quality-fixes-verification.json"
+    }
+  ],
+  "visualReview": {
+    "sourceSheetsViewed": [
+      "assets/resources/actors/sketch08/survivor-attack.png",
+      "assets/resources/actors/sketch08/wanderer-attack.png"
+    ],
+    "screenshotsViewed": [
+      "output/playwright/quality-audit/camp-deck-filter.png",
+      "output/playwright/quality-audit/camp-deck-all.png",
+      "output/playwright/quality-audit/legacy-after-toast.png",
+      "output/playwright/quality-audit/battle-neutral.png",
+      "output/playwright/quality-audit/attack-0.png",
+      "output/playwright/quality-audit/shelter-arrival.png"
+    ],
+    "additionalImagesViewed": [
+      "output/playwright/quality-audit/map-start.png",
+      "output/playwright/quality-audit/shelter-small.png"
+    ],
+    "approval": "User overall visual acceptance remains open",
+    "limits": [
+      "Only one attack screenshot captured action within the short cycle; capture wall times are not precise animation sampling times.",
+      "Video was recorded but not fully reviewed at normal and half speed.",
+      "Do not infer all actor actions, all seeds, all entry tiers, arbitrary long custom names or frame-time performance from this review."
+    ]
+  },
+  "evidenceMatrix": {
+    "currentImplementationProvenance": {
+      "status": "SUPPORTED",
+      "evidence": "458 protected hashes unchanged and matching previous verified build"
+    },
+    "nativeAuditExecution": {
+      "status": "SUPPORTED",
+      "evidence": "45 real actions and corrected viewport follow-up"
+    },
+    "uxQuality": {
+      "status": "FAILED",
+      "evidence": [
+        "QA-01",
+        "QA-02",
+        "QA-03",
+        "QA-05"
+      ]
+    },
+    "staticStyleContinuation": {
+      "status": "SUPPORTED",
+      "limit": "Bounded observed current screenshots; no new art direction implied"
+    },
+    "idleToAttackClarity": {
+      "status": "FAILED",
+      "evidence": [
+        "QA-04"
+      ]
+    },
+    "nonIdleMotionFluidity": {
+      "status": "NEEDS EVIDENCE",
+      "reason": "No completed normal/half-speed full-action review"
+    },
+    "userFinalVisualApproval": {
+      "status": "NEEDS EVIDENCE"
+    }
+  },
+  "notFlagged": [
+    {
+      "item": "Current initial map node clipping",
+      "reason": "Corrected 1100x580 own viewport bounds show the available title/status fully inside."
+    },
+    {
+      "item": "Production standard-tier B route blocked",
+      "reason": "Completed stamina-v1 route to day2 with final daily payment."
+    },
+    {
+      "item": "Emergency keyboard focus while standard tier selected",
+      "reason": "Distinct focus/selection and no charge on comparison; no erroneous payment observed."
+    }
+  ],
+  "excludedDiagnostic": {
+    "fields": [
+      "Initial mapStart.viewport and mapRouteB.viewport / titleFullyInside flags in tour.log"
+    ],
+    "reason": "getBoundingBoxToWorld included scroll descendants. Replaced by the viewport own UITransform measurement, stored separately in map-geometry.json."
+  },
+  "artifacts": {
+    "tourLog": {
+      "file": "output/playwright/quality-audit/tour.log",
+      "sha256": "8d5893522f6d626316be52ab12e31c3da016db8e10dd054e4d26ecc098c7ba09"
+    },
+    "observations": {
+      "file": "output/playwright/quality-audit/observations.json",
+      "sha256": "a56cd629438bdd45e2bfb014b1db2c73203d0f7bfe6b24b29e8a9f91d2a1a091"
+    },
+    "mapFollowup": {
+      "file": "output/playwright/quality-audit/map-geometry.json",
+      "sha256": "c7f7b71b33f1e3940ab2c9723c0e790571238eedc11ce3f5d42b9306f188232f"
+    },
+    "drivers": [
+      "temp/quality-audit.js.txt",
+      "temp/quality-map-geometry.js.txt"
+    ],
+    "screenshots": [
+      {
+        "file": "output/playwright/quality-audit/camp-deck-filter.png",
+        "bytes": 424496,
+        "sha256": "b5c04a0d22d16f89cae6f8593d4fb8611c0ca34b6c331cd708b5fd7c40b830a4",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "abe0a721-5e25-42a6-8642-7baac302000c",
+          "source_path": "camp-deck-filter.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/camp-deck-filter",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/camp-deck-filter/camp-deck-filter.png",
+          "readBackVerified": true,
+          "bytes": 424496,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-audit/camp-deck-all.png",
+        "bytes": 437326,
+        "sha256": "f1a68d61444eca3fa9914d424ad481a78ad20c89abe15ab6b4942e04337fe806",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "e0b4ce26-e1fa-4dd5-b266-b4d97e39307b",
+          "source_path": "camp-deck-all.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/camp-deck-all",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/camp-deck-all/camp-deck-all.png",
+          "readBackVerified": true,
+          "bytes": 437326,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-audit/legacy-after-toast.png",
+        "bytes": 376517,
+        "sha256": "250a544ba33bff80232b8ed79373a19e31849a3b1210661c1f67ddafd8cdb20b",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "9aa064dc-96c9-4c19-85bb-f9fce6d9e780",
+          "source_path": "legacy-after-toast.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/legacy-after-toast",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/legacy-after-toast/legacy-after-toast.png",
+          "readBackVerified": true,
+          "bytes": 376517,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-audit/battle-neutral.png",
+        "bytes": 1281715,
+        "sha256": "debbf654a3a1e8f42b2454d5709e195f45a0d95716892aac51c9c2bf4ca576e4",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "865936a3-111b-484d-acd6-0cf396b5b192",
+          "source_path": "battle-neutral.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/battle-neutral",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/battle-neutral/battle-neutral.png",
+          "readBackVerified": true,
+          "bytes": 1281715,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-audit/attack-0.png",
+        "bytes": 1259504,
+        "sha256": "155117411d40de2e6bf3abb3fc598ef0b9bfa6b6bb17351bb62429f1418d1b41",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "63de3ce3-a1f6-45b5-b287-ae04fcea9006",
+          "source_path": "attack-0.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/attack-0",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/attack-0/attack-0.png",
+          "readBackVerified": true,
+          "bytes": 1259504,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-audit/shelter-arrival.png",
+        "bytes": 1495982,
+        "sha256": "05d9a317dee16df4d3033dcc46ea51cb1d64e9a5083a3b42f5ec54d9fee359d8",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "ca68cdfb-63bb-4668-acb1-665c4097e830",
+          "source_path": "shelter-arrival.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/shelter-arrival",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/shelter-arrival/shelter-arrival.png",
+          "readBackVerified": true,
+          "bytes": 1495982,
+          "semanticIndexing": "background-not-verified"
+        }
+      }
+    ],
+    "video": {
+      "file": "output/playwright/quality-audit/gameplay.webm",
+      "bytes": 17242812,
+      "sha256": "7f293d93c68b05515adca251a5edfe32fd8c4bfb2a24fc3ee1df0df45811f4f5",
+      "archive": {
+        "status": "success",
+        "task_id": "a34b90b2-63f0-4507-b4ed-e74d27024d3b",
+        "source_path": "gameplay.webm",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/gameplay",
+        "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/gameplay/gameplay.webm",
+        "bytes": 17242812,
+        "sha256": "7f293d93c68b05515adca251a5edfe32fd8c4bfb2a24fc3ee1df0df45811f4f5",
+        "readBackVerified": true,
+        "semanticIndexing": "background-not-verified"
+      },
+      "recorded": true,
+      "fullNormalAndHalfSpeedVisualReview": false
+    }
+  },
+  "openViking": {
+    "review": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+    "artBible": "viking://~/resources/projects/the-end/designs/art-bible.md",
+    "evidence": "viking://~/resources/projects/the-end/docs/quality-audit-evidence.json",
+    "semanticIndexing": "Media storage and readback verified; semantic indexing completion is not asserted."
+  },
+  "stage": "historical-audit-before-quality-fixes",
+  "originalOutcome": "needs-changes",
+  "followUp": {
+    "date": "2026-11-16",
+    "resolvedIds": [
+      "QA-01",
+      "QA-02",
+      "QA-03",
+      "QA-04",
+      "QA-05"
+    ],
+    "record": "docs/quality-fixes-verification.json"
+  }
+}

@@ -19,10 +19,14 @@ export class ActorPresentation extends Component {
     private action: 'idle' | 'attack' | 'hurt' | 'prepare' | 'death' = 'idle';
     private impact: (() => void) | null = null;
     private complete: (() => void) | null = null;
+    private reducedMotion = false;
     onLoad(): void {
         this.getComponent(Animation)!.on(Animation.EventType.FINISHED, this.finished, this);
     }
     onEnable(): void {
+        this.reducedMotion =
+            typeof matchMedia !== 'undefined' &&
+            matchMedia('(prefers-reduced-motion: reduce)').matches;
         this.playingAction = false;
         this.impact = null;
         this.complete = null;
@@ -43,6 +47,19 @@ export class ActorPresentation extends Component {
             if (!this.playingAction) this.playIdle();
         }
     }
+    setReducedMotion(value: boolean): void {
+        if (this.reducedMotion === value) return;
+        this.reducedMotion = value;
+        // In-flight actions must still deliver their single impact and completion.
+        if (!this.enabledInHierarchy || this.playingAction || this.action !== 'idle') return;
+        if (value) this.stopIdle();
+        else this.playIdle();
+    }
+    private stopIdle(): void {
+        this.getComponent(Animation)?.stop();
+        const sprite = this.artwork?.getComponent(StableActorSprite);
+        if (sprite) sprite.breath = 0;
+    }
     private clip(kind: 'idle' | 'attack' | 'hurt' | 'prepare' | 'death'): AnimationClip | null {
         return this.armed
             ? ((kind === 'idle'
@@ -59,11 +76,7 @@ export class ActorPresentation extends Component {
         const clip = this.clip('idle');
         if (clip) {
             this.play(clip);
-            if (
-                typeof matchMedia !== 'undefined' &&
-                matchMedia('(prefers-reduced-motion: reduce)').matches
-            )
-                this.getComponent(Animation)!.stop();
+            if (this.reducedMotion) this.stopIdle();
         }
     }
     private play(clip: AnimationClip): void {

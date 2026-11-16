@@ -96,7 +96,7 @@ test('native HUD keeps status bindings, existing commands and the map entry', ()
             .filter((o) => o.__type__ === script('ButtonAction'))
             .map((o) => o.actionId)
             .sort(),
-        ['audio', 'bag', 'help', 'log', 'map', 'restart']
+        ['audio', 'bag', 'help', 'log', 'map', 'restart', 'rules-help']
     );
     for (const control of a.filter((o) => o.__type__ === 'cc.Button')) {
         const click = a[control.clickEvents[0].__id__];

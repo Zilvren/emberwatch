@@ -2,6 +2,9 @@
 const fs=require('node:fs'),path=require('node:path');
 const {root,read,copy,ref,vec,color,asset,identifier,ensureMeta,uuid,script,prune,write,Graph,cleanComponent,spriteTemplate}=require('./native-assets.cjs');
 const manifest = read('assets/resources/actors/sketch08/motion-manifest.json');
+const detailedAttack = path.join(root, 'assets/resources/actors/sketch08/survivor-attack-detail.json');
+if (fs.existsSync(detailedAttack) && JSON.parse(fs.readFileSync(detailedAttack, 'utf8')).status === 'native-connected')
+    throw Error('Detailed survivor attack is active. This legacy full-generation tool would replace it. Use prepare-attack-detail.py / Pink import / connect-attack-detail.cjs for that asset; npm run build:actors only builds the current native review scene.');
 const clips = {};
 fs.mkdirSync(path.join(root, 'assets/animations/sketch08'), { recursive: true });
 fs.mkdirSync(path.join(root, 'assets/prefabs/actors/sketch08'), { recursive: true });

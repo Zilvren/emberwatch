@@ -1,0 +1,247 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "d7fd6": {
+      "importer": "sprite-frame",
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@d7fd6",
+      "displayName": "",
+      "id": "d7fd6",
+      "name": "survivor-attack-detail-00",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 21.5,
+        "offsetY": 7.5,
+        "trimX": 208,
+        "trimY": 37,
+        "width": 357,
+        "height": 499,
+        "rawWidth": 1360,
+        "rawHeight": 544,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "436ba288-0525-4b6a-a18b-7c56a99f17d1@6c48a",
+        "atlasUuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "c9de6": {
+      "importer": "sprite-frame",
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@c9de6",
+      "displayName": "",
+      "id": "c9de6",
+      "name": "survivor-attack-detail-01",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 65,
+        "offsetY": -4,
+        "trimX": 912,
+        "trimY": 59,
+        "width": 382,
+        "height": 476,
+        "rawWidth": 1360,
+        "rawHeight": 544,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "436ba288-0525-4b6a-a18b-7c56a99f17d1@6c48a",
+        "atlasUuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "74c3e": {
+      "importer": "sprite-frame",
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@74c3e",
+      "displayName": "",
+      "id": "74c3e",
+      "name": "survivor-attack-detail-02",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 85,
+        "offsetY": -29.5,
+        "trimX": 172,
+        "trimY": 605,
+        "width": 426,
+        "height": 425,
+        "rawWidth": 1360,
+        "rawHeight": 544,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "436ba288-0525-4b6a-a18b-7c56a99f17d1@6c48a",
+        "atlasUuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e8d5c": {
+      "importer": "sprite-frame",
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@e8d5c",
+      "displayName": "",
+      "id": "e8d5c",
+      "name": "survivor-attack-detail-03",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 100.5,
+        "offsetY": -49.5,
+        "trimX": 867,
+        "trimY": 644,
+        "width": 439,
+        "height": 385,
+        "rawWidth": 1360,
+        "rawHeight": 544,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "436ba288-0525-4b6a-a18b-7c56a99f17d1@6c48a",
+        "atlasUuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "de860": {
+      "importer": "sprite-frame",
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@de860",
+      "displayName": "",
+      "id": "de860",
+      "name": "survivor-attack-detail-07",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 21.5,
+        "offsetY": 7.5,
+        "trimX": 208,
+        "trimY": 37,
+        "width": 357,
+        "height": 499,
+        "rawWidth": 1360,
+        "rawHeight": 544,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "436ba288-0525-4b6a-a18b-7c56a99f17d1@6c48a",
+        "atlasUuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "survivor-attack-detail-a.png",
+    "format": 2,
+    "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2",
+    "textureUuid": "436ba288-0525-4b6a-a18b-7c56a99f17d1@6c48a"
+  }
+}

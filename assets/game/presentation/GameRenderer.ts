@@ -17,6 +17,7 @@ import { RewardSelection } from './cards/RewardSelection';
 import { RouteMap } from './map/RouteMap';
 import { EntrySelection } from './ui/EntrySelection';
 import { shelterSummary } from './ui/ShelterSummaryModel';
+import { rulesNotice } from './ui/RulesNoticeModel';
 const phases: Phase[] = [
     'journal',
     'map',
@@ -44,7 +45,8 @@ export class GameRenderer {
         private readonly scene: SceneBindings,
         private readonly hand: HandPresentation | null,
         private readonly isMuted: () => boolean,
-        private readonly saveStatus: () => string
+        private readonly saveStatus: () => string,
+        private readonly newGameRuleset: () => string = () => 'stamina-v1'
     ) {}
     text(root: Node, values: Record<string, string | number>): void {
         for (const binding of root.getComponentsInChildren(UIValue)) {
@@ -244,6 +246,7 @@ export class GameRenderer {
             saveStatus: this.saveStatus(),
             muted: this.isMuted(),
             actionsEnabled: !this.ui.busy && !this.ui.overlay,
+            rulesNotice: rulesNotice(g.scenario.ruleset, this.newGameRuleset()).caption,
         });
     }
     renderBattle(screen: Node): void {
@@ -364,6 +367,10 @@ export class GameRenderer {
                 'modal/text1':
                     '攻击牌：点击后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n卡牌消耗战斗体力，不扣避难所物资。\n进入档位决定每回合体力；回合结束余量清零，新回合重置。\n物资点不占探索负重，物品仍占负重，暂存物品不能战斗。\n护甲降至 0 不立即失败，再次受到实际伤害才失败。\n每日 1 点物资在返家结算最后执行。',
             });
+        if (index === 1 && g.scenario.battleResource !== 'stamina')
+            this.text(this.scene.popups[1], {
+                'modal/text1': rulesNotice(g.scenario.ruleset, this.newGameRuleset()).help,
+            });
         if (index === 3) {
             const c = g.cards.find((c) => c.id === this.ui.discardId);
             let title = '修复后，生存补给将不足',
@@ -375,7 +382,8 @@ export class GameRenderer {
             if (this.ui.overlay === 'restart') {
                 title = '重新开始第 1 天？';
                 body =
-                    '当前教学探索和本次结算记录将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。';
+                    '当前教学探索和本次结算记录将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。' +
+                    rulesNotice(g.scenario.ruleset, this.newGameRuleset()).restart;
                 confirm = '重新开始';
                 variant = 'danger';
             } else if (this.ui.overlay === 'discard') {

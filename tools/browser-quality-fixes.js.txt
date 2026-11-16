@@ -1,0 +1,59 @@
+await page.setViewportSize({width:1440,height:900});
+await page.emulateMedia({reducedMotion:'no-preference'});
+const rootInfo=async()=>page.evaluate(()=>{
+ const root=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot'),d=root.getComponent('GameDirector');
+ const grid=root.getComponentsInChildren('InventoryGrid').find(c=>c.node.activeInHierarchy);
+ const notice=root.getComponent('GameDirector').hud.getComponent('StatusBar').rulesNotice;
+ return {filter:d.ui.bagFilter,editing:d.ui.deckEdit,visibleCards:grid?.content.children.filter(n=>n.activeInHierarchy).length,emptyVisible:grid?.emptyLabel.node.activeInHierarchy,emptyText:grid?.emptyLabel.string,noticeVisible:notice.node.activeInHierarchy,notice:notice.caption.string,
+ actors:root.getComponentsInChildren('ActorPresentation').filter(a=>a.node.activeInHierarchy).map(a=>({name:a.node.name,motion:a.motion,pose:a.pose,playing:a.getComponent('cc.Animation').getState(a.idle?.name)?.isPlaying,breath:a.artwork.getComponent('StableActorSprite')?.rigSnapshot().breath}))};
+});
+const samples=async()=>{const values=[];for(let i=0;i<4;i++){values.push((await rootInfo()).actors);await page.waitForTimeout(180);}return values;};
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&review=quality-fixes');await idle();
+assert(!(await rootInfo()).noticeVisible,'Modern sessions show a legacy-mode notice');
+await click('journal-start');await click('entry-confirm');await click('enter-fixed');await claimSupplies();await click('claim-card-0');await click('reward-bag');await click('bag-filter-overflow');
+let view=await rootInfo();assert(view.visibleCards===0&&view.emptyVisible&&view.emptyText.includes('暂存区是空的'),'Empty inventory lacks its explanation');await screenshot('fixed-empty-state');await click('modal-close');await leaveRewards();
+await click('route-B');await click('enter-scavenge');await claimSupplies();await claimAvailableCard();await leaveRewards();await click('enter-enemy1');
+const checkpoint=await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()));
+await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(150);const reduced=await samples();
+assert(reduced.flat().every(a=>a.playing===false&&a.breath===0),'Actors did not stop idle on reduced-motion change');
+await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForTimeout(150);const resumed=await samples();
+assert(resumed.flat().every(a=>a.playing===true),'Actors did not resume idle');
+assert(Math.max(...resumed.map(s=>s[0].breath))-Math.min(...resumed.map(s=>s[0].breath))>0.005,'Resumed idle is still frozen');
+assert(await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()))===checkpoint,'Preference changes mutated the game');
+await screenshot('fixed-battle-idle');
+let s=await state();const hit=s.hand.find(c=>c.kind==='heavy'&&!c.blocked)??s.hand.find(c=>c.kind==='attack'&&!c.blocked);assert(hit,'No legal damage card');
+const amount=await page.evaluate(kind=>globalThis.__survivalGame.content.cards[kind].effect.amount,hit.kind);const hp=s.battle.hp,cost=await page.evaluate(kind=>globalThis.__survivalGame.content.cards[kind].cost,hit.kind),energy=s.stamina;
+await click('card-'+hit.id);let target=await hitPoint('enemy-target');await page.mouse.click(target.x,target.y);
+await page.waitForFunction(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return d.hero.motion==='attack'&&d.hero.pose.startsWith('survivor-attack-detail-');});
+const detailed=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector'),f=d.hero.artwork.spriteFrame;return{pose:d.hero.pose,rectHeight:f.rect.height,originalHeight:f.originalSize.height,uuid:f.uuid};});
+assert(detailed.rectHeight>=380&&detailed.originalHeight>=500,'Attack still uses low-density source frames');await screenshot('fixed-attack-detail');await idle();
+s=await state();assert(s.phase==='battle'&&s.battle.hp===hp-amount&&s.stamina===energy-cost,'Attack applied a duplicate impact or fee');
+// Toggle after a lethal impact, while the presentation is still waiting for its completion.
+let lethal;for(let i=0;i<3&&!lethal;i++){s=await state();lethal=s.hand.find(c=>['attack','slash','heavy'].includes(c.kind)&&!c.blocked);if(!lethal)await click('end-turn');}
+assert(lethal,'No damage card for in-flight preference test');await click('card-'+lethal.id);target=await hitPoint('enemy-target');await page.mouse.click(target.x,target.y);
+await page.waitForFunction(()=>globalThis.__survivalGame.phase==='rewards'&&globalThis.__emberUI.snapshot().busy);
+await page.emulateMedia({reducedMotion:'reduce'});await idle();assert((await state()).phase==='rewards','Preference toggle interrupted presentation completion');
+await page.emulateMedia({reducedMotion:'no-preference'});
+await claimSupplies();await claimAvailableCard();await leaveRewards();await click('enter-rest');await click('rest-bag');view=await rootInfo();
+assert(view.editing&&view.filter==='all'&&view.visibleCards>0&&!view.emptyVisible,'Camp deck entry inherited the overflow filter');await screenshot('fixed-camp-deck');await click('modal-close');
+await click('rest-cash');await click('modal-confirm');await click('rest-done');await click('enter-enemy2');await fight({preferWeapon:true});await claimSupplies();await claimAvailableCard();await leaveRewards();
+await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='shelter');await idle();
+const arrival=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return{visible:d.toastRoot.active,text:d.toastLabel.string};});
+assert(arrival.visible&&arrival.text.includes('已返回避难所')&&!arrival.text.includes('返回路线图'),'Arrival displays an obsolete node notification');await screenshot('fixed-shelter-arrival');
+assert((await state()).settlement.dailySpent===0,'Arrival charged the daily supplies early');await click('shelter-done');
+// This is the runner's isolated QA profile; previous scenarios may have left a modern fixture.
+await page.evaluate(()=>{localStorage.removeItem('the-end.run.v1');localStorage.removeItem('the-end.run.v1.backup');});
+await page.goto('http://127.0.0.1:7457/?seed=23&save=on&ruleset=tutorial-v1&review=compatibility-setup');await idle();
+if((await state()).phase==='journal')await click('journal-start');
+await page.goto('http://127.0.0.1:7457/?seed=23&save=on&review=compatibility-restored');await idle();await page.waitForTimeout(3200);
+const saved=await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()));view=await rootInfo();
+assert((await state()).ruleset==='tutorial-v1'&&view.noticeVisible&&view.notice.includes('旧规则'),'Legacy notice disappears with the toast');await screenshot('fixed-legacy-notice');
+await click('rules-help');const help=await page.evaluate(()=>{const root=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot');return root.getComponentsInChildren('cc.Label').filter(c=>c.node.activeInHierarchy).map(c=>c.string).join('\n');});
+assert(help.includes('当前探索沿用旧规则')&&help.includes('体力系统'),'Rules notice does not explain compatibility and upgrade');await screenshot('fixed-legacy-explanation');await click('modal-close');
+assert(await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()))===saved,'Reading compatibility information changed the save');
+await page.setViewportSize({width:1024,height:768});await page.waitForTimeout(180);await screenshot('fixed-legacy-1024');
+await click('restart');await click('modal-cancel');assert(await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()))===saved,'Cancelling restart changed legacy progress');
+await click('restart');await click('modal-confirm');assert((await state()).ruleset==='stamina-v1'&&!(await rootInfo()).noticeVisible,'Confirmed new game did not clear the legacy notice');
+await page.emulateMedia({reducedMotion:'reduce'});await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&review=started-reduced');await idle();assert((await samples()).flat().every(a=>!a.playing&&a.breath===0),'Initially reduced idle is active');
+await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForTimeout(160);assert((await samples()).flat().every(a=>a.playing),'Initially reduced actors failed to resume');await screenshot('fixed-battle-1024');await page.setViewportSize({width:1440,height:900});
+return{passed:true,campFilterReset:true,emptyExplanation:true,persistentLegacyNotice:true,legacyReadCancelPreservesSave:true,confirmedNewGameUpgrades:true,idleStopsAndResumes:true,inFlightPreferenceKeepsCompletion:true,newDetailedAttack:detailed,oneImpactAndCost:true,arrivalContextCorrect:true,dailyLast:true,smallViewport:true,actions:trace.length,runtimeErrors};

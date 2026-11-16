@@ -46,6 +46,7 @@ const defaultTasks = [
     'browser-deck-map',
     'browser-stamina-system',
     'browser-hand-shelter',
+    'browser-quality-fixes',
 ];
 const tasks = process.env.PLAYWRIGHT_TASKS
     ? process.env.PLAYWRIGHT_TASKS.split(',').map((task) => task.trim())
@@ -93,7 +94,7 @@ for (const task of tasks) {
     const scenario = fs.readFileSync(path.join(root, 'tools', task + '.js.txt'), 'utf8');
     // Only relocate artifact filenames; controls, assertions and game rules are unchanged.
     let body = (helper + '\n' + scenario).replaceAll('output/playwright/', relativeOutput + '/');
-    if (!['browser-stamina-system', 'browser-hand-shelter'].includes(task))
+    if (!['browser-stamina-system', 'browser-hand-shelter', 'browser-quality-fixes'].includes(task))
         body = body.replaceAll(
             'http://127.0.0.1:7457/?',
             'http://127.0.0.1:7457/?ruleset=tutorial-v1&'

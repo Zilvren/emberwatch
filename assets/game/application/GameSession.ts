@@ -29,6 +29,9 @@ export class GameSession {
     get view(): GameReadModel {
         return this.game;
     }
+    get newGameRuleset(): GameScenario['ruleset'] {
+        return this.defaultScenario.ruleset;
+    }
     constructor(
         seed?: number,
         private readonly saves?: SaveRepository,

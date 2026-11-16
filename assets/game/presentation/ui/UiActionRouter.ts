@@ -33,6 +33,7 @@ export class UiActionRouter {
             this.ui.overlay = 'bag';
             this.ui.page = 0;
             this.ui.deckEdit = id === 'rest-bag';
+            if (this.ui.deckEdit) this.ui.bagFilter = 'all';
             this.ui.bagReader = false;
             this.ui.bagDetails = false;
         } else if (id === 'map') {
@@ -46,9 +47,11 @@ export class UiActionRouter {
         } else if (id === 'bag-sort' && this.ui.overlay === 'bag') {
             const sorts: UiState['bagSort'][] = ['original', 'name', 'cost', 'weight'];
             this.ui.bagSort = sorts[(sorts.indexOf(this.ui.bagSort) + 1) % sorts.length];
-        } else if (id === 'bag-mode' && this.ui.overlay === 'bag' && g.phase === 'rest')
+        } else if (id === 'bag-mode' && this.ui.overlay === 'bag' && g.phase === 'rest') {
             this.ui.deckEdit = !this.ui.deckEdit;
-        else if (id === 'bag-details' && this.ui.overlay === 'bag')
+            if (this.ui.deckEdit) this.ui.bagFilter = 'all';
+            this.ui.bagReader = false;
+        } else if (id === 'bag-details' && this.ui.overlay === 'bag')
             this.ui.bagDetails = !this.ui.bagDetails;
         else if (id === 'bag-reader-close' && this.ui.overlay === 'bag') this.ui.bagReader = false;
         else if (id.startsWith('inspect-') && this.ui.overlay === 'bag') {
@@ -83,7 +86,8 @@ export class UiActionRouter {
             this.actions.message(result.message);
             this.actions.refresh();
             return;
-        } else if (id === 'help' || id === 'log' || id === 'restart') this.ui.overlay = id;
+        } else if (id === 'rules-help') this.ui.overlay = 'help';
+        else if (id === 'help' || id === 'log' || id === 'restart') this.ui.overlay = id;
         else if (id === 'audio') this.actions.toggleAudio();
         else if (
             (id === 'modal-close' || id === 'modal-cancel') &&

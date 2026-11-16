@@ -1,0 +1,1037 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "timezone": "Asia/Shanghai",
+  "status": "all-five-implemented-native-verified",
+  "engine": {
+    "name": "Pink/Cocos",
+    "version": "4.0.0-beta.1",
+    "sdkCliAvailable": true,
+    "typeScriptCompiler": "C:\\Users\\Knock\\AppData\\Roaming\\cocos-default\\cocos-4.0.0-beta.1\\node_modules\\typescript\\bin\\tsc"
+  },
+  "platform": "web-desktop",
+  "mainSceneUuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e",
+  "fixes": [
+    {
+      "id": "QA-01",
+      "status": "VERIFIED",
+      "behavior": "Camp deck entry resets its display filter; empty filters show a recovery explanation.",
+      "code": [
+        "assets/game/presentation/ui/UiActionRouter.ts",
+        "assets/game/presentation/cards/InventoryGrid.ts"
+      ],
+      "evidence": [
+        "fixed-empty-state.png",
+        "fixed-camp-deck.png"
+      ],
+      "native": true
+    },
+    {
+      "id": "QA-02",
+      "status": "VERIFIED",
+      "behavior": "Persistent legacy-rules entry explains compatibility and the confirmed-new-game upgrade without overwriting continued progress.",
+      "code": [
+        "assets/game/presentation/ui/RulesNoticeModel.ts",
+        "assets/game/presentation/ui/StatusBar.ts",
+        "assets/game/application/GameSession.ts"
+      ],
+      "native": true
+    },
+    {
+      "id": "QA-03",
+      "status": "VERIFIED",
+      "behavior": "Idle stops/resumes in both directions; an in-flight lethal impact can finish once before its screen changes.",
+      "code": [
+        "assets/game/presentation/actors/ActorPresentation.ts",
+        "assets/game/presentation/GameDirector.ts"
+      ],
+      "native": true
+    },
+    {
+      "id": "QA-04",
+      "status": "VERIFIED",
+      "behavior": "Higher-effective-density survivor attack uses the same display height, fixed feet registration, original duration and impact cue.",
+      "assets": [
+        "assets/resources/actors/sketch08/survivor-attack-detail-a.png",
+        "assets/resources/actors/sketch08/survivor-attack-detail-b.png"
+      ],
+      "native": {
+        "pose": "survivor-attack-detail-00",
+        "rectHeight": 499,
+        "originalHeight": 544,
+        "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@d7fd6"
+      },
+      "visual": "Actual native attack and normal/half paused views inspected. User overall art acceptance remains separate."
+    },
+    {
+      "id": "QA-05",
+      "status": "VERIFIED",
+      "behavior": "Automatic shelter arrival replaces the previous map notification without charging daily supplies.",
+      "native": true
+    }
+  ],
+  "tests": {
+    "passed": 113,
+    "failed": 0,
+    "log": "temp/quality-fixes-final-tests.log",
+    "sha256": "8d1eef0b307083964a3f67e58bf10cdfae9cb3ee553364f54c75d38813b50d99"
+  },
+  "typecheck": {
+    "passed": true,
+    "exitCode": 0,
+    "log": "temp/quality-fixes-typecheck-final.log"
+  },
+  "build": {
+    "passed": true,
+    "exitCode": 0,
+    "command": "npm run build:web (via project preview pause/restore helper)",
+    "log": "temp/quality-fixes-verified-build.log",
+    "sha256": "907256fd80ef655380cbca054a1f11b2468fd3683bdef63ee7e614b8223ec387",
+    "output": "build/web-desktop",
+    "workingRuntimeFingerprint": "69fd1c63f6a41ae1acd18fe1e4bef59bc0890a6dc81801089fe3f48882893a36"
+  },
+  "actorBuild": {
+    "passed": true,
+    "exitCode": 0,
+    "log": "temp/quality-fixes-actor-build.log",
+    "output": "build/actor-review"
+  },
+  "browser": {
+    "passed": true,
+    "scenarios": 14,
+    "report": "output/playwright/quality-fixes-verified/combined-report.json",
+    "sourceReports": [
+      "output/playwright/quality-fixes-verified/browser-report.json",
+      "output/playwright/quality-fixes-last/browser-report.json"
+    ],
+    "sameNativeBuild": true,
+    "fixtureCorrection": "The first 13 checks passed. The final compatibility case initially reused another case modern save. Its dedicated QA fixture is now explicitly reset; only that case was rerun on the unchanged native build.",
+    "checks": {
+      "browser-review-round3": {
+        "passed": true,
+        "round": 3,
+        "closeIcon": "×",
+        "closeWithoutMutation": true,
+        "inventoryDetails": [
+          {
+            "kind": "attack",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "基础攻击",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "基础牌"
+            ],
+            "effect": "造成 2 点伤害",
+            "weight": "负重 0",
+            "illustration": "ui-card-attack",
+            "fullDescription": "造成 2 点伤害\n\n固有能力，永不丢失\n\n基础牌：永久属于主角，不会因失败被删除。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 22,
+            "effectFontSize": 18,
+            "compact": false
+          },
+          {
+            "kind": "attack",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "基础攻击",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "基础牌"
+            ],
+            "effect": "造成 2 点伤害",
+            "weight": "负重 0",
+            "illustration": "ui-card-attack",
+            "fullDescription": "造成 2 点伤害\n\n固有能力，永不丢失\n\n基础牌：永久属于主角，不会因失败被删除。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 22,
+            "effectFontSize": 18,
+            "compact": false
+          },
+          {
+            "kind": "dodge",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "基础躲避",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "基础牌"
+            ],
+            "effect": "获得 2 点格挡",
+            "weight": "负重 0",
+            "illustration": "ui-card-dodge",
+            "fullDescription": "获得 2 点格挡\n\n格挡在回合结束时清零\n\n基础牌：永久属于主角，不会因失败被删除。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 22,
+            "effectFontSize": 18,
+            "compact": false
+          },
+          {
+            "kind": "dodge",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "基础躲避",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "基础牌"
+            ],
+            "effect": "获得 2 点格挡",
+            "weight": "负重 0",
+            "illustration": "ui-card-dodge",
+            "fullDescription": "获得 2 点格挡\n\n格挡在回合结束时清零\n\n基础牌：永久属于主角，不会因失败被删除。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 22,
+            "effectFontSize": 18,
+            "compact": false
+          },
+          {
+            "kind": "knife",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "菜刀",
+            "cost": "2",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [
+              "武器"
+            ],
+            "effect": "生成「挥砍」",
+            "weight": "负重 3",
+            "illustration": "ui-card-knife",
+            "fullDescription": "下回合起每回合生成「挥砍」\n\n占用唯一武器槽\n\n武器：打出后进入武器槽，并按武器规则生成攻击牌。",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 22,
+            "effectFontSize": 18,
+            "compact": false
+          },
+          {
+            "kind": "evade",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "强化躲避",
+            "cost": "1",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [],
+            "effect": "获得 5 点格挡",
+            "weight": "负重 2",
+            "illustration": "ui-card-evade",
+            "fullDescription": "获得 5 点格挡\n\n格挡可抵消再次受击",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 22,
+            "effectFontSize": 18,
+            "compact": false
+          },
+          {
+            "kind": "repair",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "修复",
+            "cost": "2",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [],
+            "effect": "恢复 3 点护甲",
+            "weight": "负重 2",
+            "illustration": "ui-card-repair",
+            "fullDescription": "恢复 3 点护甲\n\n护甲为 0 时无法使用",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 22,
+            "effectFontSize": 18,
+            "compact": false
+          },
+          {
+            "kind": "cash",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "旧世界现金",
+            "cost": "0",
+            "costUnit": "物资",
+            "costVisible": false,
+            "keywords": [],
+            "effect": "只能在休整时丢弃",
+            "weight": "负重 10",
+            "illustration": "ui-card-cash",
+            "fullDescription": "只能在休整时丢弃\n\n沉重的旧世界遗物",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 0,
+            "effectFontSize": 18,
+            "compact": false
+          },
+          {
+            "kind": "heavy",
+            "hovered": false,
+            "selected": false,
+            "blocked": "",
+            "expanded": false,
+            "title": "重击",
+            "cost": "1",
+            "costUnit": "物资",
+            "costVisible": true,
+            "keywords": [],
+            "effect": "造成 5 点伤害",
+            "weight": "负重 4",
+            "illustration": "ui-card-heavy",
+            "fullDescription": "造成 5 点伤害\n\n使用后进入弃牌堆",
+            "detailsHeight": 221.20588235294116,
+            "detailY": 110.60294117647058,
+            "visualY": 0,
+            "visualScale": 1,
+            "readableFont": 0,
+            "titleFontSize": 21,
+            "costFontSize": 22,
+            "effectFontSize": 18,
+            "compact": false
+          }
+        ],
+        "smallWindow": {
+          "width": 1024,
+          "height": 768,
+          "realClick": true,
+          "escape": true
+        },
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-first-battle": {
+        "phase": "battle",
+        "runtimeErrors": [],
+        "consoleErrors": [],
+        "passed": true
+      },
+      "browser-route-a": {
+        "passed": true,
+        "route": "A",
+        "first": {
+          "weaponDemonstrated": false,
+          "dragged": true,
+          "actions": 5
+        },
+        "second": {
+          "weaponDemonstrated": true,
+          "dragged": true,
+          "actions": 8
+        },
+        "dragCancelled": true,
+        "impactBusy": true,
+        "final": {
+          "phase": "day2",
+          "supplies": 9,
+          "armor": 10,
+          "settlement": {
+            "returnedSupplies": 10,
+            "returnedCards": 10,
+            "lostOverflow": [],
+            "wasCritical": false,
+            "repairCost": 0,
+            "repaired": false,
+            "repairSpent": 0,
+            "dailySpent": 1,
+            "dailyShortfall": 0
+          }
+        },
+        "actions": 43,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-route-b": {
+        "passed": true,
+        "route": "B",
+        "failureRetry": true,
+        "zeroArmorSurvived": true,
+        "repairWarningAndCancel": true,
+        "shortfallConfirmed": true,
+        "first": {
+          "weaponDemonstrated": false,
+          "dragged": true,
+          "actions": 2
+        },
+        "second": {
+          "weaponDemonstrated": false,
+          "dragged": true,
+          "actions": 3
+        },
+        "final": {
+          "phase": "day2",
+          "supplies": 0,
+          "armor": 10,
+          "settlement": {
+            "returnedSupplies": 1,
+            "returnedCards": 10,
+            "lostOverflow": [],
+            "wasCritical": false,
+            "repairCost": 1,
+            "repaired": true,
+            "repairSpent": 1,
+            "dailySpent": 0,
+            "dailyShortfall": 1
+          }
+        },
+        "actions": 66,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-session-save": {
+        "passed": true,
+        "pendingRewardResume": true,
+        "noDuplicateClaim": true,
+        "battleResume": true,
+        "nextTurnAndRngResume": true,
+        "restartConfirmation": true,
+        "automaticSave": true,
+        "nativeActorSource": "master08-thin",
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-accessibility": {
+        "passed": true,
+        "viewport": "1024x768",
+        "reducedMotion": true,
+        "unarmedPose": true,
+        "realDrag": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-input-check": {
+        "passed": true,
+        "rapidAttackSingleApply": true,
+        "rapidDefenseSingleApply": true,
+        "dragSurvivesToastExpiry": true,
+        "normalRandomMode": true,
+        "handoff": "journal",
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-coherence-check": {
+        "passed": true,
+        "previewDoesNotWriteSave": true,
+        "reducedMotion": true,
+        "resumesMotion": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-page-overlays": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-material-coherence": {
+        "passed": true,
+        "allThreeNativeBackgrounds": true,
+        "neutralBackdropTint": true,
+        "readOnlyRouteOpacity": true,
+        "source08Preserved": true,
+        "contactShadowTracksFeet": true,
+        "inactiveEnemyShadowHidden": true,
+        "sharedDeckPaper": true,
+        "realDragAttack": true,
+        "smallViewport": true,
+        "actions": 49,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-deck-map": {
+        "passed": true,
+        "grid": true,
+        "reader": true,
+        "escapeStack": true,
+        "readonlyMap": true,
+        "rewardComparisonDoesNotMutate": true,
+        "confirmedReward": true,
+        "overflowFilter": true,
+        "routeEntry": true,
+        "actions": 17,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-stamina-system": {
+        "passed": true,
+        "productionStamina": true,
+        "entrySelectionAndCancel": true,
+        "entryPaidOnce": true,
+        "noSupplyCarryWeight": true,
+        "cardUnit": "体力",
+        "paidCardDoesNotSpendSupplies": true,
+        "turnRefresh": true,
+        "saveResume": true,
+        "cancelledDragFree": true,
+        "newBattleRefresh": true,
+        "dailyLast": true,
+        "fullRouteA": true,
+        "smallViewport": true,
+        "actions": 53,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-hand-shelter": {
+        "passed": true,
+        "compactHand": true,
+        "fontSizes": [
+          {
+            "kind": "dodge",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "evade",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "dodge",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "knife",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "heavy",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          },
+          {
+            "kind": "repair",
+            "title": 16.355555555555558,
+            "cost": 18.48888888888889,
+            "effect": 14.933333333333334
+          }
+        ],
+        "fullReadingWithoutMutation": true,
+        "cancelledDrag": true,
+        "realDrag": true,
+        "damagedShelter": true,
+        "fullArmorBarHidden": true,
+        "dailyLast": true,
+        "actions": 33,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-quality-fixes": {
+        "passed": true,
+        "campFilterReset": true,
+        "emptyExplanation": true,
+        "persistentLegacyNotice": true,
+        "legacyReadCancelPreservesSave": true,
+        "confirmedNewGameUpgrades": true,
+        "idleStopsAndResumes": true,
+        "inFlightPreferenceKeepsCompletion": true,
+        "newDetailedAttack": {
+          "pose": "survivor-attack-detail-00",
+          "rectHeight": 499,
+          "originalHeight": 544,
+          "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@d7fd6"
+        },
+        "oneImpactAndCost": true,
+        "arrivalContextCorrect": true,
+        "dailyLast": true,
+        "smallViewport": true,
+        "actions": 47,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      }
+    }
+  },
+  "motion": {
+    "normalAndHalf": {
+      "passed": true,
+      "normal": {
+        "frames": [
+          [
+            "survivor-attack-detail-00",
+            "survivor-attack-detail-01",
+            "survivor-attack-detail-02",
+            "survivor-attack-detail-03",
+            "survivor-attack-detail-04",
+            "survivor-attack-detail-05",
+            "survivor-attack-detail-06",
+            "survivor-attack-detail-07"
+          ],
+          [
+            "wanderer-attack-00",
+            "wanderer-attack-01",
+            "wanderer-attack-02",
+            "wanderer-attack-03",
+            "wanderer-attack-04",
+            "wanderer-attack-05",
+            "wanderer-attack-06",
+            "wanderer-attack-07"
+          ],
+          [
+            "brute-attack-00",
+            "brute-attack-01",
+            "brute-attack-02",
+            "brute-attack-03",
+            "brute-attack-04",
+            "brute-attack-05",
+            "brute-attack-06",
+            "brute-attack-07"
+          ]
+        ],
+        "oneCuePerActor": true
+      },
+      "half": {
+        "frames": [
+          [
+            "survivor-attack-detail-00",
+            "survivor-attack-detail-01",
+            "survivor-attack-detail-02",
+            "survivor-attack-detail-03",
+            "survivor-attack-detail-04",
+            "survivor-attack-detail-05",
+            "survivor-attack-detail-06",
+            "survivor-attack-detail-07"
+          ],
+          [
+            "wanderer-attack-00",
+            "wanderer-attack-01",
+            "wanderer-attack-02",
+            "wanderer-attack-03",
+            "wanderer-attack-04",
+            "wanderer-attack-05",
+            "wanderer-attack-06",
+            "wanderer-attack-07"
+          ],
+          [
+            "brute-attack-00",
+            "brute-attack-01",
+            "brute-attack-02",
+            "brute-attack-03",
+            "brute-attack-04",
+            "brute-attack-05",
+            "brute-attack-06",
+            "brute-attack-07"
+          ]
+        ],
+        "oneCuePerActor": true
+      },
+      "pauseStable": true,
+      "returnedToApprovedIdle": true,
+      "reviewMethod": "native normal/half playback, telemetry sampling and paused screenshots",
+      "runtimeErrors": []
+    },
+    "solo": {
+      "passed": true,
+      "normal": {
+        "frames": [
+          [
+            "survivor-attack-detail-00",
+            "survivor-attack-detail-01",
+            "survivor-attack-detail-02",
+            "survivor-attack-detail-03",
+            "survivor-attack-detail-04",
+            "survivor-attack-detail-05",
+            "survivor-attack-detail-06",
+            "survivor-attack-detail-07"
+          ],
+          [],
+          []
+        ],
+        "oneCuePerActor": true
+      },
+      "half": {
+        "frames": [
+          [
+            "survivor-attack-detail-00",
+            "survivor-attack-detail-01",
+            "survivor-attack-detail-02",
+            "survivor-attack-detail-03",
+            "survivor-attack-detail-04",
+            "survivor-attack-detail-05",
+            "survivor-attack-detail-06",
+            "survivor-attack-detail-07"
+          ],
+          [],
+          []
+        ],
+        "oneCuePerActor": true
+      },
+      "pauseStable": true,
+      "returnedToApprovedIdle": true,
+      "reviewMethod": "native normal/half playback, telemetry sampling and paused screenshots",
+      "runtimeErrors": []
+    },
+    "soloPresentationOnly": "Other preview actors were hidden and the survivor reframed in QA memory only; no actor scale, scene file or game rules changed.",
+    "reviewMethod": "Real native playback, frame telemetry, pause/resume and viewed paused screenshots; no frame-rate budget or final user aesthetic certification claimed."
+  },
+  "attack": {
+    "manifest": "assets/resources/actors/sketch08/survivor-attack-detail.json",
+    "promptRecord": "docs/designs/character-style-exploration/survivor-attack-detail.prompt.json",
+    "tool": "built-in image_gen",
+    "keyframes": 8,
+    "uniqueDrawings": 7,
+    "neutralEndpointReusesStart": true,
+    "bodyHeightSourceRange": [
+      379,
+      493
+    ],
+    "previousSourceRange": [
+      191,
+      222
+    ],
+    "logicalSize": [
+      640,
+      256
+    ],
+    "sourceSize": [
+      1360,
+      544
+    ],
+    "scale": 0.47058823529411764,
+    "duration": 0.56,
+    "impactTime": 0.28,
+    "clipUuidPreserved": "2c735fda-5f64-43b9-a62c-0c5a12b6ccb2",
+    "sourcePngResampled": false
+  },
+  "preservation": {
+    "beforeFiles": 458,
+    "afterFiles": 470,
+    "unchanged": 447,
+    "changed": [
+      "assets/animations/sketch08/Sketch08_survivor_attack.anim",
+      "assets/game/application/GameSession.ts",
+      "assets/game/presentation/GameDirector.ts",
+      "assets/game/presentation/GameRenderer.ts",
+      "assets/game/presentation/actors/ActorPresentation.ts",
+      "assets/game/presentation/cards/InventoryGrid.ts",
+      "assets/game/presentation/ui/StatusBar.ts",
+      "assets/game/presentation/ui/StatusBarModel.ts",
+      "assets/game/presentation/ui/UiActionRouter.ts",
+      "assets/prefabs/ui/HUD.prefab",
+      "assets/prefabs/ui/InventoryPopup.prefab"
+    ],
+    "added": [
+      "assets/game/presentation/ui/RulesNoticeModel.ts",
+      "assets/game/presentation/ui/RulesNoticeModel.ts.meta",
+      "assets/resources/actors/sketch08/survivor-attack-detail-a.plist",
+      "assets/resources/actors/sketch08/survivor-attack-detail-a.plist.meta",
+      "assets/resources/actors/sketch08/survivor-attack-detail-a.png",
+      "assets/resources/actors/sketch08/survivor-attack-detail-a.png.meta",
+      "assets/resources/actors/sketch08/survivor-attack-detail-b.plist",
+      "assets/resources/actors/sketch08/survivor-attack-detail-b.plist.meta",
+      "assets/resources/actors/sketch08/survivor-attack-detail-b.png",
+      "assets/resources/actors/sketch08/survivor-attack-detail-b.png.meta",
+      "assets/resources/actors/sketch08/survivor-attack-detail.json",
+      "assets/resources/actors/sketch08/survivor-attack-detail.json.meta"
+    ],
+    "existingMetadataPreserved": 245,
+    "metadataChanged": [],
+    "coreAndPersistenceFilesUnchanged": 35,
+    "originalActorSourceAndPrefabFilesPreserved": 145,
+    "approvedMasterSha256": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+    "mainSceneUnchanged": true,
+    "idempotentAuthoring": {
+      "passed": true,
+      "files": [
+        "assets/prefabs/ui/HUD.prefab",
+        "assets/prefabs/ui/InventoryPopup.prefab",
+        "assets/animations/sketch08/Sketch08_survivor_attack.anim",
+        "assets/resources/actors/sketch08/survivor-attack-detail.json",
+        "assets/resources/actors/sketch08/survivor-attack-detail-a.plist",
+        "assets/resources/actors/sketch08/survivor-attack-detail-b.plist"
+      ],
+      "changed": []
+    },
+    "nativeAssets": {
+      ".scene": 6,
+      ".prefab": 37,
+      ".anim": 36,
+      ".meta": 262
+    },
+    "missingMetadata": [],
+    "warnings": []
+  },
+  "evidenceMatrix": {
+    "logicAndSaveCompatibility": {
+      "status": "SUPPORTED",
+      "evidence": "113 tests, old-save read/cancel/confirm native checks and unchanged core/persistence hashes"
+    },
+    "nativeIntegration": {
+      "status": "SUPPORTED",
+      "evidence": "Current main/actor native builds, actual frame UUIDs and native UI"
+    },
+    "uiBehavior": {
+      "status": "SUPPORTED",
+      "evidence": "All five dedicated checks and 14 combined native scenarios"
+    },
+    "attackClarityAndRegistration": {
+      "status": "SUPPORTED",
+      "evidence": "Higher-density drawn sources, fixed geometry checks and viewed native normal/half paused images"
+    },
+    "fullUserVisualAcceptance": {
+      "status": "NEEDS EVIDENCE",
+      "reason": "Not inferred from technical passes; no user confirmation required to ship these authorized local fixes"
+    }
+  },
+  "excludedAttempts": [
+    {
+      "file": "temp/quality-fixes-import-build.log",
+      "reason": "Windows PowerShell 5 treated SDK stderr as a terminating host error. Native output handling was corrected; final main and actor builds exited 0."
+    },
+    {
+      "file": "output/playwright/quality-fixes-full/browser-report.json",
+      "reason": "Legacy A route driver assumed a repair button exists when armor is full; optional-control lookup corrected."
+    },
+    {
+      "file": "output/playwright/quality-fixes-verified/browser-report.json",
+      "reason": "Final case reused a modern QA save from a previous scenario. Isolated compatibility fixture is reset before setup, then the last case was rerun on the unchanged native build."
+    }
+  ],
+  "media": {
+    "assets": [
+      {
+        "file": "assets/resources/actors/sketch08/survivor-attack-detail-a.png",
+        "bytes": 930900,
+        "sha256": "b7755bc5b1b9b261d07a5b4358105087ea32fbe025fdea52017a8b5fc261a79b",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "387774db-e62b-417a-b57d-c5efddb62f0f",
+          "source_path": "survivor-attack-detail-a.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/survivor-attack-detail-a",
+          "file": "assets/resources/actors/sketch08/survivor-attack-detail-a.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/survivor-attack-detail-a/survivor-attack-detail-a.png",
+          "readBackVerified": true,
+          "bytes": 930900,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "assets/resources/actors/sketch08/survivor-attack-detail-b.png",
+        "bytes": 895394,
+        "sha256": "e9d0616df65fafd8333b970285f7e14b4e0850afbd9edd25f5c002a30acd73a3",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "cbf3c9a5-d93d-4424-808b-6108eba6dc72",
+          "source_path": "survivor-attack-detail-b.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/survivor-attack-detail-b",
+          "file": "assets/resources/actors/sketch08/survivor-attack-detail-b.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/survivor-attack-detail-b/survivor-attack-detail-b.png",
+          "readBackVerified": true,
+          "bytes": 895394,
+          "semanticIndexing": "background-not-verified"
+        }
+      }
+    ],
+    "screenshots": [
+      {
+        "file": "output/playwright/quality-fixes-last/fixed-empty-state.png",
+        "bytes": 149086,
+        "sha256": "3295d1f9728a95bffab09b0bb40f7c229fad0eed959e615f7c515a08d32df34e",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "a2f62b0d-018e-40e4-a088-7473133569d1",
+          "source_path": "fixed-empty-state.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-empty-state",
+          "file": "output/playwright/quality-fixes-last/fixed-empty-state.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-empty-state/fixed-empty-state.png",
+          "readBackVerified": true,
+          "bytes": 149086,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-fixes-last/fixed-camp-deck.png",
+        "bytes": 437839,
+        "sha256": "63bfed27aeed3a8fce3ea60b1f65b33b3c85830c72629309a85e89f305f5550a",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "74a60b8f-92a5-4ef1-a1bb-dca3a07b0194",
+          "source_path": "fixed-camp-deck.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-camp-deck",
+          "file": "output/playwright/quality-fixes-last/fixed-camp-deck.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-camp-deck/fixed-camp-deck.png",
+          "readBackVerified": true,
+          "bytes": 437839,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-fixes-last/fixed-legacy-notice.png",
+        "bytes": 378644,
+        "sha256": "27d355f83a4093640bf1fac5e952664d83fba6588495f9a02f5436577f011cd4",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "b9f1d824-275d-4094-88e9-a4ef05f94cd8",
+          "source_path": "fixed-legacy-notice.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-legacy-notice",
+          "file": "output/playwright/quality-fixes-last/fixed-legacy-notice.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-legacy-notice/fixed-legacy-notice.png",
+          "readBackVerified": true,
+          "bytes": 378644,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-fixes-last/fixed-legacy-1024.png",
+        "bytes": 245062,
+        "sha256": "1770743bd67f1564535c40a3d0445fb9bba4806ac480074ef43f608bdeb161df",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "bfc362a5-3f18-4814-a770-86b357b0c6a8",
+          "source_path": "fixed-legacy-1024.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-legacy-1024",
+          "file": "output/playwright/quality-fixes-last/fixed-legacy-1024.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-legacy-1024/fixed-legacy-1024.png",
+          "readBackVerified": true,
+          "bytes": 245062,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-fixes-last/fixed-shelter-arrival.png",
+        "bytes": 1499061,
+        "sha256": "d0505b830707d2b76886643252deef4b1f32b8621f67566f26ffe5c97a66fe5f",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "8a9c30c5-d2c7-4c10-b759-4ea5f8c06bb3",
+          "source_path": "fixed-shelter-arrival.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-shelter-arrival",
+          "file": "output/playwright/quality-fixes-last/fixed-shelter-arrival.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-shelter-arrival/fixed-shelter-arrival.png",
+          "readBackVerified": true,
+          "bytes": 1499061,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-fixes-last/fixed-attack-detail.png",
+        "bytes": 1309227,
+        "sha256": "b4e8f5a4511200d2bc93ffbe6b93430d0eba096a1336231d3cc0c40593db6faa",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "a7a418c9-c94c-4540-bb28-3f684a985147",
+          "source_path": "fixed-attack-detail.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-attack-detail",
+          "file": "output/playwright/quality-fixes-last/fixed-attack-detail.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-attack-detail/fixed-attack-detail.png",
+          "readBackVerified": true,
+          "bytes": 1309227,
+          "semanticIndexing": "background-not-verified"
+        }
+      },
+      {
+        "file": "output/playwright/quality-fixes-motion-solo/half-paused.png",
+        "bytes": 181839,
+        "sha256": "305e3fd34c0f1203c37f15b4a276a21cd60fa3fda9ceeb4e562a2bff9e89d90e",
+        "viewed": true,
+        "archive": {
+          "status": "success",
+          "task_id": "b2de3811-a22c-43de-b0d8-fdf70939ff25",
+          "source_path": "half-paused.png",
+          "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/half-paused",
+          "file": "output/playwright/quality-fixes-motion-solo/half-paused.png",
+          "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/half-paused/half-paused.png",
+          "readBackVerified": true,
+          "bytes": 181839,
+          "semanticIndexing": "background-not-verified"
+        }
+      }
+    ],
+    "video": {
+      "file": "output/playwright/quality-fixes-motion-solo/native-solo.webm",
+      "bytes": 677848,
+      "sha256": "03abc759da3e14be2b559fa2da9a83d6ad6614d7cd341b1239c380772cb79903",
+      "archive": {
+        "status": "success",
+        "task_id": "b3cb2242-5a20-4ce1-8a1c-51e92848ff7b",
+        "source_path": "native-solo.webm",
+        "root_uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/native-solo",
+        "uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/native-solo/native-solo.webm",
+        "file": "output/playwright/quality-fixes-motion-solo/native-solo.webm",
+        "bytes": 677848,
+        "sha256": "03abc759da3e14be2b559fa2da9a83d6ad6614d7cd341b1239c380772cb79903",
+        "readBackVerified": true,
+        "semanticIndexing": "background-not-verified"
+      }
+    }
+  },
+  "limits": [
+    "Scope is the five audited issues and survivor attack; other character actions were not redrawn.",
+    "Existing single-day content remains a compatibility slice; no new gameplay was enabled."
+  ],
+  "openViking": {
+    "verification": "viking://~/resources/projects/the-end/docs/quality-fixes-verification.json",
+    "review": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+    "semanticIndexing": "Storage and readback verified; semantic indexing completion not asserted"
+  }
+}

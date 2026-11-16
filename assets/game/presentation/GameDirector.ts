@@ -49,12 +49,19 @@ export class GameDirector extends Component {
     }
     private refresh(): void {
         this.renderer.render();
+        this.syncActorMotionPreference();
         // Keep transient feedback clear of overlay headings and the map's paper sheet.
         const toastY = this.ui.overlay ? 388 : this.game.phase === 'map' ? -416 : 345;
         this.toastRoot?.setPosition(0, toastY, 0);
     }
     private refreshBattle(screen: Node): void {
         this.renderer.renderBattle(screen);
+    }
+    private syncActorMotionPreference(): void {
+        for (const actor of this.renderer.activeScreen?.getComponentsInChildren(
+            ActorPresentation
+        ) ?? [])
+            actor.setReducedMotion(this.ui.reduced);
     }
     private attackKind(kind: CardKind): boolean {
         return this.game.content.cards[kind].effect.type === 'damage';
@@ -87,7 +94,11 @@ export class GameDirector extends Component {
     private motionQuery: MediaQueryList | null = null;
     private motionChanged = (event: MediaQueryListEvent) => {
         this.ui.reduced = event.matches;
-        if (this.renderer) this.refresh();
+        if (!this.renderer) return;
+        this.syncActorMotionPreference();
+        // A hit may already advance the rules phase while its animation finishes.
+        // Existing completion callbacks own that screen switch.
+        if (!this.ui.busy) this.refresh();
     };
     private hand: HandPresentation | null = null;
     onLoad(): void {
@@ -148,7 +159,8 @@ export class GameDirector extends Component {
             { hud: this.hud!, screens: this.screens, popups: this.popups },
             this.hand,
             () => this.audio.muted,
-            () => this.session.saveStatus
+            () => this.session.saveStatus,
+            () => this.session.newGameRuleset
         );
         this.router = new UiActionRouter(this.session, this.ui, {
             act: (command, sound) => this.act(command, sound),
@@ -179,7 +191,10 @@ export class GameDirector extends Component {
     }
     update(dt: number): void {
         if (!this.game) return;
+        const previousPhase = this.game.phase;
         if (!this.ui.busy) this.session.advanceTime(dt);
+        if (previousPhase === 'map' && this.game.phase === 'shelter')
+            this.message('已返回避难所。清点带回物资后，再结束今天。');
         if (this.game.revision !== this.renderer.revision && !this.ui.busy) this.refresh();
         if (this.toastTime > 0) {
             this.toastTime -= dt;

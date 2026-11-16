@@ -56,3 +56,11 @@
 RoutePoint 图标为原生 Graphics 路径，细线与少量灰橄榄/淡棕/土黄色块，五类地点保留不同轮廓；不是新贴图或参考游戏图标。接触影作者工具按实际 target 引用复用现有节点，避免序列化重排后重复添加。新增 UI 绑定与截图见 deck-map-components.md、stamina-system.md 和 stamina-verification.json。
 
 2026-11-15 手牌/结算精修：在 1024×768 实机中，当前六张默认牌的实际字号结合 Canvas 显示缩放换算，牌名约 16.36、费用 18.49、核心效果 14.93 CSS px；这是本次内容与窗口下的观测，不作为任意自定义长牌名的保证。手牌与结算布局的正常/较小窗口图已查看。护甲修复控件为 300×48，结算主操作为 370×56；现有 UUID、fileId、角色与动画保持，细节见 docs/hand-shelter-verification.json。
+
+## 2026-11-16 主角攻击明细
+
+资源为 `assets/resources/actors/sketch08/survivor-attack-detail-a.png` 与 `-b.png`，实际各 1448×1086，真透明背景，原 PNG 不重采样。`prepare-attack-detail.py` 只做只读像素分析和图集元数据编写，自动识别透明间隙避免裁掉刀尖；不能导入该脚本去执行旧全量素材生成流程。
+
+原 640×256 逻辑画布映射到统一 1360×544 源画布，动作全段比例 0.47058823529411764；中立主体 493 像素映射为 232 逻辑单位。所有脚底为 -112，左脚锚点保持，演员的原生场景缩放不变。8 个时序帧中，07 是 00 中立姿势的图集别名，7 张不同绘制图；端点复用用于稳定回待机，不宣称增加绘制数量。
+
+先执行 `python tools/prepare-attack-detail.py`，经 Pink 原生导入两份 plist 后执行 `node tools/connect-attack-detail.cjs`，读取实际分配的 SpriteFrame UUID 并更新现有攻击片段。普通构建不调用作者工具。旧全量作者工具已加活动资源保护，避免无意把清晰稿换回旧帧。片段、演员与既有元数据标识保留，测试与原生正常/半速检查见 docs/quality-fixes-verification.json。

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>survivor-attack-detail-04</key>
+      <dict>
+        <key>frame</key>
+        <string>{{70,63},{672,393}}</string>
+        <key>offset</key>
+        <string>{217.0000,-45.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{1360,544}</string>
+      </dict>
+      <key>survivor-attack-detail-05</key>
+      <dict>
+        <key>frame</key>
+        <string>{{830,60},{529,396}}</string>
+        <key>offset</key>
+        <string>{145.5000,-44.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{1360,544}</string>
+      </dict>
+      <key>survivor-attack-detail-06</key>
+      <dict>
+        <key>frame</key>
+        <string>{{188,569},{421,447}}</string>
+        <key>offset</key>
+        <string>{91.5000,-18.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{1360,544}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>survivor-attack-detail-b.png</string>
+      <key>realTextureFileName</key>
+      <string>survivor-attack-detail-b.png</string>
+      <key>size</key>
+      <string>{1448,1086}</string>
+    </dict>
+  </dict>
+</plist>

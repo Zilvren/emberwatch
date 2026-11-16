@@ -12,6 +12,7 @@ export interface StatusBarInput {
     saveStatus: string;
     muted: boolean;
     actionsEnabled: boolean;
+    rulesNotice?: string;
 }
 export const defaultStatus: StatusBarInput = {
     day: 1,
@@ -70,5 +71,6 @@ export function statusBarView(input: Readonly<StatusBarInput>) {
         saveTone,
         audio: input.muted ? '声音关' : '声音开',
         actionsEnabled: input.actionsEnabled,
+        rulesNotice: input.rulesNotice ?? '',
     };
 }

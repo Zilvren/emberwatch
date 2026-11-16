@@ -1,0 +1,195 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "timezone": "Asia/Shanghai",
+  "status": "all-five-fixed-stored-and-read-back-verified",
+  "verification": "viking://~/resources/projects/the-end/docs/quality-fixes-verification.json",
+  "documents": [
+    {
+      "file": "docs/designs/ui/ux-review.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+      "sha256": "f48ff59b92ef9490d891933c97da89c2a5cf3f56fc0b9967705dbc726d571925",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/art-bible.md",
+      "uri": "viking://~/resources/projects/the-end/designs/art-bible.md",
+      "sha256": "370b6288f0444e14a5a5e240063d0c3b4d90aed41c9cd79c65546198dc2c5da1",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/production-asset-spec.md",
+      "uri": "viking://~/resources/projects/the-end/designs/production-asset-spec.md",
+      "sha256": "99e70048a1b396ef701e37548863a358420b55a3a6e495e4b0d651de00031445",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/ui/wasteland-page-redesign.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+      "sha256": "d1bd84d01e6f376de777fff598d868f9d88b4e5baa0bb475aaa5ebd3895e6cec",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/architecture.md",
+      "uri": "viking://~/resources/projects/the-end/docs/architecture.md",
+      "sha256": "d5ccba580b370de2fb93b65b5912b7257f98c5add23decfaee386b7cb80c1783",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/game-studios-skills.md",
+      "uri": "viking://~/resources/projects/the-end/docs/game-studios-skills.md",
+      "sha256": "ebb88702171c9d2e31b6951cffc5b0d0b039bfddf49c36d883b42da2e17b0617",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/vertical-slice.md",
+      "uri": "viking://~/resources/projects/the-end/docs/vertical-slice.md",
+      "sha256": "400e512ba262d0b7ed08a684c7a0646d596bfdcf01fea14ed76fc376da0b3b2d",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/character-style-exploration/survivor-attack-detail.prompt.json",
+      "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail.prompt.json",
+      "sha256": "49402b41c3c35570bc5df1828e9e3f30e14acd8724b41671ddf79bcff311b396",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/quality-fixes-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/quality-fixes-verification.json",
+      "sha256": "8f5ab7c54f6f5f996cc01b629334cc462c9e325c71c0796f9495fe41a0578093",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/quality-audit-evidence.json",
+      "uri": "viking://~/resources/projects/the-end/docs/quality-audit-evidence.json",
+      "sha256": "1ca03c5e3ecd5acd8b16a09d7daff4d846d6d4df8fcae8f0c952673820f313fe",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "images": [
+    {
+      "status": "success",
+      "task_id": "387774db-e62b-417a-b57d-c5efddb62f0f",
+      "source_path": "survivor-attack-detail-a.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/survivor-attack-detail-a",
+      "file": "assets/resources/actors/sketch08/survivor-attack-detail-a.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/survivor-attack-detail-a/survivor-attack-detail-a.png",
+      "readBackVerified": true,
+      "bytes": 930900,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "cbf3c9a5-d93d-4424-808b-6108eba6dc72",
+      "source_path": "survivor-attack-detail-b.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/survivor-attack-detail-b",
+      "file": "assets/resources/actors/sketch08/survivor-attack-detail-b.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/survivor-attack-detail-b/survivor-attack-detail-b.png",
+      "readBackVerified": true,
+      "bytes": 895394,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "a2f62b0d-018e-40e4-a088-7473133569d1",
+      "source_path": "fixed-empty-state.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-empty-state",
+      "file": "output/playwright/quality-fixes-last/fixed-empty-state.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-empty-state/fixed-empty-state.png",
+      "readBackVerified": true,
+      "bytes": 149086,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "74a60b8f-92a5-4ef1-a1bb-dca3a07b0194",
+      "source_path": "fixed-camp-deck.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-camp-deck",
+      "file": "output/playwright/quality-fixes-last/fixed-camp-deck.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-camp-deck/fixed-camp-deck.png",
+      "readBackVerified": true,
+      "bytes": 437839,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "b9f1d824-275d-4094-88e9-a4ef05f94cd8",
+      "source_path": "fixed-legacy-notice.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-legacy-notice",
+      "file": "output/playwright/quality-fixes-last/fixed-legacy-notice.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-legacy-notice/fixed-legacy-notice.png",
+      "readBackVerified": true,
+      "bytes": 378644,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "bfc362a5-3f18-4814-a770-86b357b0c6a8",
+      "source_path": "fixed-legacy-1024.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-legacy-1024",
+      "file": "output/playwright/quality-fixes-last/fixed-legacy-1024.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-legacy-1024/fixed-legacy-1024.png",
+      "readBackVerified": true,
+      "bytes": 245062,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "8a9c30c5-d2c7-4c10-b759-4ea5f8c06bb3",
+      "source_path": "fixed-shelter-arrival.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-shelter-arrival",
+      "file": "output/playwright/quality-fixes-last/fixed-shelter-arrival.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-shelter-arrival/fixed-shelter-arrival.png",
+      "readBackVerified": true,
+      "bytes": 1499061,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "a7a418c9-c94c-4540-bb28-3f684a985147",
+      "source_path": "fixed-attack-detail.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-attack-detail",
+      "file": "output/playwright/quality-fixes-last/fixed-attack-detail.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/fixed-attack-detail/fixed-attack-detail.png",
+      "readBackVerified": true,
+      "bytes": 1309227,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "b2de3811-a22c-43de-b0d8-fdf70939ff25",
+      "source_path": "half-paused.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/half-paused",
+      "file": "output/playwright/quality-fixes-motion-solo/half-paused.png",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-fixes/half-paused/half-paused.png",
+      "readBackVerified": true,
+      "bytes": 181839,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "video": {
+    "status": "success",
+    "task_id": "b3cb2242-5a20-4ce1-8a1c-51e92848ff7b",
+    "source_path": "native-solo.webm",
+    "root_uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/native-solo",
+    "uri": "viking://user/default/resources/projects/the-end/designs/character-style-exploration/survivor-attack-detail/native-solo/native-solo.webm",
+    "file": "output/playwright/quality-fixes-motion-solo/native-solo.webm",
+    "bytes": 677848,
+    "sha256": "03abc759da3e14be2b559fa2da9a83d6ad6614d7cd341b1239c380772cb79903",
+    "readBackVerified": true,
+    "semanticIndexing": "background-not-verified"
+  },
+  "originalVideoSha256Verified": true,
+  "semanticIndexing": "Document/media storage and readback confirmed. Background semantic-indexing completion has not been checked.",
+  "self": "viking://~/resources/projects/the-end/docs/quality-fixes-sync.json"
+}

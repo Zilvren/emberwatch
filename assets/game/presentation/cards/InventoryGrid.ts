@@ -26,6 +26,7 @@ export class InventoryGrid extends Component {
     @property(Label) readerTitle: Label | null = null;
     @property(Label) readerBody: Label | null = null;
     @property(Label) hint: Label | null = null;
+    @property(Label) emptyLabel: Label | null = null;
     @property(ButtonAction) toggle: ButtonAction | null = null;
     @property(ButtonAction) discard: ButtonAction | null = null;
     @property(ButtonAction) modeButton: ButtonAction | null = null;
@@ -70,7 +71,7 @@ export class InventoryGrid extends Component {
             590,
             Math.ceil(cards.length / 5) * 328 + 22
         );
-        const key = ui.bagFilter + ':' + ui.bagSort;
+        const key = ui.bagFilter + ':' + ui.bagSort + ':' + ui.deckEdit;
         if (key !== this.filterKey) {
             this.scroll?.scrollToTop(0);
             this.filterKey = key;
@@ -81,6 +82,15 @@ export class InventoryGrid extends Component {
             this.hint.string = ui.deckEdit
                 ? '营地编组：点击卡牌加入或移出出战牌组 · 不释放负重'
                 : '滚动浏览 · 点击卡牌查看大图与操作';
+        if (this.emptyLabel) {
+            this.emptyLabel.node.active = cards.length === 0 && !ui.bagReader;
+            this.emptyLabel.string =
+                ui.bagFilter === 'overflow'
+                    ? '暂存区是空的\n切换「全部卡牌」查看行囊'
+                    : ui.bagFilter === 'deck'
+                      ? '当前没有出战牌\n切换「全部卡牌」查看可编组的牌'
+                      : '行囊里暂时没有卡牌';
+        }
         this.modeButton?.setText(ui.deckEdit ? '结束编组' : '整理出战牌');
         this.modeButton?.setEnabled(game.phase === 'rest');
         this.sortButton?.setText(

@@ -1,0 +1,303 @@
+{
+  "version": 1,
+  "date": "2026-11-16",
+  "status": "native-connected",
+  "logicalSize": [
+    640,
+    256
+  ],
+  "referenceHeight": 232,
+  "sourcePixelsChanged": false,
+  "uniformActionScale": 0.47058823529411764,
+  "duration": 0.56,
+  "impactTime": 0.28,
+  "keyframes": 8,
+  "uniqueDrawings": 7,
+  "neutralEndpointReusesStart": true,
+  "registration": "one action scale; first neutral feet center matches idle, left-foot anchor and ground baseline remain fixed",
+  "sheets": [
+    {
+      "image": "survivor-attack-detail-a.png",
+      "width": 1448,
+      "height": 1086,
+      "alphaZeroRatio": 0.74292,
+      "rowCuts": [
+        0,
+        570,
+        1086
+      ],
+      "columnCuts": [
+        738,
+        732
+      ],
+      "atlas": "survivor-attack-detail-a.plist"
+    },
+    {
+      "image": "survivor-attack-detail-b.png",
+      "width": 1448,
+      "height": 1086,
+      "alphaZeroRatio": 0.76183,
+      "rowCuts": [
+        0,
+        501,
+        1086
+      ],
+      "columnCuts": [
+        786,
+        756
+      ],
+      "atlas": "survivor-attack-detail-b.plist"
+    }
+  ],
+  "frames": [
+    {
+      "index": 0,
+      "image": "survivor-attack-detail-a.png",
+      "rect": [
+        208,
+        37,
+        357,
+        499
+      ],
+      "bodyHeight": 493,
+      "feet": {
+        "left": 249,
+        "right": 481,
+        "center": 365,
+        "y": 532
+      },
+      "contentHash": "36db981fb05fe1b0b8435967033ad865f69a85a35a832063c0a211a3e52e9abd",
+      "name": "survivor-attack-detail-00",
+      "sourceSize": [
+        1360,
+        544
+      ],
+      "scale": 0.47058823529411764,
+      "offset": [
+        21.5,
+        7.5
+      ],
+      "time": 0,
+      "duration": 0.08,
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@d7fd6"
+    },
+    {
+      "index": 1,
+      "image": "survivor-attack-detail-a.png",
+      "rect": [
+        912,
+        59,
+        382,
+        476
+      ],
+      "bodyHeight": 470,
+      "feet": {
+        "left": 922,
+        "right": 1204,
+        "center": 1063,
+        "y": 531
+      },
+      "contentHash": "7ab8e88d732e46e895d4ed537947344f3db7d1203596486f972bd13bdbee3a5c",
+      "name": "survivor-attack-detail-01",
+      "sourceSize": [
+        1360,
+        544
+      ],
+      "scale": 0.47058823529411764,
+      "offset": [
+        65,
+        -4
+      ],
+      "time": 0.08,
+      "duration": 0.07,
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@c9de6"
+    },
+    {
+      "index": 2,
+      "image": "survivor-attack-detail-a.png",
+      "rect": [
+        172,
+        605,
+        426,
+        425
+      ],
+      "bodyHeight": 419,
+      "feet": {
+        "left": 184,
+        "right": 541,
+        "center": 362.5,
+        "y": 1026
+      },
+      "contentHash": "7ac1ea5ee1a990a1faa0932863d1af51b1572b5de30425c0937828d0cb17b665",
+      "name": "survivor-attack-detail-02",
+      "sourceSize": [
+        1360,
+        544
+      ],
+      "scale": 0.47058823529411764,
+      "offset": [
+        85,
+        -29.5
+      ],
+      "time": 0.15,
+      "duration": 0.07,
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@74c3e"
+    },
+    {
+      "index": 3,
+      "image": "survivor-attack-detail-a.png",
+      "rect": [
+        867,
+        644,
+        439,
+        385
+      ],
+      "bodyHeight": 379,
+      "feet": {
+        "left": 870,
+        "right": 1261,
+        "center": 1065.5,
+        "y": 1025
+      },
+      "contentHash": "08164d2cc2aefdb011dec557497a03fafabb9ca58be8dca1758623c0617eb51d",
+      "name": "survivor-attack-detail-03",
+      "sourceSize": [
+        1360,
+        544
+      ],
+      "scale": 0.47058823529411764,
+      "offset": [
+        100.5,
+        -49.5
+      ],
+      "time": 0.22,
+      "duration": 0.06,
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@e8d5c"
+    },
+    {
+      "index": 4,
+      "image": "survivor-attack-detail-b.png",
+      "rect": [
+        70,
+        63,
+        672,
+        393
+      ],
+      "bodyHeight": 387,
+      "feet": {
+        "left": 73,
+        "right": 482,
+        "center": 277.5,
+        "y": 452
+      },
+      "contentHash": "03d3fb225fdeb9ecb6dfe7448ff0c1d6a874b481693e8733779040d47e11948a",
+      "name": "survivor-attack-detail-04",
+      "sourceSize": [
+        1360,
+        544
+      ],
+      "scale": 0.47058823529411764,
+      "offset": [
+        217,
+        -45.5
+      ],
+      "time": 0.28,
+      "duration": 0.05,
+      "uuid": "84e298cc-025d-4292-8361-99b13a695d46@d2569"
+    },
+    {
+      "index": 5,
+      "image": "survivor-attack-detail-b.png",
+      "rect": [
+        830,
+        60,
+        529,
+        396
+      ],
+      "bodyHeight": 390,
+      "feet": {
+        "left": 833,
+        "right": 1202,
+        "center": 1017.5,
+        "y": 452
+      },
+      "contentHash": "f574055ed0c3d0d8a85e2818fda6fe4ecd7edc4b404656b051e16a6917064b61",
+      "name": "survivor-attack-detail-05",
+      "sourceSize": [
+        1360,
+        544
+      ],
+      "scale": 0.47058823529411764,
+      "offset": [
+        145.5,
+        -44
+      ],
+      "time": 0.33,
+      "duration": 0.06,
+      "uuid": "84e298cc-025d-4292-8361-99b13a695d46@3bd0b"
+    },
+    {
+      "index": 6,
+      "image": "survivor-attack-detail-b.png",
+      "rect": [
+        188,
+        569,
+        421,
+        447
+      ],
+      "bodyHeight": 441,
+      "feet": {
+        "left": 191,
+        "right": 515,
+        "center": 353,
+        "y": 1012
+      },
+      "contentHash": "bb59d5aa1f50ac659cafc061303fb2e749c18df9d2c52db9b57c8c9b6cbd28db",
+      "name": "survivor-attack-detail-06",
+      "sourceSize": [
+        1360,
+        544
+      ],
+      "scale": 0.47058823529411764,
+      "offset": [
+        91.5,
+        -18.5
+      ],
+      "time": 0.39,
+      "duration": 0.08,
+      "uuid": "84e298cc-025d-4292-8361-99b13a695d46@0c088"
+    },
+    {
+      "index": 7,
+      "image": "survivor-attack-detail-a.png",
+      "rect": [
+        208,
+        37,
+        357,
+        499
+      ],
+      "bodyHeight": 493,
+      "feet": {
+        "left": 249,
+        "right": 481,
+        "center": 365,
+        "y": 532
+      },
+      "contentHash": "36db981fb05fe1b0b8435967033ad865f69a85a35a832063c0a211a3e52e9abd",
+      "reusesDrawing": 0,
+      "name": "survivor-attack-detail-07",
+      "sourceSize": [
+        1360,
+        544
+      ],
+      "scale": 0.47058823529411764,
+      "offset": [
+        21.5,
+        7.5
+      ],
+      "time": 0.47,
+      "duration": 0.09,
+      "uuid": "d77e0708-3f92-43ea-aa75-a5bcfcd2d7d2@de860"
+    }
+  ]
+}

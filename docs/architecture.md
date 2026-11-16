@@ -89,3 +89,11 @@ EntryTiers 是档位内容表，ExplorationRules 扣一次入场费，CombatRule
 CardPresentation.compact 是原生卡面显示变体，由 HandCard.prefab 开启，减少战斗常态元信息；背包/奖励等完整卡面保持默认变体。几何与字体仍由 Prefab 编写，CardInteraction 沿用原手势和应用命令路径。
 
 ShelterSummaryModel 从 GameReadModel 投影带回、护甲、修复资格和每日余额预测，替代 GameRenderer 中大段结算文案；它不支付、不修改状态、不保存。GameRenderer 将投影绑定到具有明确含义的 shelter/returned、armor、repair-hint、daily-summary 等键，原 ButtonAction 和 GameSession 继续负责修复与结算。验证见 hand-shelter-verification.json。
+
+## 2026-11-16 五项质量修复
+
+RulesNoticeModel 把当前规则与 GameSession.newGameRuleset 元数据投影为 HUD、帮助和重开确认文案；不执行迁移。StatusBar 的常驻入口与保存状态分开，RulesNotice 的点击仍经过 ButtonAction/UiActionRouter。UiState 的编组入口重置显示筛选，不改 selected 卡牌。
+
+GameDirector 同步动态偏好，ActorPresentation 只处理自己的 idle 播放/停止。动作执行期间只记住偏好，保留单次命中和完成；偏好事件不在 ui.busy 时完整刷新页面，以免规则阶段已变而表现回调尚未完成时销毁演员。自动 map→shelter 的通知同样由协调器更新，不进入规则层。
+
+主角攻击继续使用原生 AnimationClip，新的两个透明图集由元数据注册到固定逻辑画布。prepare/connect 作者入口与普通构建分开，保留既有资源身份和动画事件；旧生成工具有保护。验证记录为 quality-fixes-verification.json。

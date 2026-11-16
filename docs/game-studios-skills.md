@@ -64,4 +64,4 @@ npm run skills:playtest
 
 2026-11-15 后续实作：已用六技能完成 v2 背景、原生接触阴影和材质统一，当前验证见 docs/coherence-verification.json。`skills:playtest` 新增材质接入场景，现有 9 组流程加 1 组材质检查；支持 PLAYWRIGHT_SESSION 与 PLAYWRIGHT_EVIDENCE_DIR，后者限定在 output/playwright 下，以保留不同工作的证据。上文 9 组与运行资源不变描述安装阶段的历史首次应用。
 
-最新实作包括整卡网格、奖励比较确认、营地编组、滚动地图、体力，以及手牌/结算精修。测试器现在包含 13 类场景，PLAYWRIGHT_TASKS 可选择受影响项；旧流程明确选择 tutorial-v1，stamina-system 和 hand-shelter 使用新开局规则。体力阶段 104 项测试见 docs/stamina-verification.json；当前 107 项及五类受影响场景见 docs/hand-shelter-verification.json。不将历史安装阶段“资源哈希不变”的描述延伸到后续实现。
+最新实作包括整卡网格、奖励比较确认、营地编组、滚动地图、体力，以及手牌/结算和五项质量修复。测试器现在包含 14 类场景，PLAYWRIGHT_TASKS 可选择受影响项；旧流程明确选择 tutorial-v1，stamina-system、hand-shelter、quality-fixes 使用新开局规则。体力阶段 104 项测试见 docs/stamina-verification.json，手牌阶段 107 项见 docs/hand-shelter-verification.json；当前 113 项、14 类原生检查及正常/半速动作复核见 docs/quality-fixes-verification.json。不将历史安装阶段“资源哈希不变”的描述延伸到后续实现。

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>survivor-attack-detail-00</key>
+      <dict>
+        <key>frame</key>
+        <string>{{208,37},{357,499}}</string>
+        <key>offset</key>
+        <string>{21.5000,7.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{1360,544}</string>
+      </dict>
+      <key>survivor-attack-detail-01</key>
+      <dict>
+        <key>frame</key>
+        <string>{{912,59},{382,476}}</string>
+        <key>offset</key>
+        <string>{65.0000,-4.0000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{1360,544}</string>
+      </dict>
+      <key>survivor-attack-detail-02</key>
+      <dict>
+        <key>frame</key>
+        <string>{{172,605},{426,425}}</string>
+        <key>offset</key>
+        <string>{85.0000,-29.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{1360,544}</string>
+      </dict>
+      <key>survivor-attack-detail-03</key>
+      <dict>
+        <key>frame</key>
+        <string>{{867,644},{439,385}}</string>
+        <key>offset</key>
+        <string>{100.5000,-49.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{1360,544}</string>
+      </dict>
+      <key>survivor-attack-detail-07</key>
+      <dict>
+        <key>frame</key>
+        <string>{{208,37},{357,499}}</string>
+        <key>offset</key>
+        <string>{21.5000,7.5000}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{1360,544}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>survivor-attack-detail-a.png</string>
+      <key>realTextureFileName</key>
+      <string>survivor-attack-detail-a.png</string>
+      <key>size</key>
+      <string>{1448,1086}</string>
+    </dict>
+  </dict>
+</plist>

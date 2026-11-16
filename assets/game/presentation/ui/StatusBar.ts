@@ -26,6 +26,7 @@ export class StatusBar extends Component {
     @property(Label) carryHint: Label | null = null;
     @property(Node) bag: Node | null = null;
     @property(UIProgress) armorMeter: UIProgress | null = null;
+    @property(ButtonAction) rulesNotice: ButtonAction | null = null;
     private input: StatusBarInput = { ...defaultStatus };
     private viewModel = statusBarView(this.input);
     private geometry = statusBarLayout(1440);
@@ -56,6 +57,11 @@ export class StatusBar extends Component {
         this.text(this.armor, model.armor, model.armorTone);
         this.text(this.carryHint, model.carryHint, model.carryTone, true);
         this.bag?.getComponent(ButtonAction)?.setText(model.bag);
+        if (this.rulesNotice) {
+            this.rulesNotice.node.active = !!model.rulesNotice;
+            this.rulesNotice.setText(model.rulesNotice);
+            this.rulesNotice.setEnabled(model.actionsEnabled);
+        }
         for (const node of [this.bag, ...this.utilities]) {
             const action = node?.getComponent(ButtonAction);
             if (!action) continue;

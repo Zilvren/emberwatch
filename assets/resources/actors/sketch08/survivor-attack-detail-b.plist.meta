@@ -1,0 +1,155 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "84e298cc-025d-4292-8361-99b13a695d46",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "d2569": {
+      "importer": "sprite-frame",
+      "uuid": "84e298cc-025d-4292-8361-99b13a695d46@d2569",
+      "displayName": "",
+      "id": "d2569",
+      "name": "survivor-attack-detail-04",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 217,
+        "offsetY": -45.5,
+        "trimX": 70,
+        "trimY": 63,
+        "width": 672,
+        "height": 393,
+        "rawWidth": 1360,
+        "rawHeight": 544,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "722f20e2-4ff1-41bc-89e0-3bbbc0fe1cd3@6c48a",
+        "atlasUuid": "84e298cc-025d-4292-8361-99b13a695d46",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3bd0b": {
+      "importer": "sprite-frame",
+      "uuid": "84e298cc-025d-4292-8361-99b13a695d46@3bd0b",
+      "displayName": "",
+      "id": "3bd0b",
+      "name": "survivor-attack-detail-05",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 145.5,
+        "offsetY": -44,
+        "trimX": 830,
+        "trimY": 60,
+        "width": 529,
+        "height": 396,
+        "rawWidth": 1360,
+        "rawHeight": 544,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "722f20e2-4ff1-41bc-89e0-3bbbc0fe1cd3@6c48a",
+        "atlasUuid": "84e298cc-025d-4292-8361-99b13a695d46",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "0c088": {
+      "importer": "sprite-frame",
+      "uuid": "84e298cc-025d-4292-8361-99b13a695d46@0c088",
+      "displayName": "",
+      "id": "0c088",
+      "name": "survivor-attack-detail-06",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 91.5,
+        "offsetY": -18.5,
+        "trimX": 188,
+        "trimY": 569,
+        "width": 421,
+        "height": 447,
+        "rawWidth": 1360,
+        "rawHeight": 544,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "722f20e2-4ff1-41bc-89e0-3bbbc0fe1cd3@6c48a",
+        "atlasUuid": "84e298cc-025d-4292-8361-99b13a695d46",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "survivor-attack-detail-b.png",
+    "format": 2,
+    "uuid": "84e298cc-025d-4292-8361-99b13a695d46",
+    "textureUuid": "722f20e2-4ff1-41bc-89e0-3bbbc0fe1cd3@6c48a"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "timezone": "Asia/Shanghai",
+  "status": "stored-and-read-back-verified",
+  "reviewOutcome": "needs-changes",
+  "scope": "Read-only skill-based UX, art coherence and evidence audit",
+  "implementationChanged": false,
+  "documents": [
+    {
+      "file": "docs/designs/ui/ux-review.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+      "sha256": "b084cbe6c420b55196b33d5e7668fd8195c25a5794816604de82fb4518abd4f9",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/designs/art-bible.md",
+      "uri": "viking://~/resources/projects/the-end/designs/art-bible.md",
+      "sha256": "683cba193dfc746489720f893458fa32b24e4aef3fd28e1aa3f50396cc5b9671",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "file": "docs/quality-audit-evidence.json",
+      "uri": "viking://~/resources/projects/the-end/docs/quality-audit-evidence.json",
+      "sha256": "d31039135f85e1828ef14a8eb583145828182ab9b5656526518d93a80928c4ed",
+      "readBackVerified": true,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "images": [
+    {
+      "status": "success",
+      "task_id": "abe0a721-5e25-42a6-8642-7baac302000c",
+      "source_path": "camp-deck-filter.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/camp-deck-filter",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/camp-deck-filter/camp-deck-filter.png",
+      "readBackVerified": true,
+      "bytes": 424496,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "e0b4ce26-e1fa-4dd5-b266-b4d97e39307b",
+      "source_path": "camp-deck-all.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/camp-deck-all",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/camp-deck-all/camp-deck-all.png",
+      "readBackVerified": true,
+      "bytes": 437326,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "9aa064dc-96c9-4c19-85bb-f9fce6d9e780",
+      "source_path": "legacy-after-toast.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/legacy-after-toast",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/legacy-after-toast/legacy-after-toast.png",
+      "readBackVerified": true,
+      "bytes": 376517,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "865936a3-111b-484d-acd6-0cf396b5b192",
+      "source_path": "battle-neutral.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/battle-neutral",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/battle-neutral/battle-neutral.png",
+      "readBackVerified": true,
+      "bytes": 1281715,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "63de3ce3-a1f6-45b5-b287-ae04fcea9006",
+      "source_path": "attack-0.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/attack-0",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/attack-0/attack-0.png",
+      "readBackVerified": true,
+      "bytes": 1259504,
+      "semanticIndexing": "background-not-verified"
+    },
+    {
+      "status": "success",
+      "task_id": "ca68cdfb-63bb-4668-acb1-665c4097e830",
+      "source_path": "shelter-arrival.png",
+      "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/shelter-arrival",
+      "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/shelter-arrival/shelter-arrival.png",
+      "readBackVerified": true,
+      "bytes": 1495982,
+      "semanticIndexing": "background-not-verified"
+    }
+  ],
+  "video": {
+    "status": "success",
+    "task_id": "a34b90b2-63f0-4507-b4ed-e74d27024d3b",
+    "source_path": "gameplay.webm",
+    "root_uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/gameplay",
+    "uri": "viking://user/default/resources/projects/the-end/designs/ui/quality-audit/gameplay/gameplay.webm",
+    "bytes": 17242812,
+    "sha256": "7f293d93c68b05515adca251a5edfe32fd8c4bfb2a24fc3ee1df0df45811f4f5",
+    "readBackVerified": true,
+    "semanticIndexing": "background-not-verified"
+  },
+  "originalVideoSha256Verified": true,
+  "videoFullNormalAndHalfSpeedVisualReview": false,
+  "semanticIndexing": "Original content storage and readback confirmed; background semantic indexing completion has not been checked.",
+  "self": "viking://~/resources/projects/the-end/docs/quality-audit-sync.json"
+}

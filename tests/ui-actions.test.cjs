@@ -206,3 +206,31 @@ test('map browsing is read-only and cannot replace another open modal', () => {
     assert.deepEqual(c.game.exportState(), before);
     assert.equal(c.commands.length, 0);
 });
+
+test('camp deck entry does not inherit the reward overflow filter or change selected cards', () => {
+    const c = setup();
+    c.game.phase = 'rewards';
+    c.click('reward-bag');
+    c.click('bag-filter-overflow');
+    c.click('modal-close');
+    c.game.phase = 'rest';
+    const before = c.game.exportState();
+    c.click('rest-bag');
+    assert.equal(c.ui.deckEdit, true);
+    assert.equal(c.ui.bagFilter, 'all');
+    assert.deepEqual(c.game.exportState(), before);
+    assert.equal(c.commands.length, 0);
+});
+test('switching from bag browsing to deck editing resets its filter without executing commands', () => {
+    const c = setup();
+    c.game.phase = 'rest';
+    c.click('bag');
+    c.click('bag-filter-overflow');
+    c.click('bag-mode');
+    assert.equal(c.ui.deckEdit, true);
+    assert.equal(c.ui.bagFilter, 'all');
+    c.click('modal-close');
+    c.click('rules-help');
+    assert.equal(c.ui.overlay, 'help');
+    assert.equal(c.commands.length, 0);
+});
