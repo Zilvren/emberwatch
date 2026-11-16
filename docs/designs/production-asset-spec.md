@@ -64,3 +64,19 @@ RoutePoint 图标为原生 Graphics 路径，细线与少量灰橄榄/淡棕/土
 原 640×256 逻辑画布映射到统一 1360×544 源画布，动作全段比例 0.47058823529411764；中立主体 493 像素映射为 232 逻辑单位。所有脚底为 -112，左脚锚点保持，演员的原生场景缩放不变。8 个时序帧中，07 是 00 中立姿势的图集别名，7 张不同绘制图；端点复用用于稳定回待机，不宣称增加绘制数量。
 
 先执行 `python tools/prepare-attack-detail.py`，经 Pink 原生导入两份 plist 后执行 `node tools/connect-attack-detail.cjs`，读取实际分配的 SpriteFrame UUID 并更新现有攻击片段。普通构建不调用作者工具。旧全量作者工具已加活动资源保护，避免无意把清晰稿换回旧帧。片段、演员与既有元数据标识保留，测试与原生正常/半速检查见 docs/quality-fixes-verification.json。
+
+## 2026-11-16 原生纸娃娃资源合同
+
+PlayerActor.prefab 已接入 PaperDoll/Bones 与 PaperDoll/Slots，20 个骨骼/定位节点、18 个独立 Sprite 插槽，五组新的原生变换动画位于 assets/animations/paperdoll08/。现有根节点和场景缩放继续使用，地面锚点不变；腿部使用固定脚目标和二维 IK。
+
+两张新透明部件图、真实帧矩形、来源与哈希位于 assets/resources/actors/paperdoll08/ 与 character-style-exploration/paperdoll08.prompt.json。新分层图是参考 08 绘制的部件，不声称像素级复用原人物；保留原 master 的字节。图集按实际导入的 SpriteFrame UUID 连接。关节的源延伸区域由原生帧矩形选择并用层级遮挡处理，不重采样 PNG。
+
+idle 使用原生曲线插值并固定头脚；attack 保留 .56 秒和 .28 秒单次事件，半速只改变表现速度。普通构建不触发作者工具。旧序列帧评审场景继续作为历史对照，不能作为新骨架已被评审的证据。详见 paperdoll08.md 与 docs/module-refactor-verification.json；技术接入通过、最终视觉认可开放。
+
+## 2026-11-16：当前 Cocos 原生 08 动作资源
+
+当前三个主游戏演员使用 assets/resources/actors/native08/{survivor,wanderer,brute}-geometry.json 与 -skin.json，纹理仍为原 master08-thin.png。原生片段位于 assets/animations/native08/，每角色五个动作，共十五个。现有演员根 UUID、原画和场景缩放保持，旧资源留作历史参考。
+
+Animation 驱动 NativeBones 的角度、位置和 approach 属性；NativeActorSkin 仅做原画部件到节点的绑定与 SDK 渲染桥接。躯干衣物保持一体，沿关节边界细分原几何并设置重叠，按骨骼和完整顶点属性共用顶点。当前顶点为 874/1119/1385，设定 4000 的固定 SDK 预算并在导出/测试时检查，避免启动时缓冲区超限。
+
+主角、游荡者和重型怪攻击分别为 .72/.80/.94 秒，单次事件分别在 .34/.38/.46 秒。Cocos 三次曲线控制预备、前移、接触、收回；不把姿势键或播放采样数当成绘制帧数。具体维护命令、接入范围和证据见 character-style-exploration/cocos-native08-motion.md。普通构建不运行作者工具，完整行走与换装不在本轮范围内。

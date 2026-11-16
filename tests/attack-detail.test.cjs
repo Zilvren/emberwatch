@@ -4,7 +4,7 @@ const { test } = require('node:test'),
     path = require('node:path');
 const root = path.resolve(__dirname, '..'),
     read = (f) => JSON.parse(fs.readFileSync(path.join(root, f), 'utf8'));
-test('active detailed attack keeps one scale, registered feet, stable endpoint and original impact timing', () => {
+test('retained sprite-review attack keeps one scale, registered feet, stable endpoint and original impact timing', () => {
     const data = read('assets/resources/actors/sketch08/survivor-attack-detail.json');
     assert.equal(data.status, 'native-connected');
     assert.equal(data.frames.length, 8);

@@ -22,5 +22,5 @@ await leaveRewards();await page.waitForFunction(()=>globalThis.__emberUI.snapsho
 s=await state();assert(s.settlement.dailySpent===0,'Daily supplies deducted before final settlement');
 const repair=s.hits.find(h=>h.id==='shelter-repair');if(repair?.enabled){await click('shelter-repair');if((await state()).overlay==='repair-risk')await click('modal-confirm');}
 s=await state();const beforeDay=s.supplies;await click('shelter-done');s=await state();assert(s.phase==='day2'&&s.day===2,'Day two was not reached');assert(s.supplies===Math.max(0,beforeDay-1),'Daily settlement order incorrect');
-await screenshot('v2-day2');assert(!s.heroArmed&&s.heroMotion==='idle'&&s.heroPose==='master08-thin','Actor equipment state did not clear after returning home');assert(runtimeErrors.length===0,'Browser runtime errors: '+runtimeErrors.join('\n'));
+await screenshot('v2-day2');assert(!s.heroArmed&&s.heroMotion==='idle'&&s.heroPose==='master08-native:idle'&&s.heroRenderer==='cocos-native-cutout','Actor equipment state did not clear after returning home');assert(runtimeErrors.length===0,'Browser runtime errors: '+runtimeErrors.join('\n'));
 return {passed:true,route:'A',first,second,dragCancelled:true,impactBusy:impactState.busy,final:{phase:s.phase,supplies:s.supplies,armor:s.armor,settlement:s.settlement},actions:trace.length,trace,runtimeErrors};

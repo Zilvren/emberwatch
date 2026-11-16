@@ -1,0 +1,774 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "recordedAt": "2026-11-16T10:08:22.452Z",
+  "timezone": "Asia/Shanghai",
+  "task": "Four architecture coupling fixes and first native paper-doll survivor integration",
+  "engineeringOutcome": "SUPPORTED",
+  "productionVisualOutcome": "FAILED",
+  "engine": {
+    "name": "Pink/Cocos",
+    "version": "4.0.0-beta.1",
+    "sdkCliAvailable": true,
+    "typeScriptCompiler": "C:\\Users\\Knock\\AppData\\Roaming\\cocos-default\\cocos-4.0.0-beta.1\\node_modules\\typescript\\bin\\tsc"
+  },
+  "platform": "web-desktop",
+  "mainSceneUuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e",
+  "scope": {
+    "newGameplay": false,
+    "saveFormatChanged": false,
+    "newCharacterParts": true,
+    "actorMigration": "survivor only; NPC sprite adapters retained",
+    "renderer": "native Node bones + cc.Animation + layered Sprite slots; rigid cutout, not Spine weighted skinning"
+  },
+  "architecture": {
+    "files": 81,
+    "runtimeEdges": 141,
+    "failures": [],
+    "screenKeys": "one shared GamePhase list plus native GameView identity",
+    "serializationOrder": "actual screenRoots and popupRoots arrays reversed",
+    "contentIds": "node, route and enemy IDs resolved through validated scenario registry",
+    "statePermissions": "per-system Pick contexts checked by TypeScript contract",
+    "persistence": "GameSession depends on RunPersistence application port",
+    "presentationDelegation": [
+      "NativeViewWriter",
+      "PopupPresenter",
+      "RewardScreenPresenter"
+    ],
+    "boundary": "static transpiled relative runtime dependencies, not arbitrary dynamic loading"
+  },
+  "checks": {
+    "tests": {
+      "count": 123,
+      "failed": 0,
+      "log": "temp/module-refactor-tests-final.log"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "passed": true
+    },
+    "build": {
+      "command": "npm run build:web through tools/build-quality-fixes.ps1",
+      "passed": true,
+      "exitCode": 0,
+      "log": "temp/module-paperdoll-delivery.log",
+      "sha256": "f7473edf2c987bd5d516c97b4452580006eaf07a9003e1aca46a4f630e746cfd"
+    },
+    "browser": {
+      "count": 14,
+      "passed": true,
+      "report": "output/playwright/module-refactor-final/browser-report.json",
+      "checks": {
+        "browser-review-round3": {
+          "passed": true,
+          "round": 3,
+          "closeIcon": "×",
+          "closeWithoutMutation": true,
+          "inventoryDetails": [
+            {
+              "kind": "attack",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "基础攻击",
+              "cost": "0",
+              "costUnit": "物资",
+              "costVisible": true,
+              "keywords": [
+                "基础牌"
+              ],
+              "effect": "造成 2 点伤害",
+              "weight": "负重 0",
+              "illustration": "ui-card-attack",
+              "fullDescription": "造成 2 点伤害\n\n固有能力，永不丢失\n\n基础牌：永久属于主角，不会因失败被删除。",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 22,
+              "effectFontSize": 18,
+              "compact": false
+            },
+            {
+              "kind": "attack",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "基础攻击",
+              "cost": "0",
+              "costUnit": "物资",
+              "costVisible": true,
+              "keywords": [
+                "基础牌"
+              ],
+              "effect": "造成 2 点伤害",
+              "weight": "负重 0",
+              "illustration": "ui-card-attack",
+              "fullDescription": "造成 2 点伤害\n\n固有能力，永不丢失\n\n基础牌：永久属于主角，不会因失败被删除。",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 22,
+              "effectFontSize": 18,
+              "compact": false
+            },
+            {
+              "kind": "dodge",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "基础躲避",
+              "cost": "0",
+              "costUnit": "物资",
+              "costVisible": true,
+              "keywords": [
+                "基础牌"
+              ],
+              "effect": "获得 2 点格挡",
+              "weight": "负重 0",
+              "illustration": "ui-card-dodge",
+              "fullDescription": "获得 2 点格挡\n\n格挡在回合结束时清零\n\n基础牌：永久属于主角，不会因失败被删除。",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 22,
+              "effectFontSize": 18,
+              "compact": false
+            },
+            {
+              "kind": "dodge",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "基础躲避",
+              "cost": "0",
+              "costUnit": "物资",
+              "costVisible": true,
+              "keywords": [
+                "基础牌"
+              ],
+              "effect": "获得 2 点格挡",
+              "weight": "负重 0",
+              "illustration": "ui-card-dodge",
+              "fullDescription": "获得 2 点格挡\n\n格挡在回合结束时清零\n\n基础牌：永久属于主角，不会因失败被删除。",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 22,
+              "effectFontSize": 18,
+              "compact": false
+            },
+            {
+              "kind": "knife",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "菜刀",
+              "cost": "2",
+              "costUnit": "物资",
+              "costVisible": true,
+              "keywords": [
+                "武器"
+              ],
+              "effect": "生成「挥砍」",
+              "weight": "负重 3",
+              "illustration": "ui-card-knife",
+              "fullDescription": "下回合起每回合生成「挥砍」\n\n占用唯一武器槽\n\n武器：打出后进入武器槽，并按武器规则生成攻击牌。",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 22,
+              "effectFontSize": 18,
+              "compact": false
+            },
+            {
+              "kind": "evade",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "强化躲避",
+              "cost": "1",
+              "costUnit": "物资",
+              "costVisible": true,
+              "keywords": [],
+              "effect": "获得 5 点格挡",
+              "weight": "负重 2",
+              "illustration": "ui-card-evade",
+              "fullDescription": "获得 5 点格挡\n\n格挡可抵消再次受击",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 22,
+              "effectFontSize": 18,
+              "compact": false
+            },
+            {
+              "kind": "repair",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "修复",
+              "cost": "2",
+              "costUnit": "物资",
+              "costVisible": true,
+              "keywords": [],
+              "effect": "恢复 3 点护甲",
+              "weight": "负重 2",
+              "illustration": "ui-card-repair",
+              "fullDescription": "恢复 3 点护甲\n\n护甲为 0 时无法使用",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 22,
+              "effectFontSize": 18,
+              "compact": false
+            },
+            {
+              "kind": "cash",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "旧世界现金",
+              "cost": "0",
+              "costUnit": "物资",
+              "costVisible": false,
+              "keywords": [],
+              "effect": "只能在休整时丢弃",
+              "weight": "负重 10",
+              "illustration": "ui-card-cash",
+              "fullDescription": "只能在休整时丢弃\n\n沉重的旧世界遗物",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 0,
+              "effectFontSize": 18,
+              "compact": false
+            },
+            {
+              "kind": "heavy",
+              "hovered": false,
+              "selected": false,
+              "blocked": "",
+              "expanded": false,
+              "title": "重击",
+              "cost": "1",
+              "costUnit": "物资",
+              "costVisible": true,
+              "keywords": [],
+              "effect": "造成 5 点伤害",
+              "weight": "负重 4",
+              "illustration": "ui-card-heavy",
+              "fullDescription": "造成 5 点伤害\n\n使用后进入弃牌堆",
+              "detailsHeight": 221.20588235294116,
+              "detailY": 110.60294117647058,
+              "visualY": 0,
+              "visualScale": 1,
+              "readableFont": 0,
+              "titleFontSize": 21,
+              "costFontSize": 22,
+              "effectFontSize": 18,
+              "compact": false
+            }
+          ],
+          "smallWindow": {
+            "width": 1024,
+            "height": 768,
+            "realClick": true,
+            "escape": true
+          },
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-first-battle": {
+          "phase": "battle",
+          "runtimeErrors": [],
+          "consoleErrors": [],
+          "passed": true
+        },
+        "browser-route-a": {
+          "passed": true,
+          "route": "A",
+          "first": {
+            "weaponDemonstrated": false,
+            "dragged": true,
+            "actions": 5
+          },
+          "second": {
+            "weaponDemonstrated": true,
+            "dragged": true,
+            "actions": 8
+          },
+          "dragCancelled": true,
+          "impactBusy": true,
+          "final": {
+            "phase": "day2",
+            "supplies": 9,
+            "armor": 10,
+            "settlement": {
+              "returnedSupplies": 10,
+              "returnedCards": 10,
+              "lostOverflow": [],
+              "wasCritical": false,
+              "repairCost": 0,
+              "repaired": false,
+              "repairSpent": 0,
+              "dailySpent": 1,
+              "dailyShortfall": 0
+            }
+          },
+          "actions": 43,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-route-b": {
+          "passed": true,
+          "route": "B",
+          "failureRetry": true,
+          "zeroArmorSurvived": true,
+          "repairWarningAndCancel": true,
+          "shortfallConfirmed": true,
+          "first": {
+            "weaponDemonstrated": false,
+            "dragged": true,
+            "actions": 2
+          },
+          "second": {
+            "weaponDemonstrated": false,
+            "dragged": true,
+            "actions": 3
+          },
+          "final": {
+            "phase": "day2",
+            "supplies": 0,
+            "armor": 10,
+            "settlement": {
+              "returnedSupplies": 1,
+              "returnedCards": 10,
+              "lostOverflow": [],
+              "wasCritical": false,
+              "repairCost": 1,
+              "repaired": true,
+              "repairSpent": 1,
+              "dailySpent": 0,
+              "dailyShortfall": 1
+            }
+          },
+          "actions": 66,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-session-save": {
+          "passed": true,
+          "pendingRewardResume": true,
+          "noDuplicateClaim": true,
+          "battleResume": true,
+          "nextTurnAndRngResume": true,
+          "restartConfirmation": true,
+          "automaticSave": true,
+          "nativeActorSource": "paperdoll08:idle",
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-accessibility": {
+          "passed": true,
+          "viewport": "1024x768",
+          "reducedMotion": true,
+          "unarmedPose": true,
+          "realDrag": true,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-input-check": {
+          "passed": true,
+          "rapidAttackSingleApply": true,
+          "rapidDefenseSingleApply": true,
+          "dragSurvivesToastExpiry": true,
+          "normalRandomMode": true,
+          "handoff": "journal",
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-coherence-check": {
+          "passed": true,
+          "previewDoesNotWriteSave": true,
+          "reducedMotion": true,
+          "resumesMotion": true,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-page-overlays": {
+          "passed": true,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-material-coherence": {
+          "passed": true,
+          "allThreeNativeBackgrounds": true,
+          "neutralBackdropTint": true,
+          "readOnlyRouteOpacity": true,
+          "source08Preserved": true,
+          "contactShadowTracksFeet": true,
+          "inactiveEnemyShadowHidden": true,
+          "sharedDeckPaper": true,
+          "realDragAttack": true,
+          "smallViewport": true,
+          "actions": 49,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-deck-map": {
+          "passed": true,
+          "grid": true,
+          "reader": true,
+          "escapeStack": true,
+          "readonlyMap": true,
+          "rewardComparisonDoesNotMutate": true,
+          "confirmedReward": true,
+          "overflowFilter": true,
+          "routeEntry": true,
+          "actions": 17,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-stamina-system": {
+          "passed": true,
+          "productionStamina": true,
+          "entrySelectionAndCancel": true,
+          "entryPaidOnce": true,
+          "noSupplyCarryWeight": true,
+          "cardUnit": "体力",
+          "paidCardDoesNotSpendSupplies": true,
+          "turnRefresh": true,
+          "saveResume": true,
+          "cancelledDragFree": true,
+          "newBattleRefresh": true,
+          "dailyLast": true,
+          "fullRouteA": true,
+          "smallViewport": true,
+          "actions": 53,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-hand-shelter": {
+          "passed": true,
+          "compactHand": true,
+          "fontSizes": [
+            {
+              "kind": "dodge",
+              "title": 16.355555555555558,
+              "cost": 18.48888888888889,
+              "effect": 14.933333333333334
+            },
+            {
+              "kind": "evade",
+              "title": 16.355555555555558,
+              "cost": 18.48888888888889,
+              "effect": 14.933333333333334
+            },
+            {
+              "kind": "dodge",
+              "title": 16.355555555555558,
+              "cost": 18.48888888888889,
+              "effect": 14.933333333333334
+            },
+            {
+              "kind": "knife",
+              "title": 16.355555555555558,
+              "cost": 18.48888888888889,
+              "effect": 14.933333333333334
+            },
+            {
+              "kind": "heavy",
+              "title": 16.355555555555558,
+              "cost": 18.48888888888889,
+              "effect": 14.933333333333334
+            },
+            {
+              "kind": "repair",
+              "title": 16.355555555555558,
+              "cost": 18.48888888888889,
+              "effect": 14.933333333333334
+            }
+          ],
+          "fullReadingWithoutMutation": true,
+          "cancelledDrag": true,
+          "realDrag": true,
+          "damagedShelter": true,
+          "fullArmorBarHidden": true,
+          "dailyLast": true,
+          "actions": 33,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        },
+        "browser-quality-fixes": {
+          "passed": true,
+          "campFilterReset": true,
+          "emptyExplanation": true,
+          "persistentLegacyNotice": true,
+          "legacyReadCancelPreservesSave": true,
+          "confirmedNewGameUpgrades": true,
+          "idleStopsAndResumes": true,
+          "inFlightPreferenceKeepsCompletion": true,
+          "nativePaperDollAttack": {
+            "renderer": "native-paper-doll",
+            "pose": "paperdoll08:attack",
+            "rig": {
+              "renderer": "native-paper-doll",
+              "boneCount": 20,
+              "slotCount": 18,
+              "feetPlanted": true,
+              "feet": [
+                {
+                  "foot": "RearFoot",
+                  "error": 0
+                },
+                {
+                  "foot": "FrontFoot",
+                  "error": 0
+                }
+              ]
+            }
+          },
+          "oneImpactAndCost": true,
+          "arrivalContextCorrect": true,
+          "dailyLast": true,
+          "smallViewport": true,
+          "actions": 47,
+          "runtimeErrors": [],
+          "consoleErrors": []
+        }
+      }
+    },
+    "paperDoll": {
+      "passed": true,
+      "renderer": "native Node bones + cc.Animation + layered Sprite slots",
+      "nativeBones": 20,
+      "nativeSlots": 18,
+      "idleObservedFrames": 99,
+      "idleHeadAndFeetLocked": true,
+      "partFramesNeverSwapped": true,
+      "normal": {
+        "observedFrames": 18,
+        "impactClipTime": 0.2943999999761582,
+        "oneHitAndCost": true,
+        "minHipY": 168.28799992847445,
+        "maxArm": 107.84645649178762
+      },
+      "half": {
+        "observedFrames": 35,
+        "observedDuration": 1107,
+        "oneHit": true
+      },
+      "hurtReturns": true,
+      "pauseResume": true,
+      "reducedIdleResets": true,
+      "attachmentIndependent": true,
+      "deathHolds": true,
+      "presentationDiagnosticsPreserveState": true,
+      "runtimeErrors": []
+    }
+  },
+  "preservation": {
+    "baselineFiles": 470,
+    "afterFiles": 512,
+    "missing": [],
+    "changedExisting": [
+      "assets/TheEnd.scene",
+      "assets/game/application/GameSession.ts",
+      "assets/game/core/RulesTypes.ts",
+      "assets/game/core/SurvivalGame.ts",
+      "assets/game/core/content/GameScenario.ts",
+      "assets/game/core/state/GameState.ts",
+      "assets/game/core/systems/CombatRules.ts",
+      "assets/game/core/systems/ExplorationRules.ts",
+      "assets/game/core/systems/InventoryRules.ts",
+      "assets/game/core/systems/RewardRules.ts",
+      "assets/game/core/systems/RuleContext.ts",
+      "assets/game/core/systems/SettlementRules.ts",
+      "assets/game/infrastructure/SaveRepository.ts",
+      "assets/game/presentation/GameDirector.ts",
+      "assets/game/presentation/GameRenderer.ts",
+      "assets/game/presentation/actors/ActorPresentation.ts",
+      "assets/game/presentation/map/MapPointPresentation.ts",
+      "assets/game/presentation/map/RouteMapModel.ts",
+      "assets/game/presentation/map/RoutePoint.ts",
+      "assets/game/presentation/ui/UiActionRouter.ts",
+      "assets/prefabs/actors/BruteActor.prefab",
+      "assets/prefabs/actors/PlayerActor.prefab",
+      "assets/prefabs/actors/WandererActor.prefab",
+      "assets/prefabs/screens/BattleScreen.prefab",
+      "assets/prefabs/screens/DayTwoScreen.prefab",
+      "assets/prefabs/screens/FailureScreen.prefab",
+      "assets/prefabs/screens/JournalScreen.prefab",
+      "assets/prefabs/screens/MapScreen.prefab",
+      "assets/prefabs/screens/RestScreen.prefab",
+      "assets/prefabs/screens/RewardScreen.prefab",
+      "assets/prefabs/screens/ShelterScreen.prefab",
+      "assets/prefabs/ui/ConfirmPopup.prefab",
+      "assets/prefabs/ui/HelpPopup.prefab",
+      "assets/prefabs/ui/InventoryPopup.prefab",
+      "assets/prefabs/ui/LogPopup.prefab"
+    ],
+    "changedExistingMetadata": [],
+    "changedExistingAnimation": [],
+    "cardCatalogUnchanged": true,
+    "approved08Unchanged": true,
+    "nativeRootComparison": [
+      {
+        "file": "assets/TheEnd.scene",
+        "reference": "git HEAD (separate from before-task hash baseline)",
+        "rootNameBefore": "GameRoot",
+        "rootNameAfter": "GameRoot",
+        "rootFileIdBefore": null,
+        "rootFileIdAfter": null,
+        "uuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e"
+      },
+      {
+        "file": "assets/prefabs/actors/PlayerActor.prefab",
+        "reference": "git HEAD (separate from before-task hash baseline)",
+        "rootNameBefore": "PlayerActor",
+        "rootNameAfter": "PlayerActor",
+        "rootFileIdBefore": "05/7f1RaVHJa1vrt6lR/PA",
+        "rootFileIdAfter": "05/7f1RaVHJa1vrt6lR/PA",
+        "uuid": "d1b86fa6-c05f-47c7-8f33-326f170de1a9"
+      },
+      {
+        "file": "assets/prefabs/actors/WandererActor.prefab",
+        "reference": "git HEAD (separate from before-task hash baseline)",
+        "rootNameBefore": "WandererActor",
+        "rootNameAfter": "WandererActor",
+        "rootFileIdBefore": "27h6XTI2VDN5X6xwc9t1F3",
+        "rootFileIdAfter": "27h6XTI2VDN5X6xwc9t1F3",
+        "uuid": "4dc185a8-f58f-4472-858b-c78ee0906490"
+      },
+      {
+        "file": "assets/prefabs/actors/BruteActor.prefab",
+        "reference": "git HEAD (separate from before-task hash baseline)",
+        "rootNameBefore": "BruteActor",
+        "rootNameAfter": "BruteActor",
+        "rootFileIdBefore": "76qqQVwmtLsJ7nPGsR6qn6",
+        "rootFileIdAfter": "76qqQVwmtLsJ7nPGsR6qn6",
+        "uuid": "ad93f99b-4f22-46fc-8c12-81b2550de5f9"
+      }
+    ],
+    "nativeCounts": {
+      ".scene": 6,
+      ".prefab": 37,
+      ".anim": 41,
+      ".meta": 284
+    },
+    "warnings": []
+  },
+  "evidence": {
+    "recording": "output/playwright/paperdoll-playback.webm",
+    "recordingSha256": "86bfb05c1f4574d45eaffda4489ebed4cd0a52f0ceb53b27e1e42b452942a977",
+    "motionReport": "output/playwright/paperdoll-motion-report.json",
+    "motionRecordingBuild": "temp/module-paperdoll-polished.log",
+    "motionAttribution": "Final formatting and scenario/map validation changes followed this recording; final native regression reverified current actor behavior. Rig, native clips and part pixels remained the same.",
+    "viewedScreenshots": [
+      "output/playwright/paperdoll-initial.png",
+      "output/playwright/paperdoll-anticipation-paused.png",
+      "output/playwright/paperdoll-contact-paused.png",
+      "output/playwright/paperdoll-death-hold.png",
+      "output/playwright/module-refactor-final/fixed-attack-detail.png",
+      "output/playwright/module-refactor-final/fixed-camp-deck.png"
+    ],
+    "mediaReadback": [
+      {
+        "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/paperdoll08/survivor-body/survivor-body.png",
+        "local": "assets/resources/actors/paperdoll08/survivor-body.png",
+        "bytes": 1117194,
+        "sha256": "89de8d979fb3573cd17f3cebd50040f2447c846dfa141e5e9a7e179a905be411",
+        "roundtripVerified": true
+      },
+      {
+        "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/paperdoll08/survivor-limbs/survivor-limbs.png",
+        "local": "assets/resources/actors/paperdoll08/survivor-limbs.png",
+        "bytes": 1117524,
+        "sha256": "6002d8a858cb5c87fdc85d90b44d387d9c979516498bda3a8aa0684a7aed8010",
+        "roundtripVerified": true
+      },
+      {
+        "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/paperdoll08/paperdoll-playback/paperdoll-playback.webm",
+        "local": "output/playwright/paperdoll-playback.webm",
+        "bytes": 10910188,
+        "sha256": "86bfb05c1f4574d45eaffda4489ebed4cd0a52f0ceb53b27e1e42b452942a977",
+        "roundtripVerified": true
+      }
+    ]
+  },
+  "matrix": [
+    {
+      "claim": "Architecture, state permissions, scenario extension and legacy behavior",
+      "outcome": "SUPPORTED",
+      "evidence": "123 automated tests, static dependency gate and type contracts"
+    },
+    {
+      "claim": "Native integration and actual UI behavior",
+      "outcome": "SUPPORTED",
+      "evidence": "SDK build and 14 real Canvas input scenarios against final delivery build"
+    },
+    {
+      "claim": "Bounded actor behavior: fixed idle head/feet, one hit, normal/half playback, pause/hurt/death/reduced motion",
+      "outcome": "SUPPORTED",
+      "evidence": "native playback telemetry, real game actions, explicitly separated presentation diagnostics and inspected native screenshots"
+    },
+    {
+      "claim": "Final art identity and animation feel approved by user",
+      "outcome": "FAILED",
+      "evidence": "User rejected the recording; see docs/paperdoll-visual-review.json. Technical execution checks do not establish motion quality."
+    },
+    {
+      "claim": "All monsters migrated to skeletons or complete wardrobe UI shipped",
+      "outcome": "NOT APPLICABLE",
+      "evidence": "Only first survivor rig and attachment API implemented; NPC adapters retained"
+    },
+    {
+      "claim": "Performance budget or other platform certification",
+      "outcome": "NOT APPLICABLE",
+      "evidence": "No performance or additional-platform claim made"
+    }
+  ],
+  "limitations": [
+    "Formal multi-day, warehouse, crafting and failure-cost designs remain outside this architecture change.",
+    "New gameplay mechanisms or persisted fields still require coordinated rule/schema/UI work.",
+    "Headless playback sample counts do not establish frame-time or animation-feel quality.",
+    "Authored documentation and imported media were read back; asynchronous search indexing is separate."
+  ],
+  "visualReassessment": {
+    "record": "docs/paperdoll-visual-review.json",
+    "status": "FAILED",
+    "reason": "User rejected the observed animation; timestamped recording review confirms disconnected reach/contact and rigid pose execution."
+  }
+}

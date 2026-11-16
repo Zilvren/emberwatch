@@ -1,10 +1,10 @@
 import { CardSet } from '../content/ContentRegistry';
 import { GameScenario } from '../content/GameScenario';
 import { ActionResult } from '../RulesTypes';
-import { RuleFeedback, RuleState } from './RuleContext';
+import { RuleFeedback, SettlementState } from './RuleContext';
 export class SettlementRules {
     constructor(
-        private readonly state: RuleState,
+        private readonly state: SettlementState,
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
         private readonly scenario: GameScenario

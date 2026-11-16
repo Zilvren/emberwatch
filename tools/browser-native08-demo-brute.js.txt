@@ -1,0 +1,3 @@
+const consoleErrors=[];page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text());});
+await idle();assert((await state()).battle?.enemy==='enemy2','Demo must start in the boss encounter');await page.waitForTimeout(1000);await click('end-turn');await page.waitForTimeout(200);await click('end-turn');await fight({preferWeapon:true});await page.waitForTimeout(700);
+assert((await state()).phase==='rewards','Boss battle did not finish');assert(!runtimeErrors.length&&!consoleErrors.length,'Native browser errors');return{passed:true,method:'real card clicks and end-turn; normal speed; no direct animation method calls',actions:trace.length,runtimeErrors,consoleErrors};

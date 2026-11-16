@@ -1,10 +1,11 @@
 import type { GameReadModel } from '../../core/GameReadModel';
-import type { NodeKind } from '../../core/content/GameScenario';
+import type { NodeKind, MapIcon } from '../../core/content/GameScenario';
 
 export type RoutePointState = 'available' | 'visited' | 'locked' | 'excluded';
 export interface RoutePointModel {
     id: string;
     kind: string;
+    icon: MapIcon | 'home';
     title: string;
     layer: number;
     x: number;
@@ -24,15 +25,6 @@ export interface RouteMapModel {
     height: number;
     focusY: number;
 }
-const titles: Record<string, string> = {
-    fixed: '废弃补给站',
-    enemy1: '游荡感染者',
-    scavenge: '旧街搜刮',
-    rest: '临时营地',
-    enemy2: '重度感染者',
-    home: '避难所',
-};
-
 /** Adapt authored scenario routes; drawing components do not know the tutorial topology. */
 export function routeMapModel(game: GameReadModel): RouteMapModel {
     const routes = (
@@ -41,7 +33,7 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
     const shortest = Math.min(...routes.map(([, steps]) => steps.length));
     let common = 0;
     while (
-        common < shortest &&
+        common < shortest - 1 &&
         routes.every(
             ([, steps]) =>
                 steps[steps.length - 1 - common] === routes[0][1][routes[0][1].length - 1 - common]
@@ -85,7 +77,8 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
         const point = {
             id,
             kind,
-            title: titles[kind] ?? kind,
+            title: kind === 'home' ? '避难所' : (game.scenario.nodes[kind]?.title ?? kind),
+            icon: kind === 'home' ? ('home' as const) : game.scenario.nodes[kind].icon,
             layer,
             x,
             y: -(height - 100 - layer * 230),
@@ -107,7 +100,7 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
             excluded: a.state === 'excluded' || b.state === 'excluded',
             visited: a.state === 'visited' && b.state === 'visited',
         });
-    const start = add('fixed', 'fixed', 0, 0);
+    const start = add(game.scenario.fixedNodeId, game.scenario.fixedNodeId, 0, 0);
     const tails: RoutePointModel[] = [];
     prefixes.forEach(({ route, steps }, index) => {
         let previous = start;

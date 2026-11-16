@@ -1,0 +1,5 @@
+const consoleErrors=[];page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text());});
+await idle();await page.waitForTimeout(1200);let s=await state();assert(s.battle?.enemy==='enemy1','Demo must start in the first encounter');
+const heavy=s.hand.find(c=>c.kind==='heavy'&&!c.blocked);assert(heavy,'Missing demo attack');await play(heavy,true);await page.waitForTimeout(250);await click('end-turn');
+s=await state();const basic=s.hand.find(c=>c.kind==='attack'&&!c.blocked);assert(basic,'Missing finishing attack');await play(basic);assert((await state()).phase==='rewards','First battle did not finish');await page.waitForTimeout(700);
+assert(!runtimeErrors.length&&!consoleErrors.length,'Native browser errors');return{passed:true,method:'real mouse drag, card clicks and end-turn; normal speed; no direct animation method calls',actions:trace.length,runtimeErrors,consoleErrors};

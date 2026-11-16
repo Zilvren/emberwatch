@@ -1,0 +1,2 @@
+await idle();await claimSupplies();await claimAvailableCard();await leaveRewards();await click('enter-scavenge');await claimSupplies();await claimAvailableCard();await leaveRewards();await click('enter-rest');await click('rest-cash');await click('modal-confirm');await click('rest-done');await click('enter-enemy2');
+assert((await state()).battle?.enemy==='enemy2','Boss entry failed');return{passed:true,actions:trace.length,runtimeErrors};

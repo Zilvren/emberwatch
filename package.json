@@ -29,7 +29,8 @@
         "skills:install": "node tools/game-studios/install.cjs",
         "skills:check": "node tools/game-studios/install.cjs --check",
         "typecheck": "node tools/game-studios/typecheck.cjs",
-        "skills:playtest": "node tools/game-studios/playtest.cjs"
+        "skills:playtest": "node tools/game-studios/playtest.cjs",
+        "check:architecture": "node tools/check-architecture.cjs"
     },
     "pink": {
         "uuid": "80d9c7ff-7595-4f1a-9094-c2a99f82e953",

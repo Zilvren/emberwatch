@@ -77,10 +77,13 @@
     "_components": [
       {
         "__id__": 232
+      },
+      {
+        "__id__": 234
       }
     ],
     "_prefab": {
-      "__id__": 234
+      "__id__": 236
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -5341,6 +5344,25 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "49QFThkEdDOLtcUHOE85uk"
+  },
+  {
+    "__type__": "2e9c2asKOhOJYTuMw1uMxMI",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 235
+    },
+    "key": "shelter",
+    "_id": "9c1b6+agD2G2aHoEAZUVINo"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "116bbvfObjxUIGMoa4nXYDc"
   },
   {
     "__type__": "cc.PrefabInfo",

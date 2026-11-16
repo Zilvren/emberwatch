@@ -92,8 +92,8 @@ export class RoutePoint extends Component {
             g.stroke();
         };
         const paper = active ? '#cfbf98' : '#c2c0aa';
-        if (d.kind === 'enemy1' || d.kind === 'enemy2') {
-            if (d.kind === 'enemy2') {
+        if (d.icon === 'battle' || d.icon === 'elite') {
+            if (d.icon === 'elite') {
                 shape([-24, 24, 14, 29, 26, 18, 27, -18, 0, -28, -27, -18], paper);
                 shape([14, 29, 24, 35, 34, 22, 26, 18], '#aa947e');
                 g.fillColor = new Color().fromHEX(ink);
@@ -120,7 +120,7 @@ export class RoutePoint extends Component {
                 line([-11, -14, 12, -14]);
                 for (const x of [-5, 2, 8]) line([x, -15, x, -24]);
             }
-        } else if (d.kind === 'rest') {
+        } else if (d.icon === 'rest') {
             shape([-25, -24, -22, -16, 24, -25, 22, -31], '#aa947e');
             shape([-25, -28, -23, -21, 22, -14, 25, -20], '#aa947e');
             shape(
@@ -128,7 +128,7 @@ export class RoutePoint extends Component {
                 active ? '#c2a16b' : '#bca982'
             );
             shape([-5, -9, -8, 3, 3, 16, 9, 2, 4, -10], '#e2dac7');
-        } else if (d.kind === 'home') {
+        } else if (d.icon === 'home') {
             shape([-22, 1, -22, -26, 23, -26, 23, 1], paper);
             shape([-31, 0, -1, 30, 31, 1, 27, -4, -1, 21, -27, -5], '#8c927a');
             shape([-8, -26, -8, -7, 8, -7, 8, -26], '#aa947e');
@@ -139,7 +139,7 @@ export class RoutePoint extends Component {
             shape([-25, -21, 25, -21, 25, 19, -25, 19], paper);
             line([-22, -17, 21, 15]);
             line([-21, 15, 21, -17]);
-            if (d.kind === 'fixed') {
+            if (d.icon === 'supply') {
                 g.fillColor = new Color().fromHEX('#e2dac7');
                 g.circle(0, 0, 9);
                 g.fill();

@@ -1,6 +1,7 @@
 import { CARD, CardDefinition } from '../content/CardCatalog';
-import { getScenario, NodeKind, Route } from '../content/GameScenario';
+import { getScenario, hasId, NodeKind, Route } from '../content/GameScenario';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
+import { isPhase } from './GamePhase';
 import type { Battle, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
 export interface GameState {
     scenarioId: string;
@@ -28,8 +29,6 @@ export interface GameState {
     run: number;
     returnElapsed: number;
 }
-const phases = ['journal', 'map', 'battle', 'rewards', 'rest', 'shelter', 'day2', 'failure'];
-const nodes = ['fixed', 'scavenge', 'enemy1', 'rest', 'enemy2'];
 function requireValue(value: unknown, valid: boolean, name: string): void {
     if (!valid) throw new Error(`存档字段无效：${name}。原存档已保留。`);
 }
@@ -79,8 +78,8 @@ export function validateGameState(
     integer(s.armor, 0, 10, 'armor');
     flag(s.critical, 'critical');
     flag(s.fixedDone, 'fixedDone');
-    requireValue(s.phase, phases.indexOf(s.phase) >= 0, 'phase');
-    requireValue(s.route, s.route === null || s.route === 'A' || s.route === 'B', 'route');
+    requireValue(s.phase, isPhase(s.phase), 'phase');
+    requireValue(s.route, s.route === null || hasId(scenario.routes, s.route), 'route');
     integer(s.pathIndex, 0, s.route ? scenario.routes[s.route].length : 0, 'pathIndex');
     requireValue(
         s.returnElapsed,
@@ -94,7 +93,7 @@ export function validateGameState(
     list(s.logs, 36, 'logs');
     s.logs.forEach((v) => text(v, 'log'));
     list(s.visited, 100, 'visited');
-    s.visited.forEach((v) => requireValue(v, nodes.indexOf(v) >= 0, 'visited node'));
+    s.visited.forEach((v) => requireValue(v, hasId(scenario.nodes, v), 'visited node'));
     list(s.cards, 100, 'cards');
     const owned = new Set<string>(),
         combat = new Set<string>();
@@ -137,7 +136,7 @@ export function validateGameState(
     if (s.battle) {
         const b = s.battle;
         object(b, 'battle');
-        requireValue(b.enemy, b.enemy === 'enemy1' || b.enemy === 'enemy2', 'enemy');
+        requireValue(b.enemy, hasId(scenario.enemies, b.enemy), 'enemy');
         integer(b.hp, 1, 100000, 'hp');
         integer(b.maxHp, b.hp, 100000, 'maxHp');
         integer(b.attack, 0, 100000, 'attack');
@@ -176,7 +175,7 @@ export function validateGameState(
     if (s.rewards) {
         const r = s.rewards;
         object(r, 'rewards');
-        requireValue(r.source, nodes.indexOf(r.source) >= 0, 'reward source');
+        requireValue(r.source, hasId(scenario.nodes, r.source), 'reward source');
         integer(r.supplies, 0, 100000, 'reward supplies');
         flag(r.supplyTaken, 'supplyTaken');
         flag(r.cardTaken, 'cardTaken');

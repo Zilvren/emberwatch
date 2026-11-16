@@ -1,0 +1,51 @@
+await page.setViewportSize({width:1440,height:900});
+await page.emulateMedia({reducedMotion:'no-preference'});
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&review=paperdoll-native');await idle();
+const sampleRig=async duration=>page.evaluate(async duration=>{
+ const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector'),hero=d.hero,rig=hero.paperDoll,frames=[],start=performance.now();
+ while(performance.now()-start<duration){
+  const animation=hero.getComponent('cc.Animation'),clip=hero.motion==='idle'?hero.idle:hero[hero.motion],bone=name=>rig.bones.find(n=>n.name===name),g=globalThis.__survivalGame;
+  frames.push({time:performance.now()-start,motion:hero.motion,active:hero.node.activeInHierarchy,clipTime:animation.getState(clip.name)?.time,hipY:bone('Hips').position.y,arm:bone('FrontUpperArm').angle,cape:bone('Cloak').scale.x,head:{x:bone('Head').worldPosition.x,y:bone('Head').worldPosition.y},feet:rig.inspect().feet,hp:g.battle?.hp??0,stamina:g.battle?.stamina,parts:rig.slots.map(n=>n.getComponent('cc.Sprite').spriteFrame.uuid)});
+  await new Promise(r=>requestAnimationFrame(r));
+ }
+ return frames;
+},duration);
+const idleFrames=await sampleRig(3150),first=idleFrames[0];
+assert(idleFrames.length>60,'Too few observed native frames');
+assert(idleFrames.every(f=>Math.hypot(f.head.x-first.head.x,f.head.y-first.head.y)<.001&&f.feet.every(x=>x.error<.01)),'Idle drifted head/feet');
+assert(idleFrames.every(f=>JSON.stringify(f.parts)===JSON.stringify(first.parts)),'Idle swapped character drawings');
+assert(Math.max(...idleFrames.map(f=>f.cape))-Math.min(...idleFrames.map(f=>f.cape))>.004,'Native cape breathing is not interpolating');
+await page.screenshot({path:'output/playwright/paperdoll-idle.png'});
+let s=await state(),card=s.hand.find(c=>c.kind==='heavy'&&!c.blocked);assert(card,'Missing heavy attack fixture');
+await click('card-'+card.id);let target=await hitPoint('enemy-target');
+const normalPromise=sampleRig(1100);await page.mouse.click(target.x,target.y);const normal=await normalPromise;await idle();
+const attack=normal.filter(f=>f.motion==='attack');assert(attack.length>10&&Math.min(...attack.map(f=>f.hipY))<171&&Math.max(...attack.map(f=>f.arm))>95,'Native bone/position tracks did not play');
+assert(attack.every(f=>f.feet.every(x=>x.error<.01)),'Attack lost its planted feet');
+const hpChanges=normal.filter((f,i)=>i&&f.hp!==normal[i-1].hp);assert(hpChanges.length===1&&hpChanges[0].hp===1,'Normal attack did not apply damage exactly once');
+assert(hpChanges[0].clipTime>=.27&&hpChanges[0].clipTime<.34,'Impact time changed');
+assert((await state()).stamina===s.stamina-1,'Normal attack charged the wrong cost');
+await click('end-turn');s=await state();card=s.hand.find(c=>c.kind==='attack'&&!c.blocked);assert(card,'No half-speed attack fixture');
+await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');d.hero.getComponent('cc.Animation').getState(d.hero.attack.name).speed=.5;});
+await click('card-'+card.id);target=await hitPoint('enemy-target');const halfPromise=sampleRig(1450);await page.mouse.click(target.x,target.y);const half=await halfPromise;await idle();
+const halfAttack=half.filter(f=>f.motion==='attack'&&f.active),halfChanges=half.filter((f,i)=>i&&f.hp!==half[i-1].hp);
+assert(halfAttack.length>30&&halfAttack.at(-1).time-halfAttack[0].time>950,'Half-speed playback was not observed');assert(halfChanges.length===1&&halfChanges[0].hp===0,'Half-speed attack duplicated damage');assert((await state()).phase==='rewards','Half-speed action failed to finish');
+// Separate presentation diagnostics: no game-state writes, rewards/commands or saves are involved below.
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&review=paperdoll-presentation');await idle();
+const before=await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState()));
+await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');d.hero.playAction('hurt');});await page.waitForTimeout(450);assert((await state()).heroMotion==='idle','Hurt did not return to idle');
+await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');d.hero.playAction('attack');});await page.waitForTimeout(160);
+const paused=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');d.hero.getComponent('cc.Animation').pause();return d.hero.paperDoll.bones.map(n=>({name:n.name,x:n.position.x,y:n.position.y,a:n.angle}));});
+await page.screenshot({path:'output/playwright/paperdoll-anticipation-paused.png'});await page.waitForTimeout(200);
+assert(await page.evaluate(p=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return JSON.stringify(d.hero.paperDoll.bones.map(n=>({name:n.name,x:n.position.x,y:n.position.y,a:n.angle})))===JSON.stringify(p);},paused),'Paused native bones moved');
+await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');d.hero.getComponent('cc.Animation').resume();});await page.waitForTimeout(500);
+await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(80);const reduced=await sampleRig(300);assert(reduced.every(f=>f.cape===1&&f.motion==='idle'),'Reduced motion did not reset the idle pose');
+await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForTimeout(70);
+const attachment=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector'),rig=d.hero.paperDoll,slot=rig.slots.find(n=>n.name==='weapon').getComponent('cc.Sprite'),original=slot.spriteFrame,other=rig.slots.find(n=>n.name==='front-boot').getComponent('cc.Sprite').spriteFrame;rig.setAttachment('weapon',other);const changed=slot.spriteFrame===other;rig.setAttachment('weapon',original);return changed&&slot.spriteFrame===original;});assert(attachment,'Attachment slot cannot change independently');
+await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');d.hero.playAction('death');});await page.waitForTimeout(1050);
+const death=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return{motion:d.hero.motion,pose:d.hero.paperDoll.bones.map(n=>({name:n.name,x:n.position.x,y:n.position.y,a:n.angle}))};});
+await page.screenshot({path:'output/playwright/paperdoll-death-hold.png'});await page.waitForTimeout(250);
+assert(death.motion==='death'&&await page.evaluate(p=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return JSON.stringify(d.hero.paperDoll.bones.map(n=>({name:n.name,x:n.position.x,y:n.position.y,a:n.angle})))===JSON.stringify(p);},death.pose),'Death terminal pose drifted');
+assert(before===await page.evaluate(()=>JSON.stringify(globalThis.__survivalGame.exportState())),'Presentation diagnostics changed the run');
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&review=paperdoll-final');await idle();await page.waitForTimeout(200);
+await page.screenshot({path:'output/playwright/paperdoll-final.png'});
+return{passed:true,renderer:'native Node bones + cc.Animation + layered Sprite slots',nativeBones:20,nativeSlots:18,idleObservedFrames:idleFrames.length,idleHeadAndFeetLocked:true,partFramesNeverSwapped:true,normal:{observedFrames:attack.length,impactClipTime:hpChanges[0].clipTime,oneHitAndCost:true,minHipY:Math.min(...attack.map(f=>f.hipY)),maxArm:Math.max(...attack.map(f=>f.arm))},half:{observedFrames:halfAttack.length,observedDuration:halfAttack.at(-1).time-halfAttack[0].time,oneHit:true},hurtReturns:true,pauseResume:true,reducedIdleResets:true,attachmentIndependent:true,deathHolds:true,presentationDiagnosticsPreserveState:true,runtimeErrors};

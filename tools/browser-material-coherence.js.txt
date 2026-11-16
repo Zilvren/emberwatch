@@ -7,6 +7,7 @@ const nativeSurface=async()=>page.evaluate(()=>{
  return {frame:sprite.spriteFrame._uuid,tint:sprite.color.toHEX(),
   shadows:root.getComponentsInChildren('ContactShadow').filter(c=>c.node.activeInHierarchy).map(c=>({target:c.target?.name,visible:c.getComponent('cc.Graphics').enabled,actorActive:c.target?.activeInHierarchy,sameParent:c.target?.parent===c.node.parent,dx:c.node.position.x-c.target.position.x,dy:c.node.position.y-c.target.position.y})),
   rigs:root.getComponentsInChildren('StableActorSprite').filter(c=>c.node.activeInHierarchy).map(c=>c.rigSnapshot()),
+  dolls:root.getComponentsInChildren('NativeActorSkin').filter(c=>c.node.activeInHierarchy).map(c=>c.rigSnapshot()),
   decks:root.getComponentsInChildren('DeckStackGraphic').filter(c=>c.node.activeInHierarchy).map(c=>c.theme?.json.colors.paper),
   points:root.getComponentsInChildren('RoutePoint').filter(c=>c.node.activeInHierarchy).map(c=>({action:c.action.actionId,opacity:c.action.getComponent('cc.UIOpacity')?.opacity}))};
 });
@@ -20,6 +21,7 @@ const checkSurface=async kind=>{
   if(shadow.actorActive)assert(Math.abs(shadow.dx)<.05&&Math.abs(shadow.dy+2)<.05,'Contact shadow drifted from the feet');
  }
  assert(surface.rigs.every(r=>r.source==='42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f'),'08 artwork source changed');
+ assert(surface.dolls.every(r=>r.bones===10&&r.parts>=7&&r.source==='42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f'),'Paper-doll feet drifted from their native ground targets');
  return surface;
 };
 await page.setViewportSize({width:1440,height:900});await page.emulateMedia({reducedMotion:'no-preference'});

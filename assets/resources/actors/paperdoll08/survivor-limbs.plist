@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>rear-upper-arm</key>
+      <dict>
+        <key>frame</key>
+        <string>{{73,110},{195,367}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{195,367}</string>
+      </dict>
+      <key>front-upper-arm</key>
+      <dict>
+        <key>frame</key>
+        <string>{{405,105},{186,378}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{186,378}</string>
+      </dict>
+      <key>rear-forearm</key>
+      <dict>
+        <key>frame</key>
+        <string>{{724,125},{135,295}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{135,295}</string>
+      </dict>
+      <key>front-forearm</key>
+      <dict>
+        <key>frame</key>
+        <string>{{994,120},{125,299}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{125,299}</string>
+      </dict>
+      <key>rear-hand</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1253,137},{172,318}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{172,318}</string>
+      </dict>
+      <key>front-hand</key>
+      <dict>
+        <key>frame</key>
+        <string>{{77,646},{170,306}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{170,306}</string>
+      </dict>
+      <key>rear-thigh</key>
+      <dict>
+        <key>frame</key>
+        <string>{{370,599},{178,362}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{178,362}</string>
+      </dict>
+      <key>front-thigh</key>
+      <dict>
+        <key>frame</key>
+        <string>{{651,598},{197,364}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{197,364}</string>
+      </dict>
+      <key>rear-shin</key>
+      <dict>
+        <key>frame</key>
+        <string>{{981,612},{139,320}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{139,320}</string>
+      </dict>
+      <key>front-shin</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1269,618},{149,319}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{149,319}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>survivor-limbs.png</string>
+      <key>realTextureFileName</key>
+      <string>survivor-limbs.png</string>
+      <key>size</key>
+      <string>{1499,1049}</string>
+    </dict>
+  </dict>
+</plist>

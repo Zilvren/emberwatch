@@ -1,14 +1,11 @@
 import { createCardSet } from '../core/content/ContentRegistry';
 import { getScenario } from '../core/content/GameScenario';
 import { GameState, validateGameState } from '../core/state/GameState';
+import type { RunPersistence, SaveLoad } from '../application/RunPersistence';
+export type { SaveLoad } from '../application/RunPersistence';
 export interface SaveStorage {
     getItem(key: string): string | null;
     setItem(key: string, value: string): void;
-}
-export interface SaveLoad {
-    state: GameState | null;
-    recovered: boolean;
-    warning: string;
 }
 function hash(text: string): string {
     let value = 2166136261;
@@ -25,7 +22,7 @@ class SaveReadError extends Error {
 }
 
 /** Platform adapter. Storage writes are atomic per key; the previous valid save is retained. */
-export class SaveRepository {
+export class SaveRepository implements RunPersistence {
     readonly content = createCardSet();
     private blocked = false;
     status = '自动保存';

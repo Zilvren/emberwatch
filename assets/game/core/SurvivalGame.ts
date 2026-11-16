@@ -78,7 +78,8 @@ export class SurvivalGame {
             this.random,
             newId,
             fail,
-            this.scenario
+            this.scenario,
+            () => this.currentNode
         );
         this.settlementRules = new SettlementRules(
             this,

@@ -130,7 +130,9 @@ export class UiActionRouter {
             }
             return;
         } else if (id.startsWith('route-')) {
-            this.actions.act({ type: 'choose-route', route: id.slice(6) as Route });
+            const route = id.slice(6);
+            if (!Object.prototype.hasOwnProperty.call(g.scenario.routes, route)) return;
+            this.actions.act({ type: 'choose-route', route });
             return;
         } else if (id.startsWith('enter-') || id === 'map-enter') {
             this.actions.act({ type: 'enter-node' });

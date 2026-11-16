@@ -1,3 +1,4 @@
+import { bindScene, type SceneBindings } from './ui/GameView';
 import {
     _decorator,
     Component,
@@ -75,14 +76,15 @@ export class GameDirector extends Component {
     @property(Label) toastLabel: Label | null = null;
     @property({
         type: [Node],
-        tooltip: 'journal, map, battle, rewards, rest, shelter, day2, failure',
+        tooltip: 'GameView 标识的屏幕根节点，顺序任意',
     })
-    screens: Node[] = [];
+    screenRoots: Node[] = [];
+    private scene!: SceneBindings;
     @property({
         type: [Node],
-        tooltip: 'inventory, help, log, confirmation, route map, entry tier',
+        tooltip: 'GameView 标识的弹窗根节点，顺序任意',
     })
-    popups: Node[] = [];
+    popupRoots: Node[] = [];
     @property(Prefab) floatTemplate: Prefab | null = null;
     @property(Prefab) attackTemplate: Prefab | null = null;
     @property(Prefab) blockTemplate: Prefab | null = null;
@@ -104,9 +106,9 @@ export class GameDirector extends Component {
     onLoad(): void {
         this.message('正在读取卡牌配置…');
         void this.initialize().catch((error) => {
-            this.message(`卡牌配置读取失败：${String(error)}`);
+            this.message(`游戏初始化失败：${String(error)}`);
             this.toastTime = 0;
-            console.error('[the end] catalog', error);
+            console.error('[the end] initialization', error);
         });
     }
     private async initialize(): Promise<void> {
@@ -151,12 +153,13 @@ export class GameDirector extends Component {
         this.ui.reduced = this.motionQuery?.matches ?? false;
         this.motionQuery?.addEventListener('change', this.motionChanged);
         view.setDesignResolutionSize(1440, 900, ResolutionPolicy.SHOW_ALL);
-        this.hand = this.screens[2].getComponentInChildren(HandPresentation);
+        this.scene = bindScene(this.hud, this.screenRoots, this.popupRoots, this.game.scenario);
+        this.hand = this.scene.screens.battle.getComponentInChildren(HandPresentation);
         if (this.hand) this.hand.dragLayer = this.dragLayer;
         this.renderer = new GameRenderer(
             this.game,
             this.ui,
-            { hud: this.hud!, screens: this.screens, popups: this.popups },
+            this.scene,
             this.hand,
             () => this.audio.muted,
             () => this.session.saveStatus,
@@ -190,7 +193,7 @@ export class GameDirector extends Component {
         this.audio.dispose();
     }
     update(dt: number): void {
-        if (!this.game) return;
+        if (!this.renderer) return;
         const previousPhase = this.game.phase;
         if (!this.ui.busy) this.session.advanceTime(dt);
         if (previousPhase === 'map' && this.game.phase === 'shelter')
@@ -225,7 +228,7 @@ export class GameDirector extends Component {
     private onCardDrop(event: { id: string; point: Vec2; accept: () => void }): void {
         if (this.ui.busy || this.ui.overlay) return;
         const card = this.game.battle?.hand.find((c) => c.id === event.id),
-            screen = this.screens[2];
+            screen = this.scene.screens.battle;
         if (!card) return;
         const target = this.attackKind(card.kind)
             ? screen.getChildByName('enemy-target')
@@ -253,7 +256,7 @@ export class GameDirector extends Component {
         }
         this.ui.busy = true;
         this.ui.selectedCard = '';
-        this.refreshBattle(this.screens[2]);
+        this.refreshBattle(this.scene.screens.battle);
         const oldHp = b.hp,
             oldArmor = g.armor,
             oldBlock = b.block,
@@ -304,7 +307,7 @@ export class GameDirector extends Component {
                 () => {},
                 this.ui.reduced
             );
-            this.hero.playAction('attack', this.ui.reduced, impact, complete);
+            this.hero.playAction('attack', this.ui.reduced, impact, complete, this.enemy);
         } else if (presentation) presentation.playAction(impact, complete, this.ui.reduced);
         else {
             impact();
@@ -317,7 +320,7 @@ export class GameDirector extends Component {
         if (this.ui.busy || !b) return;
         this.ui.busy = true;
         this.ui.selectedCard = '';
-        this.refreshBattle(this.screens[2]);
+        this.refreshBattle(this.scene.screens.battle);
         const run = g.run,
             attacking = b.intent === 'attack',
             damage = Math.max(0, g.incomingDamage - b.block);
@@ -354,7 +357,8 @@ export class GameDirector extends Component {
                 attacking ? 'attack' : 'prepare',
                 this.ui.reduced,
                 impact,
-                complete
+                complete,
+                this.hero
             );
         else {
             impact();
@@ -455,6 +459,8 @@ export class GameDirector extends Component {
                 blocked: g.cardBlocked(c),
             })),
             heroPose: this.hero?.pose,
+            heroRenderer: this.hero?.rendererKind,
+            heroRig: this.hero?.inspectRig(),
             heroMotion: this.hero?.motion,
             heroArmed: this.hero?.isArmed,
             enemyMotion: this.enemy?.motion,

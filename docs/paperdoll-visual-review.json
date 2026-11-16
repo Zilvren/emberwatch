@@ -1,0 +1,49 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "status": "FAILED",
+  "scope": "Survivor paper-doll visual quality; no monster migration performed",
+  "userEvidence": [
+    "不是哥们",
+    "你自己看看你录像",
+    "你看下现在是不是spine骨骼动画？"
+  ],
+  "implementation": {
+    "spine": false,
+    "nativeDriver": "cc.Animation",
+    "customRig": "assets/game/presentation/actors/PaperDollRig.ts",
+    "rigType": "rigid layered Node/Sprite transforms with two-bone foot IK",
+    "nativePrefab": "assets/prefabs/actors/PlayerActor.prefab",
+    "noSpineComponentOrExportResourcesFound": true
+  },
+  "recording": "output/playwright/paperdoll-playback.webm",
+  "inspectionMethod": "Decoded timestamped frames from the actual saved WebM, not a claim of having watched the entire clip continuously",
+  "inspectedTimes": [
+    4.6,
+    5,
+    6.6,
+    7,
+    7.4,
+    7.8,
+    9,
+    10
+  ],
+  "findings": [
+    {
+      "time": 7.4,
+      "issue": "Weapon remains far from the enemy while damage/contact effects appear on the enemy; physical reach and hit presentation do not connect."
+    },
+    {
+      "time": 10,
+      "issue": "The half-speed strike shows rigid arm extension and a squat; lower body, torso and weapon do not form a convincing attack gesture."
+    }
+  ],
+  "assessment": "Technical timing/one-hit tests remain historical evidence, but they do not support natural motion or production visual quality. Current survivor animation requires rework before copying this solution to the two monsters.",
+  "nextScope": "User clarification of Spine implementation route; preserve approved08 shape, palette and established scale. No conversion to Spine is claimed.",
+  "followUp": {
+    "date": "2026-11-16",
+    "userDecision": "Use Cocos native Animation; preceding Spine choice superseded",
+    "currentCandidate": "docs/native08-verification.json",
+    "oldOutcomeUnchanged": "FAILED"
+  }
+}

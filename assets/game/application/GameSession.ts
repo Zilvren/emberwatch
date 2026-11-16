@@ -2,7 +2,7 @@ import type { GameReadModel } from '../core/GameReadModel';
 import { ActionResult, SurvivalGame } from '../core/SurvivalGame';
 import { Route, GameScenario, STAMINA_SCENARIO } from '../core/content/GameScenario';
 import { EntryTierId } from '../core/content/EntryTiers';
-import { SaveRepository } from '../infrastructure/SaveRepository';
+import type { RunPersistence } from './RunPersistence';
 export type GameCommand =
     | {
           type:
@@ -34,7 +34,7 @@ export class GameSession {
     }
     constructor(
         seed?: number,
-        private readonly saves?: SaveRepository,
+        private readonly saves?: RunPersistence,
         private readonly defaultScenario: GameScenario = STAMINA_SCENARIO
     ) {
         const loaded = saves?.load();

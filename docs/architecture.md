@@ -1,8 +1,8 @@
 # The end 当前架构
 
 - 项目：The end。
-- 日期：2026-11-14，Asia/Shanghai。
-- 状态：本轮分层与组件基础已实现；正式版资源规则及其他 UI 组件继续按件设计。
+- 日期：2026-11-16，Asia/Shanghai。
+- 状态：主分层和原生组件基础已实现；本日核查确认依赖方向基本清楚，同时记录页面顺序、内容类型及共享状态等仍需收紧的耦合。
 - 约束：本轮不增加玩法流程。现有教学关卡作为兼容样例和回归场景保留。
 - 同步地址：`viking://~/resources/projects/the-end/docs/architecture.md`；保存及回读记录见 `docs/openviking-sync-status.json`。
 
@@ -97,3 +97,51 @@ RulesNoticeModel 把当前规则与 GameSession.newGameRuleset 元数据投影�
 GameDirector 同步动态偏好，ActorPresentation 只处理自己的 idle 播放/停止。动作执行期间只记住偏好，保留单次命中和完成；偏好事件不在 ui.busy 时完整刷新页面，以免规则阶段已变而表现回调尚未完成时销毁演员。自动 map→shelter 的通知同样由协调器更新，不进入规则层。
 
 主角攻击继续使用原生 AnimationClip，新的两个透明图集由元数据注册到固定逻辑画布。prepare/connect 作者入口与普通构建分开，保留既有资源身份和动画事件；旧生成工具有保护。验证记录为 quality-fixes-verification.json。
+
+## 2026-11-16 架构耦合核查
+
+用户询问模块是否分清、是否会牵一发动全身。本节是基于当前代码的工程评估，不是一次新的重构或功能修改。静态结果见 `docs/architecture-audit.json`。
+
+已检查 `assets/game/` 的 72 份 TypeScript：core 与 application 均无 cc 导入，检查的依赖方向没有发现 core 反向依赖表现/应用/持久化实现，也没有发现普通 TypeScript 转译后的静态相对 require 依赖环。类型引用被区分处理；原生 Scene/Prefab/UUID、动态加载和构建工具不在此循环检查结论内。
+
+清楚的边界包括：GameSession 集中执行命令与保存，五类规则模块不依赖引擎；GameReadModel 使用明确字段/查询白名单和深只读类型，普通界面不获得规则命令；角色/手势/面板等组件负责表现；CardSet 冻结每局配置，编辑器的后续全局配置变更不会直接替换该局的规则快照。
+
+### 改动的预期影响
+
+| 改动 | 正常涉及范围 | 说明 |
+| --- | --- | --- |
+| 已有卡牌的伤害、费用和文案 | cards.json 及相应校验/回归 | 使用已有机制时，通常不需要改场景协调器、存档实现或每一屏 |
+| 卡面材质、字体和角色攻击绘制 | 表现组件、主题、Prefab/Animation/图集 | 原生元数据和动画命中事件必须验证，业务规则通常保持 |
+| 背包筛选与编组界面状态 | UiActionRouter、InventoryGrid、相关视图模型 | 临时界面状态不进入玩家存档；卡牌 selected 变化仍走命令 |
+| 新增一种已有机制的敌人数值配置 | 内容数据及相关界面验证 | 当前敌人类型仍写死为 enemy1/enemy2，增加第三种类型并不只是填一行数据 |
+| 新资源或保存字段、持续多日生命周期 | 规则、状态、校验、应用、相关界面与测试 | 属于真实的跨系统需求，需要成组改动与兼容策略；不是每个系统都应改 |
+
+### 尚未彻底收紧的耦合
+
+1. 页面与弹窗仍由 GameRenderer 的数组位置对应主场景绑定，GameDirector 也有 screens[2] 等访问；Phase 定义、验证列表与界面列表分散。新增页面或调整顺序容易漏改。优先改成按 Phase/Overlay 名称绑定并在启动时校验缺失/重复。
+2. Route、NodeKind、Battle.enemy、敌人配置和存档校验仍有 A/B、enemy1/enemy2 等固定类型。内容扩展尚未完全数据驱动；在增加第三类敌人或正式地图前，先建立稳定内容 ID 和明确的内容校验/表现映射。
+3. 所有规则服务拿到几乎整局的可变 RuleState，状态所有权主要靠约定。GameDirector 与 GameRenderer 分别集中协调与整屏绑定，职责虽可解释，但继续加内容会反复经过这些文件。按实际系统收窄状态接口，按页面逐步委派显示模型，避免一次重写整个状态体系。
+4. 当前没有专门的跨层导入/依赖环自动门禁。现有行为测试、只读接口和原生回归有保护作用，但不会自动阻止后来某人从规则模块引入 UI。应增加小范围架构约束与必需资源绑定检查。
+
+这些是后续工程优先级建议，用户本次没有要求立即重构。评估结论是：日常小改动已有局部维护条件，大系统改动需要明确边界配合；还不能承诺任意新功能只改一处、或不会出现回归。上次动态偏好修复涉及协调器与演员表现，但没有修改 CombatRules 或 SaveRepository，属于边界内的配合。此前一次体力改造同时涉及费用、负重、存档与界面，跨文件是需求本身的影响范围。
+
+本次没有改运行代码，也没有重复运行构建或 113 项测试；已有技术结果来自 quality-fixes-verification.json，不能当作架构完全解耦的证明。
+
+## 2026-11-16 四项架构耦合修复（当前实现）
+
+状态：已实现；上方“架构耦合核查”保留为改前记录。用户本轮明确授权立即修改。技术验证详见 docs/module-refactor-verification.json；不是对所有未来系统完全解耦的承诺。
+
+1. Phase 只在 core/state/GamePhase.ts 声明。原生 GameView 标记每个屏幕/弹窗的稳定键；GameDirector 使用 bindScene 建立键到 Node 的映射。实际主场景数组已逆序保存，依赖位置的 screens[2]/popups[0] 已移除。缺失、重复、未知键和缺失/重复战斗角色均在初始化时报错。
+2. GameScenario 分开稳定节点 ID、节点行为、敌人 ID 和 actorId。ExplorationRules 按 scavenge/rest/battle 行为分派，CombatRules 按敌人定义读取数值与奖励；奖励来源仍保存节点 ID。路线、敌人、visited 与 reward source 按注册配置校验。注册表拒绝同 ID/版本被不同定义覆盖，保留 A/B、enemy1/2 等旧存档 ID；没有迁移存档格式。单路线也保留地图选择入口；每条路线的节点 ID 唯一，重复遇到同敌人应使用不同地点 ID。
+3. RuleContext 为反馈、探索、战斗、背包、奖励、结算分别声明最小 Pick 状态权限；Combat 只通过只读 currentNode 回调取得奖励来源。GameSession 依赖 RunPersistence 应用接口，SaveRepository 实现该接口。GameRenderer 委派 PopupPresenter、RewardScreenPresenter 和 NativeViewWriter，保持界面绑定与规则命令分离；GameDirector 继续作为组装与异步动作协调入口，不把业务分散到通用消息框架。
+4. npm run check:architecture 与 npm test 检查转译后静态相对运行依赖的方向和环；TypeScript 合同检查规则状态权限及只读 UI；原生资源检查屏幕/弹窗唯一标记、演员 ID、分层插槽与单次动画事件。此门禁不覆盖任意动态 import、运行时脚本注入或所有平台表现。
+
+原生主角通过 ActorPresentation 保持同一命中/完成接口，内部可选择 PaperDollRig 或既有 Sprite 适配器。Scene 与 PlayerActor 根身份、卡牌数据、体力玩法、日耗最后执行及允许风险修复均保持。人物迁移不要求 CombatRules、SaveRepository 知道骨骼或分层素材。
+
+扩展一个已有行为的节点/敌人主要修改 GameScenario 定义及相应的原生 actorId 资源绑定；扩展一种新机制或新保存字段仍需要规则、校验与相关界面配合。新功能的真实依赖不会被隐藏。
+
+## 2026-11-16：Cocos 原生角色演出
+
+ActorPresentation 继续作为游戏协调器使用的角色接口，新增可选目标参数仅服务近战演出；GameDirector 仍在单次命中信号中执行原有 GameSession 命令。approach 属性轨道控制临时前移，按目标可见轮廓匹配接触点，完成/禁用恢复原站位。没有把骨骼、渲染或演员位置写入 GameState/SaveRepository。
+
+NativeActorSkin 复用隔离的 StableActorSprite 网格桥接，把同一张 08 原画的刚性部件绑定到 Cocos 节点；姿势插值由原生 AnimationClip 负责。三个演员通过 Prefab/JSON/anim 数据共用组件，未引入 Spine。角色资源作者工具和普通构建保持分离。源覆盖、比例和 GPU 预算有自动门禁，实际渲染还检查 renderReady 和浏览器错误。细节见 cocos-native08-motion.md 与 native08-verification.json。
