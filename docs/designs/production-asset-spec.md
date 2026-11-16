@@ -80,3 +80,35 @@ idle 使用原生曲线插值并固定头脚；attack 保留 .56 秒和 .28 秒�
 Animation 驱动 NativeBones 的角度、位置和 approach 属性；NativeActorSkin 仅做原画部件到节点的绑定与 SDK 渲染桥接。躯干衣物保持一体，沿关节边界细分原几何并设置重叠，按骨骼和完整顶点属性共用顶点。当前顶点为 874/1119/1385，设定 4000 的固定 SDK 预算并在导出/测试时检查，避免启动时缓冲区超限。
 
 主角、游荡者和重型怪攻击分别为 .72/.80/.94 秒，单次事件分别在 .34/.38/.46 秒。Cocos 三次曲线控制预备、前移、接触、收回；不把姿势键或播放采样数当成绘制帧数。具体维护命令、接入范围和证据见 character-style-exploration/cocos-native08-motion.md。普通构建不运行作者工具，完整行走与换装不在本轮范围内。
+
+## 2026-11-17：人物骨架制作建议（草案）
+
+- 项目：The end；日期：2026-11-17，Asia/Shanghai。
+- 状态：技术与制作建议，待用户选择；尚未确认采购 Spine 或迁移现有演员。此前用户选择的 Cocos 原生 Animation 仍是当前运行方案。
+- 依据：本次只读检查原画、当前 native08 三份 skin、NativeActorSkin.ts、ActorPresentation.ts、本机固定 SDK 的 Spine 模块配置及官方文档；没有重新播放并验收现有动作。
+- 归档：viking://~/resources/projects/the-end/designs/production-asset-spec.md。
+
+### 当前事实与建议方向
+
+当前三个角色各有 10 个骨骼/控制节点。三份 native08 skin 的全部顶点均只有一个骨骼影响；腿、躯干与背包保持一体，属于二维刚性部件方案。NativeActorSkin 的代码能按权重累计变换，但现有资源没有多骨骼混合权重。其完整迈步与衣物弯曲能力受素材拆分及绑定结构限制；继续增加采样或关键帧不能补出被遮挡的图像。
+
+推荐正式制作采用“二维分层骨骼、局部网格蒙皮、少量关键姿势替换”的组合。保持 08 的脸部、服装、配色、装备和游戏显示比例；原 master 保留，另建可编辑分层源稿。肩、肘、胯、膝和衣物背面的遮挡区域需要补画，并以原画核对身份；不能声称机械裁切能恢复未绘制部分。刀、靴子、头和背包等硬部件保持形状，袖口、披风与衣摆仅做局部柔性变形。
+
+如用户接受付费动画工具，长期优先评估 Spine Professional，由其制作并通过 Cocos 的 sp.Skeleton 播放。其网格、权重和 IK 能覆盖建议制作范围；Essential 缺少该范围的关键功能。如果继续采用 Cocos 原生 Animation，可制作完整分层关节与原生曲线，但蒙皮编辑、约束和导出工具的维护成本需要计入开发。
+
+本机 Pink/Cocos 4.0.0-beta.1 的 engine/cc.config.json（安装目录下 cocos-clipackagesengine/cc.config.json）定义 spine-3.8 与 spine-4.2，两套运行库也实际存在。该事实不等于项目已验证 Spine。若迁移，先选定并显式配置一种运行库，用对应编辑器主/次版本导出的样例完成导入和 web-desktop 构建播放检查，再锁定动画制作版本；不能直接按最新编辑器制作全部资源。
+
+### 首套角色的制作与接入
+
+1. 先做主角的前后侧上臂、前臂、手，前后侧大腿、小腿、脚，以及骨盆、胸腔、头、披风、背包、刀的分层源稿和遮挡补画；骨骼数量服从动作需要。
+2. 躯干设置腰胯与胸腔控制；手足按需要使用两骨骼 IK，支撑脚稳定落地，武器设手部挂点与刀尖接触点。腿、骨盆、胸腔、肩和武器形成连续发力；衣物轻微跟随。转面、持刀角度及大幅度姿势用替换附件补足透视。
+3. 首次样片只验证待机、一次完整攻击与受击；现有 prepare、death 的完整迁移随后单独验收，行走只在实际玩法需要时制作。正常速度、半速与原画静止对照同时检查，再扩展两个怪物。
+4. 通过现有 ActorPresentation 表现入口接入，规则仍归 GameSession。接触事件转发给既有命中流程且保证单次执行；覆盖动作中断、暂停恢复、死亡末姿势、回位及减少动态效果。使用 Spine 时先以 REALTIME 验证事件与混合，再根据实测决定缓存。
+5. 新增资源经 Pink SDK 导入并使用实际 UUID；保留既有引用关系。交付含可编辑分层源稿、骨骼动画工程、导出骨骼数据/图集/纹理，以及主游戏真实出牌的正常与半速录像。技术检查、执行者视觉观察和用户最终认可分别记录。
+
+### 官方参考（2026-11-17 查询）
+
+- Spine 功能与许可版本：https://esotericsoftware.com/spine-purchase
+- 编辑器与运行库版本匹配：https://esotericsoftware.com/spine-versioning
+- Cocos Spine Skeleton、实时模式及缓存限制：https://docs.cocos.com/creator/3.8/manual/zh/editor/components/spine.html
+- Cocos 骨骼资源导入格式：https://docs.cocos.com/creator/3.8/manual/en/asset/spine.html
