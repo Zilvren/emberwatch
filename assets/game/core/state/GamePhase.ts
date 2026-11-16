@@ -5,7 +5,6 @@ export const GAME_PHASES = [
     'rewards',
     'rest',
     'shelter',
-    'day2',
     'failure',
 ] as const;
 export type Phase = (typeof GAME_PHASES)[number];

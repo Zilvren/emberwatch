@@ -1,6 +1,17 @@
-import type {CombatState, InventoryState, RewardState, SettlementState, FeedbackState} from '../assets/game/core/systems/RuleContext';
-import type {GameReadModel} from '../assets/game/core/GameReadModel';
-declare const combat: CombatState, inventory: InventoryState, reward: RewardState, settlement: SettlementState, feedback: FeedbackState, view: GameReadModel;
+import type {
+    CombatState,
+    InventoryState,
+    RewardState,
+    ShelterState,
+    FeedbackState,
+} from '../assets/game/core/systems/RuleContext';
+import type { GameReadModel } from '../assets/game/core/GameReadModel';
+declare const combat: CombatState,
+    inventory: InventoryState,
+    reward: RewardState,
+    settlement: ShelterState,
+    feedback: FeedbackState,
+    view: GameReadModel;
 combat.armor = 9;
 inventory.supplies = 2;
 // @ts-expect-error Combat cannot alter permanent inventory.

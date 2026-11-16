@@ -1,5 +1,8 @@
 import { GAME_PHASES, type Phase } from '../../core/state/GamePhase';
 import type { UiState } from './UiState';
+/** day2 is the retained native follow-up journal view, not a gameplay phase. */
+export const SCREEN_KEYS = [...GAME_PHASES, 'day2'] as const;
+export type ScreenKey = (typeof SCREEN_KEYS)[number];
 export const POPUP_KEYS = ['inventory', 'help', 'log', 'confirmation', 'map', 'entry'] as const;
 export type PopupKey = (typeof POPUP_KEYS)[number];
 export function popupKey(overlay: UiState['overlay']): PopupKey | null {

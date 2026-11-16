@@ -12,15 +12,28 @@ import {
 } from './RulesTypes';
 import { CardKind } from './content/CardCatalog';
 import { CardSet, createCardSet } from './content/ContentRegistry';
-import { GameScenario, TUTORIAL_SCENARIO, getScenario } from './content/GameScenario';
-import { GameState, validateGameState } from './state/GameState';
+import {
+    GameScenario,
+    STAMINA_SCENARIO,
+    TUTORIAL_SCENARIO,
+    getScenario,
+} from './content/GameScenario';
+import { GameState, migrateLegacyGameState, validateGameState } from './state/GameState';
+import {
+    getJournalCatalog,
+    JournalCatalog,
+    JournalRecord,
+    mapClearMilestone,
+    validateJournalCatalog,
+} from './content/JournalCatalog';
 import { EntryTierId } from './content/EntryTiers';
 import { CombatRules } from './systems/CombatRules';
 import { ExplorationRules } from './systems/ExplorationRules';
 import { InventoryRules } from './systems/InventoryRules';
 import { RewardRules } from './systems/RewardRules';
 import { RuleFeedback } from './systems/RuleContext';
-import { SettlementRules } from './systems/SettlementRules';
+import { ShelterRules } from './systems/ShelterRules';
+import { JournalRules } from './systems/JournalRules';
 export { Random } from './Random';
 export * from './RulesTypes';
 export { CARD, REWARD_POOL } from './content/CardCatalog';
@@ -31,9 +44,13 @@ export class SurvivalGame {
     private readonly combatRules: CombatRules;
     private readonly rewardRules: RewardRules;
     private readonly explorationRules: ExplorationRules;
-    private readonly settlementRules: SettlementRules;
+    private readonly shelterRules: ShelterRules;
+    private readonly journalRules: JournalRules;
+    readonly schemaVersion = 2 as const;
     phase: Phase = 'journal';
     day = 1;
+    milestones: Record<string, number> = {};
+    journalEntries: JournalRecord[] = [];
     supplies = 10;
     entryTier: EntryTierId | null = null;
     armor = 10;
@@ -56,11 +73,13 @@ export class SurvivalGame {
     constructor(
         public readonly seed = Math.floor(Math.random() * 0xffffffff),
         public readonly scenario: GameScenario = TUTORIAL_SCENARIO,
-        public readonly content: CardSet = createCardSet()
+        public readonly content: CardSet = createCardSet(),
+        journals: JournalCatalog = getJournalCatalog()
     ) {
         this.scenario = JSON.parse(JSON.stringify(scenario));
         this.random = new Random(seed);
         this.feedback = new RuleFeedback(this);
+        this.journalRules = new JournalRules(this, this.feedback, validateJournalCatalog(journals));
         const newId = (prefix: string) => prefix + '-' + ++this.nextId,
             fail = (reason: string) => this.fail(reason);
         this.inventoryRules = new InventoryRules(
@@ -81,11 +100,12 @@ export class SurvivalGame {
             this.scenario,
             () => this.currentNode
         );
-        this.settlementRules = new SettlementRules(
+        this.shelterRules = new ShelterRules(
             this,
             this.feedback,
             this.content,
-            this.scenario
+            this.scenario,
+            this.journalRules
         );
         this.rewardRules = new RewardRules(
             this,
@@ -101,7 +121,7 @@ export class SurvivalGame {
             this.content,
             this.inventoryRules,
             this.combatRules,
-            this.settlementRules,
+            this.shelterRules,
             this.random,
             this.scenario,
             fail
@@ -111,6 +131,7 @@ export class SurvivalGame {
     exportState(): GameState {
         return JSON.parse(
             JSON.stringify({
+                schemaVersion: 2,
                 scenarioId: this.scenario.id,
                 scenarioVersion: this.scenario.version,
                 seed: this.seed,
@@ -118,6 +139,8 @@ export class SurvivalGame {
                 nextId: this.nextId,
                 phase: this.phase,
                 day: this.day,
+                milestones: this.milestones,
+                journalEntries: this.journalEntries,
                 supplies: this.supplies,
                 entryTier: this.entryTier,
                 armor: this.armor,
@@ -139,7 +162,7 @@ export class SurvivalGame {
         );
     }
     static fromState(raw: unknown, content: CardSet = createCardSet()): SurvivalGame {
-        const state = validateGameState(raw, content.cards);
+        const state = validateGameState(migrateLegacyGameState(raw), content.cards);
         const game = new SurvivalGame(
             state.seed,
             getScenario(state.scenarioId, state.scenarioVersion),
@@ -155,6 +178,8 @@ export class SurvivalGame {
         if (scenario) Object.assign(this.scenario, JSON.parse(JSON.stringify(scenario)));
         this.phase = 'journal';
         this.day = this.scenario.initialDay;
+        this.milestones = {};
+        this.journalEntries = [];
         this.supplies = this.scenario.initialSupplies;
         this.entryTier = null;
         this.armor = this.scenario.initialArmor;
@@ -171,7 +196,10 @@ export class SurvivalGame {
         this.logs = [];
         this.run++;
         this.cards = this.content.initialDeck.map((k) => this.inventoryRules.owned(k));
-        this.feedback.log(`第 1 天 · 护甲 10，物资 10，背负 ${this.baseWeight} / 30。`);
+        this.feedback.log(
+            `第 ${this.day} 天 · 护甲 ${this.armor}，物资 ${this.supplies}，负重 ${this.baseWeight} / 30。`
+        );
+        this.journalRules.record('campaign-started');
         this.revision++;
     }
     get baseWeight(): number {
@@ -190,7 +218,39 @@ export class SurvivalGame {
         return this.combatRules.incomingDamage;
     }
     start(tier?: EntryTierId): ActionResult {
-        return this.explorationRules.start(tier);
+        if (
+            this.phase === 'journal' &&
+            (this.currentJournal?.id !== 'departure' || this.pendingJournalCount !== 1)
+        )
+            return this.feedback.result(false, '请先阅读关键日志，再返回避难所整备。');
+        const result = this.explorationRules.start(tier);
+        if (result.ok) {
+            const departure = this.journalEntries.find((entry) => entry.id === 'departure');
+            if (departure) departure.read = true;
+        }
+        return result;
+    }
+    get currentJournal() {
+        return this.journalRules.current;
+    }
+    get pendingJournalCount(): number {
+        return this.journalEntries.filter((entry) => !entry.read).length;
+    }
+    continueJournal(): ActionResult {
+        const result = this.journalRules.continue();
+        if (
+            result.ok &&
+            this.phase === 'shelter' &&
+            this.scenario.kind === 'tutorial' &&
+            this.milestones[mapClearMilestone(this.scenario.id)]
+        )
+            Object.assign(this.scenario, JSON.parse(JSON.stringify(STAMINA_SCENARIO)));
+        return result;
+    }
+    retry(): ActionResult {
+        if (this.phase !== 'failure') return this.feedback.result(false, '当前没有失败的探索。');
+        this.phase = 'shelter';
+        return this.feedback.result(true, '已恢复出发补给，可以再次整备出发。');
     }
     chooseRoute(route: Route): ActionResult {
         return this.explorationRules.chooseRoute(route);
@@ -234,16 +294,25 @@ export class SurvivalGame {
     advanceTime(seconds: number): void {
         return this.explorationRules.advanceTime(seconds);
     }
-    repairAtShelter(confirmed = false): ActionResult {
-        return this.settlementRules.repairAtShelter(confirmed);
-    }
-    finishDay(): ActionResult {
-        return this.settlementRules.finishDay();
+    repairAtShelter(): ActionResult {
+        return this.shelterRules.repairAtShelter();
     }
     private fail(reason: string): void {
+        const day = this.day,
+            milestones = this.milestones,
+            journalEntries = this.journalEntries,
+            logs = this.logs;
         this.reset();
+        this.day = this.scenario.kind === 'tutorial' ? this.scenario.initialDay : day + 1;
+        this.milestones = milestones;
+        this.journalEntries = journalEntries;
+        this.logs = logs;
         this.phase = 'failure';
         this.failureReason = reason;
-        this.feedback.log('教学失败：所有探索内容已重置；没有永久损失，不扣每日物资。');
+        this.feedback.log(
+            this.scenario.kind === 'tutorial'
+                ? '教学失败：探索已重置，仍为第 1 天。'
+                : `探索失败：时间推进至第 ${this.day} 天，初始补给、护甲和牌组已恢复。`
+        );
     }
 }

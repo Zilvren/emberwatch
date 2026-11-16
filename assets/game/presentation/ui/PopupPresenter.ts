@@ -68,7 +68,7 @@ export class PopupPresenter {
         if (key === 'help' && g.scenario.battleResource === 'stamina')
             this.view.text(this.popups.help, {
                 'modal/text1':
-                    '攻击牌：点击后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n卡牌消耗战斗体力，不扣避难所物资。\n进入档位决定每回合体力；回合结束余量清零，新回合重置。\n物资点不占探索负重，物品仍占负重，暂存物品不能战斗。\n护甲降至 0 不立即失败，再次受到实际伤害才失败。\n每日 1 点物资在返家结算最后执行。',
+                    '攻击牌：点击后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n卡牌消耗战斗体力，不扣避难所物资。\n进入档位决定每回合体力；回合结束余量清零，新回合重置。\n物资点不占探索负重，物品仍占负重，暂存物品不能战斗。\n护甲降至 0 不立即失败，再次受到实际伤害才失败。\n正式探索成功或失败都会过去一天；日志在关键进度达成时出现。',
             });
         if (key === 'help' && g.scenario.battleResource !== 'stamina')
             this.view.text(this.popups.help, {
@@ -76,16 +76,15 @@ export class PopupPresenter {
             });
         if (key === 'confirmation') {
             const c = g.cards.find((c) => c.id === this.ui.discardId);
-            let title = '修复后，生存补给将不足',
-                body =
-                    '你仍然可以选择修复。\n\n修复费先支付，每日消耗仍在结算最后执行。\n如果届时物资不足，将记录缺口，物资最低为 0。',
-                confirm = '仍然修复',
+            let title = '',
+                body = '',
+                confirm = '确认',
                 cancel = '取消',
                 variant: ButtonVariant = 'primary';
             if (this.ui.overlay === 'restart') {
                 title = '重新开始第 1 天？';
                 body =
-                    '当前教学探索和本次结算记录将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。' +
+                    '累计天数、关键日志和当前探索进度将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。' +
                     rulesNotice(g.scenario.ruleset, this.newGameRuleset()).restart;
                 confirm = '重新开始';
                 variant = 'danger';

@@ -1038,7 +1038,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "第一次探索 / 教学已完成",
+    "_string": "SURVIVAL JOURNAL / 关键记录",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -1232,7 +1232,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "第 2 天 · 天亮了",
+    "_string": "关键日志",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -1814,7 +1814,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "修复花费 0，最后扣除每日物资 0。",
+    "_string": "余烬之中，仍有人守夜。",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -2309,7 +2309,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "重玩第 1 天",
+    "_string": "返回避难所",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -2848,7 +2848,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "余烬之中，仍有人守夜。",
+    "_string": "",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -3042,7 +3042,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "正式多日流程尚未开放 · 可重玩第 1 天",
+    "_string": "",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,

@@ -51,6 +51,7 @@ export interface ActionResult {
     message: string;
     warning?: boolean;
 }
+/** Loot and maintenance from a return; there is no daily payment. */
 export interface Settlement {
     returnedSupplies: number;
     returnedCards: number;
@@ -59,6 +60,4 @@ export interface Settlement {
     repairCost: number;
     repaired: boolean;
     repairSpent: number;
-    dailySpent: number;
-    dailyShortfall: number;
 }

@@ -1423,7 +1423,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "感染临界时再次受到实际伤害。\n\n本次教学探索已完整重置。\n卡牌没有永久损失，\n每日生存物资也没有扣除。",
+    "_string": "初始补给、牌组和护甲已恢复。",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -2112,7 +2112,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "返回出发日志",
+    "_string": "返回避难所",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -2845,7 +2845,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "A SINGLE DAY. A CHANCE TO SURVIVE.",
+    "_string": "",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,

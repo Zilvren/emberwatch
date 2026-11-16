@@ -5,7 +5,7 @@ import { ActionResult, NodeKind, Route } from '../RulesTypes';
 import { CombatRules } from './CombatRules';
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, ExplorationState } from './RuleContext';
-import { SettlementRules } from './SettlementRules';
+import { ShelterRules } from './ShelterRules';
 import { EntryTierId, entryTier, affordableEntryTier } from '../content/EntryTiers';
 export class ExplorationRules {
     constructor(
@@ -14,7 +14,7 @@ export class ExplorationRules {
         private readonly content: CardSet,
         private readonly inventory: InventoryRules,
         private readonly combat: CombatRules,
-        private readonly settlement: SettlementRules,
+        private readonly shelter: ShelterRules,
         private readonly random: Random,
         private readonly scenario: GameScenario,
         private readonly fail: (reason: string) => void
@@ -23,7 +23,8 @@ export class ExplorationRules {
         return currentNodeId(this.state, this.scenario);
     }
     start(tierId?: EntryTierId): ActionResult {
-        if (this.state.phase !== 'journal') return this.feedback.result(false, '当前不能出发。');
+        if (this.state.phase !== 'journal' && this.state.phase !== 'shelter')
+            return this.feedback.result(false, '当前不能出发。');
         if (this.scenario.battleResource === 'stamina') {
             const tier = entryTier(tierId ?? affordableEntryTier(this.state.supplies));
             if (!tier) return this.feedback.result(false, '进入档位不存在。');
@@ -35,6 +36,15 @@ export class ExplorationRules {
                 `${tier.name}档出发：支付 ${tier.cost} 物资，每回合体力 ${tier.stamina}。`
             );
         }
+        this.state.route = null;
+        this.state.fixedDone = false;
+        this.state.pathIndex = 0;
+        this.state.visited = [];
+        this.state.battle = null;
+        this.state.rewards = null;
+        this.state.settlement = null;
+        this.state.failureReason = '';
+        this.state.returnElapsed = 0;
         this.state.phase = 'map';
         return this.feedback.result(
             true,
@@ -124,6 +134,6 @@ export class ExplorationRules {
     advanceTime(seconds: number): void {
         if (this.state.phase !== 'map' || this.currentNode !== 'return') return;
         this.state.returnElapsed += seconds;
-        if (this.state.returnElapsed >= 0.8) this.settlement.returnToShelter();
+        if (this.state.returnElapsed >= 0.8) this.shelter.returnToShelter();
     }
 }

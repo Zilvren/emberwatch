@@ -21,6 +21,9 @@ function createLoader() {
         };
         const code = ts.transpileModule(fs.readFileSync(filename, 'utf8'), { compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.CommonJS } }).outputText;
         loaded._compile(code, filename);
+        // Native runtime loads this authored JSON through resources.load; tests use the same data.
+        if (filename === path.join(project, 'assets/game/core/content/JournalCatalog.ts'))
+            loaded.exports.installJournalCatalog(JSON.parse(fs.readFileSync(path.join(project, 'assets/resources/data/journals.json'), 'utf8')));
         return loaded.exports;
     }
     return load;

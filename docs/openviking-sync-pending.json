@@ -1,7 +1,7 @@
 {
   "project": "The end",
-  "date": "2026-11-15",
-  "status": "synchronized",
+  "date": "2026-11-17",
+  "status": "saved-readback-verified",
   "mustCheckExistingUrisBeforeWriting": true,
   "authored": [
     {
@@ -9,7 +9,20 @@
       "method": "write/edit",
       "target": "viking://~/resources/projects/the-end/docs/architecture.md",
       "status": "saved-readback-verified",
-      "uri": "viking://~/resources/projects/the-end/docs/architecture.md"
+      "uri": "viking://~/resources/projects/the-end/docs/architecture.md",
+      "previousSync": {
+        "file": "docs/architecture.md",
+        "method": "write/edit",
+        "target": "viking://~/resources/projects/the-end/docs/architecture.md",
+        "status": "saved-readback-verified",
+        "uri": "viking://~/resources/projects/the-end/docs/architecture.md"
+      },
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "5b3624c8709f83aab8b7f2a3d9ebb06927d275b49f00e0575b40543135400e47",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
     },
     {
       "file": "docs/formal-system-reference.md",
@@ -30,14 +43,40 @@
       "method": "write/edit",
       "target": "viking://~/resources/projects/the-end/designs/production-direction.md",
       "status": "saved-readback-verified",
-      "uri": "viking://~/resources/projects/the-end/designs/production-direction.md"
+      "uri": "viking://~/resources/projects/the-end/designs/production-direction.md",
+      "previousSync": {
+        "file": "docs/production-direction.md",
+        "method": "write/edit",
+        "target": "viking://~/resources/projects/the-end/designs/production-direction.md",
+        "status": "saved-readback-verified",
+        "uri": "viking://~/resources/projects/the-end/designs/production-direction.md"
+      },
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "2da49945861634de272aab126f98ea8a3a25eccad17daf25385ce009abda4801",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
     },
     {
       "file": "docs/game-systems.md",
       "method": "write/edit",
       "target": "viking://~/resources/projects/the-end/docs/game-systems.md",
       "status": "saved-readback-verified",
-      "uri": "viking://~/resources/projects/the-end/docs/game-systems.md"
+      "uri": "viking://~/resources/projects/the-end/docs/game-systems.md",
+      "previousSync": {
+        "file": "docs/game-systems.md",
+        "method": "write/edit",
+        "target": "viking://~/resources/projects/the-end/docs/game-systems.md",
+        "status": "saved-readback-verified",
+        "uri": "viking://~/resources/projects/the-end/docs/game-systems.md"
+      },
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "38894d27378fd2036712485cf4f87691057429b4d988513476aa7a56b1d529e6",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
     },
     {
       "file": "docs/refactor-verification.json",
@@ -107,7 +146,20 @@
       "method": "write/edit",
       "target": "viking://~/resources/projects/the-end/docs/agent-conventions.md",
       "status": "saved-readback-verified",
-      "uri": "viking://~/resources/projects/the-end/docs/agent-conventions.md"
+      "uri": "viking://~/resources/projects/the-end/docs/agent-conventions.md",
+      "previousSync": {
+        "file": "AGENTS.md",
+        "method": "write/edit",
+        "target": "viking://~/resources/projects/the-end/docs/agent-conventions.md",
+        "status": "saved-readback-verified",
+        "uri": "viking://~/resources/projects/the-end/docs/agent-conventions.md"
+      },
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "fcc14e9a485ab50412c0f8254fc3f049f3ac9d64f04a857f02e4ae82347e6e20",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
     },
     {
       "file": "docs/designs/ui/panel-component.md",
@@ -142,7 +194,20 @@
       "method": "write/edit",
       "target": "viking://~/resources/projects/the-end/designs/game-design.md",
       "uri": "viking://~/resources/projects/the-end/designs/game-design.md",
-      "status": "saved-readback-verified"
+      "status": "saved-readback-verified",
+      "previousSync": {
+        "file": "docs/game-design.md",
+        "method": "write/edit",
+        "target": "viking://~/resources/projects/the-end/designs/game-design.md",
+        "uri": "viking://~/resources/projects/the-end/designs/game-design.md",
+        "status": "saved-readback-verified"
+      },
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "f278cbcdff63f9868766350162a1af1f331431190707234a25d4f2dc554543fb",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
     },
     {
       "file": "docs/designs/formal-content-draft.json",
@@ -156,7 +221,20 @@
       "method": "write/edit",
       "target": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
       "uri": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
-      "status": "saved-readback-verified"
+      "status": "saved-readback-verified",
+      "previousSync": {
+        "file": "docs/designs/ui/wasteland-page-redesign.md",
+        "method": "write/edit",
+        "target": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+        "uri": "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+        "status": "saved-readback-verified"
+      },
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "4157a02e9fd64ee33a33a03b706b61354068c70656c63ae478ab9ce648a8b166",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
     },
     {
       "file": "docs/designs/ui/coherence-backgrounds.prompt.json",
@@ -171,6 +249,84 @@
       "target": "viking://~/resources/projects/the-end/docs/coherence-verification.json",
       "uri": "viking://~/resources/projects/the-end/docs/coherence-verification.json",
       "status": "saved-readback-verified"
+    },
+    {
+      "file": "docs/tutorial-spec.md",
+      "method": "write/edit",
+      "uri": "viking://~/resources/projects/the-end/docs/tutorial-spec.md",
+      "target": "viking://~/resources/projects/the-end/docs/tutorial-spec.md",
+      "status": "saved-readback-verified",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "dcb251696c1b28a72506b081b7176861d9db28efe23b7091fee07c8ffac373ae",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
+    },
+    {
+      "file": "docs/designs/ui/ux-review.md",
+      "method": "write/edit",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+      "target": "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+      "status": "saved-readback-verified",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "2e3b5062043cace77013cf9be17f0b173faec3c718cc1c1d3baffe75c6392ce4",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
+    },
+    {
+      "file": "docs/designs/key-node-journal-system.md",
+      "method": "write/edit",
+      "uri": "viking://~/resources/projects/the-end/designs/key-node-journal-system.md",
+      "target": "viking://~/resources/projects/the-end/designs/key-node-journal-system.md",
+      "status": "saved-readback-verified",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "3983490d1d8d5e675ba96aa661333227530cb3b76ec9f678b46031127437f7c0",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
+    },
+    {
+      "file": "docs/core-loop-verification.json",
+      "method": "write/edit",
+      "uri": "viking://~/resources/projects/the-end/docs/core-loop-verification.json",
+      "target": "viking://~/resources/projects/the-end/docs/core-loop-verification.json",
+      "status": "saved-readback-verified",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "47090aedecbb4dea0bfcd172741c7ef8ec10fe778b99794a06eef2f1a19d28c4",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
+    },
+    {
+      "file": "docs/game-studios-evidence.json",
+      "method": "write/edit",
+      "uri": "viking://~/resources/projects/the-end/docs/game-studios-evidence.json",
+      "target": "viking://~/resources/projects/the-end/docs/game-studios-evidence.json",
+      "status": "saved-readback-verified",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "b98318c59fbec818b5b7563cb7cf3f5881c915b116dca17385b9875d55a4c090",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
+    },
+    {
+      "file": "docs/merge-resolution-20261117.json",
+      "uri": "viking://~/resources/projects/the-end/docs/merge-resolution-20261117.json",
+      "target": "viking://~/resources/projects/the-end/docs/merge-resolution-20261117.json",
+      "method": "write/edit",
+      "status": "saved-readback-verified",
+      "saved": true,
+      "readbackVerified": true,
+      "checkedAt": "2026-11-16T16:28:17.290Z",
+      "localSha256": "487c1cc6a0c2469b636449c1b5a376b2803cca07e4173956e575d386f0569f7b",
+      "remoteWriteAttempted": true,
+      "mustCheckExistingUriBeforeWriting": true
     }
   ],
   "imports": [
@@ -436,7 +592,40 @@
       "preserveSource": true
     }
   ],
-  "verification": "Authored documents were saved and read back. Source imports have individual asynchronous task states in the sync record; pending/running does not mean index complete.",
-  "checkedAt": "2026-11-14T19:58:05.231Z",
-  "record": "docs/openviking-sync-status.json"
+  "verification": "Historical saved/readback/import evidence remains in previousSnapshot and unchanged entries. Current core-loop documents are pending; local readback only.",
+  "checkedAt": "2026-11-16T16:28:17.290Z",
+  "record": "docs/openviking-sync-status.json",
+  "previousSnapshot": {
+    "date": "2026-11-15",
+    "checkedAt": "2026-11-14T19:58:05.231Z",
+    "status": "synchronized",
+    "verification": "Authored documents were saved and read back. Source imports have individual asynchronous task states in the sync record; pending/running does not mean index complete."
+  },
+  "currentChange": {
+    "task": "取消每日结算，改为累计探索天数与关键节点日志系统",
+    "localFiles": [
+      "AGENTS.md",
+      "docs/architecture.md",
+      "docs/game-design.md",
+      "docs/game-systems.md",
+      "docs/production-direction.md",
+      "docs/tutorial-spec.md",
+      "docs/designs/ui/wasteland-page-redesign.md",
+      "docs/designs/ui/ux-review.md",
+      "docs/designs/key-node-journal-system.md",
+      "docs/core-loop-verification.json",
+      "docs/game-studios-evidence.json"
+    ],
+    "reason": "No registered OpenViking search/read/write tools; no client configuration; 127.0.0.1:1933 connection refused by read-only doctor.",
+    "remoteSearchAttempted": false,
+    "remoteWriteAttempted": false,
+    "remoteReadbackVerified": false,
+    "nextAction": "When connection is restored, check existing URIs, write/edit current local documents, then read back and update statuses."
+  },
+  "mergeResolution": {
+    "record": "docs/merge-resolution-20261117.json",
+    "authoredSynced": 12,
+    "storageReadbackVerified": true,
+    "backgroundSearchIndexCompletionAsserted": false
+  }
 }

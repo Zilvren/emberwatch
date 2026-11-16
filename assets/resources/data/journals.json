@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "departure",
+      "title": "离开庇护",
+      "body": "收音机只剩下沙沙声。\n最后一箱补给，撑不过太久。\n\n你带上菜刀、急救零件，\n还有一叠早已失去价值的现金。\n\n今天，必须出去走一趟。",
+      "conditions": [{ "milestone": "campaign-started", "count": 1 }],
+      "prerequisites": []
+    },
+    {
+      "id": "tutorial-cleared",
+      "title": "第一次归来",
+      "body": "门闩重新落下，外面的脚步声渐渐远去。\n\n你带回的不只是物资，\n还有下一次出发的底气。\n\n这一夜，终于熬过去了。",
+      "conditions": [{ "milestone": "map-cleared:first-expedition", "count": 1 }],
+      "prerequisites": ["departure"]
+    },
+    {
+      "id": "street-cleared",
+      "title": "灰烬街区的归路",
+      "body": "灰烬街区的道路终于走通。\n沿途的威胁已经清除，回家的路也记在了心里。\n\n门闩重新落下。\n你带回的不只是物资，\n还有下一次出发的底气。",
+      "conditions": [{ "milestone": "map-cleared:stamina-expedition", "count": 1 }],
+      "prerequisites": ["departure"]
+    }
+  ]
+}

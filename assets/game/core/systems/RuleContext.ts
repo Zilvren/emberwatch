@@ -13,6 +13,7 @@ export type RewardState = Pick<
 export type ExplorationState = Pick<
     GameState,
     | 'armor'
+    | 'battle'
     | 'critical'
     | 'entryTier'
     | 'fixedDone'
@@ -21,10 +22,12 @@ export type ExplorationState = Pick<
     | 'returnElapsed'
     | 'rewards'
     | 'route'
+    | 'settlement'
     | 'supplies'
     | 'visited'
+    | 'failureReason'
 >;
-export type SettlementState = Pick<
+export type ShelterState = Pick<
     GameState,
     | 'armor'
     | 'battle'
@@ -35,7 +38,9 @@ export type SettlementState = Pick<
     | 'revision'
     | 'settlement'
     | 'supplies'
->;
+> &
+    Readonly<Pick<GameState, 'route' | 'pathIndex'>>;
+export type JournalState = Pick<GameState, 'day' | 'journalEntries' | 'milestones' | 'phase'>;
 export class RuleFeedback {
     constructor(private readonly state: FeedbackState) {}
     result(ok: boolean, message: string, warning = false): ActionResult {

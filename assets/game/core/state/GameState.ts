@@ -1,9 +1,17 @@
 import { CARD, CardDefinition } from '../content/CardCatalog';
-import { getScenario, hasId, NodeKind, Route } from '../content/GameScenario';
+import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO } from '../content/GameScenario';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
 import { isPhase } from './GamePhase';
+import {
+    getJournalCatalog,
+    JournalCatalog,
+    JournalRecord,
+    mapClearMilestone,
+    validMilestoneId,
+} from '../content/JournalCatalog';
 import type { Battle, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
 export interface GameState {
+    schemaVersion: 2;
     scenarioId: string;
     scenarioVersion: number;
     seed: number;
@@ -11,6 +19,8 @@ export interface GameState {
     nextId: number;
     phase: Phase;
     day: number;
+    milestones: Record<string, number>;
+    journalEntries: JournalRecord[];
     supplies: number;
     entryTier: EntryTierId | null;
     armor: number;
@@ -55,10 +65,12 @@ function list(value: unknown, max: number, name: string): void {
 /** Validate before touching a live model; never hydrate arbitrary object properties. */
 export function validateGameState(
     raw: unknown,
-    definitions: Readonly<Record<string, CardDefinition>> = CARD
+    definitions: Readonly<Record<string, CardDefinition>> = CARD,
+    journals: JournalCatalog = getJournalCatalog()
 ): GameState {
     object(raw, 'state');
     const s = raw as GameState;
+    integer(s.schemaVersion, 2, 2, 'schemaVersion');
     text(s.scenarioId, 'scenarioId', 80);
     integer(s.scenarioVersion, 1, 100000, 'scenarioVersion');
     const scenario = getScenario(s.scenarioId, s.scenarioVersion);
@@ -68,11 +80,36 @@ export function validateGameState(
     integer(s.revision, 0, 1000000000, 'revision');
     integer(s.run, 1, 1000000000, 'run');
     integer(s.day, 1, 100000, 'day');
+    object(s.milestones, 'milestones');
+    requireValue(s.milestones, Object.keys(s.milestones).length <= 1000, 'milestones');
+    for (const id of Object.keys(s.milestones)) {
+        requireValue(id, validMilestoneId(id), 'milestone id');
+        integer(s.milestones[id], 1, 1000000000, 'milestone count');
+    }
+    list(s.journalEntries, 500, 'journalEntries');
+    const recorded = new Set<string>();
+    for (const entry of s.journalEntries) {
+        object(entry, 'journal entry');
+        requireValue(
+            entry.id,
+            !recorded.has(entry.id) &&
+                journals.entries.some((definition) => definition.id === entry.id),
+            'journal id'
+        );
+        recorded.add(entry.id);
+        integer(entry.day, 1, s.day, 'journal day');
+        flag(entry.read, 'journal read');
+    }
+    requireValue(
+        s.phase,
+        (s.phase === 'journal') === s.journalEntries.some((entry) => !entry.read),
+        'journal phase'
+    );
     integer(s.supplies, 0, scenario.suppliesHaveWeight === false ? 1000000000 : 30, 'supplies');
     const savedTier = s.entryTier ?? null;
     if (scenario.battleResource === 'stamina') {
         requireValue(savedTier, savedTier === null || !!entryTier(savedTier), 'entry tier');
-        if (s.phase !== 'journal' && s.phase !== 'failure')
+        if (['map', 'battle', 'rewards', 'rest'].indexOf(s.phase) >= 0)
             requireValue(savedTier, !!entryTier(savedTier), 'entry tier for active expedition');
     } else requireValue(savedTier, savedTier === null, 'legacy entry tier');
     integer(s.armor, 0, 10, 'armor');
@@ -188,8 +225,6 @@ export function validateGameState(
             )
         );
     }
-    if (s.phase === 'shelter' || s.phase === 'day2')
-        requireValue(s.settlement, s.settlement !== null, 'settlement phase');
     if (s.settlement !== null) {
         const t = s.settlement;
         object(t, 'settlement');
@@ -198,8 +233,6 @@ export function validateGameState(
             'returnedCards',
             'repairCost',
             'repairSpent',
-            'dailySpent',
-            'dailyShortfall',
         ] as const)
             integer(t[key], 0, 100000, key);
         flag(t.repaired, 'repaired');
@@ -210,6 +243,7 @@ export function validateGameState(
     requireValue(s.nextId, s.nextId >= highestId, 'nextId');
     // An explicit field list prevents prototype keys and future fields from entering the model.
     const result: GameState = {
+        schemaVersion: 2,
         scenarioId: s.scenarioId,
         scenarioVersion: s.scenarioVersion,
         seed: s.seed,
@@ -217,6 +251,8 @@ export function validateGameState(
         nextId: s.nextId,
         phase: s.phase,
         day: s.day,
+        milestones: { ...s.milestones },
+        journalEntries: s.journalEntries.map(({ id, day, read }) => ({ id, day, read })),
         supplies: s.supplies,
         entryTier: savedTier,
         armor: s.armor,
@@ -230,7 +266,17 @@ export function validateGameState(
             ? { ...s.battle, stamina: s.battle.stamina ?? 0, maxStamina: s.battle.maxStamina ?? 0 }
             : null,
         rewards: s.rewards,
-        settlement: s.settlement,
+        settlement: s.settlement
+            ? {
+                  returnedSupplies: s.settlement.returnedSupplies,
+                  returnedCards: s.settlement.returnedCards,
+                  lostOverflow: s.settlement.lostOverflow,
+                  wasCritical: s.settlement.wasCritical,
+                  repairCost: s.settlement.repairCost,
+                  repaired: s.settlement.repaired,
+                  repairSpent: s.settlement.repairSpent,
+              }
+            : null,
         logs: s.logs,
         failureReason: s.failureReason,
         revision: s.revision,
@@ -238,4 +284,34 @@ export function validateGameState(
         returnElapsed: s.returnElapsed,
     };
     return JSON.parse(JSON.stringify(result));
+}
+
+/** Upgrade the old terminal teaching loop without replaying paid costs or deleting progress. */
+export function migrateLegacyGameState(raw: unknown): unknown {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return raw;
+    const s = JSON.parse(JSON.stringify(raw));
+    if (
+        s.schemaVersion !== undefined ||
+        s.milestones !== undefined ||
+        s.journalEntries !== undefined
+    )
+        return s;
+    const scenario = getScenario(s.scenarioId, s.scenarioVersion);
+    s.schemaVersion = 2;
+    s.milestones = { 'campaign-started': 1 };
+    s.journalEntries = [{ id: 'departure', day: scenario.initialDay, read: s.phase !== 'journal' }];
+    if (s.phase === 'shelter' || s.phase === 'day2') {
+        const wasTerminal = s.phase === 'day2';
+        if (!wasTerminal) s.day++;
+        s.milestones[mapClearMilestone(scenario.id)] = 1;
+        const id = scenario.kind === 'tutorial' ? 'tutorial-cleared' : 'street-cleared';
+        s.journalEntries.push({ id, day: s.day, read: wasTerminal });
+        s.phase = wasTerminal ? 'shelter' : 'journal';
+        if (wasTerminal && scenario.kind === 'tutorial') {
+            s.scenarioId = STAMINA_SCENARIO.id;
+            s.scenarioVersion = STAMINA_SCENARIO.version;
+            s.entryTier = null;
+        }
+    } else if (s.phase === 'failure' && scenario.kind === 'expedition') s.day++;
+    return s;
 }

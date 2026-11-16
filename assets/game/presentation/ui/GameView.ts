@@ -1,5 +1,11 @@
 import { _decorator, Component, Node } from 'cc';
-import { GAME_PHASES, POPUP_KEYS, namedBindings, type Phase, type PopupKey } from './ViewBindings';
+import {
+    SCREEN_KEYS,
+    POPUP_KEYS,
+    namedBindings,
+    type ScreenKey,
+    type PopupKey,
+} from './ViewBindings';
 import { ActorPresentation } from '../actors/ActorPresentation';
 import type { GameReadModel } from '../../core/GameReadModel';
 const { ccclass, property } = _decorator;
@@ -10,7 +16,7 @@ export class GameView extends Component {
 }
 export interface SceneBindings {
     hud: Node;
-    screens: Record<Phase, Node>;
+    screens: Record<ScreenKey, Node>;
     popups: Record<PopupKey, Node>;
 }
 export function bindScene(
@@ -27,7 +33,7 @@ export function bindScene(
                 throw new Error(`界面 ${value.name} 需要且只能有一个 GameView 标识`);
             return { key: descriptors[0].key, value };
         });
-    const screens = namedBindings(GAME_PHASES, entries(screenRoots), '屏幕');
+    const screens = namedBindings(SCREEN_KEYS, entries(screenRoots), '屏幕');
     const actors = new Set<string>();
     for (const actor of screens.battle.getComponentsInChildren(ActorPresentation)) {
         if (!actor.actorId || actors.has(actor.actorId))

@@ -29,6 +29,7 @@ export type NodeDefinition = NodeDefinitionBase &
           }
     );
 export interface GameScenario {
+    kind: 'tutorial' | 'expedition';
     ruleset: 'tutorial-v1' | 'stamina-v1';
     battleResource?: 'supplies' | 'stamina';
     suppliesHaveWeight?: boolean;
@@ -44,11 +45,11 @@ export interface GameScenario {
     routes: Record<Route, NodeKind[]>;
     routeDescriptions?: Record<Route, string>;
     enemies: Record<EnemyId, EnemyDefinition>;
-    completionDay: number;
 }
 
 // Existing teaching content is the first authored scenario, not a global game limit.
 export const TUTORIAL_SCENARIO: GameScenario = {
+    kind: 'tutorial',
     ruleset: 'tutorial-v1',
     battleResource: 'supplies',
     suppliesHaveWeight: true,
@@ -107,11 +108,11 @@ export const TUTORIAL_SCENARIO: GameScenario = {
             ensureRewardOpeningHand: true,
         },
     },
-    completionDay: 2,
 };
 
 export const STAMINA_SCENARIO: GameScenario = {
     ...TUTORIAL_SCENARIO,
+    kind: 'expedition',
     ruleset: 'stamina-v1',
     id: 'stamina-expedition',
     title: '灰烬街区',
@@ -150,7 +151,8 @@ export function validateScenario(s: GameScenario): void {
         typeof v === 'number' && Number.isInteger(v) && v >= min && v <= max;
     assertContent(id(s.id) && number(s.version, 1), 'identity');
     assertContent(['tutorial-v1', 'stamina-v1'].indexOf(s.ruleset) >= 0, 'ruleset');
-    assertContent(number(s.initialDay, 1) && number(s.completionDay, s.initialDay), 'days');
+    assertContent(number(s.initialDay, 1), 'initial day');
+    assertContent(s.kind === 'tutorial' || s.kind === 'expedition', 'scenario kind');
     assertContent(number(s.initialSupplies) && number(s.initialArmor, 0, 10), 'initial resources');
     assertContent(
         !!s.nodes && !!s.routes && !!s.enemies && hasId(s.nodes, s.fixedNodeId),

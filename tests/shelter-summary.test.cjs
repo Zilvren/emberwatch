@@ -22,36 +22,35 @@ function returned({ supplies, armor, critical = false }) {
         critical,
     });
     session.advanceTime(1);
+    assert.equal(game.phase, 'journal');
+    assert.equal(session.execute({ type: 'continue-journal' }).ok, true);
     assert.equal(game.phase, 'shelter');
     return session;
 }
-test('shelter projection shows an unpaid daily forecast without mutating the settlement', () => {
+test('shelter projection shows exploration progress and leaves supplies untouched', () => {
     const session = returned({ supplies: 8, armor: 10 }),
         before = session.game.exportState();
     const summary = shelterSummary(session.view);
     assert.equal(summary.repairVisible, false);
-    assert.equal(summary.remaining, 7);
-    assert.equal(summary.dailyShortfall, false);
+    assert.equal(summary.doneCaption, '整备出发');
+    assert.match(summary.values['shelter/progress-summary'], /已通关 1 次/);
+    assert.equal(Object.keys(summary.values).some(key => key.includes('daily')), false);
     assert.deepEqual(session.game.exportState(), before);
-    assert.equal(session.execute({ type: 'finish-day' }).ok, true);
-    assert.equal(session.game.supplies, summary.remaining);
+    session.advanceTime(100);
+    assert.equal(session.game.supplies, 8);
+    assert.equal(session.game.day, 2);
 });
-test('shelter display keeps a risky repair actionable and updates the unpaid forecast afterward', () => {
+test('repair remains actionable with exactly its cost and has no daily-shortfall warning', () => {
     const session = returned({ supplies: 1, armor: 6 });
     const before = shelterSummary(session.view);
     assert.equal(before.repairVisible, true);
     assert.equal(before.repairEnabled, true);
-    assert.equal(before.repairRisk, true);
-    assert.equal(before.dailyShortfall, false);
-    assert.equal(session.execute({ type: 'repair' }).warning, true);
-    assert.equal(session.execute({ type: 'repair', confirmed: true }).ok, true);
+    assert.equal(session.execute({ type: 'repair' }).ok, true);
     const after = shelterSummary(session.view);
     assert.equal(after.repairVisible, false);
-    assert.equal(after.dailyShortfall, true);
-    assert.equal(session.game.settlement.dailySpent, 0);
+    assert.equal(session.game.supplies, 0);
     assert.match(after.values['shelter/repair-hint'], /已花费 1/);
-    assert.equal(session.execute({ type: 'finish-day' }).ok, true);
-    assert.equal(session.game.settlement.dailyShortfall, 1);
+    assert.equal(session.game.day, 2);
 });
 test('repair itself remains unavailable when the returned supplies cannot cover its actual cost', () => {
     const session = returned({ supplies: 1, armor: 0, critical: true });
@@ -59,8 +58,7 @@ test('repair itself remains unavailable when the returned supplies cannot cover 
         before = session.game.exportState();
     assert.equal(summary.repairVisible, true);
     assert.equal(summary.repairEnabled, false);
-    assert.equal(summary.repairRisk, false);
     assert.match(summary.values['shelter/repair-hint'], /缺少 1/);
-    assert.equal(session.execute({ type: 'repair', confirmed: true }).ok, false);
+    assert.equal(session.execute({ type: 'repair' }).ok, false);
     assert.deepEqual(session.game.exportState(), before);
 });

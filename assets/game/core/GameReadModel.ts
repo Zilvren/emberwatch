@@ -12,6 +12,10 @@ export type GameReadModel = ReadonlyValue<
         SurvivalGame,
         | 'phase'
         | 'day'
+        | 'milestones'
+        | 'journalEntries'
+        | 'currentJournal'
+        | 'pendingJournalCount'
         | 'supplies'
         | 'entryTier'
         | 'armor'

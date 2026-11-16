@@ -39,22 +39,41 @@ export class GameRenderer extends NativeViewWriter {
     }
     render(): void {
         const g = this.game;
+        const screenKey =
+            g.phase === 'journal' && g.currentJournal?.id !== 'departure' ? 'day2' : g.phase;
         if (g.phase !== 'rewards') {
             this.ui.rewardSelection = -1;
             this.ui.rewardContext = '';
         }
         for (const phase of Object.keys(this.scene.screens))
-            this.scene.screens[phase].active = phase === g.phase;
-        this.activeScreen = this.scene.screens[g.phase];
+            this.scene.screens[phase].active = phase === screenKey;
+        this.activeScreen = this.scene.screens[screenKey];
         const screen = this.activeScreen;
         const actors = screen.getComponentsInChildren(ActorPresentation);
         this.hero = actors.find((actor) => actor.actorId === 'player') ?? null;
         this.hero?.setArmed(g.phase === 'battle' && !!g.battle?.weapon);
         this.renderStatusBar();
-        if (g.phase === 'journal')
+        if (g.phase === 'journal' && g.currentJournal) {
+            const entry = g.currentJournal;
             this.text(screen, {
+                'journal/text0': 'SURVIVAL JOURNAL / 关键记录',
+                'journal/text1': `第 ${entry.day} 天 · ${entry.title}`,
+                'journal/text2': entry.body,
                 'journal/text3': `物资 ${g.supplies} · 护甲 ${g.armor} · 战斗牌 ${g.usableCards.length} 张\n${g.scenario.suppliesHaveWeight === false ? '物品负重' : '初始总负重'} ${g.baseWeight} / 30`,
+                'journal/text4': '余烬之中，仍有人守夜。',
+                'journal/text5': '',
+                'journal/text6': '',
             });
+            this.button(
+                screen,
+                'journal-start',
+                g.pendingJournalCount > 1
+                    ? '下一篇日志'
+                    : entry.id === 'departure'
+                      ? '整备出发'
+                      : '返回避难所'
+            );
+        }
         if (g.phase === 'map') {
             const initial = g.scenario.nodes[g.scenario.fixedNodeId];
             const fee =
@@ -119,26 +138,20 @@ export class GameRenderer extends NativeViewWriter {
             for (const action of screen.getComponentsInChildren(ButtonAction))
                 if (action.actionId === 'shelter-repair')
                     action.node.active = summary.repairVisible;
-            for (const binding of screen.getComponentsInChildren(UIValue)) {
-                if (binding.key === 'shelter/repair-hint') binding.setAlert(summary.repairRisk);
-                if (binding.key === 'shelter/daily-summary')
-                    binding.setAlert(summary.dailyShortfall);
-            }
             this.button(screen, 'shelter-done', summary.doneCaption);
         }
-        if (g.phase === 'day2') {
-            const s = g.settlement!;
+        if (g.phase === 'failure') {
             this.text(screen, {
-                'journal/text3': `带回 ${s.returnedCards} 张卡牌  /  物资剩余 ${g.supplies}`,
-                'journal/text4': s.dailyShortfall
-                    ? '最后结算：每日物资缺口 1。你选择优先修复。'
-                    : `修复花费 ${s.repairSpent}，最后扣除每日物资 ${s.dailySpent}。`,
+                'journal/text1':
+                    g.scenario.kind === 'tutorial'
+                        ? '第 1 天 · 再试一次'
+                        : `第 ${g.day} 天 · 还不是终点`,
+                'journal/text2': `${g.failureReason}\n\n初始补给、牌组和护甲已恢复。\n${g.scenario.kind === 'tutorial' ? '教学仍停留在第 1 天。' : '一天过去了，已经走过的时间和关键记录仍然保留。'}`,
+                'journal/text3': `物资 ${g.supplies} · 护甲 ${g.armor} · 战斗牌 ${g.usableCards.length} 张`,
+                'journal/text5': '',
             });
+            this.button(screen, 'journal-start', '返回避难所');
         }
-        if (g.phase === 'failure')
-            this.text(screen, {
-                'journal/text2': `${g.failureReason}\n\n本次教学探索已完整重置。\n卡牌没有永久损失，\n每日生存物资也没有扣除。`,
-            });
         this.popups.render();
         this.hand?.setLocked(this.ui.busy || !!this.ui.overlay);
         this.revision = g.revision;

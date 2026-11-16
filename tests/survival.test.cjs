@@ -11,7 +11,7 @@ const owned=(id,kind,zone='base')=>({id,kind,zone,selected:kind!=='cash',found:t
 function combat(enemy='enemy1',seed=17){const g=new SurvivalGame(seed);g.start();g.fixedDone=true;g.route='A';g.pathIndex=enemy==='enemy1'?0:3;g.enterNode();return g;}
 function hand(g,kinds){g.battle.hand=kinds.map((kind,i)=>({id:`fixture-${i}`,kind,temporary:kind==='slash'}));g.battle.draw=[];g.battle.discard=[];}
 function playKind(g,kind){const c=g.battle.hand.find(c=>c.kind===kind);assert.ok(c,`missing ${kind}`);return g.play(c.id);}
-function shelter(supplies=4,armor=5,critical=false){const g=new SurvivalGame(2);g.fixedDone=true;g.route='A';g.pathIndex=4;g.phase='map';g.supplies=supplies;g.armor=armor;g.critical=critical;g.advanceTime(1);return g;}
+function shelter(supplies=4,armor=5,critical=false){const g=new SurvivalGame(2);g.start();g.fixedDone=true;g.route='A';g.pathIndex=4;g.phase='map';g.supplies=supplies;g.armor=armor;g.critical=critical;g.advanceTime(1);g.continueJournal();return g;}
 function winUsingCards(g,basicOnly=false){
     for(let i=0;g.phase==='battle'&&i<40;i++){
         const priorities=basicOnly?['attack','dodge']:['repair','heavy','slash','attack','evade','dodge','knife'];
@@ -144,36 +144,34 @@ test('enemy one can be defeated using only basic cards',()=>{
     for(const seed of [1,7,17,42]){const g=combat('enemy1',seed);const supplies=g.supplies;winUsingCards(g,true);assert.equal(g.supplies,supplies);assert.ok(g.armor>=0);}
 });
 test('return waits for map, drops overflow, clears critical and equipment, retains base cards',()=>{
-    const g=new SurvivalGame(5);g.fixedDone=true;g.route='B';g.pathIndex=4;g.phase='map';g.critical=true;g.armor=0;g.cards.push(owned('overflow','heavy','overflow'));
-    g.advanceTime(0.3);assert.equal(g.phase,'map');g.advanceTime(0.6);assert.equal(g.phase,'shelter');assert.equal(g.critical,false);assert.equal(g.settlement.repairCost,2);assert.deepEqual(g.settlement.lostOverflow,['重击']);assert.equal(g.cards.some(c=>c.zone==='overflow'),false);
+    const g=new SurvivalGame(5);g.start();g.fixedDone=true;g.route='B';g.pathIndex=4;g.phase='map';g.critical=true;g.armor=0;g.cards.push(owned('overflow','heavy','overflow'));
+    g.advanceTime(0.3);assert.equal(g.phase,'map');g.advanceTime(0.6);assert.equal(g.phase,'journal');assert.equal(g.day,2);assert.equal(g.critical,false);assert.equal(g.settlement.repairCost,2);assert.deepEqual(g.settlement.lostOverflow,['重击']);assert.equal(g.cards.some(c=>c.zone==='overflow'),false);
 });
-test('shelter repair costs 1 normally or 2 after critical; daily fee is strictly last',()=>{
+test('shelter repair costs 1 normally or 2 after critical, without any daily fee',()=>{
     for(const critical of [false,true]){const g=shelter(5,critical?0:6,critical);const cost=critical?2:1;
-        ok(g.repairAtShelter());assert.equal(g.supplies,5-cost);assert.equal(g.armor,10);assert.equal(g.settlement.dailySpent,0);assert.equal(g.day,1);
-        ok(g.finishDay());assert.equal(g.supplies,4-cost);assert.equal(g.settlement.dailySpent,1);assert.equal(g.phase,'day2');assert.equal(g.day,2);assert.equal(g.finishDay().ok,false);
+        ok(g.repairAtShelter());assert.equal(g.supplies,5-cost);assert.equal(g.armor,10);assert.equal('dailySpent' in g.settlement,false);assert.equal(g.day,2);
+        g.advanceTime(10);assert.equal(g.supplies,5-cost);assert.equal(g.phase,'shelter');assert.equal(g.day,2);
     }
 });
-test('risk warning allows confirmed repair; final daily shortage is recorded without negative supplies',()=>{
-    const g=shelter(2,0,true);const r=g.repairAtShelter();assert.equal(r.warning,true);assert.equal(g.supplies,2);assert.equal(g.armor,0);
-    ok(g.repairAtShelter(true));assert.equal(g.supplies,0);assert.equal(g.settlement.dailySpent,0);assert.equal(g.day,1);
-    g.finishDay();assert.equal(g.supplies,0);assert.equal(g.settlement.dailyShortfall,1);assert.equal(g.settlement.dailySpent,0);assert.equal(g.phase,'day2');
+test('repair can use the last supplies directly now that daily payment is removed',()=>{
+    const g=shelter(2,0,true);const r=g.repairAtShelter();assert.equal(r.ok,true);assert.equal(r.warning,false);assert.equal(g.supplies,0);assert.equal(g.armor,10);assert.equal(g.day,2);
 });
 test('insufficient repair fee is rejected; full armor is free; skipping repair preserves armor',()=>{
-    const poor=shelter(1,0,true);assert.equal(poor.repairAtShelter(true).ok,false);poor.finishDay();assert.equal(poor.armor,0);assert.equal(poor.supplies,0);
-    const full=shelter(3,10);assert.equal(full.settlement.repairCost,0);assert.equal(full.repairAtShelter().ok,false);full.finishDay();assert.equal(full.supplies,2);
+    const poor=shelter(1,0,true);assert.equal(poor.repairAtShelter().ok,false);assert.equal(poor.armor,0);assert.equal(poor.supplies,1);
+    const full=shelter(3,10);assert.equal(full.settlement.repairCost,0);assert.equal(full.repairAtShelter().ok,false);assert.equal(full.supplies,3);
 });
-for(const route of ['A','B'])test(`complete route ${route}: day one → exploration → rest → boss → shelter → day two`,()=>{
+for(const route of ['A','B'])test(`complete teaching route ${route} unlocks a dated key journal and continues into formal play`,()=>{
     for(const seed of [7,17,42,123,2026]){
         const g=new SurvivalGame(seed);g.start();g.enterNode();g.claimSupplies();g.claimCard(0);g.finishRewards();g.chooseRoute(route);
-        for(let guard=0;guard<30&&g.phase!=='day2';guard++){
+        for(let guard=0;guard<30&&g.phase!=='journal';guard++){
             if(g.phase==='map'){if(g.currentNode==='return')g.advanceTime(1);else ok(g.enterNode());}
             else if(g.phase==='battle')winUsingCards(g);
             else if(g.phase==='rewards'){g.claimSupplies();if(!g.rewardCardBlocked(g.rewards.cards[0]))g.claimCard(0);g.finishRewards();}
             else if(g.phase==='rest'){const cash=g.cards.find(c=>c.kind==='cash');if(cash)g.discardCard(cash.id);g.finishRest();}
-            else if(g.phase==='shelter'){if(g.armor<10&&g.supplies>g.settlement.repairCost)g.repairAtShelter();g.finishDay();}
             else assert.fail(`unexpected phase ${g.phase}: ${g.failureReason}`);
             assert.ok(g.baseWeight<=30);assert.ok(g.overflowWeight<=10);assert.ok(g.supplies>=0);assert.ok(g.armor>=0&&g.armor<=10);
         }
-        assert.equal(g.phase,'day2');assert.equal(g.day,2);assert.equal(g.visited.length,5);assert.equal(g.settlement.dailySpent,1);
+        assert.equal(g.phase,'journal');assert.equal(g.day,2);assert.equal(g.visited.length,5);assert.equal(g.currentJournal.id,'tutorial-cleared');
+        ok(g.continueJournal());assert.equal(g.phase,'shelter');assert.equal(g.scenario.kind,'expedition');assert.equal('dailySpent' in g.settlement,false);
     }
 });
