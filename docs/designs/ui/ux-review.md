@@ -163,3 +163,18 @@ P2 为下一轮应处理的体验/制作问题，P3 为后续打磨。建议先�
 ## 2026-11-17：主干/日志分支合并检查
 
 当前工作区 C:/Users/Knock/Desktop/The end。保留 GameView 按名称绑定，首篇日志使用 journal 视图，后续日志使用保留身份的 day2 原生视图；两者在游戏状态中都属于 journal。帮助和重开确认通过 PopupPresenter 显示新日志/连续探索规则，不保留每日不足风险确认。历史 D:/qsrizhi 环境的记录保留为来源，当前合并验证见 docs/merge-resolution-20261117.json。
+
+## 2026-11-17：Spine 08 动作交付
+
+项目 The end，C:/Users/Knock/Desktop/The end，Pink/Cocos 原生主场景。状态：技术验证与执行者视觉观察已记录，用户最终主观认可未记录。未新增页面或更改游戏规则；现有三个演员改用 Spine 3.8.75。
+
+| 观察项 | 本轮处理与证据 | 结论 |
+| --- | --- | --- |
+| 抬臂露出缺口 | 同原图 UV 的覆盖网格补齐肩臂遮挡；已查看 hero-impact.png、diagnostic-contact-all.png | 指定命中姿势轮廓连贯，SUPPORTED |
+| 接触滞后一帧 | 动画时间线后显式更新世界骨骼矩阵，同帧前移后再发布命中；主角/游荡者/重型真实输入误差约 0.0204/0.0406/0.0083 设计单位 | 单次命中、费用与完成通过，SUPPORTED |
+| 倒下悬空/衣摆尖刺 | 否决深折叠候选；改为骨骼倒下、侧卧身体附件和原头部网格组合；已查看 diagnostic-death-all.png | 当前三终姿势贴地，SUPPORTED；最终审美认可未记录 |
+| 原生操作与存档 | 同一包 14 组浏览器回归，含路线 A/B、真实拖牌、取消、快速输入、体力、旧存档说明、奖励/读档与减少动态效果 | 本轮样本通过，SUPPORTED |
+| 较小桌面与动态诊断 | 1440×900、1024×768；三角色正常/半速的五动作、暂停恢复、取消和死亡保持；诊断前后完整游戏状态相等 | 已覆盖的桌面条件 SUPPORTED |
+| 微信首发与主观观感 | 微信小游戏仅完成 SDK 测试编译；录像按时序抽帧查看，未将文件存在或编码帧率当作主观流畅/设备性能证据 | 微信真机/性能、用户最终认可 NEEDS EVIDENCE |
+
+真实输入图为 output/playwright/spine08/hero-impact.png、brute-impact.png，正常/半速与三角色诊断见 main-gameplay.webm、poses-gameplay.webm、brute-gameplay.webm 和 poses-contact-sheet.png。三演员同框诊断为展示取景，未把三个演员同时上场写成游戏玩法。此处 supersedes 先前“怪物与死亡未重做”的当前状态描述，但保留原日期历史证据。完整矩阵与媒体哈希见 docs/spine08-verification.json。

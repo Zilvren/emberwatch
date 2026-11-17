@@ -112,3 +112,13 @@ Animation 驱动 NativeBones 的角度、位置和 approach 属性；NativeActor
 - 编辑器与运行库版本匹配：https://esotericsoftware.com/spine-versioning
 - Cocos Spine Skeleton、实时模式及缓存限制：https://docs.cocos.com/creator/3.8/manual/zh/editor/components/spine.html
 - Cocos 骨骼资源导入格式：https://docs.cocos.com/creator/3.8/manual/en/asset/spine.html
+
+## 2026-11-17：Spine 08 动作交付
+
+项目 The end；状态：本地 MCP 制作和原生接入已实施，替代前述 native08 活跃动作。版本固定为本机编辑器及导出 3.8.75、当前 Pink/Cocos 4.0.0-beta.1 的 Spine 3.8 运行库。
+
+- 编辑源为 art-source/spine08/{survivor,wanderer,brute}.spine 及同名 .authoring.json；运行资源位于 assets/resources/actors/spine08/，含三份 JSON/atlas/contract、一份原画相同字节副本、三份透明死亡身体附件和 SDK 分配的 .meta。既有演员 Prefab 根 UUID/fileId、原视觉比例与原素材保持。
+- 每角色 28 根骨骼/控制、五动作；3 秒待机循环，攻击接触为 0.40/0.45/0.54 秒，结束为 0.84/0.94/1.10 秒。头和靴子刚性绑定，身体局部权重混合、双脚 IK；武器/手部接触点进入原表现命令链且只触发一次。
+- 死亡采用骨骼倒下加侧卧身体附件，原头/兜帽/铁盔网格复用。身体图由内置 image_gen 参考原 08 生成，源与运行 PNG 保持相同字节；透明边界、原始尺寸和哈希见 tools/spine/corpse-regions.json，提示词来源见 character-style-exploration/spine08-corpse-prompts.json。
+- 显式制作入口 npm run author:spine -- --mcp <本地MCP目录> --spine <Spine.com>。MCP 经 stdio 写五动作、导入新临时工程、导出并验证；3.8 曲线序列化由适配器转换。先用 Pink SDK 导入资源分配元数据，再执行 npm run connect:spine。普通构建不运行作者工具。
+- 三角色正常/半速、暂停恢复、中断、死亡保持、减少动态效果和主游戏真实输入均有本轮证据。web-desktop 构建与微信小游戏测试编译通过；微信真机、性能和发布不属于已通过结论。详情与未验证边界为 docs/spine08-verification.json。

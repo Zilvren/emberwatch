@@ -1,0 +1,26 @@
+
+master08-thin.png
+size: 1536,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+master08-thin
+  rotate: false
+  xy: 0, 0
+  size: 1536, 1024
+  orig: 1536, 1024
+  offset: 0, 0
+  index: -1
+
+survivor-corpse.png
+size: 2172,724
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+survivor-corpse
+  rotate: false
+  xy: 74, 87
+  size: 2040, 609
+  orig: 2172, 724
+  offset: 74, 28
+  index: -1

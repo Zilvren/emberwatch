@@ -550,5 +550,13 @@
       }
     ],
     "historicalRecordNote": "其余字段保留此前技能安装与应用的历史验收；本次结果以 latestTaskReview 指向的记录为准。"
+  },
+  "latestSpineReview": {
+    "date": "2026-11-17",
+    "record": "docs/spine08-verification.json",
+    "technicalOutcome": "SUPPORTED",
+    "executorVisualOutcome": "SUPPORTED",
+    "userFinalVisualApproval": "NEEDS EVIDENCE",
+    "wechat": "compile passed; device runtime and performance unverified"
   }
 }

@@ -13,7 +13,7 @@ assert(!s.hits.some(h=>h.id==='claim-card-0'&&h.enabled),'Previously claimed rew
 await claimSupplies();await leaveRewards();await click('route-A');await click('enter-enemy1');
 const firstBattle=await page.evaluate(()=>globalThis.__survivalGame.exportState());
 await page.reload();await idle();assert(JSON.stringify(await page.evaluate(()=>globalThis.__survivalGame.exportState()))===JSON.stringify(firstBattle),'Battle piles or RNG changed during reload');
-s=await state();assert(s.heroPose==='master08-native:idle'&&s.heroRenderer==='cocos-native-cutout'&&s.heroMotion==='idle','Restored battle did not use the fixed 08 actor');assert(s.saveStatus==='已恢复进度'&&!s.saveWarning,'Continue-game status is incorrect');
+s=await state();assert(s.heroPose==='master08-spine:idle'&&s.heroRenderer==='spine-3.8'&&s.heroMotion==='idle','Restored battle did not use the fixed 08 actor');assert(s.saveStatus==='已恢复进度'&&!s.saveWarning,'Continue-game status is incorrect');
 await click('end-turn');const nextTurn=await page.evaluate(()=>globalThis.__survivalGame.exportState());assert(nextTurn.battle.turn===2,'Battle did not continue after restore');
 await page.reload();await idle();assert(JSON.stringify(await page.evaluate(()=>globalThis.__survivalGame.exportState()))===JSON.stringify(nextTurn),'Reload changed next-turn draw order, equipment or costs');
 await screenshot('production-resumed-battle');

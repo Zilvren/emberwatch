@@ -1,0 +1,692 @@
+{
+  "schemaVersion": 1,
+  "project": "The end",
+  "date": "2026-11-17",
+  "recordedAt": "2026-11-16T22:16:26.214Z",
+  "timezone": "Asia/Shanghai",
+  "task": "Use the selected local MCP to rebuild player and both monster animations, apply art skills and run whole-game regression",
+  "taskOutcome": "SUPPORTED",
+  "technicalOutcome": "SUPPORTED",
+  "executorVisualOutcome": "SUPPORTED",
+  "executorVisualScope": "Observed original identity, articulated contact pose, filled arm occlusion, foot stability and grounded terminal poses in native screenshots and timed normal/half-speed diagnostics with decoded final recording frames. Subjective fluidity is not inferred from frame counts or recording encoding.",
+  "userFinalVisualApproval": {
+    "status": "NEEDS EVIDENCE",
+    "source": "No explicit final subjective acceptance recorded; not a prerequisite invented for technical delivery."
+  },
+  "releasePlatformReadiness": {
+    "status": "NEEDS EVIDENCE",
+    "reason": "WeChat compile passed. WeChat Developer Tools, real-device runtime, memory and frame-time performance were not measured."
+  },
+  "scope": {
+    "engine": "Pink/Cocos 4.0.0-beta.1",
+    "scene": "assets/TheEnd.scene",
+    "renderer": "native sp.Skeleton, Spine 3.8.75, REALTIME",
+    "actors": [
+      "survivor",
+      "wanderer",
+      "brute"
+    ],
+    "motions": [
+      "idle",
+      "prepare",
+      "attack",
+      "hurt",
+      "death"
+    ],
+    "totalMotions": 15,
+    "newGameplay": false
+  },
+  "skillsApplied": [
+    "art-bible",
+    "asset-spec",
+    "ux-review",
+    "vertical-slice",
+    "test-evidence-review"
+  ],
+  "sourceRevision": {
+    "base": "d8fe215",
+    "implementation": "current uncommitted working tree; source/media hashes in this record identify inspected artifacts"
+  },
+  "mcp": {
+    "source": "C:/Users/Knock/Desktop/spine-MCP",
+    "packageVersion": "0.1.0",
+    "protocol": "actual MCP SDK stdio initialize/list/call",
+    "toolsPerActor": 7,
+    "report": "docs/spine08-mcp-report.json",
+    "actors": [
+      {
+        "actor": "survivor",
+        "bones": 28,
+        "version": "3.8.75",
+        "animations": [
+          "attack",
+          "death",
+          "hurt",
+          "idle",
+          "prepare"
+        ],
+        "normalizedCurves": 172,
+        "importExitCode": 0,
+        "exportExitCode": 0
+      },
+      {
+        "actor": "wanderer",
+        "bones": 28,
+        "version": "3.8.75",
+        "animations": [
+          "attack",
+          "death",
+          "hurt",
+          "idle",
+          "prepare"
+        ],
+        "normalizedCurves": 172,
+        "importExitCode": 0,
+        "exportExitCode": 0
+      },
+      {
+        "actor": "brute",
+        "bones": 28,
+        "version": "3.8.75",
+        "animations": [
+          "attack",
+          "death",
+          "hurt",
+          "idle",
+          "prepare"
+        ],
+        "normalizedCurves": 172,
+        "importExitCode": 0,
+        "exportExitCode": 0
+      }
+    ],
+    "limitations": [
+      "No direct editor canvas control or automatic art/mesh weighting",
+      "Project adapter normalizes MCP Bezier tuples for Spine 3.8",
+      "Fresh temporary .spine import avoids merging skeletons into previous outputs"
+    ],
+    "alternative": {
+      "repository": "https://github.com/egorfedorov/spine-mcp",
+      "commit": "faf78bb307a6ea36dad8c258897cdba229171320",
+      "result": "Not selected: protocol lists 9 tools; doctor timeout; pure build_rig emits fixed 4.2.00 root/body/head rig and binds arm slot to body; local editor is 3.8.75"
+    }
+  },
+  "commands": [
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "passed": 149,
+      "failed": 0,
+      "log": "temp/spine08-tests.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "temp/spine08-typecheck.log"
+    },
+    {
+      "command": "npm run check:architecture",
+      "exitCode": 0,
+      "files": 86,
+      "runtimeEdges": 150,
+      "failures": [],
+      "log": "temp/spine08-architecture.log"
+    },
+    {
+      "command": "npm run build:web",
+      "exitCode": 0,
+      "log": "temp/spine08-build.log",
+      "output": "build/web-desktop"
+    },
+    {
+      "command": "node tools/pink.cjs build --project . --platform wechatgame --build-config temp/spine08-wechat-build.json",
+      "exitCode": 0,
+      "log": "temp/spine08-wechat-build.log",
+      "output": "build/wechatgame-spine08",
+      "testAppId": "wx6ac3f5090a6b99c5",
+      "published": false
+    }
+  ],
+  "browser": {
+    "report": "output/playwright/spine08/full/browser-report.json",
+    "passed": true,
+    "scenarios": {
+      "browser-review-round3": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-first-battle": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-route-a": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-route-b": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-session-save": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-accessibility": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-input-check": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-coherence-check": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-page-overlays": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-material-coherence": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-deck-map": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-stamina-system": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-hand-shelter": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      },
+      "browser-quality-fixes": {
+        "passed": true,
+        "runtimeErrors": [],
+        "consoleErrors": []
+      }
+    },
+    "scenarioCount": 14,
+    "conditions": [
+      "native Cocos Canvas on Chromium",
+      "1440x900",
+      "1024x768",
+      "dedicated QA storage and save-off diagnostic"
+    ],
+    "realBattle": {
+      "report": "output/playwright/spine08/main-report.json",
+      "passed": true,
+      "normalInput": true,
+      "halfSpeedDiagnostic": true,
+      "contactErrorDesignUnits": {
+        "survivor": 0.020356193186657864,
+        "wanderer": 0.04056165177059178,
+        "brute": 0.008241074624868162
+      },
+      "bruteReport": "output/playwright/spine08/brute-report.json",
+      "bruteRealInputs": true,
+      "bruteNormalSpeed": true,
+      "bruteOneImpact": true,
+      "bruteDeathComplete": true,
+      "runtimeErrors": []
+    },
+    "presentationDiagnostic": {
+      "report": "output/playwright/spine08/poses-report.json",
+      "passed": true,
+      "presentationOnly": true,
+      "gameStateUnchanged": true,
+      "playback": [
+        {
+          "motion": "prepare",
+          "speed": 1,
+          "callbacks": {
+            "player": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.669900119304657
+              ]
+            },
+            "wanderer": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.669900119304657
+              ]
+            },
+            "brute": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.669900119304657
+              ]
+            }
+          }
+        },
+        {
+          "motion": "attack",
+          "speed": 1,
+          "callbacks": {
+            "player": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.4067000150680542
+              ]
+            },
+            "wanderer": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.4626000225543976
+              ]
+            },
+            "brute": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.5551000237464905
+              ]
+            }
+          }
+        },
+        {
+          "motion": "hurt",
+          "speed": 1,
+          "callbacks": {
+            "player": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.382500022649765
+              ]
+            },
+            "wanderer": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.382500022649765
+              ]
+            },
+            "brute": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.382500022649765
+              ]
+            }
+          }
+        },
+        {
+          "motion": "death",
+          "speed": 1,
+          "callbacks": {
+            "player": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                1.1293997764587402
+              ]
+            },
+            "wanderer": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                1.1845998764038086
+              ]
+            },
+            "brute": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                1.2851998805999756
+              ]
+            }
+          }
+        },
+        {
+          "motion": "prepare",
+          "speed": 0.5,
+          "callbacks": {
+            "player": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.6664000153541565
+              ]
+            },
+            "wanderer": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.6664000153541565
+              ]
+            },
+            "brute": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.6664000153541565
+              ]
+            }
+          }
+        },
+        {
+          "motion": "attack",
+          "speed": 0.5,
+          "callbacks": {
+            "player": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.40164995193481445
+              ]
+            },
+            "wanderer": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.45184996724128723
+              ]
+            },
+            "brute": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.542699933052063
+              ]
+            }
+          }
+        },
+        {
+          "motion": "hurt",
+          "speed": 0.5,
+          "callbacks": {
+            "player": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.38429996371269226
+              ]
+            },
+            "wanderer": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.38429996371269226
+              ]
+            },
+            "brute": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                0.38429996371269226
+              ]
+            }
+          }
+        },
+        {
+          "motion": "death",
+          "speed": 0.5,
+          "callbacks": {
+            "player": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                1.1236002445220947
+              ]
+            },
+            "wanderer": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                1.1814502477645874
+              ]
+            },
+            "brute": {
+              "impact": 1,
+              "complete": 1,
+              "eventTimes": [
+                1.2821003198623657
+              ]
+            }
+          }
+        }
+      ],
+      "cancelledCallbacks": {
+        "old": 0,
+        "next": 3
+      },
+      "runtimeErrors": []
+    }
+  },
+  "sourceIntegrity": {
+    "baseline": "temp/spine08-before.json",
+    "baselineProtectedFiles": 564,
+    "modifiedProtectedPaths": [
+      "assets/game/presentation/actors/ActorPresentation.ts",
+      "assets/game/presentation/primitives/ContactShadow.ts",
+      "assets/prefabs/actors/BruteActor.prefab",
+      "assets/prefabs/actors/PlayerActor.prefab",
+      "assets/prefabs/actors/WandererActor.prefab"
+    ],
+    "gameplayApplicationPersistenceFilesChanged": [],
+    "actorMetaUnchanged": true,
+    "approvedMaster": {
+      "path": "assets/resources/actors/sketch08/master08-thin.png",
+      "sha256": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+      "runtimeCopyByteIdentical": true
+    },
+    "baselineFloor": -112,
+    "displayScale": "existing product Prefab/Scene scale preserved; 0.84 scene-only review framing not written to assets",
+    "editableSources": [
+      {
+        "path": "art-source/spine08/survivor.spine",
+        "sha256": "f84f514b30a7374c9477bca2b7d3eeccd69930a34c27fde3c959d964403c0763"
+      },
+      {
+        "path": "art-source/spine08/wanderer.spine",
+        "sha256": "9c7a4814f0de66959540d7c46b01ef8b1d018dbc1343c877fd682ed275ac594e"
+      },
+      {
+        "path": "art-source/spine08/brute.spine",
+        "sha256": "9d158210a9fd685f22b9add7c505baac7bbb9110e3db0c873c1fcc192d96395d"
+      }
+    ],
+    "runtimeAssets": [
+      {
+        "path": "assets/resources/actors/spine08/survivor.json",
+        "sha256": "0ad0bf684f237000578651a3296f9649682f29b9338fa8cacf945270dd50104f"
+      },
+      {
+        "path": "assets/resources/actors/spine08/wanderer.json",
+        "sha256": "3b38868b369cd45586ded0a1ff41f15b2f0c76a096e8b1da849ee299e0d3c94e"
+      },
+      {
+        "path": "assets/resources/actors/spine08/brute.json",
+        "sha256": "e2730d0b758aa5c6ff4e29b3dd776e3cbbc820204d52541484f6935d72959fa6"
+      }
+    ],
+    "implementationFiles": [
+      {
+        "path": "assets/game/presentation/actors/ActorPresentation.ts",
+        "sha256": "3d35dce059915a2faaf558b27f29a20d3e1f5aba156fe939d530732be6652077"
+      },
+      {
+        "path": "assets/game/presentation/actors/SpineActorRig.ts",
+        "sha256": "640b384fc07518a2b42bd684cb0c0789081637429729a9738428590aae81f080"
+      },
+      {
+        "path": "assets/game/presentation/actors/SpineRigGeometry.ts",
+        "sha256": "632954862063f098f530204fb56f5d182fd6496801e5669659f36cef37a46de6"
+      },
+      {
+        "path": "assets/game/presentation/primitives/ContactShadow.ts",
+        "sha256": "e92bf729b0a665630a64c7ede36539654419bb5e1796c5e68725de8b74c05e1f"
+      },
+      {
+        "path": "assets/prefabs/actors/PlayerActor.prefab",
+        "sha256": "74c631f0fa63785bc54bff1a5450fe8bbbf683f84d40a295853279472355ba07"
+      },
+      {
+        "path": "assets/prefabs/actors/WandererActor.prefab",
+        "sha256": "0ba265e175f7db0d350891c8da903a3a0399df6e3bcbed64b615b7ea1c7fbcfb"
+      },
+      {
+        "path": "assets/prefabs/actors/BruteActor.prefab",
+        "sha256": "7b96b22bab05f59f9ec8b1d975d9889d00a219b814e73f8aec9be2adcd353a34"
+      },
+      {
+        "path": "tools/spine/rig-authoring.cjs",
+        "sha256": "f72fc1aa254d610e831875360fa8b91af4cb9bafcf371053a587d166f605063b"
+      },
+      {
+        "path": "tools/spine/author.mjs",
+        "sha256": "785e62b10d3b0915a5d9139bdfe13ced4a6164df5e7139f65aa2e1c25bcecdf6"
+      },
+      {
+        "path": "tools/spine/connect.cjs",
+        "sha256": "798011a141dd5aaf9679e177a5337fb2e90bbc8553c870a9e58ad0681308315e"
+      },
+      {
+        "path": "tools/spine/wechat-babel-compat.cjs",
+        "sha256": "0bc3c41a1d040951fb33e7f6d0fd98c1a42f57121d39b9c0b81d3fc7d2c27871"
+      },
+      {
+        "path": "tools/pink.cjs",
+        "sha256": "937d77b72e8bcbeeeb85e25d0af5a7426c3a90a13e863c7563a2cf992f1bab0c"
+      },
+      {
+        "path": "tests/spine-actor-motion.test.cjs",
+        "sha256": "c3e2fdfef1079f4b568c36606e0ea4d0e79b6409dfce3868b96818f06e0d934d"
+      }
+    ]
+  },
+  "artReview": [
+    {
+      "finding": "Arm gap after lifting the original occluded shoulder",
+      "status": "SUPPORTED",
+      "fix": "Original-art UV coverage meshes; current native impact screenshots inspected."
+    },
+    {
+      "finding": "Spine timeline/transform timing produced stale contact geometry",
+      "status": "SUPPORTED",
+      "fix": "Before-draw updateWorldTransform, actor travel and ordered exactly-once signals."
+    },
+    {
+      "finding": "Deep-fold death candidate distorted cloth and floated",
+      "status": "SUPPORTED",
+      "fix": "Rejected candidate; bone fall transitions into grounded body attachment using original head mesh.",
+      "rejectedEvidence": "output/playwright/spine08/before/death-deep-fold-rejected.png"
+    },
+    {
+      "finding": "Identity and ground registration",
+      "status": "SUPPORTED",
+      "evidence": [
+        "diagnostic-idle-all.png",
+        "diagnostic-contact-all.png",
+        "diagnostic-death-all.png",
+        "diagnostic-1024.png"
+      ]
+    },
+    {
+      "finding": "User final subjective approval",
+      "status": "NEEDS EVIDENCE",
+      "reason": "Not recorded; executor observations are separate."
+    }
+  ],
+  "deathImplementation": "Bone fall plus side-lying body replacement attachment, original head/hood/helmet mesh; not an independently skinned terminal limb rig.",
+  "media": [
+    {
+      "path": "output/playwright/spine08/diagnostic-idle-all.png",
+      "bytes": 1395736,
+      "modifiedAt": "2026-11-16T21:39:54.757Z",
+      "sha256": "7936ea1ffef1448352608bb3e1b9fa1f19295e97627c59f7e757d1ec80e22e38"
+    },
+    {
+      "path": "output/playwright/spine08/diagnostic-contact-all.png",
+      "bytes": 1400229,
+      "modifiedAt": "2026-11-16T21:40:07.103Z",
+      "sha256": "8ac50b6a2994a34c902c567ff80bdcdeca5ec20feee5bb771dbc6af6f2dcca30"
+    },
+    {
+      "path": "output/playwright/spine08/diagnostic-death-all.png",
+      "bytes": 1323747,
+      "modifiedAt": "2026-11-16T21:39:59.242Z",
+      "sha256": "3e52882cfb7216e6016848cca637a83fc39cb7c87bcb877d8af9fd8856bf0810"
+    },
+    {
+      "path": "output/playwright/spine08/diagnostic-1024.png",
+      "bytes": 882110,
+      "modifiedAt": "2026-11-16T21:40:08.359Z",
+      "sha256": "eec0d7f5dfded86cea70fd76e4e3f52fcd93bec369a5ae5c76d20a53aed548bf"
+    },
+    {
+      "path": "output/playwright/spine08/hero-impact.png",
+      "bytes": 1294790,
+      "modifiedAt": "2026-11-16T21:44:58.621Z",
+      "sha256": "ee814456010343fcc57805b2fb7c83a1e2f873c900427c660afe4aa26ce58d10"
+    },
+    {
+      "path": "output/playwright/spine08/brute-impact.png",
+      "bytes": 1299155,
+      "modifiedAt": "2026-11-16T22:07:16.796Z",
+      "sha256": "5c3b85e314370603719240ffdaa9f30cbd159925b06156923874f4b5784a009e"
+    },
+    {
+      "path": "output/playwright/spine08/main-gameplay.webm",
+      "bytes": 1312216,
+      "modifiedAt": "2026-11-16T21:45:06.270Z",
+      "sha256": "23f84e3c17a028e9c9fa176f1e2341e6d3d027c52fe2cf688c79ef6c230d89cd"
+    },
+    {
+      "path": "output/playwright/spine08/poses-gameplay.webm",
+      "bytes": 2280283,
+      "modifiedAt": "2026-11-16T21:40:09.411Z",
+      "sha256": "0fc0662e99bd200b0bac65a896ce2aa0c69336d1def3540a06140941842b1fdf"
+    },
+    {
+      "path": "output/playwright/spine08/brute-gameplay.webm",
+      "bytes": 1744121,
+      "modifiedAt": "2026-11-16T22:07:26.154Z",
+      "sha256": "541e979567169dd34de498304ffe7a5d1b8b90d8fbadc885f49cf92724f2c678"
+    },
+    {
+      "path": "output/playwright/spine08/poses-contact-sheet.png",
+      "bytes": 2770856,
+      "modifiedAt": "2026-11-16T22:12:27.747Z",
+      "sha256": "86a2a3e5488edbc9109dd53af27a14f426e788fa98b9b323be5a979a1e0c675e"
+    }
+  ],
+  "performance": {
+    "status": "NEEDS EVIDENCE",
+    "reason": "No real-device frame time or memory measurement; WebM frame rate is encoder metadata."
+  },
+  "archive": {
+    "verification": "viking://~/resources/projects/the-end/docs/spine08-verification.json",
+    "motion": "viking://~/resources/projects/the-end/designs/character-style-exploration/spine08-motion.md",
+    "mcp": "viking://~/resources/projects/the-end/docs/spine08-mcp-report.json"
+  },
+  "limitations": [
+    "WeChat real-device/runtime, performance and publication not performed",
+    "User final subjective aesthetic approval not recorded",
+    "Art style checks are bounded executor observations, not a claim that every action is final production art",
+    "SDK bridge and scoped WeChat Babel compatibility need revalidation on engine upgrade"
+  ]
+}

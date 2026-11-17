@@ -28,6 +28,7 @@ const scripts={"GameView":"assets/game/presentation/ui/GameView.ts","PaperDollRi
   "SpriteActorMotion": "assets/game/presentation/actors/SpriteActorMotion.ts",
   "StableActorSprite": "assets/game/presentation/actors/StableActorSprite.ts",
   "NativeActorSkin": "assets/game/presentation/actors/NativeActorSkin.ts",
+  "SpineActorRig": "assets/game/presentation/actors/SpineActorRig.ts",
   "ActorMotionReview": "assets/game/presentation/actors/ActorMotionReview.ts",
   "EffectPresentation": "assets/game/presentation/effects/EffectPresentation.ts",
   "GameAudio": "assets/game/presentation/audio/GameAudio.ts",

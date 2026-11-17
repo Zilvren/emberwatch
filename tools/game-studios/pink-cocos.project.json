@@ -19,7 +19,8 @@
     "animations": "assets/animations",
     "resources": "assets/resources",
     "buildConfig": "build-config.json",
-    "buildOutput": "build/web-desktop"
+    "buildOutput": "build/web-desktop",
+    "skeletalAnimations": "assets/resources/actors/spine08"
   },
   "commands": {
     "inspect": "node tools/game-studios/inspect.cjs --project .",
@@ -36,8 +37,14 @@
     "qaSession": "the-end-skills",
     "baseUrl": "http://127.0.0.1:7457/",
     "temporaryBattle": "?seed=17&save=off&preview=encounter",
-    "designResolution": { "width": 1440, "height": 900 },
-    "supportedSmallerViewport": { "width": 1024, "height": 768 },
+    "designResolution": {
+      "width": 1440,
+      "height": 900
+    },
+    "supportedSmallerViewport": {
+      "width": 1024,
+      "height": 768
+    },
     "evidenceDirectory": "output/playwright"
   },
   "artifacts": {
@@ -47,7 +54,9 @@
     "uxReview": "docs/designs/ui/ux-review.md",
     "verticalSlice": "docs/vertical-slice.md",
     "evidenceReview": "docs/game-studios-evidence.json",
-    "installation": "docs/game-studios-skills.md"
+    "installation": "docs/game-studios-skills.md",
+    "spineMotion": "docs/designs/character-style-exploration/spine08-motion.md",
+    "spineVerification": "docs/spine08-verification.json"
   },
   "openViking": {
     "root": "viking://~/resources/projects/the-end/",

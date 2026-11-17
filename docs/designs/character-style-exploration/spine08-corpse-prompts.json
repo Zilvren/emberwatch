@@ -1,0 +1,81 @@
+{
+  "project": "The end",
+  "date": "2026-11-17",
+  "status": "implemented; executor in-engine visual review recorded; user final subjective approval not recorded",
+  "tool": "built-in image_gen",
+  "reference": "assets/resources/actors/sketch08/master08-thin.png",
+  "headPolicy": "Original head/hood/helmet mesh is reused; generated assets contain body only.",
+  "prompts": {
+    "survivor": "Use case: stylized-concept. Production bitmap asset for a 2D skeletal game, matching the attached MUTED FIELD SKETCH 08 reference exactly in costume, low saturation warm ochre/olive/beige palette, thin uneven dark brown ink lines, sparse flat hand-painted shading and texture. Make ONE modular animation BODY WITHOUT A HEAD: a clean garment collar/neck socket, no head or face, no blood, no injury, no gore. The game's original head will be attached separately, so omit every head/helmet/hair shape. The whole body is lying naturally ON ITS SIDE, fully settled flat along one horizontal ground-contact baseline, relaxed bent knees and arms, no body floating, no feet sticking in the air. This is an unconscious/death terminal body pose for a game, not a scene. Entire cutout visible with generous transparent padding. A real transparent alpha background, no ground, no shadow, no labels, no text, no panel border. Preserve the reference's limb thickness and equipment details. Wide horizontal composition. SUBJECT: ONLY the LEFT hooded survivor from the reference. Keep ochre poncho, olive trousers, bandaged forearms, fingerless gloves, belt pouch, square tan backpack, brown boots and the SAME short angular cleaver held loosely in the near hand. The hood and head are omitted for the separate original head attachment; preserve scarf/collar base. Neck socket at the RIGHT end, feet at the LEFT end. Body rests prone on its side; arms folded naturally near chest, cleaver flat beside the hand, both boots resting on the same ground baseline. No new accessories.",
+    "wanderer": "Use case: stylized-concept. Production bitmap asset for a 2D skeletal game, matching the attached MUTED FIELD SKETCH 08 reference exactly in costume, low saturation warm ochre/olive/beige palette, thin uneven dark brown ink lines, sparse flat hand-painted shading and texture. Make ONE modular animation BODY WITHOUT A HEAD: a clean garment collar/neck socket, no head or face, no blood, no injury, no gore. The game's original head will be attached separately, so omit every head/helmet/hair shape. The whole body is lying naturally ON ITS SIDE, fully settled flat along one horizontal ground-contact baseline, relaxed bent knees and arms, no body floating, no feet sticking in the air. This is an unconscious/death terminal body pose for a game, not a scene. Entire cutout visible with generous transparent padding. A real transparent alpha background, no ground, no shadow, no labels, no text, no panel border. Preserve the reference's limb thickness and equipment details. Wide horizontal composition. SUBJECT: ONLY the CENTER skinny infected wanderer from the reference. Keep ragged gray olive jacket, torn trousers, thin pale arms and hands with the same long fingers, brown boots and the same slim proportions. No hair/head/face, clean collar socket at the LEFT end, feet at the RIGHT end. Relaxed side-lying pose, both arms resting on or beside the torso and legs, bent knees, all weight resting on the ground baseline. No new accessories.",
+    "brute": "Use case: stylized-concept. Production bitmap asset for a 2D skeletal game, matching the attached MUTED FIELD SKETCH 08 reference exactly in costume, low saturation warm ochre/olive/beige palette, thin uneven dark brown ink lines, sparse flat hand-painted shading and texture. Make ONE modular animation BODY WITHOUT A HEAD: a clean garment collar/neck socket, no head or face, no blood, no injury, no gore. The game's original head will be attached separately, so omit every head/helmet/hair shape. The whole body is lying naturally ON ITS SIDE, fully settled flat along one horizontal ground-contact baseline, relaxed bent knees and arms, no body floating, no feet sticking in the air. This is an unconscious/death terminal body pose for a game, not a scene. Entire cutout visible with generous transparent padding. A real transparent alpha background, no ground, no shadow, no labels, no text, no panel border. Preserve the reference's limb thickness and equipment details. Wide horizontal composition. SUBJECT: ONLY the RIGHT hulking armored infected brute from the reference. Keep huge ochre overcoat, plated shoulder pads with rivets, dark chest armor, diagonal belt and pouches, brown heavy gloves, thick trousers and large brown boots. Omit the entire box helmet/head because the ORIGINAL box helmet will be attached separately. Neck socket at the LEFT end, feet at the RIGHT end. Heavy compact side-lying body, shoulder and hip settled on ground, arms folded at chest with bulky gloves, knees comfortably bent and both boots supported on ground. Keep reference's massive torso and short thick limbs, no new accessories."
+  },
+  "referenceSha256": "42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f",
+  "assembly": "Spine bone fall transitions to side-lying body attachment. Corpse/CorpseHead keep the original head/hood/helmet mesh, with fixed source registration. PNG pixels are not resampled.",
+  "outputs": {
+    "survivor": {
+      "source": "art-source/spine08/corpse-bodies/survivor.png",
+      "runtime": "assets/resources/actors/spine08/survivor-corpse.png",
+      "size": [
+        2172,
+        724
+      ],
+      "bbox": [
+        74,
+        87,
+        2114,
+        696
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "c90a59dc6b2a080308edde09217a884c620965a6ab7f8781467afa04d29352f2"
+    },
+    "wanderer": {
+      "source": "art-source/spine08/corpse-bodies/wanderer.png",
+      "runtime": "assets/resources/actors/spine08/wanderer-corpse.png",
+      "size": [
+        2172,
+        724
+      ],
+      "bbox": [
+        185,
+        195,
+        2030,
+        662
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "5610f2fcff5521fbfd0dca519373a01af8d3aa062dc341803b69d997aa2d71ad"
+    },
+    "brute": {
+      "source": "art-source/spine08/corpse-bodies/brute.png",
+      "runtime": "assets/resources/actors/spine08/brute-corpse.png",
+      "size": [
+        1774,
+        887
+      ],
+      "bbox": [
+        41,
+        86,
+        1675,
+        830
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "161f5fd768bcc7b268790c03c1c0778fe46350f050b9d982a0a52620c012c309"
+    }
+  },
+  "review": {
+    "executor": "Codex",
+    "image": "output/playwright/spine08/diagnostic-death-all.png",
+    "method": "Native scene screenshot and normal/half-speed playback telemetry plus decoded video frames; not a claim of full continuous video viewing or measured frame rate.",
+    "observation": "Bodies and original heads meet the ground; rejected deep-fold candidate retained separately.",
+    "userFinalApproval": "not recorded"
+  }
+}

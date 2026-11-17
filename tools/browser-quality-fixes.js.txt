@@ -5,7 +5,7 @@ const rootInfo=async()=>page.evaluate(()=>{
  const grid=root.getComponentsInChildren('InventoryGrid').find(c=>c.node.activeInHierarchy);
  const notice=root.getComponent('GameDirector').hud.getComponent('StatusBar').rulesNotice;
  return {filter:d.ui.bagFilter,editing:d.ui.deckEdit,visibleCards:grid?.content.children.filter(n=>n.activeInHierarchy).length,emptyVisible:grid?.emptyLabel.node.activeInHierarchy,emptyText:grid?.emptyLabel.string,noticeVisible:notice.node.activeInHierarchy,notice:notice.caption.string,
- actors:root.getComponentsInChildren('ActorPresentation').filter(a=>a.node.activeInHierarchy).map(a=>({name:a.node.name,motion:a.motion,pose:a.pose,playing:a.getComponent('cc.Animation').getState(a.idle?.name)?.isPlaying,idleOffset:a.paperDoll?(a.paperDoll.bones.find(n=>n.name==='Cloak').scale.x-1):a.artwork.getComponent('StableActorSprite')?.rigSnapshot().breath}))};
+ actors:root.getComponentsInChildren('ActorPresentation').filter(a=>a.node.activeInHierarchy).map(a=>({name:a.node.name,motion:a.motion,pose:a.pose,playing:a.spineRig?!a.spineRig.skeleton.paused:a.getComponent('cc.Animation').getState(a.idle?.name)?.isPlaying,idleOffset:a.spineRig?(a.spineRig.skeleton.findBone('Breath')?.y??0):a.artwork.getComponent('StableActorSprite')?.rigSnapshot().breath}))};
 });
 const samples=async()=>{const values=[];for(let i=0;i<4;i++){values.push((await rootInfo()).actors);await page.waitForTimeout(180);}return values;};
 await page.goto('http://127.0.0.1:7457/?seed=17&save=off&review=quality-fixes');await idle();
@@ -24,9 +24,9 @@ await screenshot('fixed-battle-idle');
 let s=await state();const hit=s.hand.find(c=>c.kind==='heavy'&&!c.blocked)??s.hand.find(c=>c.kind==='attack'&&!c.blocked);assert(hit,'No legal damage card');
 const amount=await page.evaluate(kind=>globalThis.__survivalGame.content.cards[kind].effect.amount,hit.kind);const hp=s.battle.hp,cost=await page.evaluate(kind=>globalThis.__survivalGame.content.cards[kind].cost,hit.kind),energy=s.stamina;
 await click('card-'+hit.id);let target=await hitPoint('enemy-target');await page.mouse.click(target.x,target.y);
-await page.waitForFunction(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return d.hero.motion==='attack'&&d.hero.rendererKind==='cocos-native-cutout';});
+await page.waitForFunction(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return d.hero.motion==='attack'&&d.hero.rendererKind==='spine-3.8';});
 const detailed=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return{renderer:d.hero.rendererKind,pose:d.hero.pose,rig:d.hero.inspectRig()};});
-assert(detailed.renderer==='cocos-native-cutout'&&detailed.rig.bones===10&&detailed.rig.parts>=7,'Attack has unresolved native slots or unplanted feet');await screenshot('fixed-attack-detail');await idle();
+assert(detailed.renderer==='spine-3.8'&&detailed.rig.bones>=26&&detailed.rig.weightedVertices>100,'Attack has unresolved native slots or unplanted feet');await screenshot('fixed-attack-detail');await idle();
 s=await state();assert(s.phase==='battle'&&s.battle.hp===hp-amount&&s.stamina===energy-cost,'Attack applied a duplicate impact or fee');
 // Toggle after a lethal impact, while the presentation is still waiting for its completion.
 let lethal;for(let i=0;i<3&&!lethal;i++){s=await state();lethal=s.hand.find(c=>['attack','slash','heavy'].includes(c.kind)&&!c.blocked);if(!lethal)await click('end-turn');}
@@ -56,4 +56,4 @@ await click('restart');await click('modal-cancel');assert(await page.evaluate(()
 await click('restart');await click('modal-confirm');assert((await state()).ruleset==='stamina-v1'&&!(await rootInfo()).noticeVisible,'Confirmed new game did not clear the legacy notice');
 await page.emulateMedia({reducedMotion:'reduce'});await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&review=started-reduced');await idle();assert((await samples()).flat().every(a=>!a.playing&&Math.abs(a.idleOffset)<0.00001),'Initially reduced idle is active');
 await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForTimeout(160);assert((await samples()).flat().every(a=>a.playing),'Initially reduced actors failed to resume');await screenshot('fixed-battle-1024');await page.setViewportSize({width:1440,height:900});
-return{passed:true,campFilterReset:true,emptyExplanation:true,persistentLegacyNotice:true,legacyReadCancelPreservesSave:true,confirmedNewGameUpgrades:true,idleStopsAndResumes:true,inFlightPreferenceKeepsCompletion:true,nativePaperDollAttack:detailed,oneImpactAndCost:true,arrivalContextCorrect:true,dailyLast:true,smallViewport:true,actions:trace.length,runtimeErrors};
+return{passed:true,campFilterReset:true,emptyExplanation:true,persistentLegacyNotice:true,legacyReadCancelPreservesSave:true,confirmedNewGameUpgrades:true,idleStopsAndResumes:true,inFlightPreferenceKeepsCompletion:true,nativeSpineAttack:detailed,oneImpactAndCost:true,arrivalContextCorrect:true,dailyLast:true,smallViewport:true,actions:trace.length,runtimeErrors};

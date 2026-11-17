@@ -1,0 +1,47 @@
+await page.setViewportSize({width:1440,height:900});
+await page.emulateMedia({reducedMotion:'no-preference'});
+await page.goto('http://127.0.0.1:7467/?seed=17&save=off&preview=encounter&review=spine08');
+await idle();
+const actors=()=>page.evaluate(()=>{
+ const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');
+ return [d.hero,d.enemy].map(a=>({id:a.actorId,renderer:a.rendererKind,motion:a.motion,rig:a.inspectRig()}));
+});
+let initial=await actors();
+assert(initial.every(a=>a.renderer==='spine-3.8'&&a.rig.runtimeReady),'Actor did not use the Spine runtime');
+await screenshot('spine08-initial-all');
+await page.evaluate(()=>{
+ const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector'),hero=d.hero,enemy=d.enemy;
+ globalThis.__spineSamples=[];globalThis.__spineSampling=true;
+ function sample(){if(!globalThis.__spineSampling)return;const g=globalThis.__survivalGame;globalThis.__spineSamples.push({at:performance.now(),hp:g.battle?.hp,armor:g.armor,revision:g.revision,phase:g.phase,busy:d.ui.busy,hero:{motion:hero.motion,rig:hero.inspectRig(),x:hero.node.position.x,y:hero.node.position.y},enemy:{motion:enemy.motion,rig:enemy.inspectRig(),x:enemy.node.position.x,y:enemy.node.position.y}});requestAnimationFrame(sample);}requestAnimationFrame(sample);
+});
+const before=await state(),damageCard=before.hand.find(c=>['heavy','attack'].includes(c.kind)&&!c.blocked);
+assert(damageCard,'No legal damage card');
+const beforeRules=await page.evaluate(kind=>({hp:__survivalGame.battle.hp,stamina:__survivalGame.battle.stamina,damage:__survivalGame.content.cards[kind].effect.amount,cost:__survivalGame.content.cards[kind].cost}),damageCard.kind);
+let start=await hitPoint('card-'+damageCard.id),target=await point(1030,390);
+await page.mouse.move(start.x,start.y);await page.waitForTimeout(150);await page.mouse.down();await page.mouse.move(target.x,target.y,{steps:14});await page.waitForTimeout(100);await page.mouse.up();
+await page.waitForFunction(()=>__survivalGame.battle?.hp<6);
+await page.screenshot({path:'output/playwright/spine08/hero-impact.png'});
+await idle();
+let after=await state();
+assert(after.battle.hp===beforeRules.hp-beforeRules.damage,'Wrong hero damage');
+assert(after.stamina===beforeRules.stamina-beforeRules.cost,'Wrong stamina cost');
+await click('end-turn');
+await screenshot('spine08-after-enemy-attack');
+const normal=await actors();
+assert(normal.every(a=>a.motion==='idle'),'An actor failed to return to idle');
+const diagnostics=await page.evaluate(()=>{
+ const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');
+ return {hero:d.hero.inspectRig(),enemy:d.enemy.inspectRig()};
+});
+assert(diagnostics.hero.contactError<6,'Hero contact error '+diagnostics.hero.contactError);
+assert(diagnostics.enemy.contactError<6,'Enemy contact error '+diagnostics.enemy.contactError);
+// Half-speed is an explicitly marked presentation diagnostic; inputs and commands remain real.
+await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');d.hero.spineRig.setSpeed(.5);d.enemy.spineRig.setSpeed(.5);});
+after=await state();const lethal=after.hand.find(c=>['heavy','attack','slash'].includes(c.kind)&&!c.blocked);
+assert(lethal,'No legal finishing card');await play(lethal,true);
+assert((await state()).phase==='rewards','Enemy death did not complete');
+const samples=await page.evaluate(()=>{globalThis.__spineSampling=false;return globalThis.__spineSamples;});
+const hpSteps=samples.filter((s,i)=>i&&samples[i-1].hp!==undefined&&s.hp!==samples[i-1].hp).map(s=>({hp:s.hp??0,phase:s.phase,time:s.hero.rig.time,motion:s.hero.motion}));
+assert(hpSteps.length===2,'Damage happened more than once per attack: '+JSON.stringify(hpSteps));
+assert(hpSteps[0].time>=.39&&hpSteps[0].time<.6,'Impact was delayed until completion: '+JSON.stringify(hpSteps[0]));
+return {passed:true,initial,diagnostics,hpSteps,normalInput:true,halfSpeedDiagnostic:true,samples,runtimeErrors};
