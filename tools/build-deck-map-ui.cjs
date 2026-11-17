@@ -255,8 +255,10 @@ if (mode === '--templates') {
         const g = blank(pointFile, 'RoutePoint');
         size(g, g.root, 148, 170);
         g.component(g.root, 'cc.Graphics', cleanComponent(graphicTemplate));
-        const title = label(g, 'PointTitle', '地点', 720, 510, 180, 26, 18, '434b3c', true),
+        const title = label(g, 'PointTitle', '', 720, 510, 180, 26, 18, '434b3c', true),
             status = label(g, 'PointStatus', '', 720, 535, 180, 22, 14, '59614f');
+        g.graph[title.node]._active = false;
+        g.graph[status.node]._active = false;
         const input = rawButton(g, g.root, 'map-node');
         g.component(g.root, script('RoutePoint'), {
             action: ref(input),
@@ -287,7 +289,7 @@ function makeMap(file, popup) {
     const paths = g.node('RoutePaths', v.content, 0, 0, 1100, 1540);
     comp(g, paths, 'cc.UITransform')._anchorPoint = { __type__: 'cc.Vec2', x: 0.5, y: 1 };
     const drawing = g.component(paths, 'cc.Graphics', cleanComponent(graphicTemplate));
-    const hint = label(g, 'RouteHint', '滚动查看后续地点', 560, 785, 800, 28, 16, '59614f');
+    const hint = label(g, 'RouteHint', '仅显示当前层与下一层', 560, 785, 800, 28, 16, '59614f');
     label(
         g,
         'RouteLegend',

@@ -1,6 +1,6 @@
 {
   "project": "The end",
-  "date": "2026-11-16",
+  "date": "2026-11-17",
   "status": "pending-server-unavailable",
   "mustCheckExistingUrisBeforeWriting": true,
   "authored": [
@@ -19,8 +19,8 @@
       },
       "saved": false,
       "readbackVerified": false,
-      "checkedAt": "2026-11-16T13:17:16.412Z",
-      "localSha256": "15335a0192f1bbdad072178c0b93e50905916220fb9eb15147d81043ebc69aaa",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
+      "localSha256": "7613bda2d317945027d260e134bf6839d7742bb734fc8da7100835123d6a79d9",
       "remoteWriteAttempted": false,
       "mustCheckExistingUriBeforeWriting": true
     },
@@ -73,8 +73,8 @@
       },
       "saved": false,
       "readbackVerified": false,
-      "checkedAt": "2026-11-16T13:17:16.412Z",
-      "localSha256": "38894d27378fd2036712485cf4f87691057429b4d988513476aa7a56b1d529e6",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
+      "localSha256": "4df2ffc8fe35b3027f8c1c653229631dbabd0f16ae3f0887d3a27671636d7c89",
       "remoteWriteAttempted": false,
       "mustCheckExistingUriBeforeWriting": true
     },
@@ -204,8 +204,8 @@
       },
       "saved": false,
       "readbackVerified": false,
-      "checkedAt": "2026-11-16T13:17:16.412Z",
-      "localSha256": "f278cbcdff63f9868766350162a1af1f331431190707234a25d4f2dc554543fb",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
+      "localSha256": "b9dca5c0e066c1e33864e94403194ec1587bdf7e7956c04c000f47b02335b3e5",
       "remoteWriteAttempted": false,
       "mustCheckExistingUriBeforeWriting": true
     },
@@ -231,8 +231,8 @@
       },
       "saved": false,
       "readbackVerified": false,
-      "checkedAt": "2026-11-16T13:17:16.412Z",
-      "localSha256": "4157a02e9fd64ee33a33a03b706b61354068c70656c63ae478ab9ce648a8b166",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
+      "localSha256": "1b8f9254b025cda8876327b2cddd7b47259a1bbf15f8c8bfc1a76a4f0fbce3fa",
       "remoteWriteAttempted": false,
       "mustCheckExistingUriBeforeWriting": true
     },
@@ -258,8 +258,8 @@
       "status": "pending-server-unavailable",
       "saved": false,
       "readbackVerified": false,
-      "checkedAt": "2026-11-16T13:17:16.412Z",
-      "localSha256": "dcb251696c1b28a72506b081b7176861d9db28efe23b7091fee07c8ffac373ae",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
+      "localSha256": "0412b9adcf91a5aedd55076999a8fa2d0b4c15eb4c26dbf4419ebda9dc051af9",
       "remoteWriteAttempted": false,
       "mustCheckExistingUriBeforeWriting": true
     },
@@ -271,8 +271,8 @@
       "status": "pending-server-unavailable",
       "saved": false,
       "readbackVerified": false,
-      "checkedAt": "2026-11-16T13:17:16.412Z",
-      "localSha256": "ac6672734a65cba9cd8bb4efd8e63ab1fafb4b7c0918f4eda3bd22eb5d537d27",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
+      "localSha256": "7de0589aaaee97d6de22514d226b6f9d57f8dee6018607724c08ff13c485b008",
       "remoteWriteAttempted": false,
       "mustCheckExistingUriBeforeWriting": true
     },
@@ -310,8 +310,32 @@
       "status": "pending-server-unavailable",
       "saved": false,
       "readbackVerified": false,
-      "checkedAt": "2026-11-16T13:17:16.412Z",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
       "localSha256": "fac76a2a37dcaf943e4bcd65b78cc74281e218f713b1f83f7696473bbece07f2",
+      "remoteWriteAttempted": false,
+      "mustCheckExistingUriBeforeWriting": true
+    },
+    {
+      "file": "docs/designs/ui/deck-map-components.md",
+      "uri": "viking://~/resources/projects/the-end/designs/ui/deck-map-components.md",
+      "target": "viking://~/resources/projects/the-end/designs/ui/deck-map-components.md",
+      "saved": false,
+      "readbackVerified": false,
+      "status": "pending-server-unavailable",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
+      "localSha256": "1a17b66c2b37a454ded5c24d8c4860832e5a8de332010b42f4ced414db380174",
+      "remoteWriteAttempted": false,
+      "mustCheckExistingUriBeforeWriting": true
+    },
+    {
+      "file": "docs/map-window-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/map-window-verification.json",
+      "target": "viking://~/resources/projects/the-end/docs/map-window-verification.json",
+      "saved": false,
+      "readbackVerified": false,
+      "status": "pending-server-unavailable",
+      "checkedAt": "2026-11-17T13:22:42.290Z",
+      "localSha256": "6cb5e6e1ceaff6bb4417c87418cb07603da87b15c74ff6e40827b9a0dbdaea7e",
       "remoteWriteAttempted": false,
       "mustCheckExistingUriBeforeWriting": true
     }
@@ -579,8 +603,8 @@
       "preserveSource": true
     }
   ],
-  "verification": "Historical saved/readback/import evidence remains in previousSnapshot and unchanged entries. Current core-loop documents are pending; local readback only.",
-  "checkedAt": "2026-11-16T13:17:16.412Z",
+  "verification": "Current map-window documents are locally updated and queued; remote search/write/readback remains unavailable. Historical saved/readback/import entries are preserved.",
+  "checkedAt": "2026-11-17T13:22:42.290Z",
   "record": "docs/openviking-sync-status.json",
   "previousSnapshot": {
     "date": "2026-11-15",
@@ -589,24 +613,22 @@
     "verification": "Authored documents were saved and read back. Source imports have individual asynchronous task states in the sync record; pending/running does not mean index complete."
   },
   "currentChange": {
-    "task": "取消每日结算，改为累计探索天数与关键节点日志系统",
+    "task": "关键节点日志系统后的地图窗口：两个同效起始入口、只显示当前层与下一层、节点纯图标",
     "localFiles": [
-      "AGENTS.md",
+      "docs/designs/ui/deck-map-components.md",
+      "docs/designs/ui/wasteland-page-redesign.md",
       "docs/architecture.md",
       "docs/game-design.md",
       "docs/game-systems.md",
-      "docs/production-direction.md",
       "docs/tutorial-spec.md",
-      "docs/designs/ui/wasteland-page-redesign.md",
       "docs/designs/ui/ux-review.md",
-      "docs/designs/key-node-journal-system.md",
-      "docs/core-loop-verification.json",
+      "docs/map-window-verification.json",
       "docs/game-studios-evidence.json"
     ],
-    "reason": "No registered OpenViking search/read/write tools; no client configuration; 127.0.0.1:1933 connection refused by read-only doctor.",
+    "reason": "No registered OpenViking search/read/write tools; no client configuration; a direct 127.0.0.1:1933 check on 2026-11-17 returned ECONNREFUSED.",
     "remoteSearchAttempted": false,
     "remoteWriteAttempted": false,
     "remoteReadbackVerified": false,
-    "nextAction": "When connection is restored, check existing URIs, write/edit current local documents, then read back and update statuses."
+    "nextAction": "When connection is restored, check each existing URI, update the mapped docs/designs resources, read them back, and append the new verification record without replacing historical entries."
   }
 }

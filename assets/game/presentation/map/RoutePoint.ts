@@ -29,29 +29,24 @@ export class RoutePoint extends Component {
     }
     show(data: RoutePointModel, readonly = false): void {
         this.data = data;
-        if (this.title) {
-            this.title.string = data.title;
-            this.title.color = new Color().fromHEX('#434b3c');
-        }
-        if (this.status) {
-            this.status.string =
-                data.state === 'visited'
-                    ? '已完成'
-                    : data.state === 'available'
-                      ? readonly
-                          ? '当前位置'
-                          : data.action.startsWith('route-')
-                            ? '选择此路'
-                            : '点击进入'
-                      : data.state === 'excluded'
-                        ? '另一条路径'
-                        : '未到达';
-        }
+        this.hovering = false;
+        this.node.active = data.revealed;
         if (this.action) {
             this.action.actionId = data.action || 'map-home';
             this.action.disabledOpacity = 255;
-            this.action.setEnabled(data.state === 'available' && !readonly && !!data.action);
+            this.action.setEnabled(
+                data.revealed && data.state === 'available' && !readonly && !!data.action
+            );
         }
+        if (this.title) {
+            this.title.string = '';
+            this.title.node.active = false;
+        }
+        if (this.status) {
+            this.status.string = '';
+            this.status.node.active = false;
+        }
+        if (!data.revealed) return;
         this.draw();
     }
     private draw(): void {
@@ -153,6 +148,5 @@ export class RoutePoint extends Component {
             g.lineWidth = 3;
             line([23, 29, 29, 22, 42, 37]);
         }
-        if (this.status) this.status.node.active = active || visited || this.hovering;
     }
 }

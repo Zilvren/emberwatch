@@ -13,6 +13,8 @@ export interface GameScenario {
     initialDay: number;
     initialSupplies: number;
     initialArmor: number;
+    /** Equivalent visible entrances to the same fixed opening encounter. */
+    openingNodeCount?: number;
     routes: Record<Route, NodeKind[]>;
     enemies: Record<'enemy1' | 'enemy2', { hp: number; attack: number; strongAttack: number }>;
 }
@@ -30,6 +32,7 @@ export const TUTORIAL_SCENARIO: GameScenario = {
     initialDay: 1,
     initialSupplies: 10,
     initialArmor: 10,
+    openingNodeCount: 2,
     routes: {
         A: ['enemy1', 'scavenge', 'rest', 'enemy2'],
         B: ['scavenge', 'enemy1', 'rest', 'enemy2'],

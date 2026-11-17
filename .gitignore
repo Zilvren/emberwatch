@@ -32,3 +32,6 @@ node_modules/
 .idea/
 
 /.cache-before-prefab-migration/
+
+# OpenViking project-local configuration
+/.openviking/config.json

@@ -1,7 +1,7 @@
 # The end 当前架构
 
 - 项目：The end。
-- 日期：2026-11-16，Asia/Hong_Kong。
+- 日期：2026-11-17，Asia/Hong_Kong。
 - 状态：本轮分层与组件基础已实现；正式版资源规则及其他 UI 组件继续按件设计。
 - 最新流程：关键节点日志与连续探索已接入，取消每日结算。教学关卡作为兼容样例保留，失败仍第 1 天。
 - 同步地址：`viking://~/resources/projects/the-end/docs/architecture.md`；保存及回读记录见 `docs/openviking-sync-status.json`。
@@ -28,6 +28,7 @@
 | `presentation/ui/UiState.ts` | 选牌、弹窗、分页和操作锁等临时界面状态，不进入玩家存档。 |
 | `presentation/cards/` | 卡面显示、手势输入、手牌布局与组件评审。 |
 | `presentation/actors/` | 原生角色动画和固定原画网格表现。 |
+| `presentation/map/` | 根据情景路线与探索索引投影当前层和下一层，原生实例化图标、连线与输入；只读地图不推进规则。 |
 
 表中 `core/`、`presentation/` 的简写均位于 `assets/game/` 下。根目录 `assets/SurvivalRules.ts` 和 `assets/CardCatalog.ts` 仅保留旧教学代码的导入入口，实际实现已移动。
 
@@ -98,3 +99,9 @@ RulesNoticeModel 把当前规则与 GameSession.newGameRuleset 元数据投影�
 GameDirector 同步动态偏好，ActorPresentation 只处理自己的 idle 播放/停止。动作执行期间只记住偏好，保留单次命中和完成；偏好事件不在 ui.busy 时完整刷新页面，以免规则阶段已变而表现回调尚未完成时销毁演员。自动 map→shelter 的通知同样由协调器更新，不进入规则层。
 
 主角攻击继续使用原生 AnimationClip，新的两个透明图集由元数据注册到固定逻辑画布。prepare/connect 作者入口与普通构建分开，保留既有资源身份和动画事件；旧生成工具有保护。验证记录为 quality-fixes-verification.json。
+
+## 2026-11-17 地图可见范围与入口
+
+已确认并实现：教学和当前标准情景的固定起始节点投影为两个同效入口，后续原 A/B 路线不变。配置 `openingNodeCount` 只决定固定遭遇的视图入口数量；二者仍发送同一个 `enter-fixed` 命令，不产生两份奖励或新的路线存档。
+
+`RouteMapModel` 按 `fixedDone`、`route` 与 `pathIndex` 计算当前层，返回当前层/下一层节点及端点都可见的连线。完成步骤按索引判断，不依赖节点种类是否曾经出现。`RouteMap` 和房间内只读覆盖层使用同一投影；`RoutePoint` 仅显示实际节点图标，原生标题与状态标签由 MCP 关闭，悬停不会重新打开。无需存档迁移。合同见 `designs/ui/deck-map-components.md`，本轮证据见 `map-window-verification.json`。

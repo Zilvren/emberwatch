@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "project": "The end",
+  "date": "2026-11-17",
+  "timezone": "Asia/Hong_Kong",
+  "status": "SUPPORTED_TECHNICAL_REVIEW_NEEDS_USER_VISUAL_APPROVAL",
+  "userScope": {
+    "sourceImage": "The attached image is the current game UI, not an external visual reference.",
+    "requirements": [
+      "The first layer has two identical supply-station entrances.",
+      "Either entrance produces the same encounter, rewards, random state and later A/B route choices.",
+      "The map shows only the current layer and the next layer; scrolling cannot reveal more.",
+      "Map nodes show icons only, including hover and read-only room overlays."
+    ]
+  },
+  "implementation": {
+    "scenarioConfig": "assets/game/core/content/GameScenario.ts",
+    "projection": "assets/game/presentation/map/RouteMapModel.ts",
+    "mapView": "assets/game/presentation/map/RouteMap.ts",
+    "pointView": "assets/game/presentation/map/RoutePoint.ts",
+    "nativePrefab": "assets/prefabs/ui/RoutePoint.prefab",
+    "authorTemplate": "tools/build-deck-map-ui.cjs",
+    "openingNodeCount": 2,
+    "openingAction": "enter-fixed",
+    "routeOrderPreserved": {
+      "A": ["enemy1", "scavenge", "rest", "enemy2"],
+      "B": ["scavenge", "enemy1", "rest", "enemy2"]
+    },
+    "renderWindow": "currentLayer and currentLayer + 1 only; edges require both endpoints to be visible",
+    "nodeText": "PointTitle and PointStatus are blank/inactive in the view and inactive in the native prefab; hover does not reactivate them",
+    "saveSchema": "No new saved fields; the projection reads fixedDone, route and pathIndex"
+  },
+  "nativeMcp": {
+    "endpoint": "http://127.0.0.1:9528/mcp",
+    "reads": "output/map-window/mcp-before.json",
+    "authoring": "output/map-window/mcp-authoring.json",
+    "readCount": 18,
+    "updates": ["RoutePoint/PointTitle active=false", "RoutePoint/PointStatus active=false"],
+    "prefabUuidPreserved": "919f3497-9dc1-4075-85d9-1d1d6bea884e",
+    "prefabFileIdsPreserved": true,
+    "mainSceneMatchesBeforeNativeAuthoring": true
+  },
+  "verification": {
+    "unitTests": {
+      "command": "npm test",
+      "result": "132 passed, 0 failed, 0 skipped",
+      "log": "output/map-window/tests.log"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "result": "passed",
+      "log": "output/map-window/typecheck.log"
+    },
+    "format": {
+      "command": "npx --no-install prettier --check assets/game/core/content/GameScenario.ts assets/game/presentation/map/RouteMap.ts assets/game/presentation/map/RouteMapModel.ts assets/game/presentation/map/RoutePoint.ts",
+      "result": "passed"
+    },
+    "nativeInspection": {
+      "result": "passed; Pink/Cocos 4.0.0-beta.1, 476 protected files, no missing metadata, no warnings",
+      "record": "output/playwright/map-window/project-inspection.json"
+    },
+    "nativeBuild": {
+      "result": "passed through PinK MCP builder-build",
+      "log": "output/map-window/build-final.log",
+      "preview": "http://localhost:9528/build/web-desktop/web-desktop/index.html"
+    },
+    "browserMapWindow": {
+      "result": "passed",
+      "report": "output/playwright/core-loop/browser-map-window/browser-report.json",
+      "realMouseActions": 57,
+      "checks": [
+        "left and right openings export identical full state",
+        "four initial nodes contain two fixed openings plus only the next layer",
+        "current/next window remains bounded after scrolling",
+        "node labels remain absent on hover",
+        "rewards, scavenge, battle, rest and completed-map overlays are read-only and bounded",
+        "save reload preserves map progress",
+        "original B route completes and day progression remains unchanged",
+        "1440x900 and 1024x768"
+      ]
+    },
+    "browserStaminaRegression": {
+      "result": "passed",
+      "report": "output/playwright/core-loop/browser-stamina-system/browser-report.json",
+      "realMouseActions": 55,
+      "checks": [
+        "default stamina-v1 A route completes",
+        "entry fee, card unit, save resume and no daily settlement remain correct",
+        "1024x768 remains operable"
+      ]
+    },
+    "screenshotsReviewed": [
+      "output/playwright/core-loop/browser-map-window/map-window-start-1440.png",
+      "output/playwright/core-loop/browser-map-window/map-window-start-1024.png",
+      "output/playwright/core-loop/browser-map-window/map-window-camp-overlay.png",
+      "output/playwright/core-loop/browser-map-window/map-window-boss-and-home.png",
+      "output/playwright/core-loop/browser-map-window/map-window-battle-overlay-1024.png"
+    ]
+  },
+  "boundaries": {
+    "supported": [
+      "The requested map behavior works in the native web-desktop build and real input paths.",
+      "The attached current UI was used as the implementation target.",
+      "The two first-layer choices are deliberately equivalent and do not create two reward claims."
+    ],
+    "needsUserVisualApproval": [
+      "Overall game art direction and animation quality are outside this map-window change.",
+      "Mobile, gamepad and untested engine platforms are outside this evidence."
+    ]
+  },
+  "openViking": {
+    "targetUris": [
+      "viking://~/resources/projects/the-end/designs/ui/deck-map-components.md",
+      "viking://~/resources/projects/the-end/designs/ui/wasteland-page-redesign.md",
+      "viking://~/resources/projects/the-end/docs/architecture.md",
+      "viking://~/resources/projects/the-end/docs/game-design.md",
+      "viking://~/resources/projects/the-end/docs/game-systems.md",
+      "viking://~/resources/projects/the-end/docs/tutorial-spec.md",
+      "viking://~/resources/projects/the-end/designs/ui/ux-review.md",
+      "viking://~/resources/projects/the-end/docs/map-window-verification.json",
+      "viking://~/resources/projects/the-end/docs/game-studios-evidence.json"
+    ],
+    "status": "pending-server-unavailable",
+    "localQueue": "docs/openviking-sync-pending.json",
+    "reason": "No registered OpenViking tools or client configuration; direct 127.0.0.1:1933 check returned ECONNREFUSED on 2026-11-17."
+  }
+}

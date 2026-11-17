@@ -57,23 +57,20 @@ export class RouteMap extends Component {
         this.drawPaths();
         if (this.title) this.title.string = `第 ${game.day} 天 · 灰烬街区`;
         const next = this.model.points.find((point) => point.state === 'available');
+        const choosing =
+            game.currentNode === 'choice' ||
+            this.model.points.filter((point) => point.state === 'available').length > 1;
         if (this.hint)
             this.hint.string = readonly
-                ? '查看本次探索路线 · 当前房间内不能移动'
-                : game.currentNode === 'choice'
-                  ? '选择一条路径，然后前往高亮地点'
-                  : '滚动查看路线 · ' + (next?.title ?? '正在返回避难所');
+                ? '查看当前层与下一层 · 当前房间内不能移动'
+                : choosing
+                  ? '选择一个高亮图标进入'
+                  : '点击高亮图标进入下一层';
         if (this.close) this.close.node.active = readonly;
         if (this.enter) {
             this.enter.node.active = !readonly;
-            this.enter.setText(
-                game.currentNode === 'choice'
-                    ? '先选择一条路径'
-                    : '前往 · ' + (next?.title ?? '避难所')
-            );
-            this.enter.setEnabled(
-                !!next && game.currentNode !== 'choice' && game.currentNode !== 'return'
-            );
+            this.enter.setText(choosing ? '先选择一个图标' : '前往高亮地点');
+            this.enter.setEnabled(!!next && !choosing && game.currentNode !== 'return');
         }
         const key = game.currentNode + ':' + game.route + ':' + game.pathIndex + ':' + readonly;
         if (key !== this.focusKey) {
@@ -121,6 +118,7 @@ export class RouteMap extends Component {
         return {
             points: this.model?.points,
             edges: this.model?.edges,
+            currentLayer: this.model?.currentLayer,
             scrollOffset: this.scroll?.getScrollOffset(),
             focus: this.focusKey,
         };

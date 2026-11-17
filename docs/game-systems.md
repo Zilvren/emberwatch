@@ -1,7 +1,7 @@
 # The end 当前系统清单
 
 - 项目：The end，`C:\Users\Knock\Desktop\The end`
-- 日期：2026-11-16（Asia/Hong_Kong）
+- 日期：2026-11-17（Asia/Hong_Kong）
 - 状态：下方旧表保留兼容教学记录；2026-11-15 新开局已实现 stamina-v1 进入档位、回合体力和独立物资点。最新实现及验证见 architecture.md、designs/stamina-system.md 与 stamina-verification.json。
 - OpenViking：`viking://~/resources/projects/the-end/docs/game-systems.md`；实际保存与回读记录见 docs/openviking-sync-status.json。
 - 相关代码：`assets/SurvivalRules.ts`、`assets/SurvivalView.ts`、`assets/CardCatalog.ts`、`assets/resources/data/cards.json`、`assets/TheEnd.scene`、`tools/card-editor-server.cjs`、`tools/card-editor/`。
@@ -22,7 +22,8 @@
 
 | 系统 | 当前实现 |
 | --- | --- |
-| 日循环与路线探索 | 固定搜刮后选择 A/B 路线，分别先战斗后搜刮、先搜刮后战斗，汇合于休整，再挑战重度感染者并自动返家。教学图不提供主动撤离。 |
+| 日循环与路线探索 | 第一层两个相同补给站入口，任选一个进入同一次固定搜刮；完成后选择 A/B，分别先战斗后搜刮、先搜刮后战斗，汇合于休整，再挑战重度感染者并自动返家。教学图不提供主动撤离。 |
+| 地图信息 | 主地图与房间内只读地图都只显示当前层及下一层和二者之间的连线；滚动不能看到更远节点。节点仅有图标与状态圈注，无名称、状态或悬停文字。见 `designs/ui/deck-map-components.md` 与 `map-window-verification.json`。 |
 | 回合制卡牌战斗 | 手牌、抽牌堆、弃牌堆、洗牌、出牌费用、玩家结束回合及敌人意图。手牌上限 6，敌人按攻击与准备交替行动；有游荡感染者与重度感染者。 |
 | 卡牌与武器 | 配置驱动的伤害、格挡、修复、装备效果；唯一武器槽；武器从下回合生成临时牌，战斗结束清除临时牌与装备状态。默认 8 种卡牌定义。 |
 | 生存资源与感染临界 | 正式探索物资用于进入档位和修复，出牌使用回合体力，物资不占负重；教学兼容规则仍可出牌扣物资、物资占重。没有每日消耗。护甲为 0 后临界，再受实际伤害失败。 |

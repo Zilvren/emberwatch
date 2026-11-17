@@ -1,0 +1,145 @@
+const mapViews = async () => page.evaluate(() => {
+    const root = cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot');
+    return root.getComponentsInChildren('RouteMap').filter(map => map.node.activeInHierarchy).map(map => ({
+        ...map.inspect(),
+        labels: map.content.getComponentsInChildren(cc.Label).filter(label => label.node.activeInHierarchy).map(label => label.string),
+        nativePoints: map.content.getComponentsInChildren('RoutePoint').filter(view => view.node.activeInHierarchy).map(view => ({
+            id: view.data.id,
+            enabled: view.action.getComponent(cc.Button).interactable,
+            titleActive: view.title?.node.activeInHierarchy ?? false,
+            statusActive: view.status?.node.activeInHierarchy ?? false,
+        })),
+    }));
+});
+const checkWindow = async (layer, readonly = false) => {
+    const maps = await mapViews();
+    assert(maps.length > 0, 'No native map is visible');
+    for (const map of maps) {
+        assert(map.currentLayer === layer, 'Wrong current layer: ' + JSON.stringify(map));
+        assert(map.points.every(point => point.layer === layer || point.layer === layer + 1), 'A hidden layer leaked');
+        const ids = new Set(map.points.map(point => point.id));
+        assert(map.edges.every(edge => ids.has(edge.from) && ids.has(edge.to)), 'An edge reveals a hidden layer');
+        assert(map.nativePoints.length === map.points.length, 'Old native points remain visible');
+        assert(map.nativePoints.every(point => !point.titleActive && !point.statusActive), 'A point label is visible');
+        assert(map.labels.length === 0, 'Map nodes contain visible text: ' + map.labels.join(','));
+        if (readonly) assert(map.nativePoints.every(point => !point.enabled), 'Read-only map can move the player');
+    }
+    return maps[0];
+};
+const chooseOpening = async (side) => {
+    const before = await state();
+    const choices = before.hits.filter(hit => hit.id === 'enter-fixed' && hit.enabled).sort((a, b) => a.x - b.x);
+    assert(choices.length === 2, 'There must be two clickable opening icons');
+    const hit = choices[side], p = await point(hit.x + hit.width / 2, hit.y + hit.height / 2);
+    await page.mouse.move(p.x, p.y);
+    await page.waitForTimeout(120);
+    assert((await mapViews())[0].labels.length === 0, 'Hover showed a node label');
+    await page.mouse.click(p.x, p.y);
+    await idle();
+    trace.push({ action: side ? 'right-opening-icon' : 'left-opening-icon' });
+    assert((await state()).phase === 'rewards', 'Opening icon did not enter the supply encounter');
+    return page.evaluate(() => globalThis.__survivalGame.exportState());
+};
+
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&ruleset=tutorial-v1&review=map-window-left');
+await idle();
+await click('journal-start');
+const first = await checkWindow(0);
+const openings = first.points.filter(point => point.layer === 0);
+assert(openings.length === 2 && openings.every(point => point.kind === 'fixed' && point.action === 'enter-fixed'), 'Opening content differs');
+assert(!first.points.some(point => ['rest', 'enemy2', 'home'].includes(point.kind)), 'Distant encounters visible on entry');
+assert(!(await state()).hits.find(hit => hit.id === 'map-enter').enabled, 'Footer bypasses the two-icon choice');
+await screenshot('map-window-start-1440');
+await page.mouse.move(720, 420);
+await page.mouse.wheel(0, -1600);
+await page.mouse.wheel(0, 2400);
+await page.waitForTimeout(180);
+assert(JSON.stringify((await checkWindow(0)).points) === JSON.stringify(first.points), 'Scrolling revealed more nodes');
+await page.setViewportSize({ width: 1024, height: 768 });
+await page.waitForTimeout(250);
+await checkWindow(0);
+await screenshot('map-window-start-1024');
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.waitForTimeout(200);
+const leftResult = await chooseOpening(0);
+
+await page.goto('http://127.0.0.1:7457/?seed=17&save=on&ruleset=tutorial-v1&review=map-window-right');
+await idle();
+await click('journal-start');
+await checkWindow(0);
+const rightResult = await chooseOpening(1);
+assert(JSON.stringify(leftResult) === JSON.stringify(rightResult), 'Left and right openings produced different rules, rewards or RNG');
+const beforeMap = JSON.stringify(rightResult);
+await click('map');
+await checkWindow(0, true);
+await screenshot('map-window-opening-readonly');
+await click('modal-close');
+assert(await page.evaluate(() => JSON.stringify(globalThis.__survivalGame.exportState())) === beforeMap, 'Read-only map mutated the encounter');
+await claimSupplies();
+await claimAvailableCard();
+await leaveRewards();
+let map = await checkWindow(1);
+assert(map.points.filter(point => point.state === 'available').map(point => point.action).join(',') === 'route-A,route-B', 'Original A/B choice changed');
+await screenshot('map-window-branch-choice');
+await click('route-B');
+await checkWindow(1);
+await click('enter-scavenge');
+assert((await state()).rewards.source === 'scavenge', 'B must begin with scavenging');
+await click('map');
+await checkWindow(1, true);
+await screenshot('map-window-scavenge-readonly');
+await click('modal-close');
+await claimSupplies();
+await claimAvailableCard();
+await leaveRewards();
+map = await checkWindow(2);
+assert(map.points.some(point => point.kind === 'rest') && !map.points.some(point => point.kind === 'enemy2'), 'Next-layer camp disclosure is wrong');
+const saved = await page.evaluate(() => JSON.stringify(globalThis.__survivalGame.exportState()));
+await page.reload();
+await idle();
+assert(await page.evaluate(() => JSON.stringify(globalThis.__survivalGame.exportState())) === saved, 'Reload changed map progress');
+await checkWindow(2);
+await screenshot('map-window-resumed');
+await click('enter-enemy1');
+await click('map');
+await checkWindow(2, true);
+await page.setViewportSize({ width: 1024, height: 768 });
+await page.waitForTimeout(250);
+await screenshot('map-window-battle-overlay-1024');
+await checkWindow(2, true);
+await click('modal-close');
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.waitForTimeout(200);
+await fight({ basicOnly: true });
+await claimSupplies();
+await claimAvailableCard();
+await leaveRewards();
+await checkWindow(3);
+await click('enter-rest');
+await click('map');
+await checkWindow(3, true);
+await screenshot('map-window-camp-overlay');
+await click('modal-close');
+await click('rest-done');
+map = await checkWindow(4);
+assert(map.points.map(point => point.kind).join(',') === 'enemy2,home', 'Boss layer must show only boss and home');
+await screenshot('map-window-boss-and-home');
+await click('enter-enemy2');
+await fight({ preferWeapon: true });
+await claimSupplies();
+await claimAvailableCard();
+await leaveRewards();
+await page.waitForFunction(() => globalThis.__emberUI.snapshot().phase === 'journal');
+assert((await state()).day === 2, 'Map UI changed the day progression');
+await click('map');
+map = await checkWindow(5, true);
+assert(map.points.length === 1 && map.points[0].kind === 'home', 'Completed map disclosed past layers');
+await screenshot('map-window-home-only');
+assert(!runtimeErrors.length, runtimeErrors.join('\n'));
+return {
+    passed: true, identicalOpeningResults: true, initialNodes: 4, openingChoices: 2,
+    onlyCurrentAndNextLayer: true, iconOnlyIncludingHover: true, scrollCannotRevealHiddenLayers: true,
+    readonlyMaps: ['rewards', 'scavenge', 'battle', 'rest', 'completed'],
+    reloadPreservesWindow: true, originalRouteBCompleted: true, dayProgressionUnchanged: true,
+    viewports: ['1440x900', '1024x768'], actions: trace.length, runtimeErrors,
+};
