@@ -1,4 +1,4 @@
-import { CardKind } from '../content/CardCatalog';
+import { CardKind, isBattleCard } from '../content/CardCatalog';
 import { CardSet } from '../content/ContentRegistry';
 import { ActionResult, OwnedCard } from '../RulesTypes';
 import { RuleFeedback, RuleState } from './RuleContext';
@@ -12,23 +12,38 @@ export class InventoryRules {
         private readonly scenario: GameScenario = TUTORIAL_SCENARIO
     ) {}
     owned(kind: CardKind, found = false, zone: 'base' | 'overflow' = 'base'): OwnedCard {
-        return { id: this.newId('card'), kind, found, zone, selected: kind !== 'cash' };
+        return {
+            id: this.newId('card'),
+            kind,
+            found,
+            zone,
+            selected: isBattleCard(this.content.cards[kind]),
+        };
+    }
+    get carriedCards(): OwnedCard[] {
+        return this.scenario.runDeck
+            ? this.state.cards.filter((card) => this.content.cards[card.kind].role === 'supply')
+            : this.state.cards;
     }
     get baseWeight(): number {
         return (
             (this.scenario.suppliesHaveWeight === false ? 0 : this.state.supplies) +
-            this.state.cards
+            this.carriedCards
                 .filter((c) => c.zone === 'base')
                 .reduce((n, c) => n + this.content.cards[c.kind].weight, 0)
         );
     }
     get overflowWeight(): number {
-        return this.state.cards
+        return this.carriedCards
             .filter((c) => c.zone === 'overflow')
             .reduce((n, c) => n + this.content.cards[c.kind].weight, 0);
     }
     get usableCards(): OwnedCard[] {
-        return this.state.cards.filter((c) => c.zone === 'base' && c.selected && c.kind !== 'cash');
+        return this.state.cards.filter(
+            (card) =>
+                isBattleCard(this.content.cards[card.kind]) &&
+                (this.scenario.runDeck || (card.zone === 'base' && card.selected))
+        );
     }
     spend(amount: number): void {
         this.state.supplies -= amount;
@@ -38,7 +53,9 @@ export class InventoryRules {
         for (const card of this.state.cards.filter((c) => c.zone === 'overflow')) {
             if (this.baseWeight + this.content.cards[card.kind].weight > 30) break;
             card.zone = 'base';
-            this.feedback.log(`${this.content.cards[card.kind].name}从溢出区转入可用卡组。`);
+            this.feedback.log(
+                `${this.content.cards[card.kind].name}从溢出区转入${this.scenario.runDeck ? '行囊' : '可用卡组'}。`
+            );
             if (this.state.battle && card.selected)
                 this.state.battle.discard.push({
                     id: card.id,
@@ -48,8 +65,14 @@ export class InventoryRules {
                 });
         }
     }
+    rewardZone(kind: CardKind): OwnedCard['zone'] {
+        return (this.scenario.runDeck && isBattleCard(this.content.cards[kind])) ||
+            this.baseWeight + this.content.cards[kind].weight <= 30
+            ? 'base'
+            : 'overflow';
+    }
     rewardCardBlocked(kind: CardKind): string {
-        if (this.baseWeight + this.content.cards[kind].weight <= 30) return '';
+        if (this.rewardZone(kind) === 'base') return '';
         return this.overflowWeight + this.content.cards[kind].weight <= 10
             ? ''
             : '基础负重和临时溢出区均不足';
@@ -60,8 +83,10 @@ export class InventoryRules {
         const index = this.state.cards.findIndex((c) => c.id === id);
         if (index < 0) return this.feedback.result(false, '卡牌不存在。');
         const card = this.state.cards[index];
+        if (this.scenario.runDeck && this.content.cards[card.kind].role !== 'supply')
+            return this.feedback.result(false, '行囊只整理物资卡。');
         if (card.kind === 'attack' || card.kind === 'dodge')
-            return this.feedback.result(false, '基础能力永久保留，可在休整时选择不带入战斗。');
+            return this.feedback.result(false, '本次教学可在休整时调整基础牌的出场状态。');
         if (card.kind === 'cash' && this.state.phase !== 'rest')
             return this.feedback.result(false, '现金只能在休整节点删除。');
         this.state.cards.splice(index, 1);
@@ -83,6 +108,7 @@ export class InventoryRules {
         return this.feedback.result(true, `已释放 ${amount} 点负重。`);
     }
     toggleCard(id: string): ActionResult {
+        if (this.scenario.runDeck) return this.feedback.result(false, '整套本局卡组都会进入战斗。');
         if (this.state.phase !== 'rest')
             return this.feedback.result(false, '只有休整节点可调整出手卡组。');
         const card = this.state.cards.find((c) => c.id === id);

@@ -28,7 +28,11 @@ import { ButtonAction } from './ui/ButtonAction';
 import { StatusBar } from './ui/StatusBar';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { enterEncounterPreview } from './dev/EncounterPreview';
-import { STAMINA_SCENARIO, TUTORIAL_SCENARIO } from '../core/content/GameScenario';
+import {
+    RUN_DECK_SCENARIO,
+    STAMINA_SCENARIO,
+    TUTORIAL_SCENARIO,
+} from '../core/content/GameScenario';
 import { UiActionRouter } from './ui/UiActionRouter';
 import { ACTION_EVENT, ActionInputEvent, CARD_DROP_EVENT, CardDropInputEvent } from './ui/UIEvents';
 import { initialUiState } from './ui/UiState';
@@ -80,7 +84,7 @@ export class GameDirector extends Component {
     screens: Node[] = [];
     @property({
         type: [Node],
-        tooltip: 'inventory, help, log, confirmation, route map, entry tier',
+        tooltip: 'inventory, help, log, confirmation, route map, entry tier, recipes',
     })
     popups: Node[] = [];
     @property(Prefab) floatTemplate: Prefab | null = null;
@@ -139,7 +143,10 @@ export class GameDirector extends Component {
             saving ? new SaveRepository(sys.localStorage) : undefined,
             seed !== null && query?.get('ruleset') === 'tutorial-v1'
                 ? TUTORIAL_SCENARIO
-                : STAMINA_SCENARIO
+                : seed !== null && query?.get('ruleset') === 'stamina-v1'
+                  ? STAMINA_SCENARIO
+                  : RUN_DECK_SCENARIO,
+            query?.get('save') === 'off' && query?.get('mapCraft') === '1'
         );
         if (!saving && seed !== null && query?.get('preview') === 'encounter')
             enterEncounterPreview(this.session);
@@ -160,7 +167,11 @@ export class GameDirector extends Component {
             this.hand,
             () => this.audio.muted,
             () => this.session.saveStatus,
-            () => this.session.newGameRuleset
+            () => this.session.newGameRuleset,
+            () => ({
+                blocked: this.session.synthesisBlocked,
+                canUndo: this.session.canUndoSynthesis,
+            })
         );
         this.router = new UiActionRouter(this.session, this.ui, {
             act: (command, sound) => this.act(command, sound),
@@ -194,7 +205,11 @@ export class GameDirector extends Component {
         const previousPhase = this.game.phase;
         if (!this.ui.busy) this.session.advanceTime(dt);
         if (previousPhase === 'map' && this.game.phase === 'shelter')
-            this.message('已返回避难所。清点带回物资后，再结束今天。');
+            this.message(
+                this.game.scenario.runDeck
+                    ? '已返回避难所。物资卡已入库，可兑换后开始下一局。'
+                    : '已返回避难所。清点带回物资后，再结束今天。'
+            );
         if (this.game.revision !== this.renderer.revision && !this.ui.busy) this.refresh();
         if (this.toastTime > 0) {
             this.toastTime -= dt;
@@ -407,6 +422,8 @@ export class GameDirector extends Component {
             )
             .map((a) => ({
                 id: a.actionId,
+                payload: a.payload,
+                caption: a.caption?.string,
                 ...this.bounds(a.node),
                 enabled: a.enabled && !this.ui.busy,
             }));
@@ -414,6 +431,8 @@ export class GameDirector extends Component {
             for (const card of this.hand?.entries() ?? [])
                 hits.push({
                     id: 'card-' + card.cardId,
+                    payload: card.cardId,
+                    caption: undefined,
                     ...this.bounds(card.node),
                     enabled: !this.ui.busy && !this.ui.overlay,
                 });
@@ -431,6 +450,8 @@ export class GameDirector extends Component {
                 ?.inspect(),
             busy: this.ui.busy,
             overlay: this.ui.overlay,
+            synthesisBlocked: this.session.synthesisBlocked,
+            canUndoSynthesis: this.session.canUndoSynthesis,
             inventoryMode: this.ui.deckEdit ? 'deck' : 'inspect',
             inventoryReader: this.ui.bagReader,
             inspectedCard: this.ui.inspectedCard,

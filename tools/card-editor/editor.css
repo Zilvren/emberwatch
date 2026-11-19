@@ -6,3 +6,39 @@
 @media(max-width:900px){.topbar{flex-wrap:wrap;gap:14px}.toolbar{flex:1;justify-content:flex-end;flex-wrap:wrap}.workspace{height:auto;min-height:0;grid-template-columns:230px minmax(320px,1fr)}.library{max-height:790px}.preview-area{min-height:790px}.inspector{grid-column:1/-1;overflow:visible}.inspector-content{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;overflow:visible}.inspector-content>.validation,.inspector-content>.references{grid-column:1/-1}.inspector-heading{padding:20px}.property-group:last-of-type{grid-column:1/-1}.art-options{grid-template-columns:repeat(8,1fr)}.game-card{transform:rotate(-1.5deg)}.save-state{margin-left:auto}.preview-stage{min-height:540px}}
 @media(max-width:590px){.topbar{padding:16px}.brand{gap:10px}.brand-separator{margin:0 8px}.toolbar{width:100%;flex-basis:100%;justify-content:space-between}.save-state{margin:0;order:4;flex-basis:100%;padding:3px 0;font-size:11px}.workspace{grid-template-columns:1fr}.library{max-height:335px;border-right:0}.library-header{padding:20px 18px 12px}.section-line{margin:6px 0 14px}.card-list{display:grid;grid-template-columns:1fr 1fr;min-height:90px}.card-row{min-height:72px;padding:8px}.row-art{width:33px;height:42px}.row-info strong{font-size:11px}.row-info small{font-size:9px}.row-cost{display:none}.row-indicator{font-size:8px}.library-footer{padding:11px 18px}.preview-area{min-height:740px}.preview-stage{min-height:515px}.inspector-content{display:block;padding:0 20px 24px}.art-options{grid-template-columns:repeat(4,1fr)}.game-dialog{width:100vw;height:100dvh;border-radius:0}.game-dialog-header{padding:8px}.game-dialog-header strong>span{display:none}.preview-caption{font-size:8px;gap:10px}.deck-summary{max-width:390px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.game-card{transform:none}}
+
+[hidden] { display: none !important; }
+.workshop-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 9px clamp(16px, 3vw, 44px); background: #24362a; color: #ebeee3; }
+.library-actions { display: flex; gap: 6px; }
+.supply-add { color: #d8e4c8; border-color: #8fa47f; }
+.workshop-nav a { color: inherit; text-decoration: none; padding: 8px 14px; border-radius: 5px; font-size: 13px; }
+.workshop-nav a[aria-current="page"] { background: #dcb775; color: #242c20; font-weight: 700; }
+.map-craft-test { margin-left: auto; display: flex; align-items: center; gap: 7px; font-size: 12px; padding-block: 6px; }
+.recipe-workspace { display: grid; grid-template-columns: minmax(195px, 1fr) minmax(360px, 2.1fr) minmax(235px, 1.3fr); align-items: start; min-height: 76vh; gap: 1px; background: #c9cebc; }
+.recipe-workspace > * { padding: 24px clamp(15px, 2vw, 30px); min-width: 0; align-self: stretch; background: #f5f3e9; }
+.recipe-workspace h1, .recipe-workspace h2 { font-size: 20px; }
+.recipe-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 20px; }
+.recipe-list-row { width: 100%; text-align: left; padding: 12px; margin-bottom: 8px; background: #f9f7ef; border: 1px solid #c8d0bc; border-radius: 5px; color: #354632; overflow-wrap: anywhere; }
+.recipe-list-row[aria-current="true"] { border-color: #657d5d; background: #e6eddc; box-shadow: inset 3px 0 #657d5d; }
+.recipe-list-row span { display: block; margin-top: 5px; font-size: 12px; color: #4f6248; }
+.recipe-note { color: #53624e; font-size: 13px; line-height: 1.7; }
+.recipe-side { min-width: 0; padding: 15px 0; border: 0; border-top: 1px solid #c8d0bc; margin-top: 18px; }
+.recipe-side legend, .recipe-preview h3 { font-size: 14px; font-weight: 700; color: #34452d; }
+.recipe-input-row { display: grid; grid-template-columns: minmax(104px, 1fr) 75px 34px; gap: 9px; align-items: end; }
+.recipe-input-row .icon-button { margin-bottom: 13px; }
+.recipe-add-row { color: #3c5435; border-color: #8a9d82; }
+.recipe-preview h3 { margin: 18px 0 8px; }
+.tree-root { background: #e6eddc; padding: 12px; margin: 18px 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 7px; }
+.recipe-branches, .recipe-branches ul { list-style: none; padding-left: 12px; }
+.recipe-branches li { border-left: 1px solid #9eab93; padding: 3px 0 3px 8px; overflow-wrap: anywhere; }
+.tree-recipe, .tree-note { font-size: 11px; color: #5d6c55; }
+.tree-card { padding: 3px; background: transparent; color: #34452d; border: 0; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 900px) {
+    .recipe-workspace { grid-template-columns: minmax(152px, .9fr) minmax(290px, 2fr); }
+    .recipe-preview { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) {
+    .recipe-workspace { grid-template-columns: 1fr; }
+    .recipe-workspace > * { padding: 17px; }
+    .map-craft-test { margin-left: 5px; }
+}

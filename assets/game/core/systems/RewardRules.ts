@@ -37,17 +37,17 @@ export class RewardRules {
         const kind = r.cards[index];
         const blocked = this.inventory.rewardCardBlocked(kind);
         if (blocked) return this.feedback.result(false, blocked);
-        const zone =
-            this.inventory.baseWeight + this.content.cards[kind].weight <= 30 ? 'base' : 'overflow';
+        const zone = this.inventory.rewardZone(kind);
         this.state.cards.push(this.inventory.owned(kind, true, zone));
         r.cardTaken = true;
-        this.feedback.log(
-            `获得${this.content.cards[kind].name}，${zone === 'base' ? '进入可用卡组' : '暂存临时溢出区'}。`
-        );
-        return this.feedback.result(
-            true,
-            zone === 'base' ? '卡牌已加入本次探索卡组。' : '卡牌进入临时溢出区，暂不能用于战斗。'
-        );
+        const destination =
+            zone === 'overflow'
+                ? '临时溢出区'
+                : this.content.cards[kind].role === 'supply'
+                  ? '行囊'
+                  : '本局卡组';
+        this.feedback.log(`获得${this.content.cards[kind].name}，进入${destination}。`);
+        return this.feedback.result(true, `卡牌已放入${destination}。`);
     }
     finishRewards(): ActionResult {
         const r = this.state.rewards;

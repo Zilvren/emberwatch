@@ -58,9 +58,11 @@ function createEditorServer(options = {}) {
             }
             if (request.method !== 'GET' && request.method !== 'HEAD') return json(response, 405, { error: '不支持此操作。' });
             if (address.pathname === '/api/status') return json(response, 200, { gameBuilt: fs.existsSync(path.join(project, 'build/web-desktop/application.js')) });
-            if (address.pathname === '/shared/catalog.js') {
+            if (address.pathname === '/shared/catalog.js' || address.pathname === '/shared/recipes.js') {
+                const file = address.pathname === '/shared/catalog.js' ? schemaPath : path.join(path.dirname(schemaPath), 'RecipeCatalog.ts');
+                const source = fs.readFileSync(file, 'utf8').replace(/from ['"]\.\/RecipeCatalog['"]/g, "from '/shared/recipes.js'");
                 response.writeHead(200, { 'Content-Type': mime['.js'], 'Cache-Control': 'no-store' });
-                return response.end(ts.transpileModule(fs.readFileSync(schemaPath, 'utf8'), { compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ES2020 } }).outputText);
+                return response.end(ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ES2020 } }).outputText);
             }
             if (address.pathname === '/shared/card-view.js') {
                 const source = fs.readFileSync(path.join(project, 'assets/game/presentation/cards/CardViewModel.ts'), 'utf8').replace(/from ['"][^'"]*CardCatalog['"]/g, "from '/shared/catalog.js'");
@@ -84,7 +86,7 @@ function createEditorServer(options = {}) {
                 }
                 return sendFile(response, resolved);
             }
-            const staticFiles = { '/': 'index.html', '/editor.css': 'editor.css', '/card-component.css': 'card-component.css', '/editor.js': 'editor.js' };
+            const staticFiles = { '/': 'index.html', '/recipes': 'index.html', '/editor.css': 'editor.css', '/card-component.css': 'card-component.css', '/editor.js': 'editor.js', '/recipes.js': 'recipes.js' };
             const name = staticFiles[address.pathname];
             if (name) return sendFile(response, path.join(project, 'tools/card-editor', name));
             return json(response, 404, { error: '页面不存在。' });

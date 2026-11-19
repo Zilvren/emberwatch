@@ -69,7 +69,7 @@ test('invalid definitions, dangling references and deleting system cards are rej
         c => { c.cards.find(card => card.id === 'knife').effect.generatedCard = 'missing'; },
         c => { c.fixedReward = 'missing'; },
         c => c.cards.forEach(card => { card.reward = false; }),
-        c => { c.cards.find(card => card.id === 'knife').initialCount = 8; },
+        c => { c.cards.find(card => card.id === 'knife').initialCount = 9; },
         c => { c.cards[0].id = 'constructor'; },
     ];
     for (const change of changes) { const catalog = base(); change(catalog); assert.throws(() => schema.validateCatalog(catalog), schema.CatalogError); }

@@ -52,6 +52,7 @@ export class CombatRules {
         this.beginPlayerTurn();
         if (
             boss &&
+            !this.scenario.runDeck &&
             !this.state.battle.hand.some((c) => this.content.rewardPool.indexOf(c.kind) >= 0)
         ) {
             const index = this.state.battle.draw.findIndex(

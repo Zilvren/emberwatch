@@ -85,10 +85,11 @@ export class CardPresentation extends Component {
         caption = '点击 / 拖动',
         id = '',
         definitions: Readonly<Record<string, CardDefinition>> = CARD,
-        costUnit = '物资'
+        costUnit = '物资',
+        options: { runDeck?: boolean; neededForSynthesis?: boolean } = {}
     ): void {
         this.showModel(
-            cardViewModel(definitions[kind], definitions, costUnit),
+            cardViewModel(definitions[kind], definitions, costUnit, options),
             blocked,
             caption,
             id
@@ -137,7 +138,13 @@ export class CardPresentation extends Component {
         if (this.weightLabel) this.weightLabel.string = model.weight;
         if (this.artwork)
             this.artwork.spriteFrame = this.illustrations[model.artIndex] ?? this.illustrations[2];
-        this.showKeywords(this.compact ? [] : model.keywords);
+        this.showKeywords(
+            this.compact
+                ? model.keywords.filter(
+                      (word) => word === '可作为合成材料' || word === '已有搭配 · 缺此材料'
+                  )
+                : model.keywords
+        );
         if (this.typeLabel) this.typeLabel.node.active = !this.compact;
         if (this.weightLabel) this.weightLabel.node.active = !this.compact;
         if (this.disabledOverlay) this.disabledOverlay.active = !!blocked;

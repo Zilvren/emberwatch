@@ -13,6 +13,7 @@ export interface StatusBarInput {
     muted: boolean;
     actionsEnabled: boolean;
     rulesNotice?: string;
+    recipesVisible?: boolean;
 }
 export const defaultStatus: StatusBarInput = {
     day: 1,

@@ -17,6 +17,8 @@ export type GameReadModel = ReadonlyValue<
         | 'armor'
         | 'critical'
         | 'cards'
+        | 'carriedCards'
+        | 'storedSupplies'
         | 'route'
         | 'fixedDone'
         | 'pathIndex'
@@ -37,4 +39,4 @@ export type GameReadModel = ReadonlyValue<
         | 'content'
     >
 > &
-    Pick<SurvivalGame, 'cardBlocked' | 'rewardCardBlocked'>;
+    Pick<SurvivalGame, 'cardBlocked' | 'rewardCardBlocked' | 'rewardZone'>;

@@ -6,11 +6,17 @@ const keywordLabels: Record<string, string> = {
     basic: '基础牌',
     weapon: '武器',
     consumable: '消耗品',
+    supply: '物资卡',
+    synthesis: '可作为合成材料',
+    'synthesis-needed': '已有搭配 · 缺此材料',
 };
 const keywordDescriptions: Record<string, string> = {
-    basic: '永久属于主角，不会因失败被删除。',
+    basic: '可在初始卡组中获得。',
     weapon: '打出后进入武器槽，并按武器规则生成攻击牌。',
     consumable: '使用并结算效果后永久消失。',
+    supply: '带回避难所后，可以兑换成物资点。',
+    synthesis: '可以按配方使用本局卡组中的卡牌进行合成。',
+    'synthesis-needed': '本局卡组中已有这条配方的一部分材料，仍需要这张卡。',
 };
 interface DisplayInput {
     id: string;
@@ -58,7 +64,8 @@ export type CardDisplayModel = ReturnType<typeof displayModel>;
 export function cardViewModel(
     data: CardDefinition,
     definitions: Readonly<Record<string, CardDefinition>> = CARD,
-    costUnit = '物资'
+    costUnit = '物资',
+    options: { runDeck?: boolean; neededForSynthesis?: boolean } = {}
 ): CardDisplayModel {
     const effect = effectSummary(data, definitions),
         detail = data.text === effect ? '' : data.text;
@@ -66,22 +73,38 @@ export function cardViewModel(
         data.effect.type === 'equip'
             ? `生成「${definitions[data.effect.generatedCard ?? '']?.name ?? data.effect.generatedCard}」`
             : effect;
+    const keywords =
+        data.role === 'supply'
+            ? ['supply']
+            : data.role === 'basic'
+              ? ['basic']
+              : data.effect.type === 'equip'
+                ? ['weapon']
+                : [];
+    if (data.canSynthesize) {
+        keywords.push('synthesis');
+        if (options.neededForSynthesis) keywords.push('synthesis-needed');
+    }
     return displayModel({
         id: data.id,
         title: data.name,
         tag: data.tag,
         cost: data.cost,
         costUnit,
-        showCost: data.role !== 'cash',
+        showCost: data.role !== 'cash' && data.role !== 'supply',
         effect: primary,
         description: (data.effect.type === 'equip' ? '从下回合起，每回合 1 张。' : '') + detail,
         fullDescription: effect + (detail ? '\n\n' + detail : ''),
-        weight: data.role === 'temporary' ? '本场临时' : `负重 ${data.weight}`,
+        weight:
+            data.role === 'temporary'
+                ? '本场临时'
+                : options.runDeck && data.role !== 'supply'
+                  ? '本局卡组'
+                  : `负重 ${data.weight}`,
         art: data.art,
         accent: data.color,
         temporary: data.role === 'temporary',
-        keywords:
-            data.role === 'basic' ? ['basic'] : data.effect.type === 'equip' ? ['weapon'] : [],
+        keywords,
     });
 }
 

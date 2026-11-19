@@ -68,15 +68,17 @@ export class ExplorationRules {
                 );
             this.inventory.spend(fee);
             this.state.phase = 'rewards';
+            const pool =
+                this.scenario.runDeck && this.content.supplyPool.length
+                    ? this.content.supplyPool
+                    : this.content.rewardPool;
             this.state.rewards = {
                 source: node,
                 supplies: node === 'fixed' ? 4 : this.random.int(4, 6),
                 cards: [
                     node === 'fixed'
                         ? this.content.catalog.fixedReward
-                        : this.content.rewardPool[
-                              this.random.int(0, this.content.rewardPool.length - 1)
-                          ],
+                        : pool[this.random.int(0, pool.length - 1)],
                 ],
                 supplyTaken: false,
                 cardTaken: false,
@@ -97,6 +99,7 @@ export class ExplorationRules {
     finishRest(): ActionResult {
         if (this.state.phase !== 'rest') return this.feedback.result(false, '当前不在营地。');
         if (
+            !this.scenario.runDeck &&
             !this.inventory.usableCards.some(
                 (c) =>
                     this.content.cards[c.kind].effect.type === 'damage' ||

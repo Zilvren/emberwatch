@@ -1,6 +1,7 @@
 {
   "version": 1,
   "fixedReward": "heavy",
+  "recipes": [],
   "cards": [
     {
       "id": "attack",
@@ -8,7 +9,7 @@
       "tag": "固有 · 攻击",
       "cost": 0,
       "weight": 0,
-      "text": "固有能力，永不丢失",
+      "text": "",
       "color": "#c29060",
       "art": "attack",
       "role": "basic",

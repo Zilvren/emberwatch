@@ -1,7 +1,7 @@
 {
   "project": "The end",
-  "date": "2026-11-15",
-  "status": "synchronized",
+  "date": "2026-11-20",
+  "status": "local-updated-openviking-pending",
   "mustCheckExistingUrisBeforeWriting": true,
   "authored": [
     {
@@ -171,6 +171,24 @@
       "target": "viking://~/resources/projects/the-end/docs/coherence-verification.json",
       "uri": "viking://~/resources/projects/the-end/docs/coherence-verification.json",
       "status": "saved-readback-verified"
+    },
+    {
+      "file": "docs/designs/card-synthesis-system.md",
+      "method": "write/edit",
+      "target": "viking://~/resources/projects/the-end/designs/card-synthesis-system.md",
+      "uri": "viking://~/resources/projects/the-end/designs/card-synthesis-system.md",
+      "status": "saved-readback-verified-indexing-pending",
+      "taskId": "95d76b5d-c515-45cb-a88f-4db667108d7d",
+      "error": "OpenViking semantic indexing needs the local embedding model embedding-local-only.gguf."
+    },
+    {
+      "file": "docs/card-editor-usage.md",
+      "method": "write/edit",
+      "target": "viking://~/resources/projects/the-end/docs/card-editor-usage.md",
+      "uri": "viking://~/resources/projects/the-end/docs/card-editor-usage.md",
+      "status": "saved-readback-verified-indexing-pending",
+      "taskId": "61c0dcd0-eed4-4b17-8869-edc171488ec2",
+      "error": "OpenViking semantic indexing needs the local embedding model embedding-local-only.gguf."
     }
   ],
   "imports": [
@@ -436,7 +454,23 @@
       "preserveSource": true
     }
   ],
-  "verification": "Authored documents were saved and read back. Source imports have individual asynchronous task states in the sync record; pending/running does not mean index complete.",
-  "checkedAt": "2026-11-14T19:58:05.231Z",
+  "pendingUpdates": [
+    {
+      "file": "docs/card-editor-usage.md",
+      "target": "viking://~/resources/projects/the-end/docs/card-editor-usage.md",
+      "status": "blocked-local-embedding-model-missing",
+      "reason": "OpenViking edit failed because embedding-local-only.gguf is missing.",
+      "changes": "Document the visible +物资卡 editor entry, 兑换物资点 field, shelter exchange, preserved supply points, and fresh-run shelter rules."
+    },
+    {
+      "file": "docs/designs/card-synthesis-system.md",
+      "target": "viking://~/resources/projects/the-end/designs/card-synthesis-system.md",
+      "status": "blocked-local-embedding-model-missing",
+      "reason": "OpenViking edit failed because embedding-local-only.gguf is missing.",
+      "changes": "Document supply-card identity, shelter storage and exchange, preserved supply points, the editor entry, and the 2026-11-20 verification results."
+    }
+  ],
+  "verification": "Previously authored documents were saved and read back. The 2026-11-20 local document updates are staged here because OpenViking semantic processing is unavailable until embedding-local-only.gguf is restored.",
+  "checkedAt": "2026-11-20T00:37:26.7562485+08:00",
   "record": "docs/openviking-sync-status.json"
 }

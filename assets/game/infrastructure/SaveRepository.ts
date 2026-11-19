@@ -34,6 +34,26 @@ export class SaveRepository {
         private readonly storage: SaveStorage,
         readonly key = 'the-end.run.v1'
     ) {}
+    private matchesCatalog(catalogHash: unknown, scenarioVersion: unknown): boolean {
+        const catalog = this.content.catalog;
+        if (catalogHash === hash(JSON.stringify(catalog))) return true;
+        if (scenarioVersion !== 1) return false;
+        const legacy = {
+            version: catalog.version,
+            fixedReward: catalog.fixedReward,
+            cards: catalog.cards.map(({ canSynthesize, supplyValue, ...card }) => card),
+        };
+        if (catalogHash === hash(JSON.stringify(legacy))) return true;
+        const original = {
+            ...legacy,
+            cards: legacy.cards.map((card) =>
+                card.id === 'attack' && card.text === ''
+                    ? { ...card, text: '固有能力，永不丢失' }
+                    : card
+            ),
+        };
+        return catalogHash === hash(JSON.stringify(original));
+    }
     private decode(text: string): GameState {
         const envelope = JSON.parse(text);
         if (envelope?.format !== 'the-end-save') throw new Error('存档格式无效。');
@@ -41,7 +61,7 @@ export class SaveRepository {
             throw new SaveReadError('存档版本暂不受支持，原存档已保留。', true);
         const { checksum, ...body } = envelope;
         if (checksum !== hash(JSON.stringify(body))) throw new Error('存档完整性校验失败。');
-        if (body.catalogHash !== hash(JSON.stringify(this.content.catalog)))
+        if (!this.matchesCatalog(body.catalogHash, body.state?.scenarioVersion))
             throw new SaveReadError(
                 '卡牌配置已改变，未加载或覆盖原存档。可恢复原配置，或通过“重开”开始新进度。',
                 true

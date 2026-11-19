@@ -1,9 +1,11 @@
 /** Teaching-catalog v1 compatibility schema. Shared by its game/editor; no engine dependencies.
  * Formal display references are kept separate until the formal resource rules are implemented.
  */
+import { RecipeDefinition, validateRecipes } from './RecipeCatalog';
+
 export type CardKind = string;
 export type EffectType = 'damage' | 'block' | 'heal' | 'equip' | 'none';
-export type CardRole = 'basic' | 'normal' | 'temporary' | 'cash';
+export type CardRole = 'basic' | 'normal' | 'temporary' | 'cash' | 'supply';
 export interface CardDefinition {
     id: string;
     name: string;
@@ -16,12 +18,18 @@ export interface CardDefinition {
     role: CardRole;
     initialCount: number;
     reward: boolean;
+    supplyValue?: number;
+    canSynthesize?: boolean;
     effect: { type: EffectType; amount: number; generatedCard?: string };
 }
 export interface Catalog {
     version: number;
     fixedReward: string;
     cards: CardDefinition[];
+    recipes: RecipeDefinition[];
+}
+export function isBattleCard(card: Pick<CardDefinition, 'role'>): boolean {
+    return card.role === 'basic' || card.role === 'normal';
 }
 export const ART_IDS = ['attack', 'dodge', 'knife', 'evade', 'repair', 'heavy', 'slash', 'cash'];
 export const EFFECT_NAMES: Record<EffectType, string> = {
@@ -90,13 +98,19 @@ export function validateCatalog(raw: unknown): Catalog {
         if (ART_IDS.indexOf(card.art) < 0) issues.push(`${label}：请选择现有插画。`);
         if (typeof card.color !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(card.color))
             issues.push(`${label}：颜色格式无效。`);
-        if (['basic', 'normal', 'temporary', 'cash'].indexOf(card.role) < 0)
+        if (['basic', 'normal', 'temporary', 'cash', 'supply'].indexOf(card.role) < 0)
             issues.push(`${label}：卡牌身份无效。`);
+        if (card.canSynthesize !== undefined && typeof card.canSynthesize !== 'boolean')
+            issues.push(`${label}：合成材料设置无效。`);
+        if (card.canSynthesize && !isBattleCard(card))
+            issues.push(`${label}：只有战斗卡可以作为合成材料。`);
+        if (card.supplyValue !== undefined && !integer(card.supplyValue, 1, 999))
+            issues.push(`${label}：兑换物资点需为 1～999 的整数。`);
         if (Object.prototype.hasOwnProperty.call(SYSTEM_ROLES, card.id)) {
             if (card.role !== SYSTEM_ROLES[card.id])
                 issues.push(`${label}：系统卡牌的身份不能更改。`);
         } else if (card.role === 'basic' || card.role === 'cash')
-            issues.push(`${label}：新卡请选择普通牌或临时牌。`);
+            issues.push(`${label}：新卡请选择普通牌、临时牌或物资牌。`);
         const effect = card.effect;
         if (
             !effect ||
@@ -123,9 +137,13 @@ export function validateCatalog(raw: unknown): Catalog {
             issues.push(
                 `${label}：临时牌重量为 0，不进入初始卡组或奖励池，效果限于伤害、格挡和修复。`
             );
-        if (card.role !== 'normal' && card.reward)
-            issues.push(`${label}：只有普通牌能进入奖励池。`);
-        if (effect.type === 'none' && card.role !== 'cash')
+        if (card.role !== 'normal' && card.role !== 'supply' && card.reward)
+            issues.push(`${label}：只有普通牌和物资牌能进入奖励池。`);
+        if (card.role === 'supply' && (card.initialCount || card.cost || effect.type !== 'none'))
+            issues.push(`${label}：物资牌只从搜刮获得，初始数量和费用为 0，效果请选择“无”。`);
+        if (card.role === 'supply' && !integer(card.supplyValue ?? 1, 1, 999))
+            issues.push(`${label}：物资牌必须设置 1～999 点兑换值。`);
+        if (effect.type === 'none' && card.role !== 'cash' && card.role !== 'supply')
             issues.push(`${label}：普通牌需要可执行的效果。`);
         if (
             card.id === 'attack' &&
@@ -161,6 +179,8 @@ export function validateCatalog(raw: unknown): Catalog {
             role: card.role,
             initialCount: card.initialCount,
             reward: card.reward,
+            ...(card.role === 'supply' ? { supplyValue: card.supplyValue ?? 1 } : {}),
+            ...(card.canSynthesize === true ? { canSynthesize: true } : {}),
             effect: {
                 type: effect.type,
                 amount: effect.amount,
@@ -180,13 +200,13 @@ export function validateCatalog(raw: unknown): Catalog {
             issues.push(`${card.name}：装备必须引用一张存在的临时牌。`);
     if (typeof input.fixedReward !== 'string' || definitions[input.fixedReward]?.role !== 'normal')
         issues.push('固定搜刮奖励必须引用一张存在的普通牌。');
-    if (!cards.some((card) => card.reward)) issues.push('奖励池至少需要一张普通牌。');
-    const weight = cards.reduce((sum, card) => sum + card.weight * card.initialCount, 0);
-    if (weight > 30) issues.push(`初始卡牌负重为 ${weight}/30，请减少初始数量或重量。`);
+    if (!cards.some((card) => card.role === 'normal' && card.reward))
+        issues.push('奖励池至少需要一张普通牌。');
     if (cards.reduce((sum, card) => sum + card.initialCount, 0) > 30)
         issues.push('初始卡牌数量不能超过 30 张。');
+    const recipes = validateRecipes(input.recipes, definitions, issues);
     if (issues.length) throw new CatalogError(issues);
-    return { version: 1, fixedReward: input.fixedReward, cards };
+    return { version: 1, fixedReward: input.fixedReward, cards, recipes };
 }
 
 export function installCatalog(raw: unknown): Catalog {
@@ -216,7 +236,7 @@ export function effectSummary(
     if (effect.type === 'heal') return `恢复 ${effect.amount} 点护甲`;
     if (effect.type === 'equip')
         return `下回合起每回合生成「${definitions[effect.generatedCard ?? '']?.name ?? effect.generatedCard}」`;
-    return '只能在休整时丢弃';
+    return card.role === 'supply' ? `带回避难所兑换 ${card.supplyValue ?? 1} 物资点` : '只能在休整时丢弃';
 }
 /** Dark ink derived from the chosen accent keeps names legible on the paper card. */
 export function titleColor(accent: string): string {
@@ -240,5 +260,9 @@ export function cardReferences(catalog: Catalog, id: string): string[] {
     if (catalog.fixedReward === id) refs.push('固定搜刮奖励');
     for (const source of catalog.cards)
         if (source.effect.generatedCard === id) refs.push(`${source.name}的生成牌`);
+    for (const recipe of catalog.recipes ?? []) {
+        if (recipe.materials.some(({ card }) => card === id)) refs.push(`配方 ${recipe.id} 的材料`);
+        if (recipe.products.some(({ card }) => card === id)) refs.push(`配方 ${recipe.id} 的产物`);
+    }
     return refs;
 }

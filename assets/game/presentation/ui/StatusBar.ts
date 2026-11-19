@@ -27,6 +27,7 @@ export class StatusBar extends Component {
     @property(Node) bag: Node | null = null;
     @property(UIProgress) armorMeter: UIProgress | null = null;
     @property(ButtonAction) rulesNotice: ButtonAction | null = null;
+    @property(Node) recipeButton: Node | null = null;
     private input: StatusBarInput = { ...defaultStatus };
     private viewModel = statusBarView(this.input);
     private geometry = statusBarLayout(1440);
@@ -48,6 +49,11 @@ export class StatusBar extends Component {
         if (signature === this.signature) return;
         this.signature = signature;
         this.input = { ...input };
+        if (this.recipeButton && this.recipeButton.active !== !!input.recipesVisible) {
+            this.recipeButton.active = !!input.recipesVisible;
+            this.lastWidth = -1;
+            this.layout();
+        }
         const model = (this.viewModel = statusBarView(input));
         this.text(this.save, model.save, model.saveTone);
         this.text(this.day, model.day);
@@ -62,7 +68,7 @@ export class StatusBar extends Component {
             this.rulesNotice.setText(model.rulesNotice);
             this.rulesNotice.setEnabled(model.actionsEnabled);
         }
-        for (const node of [this.bag, ...this.utilities]) {
+        for (const node of [this.bag, ...this.utilities, this.recipeButton]) {
             const action = node?.getComponent(ButtonAction);
             if (!action) continue;
             if (action.actionId === 'audio') action.setText(model.audio);
@@ -103,7 +109,12 @@ export class StatusBar extends Component {
             return;
         this.lastWidth = ui.width;
         this.lastPresentation = this.presentation;
-        const geometry = (this.geometry = statusBarLayout(ui.width, this.presentation));
+        const recipesVisible = !!this.recipeButton?.active;
+        const geometry = (this.geometry = statusBarLayout(
+            ui.width,
+            this.presentation,
+            recipesVisible
+        ));
         if (ui.height !== geometry.height) ui.height = geometry.height;
         const surface = this.paper?.getComponent(UITransform);
         surface?.setContentSize(geometry.width, geometry.height);
@@ -123,7 +134,8 @@ export class StatusBar extends Component {
         const carry = geometry.sections[4];
         this.bag?.setPosition(0, 5);
         this.bag?.getComponent(ButtonPresentation)?.resize(Math.min(224, carry.width), 40);
-        this.utilities.forEach((node, index) => {
+        const utilities = recipesVisible ? [...this.utilities, this.recipeButton!] : this.utilities;
+        utilities.forEach((node, index) => {
             const slot = geometry.utilities[index];
             node.setPosition(slot.x, slot.y);
             node.getComponent(ButtonPresentation)?.resize(slot.width, slot.height);

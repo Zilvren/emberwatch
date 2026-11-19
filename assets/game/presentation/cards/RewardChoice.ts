@@ -15,13 +15,21 @@ export class RewardChoice extends Component {
             blocked = game.rewardCardBlocked(kind);
         this.cardRoot
             ?.getComponent(CardPresentation)
-            ?.configure(kind, taken ? '奖励已处理' : blocked, '', '', game.content.cards);
+            ?.configure(
+                kind,
+                taken ? '奖励已处理' : blocked,
+                '',
+                '',
+                game.content.cards,
+                game.scenario.battleResource === 'stamina' ? '体力' : '物资',
+                { runDeck: game.scenario.runDeck }
+            );
         if (this.claim) {
             this.claim.actionId = 'claim-card-' + index;
             this.claim.setText(
                 taken
                     ? '卡牌已领取'
-                    : game.baseWeight + game.content.cards[kind].weight > 30
+                    : game.rewardZone(kind) === 'overflow'
                       ? '领取 · 暂存'
                       : '选择这张卡'
             );

@@ -61,42 +61,44 @@ test('container widths select readable layouts without overlapping actionable co
     const intersects = (a, b) =>
         Math.abs(a.x - b.x) < (a.width + b.width) / 2 - 1e-6 &&
         Math.abs(a.y - b.y) < (a.height + b.height) / 2 - 1e-6;
-    for (const width of [360, 408, 719, 720, 960, 1179, 1180, 1320, 1440]) {
-        const grid = statusBarLayout(width);
-        assert.equal(grid.sections.length, 5);
-        assert.equal(grid.utilities.length, 4);
-        const bag = {
-            ...grid.sections[4],
-            width: Math.min(224, grid.sections[4].width),
-            height: 40,
-            y: grid.sections[4].y + 5,
-        };
-        const controls = [bag, ...grid.utilities];
-        for (let i = 0; i < controls.length; i++) {
-            const a = controls[i];
-            assert.equal(a.height, 40);
-            assert.ok(a.x - a.width / 2 >= -width / 2 + grid.padding - 1e-6);
-            assert.ok(a.x + a.width / 2 <= width / 2 - grid.padding + 1e-6);
-            assert.ok(a.y - a.height / 2 >= -grid.height / 2);
-            assert.ok(a.y + a.height / 2 <= grid.height / 2);
-            for (let j = i + 1; j < controls.length; j++) assert.ok(!intersects(a, controls[j]));
+    for (const recipesVisible of [false, true]) {
+        for (const width of [360, 408, 719, 720, 960, 1179, 1180, 1320, 1440]) {
+            const grid = statusBarLayout(width, 'strip', recipesVisible);
+            assert.equal(grid.sections.length, 5);
+            assert.equal(grid.utilities.length, recipesVisible ? 5 : 4);
+            const bag = {
+                ...grid.sections[4],
+                width: Math.min(224, grid.sections[4].width),
+                height: 40,
+                y: grid.sections[4].y + 5,
+            };
+            const controls = [bag, ...grid.utilities];
+            for (const [index, control] of controls.entries()) {
+                assert.equal(control.height, 40);
+                assert.ok(control.x - control.width / 2 >= -width / 2 + grid.padding - 1e-6);
+                assert.ok(control.x + control.width / 2 <= width / 2 - grid.padding + 1e-6);
+                assert.ok(control.y - control.height / 2 >= -grid.height / 2);
+                assert.ok(control.y + control.height / 2 <= grid.height / 2);
+                for (const next of controls.slice(index + 1)) assert.ok(!intersects(control, next));
+            }
         }
     }
     assert.equal(statusBarLayout(1440).height, 80);
     assert.equal(statusBarLayout(960).mode, 'compact');
     assert.equal(statusBarLayout(408).mode, 'narrow');
 });
-test('native HUD keeps status bindings, existing commands and the map entry', () => {
+test('native HUD keeps status bindings and exposes both map and recipe entries', () => {
     const { read, script } = require('../tools/native-assets.cjs'),
         a = read('assets/prefabs/ui/HUD.prefab');
-    assert.ok(a.some((o) => o.__type__ === script('StatusBar')));
+    const statusBar = a.find((o) => o.__type__ === script('StatusBar'));
+    assert.equal(a[statusBar.recipeButton.__id__]._name, 'recipe-open');
     assert.ok(!a.some((o) => o.__type__ === script('UIValue') && o.key.startsWith('header/')));
     assert.deepEqual(
         a
             .filter((o) => o.__type__ === script('ButtonAction'))
             .map((o) => o.actionId)
             .sort(),
-        ['audio', 'bag', 'help', 'log', 'map', 'restart', 'rules-help']
+        ['audio', 'bag', 'help', 'log', 'map', 'recipe-open', 'restart', 'rules-help']
     );
     for (const control of a.filter((o) => o.__type__ === 'cc.Button')) {
         const click = a[control.clickEvents[0].__id__];

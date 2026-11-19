@@ -5,6 +5,7 @@ export interface GameScenario {
     ruleset: 'tutorial-v1' | 'stamina-v1';
     battleResource?: 'supplies' | 'stamina';
     suppliesHaveWeight?: boolean;
+    runDeck?: boolean;
     scavengeFees?: { fixed: number; scavenge: number };
     id: string;
     version: number;
@@ -22,6 +23,7 @@ export const TUTORIAL_SCENARIO: GameScenario = {
     ruleset: 'tutorial-v1',
     battleResource: 'supplies',
     suppliesHaveWeight: true,
+    runDeck: false,
     scavengeFees: { fixed: 2, scavenge: 3 },
     id: 'first-expedition',
     version: 1,
@@ -49,8 +51,13 @@ export const STAMINA_SCENARIO: GameScenario = {
     suppliesHaveWeight: false,
     scavengeFees: { fixed: 0, scavenge: 0 },
 };
+export const RUN_DECK_SCENARIO: GameScenario = {
+    ...STAMINA_SCENARIO,
+    version: 2,
+    runDeck: true,
+};
 export function getScenario(id: string, version: number): GameScenario {
-    const scenario = [TUTORIAL_SCENARIO, STAMINA_SCENARIO].find(
+    const scenario = [TUTORIAL_SCENARIO, STAMINA_SCENARIO, RUN_DECK_SCENARIO].find(
         (s) => s.id === id && s.version === version
     );
     if (!scenario) throw new Error('此存档使用的章节版本尚不受支持，已保留原存档。');

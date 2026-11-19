@@ -3,6 +3,7 @@ import type { CardKind, Route } from '../../core/SurvivalGame';
 import type { ButtonActionEvent } from './UIEvents';
 import type { UiState } from './UiState';
 import { entryTier, affordableEntryTier } from '../../core/content/EntryTiers';
+import { initialRecipeBrowse, recipeBrowse } from './RecipePanelModel';
 export type UiSound = 'tap' | 'loot' | 'heal';
 export interface UiActions {
     act(command: GameCommand, sound?: UiSound): void;
@@ -25,6 +26,10 @@ export class UiActionRouter {
         if (this.ui.busy || !this.session.view) return;
         const id = event.id,
             g = this.session.view;
+        if (this.ui.overlay === 'recipes' || id === 'recipe-open' || id === 'rest-synthesis') {
+            this.recipeAction(event);
+            return;
+        }
         if (id === 'card-select') {
             if (!this.ui.overlay) this.selectCard(event.payload ?? '');
             return;
@@ -32,7 +37,8 @@ export class UiActionRouter {
         if (id === 'bag' || id === 'rest-bag' || id === 'reward-bag') {
             this.ui.overlay = 'bag';
             this.ui.page = 0;
-            this.ui.deckEdit = id === 'rest-bag';
+            this.ui.deckEdit = id === 'rest-bag' && !g.scenario.runDeck;
+            if (g.scenario.runDeck) this.ui.bagFilter = id === 'rest-bag' ? 'deck' : 'all';
             if (this.ui.deckEdit) this.ui.bagFilter = 'all';
             this.ui.bagReader = false;
             this.ui.bagDetails = false;
@@ -47,7 +53,12 @@ export class UiActionRouter {
         } else if (id === 'bag-sort' && this.ui.overlay === 'bag') {
             const sorts: UiState['bagSort'][] = ['original', 'name', 'cost', 'weight'];
             this.ui.bagSort = sorts[(sorts.indexOf(this.ui.bagSort) + 1) % sorts.length];
-        } else if (id === 'bag-mode' && this.ui.overlay === 'bag' && g.phase === 'rest') {
+        } else if (
+            id === 'bag-mode' &&
+            this.ui.overlay === 'bag' &&
+            g.phase === 'rest' &&
+            !g.scenario.runDeck
+        ) {
             this.ui.deckEdit = !this.ui.deckEdit;
             if (this.ui.deckEdit) this.ui.bagFilter = 'all';
             this.ui.bagReader = false;
@@ -180,18 +191,78 @@ export class UiActionRouter {
             this.actions.act({ type: 'finish-rest' });
             return;
         } else if (id === 'shelter-repair') {
-            const result = this.session.execute({ type: 'repair' });
+            const result = g.scenario.runDeck
+                ? this.session.execute({ type: 'redeem-supplies' })
+                : this.session.execute({ type: 'repair' });
             if (result.warning) this.ui.overlay = 'repair-risk';
             else {
                 this.actions.message(result.message);
-                this.actions.sound('heal');
-                this.actions.healEffect();
+                if (!g.scenario.runDeck) {
+                    this.actions.sound('heal');
+                    this.actions.healEffect();
+                } else this.actions.sound('loot');
+                this.actions.refresh();
             }
         } else if (id === 'shelter-done') {
             this.actions.act({ type: 'finish-day' }, 'loot');
             return;
         }
         this.actions.sound('tap');
+        this.actions.refresh();
+    }
+    private recipeAction(event: ButtonActionEvent): void {
+        const { id, payload = '' } = event;
+        if (this.ui.overlay !== 'recipes') {
+            if (this.ui.overlay || !this.session.execute({ type: 'open-recipes' }).ok) return;
+            this.ui.recipes = initialRecipeBrowse();
+            this.ui.overlay = 'recipes';
+            this.actions.refresh();
+            return;
+        }
+        const browse = this.ui.recipes;
+        const model = recipeBrowse(this.session.view, browse);
+        const resetSelection = () => {
+            browse.recipeId = '';
+            browse.card = '';
+            browse.page = 0;
+        };
+        if (id === 'modal-close' || id === 'modal-cancel') {
+            this.session.execute({ type: 'close-recipes' });
+            this.ui.overlay = null;
+        } else if (id === 'recipe-filter') {
+            if (payload !== 'all' && payload !== 'ready' && payload !== 'partial') return;
+            browse.filter = payload;
+            resetSelection();
+        } else if (id === 'recipe-category') {
+            const categories = ['', ...model.categories];
+            browse.category =
+                categories[(categories.indexOf(browse.category) + 1) % categories.length];
+            resetSelection();
+        } else if (id === 'recipe-sort') {
+            browse.byName = !browse.byName;
+            resetSelection();
+        } else if (id === 'recipe-prev' || id === 'recipe-next') {
+            resetSelection();
+            browse.page = Math.max(
+                0,
+                Math.min(model.totalPages - 1, model.page + (id === 'recipe-prev' ? -1 : 1))
+            );
+        } else if (id === 'recipe-pick' || id === 'recipe-link') {
+            if (id === 'recipe-link') {
+                browse.filter = 'all';
+                browse.category = '';
+            }
+            browse.recipeId = payload;
+            browse.card = '';
+        } else if (id === 'recipe-card') browse.card = payload;
+        else if (id === 'recipe-craft' && model.selected) {
+            browse.recipeId = model.selected.recipe.id;
+            this.actions.act({ type: 'synthesize', recipeId: model.selected.recipe.id }, 'loot');
+            return;
+        } else if (id === 'recipe-undo') {
+            this.actions.act({ type: 'undo-synthesis' });
+            return;
+        } else return;
         this.actions.refresh();
     }
     private confirm(): void {

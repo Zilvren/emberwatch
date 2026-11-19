@@ -1,4 +1,4 @@
-import { CARD, CardDefinition } from '../content/CardCatalog';
+import { CARD, CardDefinition, isBattleCard } from '../content/CardCatalog';
 import { getScenario, NodeKind, Route } from '../content/GameScenario';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
 import type { Battle, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
@@ -15,6 +15,7 @@ export interface GameState {
     armor: number;
     critical: boolean;
     cards: OwnedCard[];
+    storedSupplies?: Record<string, number>;
     route: Route | null;
     fixedDone: boolean;
     pathIndex: number;
@@ -95,7 +96,14 @@ export function validateGameState(
     s.logs.forEach((v) => text(v, 'log'));
     list(s.visited, 100, 'visited');
     s.visited.forEach((v) => requireValue(v, nodes.indexOf(v) >= 0, 'visited node'));
-    list(s.cards, 100, 'cards');
+    list(s.cards, scenario.runDeck ? Number.MAX_SAFE_INTEGER : 100, 'cards');
+    if (s.storedSupplies !== undefined) {
+        object(s.storedSupplies, 'stored supplies');
+        for (const kind of Object.keys(s.storedSupplies)) {
+            requireValue(kind, definitions[kind]?.role === 'supply', 'stored supply kind');
+            integer(s.storedSupplies[kind], 1, Number.MAX_SAFE_INTEGER, 'stored supply count');
+        }
+    }
     const owned = new Set<string>(),
         combat = new Set<string>();
     let highestId = 0;
@@ -123,11 +131,27 @@ export function validateGameState(
         flag(card.selected, 'selected');
         flag(card.found, 'found');
         requireValue(card.zone, card.zone === 'base' || card.zone === 'overflow', 'zone');
+        if (scenario.runDeck) {
+            const definition = definitions[card.kind];
+            requireValue(
+                card,
+                definition.role === 'supply'
+                    ? !card.selected
+                    : isBattleCard(definition) && card.zone === 'base' && card.selected,
+                'run deck or carry item'
+            );
+        }
     });
+    if (scenario.runDeck && ['shelter', 'day2', 'failure'].indexOf(s.phase) >= 0)
+        requireValue(s.cards, s.cards.length === 0, 'closed run cards');
     const baseWeight =
         (scenario.suppliesHaveWeight === false ? 0 : s.supplies) +
         s.cards
-            .filter((c) => c.zone === 'base')
+            .filter(
+                (c) =>
+                    c.zone === 'base' &&
+                    (!scenario.runDeck || definitions[c.kind].role === 'supply')
+            )
             .reduce((n, c) => n + definitions[c.kind].weight, 0);
     const overflowWeight = s.cards
         .filter((c) => c.zone === 'overflow')
@@ -160,7 +184,11 @@ export function validateGameState(
             ['hand', b.hand],
             ['discard', b.discard],
         ] as const) {
-            list(cards, name === 'hand' ? 6 : 10000, name);
+            list(
+                cards,
+                name === 'hand' ? 6 : scenario.runDeck ? Number.MAX_SAFE_INTEGER : 10000,
+                name
+            );
             cards.forEach((card) => identity(card, combat, true));
         }
         if (b.weapon !== null) {
@@ -223,6 +251,7 @@ export function validateGameState(
         armor: s.armor,
         critical: s.critical,
         cards: s.cards,
+        storedSupplies: s.storedSupplies,
         route: s.route,
         fixedDone: s.fixedDone,
         pathIndex: s.pathIndex,

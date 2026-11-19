@@ -1,3 +1,5 @@
+import { initialRecipeBrowse, RecipeBrowseState } from './RecipePanelModel';
+
 export type Overlay =
     | 'bag'
     | 'help'
@@ -9,6 +11,7 @@ export type Overlay =
     | 'log'
     | 'map'
     | 'entry'
+    | 'recipes'
     | null;
 export interface UiState {
     overlay: Overlay;
@@ -25,6 +28,7 @@ export interface UiState {
     rewardSelection: number;
     rewardContext: string;
     entryTier: 'emergency' | 'low' | 'standard' | 'high';
+    recipes: RecipeBrowseState;
     busy: boolean;
     reduced: boolean;
 }
@@ -44,6 +48,7 @@ export function initialUiState(): UiState {
         rewardSelection: -1,
         rewardContext: '',
         entryTier: 'standard',
+        recipes: initialRecipeBrowse(),
         busy: false,
         reduced: false,
     };

@@ -10,7 +10,7 @@ import {
     Route,
     Settlement,
 } from './RulesTypes';
-import { CardKind } from './content/CardCatalog';
+import { CardKind, isBattleCard } from './content/CardCatalog';
 import { CardSet, createCardSet } from './content/ContentRegistry';
 import { GameScenario, TUTORIAL_SCENARIO, getScenario } from './content/GameScenario';
 import { GameState, validateGameState } from './state/GameState';
@@ -21,6 +21,7 @@ import { InventoryRules } from './systems/InventoryRules';
 import { RewardRules } from './systems/RewardRules';
 import { RuleFeedback } from './systems/RuleContext';
 import { SettlementRules } from './systems/SettlementRules';
+import { SynthesisRules } from './systems/SynthesisRules';
 export { Random } from './Random';
 export * from './RulesTypes';
 export { CARD, REWARD_POOL } from './content/CardCatalog';
@@ -32,6 +33,7 @@ export class SurvivalGame {
     private readonly rewardRules: RewardRules;
     private readonly explorationRules: ExplorationRules;
     private readonly settlementRules: SettlementRules;
+    readonly synthesis: SynthesisRules;
     phase: Phase = 'journal';
     day = 1;
     supplies = 10;
@@ -39,6 +41,7 @@ export class SurvivalGame {
     armor = 10;
     critical = false;
     cards: OwnedCard[] = [];
+    storedSupplies?: Record<CardKind, number>;
     route: Route | null = null;
     fixedDone = false;
     pathIndex = 0;
@@ -84,7 +87,8 @@ export class SurvivalGame {
             this,
             this.feedback,
             this.content,
-            this.scenario
+            this.scenario,
+            () => this.reset(this.scenario, true)
         );
         this.rewardRules = new RewardRules(
             this,
@@ -105,6 +109,13 @@ export class SurvivalGame {
             this.scenario,
             fail
         );
+        this.synthesis = new SynthesisRules(
+            this,
+            this.feedback,
+            this.content,
+            this.scenario,
+            (kind) => this.inventoryRules.owned(kind)
+        );
         this.reset();
     }
     exportState(): GameState {
@@ -122,6 +133,7 @@ export class SurvivalGame {
                 armor: this.armor,
                 critical: this.critical,
                 cards: this.cards,
+                storedSupplies: this.storedSupplies,
                 route: this.route,
                 fixedDone: this.fixedDone,
                 pathIndex: this.pathIndex,
@@ -150,11 +162,11 @@ export class SurvivalGame {
         game.random.state = randomState;
         return game;
     }
-    reset(scenario?: GameScenario): void {
+    reset(scenario?: GameScenario, preserveSupplies = false): void {
         if (scenario) Object.assign(this.scenario, JSON.parse(JSON.stringify(scenario)));
         this.phase = 'journal';
         this.day = this.scenario.initialDay;
-        this.supplies = this.scenario.initialSupplies;
+        if (!preserveSupplies) this.supplies = this.scenario.initialSupplies;
         this.entryTier = null;
         this.armor = this.scenario.initialArmor;
         this.critical = false;
@@ -169,7 +181,10 @@ export class SurvivalGame {
         this.returnElapsed = 0;
         this.logs = [];
         this.run++;
-        this.cards = this.content.initialDeck.map((k) => this.inventoryRules.owned(k));
+        this.synthesis.close();
+        this.cards = this.content.initialDeck
+            .filter((kind) => !this.scenario.runDeck || isBattleCard(this.content.cards[kind]))
+            .map((kind) => this.inventoryRules.owned(kind));
         this.feedback.log(`第 1 天 · 护甲 10，物资 10，背负 ${this.baseWeight} / 30。`);
         this.revision++;
     }
@@ -181,6 +196,9 @@ export class SurvivalGame {
     }
     get usableCards(): OwnedCard[] {
         return this.inventoryRules.usableCards;
+    }
+    get carriedCards(): OwnedCard[] {
+        return this.inventoryRules.carriedCards;
     }
     get currentNode(): NodeKind | 'choice' | 'return' {
         return this.explorationRules.currentNode;
@@ -212,6 +230,9 @@ export class SurvivalGame {
     rewardCardBlocked(kind: CardKind): string {
         return this.inventoryRules.rewardCardBlocked(kind);
     }
+    rewardZone(kind: CardKind): OwnedCard['zone'] {
+        return this.inventoryRules.rewardZone(kind);
+    }
     claimCard(index: number): ActionResult {
         return this.rewardRules.claimCard(index);
     }
@@ -239,10 +260,18 @@ export class SurvivalGame {
     finishDay(): ActionResult {
         return this.settlementRules.finishDay();
     }
+    redeemAllSupplies(): ActionResult {
+        return this.settlementRules.redeemAllSupplies();
+    }
     private fail(reason: string): void {
         this.reset();
         this.phase = 'failure';
         this.failureReason = reason;
-        this.feedback.log('教学失败：所有探索内容已重置；没有永久损失，不扣每日物资。');
+        if (this.scenario.runDeck) this.cards = [];
+        this.feedback.log(
+            this.scenario.runDeck
+                ? '探索失败，本局卡组和行囊已清空。'
+                : '教学失败：探索内容已重置，不扣每日物资。'
+        );
     }
 }

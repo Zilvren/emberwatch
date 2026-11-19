@@ -170,7 +170,7 @@ test('legacy saves retain their rules until an explicitly confirmed new game', (
     assert.equal(continued.game.entryTier, null);
 });
 
-test('stamina runs still allow risky repair and charge daily supplies only at final settlement', () => {
+test('fresh runs do not repair or charge daily supplies when returning to shelter', () => {
     const session = new GameSession(17),
         game = session.game;
     ok(session.execute({ type: 'start', tier: 'emergency' }));
@@ -183,17 +183,14 @@ test('stamina runs still allow risky repair and charge daily supplies only at fi
     session.advanceTime(1);
     assert.equal(game.phase, 'shelter');
     assert.equal(game.settlement.dailySpent, 0);
-    const before = game.exportState(),
-        warning = session.execute({ type: 'repair' });
-    assert.equal(warning.warning, true);
+    const before = game.exportState();
+    assert.equal(session.execute({ type: 'repair' }).ok, false);
     assert.deepEqual(game.exportState(), before);
-    ok(session.execute({ type: 'repair', confirmed: true }));
-    assert.equal(game.armor, 10);
-    assert.equal(game.supplies, 0);
-    assert.equal(game.settlement.dailySpent, 0);
+    assert.equal(game.armor, 3);
+    assert.equal(game.supplies, 1);
     ok(session.execute({ type: 'finish-day' }));
-    assert.equal(game.settlement.dailyShortfall, 1);
-    const settled = game.exportState();
+    assert.equal(game.phase, 'journal');
+    assert.equal(game.supplies, 1);
+    assert.equal(game.armor, 10);
     assert.equal(session.execute({ type: 'finish-day' }).ok, false);
-    assert.deepEqual(game.exportState(), settled);
 });

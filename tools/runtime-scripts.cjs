@@ -5,6 +5,7 @@ const scripts={"DeckStackGraphic":"assets/game/presentation/primitives/DeckStack
   "SelectableCard": "assets/game/presentation/cards/SelectableCard.ts",
   "InventoryGrid": "assets/game/presentation/cards/InventoryGrid.ts",
   "RewardSelection": "assets/game/presentation/cards/RewardSelection.ts",
+  "RecipePanel": "assets/game/presentation/ui/RecipePanel.ts",
   "RouteMap": "assets/game/presentation/map/RouteMap.ts",
   "RoutePoint": "assets/game/presentation/map/RoutePoint.ts",
   "CardCatalog": "assets/game/core/content/CardCatalog.ts",

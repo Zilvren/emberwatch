@@ -16,6 +16,7 @@ import { InventoryGrid } from './cards/InventoryGrid';
 import { RewardSelection } from './cards/RewardSelection';
 import { RouteMap } from './map/RouteMap';
 import { EntrySelection } from './ui/EntrySelection';
+import { RecipePanel } from './ui/RecipePanel';
 import { shelterSummary } from './ui/ShelterSummaryModel';
 import { rulesNotice } from './ui/RulesNoticeModel';
 const phases: Phase[] = [
@@ -46,7 +47,11 @@ export class GameRenderer {
         private readonly hand: HandPresentation | null,
         private readonly isMuted: () => boolean,
         private readonly saveStatus: () => string,
-        private readonly newGameRuleset: () => string = () => 'stamina-v1'
+        private readonly newGameRuleset: () => string = () => 'stamina-v1',
+        private readonly synthesisView: () => { blocked: string; canUndo: boolean } = () => ({
+            blocked: '',
+            canUndo: false,
+        })
     ) {}
     text(root: Node, values: Record<string, string | number>): void {
         for (const binding of root.getComponentsInChildren(UIValue)) {
@@ -189,8 +194,14 @@ export class GameRenderer {
                 'banner/text2': g.critical
                     ? '感染临界无法恢复护甲。趁现在整理行囊。'
                     : '进入时已恢复最多 2 点护甲。物资不会恢复。',
-                'rest/text1': `${CARD.cash.name}已经不再有用。\n丢弃后释放 ${CARD.cash.weight} 点负重，暂存卡会自动转入。`,
-                'rest/text3': `${g.usableCards.length} 张可用牌 · ${g.cards.filter((c) => c.zone === 'overflow').length} 张暂存\n移出战斗不释放负重，永久丢弃才释放。`,
+                'rest/text0': g.scenario.runDeck ? '合成' : '整理背包',
+                'rest/text1': g.scenario.runDeck
+                    ? '使用本局卡组里的材料。\n可以连续合成。'
+                    : `${CARD.cash.name}已经不再有用。\n丢弃后释放 ${CARD.cash.weight} 点负重，暂存卡会自动转入。`,
+                'rest/text2': g.scenario.runDeck ? '本局卡组' : '出手卡组',
+                'rest/text3': g.scenario.runDeck
+                    ? `${g.usableCards.length} 张战斗牌 · 本局使用\n搜刮的物资卡放在行囊里。`
+                    : `${g.usableCards.length} 张可用牌 · ${g.cards.filter((c) => c.zone === 'overflow').length} 张暂存\n移出战斗不释放负重，永久丢弃才释放。`,
                 'rest/text5': `护甲 ${g.armor}/10  ·  物资 ${g.supplies}  ·  负重 ${g.baseWeight}/30`,
             });
             this.button(
@@ -199,14 +210,19 @@ export class GameRenderer {
                 cash ? `丢弃${CARD.cash.name} · 释放 ${CARD.cash.weight} 负重` : '现金已丢弃',
                 cash
             );
+            for (const action of screen.getComponentsInChildren(ButtonAction)) {
+                if (action.actionId === 'rest-cash') action.node.active = !g.scenario.runDeck;
+                if (action.actionId === 'rest-synthesis') action.node.active = !!g.scenario.runDeck;
+                if (action.actionId === 'rest-bag')
+                    action.setText(g.scenario.runDeck ? '查看本局卡组' : '整理出手卡组');
+            }
         }
         if (g.phase === 'shelter') {
             const summary = shelterSummary(g);
             this.text(screen, summary.values);
             this.button(screen, 'shelter-repair', summary.repairCaption, summary.repairEnabled);
             for (const action of screen.getComponentsInChildren(ButtonAction))
-                if (action.actionId === 'shelter-repair')
-                    action.node.active = summary.repairVisible;
+                if (action.actionId === 'shelter-repair') action.node.active = summary.repairVisible;
             for (const binding of screen.getComponentsInChildren(UIValue)) {
                 if (binding.key === 'shelter/repair-hint') binding.setAlert(summary.repairRisk);
                 if (binding.key === 'shelter/daily-summary')
@@ -225,7 +241,9 @@ export class GameRenderer {
         }
         if (g.phase === 'failure')
             this.text(screen, {
-                'journal/text2': `${g.failureReason}\n\n本次教学探索已完整重置。\n卡牌没有永久损失，\n每日生存物资也没有扣除。`,
+                'journal/text2': g.scenario.runDeck
+                    ? `${g.failureReason}\n\n本局卡组和行囊已清空。\n下一次探索将使用固定初始卡组。`
+                    : `${g.failureReason}\n\n本次教学探索已重置，\n每日生存物资没有扣除。`,
             });
         this.renderPopups();
         this.hand?.setLocked(this.ui.busy || !!this.ui.overlay);
@@ -246,6 +264,7 @@ export class GameRenderer {
             saveStatus: this.saveStatus(),
             muted: this.isMuted(),
             actionsEnabled: !this.ui.busy && !this.ui.overlay,
+            recipesVisible: g.phase === 'map' || g.phase === 'battle',
             rulesNotice: rulesNotice(g.scenario.ruleset, this.newGameRuleset()).caption,
         });
     }
@@ -302,7 +321,7 @@ export class GameRenderer {
             this.ui.busy || !!this.ui.overlay,
             this.ui.reduced
         );
-        this.button(screen, 'end-turn', undefined, !this.ui.busy);
+        this.button(screen, 'end-turn', undefined, !this.ui.busy && !this.ui.overlay);
     }
     renderPopups(): void {
         const g = this.game;
@@ -313,14 +332,22 @@ export class GameRenderer {
                   ? 1
                   : this.ui.overlay === 'log'
                     ? 2
-                    : this.ui.overlay === 'entry'
-                      ? 5
-                      : this.ui.overlay === 'map'
-                        ? 4
-                        : this.ui.overlay
-                          ? 3
-                          : -1;
+                    : this.ui.overlay === 'recipes'
+                      ? 6
+                      : this.ui.overlay === 'entry'
+                        ? 5
+                        : this.ui.overlay === 'map'
+                          ? 4
+                          : this.ui.overlay
+                            ? 3
+                            : -1;
         this.scene.popups.forEach((popup, i) => (popup.active = i === index));
+        if (index === 6) {
+            const { blocked, canUndo } = this.synthesisView();
+            this.scene.popups[6]
+                ?.getComponentInChildren(RecipePanel)
+                ?.refresh(g, this.ui.recipes, blocked, canUndo);
+        }
         if (index === 0) {
             const popup = this.scene.popups[0],
                 max = Math.max(0, Math.ceil(g.cards.length / 6) - 1);
@@ -328,14 +355,15 @@ export class GameRenderer {
             this.text(popup, {
                 'bag/text1': `基础 ${g.baseWeight}/30  ·  暂存 ${g.overflowWeight}/10  ·  可战斗 ${g.usableCards.length} 张`,
                 'bag/text20': `${this.ui.page + 1} / ${max + 1}`,
-                'bag/text21':
-                    g.phase === 'rest'
-                        ? '移出战斗不释放负重。基础能力永久保留；现金可在这里丢弃。'
-                        : g.phase === 'rewards'
-                          ? g.scenario.suppliesHaveWeight === false
-                              ? '物资点不占负重；普通物品可丢弃腾出空间。基础能力保留，现金仅营地可丢弃。'
-                              : '物资不能暂存；可先丢弃普通物品腾出空间。基础能力保留，现金仅营地可丢弃。'
-                          : '当前仅可查看。奖励和休整时可整理背包；调整战斗卡组需在营地进行。',
+                'bag/text21': g.scenario.runDeck
+                    ? '行囊只装搜刮得到的物资卡。'
+                    : g.phase === 'rest'
+                      ? '移出战斗不释放负重。现金可在这里丢弃。'
+                      : g.phase === 'rewards'
+                        ? g.scenario.suppliesHaveWeight === false
+                            ? '物资点不占负重；普通物品可丢弃腾出空间。基础能力保留，现金仅营地可丢弃。'
+                            : '物资不能暂存；可先丢弃普通物品腾出空间。基础能力保留，现金仅营地可丢弃。'
+                        : '当前仅可查看。奖励和休整时可整理背包；调整战斗卡组需在营地进行。',
             });
             const grid = popup.getComponent(InventoryGrid);
             if (grid) grid.refresh(g, this.ui);

@@ -14,9 +14,14 @@
     <a class="brand" href="/" aria-label="the end 卡牌工坊首页"><span class="brand-symbol" aria-hidden="true">▰</span><span><strong>the end<span class="brand-separator">/</span>卡牌工坊</strong><small>CARD WORKSHOP</small></span></a>
     <div class="toolbar"><span id="save-state" class="save-state" role="status">正在连接…</span><button id="reload" class="button quiet">重新载入</button><button id="play" class="button outline">▷ 试玩游戏</button><button id="save" class="button primary" disabled>保存到项目 <kbd>Ctrl S</kbd></button></div>
   </header>
+  <nav class="workshop-nav" aria-label="工坊页面">
+    <a href="/" data-page="cards">卡牌编辑</a>
+    <a href="/recipes" data-page="recipes">配方编辑</a>
+    <label class="map-craft-test"><input id="map-craft-test" type="checkbox"> 试玩时解锁地图合成</label>
+  </nav>
   <main id="workspace" class="workspace" aria-busy="true">
     <aside class="library" aria-label="卡牌库">
-      <div class="library-header"><span class="eyebrow">COLLECTION</span><div class="section-line"><h1>卡牌库 <span id="card-count" class="count">0</span></h1><button id="add" class="icon-button" aria-label="新增卡牌" title="新增卡牌">＋</button></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="搜索卡牌" placeholder="搜索名称或 ID" autocomplete="off"></label><label class="sr-only" for="filter">筛选效果</label><select id="filter"><option value="all">全部卡牌</option><option value="damage">伤害</option><option value="block">格挡</option><option value="heal">修复</option><option value="equip">装备</option><option value="none">遗物</option></select></div>
+      <div class="library-header"><span class="eyebrow">COLLECTION</span><div class="section-line"><h1>卡牌库 <span id="card-count" class="count">0</span></h1><div class="library-actions"><button id="add" class="icon-button" aria-label="新增卡牌" title="新增普通卡牌">＋</button><button id="add-supply" class="button quiet supply-add" aria-label="新增物资卡" title="新增物资卡">＋物资卡</button></div></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="搜索卡牌" placeholder="搜索名称或 ID" autocomplete="off"></label><label class="sr-only" for="filter">筛选卡牌</label><select id="filter"><option value="all">全部卡牌</option><option value="supply">物资卡</option><option value="damage">伤害</option><option value="block">格挡</option><option value="heal">修复</option><option value="equip">装备</option><option value="none">遗物</option></select></div>
       <div id="card-list" class="card-list" role="list" aria-label="卡牌列表"></div>
       <div class="library-footer"><span class="connection-dot"></span> 本地项目已连接<span id="library-note">项目配置</span></div>
     </aside>
@@ -34,13 +39,27 @@
         </article>
         <div class="preview-caption"><span id="preview-id">—</span><span>编辑器预览 · 效果与游戏共用</span></div>
       </div>
-      <div class="deck-summary"><div><span class="summary-icon">▤</span><span>初始卡组<strong id="deck-count">—</strong></span></div><div><span>初始负重<strong id="deck-weight">—</strong></span><div class="weight-track"><i id="weight-fill"></i></div></div><div><span>奖励池<strong id="reward-count">—</strong></span></div></div>
+      <div class="deck-summary"><div><span class="summary-icon">▤</span><span>初始卡组<strong id="deck-count">—</strong></span></div><div><span>配方<strong id="recipe-count">—</strong></span></div><div><span>奖励池<strong id="reward-count">—</strong></span></div></div>
       <p class="preview-hint">保存后重新打开试玩，即可使用新的卡牌配置。当前对局会保持原样。</p>
     </section>
     <aside class="inspector" aria-label="卡牌属性编辑">
       <div class="inspector-heading"><div><span class="eyebrow">PROPERTIES</span><h2>卡牌属性</h2></div><div class="card-actions"><button id="duplicate" class="icon-button" aria-label="复制卡牌" title="复制卡牌">⧉</button><button id="delete" class="icon-button danger" aria-label="删除卡牌" title="删除卡牌">⌫</button></div></div>
       <div id="inspector-content" class="inspector-content"></div>
     </aside>
+  </main>
+  <main id="recipe-workspace" class="recipe-workspace" hidden>
+    <aside class="recipe-library" aria-label="配方列表">
+      <div class="recipe-heading"><h1>配方</h1><button id="add-recipe" class="button primary" type="button">＋ 新建配方</button></div>
+      <div id="recipe-list"></div>
+    </aside>
+    <section class="recipe-editor" aria-label="配方表单">
+      <div id="recipe-form"></div>
+      <p id="recipe-validation" class="validation" role="status"></p>
+    </section>
+    <section class="recipe-preview" aria-label="关系树预览">
+      <h2>关系树</h2>
+      <div id="recipe-tree"></div>
+    </section>
   </main>
   <div id="notice" class="notice" role="status" hidden></div>
   <dialog id="confirm-dialog"><form method="dialog"><span class="eyebrow">CONFIRM CHANGE</span><h2 id="confirm-title"></h2><p id="confirm-body"></p><div class="dialog-actions"><button value="cancel" class="button outline">取消</button><button value="confirm" id="confirm-action" class="button primary">确认</button></div></form></dialog>

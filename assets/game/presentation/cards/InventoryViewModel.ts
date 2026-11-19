@@ -9,7 +9,8 @@ export function visibleInventory(
     filter: BagFilter,
     sort: BagSort
 ): Readonly<OwnedCard>[] {
-    const cards = game.cards.filter(
+    const source = game.scenario.runDeck && filter !== 'deck' ? game.carriedCards : game.cards;
+    const cards = source.filter(
         (card) =>
             filter === 'all' ||
             (filter === 'overflow'
@@ -28,6 +29,23 @@ export function visibleInventory(
 }
 export function inventoryCardView(card: Readonly<OwnedCard>, game: GameReadModel) {
     const definition = game.content.cards[card.kind];
+    if (game.scenario.runDeck) {
+        const carried = definition.role === 'supply';
+        const canDiscard = carried && (game.phase === 'rewards' || game.phase === 'rest');
+        return {
+            name: definition.name,
+            status: carried ? (card.zone === 'overflow' ? '暂存' : '行囊 · 可入库') : '本局战斗牌',
+            effect: effectSummary(definition, game.content.cards),
+            weight: definition.weight,
+            canToggle: false,
+            toggleLabel: '',
+            toggleHint: carried
+                ? '探索完成后将行囊中的物资卡带回避难所。'
+                : '整套本局卡组都会进入战斗。',
+            canDiscard,
+            discardLabel: canDiscard ? '丢弃物资卡' : '当前仅可查看',
+        };
+    }
     const status =
         card.zone === 'overflow'
             ? '暂存 · 不可战斗'

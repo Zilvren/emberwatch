@@ -1,6 +1,6 @@
 import type { GameReadModel } from '../core/GameReadModel';
 import { ActionResult, SurvivalGame } from '../core/SurvivalGame';
-import { Route, GameScenario, STAMINA_SCENARIO } from '../core/content/GameScenario';
+import { Route, GameScenario, RUN_DECK_SCENARIO } from '../core/content/GameScenario';
 import { EntryTierId } from '../core/content/EntryTiers';
 import { SaveRepository } from '../infrastructure/SaveRepository';
 export type GameCommand =
@@ -12,6 +12,10 @@ export type GameCommand =
               | 'finish-rewards'
               | 'finish-rest'
               | 'finish-day'
+              | 'redeem-supplies'
+              | 'open-recipes'
+              | 'close-recipes'
+              | 'undo-synthesis'
               | 'new-game';
       }
     | { type: 'start'; tier?: EntryTierId }
@@ -19,13 +23,15 @@ export type GameCommand =
     | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
     | { type: 'discard-supplies'; amount: number }
-    | { type: 'repair'; confirmed?: boolean };
+    | { type: 'repair'; confirmed?: boolean }
+    | { type: 'synthesize'; recipeId: string };
 
 /** Application flow: commands -> pure rules -> persistence. No engine or UI dependencies. */
 export class GameSession {
     readonly game: SurvivalGame;
     readonly restored: boolean;
     readonly startupMessage: string;
+    private recipesOpen = false;
     get view(): GameReadModel {
         return this.game;
     }
@@ -35,7 +41,8 @@ export class GameSession {
     constructor(
         seed?: number,
         private readonly saves?: SaveRepository,
-        private readonly defaultScenario: GameScenario = STAMINA_SCENARIO
+        private readonly defaultScenario: GameScenario = RUN_DECK_SCENARIO,
+        private readonly mapSynthesisUnlocked = false
     ) {
         const loaded = saves?.load();
         this.game = loaded?.state
@@ -57,11 +64,37 @@ export class GameSession {
     get saveWarning(): string {
         return this.saves?.warning ?? '';
     }
+    get synthesisBlocked(): string {
+        return this.game.synthesis.blocked(this.mapSynthesisUnlocked);
+    }
+    get canUndoSynthesis(): boolean {
+        return this.recipesOpen && !this.synthesisBlocked && this.game.synthesis.canUndo;
+    }
     execute(command: GameCommand): ActionResult {
         const g = this.game,
             revision = g.revision;
+        if (command.type === 'open-recipes') {
+            if (['rest', 'map', 'battle'].indexOf(g.phase) < 0)
+                return { ok: false, message: '当前无法打开配方表。' };
+            this.recipesOpen = true;
+            return { ok: true, message: '' };
+        }
+        if (command.type === 'close-recipes') {
+            this.recipesOpen = false;
+            g.synthesis.close();
+            return { ok: true, message: '' };
+        }
+        const synthesis = command.type === 'synthesize' || command.type === 'undo-synthesis';
+        if (synthesis !== this.recipesOpen)
+            return { ok: false, message: synthesis ? '请先打开配方表。' : '请先关闭配方表。' };
         let result: ActionResult;
         switch (command.type) {
+            case 'synthesize':
+                result = g.synthesis.craft(command.recipeId, this.mapSynthesisUnlocked);
+                break;
+            case 'undo-synthesis':
+                result = g.synthesis.undo(this.mapSynthesisUnlocked);
+                break;
             case 'start':
                 result = g.start(command.tier);
                 break;
@@ -104,6 +137,9 @@ export class GameSession {
             case 'repair':
                 result = g.repairAtShelter(command.confirmed);
                 break;
+            case 'redeem-supplies':
+                result = g.redeemAllSupplies();
+                break;
             case 'finish-day':
                 result = g.finishDay();
                 break;
@@ -119,6 +155,7 @@ export class GameSession {
         return result;
     }
     advanceTime(seconds: number): void {
+        if (this.recipesOpen) return;
         const revision = this.game.revision;
         this.game.advanceTime(seconds);
         if (revision !== this.game.revision) this.saves?.save(this.game.exportState());

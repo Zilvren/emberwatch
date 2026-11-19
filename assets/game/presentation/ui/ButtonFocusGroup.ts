@@ -8,6 +8,9 @@ import {
     Input,
     KeyCode,
     Node,
+    ScrollView,
+    UITransform,
+    Vec2,
 } from 'cc';
 import { BUTTON_FOCUS_REQUEST, ButtonFocusRequest, ButtonPresentation } from './ButtonPresentation';
 const { ccclass, property } = _decorator;
@@ -119,6 +122,31 @@ export class ButtonFocusGroup extends Component {
         this.focused?.setKeyboardFocus(false);
         this.focused = button;
         button.setKeyboardFocus(true);
+        if (this.modal) this.reveal(button.node);
+    }
+    private reveal(node: Node): void {
+        for (let parent = node.parent; parent && parent !== this.node; parent = parent.parent) {
+            const scroll = parent.getComponent(ScrollView);
+            if (!scroll?.content || !scroll.vertical) continue;
+            const content = scroll.content.getComponent(UITransform)!;
+            const center = content.convertToNodeSpaceAR(node.worldPosition);
+            const halfHeight = (node.getComponent(UITransform)?.height ?? 0) / 2;
+            const top = content.height * (1 - content.anchorY) - center.y - halfHeight;
+            const height = parent.getComponent(UITransform)!.height;
+            const offset = scroll.getScrollOffset();
+            const target = Math.min(top, Math.max(top + halfHeight * 2 - height, offset.y));
+            if (target !== offset.y) {
+                scroll.stopAutoScroll();
+                scroll.scrollToOffset(
+                    new Vec2(
+                        offset.x,
+                        Math.max(0, Math.min(scroll.getMaxScrollOffset().y, target))
+                    ),
+                    0
+                );
+            }
+            return;
+        }
     }
     private keyDown(code: number, shift: boolean): void {
         if (!this.ownsKeys() || this.held.has(code)) return;
