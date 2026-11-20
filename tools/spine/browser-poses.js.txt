@@ -1,0 +1,72 @@
+// Presentation-only native Cocos diagnostics. No game commands are executed here.
+await page.setViewportSize({width:1440,height:900});
+await page.emulateMedia({reducedMotion:'no-preference'});
+await page.goto('http://127.0.0.1:7467/?seed=17&save=off&preview=encounter&review=spine08-poses');
+await idle();
+const gameBefore=await page.evaluate(()=>JSON.stringify(__survivalGame.exportState()));
+await page.evaluate(()=>{
+ const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector'),screen=d.scene.screens.battle,world=screen.getChildByName('World');
+ globalThis.__poseActors=world.getComponentsInChildren('ActorPresentation').sort((a,b)=>['player','wanderer','brute'].indexOf(a.actorId)-['player','wanderer','brute'].indexOf(b.actorId));
+ for(const n of screen.children)if(!['World','SceneEdgeShade'].includes(n.name))n.active=false;
+ d.hud.active=false;if(d.toastRoot)d.toastRoot.active=false;
+ __poseActors.forEach((a,i)=>{a.node.active=true;a.node.setPosition([-500,0,480][i],-205,0);const s=a.node.scale.clone();a.node.setScale(s.x*.84,s.y*.84,s.z);});
+ globalThis.__poseCounts={};
+});
+await page.waitForFunction(()=>__poseActors.length===3&&__poseActors.every(a=>a.spineRig?.ready));
+const info=()=>page.evaluate(()=>__poseActors.map(a=>({id:a.actorId,motion:a.motion,rig:a.inspectRig(),x:a.node.position.x,y:a.node.position.y})));
+const reset=async(speed)=>page.evaluate(speed=>{for(const a of __poseActors){a.playAction('hurt',true);a.spineRig.setSpeed(speed);}},speed);
+await reset(1);await page.waitForTimeout(150);
+const idleBefore=await info();await page.waitForTimeout(1200);const idleAfter=await info();
+for(let i=0;i<3;i++)for(const n of ['Head','FrontFoot','RearFoot']){
+ const a=idleBefore[i].rig.markers[n],b=idleAfter[i].rig.markers[n];
+ assert(Math.hypot(a.x-b.x,a.y-b.y)<.005,'Idle anchor drift: '+idleBefore[i].id+' '+n);
+}
+await page.screenshot({path:'output/playwright/spine08/diagnostic-idle-all.png'});
+const playback=[];
+for(const speed of [1,.5]){
+ for(const kind of ['prepare','attack','hurt','death']){
+  await reset(speed);
+  await page.evaluate(({kind,speed})=>{
+   globalThis.__poseCounts={};
+   for(const a of __poseActors){
+    const entry={impact:0,complete:0,eventTimes:[]};__poseCounts[a.actorId]=entry;
+    a.playAction(kind,false,()=>{entry.impact++;entry.eventTimes.push(a.spineRig.time);},()=>{entry.complete++;});
+   }
+  },{kind,speed});
+  await page.waitForTimeout(180/speed);
+  const moving=await info();
+  assert(moving.every(a=>a.motion===kind),'Motion did not begin: '+kind);
+  if(kind==='attack'){
+   await page.evaluate(()=>__poseActors.forEach(a=>a.spineRig.pause()));
+   const paused=await info();await page.waitForTimeout(220);const held=await info();
+   assert(held.every((a,i)=>Math.abs(a.rig.time-paused[i].rig.time)<.000001),'Pause advanced a track');
+   await page.evaluate(()=>__poseActors.forEach(a=>a.spineRig.resume()));
+  }
+  await page.waitForFunction(()=>Object.values(__poseCounts).every(c=>c.complete>=1),{},{timeout:12000});
+  const ended=await info(),counts=await page.evaluate(()=>__poseCounts);
+  for(const a of ended){assert(counts[a.id].impact===1&&counts[a.id].complete===1,'Duplicate or missing signal '+a.id+' '+kind);assert(a.motion===(kind==='death'?'death':'idle'),'Incorrect terminal pose '+a.id+' '+kind);}
+  if(kind==='death'){await page.waitForTimeout(220);const held=await info();assert(held.every((a,i)=>JSON.stringify(a.rig.markers)===JSON.stringify(ended[i].rig.markers)),'Death pose did not hold');}
+  if(kind==='death'&&speed===1)await page.screenshot({path:'output/playwright/spine08/diagnostic-death-all.png'});
+  playback.push({speed,kind,counts,ended});
+ }
+}
+// Pause each character at its own authored contact, not at one shared clock time.
+await reset(1);
+await page.evaluate(()=>__poseActors.forEach(a=>a.spineRig.sample('attack',a.spineRig.duration('attack')&&a.spineRig.contract.json.motions.attack.contact)));
+await page.waitForTimeout(130);
+await page.screenshot({path:'output/playwright/spine08/diagnostic-contact-all.png'});
+const contact=await info();
+for(const a of contact)assert(a.rig.paused&&a.rig.runtimeReady,'Contact diagnostic is not paused');
+await reset(1);
+await page.evaluate(()=>{globalThis.__cancelCounts={old:0,next:0};for(const a of __poseActors)a.playAction('attack',false,()=>__cancelCounts.old++,()=>__cancelCounts.old++);});
+await page.waitForTimeout(130);
+await page.evaluate(()=>__poseActors.forEach(a=>a.playAction('hurt',false,undefined,()=>__cancelCounts.next++)));
+await page.waitForTimeout(650);
+const cancellation=await page.evaluate(()=>__cancelCounts);
+assert(cancellation.old===0&&cancellation.next===3,'Interrupted animation emitted stale callbacks');
+const gameAfter=await page.evaluate(()=>JSON.stringify(__survivalGame.exportState()));
+assert(gameBefore===gameAfter,'Presentation diagnostics changed rule state');
+await page.setViewportSize({width:1024,height:768});await page.waitForTimeout(200);
+await page.screenshot({path:'output/playwright/spine08/diagnostic-1024.png'});
+await page.setViewportSize({width:1440,height:900});
+return {passed:true,presentationOnly:true,gameStateUnchanged:true,idleBefore,idleAfter,playback,contact,cancellation,runtimeErrors};

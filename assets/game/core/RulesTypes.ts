@@ -2,16 +2,12 @@ import { CardKind } from './content/CardCatalog';
 import { NodeKind, TUTORIAL_SCENARIO } from './content/GameScenario';
 export type { CardDefinition, CardKind } from './content/CardCatalog';
 export type { NodeKind, Route } from './content/GameScenario';
-export type Phase =
-    'journal' | 'map' | 'battle' | 'rewards' | 'rest' | 'shelter' | 'day2' | 'failure';
+export type { Phase } from './state/GamePhase';
 export const ROUTES = TUTORIAL_SCENARIO.routes;
-export const NODE_NAMES: Record<NodeKind, string> = {
-    fixed: '废弃补给站',
-    scavenge: '旧街搜刮',
-    enemy1: '游荡感染者',
-    rest: '临时营地',
-    enemy2: '重度感染者',
-};
+/** Compatibility export for tools that inspect the first chapter. Runtime views use scenario.nodes. */
+export const NODE_NAMES: Record<NodeKind, string> = {};
+for (const id of Object.keys(TUTORIAL_SCENARIO.nodes))
+    NODE_NAMES[id] = TUTORIAL_SCENARIO.nodes[id].title;
 export interface OwnedCard {
     id: string;
     kind: CardKind;
@@ -28,7 +24,7 @@ export interface CombatCard {
 export interface Battle {
     stamina: number;
     maxStamina: number;
-    enemy: 'enemy1' | 'enemy2';
+    enemy: string;
     hp: number;
     maxHp: number;
     attack: number;
@@ -55,6 +51,7 @@ export interface ActionResult {
     message: string;
     warning?: boolean;
 }
+/** Loot and maintenance from a return; there is no daily payment. */
 export interface Settlement {
     returnedSupplies: number;
     returnedCards: number;
@@ -63,6 +60,4 @@ export interface Settlement {
     repairCost: number;
     repaired: boolean;
     repairSpent: number;
-    dailySpent: number;
-    dailyShortfall: number;
 }

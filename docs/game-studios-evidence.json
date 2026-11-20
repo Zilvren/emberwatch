@@ -497,5 +497,98 @@
   "openViking": {
     "uri": "viking://~/resources/projects/the-end/docs/game-studios-evidence.json",
     "syncRecord": "docs/game-studios-sync.json"
+  },
+  "latestTaskReview": {
+    "task": "取消每日结算，改为累计探索天数与关键节点日志系统",
+    "date": "2026-11-16",
+    "recordedAt": "2026-11-16T13:17:16.412Z",
+    "outcome": "SUPPORTED",
+    "record": "docs/core-loop-verification.json",
+    "matrix": [
+      {
+        "claim": "关键节点条件、队列、去重、日期和正式/教学失败规则",
+        "status": "SUPPORTED",
+        "evidence": [
+          "tests/journal-progression.test.cjs",
+          "output/core-loop/tests.log"
+        ]
+      },
+      {
+        "claim": "实际 Pink/Cocos 原生加载与构建",
+        "status": "SUPPORTED",
+        "evidence": [
+          "output/core-loop/build-final.log",
+          "output/playwright/core-loop/project-inspection.json"
+        ]
+      },
+      {
+        "claim": "原生按钮、重复探索、修复与两个桌面尺寸",
+        "status": "SUPPORTED",
+        "evidence": [
+          "output/playwright/core-loop/browser-report.json",
+          "output/playwright/core-loop/browser-stamina-system/browser-report.json"
+        ]
+      },
+      {
+        "claim": "隔离存储的未读/已读恢复和旧存档升级",
+        "status": "SUPPORTED",
+        "evidence": [
+          "tests/journal-progression.test.cjs",
+          "tests/session-save.test.cjs",
+          "output/playwright/core-loop/browser-report.json"
+        ]
+      },
+      {
+        "claim": "整体美术、动作手感、移动端与性能预算验收",
+        "status": "NOT APPLICABLE",
+        "reason": "超出本次核心循环修改范围。"
+      },
+      {
+        "claim": "本次资料已同步并回读 OpenViking",
+        "status": "NEEDS EVIDENCE",
+        "reason": "无可调用工具、客户端未配置且本地服务拒绝连接，已本地暂存并加入原待同步清单。"
+      }
+    ],
+    "historicalRecordNote": "其余字段保留此前技能安装与应用的历史验收；本次结果以 latestTaskReview 指向的记录为准。"
+  },
+  "latestSpineReview": {
+    "date": "2026-11-17",
+    "record": "docs/spine08-verification.json",
+    "technicalOutcome": "SUPPORTED",
+    "executorVisualOutcome": "SUPPORTED",
+    "userFinalVisualApproval": "NEEDS EVIDENCE",
+    "wechat": "compile passed; device runtime and performance unverified"
+  },
+  "mergeReview20261120": {
+    "recordedAt": "2026-11-20T22:46:57.7656445+08:00",
+    "task": "合并卡牌合成与关键日志、角色资源",
+    "localHead": "1eb7b918e5feab5ad0199a8b429b22a35693f611",
+    "incomingHead": "ec5686a7b8bc66336d0048c8f0284dd7ed38e18b",
+    "workingBackup": "temp/merge-resolution-20261120-222045-155/",
+    "matrix": [
+      {
+        "claim": "合成、避难所兑换、固定初始卡组、日志和存档",
+        "status": "SUPPORTED",
+        "evidence": "npm test 通过 156 项，类型检查和架构检查通过。"
+      },
+      {
+        "claim": "Pink/Cocos Web 构建及原生组件加载",
+        "status": "SUPPORTED",
+        "evidence": "原工作区缓存构建出现缺类警告。在隔离目录重新导入和构建后无缺类警告，并将通过验证的产物放回 build/web-desktop。"
+      },
+      {
+        "claim": "工坊、战斗配方表、营地合成、带回物资、关键日志和再次出发",
+        "status": "SUPPORTED",
+        "evidence": "tools/run-recipe-browser-test.cjs 实际操作完整探索。tools/test-core-loop-browser.cjs 的日志日期、失败与读档边界通过。",
+        "browserReport": "output/playwright/core-loop/browser-report.json",
+        "exchangeScreenshot": "output/playwright/synthesis/shelter-exchange.png"
+      },
+      {
+        "claim": "本轮 OpenViking 归档及回读",
+        "status": "NEEDS EVIDENCE",
+        "reason": "本机服务拒绝连接，待同步内容已登记。",
+        "record": "docs/openviking-sync-pending.json"
+      }
+    ]
   }
 }

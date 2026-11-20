@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-17",
+  "mcpRoot": "C:/Users/Knock/Desktop/spine-MCP",
+  "spine": "C:/Users/Knock/Desktop/Spine3.8.75/Spine.com",
+  "actors": [
+    {
+      "actor": "survivor",
+      "bones": 28,
+      "version": "3.8.75",
+      "animations": [
+        "attack",
+        "death",
+        "hurt",
+        "idle",
+        "prepare"
+      ],
+      "contactTip": [
+        159.065777,
+        33.279058
+      ],
+      "normalizedCurves": 172,
+      "steps": [
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 15,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 11,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 8,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 10,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 11,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_import_json",
+          "elapsedMs": 7512,
+          "exitCode": 0
+        },
+        {
+          "tool": "spine_export",
+          "elapsedMs": 7726,
+          "exitCode": 0
+        }
+      ]
+    },
+    {
+      "actor": "wanderer",
+      "bones": 28,
+      "version": "3.8.75",
+      "animations": [
+        "attack",
+        "death",
+        "hurt",
+        "idle",
+        "prepare"
+      ],
+      "contactTip": [
+        -149.961206,
+        38.793082
+      ],
+      "normalizedCurves": 172,
+      "steps": [
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 22,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 16,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 10,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 13,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 15,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_import_json",
+          "elapsedMs": 7743,
+          "exitCode": 0
+        },
+        {
+          "tool": "spine_export",
+          "elapsedMs": 7750,
+          "exitCode": 0
+        }
+      ]
+    },
+    {
+      "actor": "brute",
+      "bones": 28,
+      "version": "3.8.75",
+      "animations": [
+        "attack",
+        "death",
+        "hurt",
+        "idle",
+        "prepare"
+      ],
+      "contactTip": [
+        -159.038706,
+        -9.782495
+      ],
+      "normalizedCurves": 172,
+      "steps": [
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 9,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 14,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 12,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 11,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 16,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_import_json",
+          "elapsedMs": 7721,
+          "exitCode": 0
+        },
+        {
+          "tool": "spine_export",
+          "elapsedMs": 7680,
+          "exitCode": 0
+        }
+      ]
+    }
+  ]
+}

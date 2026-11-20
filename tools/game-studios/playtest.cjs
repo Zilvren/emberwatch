@@ -26,6 +26,7 @@ if (!cli)
         'Set PLAYWRIGHT_CLI to the installed @playwright/cli/playwright-cli.js, or install the CLI before native browser checks.'
     );
 const session = process.env.PLAYWRIGHT_SESSION ?? profile.browser.qaSession;
+const baseUrl = process.env.PLAYWRIGHT_BASE_URL ?? profile.browser.baseUrl;
 const requestedOutput = process.env.PLAYWRIGHT_EVIDENCE_DIR ?? 'output/playwright/game-studios';
 const output = require('./inspect.cjs').projectPath(root, requestedOutput);
 const relativeOutput = path.relative(root, output).replaceAll(path.sep, '/');
@@ -79,7 +80,7 @@ function run(args) {
 
 const opened = run([
     'open',
-    profile.browser.baseUrl + '?seed=17&save=off',
+    baseUrl + '?seed=17&save=off',
     '--config',
     path.join(root, profile.browser.config),
 ]);
@@ -99,6 +100,7 @@ for (const task of tasks) {
             'http://127.0.0.1:7457/?',
             'http://127.0.0.1:7457/?ruleset=tutorial-v1&'
         );
+    body = body.replaceAll(profile.browser.baseUrl, baseUrl);
     const code = `async (page) => { const runtimeErrors=[],consoleErrors=[]; const onError=e=>runtimeErrors.push(String(e)); const onConsole=m=>{if(m.type()==='error')consoleErrors.push(m.text());}; page.on('pageerror',onError); page.on('console',onConsole); try { const result=await(async()=>{${body}})(); return {...result,consoleErrors}; } finally { page.off('pageerror',onError); page.off('console',onConsole); } }`;
     const result = run(['run-code', code]);
     fs.writeFileSync(

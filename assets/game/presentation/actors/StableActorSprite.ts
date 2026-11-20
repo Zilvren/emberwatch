@@ -14,6 +14,7 @@ export class StableActorSprite extends Sprite {
     @property(JsonAsset) geometry: JsonAsset | null = null;
     private breathing = 0;
     private rigEnabled = true;
+    private readonly vertexSample = { x: 0, y: 0 };
     @property
     get breath(): number {
         return this.breathing;
@@ -24,6 +25,13 @@ export class StableActorSprite extends Sprite {
     }
     get rig(): RigGeometry {
         return this.geometry!.json as RigGeometry;
+    }
+    /** Local sample hook shared by the fixed drawing and its articulated native-node variant. */
+    vertexPosition(index: number): { x: number; y: number } {
+        const v = this.rig.vertices[index];
+        this.vertexSample.x = v[0] + v[4] * this.breath;
+        this.vertexSample.y = v[1] + v[5] * this.breath;
+        return this.vertexSample;
     }
     setRigActive(active: boolean): void {
         if (this.rigEnabled === active) return;
@@ -75,9 +83,9 @@ const stableMesh = {
         const data = sprite.renderData;
         if (!data?.chunk || !sprite.spriteFrame) return;
         for (let i = 0; i < sprite.rig.vertices.length; i++) {
-            const v = sprite.rig.vertices[i];
-            data.data[i].x = v[0] + v[4] * sprite.breath;
-            data.data[i].y = v[1] + v[5] * sprite.breath;
+            const point = sprite.vertexPosition(i);
+            data.data[i].x = point.x;
+            data.data[i].y = point.y;
         }
         data.vertDirty = true;
         this.updateUVs(sprite);

@@ -2,13 +2,13 @@ import { CardSet } from '../content/ContentRegistry';
 import { GameScenario } from '../content/GameScenario';
 import { countKinds, recipeAvailability } from '../content/RecipeCatalog';
 import { ActionResult, CardKind, OwnedCard } from '../RulesTypes';
-import { RuleFeedback, RuleState } from './RuleContext';
+import { RuleFeedback, SynthesisState } from './RuleContext';
 
 export class SynthesisRules {
     private previous?: { cards: OwnedCard[]; revision: number };
 
     constructor(
-        private readonly state: RuleState,
+        private readonly state: SynthesisState,
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
         private readonly scenario: GameScenario,

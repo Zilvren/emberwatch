@@ -1,0 +1,187 @@
+{
+  "project": "The end",
+  "date": "2026-11-17",
+  "timezone": "Asia/Shanghai",
+  "status": "conflicts-resolved-and-staged",
+  "head": "307308bf8f50d490a663b5291e658300ed795ddf",
+  "incoming": "139ecf2b95b3bcd3507ce595f48251fb3aaefe20",
+  "before": [
+    "assets/game/core/RulesTypes.ts",
+    "assets/game/core/content/GameScenario.ts",
+    "assets/game/core/state/GameState.ts",
+    "assets/game/core/systems/ExplorationRules.ts",
+    "assets/game/core/systems/ShelterRules.ts",
+    "assets/game/infrastructure/SaveRepository.ts",
+    "assets/game/presentation/GameDirector.ts",
+    "assets/game/presentation/GameRenderer.ts",
+    "docs/architecture.md",
+    "docs/designs/ui/ux-review.md",
+    "tools/browser-route-a.js.txt"
+  ],
+  "remainingConflicts": "",
+  "unmergedIndexEntries": "",
+  "mergeCommitCreated": false,
+  "workingBackup": "temp/merge-resolution-20261116/",
+  "semanticResolution": [
+    "Preserve named native screen binding; follow-up journal retains day2 resource key but uses journal gameplay phase.",
+    "Preserve stable node/route/enemy IDs and configured routes through GameSession.",
+    "Merge journal/schema-v2 and legacy-save migration with RunPersistence application port.",
+    "Rename settlement implementation to ShelterRules while preserving narrow state permissions; route/pathIndex are readonly in shelter context.",
+    "Keep PopupPresenter delegation and update its help/restart text to current journal rules.",
+    "Keep current native Cocos actor presentation and latest confirmed no-daily-cost progression rules."
+  ],
+  "checks": {
+    "tests": {
+      "count": 142,
+      "failed": 0,
+      "log": "temp/merge-resolution-tests.log"
+    },
+    "typecheck": {
+      "passed": true,
+      "command": "npm run typecheck"
+    },
+    "architecture": {
+      "passed": true,
+      "files": 84,
+      "edges": 148
+    },
+    "nativeBuild": {
+      "passed": true,
+      "log": "temp/merge-journal-integration.log"
+    },
+    "browser": {
+      "project": "The end",
+      "date": "2026-11-16T16:18:35.182Z",
+      "passed": true,
+      "platform": "Pink/Cocos web-desktop",
+      "viewports": [
+        "1440x900",
+        "1024x768"
+      ],
+      "scenario": "browser-core-loop",
+      "preparation": "Isolated browser context; completed-map and fatal-damage fixtures; real native buttons for departure, enemy turn, reading, repair and retry.",
+      "runtimeErrors": [],
+      "consoleErrors": [],
+      "checks": {
+        "passed": true,
+        "realButtonActions": 77,
+        "sameStoryDifferentDates": [
+          3,
+          11
+        ],
+        "dailySettlementRemoved": true,
+        "exactRepairCost": true,
+        "formalFailureRecovery": true,
+        "repeatClearDoesNotReplay": true,
+        "pendingAndReadSaveResume": true,
+        "teachingDayOneLock": true,
+        "teachingToFormalContinuation": true,
+        "viewports": [
+          "1440x900",
+          "1024x768"
+        ]
+      },
+      "evidenceScope": "Completed-map and fatal-damage boundary fixtures; real native buttons for reading, departure, repair, retry and enemy turn; not an unprepared full combat playthrough."
+    },
+    "viewedImages": [
+      "output/playwright/core-loop/core-loop-day-11-small.png",
+      "output/playwright/core-loop/core-loop-shelter-small.png"
+    ]
+  },
+  "metadata": {
+    "manuallyEdited": false,
+    "note": "Pink AssetDB refreshed imported flags during validation; preexisting/staged UUIDs preserved.",
+    "uuidChecks": [
+      {
+        "file": "assets/game/application/GameSession.ts.meta",
+        "uuid": "02eee7f5-411b-4932-9441-310d198653ec",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/GameReadModel.ts.meta",
+        "uuid": "bd48f803-603b-429e-9820-b78b40c26963",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/RulesTypes.ts.meta",
+        "uuid": "11e93304-391f-4372-a52f-81b99dcc93d4",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/SurvivalGame.ts.meta",
+        "uuid": "da972bd9-2c39-4d67-b4d1-d021f4e96fab",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/content/GameScenario.ts.meta",
+        "uuid": "c2800cac-02e5-4d5a-9c1c-314f54be3fb0",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/content/JournalCatalog.ts.meta",
+        "uuid": "c3bb3711-fb0d-43ff-937f-9620a2d31106",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/state/GameState.ts.meta",
+        "uuid": "d0ae9e40-42ce-42d6-af3c-8a1e2f41d623",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/systems/ExplorationRules.ts.meta",
+        "uuid": "4361dc22-0d6d-4dd9-ab43-73981d88e193",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/systems/JournalRules.ts.meta",
+        "uuid": "c14c7b26-4e7d-4ebf-b021-f5f8f5d69103",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/core/systems/ShelterRules.ts.meta",
+        "uuid": "1e1495bd-06ed-4236-a22e-04c1609890ab",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/infrastructure/SaveRepository.ts.meta",
+        "uuid": "a879695d-45d6-48e4-994b-785e79f44018",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/presentation/GameDirector.ts.meta",
+        "uuid": "4fddda47-0c1f-4833-8a8d-050e9a6618c9",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/presentation/GameRenderer.ts.meta",
+        "uuid": "9d309767-2948-4529-81cd-d159e1f3dca3",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/presentation/map/RouteMapModel.ts.meta",
+        "uuid": "59a1dbe8-f001-4d15-872c-ccad66a0a776",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/presentation/ui/RulesNoticeModel.ts.meta",
+        "uuid": "999a32bb-1110-4d4b-838c-ca77114e10b7",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/presentation/ui/ShelterSummaryModel.ts.meta",
+        "uuid": "51488536-f88f-4dab-99a2-ad5eca81283e",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/presentation/ui/UiActionRouter.ts.meta",
+        "uuid": "50844ad7-7e4c-4fe6-a461-0e64946974ed",
+        "uuidPreserved": true
+      },
+      {
+        "file": "assets/game/presentation/ui/UiState.ts.meta",
+        "uuid": "4132586c-570e-4586-bb4a-34f60d4539ce",
+        "uuidPreserved": true
+      }
+    ]
+  }
+}

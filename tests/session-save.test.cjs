@@ -95,8 +95,9 @@ test('restoration makes independent copies of inventory and battle state', () =>
     assert.ok(loaded.battle.hand.length > 0);
     assert.equal(loaded.cards[0].selected, true);
 });
-test('settlement keeps repair warning and daily consumption strictly last across save/load', () => {
+test('return and optional repair survive reload without a daily payment', () => {
     const g = new SurvivalGame(2);
+    ok(g.start());
     g.fixedDone = true;
     g.route = 'A';
     g.pathIndex = 4;
@@ -105,15 +106,14 @@ test('settlement keeps repair warning and daily consumption strictly last across
     g.armor = 5;
     g.advanceTime(1);
     const loaded = restore(g);
-    const warning = loaded.repairAtShelter();
-    assert.equal(warning.warning, true);
+    assert.equal(loaded.currentJournal.id, 'tutorial-cleared');
+    ok(loaded.continueJournal());
     assert.equal(loaded.supplies, 1);
-    ok(loaded.repairAtShelter(true));
+    ok(loaded.repairAtShelter());
     assert.equal(loaded.supplies, 0);
     const afterRepair = restore(loaded);
-    assert.equal(afterRepair.settlement.dailySpent, 0);
-    ok(afterRepair.finishDay());
-    assert.equal(afterRepair.settlement.dailyShortfall, 1);
+    assert.equal(afterRepair.day, 2);
+    assert.equal('dailySpent' in afterRepair.settlement, false);
     assert.deepEqual(restore(afterRepair).exportState(), afterRepair.exportState());
 });
 test('automatic return-to-shelter transition is saved by the application session', () => {
@@ -125,7 +125,8 @@ test('automatic return-to-shelter transition is saved by the application session
     s.game.pathIndex = 4;
     s.advanceTime(1);
     const loaded = new LegacySession(99, new SaveRepository(storage));
-    assert.equal(loaded.game.phase, 'shelter');
+    assert.equal(loaded.game.phase, 'journal');
+    assert.equal(loaded.game.currentJournal.id, 'tutorial-cleared');
     assert.deepEqual(loaded.game.exportState(), s.game.exportState());
 });
 test('a damaged primary save recovers its previous valid checkpoint and retains that backup', () => {

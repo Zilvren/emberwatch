@@ -1,14 +1,11 @@
 import { createCardSet } from '../core/content/ContentRegistry';
 import { getScenario } from '../core/content/GameScenario';
-import { GameState, validateGameState } from '../core/state/GameState';
+import { GameState, migrateLegacyGameState, validateGameState } from '../core/state/GameState';
+import type { RunPersistence, SaveLoad } from '../application/RunPersistence';
+export type { SaveLoad } from '../application/RunPersistence';
 export interface SaveStorage {
     getItem(key: string): string | null;
     setItem(key: string, value: string): void;
-}
-export interface SaveLoad {
-    state: GameState | null;
-    recovered: boolean;
-    warning: string;
 }
 function hash(text: string): string {
     let value = 2166136261;
@@ -25,7 +22,7 @@ class SaveReadError extends Error {
 }
 
 /** Platform adapter. Storage writes are atomic per key; the previous valid save is retained. */
-export class SaveRepository {
+export class SaveRepository implements RunPersistence {
     readonly content = createCardSet();
     private blocked = false;
     status = '自动保存';
@@ -57,7 +54,7 @@ export class SaveRepository {
     private decode(text: string): GameState {
         const envelope = JSON.parse(text);
         if (envelope?.format !== 'the-end-save') throw new Error('存档格式无效。');
-        if (envelope.version !== 1)
+        if (envelope.version !== 1 && envelope.version !== 2)
             throw new SaveReadError('存档版本暂不受支持，原存档已保留。', true);
         const { checksum, ...body } = envelope;
         if (checksum !== hash(JSON.stringify(body))) throw new Error('存档完整性校验失败。');
@@ -71,7 +68,10 @@ export class SaveRepository {
         } catch {
             throw new SaveReadError('存档的章节版本暂不受支持，原存档已保留。', true);
         }
-        return validateGameState(body.state, this.content.cards);
+        return validateGameState(
+            envelope.version === 1 ? migrateLegacyGameState(body.state) : body.state,
+            this.content.cards
+        );
     }
     load(): SaveLoad {
         const result: SaveLoad = { state: null, recovered: false, warning: '' };
@@ -114,7 +114,7 @@ export class SaveRepository {
         try {
             const body = {
                 format: 'the-end-save',
-                version: 1,
+                version: 2,
                 savedAt: new Date().toISOString(),
                 catalogHash: hash(JSON.stringify(this.content.catalog)),
                 state: validateGameState(state, this.content.cards),

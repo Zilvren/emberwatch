@@ -77,10 +77,13 @@
     "_components": [
       {
         "__id__": 232
+      },
+      {
+        "__id__": 234
       }
     ],
     "_prefab": {
-      "__id__": 234
+      "__id__": 236
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -1447,7 +1450,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "修复可选。每日消耗在结束结算时支付。",
+    "_string": "整理带回的物品，按需修复护甲，然后再次出发。",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -3451,7 +3454,7 @@
       "b": 191,
       "a": 255
     },
-    "_string": "今晚的生存消耗",
+    "_string": "探索进度",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -3509,7 +3512,7 @@
     "__prefab": {
       "__id__": 153
     },
-    "key": "shelter/daily-title",
+    "key": "shelter/progress-title",
     "format": "{value}",
     "_id": "",
     "normalColor": {
@@ -3703,7 +3706,7 @@
     "__prefab": {
       "__id__": 161
     },
-    "key": "shelter/daily-summary",
+    "key": "shelter/progress-summary",
     "format": "{value}",
     "_id": "",
     "normalColor": {
@@ -3839,7 +3842,7 @@
       "b": 191,
       "a": 255
     },
-    "_string": "",
+    "_string": "关键事件发生时，会留下新的日志。",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -3897,7 +3900,7 @@
     "__prefab": {
       "__id__": 169
     },
-    "key": "shelter/daily-hint",
+    "key": "shelter/progress-hint",
     "format": "{value}",
     "_id": "",
     "normalColor": {
@@ -4334,7 +4337,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "结束结算 → 第 2 天",
+    "_string": "整备出发",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -5341,6 +5344,25 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "49QFThkEdDOLtcUHOE85uk"
+  },
+  {
+    "__type__": "2e9c2asKOhOJYTuMw1uMxMI",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 235
+    },
+    "key": "shelter",
+    "_id": "9c1b6+agD2G2aHoEAZUVINo"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "116bbvfObjxUIGMoa4nXYDc"
   },
   {
     "__type__": "cc.PrefabInfo",

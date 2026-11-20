@@ -117,13 +117,21 @@ if (!rest.graph.some((object) => object.__type__ === actionType && object.action
 
 const scene = new Graph('assets/TheEnd.scene', 'TheEnd');
 const director = scene.graph.find((object) => object.__type__ === script('GameDirector'));
-if (!director.popups[6]) {
+const gameViewType = script('GameView');
+const hasRecipeView = director.popupRoots.some(({ __id__ }) =>
+    scene.graph[__id__]._components?.some((reference) =>
+        scene.graph[reference.__id__].__type__ === gameViewType &&
+        scene.graph[reference.__id__].key === 'recipes'
+    )
+);
+if (!hasRecipeView) {
     const host = scene.node('RecipePopupHost', director.popupRoot.__id__, 0, 0, 1440, 900);
     scene.graph[host]._active = false;
+    scene.component(host, gameViewType, { key: 'recipes' });
     scene.root = host;
     const linked = scene.linked(popupFile, 'RecipePopup', 0, 0);
     const sceneRoot = scene.graph[scene.graph[0].scene.__id__];
     scene.graph[sceneRoot._prefab.__id__].nestedPrefabInstanceRoots.push(ref(linked));
-    director.popups.push(ref(host));
+    director.popupRoots.push(ref(host));
     scene.save();
 }

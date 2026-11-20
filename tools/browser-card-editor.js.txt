@@ -40,7 +40,7 @@ async function testPlay(expectedCost,expectedDamage,expectedName){
   await page.waitForTimeout(100);await idle();
  };
  await click('journal-start');
- assert(await frame.evaluate(name=>{const controller=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return controller.screens[1].getComponentsInChildren('UIValue').find(v=>v.key==='map/fixedReward').getComponent(cc.Label).string.includes(name);},expectedName),'Fixed reward map hint was not updated');
+ assert(await frame.evaluate(name=>{const controller=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return controller.scene.screens.map.getComponentsInChildren('UIValue').find(v=>v.key==='map/fixedReward').getComponent(cc.Label).string.includes(name);},expectedName),'Fixed reward map hint was not updated');
  await click('enter-fixed');assert((await state()).ui.phase==='rewards','Configured fixed reward did not open');
  assert(await frame.evaluate(id=>globalThis.__survivalGame.rewards.cards[0]===id,id),'Fixed reward did not use the custom ID');
  await claimSupplies();await leaveRewards();await click('route-A');await click('enter-enemy1');

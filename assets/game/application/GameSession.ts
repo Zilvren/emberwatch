@@ -2,7 +2,7 @@ import type { GameReadModel } from '../core/GameReadModel';
 import { ActionResult, SurvivalGame } from '../core/SurvivalGame';
 import { Route, GameScenario, RUN_DECK_SCENARIO } from '../core/content/GameScenario';
 import { EntryTierId } from '../core/content/EntryTiers';
-import { SaveRepository } from '../infrastructure/SaveRepository';
+import type { RunPersistence } from './RunPersistence';
 export type GameCommand =
     | {
           type:
@@ -11,7 +11,8 @@ export type GameCommand =
               | 'claim-supplies'
               | 'finish-rewards'
               | 'finish-rest'
-              | 'finish-day'
+              | 'continue-journal'
+              | 'retry'
               | 'redeem-supplies'
               | 'open-recipes'
               | 'close-recipes'
@@ -23,7 +24,7 @@ export type GameCommand =
     | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
     | { type: 'discard-supplies'; amount: number }
-    | { type: 'repair'; confirmed?: boolean }
+    | { type: 'repair' }
     | { type: 'synthesize'; recipeId: string };
 
 /** Application flow: commands -> pure rules -> persistence. No engine or UI dependencies. */
@@ -40,7 +41,7 @@ export class GameSession {
     }
     constructor(
         seed?: number,
-        private readonly saves?: SaveRepository,
+        private readonly saves?: RunPersistence,
         private readonly defaultScenario: GameScenario = RUN_DECK_SCENARIO,
         private readonly mapSynthesisUnlocked = false
     ) {
@@ -99,10 +100,7 @@ export class GameSession {
                 result = g.start(command.tier);
                 break;
             case 'choose-route':
-                result =
-                    command.route === 'A' || command.route === 'B'
-                        ? g.chooseRoute(command.route)
-                        : { ok: false, message: '路线不存在。' };
+                result = g.chooseRoute(command.route);
                 break;
             case 'enter-node':
                 result = g.enterNode();
@@ -135,13 +133,16 @@ export class GameSession {
                 result = g.finishRest();
                 break;
             case 'repair':
-                result = g.repairAtShelter(command.confirmed);
+                result = g.repairAtShelter();
+                break;
+            case 'continue-journal':
+                result = g.continueJournal();
+                break;
+            case 'retry':
+                result = g.retry();
                 break;
             case 'redeem-supplies':
                 result = g.redeemAllSupplies();
-                break;
-            case 'finish-day':
-                result = g.finishDay();
                 break;
             case 'new-game':
                 g.reset(this.defaultScenario);

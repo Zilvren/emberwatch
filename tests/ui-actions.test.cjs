@@ -127,20 +127,20 @@ test('the camp cash shortcut returns to camp after either cancel or discard', ()
     assert.equal(c.ui.overlay, null);
     assert.ok(!c.game.cards.some((card) => card.kind === 'cash'));
 });
-test('replaying a completed teaching day cannot erase the result without confirmation', () => {
+test('continuing a key journal returns to shelter without resetting the campaign', () => {
     const c = setup();
-    c.game.phase = 'day2';
+    c.session.execute({ type: 'start' });
+    Object.assign(c.game, { fixedDone: true, route: 'A', pathIndex: 4 });
+    c.session.advanceTime(1);
     c.game.day = 2;
     const before = c.game.exportState();
     c.click('journal-start');
-    assert.equal(c.ui.overlay, 'restart');
-    assert.deepEqual(c.game.exportState(), before);
-    c.click('modal-cancel');
-    assert.deepEqual(c.game.exportState(), before);
-    c.click('journal-start');
-    c.click('modal-confirm');
-    assert.equal(c.game.phase, 'journal');
-    assert.equal(c.game.day, 1);
+    assert.equal(c.ui.overlay, null);
+    assert.equal(c.game.phase, 'shelter');
+    assert.equal(c.game.day, 2);
+    assert.equal(c.game.supplies, before.supplies);
+    assert.deepEqual(c.game.cards, before.cards);
+    assert.equal(c.game.journalEntries.find(entry => entry.id === 'tutorial-cleared').read, true);
 });
 test('an open confirmation blocks underlying reward actions', () => {
     const c = fixedRewards();

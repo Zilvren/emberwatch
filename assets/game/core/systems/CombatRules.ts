@@ -1,20 +1,21 @@
 import { CardSet } from '../content/ContentRegistry';
 import { GameScenario } from '../content/GameScenario';
 import { Random } from '../Random';
-import { ActionResult, CombatCard, NODE_NAMES, OwnedCard } from '../RulesTypes';
+import { ActionResult, CombatCard, OwnedCard } from '../RulesTypes';
 import { InventoryRules } from './InventoryRules';
-import { RuleFeedback, RuleState } from './RuleContext';
+import { RuleFeedback, CombatState } from './RuleContext';
 import { entryTier } from '../content/EntryTiers';
 export class CombatRules {
     constructor(
-        private readonly state: RuleState,
+        private readonly state: CombatState,
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
         private readonly inventory: InventoryRules,
         private readonly random: Random,
         private readonly newId: (prefix: string) => string,
         private readonly fail: (reason: string) => void,
-        private readonly scenario: GameScenario
+        private readonly scenario: GameScenario,
+        private readonly currentNode: () => string
     ) {}
     get incomingDamage(): number {
         const b = this.state.battle;
@@ -23,9 +24,9 @@ export class CombatRules {
     combatCard(card: OwnedCard): CombatCard {
         return { id: card.id, kind: card.kind, origin: card.id, temporary: false };
     }
-    startBattle(enemy: 'enemy1' | 'enemy2'): void {
-        const boss = enemy === 'enemy2',
-            definition = this.scenario.enemies[enemy];
+    startBattle(enemy: string): void {
+        const definition = this.scenario.enemies[enemy];
+        if (!definition) throw new Error('缺少敌人定义：' + enemy);
         this.state.phase = 'battle';
         this.state.battle = {
             stamina: 0,
@@ -51,7 +52,7 @@ export class CombatRules {
         this.drawCards(4);
         this.beginPlayerTurn();
         if (
-            boss &&
+            definition.ensureRewardOpeningHand &&
             !this.scenario.runDeck &&
             !this.state.battle.hand.some((c) => this.content.rewardPool.indexOf(c.kind) >= 0)
         ) {
@@ -65,7 +66,7 @@ export class CombatRules {
                 this.state.battle.hand.push(card);
             }
         }
-        this.feedback.log(`${NODE_NAMES[enemy]}出现。你先行动，敌人意图已公开。`);
+        this.feedback.log(`${definition.title}出现。你先行动，敌人意图已公开。`);
     }
     drawCards(count: number): void {
         const b = this.state.battle!;
@@ -168,16 +169,17 @@ export class CombatRules {
         return this.feedback.result(true, `第 ${b.turn} 回合，你先行动。`);
     }
     winBattle(): void {
-        const enemy = this.state.battle!.enemy;
+        const enemy = this.state.battle!.enemy,
+            definition = this.scenario.enemies[enemy];
         this.state.battle = null;
         this.state.phase = 'rewards';
         this.state.rewards = {
-            source: enemy,
-            supplies: enemy === 'enemy1' ? 2 : 3,
-            cards: this.random.shuffle(this.content.rewardPool).slice(0, 3),
+            source: this.currentNode(),
+            supplies: definition.rewardSupplies,
+            cards: this.random.shuffle(this.content.rewardPool).slice(0, definition.rewardChoices),
             supplyTaken: false,
             cardTaken: false,
         };
-        this.feedback.log(`击败${NODE_NAMES[enemy]}。战斗结束，临时牌与装备已清除。`);
+        this.feedback.log(`击败${definition.title}。战斗结束，临时牌与装备已清除。`);
     }
 }

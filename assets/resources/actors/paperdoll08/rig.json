@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "reference": "approved08",
+  "height": 420,
+  "feetBaseline": 0,
+  "bones": [
+    {
+      "id": "Hips",
+      "parent": "Bones"
+    },
+    {
+      "id": "Chest",
+      "parent": "Hips"
+    },
+    {
+      "id": "Head",
+      "parent": "Chest"
+    },
+    {
+      "id": "Cloak",
+      "parent": "Chest"
+    },
+    {
+      "id": "Pack",
+      "parent": "Chest"
+    },
+    {
+      "id": "RearUpperArm",
+      "parent": "Chest"
+    },
+    {
+      "id": "RearForearm",
+      "parent": "RearUpperArm"
+    },
+    {
+      "id": "RearHand",
+      "parent": "RearForearm"
+    },
+    {
+      "id": "FrontUpperArm",
+      "parent": "Chest"
+    },
+    {
+      "id": "FrontForearm",
+      "parent": "FrontUpperArm"
+    },
+    {
+      "id": "FrontHand",
+      "parent": "FrontForearm"
+    },
+    {
+      "id": "Weapon",
+      "parent": "FrontHand"
+    },
+    {
+      "id": "RearThigh",
+      "parent": "Hips"
+    },
+    {
+      "id": "RearShin",
+      "parent": "RearThigh"
+    },
+    {
+      "id": "RearFoot",
+      "parent": "RearShin"
+    },
+    {
+      "id": "FrontThigh",
+      "parent": "Hips"
+    },
+    {
+      "id": "FrontShin",
+      "parent": "FrontThigh"
+    },
+    {
+      "id": "FrontFoot",
+      "parent": "FrontShin"
+    },
+    {
+      "id": "RearTarget",
+      "parent": "Bones"
+    },
+    {
+      "id": "FrontTarget",
+      "parent": "Bones"
+    }
+  ],
+  "slots": [
+    {
+      "id": "backpack",
+      "bone": "Pack"
+    },
+    {
+      "id": "rear-upper-arm",
+      "bone": "RearUpperArm"
+    },
+    {
+      "id": "rear-forearm",
+      "bone": "RearForearm"
+    },
+    {
+      "id": "rear-hand",
+      "bone": "RearHand"
+    },
+    {
+      "id": "rear-thigh",
+      "bone": "RearThigh"
+    },
+    {
+      "id": "rear-shin",
+      "bone": "RearShin"
+    },
+    {
+      "id": "rear-boot",
+      "bone": "RearFoot"
+    },
+    {
+      "id": "front-thigh",
+      "bone": "FrontThigh"
+    },
+    {
+      "id": "front-shin",
+      "bone": "FrontShin"
+    },
+    {
+      "id": "front-boot",
+      "bone": "FrontFoot"
+    },
+    {
+      "id": "torso",
+      "bone": "Chest"
+    },
+    {
+      "id": "hips",
+      "bone": "Hips"
+    },
+    {
+      "id": "head",
+      "bone": "Head"
+    },
+    {
+      "id": "poncho",
+      "bone": "Cloak"
+    },
+    {
+      "id": "front-upper-arm",
+      "bone": "FrontUpperArm"
+    },
+    {
+      "id": "front-forearm",
+      "bone": "FrontForearm"
+    },
+    {
+      "id": "weapon",
+      "bone": "Weapon"
+    },
+    {
+      "id": "front-hand",
+      "bone": "FrontHand"
+    }
+  ],
+  "legs": [
+    {
+      "upper": "RearThigh",
+      "lower": "RearShin",
+      "foot": "RearFoot",
+      "target": "RearTarget",
+      "upperLength": 80,
+      "lowerLength": 68,
+      "bend": 1
+    },
+    {
+      "upper": "FrontThigh",
+      "lower": "FrontShin",
+      "foot": "FrontFoot",
+      "target": "FrontTarget",
+      "upperLength": 80,
+      "lowerLength": 68,
+      "bend": -1
+    }
+  ]
+}

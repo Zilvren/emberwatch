@@ -1,0 +1,59 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "status": "written-and-read-back",
+  "documents": [
+    {
+      "file": "docs/designs/character-style-exploration/cocos-native08-motion.md",
+      "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/cocos-native08-motion.md",
+      "sha256": "c011e37ca731f6887791098632cfb33b3e7729eebd694eafd1a7044ddaa93b9f",
+      "readBackMatches": true
+    },
+    {
+      "file": "docs/native08-verification.json",
+      "uri": "viking://~/resources/projects/the-end/docs/native08-verification.json",
+      "sha256": "90e5a07551c836cdaa1dec82583d1b15fe8ec33943435d4598f8525e6205dca6",
+      "readBackMatches": true
+    },
+    {
+      "file": "docs/designs/art-bible.md",
+      "uri": "viking://~/resources/projects/the-end/designs/art-bible.md",
+      "sha256": "645c77c937cb5ec893ae1978e7d3d5aa64a3c8f83c249ac950c5a7930d1c0077",
+      "readBackMatches": true
+    },
+    {
+      "file": "docs/designs/production-asset-spec.md",
+      "uri": "viking://~/resources/projects/the-end/designs/production-asset-spec.md",
+      "sha256": "6a33d0f87b21cc9f1b1d0397206b06ec2d180e1383dcfff42dca438aaf83201e",
+      "readBackMatches": true
+    },
+    {
+      "file": "docs/architecture.md",
+      "uri": "viking://~/resources/projects/the-end/docs/architecture.md",
+      "sha256": "c0d19a463305f766582cfab2517516e564fdb575bfeadcd4e7d081a02ecb6188",
+      "readBackMatches": true
+    },
+    {
+      "file": "docs/vertical-slice.md",
+      "uri": "viking://~/resources/projects/the-end/docs/vertical-slice.md",
+      "sha256": "409f79484f5f7c94825f1fabf05dd900d7d0cba6227d0bc2fe89d1d4b279d549",
+      "readBackMatches": true
+    },
+    {
+      "file": "docs/paperdoll-visual-review.json",
+      "uri": "viking://~/resources/projects/the-end/docs/paperdoll-visual-review.json",
+      "sha256": "420336ad58e16d344b74be44d4999ab93f372367f6f629b323eb077d5cf0d6b5",
+      "readBackMatches": true
+    },
+    {
+      "file": "docs/designs/character-style-exploration/paperdoll08.md",
+      "uri": "viking://~/resources/projects/the-end/designs/character-style-exploration/paperdoll08.md",
+      "sha256": "e89d98bfba5cc7c3291663f0fb5c6b143574c063dc5b878e4792ab84dbc5b98b",
+      "readBackMatches": true
+    }
+  ],
+  "media": "Three videos imported, downloaded back and checked with SHA-256; see native08-verification.json evidence.mediaArchive",
+  "readback": "Text normalized for CRLF/trailing newline; hashes describe local source bytes",
+  "indexing": "Storage verified; semantic/vector background-index completion is not asserted",
+  "verificationUri": "viking://~/resources/projects/the-end/docs/native08-verification.json"
+}

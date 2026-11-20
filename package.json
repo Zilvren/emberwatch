@@ -15,12 +15,15 @@
         "cards": "node tools/card-editor-server.cjs",
         "build:actors": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-actor-review.json",
         "actors": "node tools/actor-preview.cjs",
+        "author:spine": "node tools/spine/author.mjs",
+        "connect:spine": "node tools/spine/connect.cjs",
         "build:ui": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-card-review.json",
         "ui": "node tools/ui-preview.cjs",
         "build:buttons": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-button-review.json",
         "buttons": "node tools/button-preview.cjs",
         "mcp": "node tools/pink.cjs start-mcp-server --project . --port 9527",
         "test": "node --test --test-reporter=tap tests/*.test.cjs",
+        "test:core-loop-browser": "node tools/test-core-loop-browser.cjs",
         "build:panels": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-panel-review.json",
         "panels": "node tools/panel-preview.cjs",
         "build:status": "node tools/pink.cjs build --project . --platform web-desktop --build-config build-status-review.json",
@@ -29,7 +32,8 @@
         "skills:install": "node tools/game-studios/install.cjs",
         "skills:check": "node tools/game-studios/install.cjs --check",
         "typecheck": "node tools/game-studios/typecheck.cjs",
-        "skills:playtest": "node tools/game-studios/playtest.cjs"
+        "skills:playtest": "node tools/game-studios/playtest.cjs",
+        "check:architecture": "node tools/check-architecture.cjs"
     },
     "pink": {
         "uuid": "80d9c7ff-7595-4f1a-9094-c2a99f82e953",

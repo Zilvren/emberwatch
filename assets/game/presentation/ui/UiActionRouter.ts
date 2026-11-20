@@ -127,21 +127,17 @@ export class UiActionRouter {
         } else if (this.ui.overlay) return;
         else if (id === 'journal-start') {
             if (g.phase === 'journal') {
-                if (g.scenario.battleResource === 'stamina') {
-                    this.ui.entryTier = affordableEntryTier(g.supplies);
-                    this.ui.overlay = 'entry';
-                    this.actions.refresh();
-                } else this.actions.act({ type: 'start' });
+                if (g.currentJournal?.id === 'departure' && g.pendingJournalCount === 1)
+                    this.openEntry();
+                else this.actions.act({ type: 'continue-journal' });
             } else if (g.phase === 'failure') {
-                this.session.execute({ type: 'new-game' });
-                this.actions.refresh();
-            } else if (g.phase === 'day2') {
-                this.ui.overlay = 'restart';
-                this.actions.refresh();
+                this.actions.act({ type: 'retry' });
             }
             return;
         } else if (id.startsWith('route-')) {
-            this.actions.act({ type: 'choose-route', route: id.slice(6) as Route });
+            const route = id.slice(6);
+            if (!Object.prototype.hasOwnProperty.call(g.scenario.routes, route)) return;
+            this.actions.act({ type: 'choose-route', route });
             return;
         } else if (id.startsWith('enter-') || id === 'map-enter') {
             this.actions.act({ type: 'enter-node' });
@@ -191,20 +187,18 @@ export class UiActionRouter {
             this.actions.act({ type: 'finish-rest' });
             return;
         } else if (id === 'shelter-repair') {
-            const result = g.scenario.runDeck
-                ? this.session.execute({ type: 'redeem-supplies' })
-                : this.session.execute({ type: 'repair' });
-            if (result.warning) this.ui.overlay = 'repair-risk';
-            else {
-                this.actions.message(result.message);
-                if (!g.scenario.runDeck) {
-                    this.actions.sound('heal');
-                    this.actions.healEffect();
-                } else this.actions.sound('loot');
-                this.actions.refresh();
+            if (g.scenario.runDeck) {
+                this.actions.act({ type: 'redeem-supplies' }, 'loot');
+                return;
+            }
+            const result = this.session.execute({ type: 'repair' });
+            this.actions.message(result.message);
+            if (result.ok) {
+                this.actions.sound('heal');
+                this.actions.healEffect();
             }
         } else if (id === 'shelter-done') {
-            this.actions.act({ type: 'finish-day' }, 'loot');
+            if (g.phase === 'shelter') this.openEntry();
             return;
         }
         this.actions.sound('tap');
@@ -281,11 +275,14 @@ export class UiActionRouter {
         } else if (this.ui.overlay === 'supply-overflow') {
             this.ui.overlay = null;
             this.actions.act({ type: 'claim-supplies' }, 'loot');
-        } else if (this.ui.overlay === 'repair-risk') {
-            this.ui.overlay = null;
-            this.actions.act({ type: 'repair', confirmed: true }, 'heal');
-            this.actions.healEffect();
         }
+    }
+    private openEntry(): void {
+        if (this.session.view.scenario.battleResource === 'stamina') {
+            this.ui.entryTier = affordableEntryTier(this.session.view.supplies);
+            this.ui.overlay = 'entry';
+            this.actions.refresh();
+        } else this.actions.act({ type: 'start' });
     }
     private selectCard(id: string): void {
         const card = this.session.view.battle?.hand.find((c) => c.id === id);

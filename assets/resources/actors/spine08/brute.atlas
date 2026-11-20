@@ -1,0 +1,26 @@
+
+master08-thin.png
+size: 1536,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+master08-thin
+  rotate: false
+  xy: 0, 0
+  size: 1536, 1024
+  orig: 1536, 1024
+  offset: 0, 0
+  index: -1
+
+brute-corpse.png
+size: 1774,887
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+brute-corpse
+  rotate: false
+  xy: 41, 86
+  size: 1634, 744
+  orig: 1774, 887
+  offset: 41, 57
+  index: -1

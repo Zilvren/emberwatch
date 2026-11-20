@@ -1,11 +1,11 @@
 import { CardSet } from '../content/ContentRegistry';
 import { ActionResult } from '../RulesTypes';
 import { InventoryRules } from './InventoryRules';
-import { RuleFeedback, RuleState } from './RuleContext';
+import { RuleFeedback, RewardState } from './RuleContext';
 import { GameScenario, TUTORIAL_SCENARIO } from '../content/GameScenario';
 export class RewardRules {
     constructor(
-        private readonly state: RuleState,
+        private readonly state: RewardState,
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
         private readonly inventory: InventoryRules,
@@ -56,7 +56,7 @@ export class RewardRules {
         if (!r.supplyTaken) this.feedback.log(`放弃 ${r.supplies} 点物资奖励。`);
         if (!r.cardTaken) this.feedback.log('放弃未领取的卡牌奖励。');
         this.state.visited.push(r.source);
-        if (r.source === 'fixed') this.state.fixedDone = true;
+        if (r.source === this.scenario.fixedNodeId) this.state.fixedDone = true;
         else this.state.pathIndex++;
         this.state.rewards = null;
         this.state.phase = 'map';

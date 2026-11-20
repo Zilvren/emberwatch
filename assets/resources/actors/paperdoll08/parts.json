@@ -1,0 +1,294 @@
+{
+  "sourcePixelsChanged": false,
+  "reference": "../sketch08/master08-thin.png",
+  "sheets": [
+    {
+      "image": "survivor-body.png",
+      "sha256": "89de8d979fb3573cd17f3cebd50040f2447c846dfa141e5e9a7e179a905be411",
+      "width": 1448,
+      "height": 1086,
+      "alphaZeroRatio": 0.6493512357172655,
+      "frames": [
+        {
+          "id": "head",
+          "rect": [
+            26,
+            177,
+            304,
+            258
+          ],
+          "alphaBounds": [
+            26,
+            177,
+            304,
+            258
+          ]
+        },
+        {
+          "id": "torso",
+          "rect": [
+            399,
+            130,
+            220,
+            399
+          ],
+          "alphaBounds": [
+            399,
+            130,
+            220,
+            399
+          ]
+        },
+        {
+          "id": "poncho",
+          "rect": [
+            678,
+            125,
+            394,
+            422
+          ],
+          "alphaBounds": [
+            678,
+            125,
+            394,
+            422
+          ]
+        },
+        {
+          "id": "backpack",
+          "rect": [
+            1113,
+            159,
+            290,
+            320
+          ],
+          "alphaBounds": [
+            1113,
+            159,
+            290,
+            320
+          ]
+        },
+        {
+          "id": "hips",
+          "rect": [
+            52,
+            682,
+            286,
+            279
+          ],
+          "alphaBounds": [
+            52,
+            682,
+            286,
+            279
+          ]
+        },
+        {
+          "id": "weapon",
+          "rect": [
+            358,
+            762,
+            393,
+            96
+          ],
+          "alphaBounds": [
+            358,
+            762,
+            393,
+            96
+          ]
+        },
+        {
+          "id": "rear-boot",
+          "rect": [
+            787,
+            684,
+            246,
+            251
+          ],
+          "alphaBounds": [
+            787,
+            684,
+            246,
+            251
+          ]
+        },
+        {
+          "id": "front-boot",
+          "rect": [
+            1148,
+            683,
+            241,
+            246
+          ],
+          "alphaBounds": [
+            1148,
+            683,
+            241,
+            246
+          ]
+        }
+      ]
+    },
+    {
+      "image": "survivor-limbs.png",
+      "sha256": "6002d8a858cb5c87fdc85d90b44d387d9c979516498bda3a8aa0684a7aed8010",
+      "width": 1499,
+      "height": 1049,
+      "alphaZeroRatio": 0.6830839243957363,
+      "frames": [
+        {
+          "id": "rear-upper-arm",
+          "rect": [
+            73,
+            110,
+            195,
+            367
+          ],
+          "alphaBounds": [
+            73,
+            55,
+            195,
+            422
+          ]
+        },
+        {
+          "id": "front-upper-arm",
+          "rect": [
+            405,
+            105,
+            186,
+            378
+          ],
+          "alphaBounds": [
+            405,
+            49,
+            186,
+            434
+          ]
+        },
+        {
+          "id": "rear-forearm",
+          "rect": [
+            724,
+            125,
+            135,
+            295
+          ],
+          "alphaBounds": [
+            724,
+            60,
+            135,
+            404
+          ]
+        },
+        {
+          "id": "front-forearm",
+          "rect": [
+            994,
+            120,
+            125,
+            299
+          ],
+          "alphaBounds": [
+            994,
+            64,
+            125,
+            399
+          ]
+        },
+        {
+          "id": "rear-hand",
+          "rect": [
+            1253,
+            137,
+            172,
+            318
+          ],
+          "alphaBounds": [
+            1253,
+            81,
+            172,
+            374
+          ]
+        },
+        {
+          "id": "front-hand",
+          "rect": [
+            77,
+            646,
+            170,
+            306
+          ],
+          "alphaBounds": [
+            77,
+            592,
+            170,
+            360
+          ]
+        },
+        {
+          "id": "rear-thigh",
+          "rect": [
+            370,
+            599,
+            178,
+            362
+          ],
+          "alphaBounds": [
+            370,
+            546,
+            178,
+            441
+          ]
+        },
+        {
+          "id": "front-thigh",
+          "rect": [
+            651,
+            598,
+            197,
+            364
+          ],
+          "alphaBounds": [
+            651,
+            545,
+            197,
+            444
+          ]
+        },
+        {
+          "id": "rear-shin",
+          "rect": [
+            981,
+            612,
+            139,
+            320
+          ],
+          "alphaBounds": [
+            981,
+            560,
+            139,
+            400
+          ]
+        },
+        {
+          "id": "front-shin",
+          "rect": [
+            1269,
+            618,
+            149,
+            319
+          ],
+          "alphaBounds": [
+            1269,
+            566,
+            149,
+            399
+          ]
+        }
+      ]
+    }
+  ]
+}

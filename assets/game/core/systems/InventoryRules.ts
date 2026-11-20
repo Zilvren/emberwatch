@@ -1,11 +1,11 @@
 import { CardKind, isBattleCard } from '../content/CardCatalog';
 import { CardSet } from '../content/ContentRegistry';
 import { ActionResult, OwnedCard } from '../RulesTypes';
-import { RuleFeedback, RuleState } from './RuleContext';
+import { RuleFeedback, InventoryState } from './RuleContext';
 import { GameScenario, TUTORIAL_SCENARIO } from '../content/GameScenario';
 export class InventoryRules {
     constructor(
-        private readonly state: RuleState,
+        private readonly state: InventoryState,
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
         private readonly newId: (prefix: string) => string,

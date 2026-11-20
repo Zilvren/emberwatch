@@ -11,9 +11,19 @@ if (!fs.existsSync(cli)) throw new Error(`Pink COCOS CLI not found: ${cli}`);
 // Pink's native engine modules are built for its Electron runtime, not system Node.
 const runtime = process.env.PINK_EXECUTABLE ?? 'C:/software/work/PinK/PinK.exe';
 if (!fs.existsSync(runtime)) throw new Error('Set PINK_EXECUTABLE to the installed PinK.exe path.');
+const buildArgs = process.argv.slice(2);
+const platformIndex = buildArgs.indexOf('--platform');
+const wechatCompat = settings['cocos.engine.version'] === '4.0.0-beta.1'
+    && platformIndex >= 0 && buildArgs[platformIndex + 1] === 'wechatgame';
+const childEnv = { ...process.env, ELECTRON_RUN_AS_NODE: '1', PINK_CLI_ENTRY: cli };
+if (wechatCompat) {
+    const preload = path.join(__dirname, 'spine/wechat-babel-compat.cjs').replaceAll('\\', '/');
+    childEnv.NODE_OPTIONS = [childEnv.NODE_OPTIONS, '--require "' + preload + '"'].filter(Boolean).join(' ');
+    childEnv.THE_END_WECHAT_WASM_COMPAT = '1';
+}
 const result = spawnSync(runtime, [path.join(__dirname, 'pink-runtime.cjs'), ...process.argv.slice(2)], {
     cwd: project,
-    env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', PINK_CLI_ENTRY: cli },
+    env: childEnv,
     stdio: 'inherit',
 });
 if (result.error) throw result.error;

@@ -1,0 +1,13 @@
+await page.setViewportSize({width:1440,height:900});await page.emulateMedia({reducedMotion:'no-preference'});
+await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&review=native08-contact');await idle();
+const actors=async()=>page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return[d.hero,d.enemy].filter(Boolean).map(a=>({id:a.actorId,motion:a.motion,root:{x:a.node.position.x,y:a.node.position.y},rig:a.inspectRig()}));});
+await page.screenshot({path:'output/playwright/native08-idle-current.png'});
+const start=await actors(),before=await state(),heavy=before.hand.find(c=>c.kind==='heavy'&&!c.blocked);assert(heavy,'No heavy fixture');
+await click('card-'+heavy.id);const target=await hitPoint('enemy-target');await page.mouse.click(target.x,target.y);
+await page.waitForFunction(()=>globalThis.__survivalGame.battle?.hp===1&&globalThis.__emberUI.snapshot().busy);
+const playerContact=await actors();await page.screenshot({path:'output/playwright/native08-player-real-contact.png'});await idle();
+const afterPlayer=await actors(),result=await state();assert(result.battle.hp===1&&result.stamina===before.stamina-1,'Player action applied damage or cost incorrectly');
+const end=await hitPoint('end-turn');await page.mouse.click(end.x,end.y);await page.waitForFunction(()=>globalThis.__survivalGame.battle?.turn===2&&globalThis.__emberUI.snapshot().busy);
+const enemyContact=await actors();await page.screenshot({path:'output/playwright/native08-wanderer-real-contact.png'});await idle();
+const final=await actors();assert(final.every((a,i)=>Math.hypot(a.root.x-start[i].root.x,a.root.y-start[i].root.y)<.001),'An actor did not return to its authored position');
+return{passed:true,playerContact,enemyContact,afterPlayer,returnedHome:final,runtimeErrors};

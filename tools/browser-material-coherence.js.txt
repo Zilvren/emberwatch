@@ -6,7 +6,7 @@ const nativeSurface=async()=>page.evaluate(()=>{
  const sprite=atmosphere.backdrop.getComponent('cc.Sprite');
  return {frame:sprite.spriteFrame._uuid,tint:sprite.color.toHEX(),
   shadows:root.getComponentsInChildren('ContactShadow').filter(c=>c.node.activeInHierarchy).map(c=>({target:c.target?.name,visible:c.getComponent('cc.Graphics').enabled,actorActive:c.target?.activeInHierarchy,sameParent:c.target?.parent===c.node.parent,dx:c.node.position.x-c.target.position.x,dy:c.node.position.y-c.target.position.y})),
-  rigs:root.getComponentsInChildren('StableActorSprite').filter(c=>c.node.activeInHierarchy).map(c=>c.rigSnapshot()),
+  rigs:root.getComponentsInChildren('SpineActorRig').filter(c=>c.enabledInHierarchy).map(c=>c.inspect()),
   decks:root.getComponentsInChildren('DeckStackGraphic').filter(c=>c.node.activeInHierarchy).map(c=>c.theme?.json.colors.paper),
   points:root.getComponentsInChildren('RoutePoint').filter(c=>c.node.activeInHierarchy).map(c=>({action:c.action.actionId,opacity:c.action.getComponent('cc.UIOpacity')?.opacity}))};
 });
@@ -20,6 +20,7 @@ const checkSurface=async kind=>{
   if(shadow.actorActive)assert(Math.abs(shadow.dx)<.05&&Math.abs(shadow.dy+2)<.05,'Contact shadow drifted from the feet');
  }
  assert(surface.rigs.every(r=>r.source==='42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f'),'08 artwork source changed');
+ assert(surface.rigs.every(r=>r.bones>=26&&r.runtimeReady&&r.weightedVertices>100),'Spine actor bindings are incomplete');
  return surface;
 };
 await page.setViewportSize({width:1440,height:900});await page.emulateMedia({reducedMotion:'no-preference'});
@@ -41,7 +42,7 @@ const shelter=await checkSurface('shelter');await screenshot('coherent-rest');
 await click('rest-cash');await click('modal-confirm');await click('rest-done');await click('enter-enemy2');
 const boss=await checkSurface('street');assert(boss.shadows.find(s=>s.target==='Brute')?.visible&&!boss.shadows.find(s=>s.target==='Wanderer')?.visible,'Enemy shadow did not switch with the boss');await screenshot('coherent-boss');
 await fight({preferWeapon:true});await claimSupplies();await claimAvailableCard();await leaveRewards();
-await page.waitForFunction(()=>globalThis.__emberUI.snapshot().phase==='shelter');await idle();await checkSurface('shelter');await screenshot('coherent-shelter');
+await page.waitForFunction(()=>['shelter','journal'].includes(globalThis.__emberUI.snapshot().phase));await idle();while((await state()).phase==='journal')await click('journal-start');await checkSurface('shelter');await screenshot('coherent-shelter');
 await page.setViewportSize({width:1024,height:768});await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&design=materials-04');await idle();await checkSurface('street');await screenshot('coherent-battle-1024');
 await page.setViewportSize({width:1440,height:900});await page.goto('http://127.0.0.1:7457/?seed=17&save=off&preview=encounter&design=materials-04');await idle();await screenshot('coherent-battle-final');
 assert(!runtimeErrors.length,runtimeErrors.join('\n'));

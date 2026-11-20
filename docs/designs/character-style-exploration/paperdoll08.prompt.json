@@ -1,0 +1,22 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "status": "generated-components-native-connected-visual-review-open",
+  "reference": "assets/resources/actors/sketch08/master08-thin.png",
+  "sourcePixelsChanged": false,
+  "generated": [
+    {
+      "file": "assets/resources/actors/paperdoll08/survivor-body.png",
+      "tool": "image_gen",
+      "prompt": "Create an identity-preserving production PAPER-DOLL body-parts atlas from the supplied APPROVED 08 character master. Use ONLY the hooded survivor at upper left; ignore monsters, lower action figures, labels and paper. Preserve the same slender proportions, exact hood and face, dark hair, pale skin, gray-olive scarf/trousers, muted pale-ochre ragged poncho, light-brown boots, square backpack, belt pouch and machete design. We need separate cutout components for a native 2D skeletal rig, NOT complete character poses. Exactly EIGHT detached components in a FOUR COLUMN by TWO ROW landscape grid, row-major: (0) head with hood/hair/face looking screen right, NO scarf and no torso; (1) underlying torso/undershirt with filled shoulder/neck/hip overlap surfaces, NO head, arms or poncho; (2) the complete ragged ochre poncho with gray-olive scarf as one front clothing layer, NO body or arms; (3) the square backpack alone; (4) pelvis/trouser waistband with belt and small pouch attached, NO legs; (5) machete blade and handle alone, horizontal pointing right, NO hand; (6) nearer boot alone, toe pointing screen right, NO shin; (7) farther boot alone, toe pointing screen right, NO shin. All components must share the same view and design as the approved reference, with clean thin dark olive-brown ink, flat restrained matte fills and subtle interior texture. Build hidden joint overlap areas so rotations will not reveal holes. Each component wholly inside its own spacious cell, generously separated; components may fill their cells independently for texture detail because the rig will size them explicitly. Aim for native 2048x1536 or maximum native detail landscape. Actual transparent alpha background, no paper, no gradient, no ground, no shadows/glow/noise outside forms, no text/numbers, no borders or lines. Do not assemble the figure, no extra limbs, no second character, no new outfit and no weapon hand.",
+      "source": "C:/Users/Knock/.codex/generated_images/01a1c962-1a97-7773-bdc4-99108dda99ec/exec-5d2e3430-0bb1-4dbe-be1f-fbb3e37dd4c4.png"
+    },
+    {
+      "file": "assets/resources/actors/paperdoll08/survivor-limbs.png",
+      "tool": "image_gen",
+      "prompt": "Create a production cutout paper-doll limb atlas for the exact hooded survivor in reference 1 (approved08 master), matching the separate body components in reference 2. Preserve face/character identity indirectly through clothing: muted pale ochre, grey olive trousers, light brown leather boots/gloves, thin delicate dark brown field-sketch ink, very slight paper texture inside fills, crisp alpha edges. This is ART COMPONENTS only, no complete figures. Exactly TEN clearly detached pieces, orderly 5 columns by 2 rows, ample transparent gutters. TOP ROW left to right: rear upper arm (short ochre sleeve with skin forearm connection), front upper arm (ochre sleeve); rear forearm (skin+cloth wrap); front forearm (cream bandages); rear closed leather gloved hand. BOTTOM ROW left to right: front leather gloved gripping hand empty (no weapon); rear thigh segment grey olive cloth, no waist and no boot; front thigh segment grey olive cloth with simple cargo patch, no waist and no boot; rear lower leg/shin cream bandages, no boot; front lower leg/shin cream bandages, no boot. Each long limb points DOWN in neutral rest pose, no rotation/extreme perspective, simple three-quarter view facing RIGHT, keep consistent width: upper arms and shins narrower than thighs. Rounded solid filled overlapping joint caps at both ends, enough hidden continuation for elbow/knee rotation, no holes through cloth/skin. Similar line weight and scale of texture to reference2. No labels, lines, grid, background, shadow or ground. Genuine fully transparent background. 2000x1400 canvas, all parts fit inside own cells.",
+      "source": "C:/Users/Knock/.codex/generated_images/01a1c962-1a97-7773-bdc4-99108dda99ec/exec-7eb07374-f05e-4f0d-802e-058df9bb2803.png"
+    }
+  ],
+  "note": "New separated drawings derived from approved08, not a claim of pixel identity to the original whole character. Python only analyzes alpha and authors native frame rectangles; no image pixels are resampled."
+}

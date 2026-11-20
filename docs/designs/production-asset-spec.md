@@ -64,3 +64,61 @@ RoutePoint 图标为原生 Graphics 路径，细线与少量灰橄榄/淡棕/土
 原 640×256 逻辑画布映射到统一 1360×544 源画布，动作全段比例 0.47058823529411764；中立主体 493 像素映射为 232 逻辑单位。所有脚底为 -112，左脚锚点保持，演员的原生场景缩放不变。8 个时序帧中，07 是 00 中立姿势的图集别名，7 张不同绘制图；端点复用用于稳定回待机，不宣称增加绘制数量。
 
 先执行 `python tools/prepare-attack-detail.py`，经 Pink 原生导入两份 plist 后执行 `node tools/connect-attack-detail.cjs`，读取实际分配的 SpriteFrame UUID 并更新现有攻击片段。普通构建不调用作者工具。旧全量作者工具已加活动资源保护，避免无意把清晰稿换回旧帧。片段、演员与既有元数据标识保留，测试与原生正常/半速检查见 docs/quality-fixes-verification.json。
+
+## 2026-11-16 原生纸娃娃资源合同
+
+PlayerActor.prefab 已接入 PaperDoll/Bones 与 PaperDoll/Slots，20 个骨骼/定位节点、18 个独立 Sprite 插槽，五组新的原生变换动画位于 assets/animations/paperdoll08/。现有根节点和场景缩放继续使用，地面锚点不变；腿部使用固定脚目标和二维 IK。
+
+两张新透明部件图、真实帧矩形、来源与哈希位于 assets/resources/actors/paperdoll08/ 与 character-style-exploration/paperdoll08.prompt.json。新分层图是参考 08 绘制的部件，不声称像素级复用原人物；保留原 master 的字节。图集按实际导入的 SpriteFrame UUID 连接。关节的源延伸区域由原生帧矩形选择并用层级遮挡处理，不重采样 PNG。
+
+idle 使用原生曲线插值并固定头脚；attack 保留 .56 秒和 .28 秒单次事件，半速只改变表现速度。普通构建不触发作者工具。旧序列帧评审场景继续作为历史对照，不能作为新骨架已被评审的证据。详见 paperdoll08.md 与 docs/module-refactor-verification.json；技术接入通过、最终视觉认可开放。
+
+## 2026-11-16：当前 Cocos 原生 08 动作资源
+
+当前三个主游戏演员使用 assets/resources/actors/native08/{survivor,wanderer,brute}-geometry.json 与 -skin.json，纹理仍为原 master08-thin.png。原生片段位于 assets/animations/native08/，每角色五个动作，共十五个。现有演员根 UUID、原画和场景缩放保持，旧资源留作历史参考。
+
+Animation 驱动 NativeBones 的角度、位置和 approach 属性；NativeActorSkin 仅做原画部件到节点的绑定与 SDK 渲染桥接。躯干衣物保持一体，沿关节边界细分原几何并设置重叠，按骨骼和完整顶点属性共用顶点。当前顶点为 874/1119/1385，设定 4000 的固定 SDK 预算并在导出/测试时检查，避免启动时缓冲区超限。
+
+主角、游荡者和重型怪攻击分别为 .72/.80/.94 秒，单次事件分别在 .34/.38/.46 秒。Cocos 三次曲线控制预备、前移、接触、收回；不把姿势键或播放采样数当成绘制帧数。具体维护命令、接入范围和证据见 character-style-exploration/cocos-native08-motion.md。普通构建不运行作者工具，完整行走与换装不在本轮范围内。
+
+## 2026-11-17：人物骨架制作建议（草案）
+
+- 项目：The end；日期：2026-11-17，Asia/Shanghai。
+- 状态：技术与制作建议，待用户选择；尚未确认采购 Spine 或迁移现有演员。此前用户选择的 Cocos 原生 Animation 仍是当前运行方案。
+- 依据：本次只读检查原画、当前 native08 三份 skin、NativeActorSkin.ts、ActorPresentation.ts、本机固定 SDK 的 Spine 模块配置及官方文档；没有重新播放并验收现有动作。
+- 归档：viking://~/resources/projects/the-end/designs/production-asset-spec.md。
+
+### 当前事实与建议方向
+
+当前三个角色各有 10 个骨骼/控制节点。三份 native08 skin 的全部顶点均只有一个骨骼影响；腿、躯干与背包保持一体，属于二维刚性部件方案。NativeActorSkin 的代码能按权重累计变换，但现有资源没有多骨骼混合权重。其完整迈步与衣物弯曲能力受素材拆分及绑定结构限制；继续增加采样或关键帧不能补出被遮挡的图像。
+
+推荐正式制作采用“二维分层骨骼、局部网格蒙皮、少量关键姿势替换”的组合。保持 08 的脸部、服装、配色、装备和游戏显示比例；原 master 保留，另建可编辑分层源稿。肩、肘、胯、膝和衣物背面的遮挡区域需要补画，并以原画核对身份；不能声称机械裁切能恢复未绘制部分。刀、靴子、头和背包等硬部件保持形状，袖口、披风与衣摆仅做局部柔性变形。
+
+如用户接受付费动画工具，长期优先评估 Spine Professional，由其制作并通过 Cocos 的 sp.Skeleton 播放。其网格、权重和 IK 能覆盖建议制作范围；Essential 缺少该范围的关键功能。如果继续采用 Cocos 原生 Animation，可制作完整分层关节与原生曲线，但蒙皮编辑、约束和导出工具的维护成本需要计入开发。
+
+本机 Pink/Cocos 4.0.0-beta.1 的 engine/cc.config.json（安装目录下 cocos-clipackagesengine/cc.config.json）定义 spine-3.8 与 spine-4.2，两套运行库也实际存在。该事实不等于项目已验证 Spine。若迁移，先选定并显式配置一种运行库，用对应编辑器主/次版本导出的样例完成导入和 web-desktop 构建播放检查，再锁定动画制作版本；不能直接按最新编辑器制作全部资源。
+
+### 首套角色的制作与接入
+
+1. 先做主角的前后侧上臂、前臂、手，前后侧大腿、小腿、脚，以及骨盆、胸腔、头、披风、背包、刀的分层源稿和遮挡补画；骨骼数量服从动作需要。
+2. 躯干设置腰胯与胸腔控制；手足按需要使用两骨骼 IK，支撑脚稳定落地，武器设手部挂点与刀尖接触点。腿、骨盆、胸腔、肩和武器形成连续发力；衣物轻微跟随。转面、持刀角度及大幅度姿势用替换附件补足透视。
+3. 首次样片只验证待机、一次完整攻击与受击；现有 prepare、death 的完整迁移随后单独验收，行走只在实际玩法需要时制作。正常速度、半速与原画静止对照同时检查，再扩展两个怪物。
+4. 通过现有 ActorPresentation 表现入口接入，规则仍归 GameSession。接触事件转发给既有命中流程且保证单次执行；覆盖动作中断、暂停恢复、死亡末姿势、回位及减少动态效果。使用 Spine 时先以 REALTIME 验证事件与混合，再根据实测决定缓存。
+5. 新增资源经 Pink SDK 导入并使用实际 UUID；保留既有引用关系。交付含可编辑分层源稿、骨骼动画工程、导出骨骼数据/图集/纹理，以及主游戏真实出牌的正常与半速录像。技术检查、执行者视觉观察和用户最终认可分别记录。
+
+### 官方参考（2026-11-17 查询）
+
+- Spine 功能与许可版本：https://esotericsoftware.com/spine-purchase
+- 编辑器与运行库版本匹配：https://esotericsoftware.com/spine-versioning
+- Cocos Spine Skeleton、实时模式及缓存限制：https://docs.cocos.com/creator/3.8/manual/zh/editor/components/spine.html
+- Cocos 骨骼资源导入格式：https://docs.cocos.com/creator/3.8/manual/en/asset/spine.html
+
+## 2026-11-17：Spine 08 动作交付
+
+项目 The end；状态：本地 MCP 制作和原生接入已实施，替代前述 native08 活跃动作。版本固定为本机编辑器及导出 3.8.75、当前 Pink/Cocos 4.0.0-beta.1 的 Spine 3.8 运行库。
+
+- 编辑源为 art-source/spine08/{survivor,wanderer,brute}.spine 及同名 .authoring.json；运行资源位于 assets/resources/actors/spine08/，含三份 JSON/atlas/contract、一份原画相同字节副本、三份透明死亡身体附件和 SDK 分配的 .meta。既有演员 Prefab 根 UUID/fileId、原视觉比例与原素材保持。
+- 每角色 28 根骨骼/控制、五动作；3 秒待机循环，攻击接触为 0.40/0.45/0.54 秒，结束为 0.84/0.94/1.10 秒。头和靴子刚性绑定，身体局部权重混合、双脚 IK；武器/手部接触点进入原表现命令链且只触发一次。
+- 死亡采用骨骼倒下加侧卧身体附件，原头/兜帽/铁盔网格复用。身体图由内置 image_gen 参考原 08 生成，源与运行 PNG 保持相同字节；透明边界、原始尺寸和哈希见 tools/spine/corpse-regions.json，提示词来源见 character-style-exploration/spine08-corpse-prompts.json。
+- 显式制作入口 npm run author:spine -- --mcp <本地MCP目录> --spine <Spine.com>。MCP 经 stdio 写五动作、导入新临时工程、导出并验证；3.8 曲线序列化由适配器转换。先用 Pink SDK 导入资源分配元数据，再执行 npm run connect:spine。普通构建不运行作者工具。
+- 三角色正常/半速、暂停恢复、中断、死亡保持、减少动态效果和主游戏真实输入均有本轮证据。web-desktop 构建与微信小游戏测试编译通过；微信真机、性能和发布不属于已通过结论。详情与未验证边界为 docs/spine08-verification.json。

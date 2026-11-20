@@ -1,4 +1,14 @@
-import { _decorator, Color, Component, Graphics, Node, UITransform, Vec3 } from 'cc';
+import {
+    _decorator,
+    Color,
+    Component,
+    director,
+    Director,
+    Graphics,
+    Node,
+    UITransform,
+    Vec3,
+} from 'cc';
 const { ccclass, executeInEditMode, property, requireComponent } = _decorator;
 
 /** Scene-owned grounding; follows the actor without changing its artwork or motion. */
@@ -15,12 +25,17 @@ export class ContactShadow extends Component {
     onEnable(): void {
         this.node.on(Node.EventType.SIZE_CHANGED, this.redraw, this);
         this.redraw();
-        this.lateUpdate();
+        this.followTarget();
     }
     onDisable(): void {
         this.node.off(Node.EventType.SIZE_CHANGED, this.redraw, this);
+        director.off(Director.EVENT_BEFORE_DRAW, this.followTarget, this);
     }
     lateUpdate(): void {
+        // Run after the actor's persistent pose callback publishes its final position.
+        director.once(Director.EVENT_BEFORE_DRAW, this.followTarget, this);
+    }
+    private followTarget(): void {
         const graphics = this.getComponent(Graphics);
         if (!graphics) return;
         graphics.enabled = !!this.target?.activeInHierarchy;

@@ -108,7 +108,12 @@ test('map permission gates crafting; chained multi-output crafting and single-st
 });
 
 test('gameplay locks under the battle overlay and settled supply cards survive a fresh run', () => {
-    const session = new GameSession(17);
+    const values = new Map();
+    const saves = new SaveRepository({
+        getItem: (key) => values.get(key) ?? null,
+        setItem: (key, value) => values.set(key, value),
+    });
+    const session = new GameSession(17, saves);
     start(session);
     takeFixedReward(session);
     command(session, 'choose-route', { route: 'B' });
@@ -139,20 +144,29 @@ test('gameplay locks under the battle overlay and settled supply cards survive a
     command(session, 'finish-rest');
     game.pathIndex = game.scenario.routes.B.length;
     session.advanceTime(1);
-    assert.equal(game.phase, 'shelter');
+    assert.equal(game.phase, 'journal');
+    assert.equal(game.currentJournal.id, 'street-cleared');
+    assert.equal(game.currentJournal.day, 2);
     assert.deepEqual(game.cards, []);
     assert.deepEqual(game.storedSupplies, { cloth_supplies: 1 });
     assert.equal(game.settlement.returnedCards, 1);
+    assert.deepEqual(new GameSession(42, saves).game.exportState(), game.exportState());
+    command(session, 'continue-journal');
     const suppliesBeforeExchange = game.supplies;
     assert.match(command(session, 'redeem-supplies').message, /获得 3 点物资/);
     assert.equal(game.supplies, suppliesBeforeExchange + 3);
     assert.deepEqual(game.storedSupplies, {});
     assert.equal(session.execute({ type: 'redeem-supplies' }).ok, false);
-    command(session, 'new-game');
+    command(session, 'start', { tier: 'emergency' });
+    assert.equal(game.day, 2);
+    assert.equal(game.phase, 'map');
+    assert.equal(game.supplies, suppliesBeforeExchange + 3);
+    assert.equal(game.journalEntries.find(({ id }) => id === 'street-cleared').read, true);
     assert.equal(counts(session.view.usableCards, 'attack'), 2);
     assert.equal(counts(session.view.usableCards, 'wood_stick'), 0);
     assert.equal(counts(session.view.usableCards, 'long_spear'), 0);
     assert.deepEqual(game.storedSupplies, {});
+    assert.deepEqual(new GameSession(42, saves).game.exportState(), game.exportState());
 });
 
 test('pre-synthesis saves keep their original rules until the player starts a new exploration', () => {

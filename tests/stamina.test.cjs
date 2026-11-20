@@ -12,7 +12,7 @@ const { GameSession } = load(path.join(root, 'assets/game/application/GameSessio
 const { ENTRY_TIERS } = load(path.join(root, 'assets/game/core/content/EntryTiers.ts'));
 const { SaveRepository } = load(path.join(root, 'assets/game/infrastructure/SaveRepository.ts'));
 const { validateGameState } = load(path.join(root, 'assets/game/core/state/GameState.ts'));
-const { TUTORIAL_SCENARIO } = load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
+const { TUTORIAL_SCENARIO, STAMINA_SCENARIO } = load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
 const ok = (result) => assert.equal(result.ok, true, result.message);
 const storage = () => {
     const values = new Map();
@@ -170,8 +170,8 @@ test('legacy saves retain their rules until an explicitly confirmed new game', (
     assert.equal(continued.game.entryTier, null);
 });
 
-test('fresh runs do not repair or charge daily supplies when returning to shelter', () => {
-    const session = new GameSession(17),
+test('stamina return advances time once and repair can spend the last supply without a daily fee', () => {
+    const session = new GameSession(17, undefined, STAMINA_SCENARIO),
         game = session.game;
     ok(session.execute({ type: 'start', tier: 'emergency' }));
     // A completed expedition fixture; returning still goes through the application clock.
@@ -181,16 +181,14 @@ test('fresh runs do not repair or charge daily supplies when returning to shelte
     game.supplies = 1;
     game.armor = 3;
     session.advanceTime(1);
-    assert.equal(game.phase, 'shelter');
-    assert.equal(game.settlement.dailySpent, 0);
-    const before = game.exportState();
-    assert.equal(session.execute({ type: 'repair' }).ok, false);
-    assert.deepEqual(game.exportState(), before);
-    assert.equal(game.armor, 3);
-    assert.equal(game.supplies, 1);
-    ok(session.execute({ type: 'finish-day' }));
     assert.equal(game.phase, 'journal');
-    assert.equal(game.supplies, 1);
+    assert.equal(game.day, 2);
+    ok(session.execute({ type: 'continue-journal' }));
+    ok(session.execute({ type: 'repair' }));
     assert.equal(game.armor, 10);
+    assert.equal(game.supplies, 0);
+    assert.equal('dailySpent' in game.settlement, false);
+    const settled = game.exportState();
     assert.equal(session.execute({ type: 'finish-day' }).ok, false);
+    assert.deepEqual(game.exportState(), settled);
 });

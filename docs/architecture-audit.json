@@ -1,0 +1,2100 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "files": 72,
+  "coreCcImports": [],
+  "applicationCcImports": [],
+  "boundaryViolations": [],
+  "runtimeCycles": [],
+  "topFiles": [
+    {
+      "file": "assets/game/presentation/GameDirector.ts",
+      "lines": 466
+    },
+    {
+      "file": "assets/game/presentation/GameRenderer.ts",
+      "lines": 419
+    },
+    {
+      "file": "assets/game/presentation/cards/CardPresentation.ts",
+      "lines": 279
+    },
+    {
+      "file": "assets/game/core/SurvivalGame.ts",
+      "lines": 249
+    },
+    {
+      "file": "assets/game/core/content/CardCatalog.ts",
+      "lines": 245
+    },
+    {
+      "file": "assets/game/core/state/GameState.ts",
+      "lines": 243
+    },
+    {
+      "file": "assets/game/presentation/ui/ButtonPresentation.ts",
+      "lines": 238
+    },
+    {
+      "file": "assets/game/presentation/ui/UiActionRouter.ts",
+      "lines": 236
+    }
+  ],
+  "rows": [
+    {
+      "file": "assets/game/application/GameSession.ts",
+      "lines": 127,
+      "imports": [
+        {
+          "spec": "../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../core/SurvivalGame",
+          "typeOnly": false
+        },
+        {
+          "spec": "../core/content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "../core/content/EntryTiers",
+          "typeOnly": false
+        },
+        {
+          "spec": "../infrastructure/SaveRepository",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../core/SurvivalGame",
+        "../core/content/GameScenario"
+      ],
+      "dependencies": [
+        "assets/game/core/SurvivalGame.ts",
+        "assets/game/core/content/GameScenario.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/content/CardCatalog.ts",
+      "lines": 245,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/core/content/ContentRegistry.ts",
+      "lines": 29,
+      "imports": [
+        {
+          "spec": "./CardCatalog",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "./CardCatalog"
+      ],
+      "dependencies": [
+        "assets/game/core/content/CardCatalog.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/content/EntryTiers.ts",
+      "lines": 28,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/core/content/GameScenario.ts",
+      "lines": 59,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/core/GameReadModel.ts",
+      "lines": 41,
+      "imports": [
+        {
+          "spec": "./SurvivalGame",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/core/Random.ts",
+      "lines": 25,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/core/RulesTypes.ts",
+      "lines": 69,
+      "imports": [
+        {
+          "spec": "./content/CardCatalog",
+          "typeOnly": false
+        },
+        {
+          "spec": "./content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "./content/CardCatalog",
+          "typeOnly": true
+        },
+        {
+          "spec": "./content/GameScenario",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [
+        "./content/GameScenario"
+      ],
+      "dependencies": [
+        "assets/game/core/content/GameScenario.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/state/GameState.ts",
+      "lines": 243,
+      "imports": [
+        {
+          "spec": "../content/CardCatalog",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/EntryTiers",
+          "typeOnly": false
+        },
+        {
+          "spec": "../RulesTypes",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [
+        "../content/CardCatalog",
+        "../content/GameScenario",
+        "../content/EntryTiers"
+      ],
+      "dependencies": [
+        "assets/game/core/content/CardCatalog.ts",
+        "assets/game/core/content/GameScenario.ts",
+        "assets/game/core/content/EntryTiers.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/SurvivalGame.ts",
+      "lines": 249,
+      "imports": [
+        {
+          "spec": "./Random",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RulesTypes",
+          "typeOnly": false
+        },
+        {
+          "spec": "./content/CardCatalog",
+          "typeOnly": false
+        },
+        {
+          "spec": "./content/ContentRegistry",
+          "typeOnly": false
+        },
+        {
+          "spec": "./content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "./state/GameState",
+          "typeOnly": false
+        },
+        {
+          "spec": "./content/EntryTiers",
+          "typeOnly": false
+        },
+        {
+          "spec": "./systems/CombatRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./systems/ExplorationRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./systems/InventoryRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./systems/RewardRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./systems/RuleContext",
+          "typeOnly": false
+        },
+        {
+          "spec": "./systems/SettlementRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./Random",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RulesTypes",
+          "typeOnly": false
+        },
+        {
+          "spec": "./content/CardCatalog",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "./Random",
+        "./content/ContentRegistry",
+        "./content/GameScenario",
+        "./state/GameState",
+        "./systems/CombatRules",
+        "./systems/ExplorationRules",
+        "./systems/InventoryRules",
+        "./systems/RewardRules",
+        "./systems/RuleContext",
+        "./systems/SettlementRules",
+        "./Random",
+        "./RulesTypes",
+        "./content/CardCatalog"
+      ],
+      "dependencies": [
+        "assets/game/core/Random.ts",
+        "assets/game/core/content/ContentRegistry.ts",
+        "assets/game/core/content/GameScenario.ts",
+        "assets/game/core/state/GameState.ts",
+        "assets/game/core/systems/CombatRules.ts",
+        "assets/game/core/systems/ExplorationRules.ts",
+        "assets/game/core/systems/InventoryRules.ts",
+        "assets/game/core/systems/RewardRules.ts",
+        "assets/game/core/systems/RuleContext.ts",
+        "assets/game/core/systems/SettlementRules.ts",
+        "assets/game/core/Random.ts",
+        "assets/game/core/RulesTypes.ts",
+        "assets/game/core/content/CardCatalog.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/systems/CombatRules.ts",
+      "lines": 183,
+      "imports": [
+        {
+          "spec": "../content/ContentRegistry",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "../Random",
+          "typeOnly": false
+        },
+        {
+          "spec": "../RulesTypes",
+          "typeOnly": false
+        },
+        {
+          "spec": "./InventoryRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RuleContext",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/EntryTiers",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../RulesTypes",
+        "../content/EntryTiers"
+      ],
+      "dependencies": [
+        "assets/game/core/RulesTypes.ts",
+        "assets/game/core/content/EntryTiers.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/systems/ExplorationRules.ts",
+      "lines": 122,
+      "imports": [
+        {
+          "spec": "../content/ContentRegistry",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "../Random",
+          "typeOnly": false
+        },
+        {
+          "spec": "../RulesTypes",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CombatRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./InventoryRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RuleContext",
+          "typeOnly": false
+        },
+        {
+          "spec": "./SettlementRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/EntryTiers",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../RulesTypes",
+        "../content/EntryTiers"
+      ],
+      "dependencies": [
+        "assets/game/core/RulesTypes.ts",
+        "assets/game/core/content/EntryTiers.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/systems/InventoryRules.ts",
+      "lines": 99,
+      "imports": [
+        {
+          "spec": "../content/CardCatalog",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/ContentRegistry",
+          "typeOnly": false
+        },
+        {
+          "spec": "../RulesTypes",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RuleContext",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/GameScenario",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../content/GameScenario"
+      ],
+      "dependencies": [
+        "assets/game/core/content/GameScenario.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/systems/RewardRules.ts",
+      "lines": 71,
+      "imports": [
+        {
+          "spec": "../content/ContentRegistry",
+          "typeOnly": false
+        },
+        {
+          "spec": "../RulesTypes",
+          "typeOnly": false
+        },
+        {
+          "spec": "./InventoryRules",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RuleContext",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/GameScenario",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../content/GameScenario"
+      ],
+      "dependencies": [
+        "assets/game/core/content/GameScenario.ts"
+      ]
+    },
+    {
+      "file": "assets/game/core/systems/RuleContext.ts",
+      "lines": 18,
+      "imports": [
+        {
+          "spec": "../RulesTypes",
+          "typeOnly": false
+        },
+        {
+          "spec": "../state/GameState",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/core/systems/SettlementRules.ts",
+      "lines": 68,
+      "imports": [
+        {
+          "spec": "../content/ContentRegistry",
+          "typeOnly": false
+        },
+        {
+          "spec": "../content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "../RulesTypes",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RuleContext",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/infrastructure/SaveRepository.ts",
+      "lines": 123,
+      "imports": [
+        {
+          "spec": "../core/content/ContentRegistry",
+          "typeOnly": false
+        },
+        {
+          "spec": "../core/content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "../core/state/GameState",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../core/content/ContentRegistry",
+        "../core/content/GameScenario",
+        "../core/state/GameState"
+      ],
+      "dependencies": [
+        "assets/game/core/content/ContentRegistry.ts",
+        "assets/game/core/content/GameScenario.ts",
+        "assets/game/core/state/GameState.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/actors/ActorMotionReview.ts",
+      "lines": 139,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./SpriteActorMotion",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./SpriteActorMotion"
+      ],
+      "dependencies": [
+        "assets/game/presentation/actors/SpriteActorMotion.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/actors/ActorPresentation.ts",
+      "lines": 143,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./StableActorSprite",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./StableActorSprite"
+      ],
+      "dependencies": [
+        "assets/game/presentation/actors/StableActorSprite.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/actors/SpriteActorMotion.ts",
+      "lines": 99,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./StableActorSprite",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./StableActorSprite"
+      ],
+      "dependencies": [
+        "assets/game/presentation/actors/StableActorSprite.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/actors/StableActorSprite.ts",
+      "lines": 132,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/audio/GameAudio.ts",
+      "lines": 39,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/cards/CardDesignReference.ts",
+      "lines": 16,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/cards/CardDesignReview.ts",
+      "lines": 130,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardDesignReference",
+          "typeOnly": true
+        },
+        {
+          "spec": "../ui/UIEvents",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardInteraction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardPresentation",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/UIEvents",
+        "./CardInteraction",
+        "./CardPresentation"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/UIEvents.ts",
+        "assets/game/presentation/cards/CardInteraction.ts",
+        "assets/game/presentation/cards/CardPresentation.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/CardInteraction.ts",
+      "lines": 206,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../ui/UIEvents",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardPresentation",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/UIEvents"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/UIEvents.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/CardPresentation.ts",
+      "lines": 279,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/content/CardCatalog",
+          "typeOnly": false
+        },
+        {
+          "spec": "../primitives/PaperPanel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardViewModel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardDesignReference",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../../core/content/CardCatalog",
+        "../primitives/PaperPanel",
+        "./CardViewModel"
+      ],
+      "dependencies": [
+        "assets/game/core/content/CardCatalog.ts",
+        "assets/game/presentation/primitives/PaperPanel.ts",
+        "assets/game/presentation/cards/CardViewModel.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/CardViewModel.ts",
+      "lines": 140,
+      "imports": [
+        {
+          "spec": "../../core/content/CardCatalog",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardDesignReference",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [
+        "../../core/content/CardCatalog"
+      ],
+      "dependencies": [
+        "assets/game/core/content/CardCatalog.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/HandPresentation.ts",
+      "lines": 105,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/SurvivalGame",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardInteraction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardPresentation",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./CardInteraction",
+        "./CardPresentation"
+      ],
+      "dependencies": [
+        "assets/game/presentation/cards/CardInteraction.ts",
+        "assets/game/presentation/cards/CardPresentation.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/InventoryGrid.ts",
+      "lines": 131,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../ui/UiState",
+          "typeOnly": true
+        },
+        {
+          "spec": "../ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./InventoryViewModel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./SelectableCard",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/ButtonAction",
+        "./InventoryViewModel",
+        "./SelectableCard"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/cards/InventoryViewModel.ts",
+        "assets/game/presentation/cards/SelectableCard.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/InventoryRowPresentation.ts",
+      "lines": 80,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/SurvivalGame",
+          "typeOnly": false
+        },
+        {
+          "spec": "../ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/content/CardCatalog",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/ButtonAction",
+        "../../core/content/CardCatalog"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/core/content/CardCatalog.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/InventoryViewModel.ts",
+      "lines": 71,
+      "imports": [
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/SurvivalGame",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/content/CardCatalog",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../../core/content/CardCatalog"
+      ],
+      "dependencies": [
+        "assets/game/core/content/CardCatalog.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/RewardChoice.ts",
+      "lines": 32,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/SurvivalGame",
+          "typeOnly": false
+        },
+        {
+          "spec": "../ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardPresentation",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/ButtonAction",
+        "./CardPresentation"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/cards/CardPresentation.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/RewardSelection.ts",
+      "lines": 61,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./SelectableCard",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/ButtonAction",
+        "./SelectableCard"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/cards/SelectableCard.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/cards/SelectableCard.ts",
+      "lines": 61,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/SurvivalGame",
+          "typeOnly": true
+        },
+        {
+          "spec": "../ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CardPresentation",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/ButtonAction",
+        "./CardPresentation"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/cards/CardPresentation.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/dev/EncounterPreview.ts",
+      "lines": 19,
+      "imports": [
+        {
+          "spec": "../../application/GameSession",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/effects/EffectPresentation.ts",
+      "lines": 24,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/effects/SceneAtmosphere.ts",
+      "lines": 84,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/GameDirector.ts",
+      "lines": 466,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../application/GameSession",
+          "typeOnly": false
+        },
+        {
+          "spec": "../core/content/CardCatalog",
+          "typeOnly": false
+        },
+        {
+          "spec": "../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../core/SurvivalGame",
+          "typeOnly": false
+        },
+        {
+          "spec": "../infrastructure/SaveRepository",
+          "typeOnly": false
+        },
+        {
+          "spec": "./actors/ActorPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./audio/GameAudio",
+          "typeOnly": false
+        },
+        {
+          "spec": "./cards/HandPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./GameRenderer",
+          "typeOnly": false
+        },
+        {
+          "spec": "./map/MapPointPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/StatusBar",
+          "typeOnly": false
+        },
+        {
+          "spec": "./effects/SceneAtmosphere",
+          "typeOnly": false
+        },
+        {
+          "spec": "./dev/EncounterPreview",
+          "typeOnly": false
+        },
+        {
+          "spec": "../core/content/GameScenario",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/UiActionRouter",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/UIEvents",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/UiState",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../application/GameSession",
+        "../core/content/CardCatalog",
+        "../infrastructure/SaveRepository",
+        "./actors/ActorPresentation",
+        "./audio/GameAudio",
+        "./cards/HandPresentation",
+        "./GameRenderer",
+        "./map/MapPointPresentation",
+        "./ui/ButtonAction",
+        "./ui/StatusBar",
+        "./effects/SceneAtmosphere",
+        "./dev/EncounterPreview",
+        "../core/content/GameScenario",
+        "./ui/UiActionRouter",
+        "./ui/UIEvents",
+        "./ui/UiState"
+      ],
+      "dependencies": [
+        "assets/game/application/GameSession.ts",
+        "assets/game/core/content/CardCatalog.ts",
+        "assets/game/infrastructure/SaveRepository.ts",
+        "assets/game/presentation/actors/ActorPresentation.ts",
+        "assets/game/presentation/audio/GameAudio.ts",
+        "assets/game/presentation/cards/HandPresentation.ts",
+        "assets/game/presentation/GameRenderer.ts",
+        "assets/game/presentation/map/MapPointPresentation.ts",
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/ui/StatusBar.ts",
+        "assets/game/presentation/effects/SceneAtmosphere.ts",
+        "assets/game/presentation/dev/EncounterPreview.ts",
+        "assets/game/core/content/GameScenario.ts",
+        "assets/game/presentation/ui/UiActionRouter.ts",
+        "assets/game/presentation/ui/UIEvents.ts",
+        "assets/game/presentation/ui/UiState.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/GameRenderer.ts",
+      "lines": 419,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../core/SurvivalGame",
+          "typeOnly": false
+        },
+        {
+          "spec": "./actors/ActorPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./cards/HandPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./cards/InventoryRowPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./cards/RewardChoice",
+          "typeOnly": false
+        },
+        {
+          "spec": "./map/MapPointPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/ButtonStyle",
+          "typeOnly": true
+        },
+        {
+          "spec": "./ui/UIProgress",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/UiState",
+          "typeOnly": true
+        },
+        {
+          "spec": "./ui/UIValue",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/StatusBar",
+          "typeOnly": false
+        },
+        {
+          "spec": "./cards/InventoryGrid",
+          "typeOnly": false
+        },
+        {
+          "spec": "./cards/RewardSelection",
+          "typeOnly": false
+        },
+        {
+          "spec": "./map/RouteMap",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/EntrySelection",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/ShelterSummaryModel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ui/RulesNoticeModel",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../core/SurvivalGame",
+        "./actors/ActorPresentation",
+        "./cards/InventoryRowPresentation",
+        "./cards/RewardChoice",
+        "./map/MapPointPresentation",
+        "./ui/ButtonAction",
+        "./ui/UIProgress",
+        "./ui/UIValue",
+        "./ui/StatusBar",
+        "./cards/InventoryGrid",
+        "./cards/RewardSelection",
+        "./map/RouteMap",
+        "./ui/EntrySelection",
+        "./ui/ShelterSummaryModel",
+        "./ui/RulesNoticeModel"
+      ],
+      "dependencies": [
+        "assets/game/core/SurvivalGame.ts",
+        "assets/game/presentation/actors/ActorPresentation.ts",
+        "assets/game/presentation/cards/InventoryRowPresentation.ts",
+        "assets/game/presentation/cards/RewardChoice.ts",
+        "assets/game/presentation/map/MapPointPresentation.ts",
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/ui/UIProgress.ts",
+        "assets/game/presentation/ui/UIValue.ts",
+        "assets/game/presentation/ui/StatusBar.ts",
+        "assets/game/presentation/cards/InventoryGrid.ts",
+        "assets/game/presentation/cards/RewardSelection.ts",
+        "assets/game/presentation/map/RouteMap.ts",
+        "assets/game/presentation/ui/EntrySelection.ts",
+        "assets/game/presentation/ui/ShelterSummaryModel.ts",
+        "assets/game/presentation/ui/RulesNoticeModel.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/map/MapPointPresentation.ts",
+      "lines": 50,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/SurvivalGame",
+          "typeOnly": false
+        },
+        {
+          "spec": "../primitives/ShapeGraphic",
+          "typeOnly": false
+        },
+        {
+          "spec": "../ui/ButtonAction",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../primitives/ShapeGraphic",
+        "../ui/ButtonAction"
+      ],
+      "dependencies": [
+        "assets/game/presentation/primitives/ShapeGraphic.ts",
+        "assets/game/presentation/ui/ButtonAction.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/map/RouteMap.ts",
+      "lines": 129,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RouteMapModel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RoutePoint",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/ButtonAction",
+        "./RouteMapModel",
+        "./RoutePoint"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/map/RouteMapModel.ts",
+        "assets/game/presentation/map/RoutePoint.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/map/RouteMapModel.ts",
+      "lines": 146,
+      "imports": [
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/content/GameScenario",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/map/RoutePoint.ts",
+      "lines": 159,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../ui/ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./RouteMapModel",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../ui/ButtonAction"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonAction.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/platform/WebViewport.ts",
+      "lines": 25,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/primitives/ContactShadow.ts",
+      "lines": 51,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/primitives/DeckStackGraphic.ts",
+      "lines": 65,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/primitives/FieldPanel.ts",
+      "lines": 61,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/primitives/PaperPanel.ts",
+      "lines": 50,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/primitives/SceneShade.ts",
+      "lines": 58,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/primitives/ShapeGraphic.ts",
+      "lines": 87,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "cc/env",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "cc/env"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/ButtonAction.ts",
+      "lines": 43,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./UIEvents",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonStyle",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./UIEvents",
+        "./ButtonPresentation"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/UIEvents.ts",
+        "assets/game/presentation/ui/ButtonPresentation.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/ButtonDesignReview.ts",
+      "lines": 76,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./UIEvents",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonFocusGroup",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./UIEvents",
+        "./ButtonAction",
+        "./ButtonPresentation",
+        "./ButtonFocusGroup"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/UIEvents.ts",
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/ui/ButtonPresentation.ts",
+        "assets/game/presentation/ui/ButtonFocusGroup.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/ButtonFocusGroup.ts",
+      "lines": 213,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonPresentation",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./ButtonPresentation"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonPresentation.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/ButtonPresentation.ts",
+      "lines": 238,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../primitives/PaperPanel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonStyle",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../primitives/PaperPanel",
+        "./ButtonStyle"
+      ],
+      "dependencies": [
+        "assets/game/presentation/primitives/PaperPanel.ts",
+        "assets/game/presentation/ui/ButtonStyle.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/ButtonStyle.ts",
+      "lines": 52,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/CommonPanel.ts",
+      "lines": 171,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../primitives/PaperPanel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./PanelLayout",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../primitives/PaperPanel",
+        "./ButtonPresentation",
+        "./PanelLayout"
+      ],
+      "dependencies": [
+        "assets/game/presentation/primitives/PaperPanel.ts",
+        "assets/game/presentation/ui/ButtonPresentation.ts",
+        "assets/game/presentation/ui/PanelLayout.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/EntrySelection.ts",
+      "lines": 29,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/content/EntryTiers",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonAction",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../../core/content/EntryTiers",
+        "./ButtonAction"
+      ],
+      "dependencies": [
+        "assets/game/core/content/EntryTiers.ts",
+        "assets/game/presentation/ui/ButtonAction.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/ModalPanel.ts",
+      "lines": 103,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonFocusGroup",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CommonPanel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./UIEvents",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./ButtonFocusGroup",
+        "./CommonPanel",
+        "./UIEvents"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/ButtonFocusGroup.ts",
+        "assets/game/presentation/ui/CommonPanel.ts",
+        "assets/game/presentation/ui/UIEvents.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/PanelDesignReview.ts",
+      "lines": 122,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./UIEvents",
+          "typeOnly": false
+        },
+        {
+          "spec": "./CommonPanel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonFocusGroup",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./UIEvents",
+        "./CommonPanel",
+        "./ButtonAction",
+        "./ButtonFocusGroup"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/UIEvents.ts",
+        "assets/game/presentation/ui/CommonPanel.ts",
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/ui/ButtonFocusGroup.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/PanelLayout.ts",
+      "lines": 64,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/RulesNoticeModel.ts",
+      "lines": 21,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/ShelterSummaryModel.ts",
+      "lines": 43,
+      "imports": [
+        {
+          "spec": "../../core/GameReadModel",
+          "typeOnly": true
+        }
+      ],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/StatusBar.ts",
+      "lines": 148,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../primitives/PaperPanel",
+          "typeOnly": false
+        },
+        {
+          "spec": "../primitives/ShapeGraphic",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonPresentation",
+          "typeOnly": false
+        },
+        {
+          "spec": "./UIProgress",
+          "typeOnly": false
+        },
+        {
+          "spec": "./StatusBarModel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./StatusBarLayout",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../primitives/PaperPanel",
+        "../primitives/ShapeGraphic",
+        "./ButtonAction",
+        "./ButtonPresentation",
+        "./UIProgress",
+        "./StatusBarModel",
+        "./StatusBarLayout"
+      ],
+      "dependencies": [
+        "assets/game/presentation/primitives/PaperPanel.ts",
+        "assets/game/presentation/primitives/ShapeGraphic.ts",
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/ui/ButtonPresentation.ts",
+        "assets/game/presentation/ui/UIProgress.ts",
+        "assets/game/presentation/ui/StatusBarModel.ts",
+        "assets/game/presentation/ui/StatusBarLayout.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/StatusBarDesignReview.ts",
+      "lines": 138,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "./StatusBar",
+          "typeOnly": false
+        },
+        {
+          "spec": "./StatusBarModel",
+          "typeOnly": false
+        },
+        {
+          "spec": "./UIEvents",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonAction",
+          "typeOnly": false
+        },
+        {
+          "spec": "./ButtonFocusGroup",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "./StatusBar",
+        "./StatusBarModel",
+        "./UIEvents",
+        "./ButtonAction",
+        "./ButtonFocusGroup"
+      ],
+      "dependencies": [
+        "assets/game/presentation/ui/StatusBar.ts",
+        "assets/game/presentation/ui/StatusBarModel.ts",
+        "assets/game/presentation/ui/UIEvents.ts",
+        "assets/game/presentation/ui/ButtonAction.ts",
+        "assets/game/presentation/ui/ButtonFocusGroup.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/StatusBarLayout.ts",
+      "lines": 70,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/StatusBarModel.ts",
+      "lines": 77,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/UiActionRouter.ts",
+      "lines": 236,
+      "imports": [
+        {
+          "spec": "../../application/GameSession",
+          "typeOnly": false
+        },
+        {
+          "spec": "../../core/SurvivalGame",
+          "typeOnly": true
+        },
+        {
+          "spec": "./UIEvents",
+          "typeOnly": true
+        },
+        {
+          "spec": "./UiState",
+          "typeOnly": true
+        },
+        {
+          "spec": "../../core/content/EntryTiers",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "../../core/content/EntryTiers"
+      ],
+      "dependencies": [
+        "assets/game/core/content/EntryTiers.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/UIEvents.ts",
+      "lines": 29,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/UIProgress.ts",
+      "lines": 31,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../primitives/ShapeGraphic",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../primitives/ShapeGraphic"
+      ],
+      "dependencies": [
+        "assets/game/presentation/primitives/ShapeGraphic.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/UiState.ts",
+      "lines": 51,
+      "imports": [],
+      "runtimeImports": [],
+      "dependencies": []
+    },
+    {
+      "file": "assets/game/presentation/ui/UIValue.ts",
+      "lines": 27,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        },
+        {
+          "spec": "../primitives/ShapeGraphic",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc",
+        "../primitives/ShapeGraphic"
+      ],
+      "dependencies": [
+        "assets/game/presentation/primitives/ShapeGraphic.ts"
+      ]
+    },
+    {
+      "file": "assets/game/presentation/ui/UIVisibility.ts",
+      "lines": 11,
+      "imports": [
+        {
+          "spec": "cc",
+          "typeOnly": false
+        }
+      ],
+      "runtimeImports": [
+        "cc"
+      ],
+      "dependencies": []
+    }
+  ],
+  "scope": "72 TypeScript source files in assets/game; static relative imports after ordinary TypeScript CommonJS transpilation; native asset/dynamic dependencies excluded",
+  "status": "layered-with-known-coupling",
+  "implementationChanged": false,
+  "findings": [
+    {
+      "id": "ARCH-01",
+      "area": "Named screen and popup bindings",
+      "code": [
+        "assets/game/presentation/GameRenderer.ts",
+        "assets/game/presentation/GameDirector.ts",
+        "assets/game/core/state/GameState.ts",
+        "assets/game/core/RulesTypes.ts"
+      ],
+      "status": "recommendation-not-implemented"
+    },
+    {
+      "id": "ARCH-02",
+      "area": "Fixed enemy/node/route content types",
+      "code": [
+        "assets/game/core/content/GameScenario.ts",
+        "assets/game/core/RulesTypes.ts",
+        "assets/game/core/systems/CombatRules.ts",
+        "assets/game/core/state/GameState.ts"
+      ],
+      "status": "recommendation-not-implemented"
+    },
+    {
+      "id": "ARCH-03",
+      "area": "Broad shared mutable RuleState and central presentation coordination",
+      "code": [
+        "assets/game/core/systems/RuleContext.ts",
+        "assets/game/presentation/GameDirector.ts",
+        "assets/game/presentation/GameRenderer.ts"
+      ],
+      "status": "recommendation-not-implemented"
+    },
+    {
+      "id": "ARCH-04",
+      "area": "Automated dependency/required-binding gates",
+      "status": "recommendation-not-implemented"
+    }
+  ],
+  "verification": {
+    "testsRerun": false,
+    "buildRerun": false,
+    "priorEvidence": "docs/quality-fixes-verification.json",
+    "method": "Source review, TypeScript AST import inventory and runtime require graph DFS; no cc or prohibited imports found in inspected pure layers"
+  },
+  "sourceHashes": {
+    "assets/game/application/GameSession.ts": "8923ab14842dc1df834bfbb1501e3966cfdb9c5ea629f886bc8b193fc2b5b378",
+    "assets/game/core/content/CardCatalog.ts": "773fb59a1d088d04397156529a902af854e6cb0a47b5d343d8dd4421ede0850a",
+    "assets/game/core/content/ContentRegistry.ts": "f3eec8c50e670f1c94902fedb7f5f7e21d8891be54de791c04b8463d73a83cb4",
+    "assets/game/core/content/EntryTiers.ts": "aa502b312089e736946cab23293a1a0af46f805b015c7cfe0e0f6321bc5ac784",
+    "assets/game/core/content/GameScenario.ts": "ea17c09eebe5330d79daed1a7eaf11e42ebbaccc83f27b6c05561c42d46ff975",
+    "assets/game/core/GameReadModel.ts": "fb79f652797a8b8c8f71a4ea9e1ae787d00832e2360bb9aed811d27125838ea3",
+    "assets/game/core/Random.ts": "155494ca841ab088a38ba80d45c31894eaab261630c14429b2a5b32343bcbd89",
+    "assets/game/core/RulesTypes.ts": "a646180764e7f05e1c020b84097466d033d1cbdfa4e03e15ae2a26a4cdd5c0cf",
+    "assets/game/core/state/GameState.ts": "3cc77ba7465243d1b4aa1c162798e973f05bf9ad4f7fbd1438636793b80fe5b4",
+    "assets/game/core/SurvivalGame.ts": "165b0c55dc756afd5809b2390107fd7c3e5db466ecd11d404bcf378a01fcb0c9",
+    "assets/game/core/systems/CombatRules.ts": "8ca58c99d50db57ef7505fb88fbfdf9870d6e9364d59a00f87dabf93d40a56d7",
+    "assets/game/core/systems/ExplorationRules.ts": "51a74d78301754e0b76663d018b84c8094d950e3b9e60a2a95fce4867f05de56",
+    "assets/game/core/systems/InventoryRules.ts": "c129a71e6b03a5e73281c7747443ad23764fb3e693b53f7b667aef5925c6063b",
+    "assets/game/core/systems/RewardRules.ts": "1f878f91aa8a53bf52fc443e7071a7948d9f448e418d10311cc846822afe7e0e",
+    "assets/game/core/systems/RuleContext.ts": "2014584730d899e18dd9214b075adcdc2acb063d457356d8fb534e65bcba1551",
+    "assets/game/core/systems/SettlementRules.ts": "75ff912ef97720bf5ddeb469320ed54172cd7e50eadf03b2502a2baae7ab690c",
+    "assets/game/infrastructure/SaveRepository.ts": "22269ba3bbb00fe3f833f07c4e55c78b3a613f9e12f7e1263ffc9ea4a989ff69",
+    "assets/game/presentation/actors/ActorMotionReview.ts": "e6716186f832ed0622e11c2bb9e87367cb70dbeb0c8cfd1d806e873320d337d1",
+    "assets/game/presentation/actors/ActorPresentation.ts": "7784e493f8586da752ca59ffcf9f656abf31a8cd7edfd96b614ade9bb12ac245",
+    "assets/game/presentation/actors/SpriteActorMotion.ts": "fc7073a86075df0780b174f11733d9d42bb7728063a448004a335edecb7d21f9",
+    "assets/game/presentation/actors/StableActorSprite.ts": "17b13e4208a4fc9fe321eeade4acd844ec28f057aa8e14016ec4b2c0066eb0e3",
+    "assets/game/presentation/audio/GameAudio.ts": "11c44f30686c23516d26a8c07f45486e1ce4fd27226f69668aa75f22bef9674f",
+    "assets/game/presentation/cards/CardDesignReference.ts": "9f397af492f97a2b39f881fe11291ce8c8de9657bfbfae48301a472265622105",
+    "assets/game/presentation/cards/CardDesignReview.ts": "0d5858d2ce9d3d0ba1d5ce9cb239e15662b79d148f8c8210a7797ddfc281ab40",
+    "assets/game/presentation/cards/CardInteraction.ts": "80358e9ee3b6f8dc2d40bd897e784ff4203920b1f207bf3bd5077d008fa50d95",
+    "assets/game/presentation/cards/CardPresentation.ts": "162cfd1eb0dd8dc569390f9b09d91e76b207ec3282642c87b0926e13a72993bf",
+    "assets/game/presentation/cards/CardViewModel.ts": "b28aa8aa5ca517b438fc400f2774fca99e65a787b7dd176b771884909dfcf413",
+    "assets/game/presentation/cards/HandPresentation.ts": "74c21d7e9db269574c4dcbb203092e1ad6827f58d5a85e3cb6cc1f4a497026b5",
+    "assets/game/presentation/cards/InventoryGrid.ts": "42267043ea5a4da7c9401152005822b463edeffb9105b3d1d687ed6a711bec86",
+    "assets/game/presentation/cards/InventoryRowPresentation.ts": "1778ab9f0fa46f4302e2298bccd1c5246bf60a20d9807fd43b926d4d06398329",
+    "assets/game/presentation/cards/InventoryViewModel.ts": "f0ff07d3337aac80a3153dbb972a94d1466431632cfe540b624fcd39e03117f4",
+    "assets/game/presentation/cards/RewardChoice.ts": "f76c78550d3419e9b964ff24c9ea97b9f3da6bdc888f54671cd33cd3bc9e17e9",
+    "assets/game/presentation/cards/RewardSelection.ts": "e3ee34cd05ef46e5a8a23961ef98528557b6e7e634ca2601194b0c2e98709969",
+    "assets/game/presentation/cards/SelectableCard.ts": "44b88977b23800008d0a5a26753bfef592670b8a44dd60c246f4a5f746afc44e",
+    "assets/game/presentation/dev/EncounterPreview.ts": "d93d72dfe83090b98393e5cad09e81095981cba3ddb0d76e75f0392ff83d4535",
+    "assets/game/presentation/effects/EffectPresentation.ts": "cd067a77104fa4f3b1cad727def751f8e2eef03054c9ff917194e95e38d02bf6",
+    "assets/game/presentation/effects/SceneAtmosphere.ts": "cfbc41191ad6b6cef49f1b8ea8af18ab85e5d8dcde9d66be35cbb72ec3f7c7bb",
+    "assets/game/presentation/GameDirector.ts": "50d5143d80d71c308efa9d0da593dd973ea4806f988330a0e9f63d69a9860aa1",
+    "assets/game/presentation/GameRenderer.ts": "64105f7434e993de4af34d3788c1de8616c7b6e670341fcb985336343898f01c",
+    "assets/game/presentation/map/MapPointPresentation.ts": "77a8861b22bfd54f303b78425c274449858ecf2877989f8bdfe60a9582c115ec",
+    "assets/game/presentation/map/RouteMap.ts": "c8439a260db0ca07eea49563342fca7d5ca6eb7c4328dafac01b0f08a10d01ca",
+    "assets/game/presentation/map/RouteMapModel.ts": "054f2b119cbfcbc62f7b30b8ef1405a4c0f9ad9fdfd3ced646561a95dadaca32",
+    "assets/game/presentation/map/RoutePoint.ts": "86cb09a562af22448c738d69713a156ff6f9e18a4b9f91442ba7aa4dd5bcebee",
+    "assets/game/presentation/platform/WebViewport.ts": "70e299dded6719b295acd855fed3cc9375fd3c4eb2384b6e1f08490a3d6023e4",
+    "assets/game/presentation/primitives/ContactShadow.ts": "97621af24c18fdcb0909a73577707c5c670a683ac4099b14155134804791df59",
+    "assets/game/presentation/primitives/DeckStackGraphic.ts": "3c492290478d0236b9d7e4ebaed11a1e3f262488d7aac200ea9a66cb12678d7d",
+    "assets/game/presentation/primitives/FieldPanel.ts": "d7993a013392bf28aab4f817e78cc21d159774b829d384a31b6472cf3863b45e",
+    "assets/game/presentation/primitives/PaperPanel.ts": "890c064830c279dec051d321c67170ce7797065bf0b1d1f646e34814c9806eb3",
+    "assets/game/presentation/primitives/SceneShade.ts": "57e776a87530e46763262a290db867d57888f8683f1027fce1e68911d44e43d4",
+    "assets/game/presentation/primitives/ShapeGraphic.ts": "4cfa4fd6d0d5410a3ca415f5280d28ab801acc2c7f9a78cd52fead82549f53b3",
+    "assets/game/presentation/ui/ButtonAction.ts": "9550c9e0584460e9fca98ec8141d778402af531ac317ed4e176456c98e8920c7",
+    "assets/game/presentation/ui/ButtonDesignReview.ts": "b3ad51cce3e73285dcf2a9a4467e213b0bbddedf0cb19aca05400f7e04d32f29",
+    "assets/game/presentation/ui/ButtonFocusGroup.ts": "f233def9bb2ee68c83a9329696624177b16fbf54504a5ca788ba94e7d53d03d7",
+    "assets/game/presentation/ui/ButtonPresentation.ts": "9d6a65b6af0e14250babbfe4975d060324c0e8c8c19432850f0734dd59978320",
+    "assets/game/presentation/ui/ButtonStyle.ts": "9e45e9c7d146f5d7eca6f783ab065d395c2fb078e68b291e55cd6215ee1d97f9",
+    "assets/game/presentation/ui/CommonPanel.ts": "1c857ca87ddb5ad88c02c554650112422ed6d9239f0cb54d3ac67c52af9d3843",
+    "assets/game/presentation/ui/EntrySelection.ts": "d21e9440e235890d23ccdf765f85989d0356104c741e1c54f8c946ef7e423251",
+    "assets/game/presentation/ui/ModalPanel.ts": "3f6acd591ae5b61a24e9797163e9bb5524f3ed1d74f78e9060b1bd74e1ed35ce",
+    "assets/game/presentation/ui/PanelDesignReview.ts": "c1847546b71aa3522093da8d80449aafd565e54f25a7690efa19c5b4d1a46936",
+    "assets/game/presentation/ui/PanelLayout.ts": "bb631b9897b2a550807c2a6d4be751edfa97dba336141590b34b37b806cbc69a",
+    "assets/game/presentation/ui/RulesNoticeModel.ts": "b19b0518c45a6b155b878ec3faa9088406f87871c94f2851a43ecc82d04b97c1",
+    "assets/game/presentation/ui/ShelterSummaryModel.ts": "4515246a3325e5c8fccc41c234964ecc105eed0bf30a541e56c0d48e7836deff",
+    "assets/game/presentation/ui/StatusBar.ts": "fc3e4bd996a016161fc8e25827169165154dbd8a66cf41d4c90c6772683b2c10",
+    "assets/game/presentation/ui/StatusBarDesignReview.ts": "52d63aa61e7ca8b38f8734626342d27eac2eb234427db88745f276c5edd5d903",
+    "assets/game/presentation/ui/StatusBarLayout.ts": "a9d7f785ffbd89cf499115cade55ec6958e5488b25dfa644ad74253348c641e1",
+    "assets/game/presentation/ui/StatusBarModel.ts": "7bd6885cd174de8cb3770a3a94ba6c78920142034f80d4093ccefe542f2003cd",
+    "assets/game/presentation/ui/UiActionRouter.ts": "620105d4ec4f97129e6f375fd6462f7b09cefa3e0e8ef7e0f899db4e7e05b260",
+    "assets/game/presentation/ui/UIEvents.ts": "d591114d4a01670a30603acd14dc53a12c21097560cb318dc587b1a1b6fa9bed",
+    "assets/game/presentation/ui/UIProgress.ts": "cf239baf649bfc3fa869c18713862676930aa806e1f668dc5f432ffcd3df1fb7",
+    "assets/game/presentation/ui/UiState.ts": "65eb99c4e1e540d141bbc94fdb9da306acd6c299a200f4016946d70ca66c8054",
+    "assets/game/presentation/ui/UIValue.ts": "06de962f5336507a375d9297f3333d669eb4279156c5aaa31186971a1dc664ea",
+    "assets/game/presentation/ui/UIVisibility.ts": "3ca63456089ae5580b9b25f269af392ee4ac17e4992309045d8e3d36b06ddbe7"
+  },
+  "followUp": {
+    "date": "2026-11-16",
+    "status": "four-issues-implemented",
+    "record": "docs/module-refactor-verification.json",
+    "note": "This audit is the pre-refactor snapshot; consult follow-up for current source, named bindings and state permissions."
+  }
+}

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>frames</key>
+    <dict>
+      <key>head</key>
+      <dict>
+        <key>frame</key>
+        <string>{{26,177},{304,258}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{304,258}</string>
+      </dict>
+      <key>torso</key>
+      <dict>
+        <key>frame</key>
+        <string>{{399,130},{220,399}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{220,399}</string>
+      </dict>
+      <key>poncho</key>
+      <dict>
+        <key>frame</key>
+        <string>{{678,125},{394,422}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{394,422}</string>
+      </dict>
+      <key>backpack</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1113,159},{290,320}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{290,320}</string>
+      </dict>
+      <key>hips</key>
+      <dict>
+        <key>frame</key>
+        <string>{{52,682},{286,279}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{286,279}</string>
+      </dict>
+      <key>weapon</key>
+      <dict>
+        <key>frame</key>
+        <string>{{358,762},{393,96}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{393,96}</string>
+      </dict>
+      <key>rear-boot</key>
+      <dict>
+        <key>frame</key>
+        <string>{{787,684},{246,251}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{246,251}</string>
+      </dict>
+      <key>front-boot</key>
+      <dict>
+        <key>frame</key>
+        <string>{{1148,683},{241,246}}</string>
+        <key>offset</key>
+        <string>{0,0}</string>
+        <key>rotated</key>
+        <false />
+        <key>sourceSize</key>
+        <string>{241,246}</string>
+      </dict>
+    </dict>
+    <key>metadata</key>
+    <dict>
+      <key>format</key>
+      <integer>2</integer>
+      <key>textureFileName</key>
+      <string>survivor-body.png</string>
+      <key>realTextureFileName</key>
+      <string>survivor-body.png</string>
+      <key>size</key>
+      <string>{1448,1086}</string>
+    </dict>
+  </dict>
+</plist>

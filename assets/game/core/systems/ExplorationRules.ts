@@ -1,31 +1,30 @@
 import { CardSet } from '../content/ContentRegistry';
-import { GameScenario } from '../content/GameScenario';
+import { GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
 import { Random } from '../Random';
-import { ActionResult, NODE_NAMES, NodeKind, Route } from '../RulesTypes';
+import { ActionResult, NodeKind, Route } from '../RulesTypes';
 import { CombatRules } from './CombatRules';
 import { InventoryRules } from './InventoryRules';
-import { RuleFeedback, RuleState } from './RuleContext';
-import { SettlementRules } from './SettlementRules';
+import { RuleFeedback, ExplorationState } from './RuleContext';
+import { ShelterRules } from './ShelterRules';
 import { EntryTierId, entryTier, affordableEntryTier } from '../content/EntryTiers';
 export class ExplorationRules {
     constructor(
-        private readonly state: RuleState,
+        private readonly state: ExplorationState,
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
         private readonly inventory: InventoryRules,
         private readonly combat: CombatRules,
-        private readonly settlement: SettlementRules,
+        private readonly shelter: ShelterRules,
         private readonly random: Random,
         private readonly scenario: GameScenario,
         private readonly fail: (reason: string) => void
     ) {}
     get currentNode(): NodeKind | 'choice' | 'return' {
-        if (!this.state.fixedDone) return 'fixed';
-        if (!this.state.route) return 'choice';
-        return this.scenario.routes[this.state.route][this.state.pathIndex] ?? 'return';
+        return currentNodeId(this.state, this.scenario);
     }
     start(tierId?: EntryTierId): ActionResult {
-        if (this.state.phase !== 'journal') return this.feedback.result(false, '当前不能出发。');
+        if (this.state.phase !== 'journal' && this.state.phase !== 'shelter')
+            return this.feedback.result(false, '当前不能出发。');
         if (this.scenario.battleResource === 'stamina') {
             const tier = entryTier(tierId ?? affordableEntryTier(this.state.supplies));
             if (!tier) return this.feedback.result(false, '进入档位不存在。');
@@ -37,6 +36,15 @@ export class ExplorationRules {
                 `${tier.name}档出发：支付 ${tier.cost} 物资，每回合体力 ${tier.stamina}。`
             );
         }
+        this.state.route = null;
+        this.state.fixedDone = false;
+        this.state.pathIndex = 0;
+        this.state.visited = [];
+        this.state.battle = null;
+        this.state.rewards = null;
+        this.state.settlement = null;
+        this.state.failureReason = '';
+        this.state.returnElapsed = 0;
         this.state.phase = 'map';
         return this.feedback.result(
             true,
@@ -48,9 +56,10 @@ export class ExplorationRules {
     chooseRoute(route: Route): ActionResult {
         if (this.state.phase !== 'map' || this.currentNode !== 'choice')
             return this.feedback.result(false, '请先完成固定搜刮。');
+        if (!hasId(this.scenario.routes, route)) return this.feedback.result(false, '路线不存在。');
         this.state.route = route;
         this.feedback.log(
-            `选择路线 ${route}：${route === 'A' ? '先战斗，后搜刮' : '先搜刮，后战斗'}。`
+            `选择路线 ${route}：${this.scenario.routeDescriptions?.[route] ?? this.scenario.routes[route].map((id) => nodeTitle(this.scenario, id)).join(' → ')}。`
         );
         return this.feedback.result(true, `已选择路线 ${route}。`);
     }
@@ -59,8 +68,10 @@ export class ExplorationRules {
         const node = this.currentNode;
         if (node === 'choice') return this.feedback.result(false, '选择一条路线。');
         if (node === 'return') return this.feedback.result(false, '正在返回避难所。');
-        if (node === 'fixed' || node === 'scavenge') {
-            const fee = this.scenario.scavengeFees?.[node] ?? (node === 'fixed' ? 2 : 3);
+        const definition = this.scenario.nodes[node];
+        if (!definition) return this.feedback.result(false, '地点配置不存在。');
+        if (definition.type === 'scavenge') {
+            const fee = this.scenario.scavengeFees?.[node] ?? definition.cost;
             if (this.state.supplies < fee)
                 return this.feedback.result(
                     false,
@@ -74,27 +85,34 @@ export class ExplorationRules {
                     : this.content.rewardPool;
             this.state.rewards = {
                 source: node,
-                supplies: node === 'fixed' ? 4 : this.random.int(4, 6),
+                supplies:
+                    definition.supplies[0] === definition.supplies[1]
+                        ? definition.supplies[0]
+                        : this.random.int(definition.supplies[0], definition.supplies[1]),
                 cards: [
-                    node === 'fixed'
+                    definition.cardReward === 'fixed'
                         ? this.content.catalog.fixedReward
                         : pool[this.random.int(0, pool.length - 1)],
                 ],
                 supplyTaken: false,
                 cardTaken: false,
             };
-            this.feedback.log(`${NODE_NAMES[node]}：支付 ${fee} 点物资。奖励需要主动领取。`);
-        } else if (node === 'rest') {
+            this.feedback.log(
+                `${nodeTitle(this.scenario, node)}：支付 ${fee} 点物资。奖励需要主动领取。`
+            );
+        } else if (definition.type === 'rest') {
             this.state.phase = 'rest';
-            const restored = this.state.critical ? 0 : Math.min(2, 10 - this.state.armor);
+            const restored = this.state.critical
+                ? 0
+                : Math.min(definition.restoreArmor, 10 - this.state.armor);
             this.state.armor += restored;
             this.feedback.log(
                 this.state.critical
                     ? '感染临界，营地无法恢复护甲。'
                     : `进入营地，恢复 ${restored} 点护甲。`
             );
-        } else this.combat.startBattle(node);
-        return this.feedback.result(true, `进入${NODE_NAMES[node]}。`);
+        } else this.combat.startBattle(definition.enemyId);
+        return this.feedback.result(true, `进入${nodeTitle(this.scenario, node)}。`);
     }
     finishRest(): ActionResult {
         if (this.state.phase !== 'rest') return this.feedback.result(false, '当前不在营地。');
@@ -109,7 +127,7 @@ export class ExplorationRules {
             )
         )
             return this.feedback.result(false, '至少选择一张能够造成伤害的牌再出发。');
-        this.state.visited.push('rest');
+        this.state.visited.push(this.currentNode);
         this.state.pathIndex++;
         this.state.phase = 'map';
         if (this.scenario.battleResource !== 'stamina' && this.state.supplies === 0)
@@ -119,6 +137,6 @@ export class ExplorationRules {
     advanceTime(seconds: number): void {
         if (this.state.phase !== 'map' || this.currentNode !== 'return') return;
         this.state.returnElapsed += seconds;
-        if (this.state.returnElapsed >= 0.8) this.settlement.returnToShelter();
+        if (this.state.returnElapsed >= 0.8) this.shelter.returnToShelter();
     }
 }

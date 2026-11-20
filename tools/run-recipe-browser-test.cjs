@@ -91,7 +91,8 @@ async function game(page, origin) {
         await phase('rewards');
         const candidate = await page.evaluate(() => {
             const controller = cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');
-            const card = controller.screens[3].getComponentsInChildren('CardPresentation').find((card) => card.kind === 'wood_stick');
+            const rewardScreen = controller.scene.screens.rewards;
+            const card = rewardScreen.getComponentsInChildren('CardPresentation').find((card) => card.kind === 'wood_stick');
             return card?.inspect().keywords;
         });
         assert.ok(candidate?.includes('已有搭配 · 缺此材料'), JSON.stringify(candidate));
@@ -122,7 +123,11 @@ async function game(page, origin) {
     await fixed();
     await click('route-B');
     await click('enter-scavenge');
-    await endUnclaimed();
+    await click('claim-supplies');
+    await click('reward-select-0');
+    await click('claim-card-0');
+    await click('rewards-done');
+    assert.ok((await state()).cards.some(({ kind }) => kind === 'cloth_supplies'));
     await click('enter-enemy1');
     await phase('battle');
     const before = await state();
@@ -166,6 +171,46 @@ async function game(page, origin) {
     assert.equal((await snapshot()).canUndoSynthesis, false);
     assert.equal((await state()).cards.some(({ kind }) => kind === 'long_spear'), true);
 
+    await page.keyboard.press('Escape');
+    await click('rest-done');
+    await click('enter-enemy2');
+    await phase('battle');
+    for (let turn = 0; turn < 6 && (await snapshot()).phase === 'battle'; turn++) {
+        const { hand } = await snapshot();
+        for (const { id, kind, blocked } of hand) {
+            if ((await snapshot()).phase !== 'battle') break;
+            if (blocked || !['long_spear', 'spare_parts', 'attack'].includes(kind)) continue;
+            await click('card-' + id);
+            await click('enemy-target');
+        }
+        if ((await snapshot()).phase === 'battle') await click('end-turn');
+    }
+    await phase('rewards');
+    await click('claim-supplies');
+    await click('rewards-done');
+    await click('modal-confirm');
+    await phase('journal');
+    const returned = await state();
+    assert.equal(returned.day, 2);
+    assert.ok(returned.journalEntries.some(({ id, read }) => id === 'street-cleared' && !read));
+    assert.deepEqual(returned.storedSupplies, { cloth_supplies: 1 });
+    assert.deepEqual(returned.cards, []);
+    await click('journal-start');
+    await phase('shelter');
+    await page.screenshot({ path: path.join(output, 'shelter-exchange.png') });
+    await click('shelter-repair');
+    assert.equal((await state()).supplies, returned.supplies + 3);
+    await click('shelter-done');
+    await click('entry-tier-emergency');
+    await click('entry-confirm');
+    await phase('map');
+    const next = await state();
+    assert.equal(next.day, returned.day);
+    assert.equal(next.supplies, returned.supplies + 3);
+    assert.equal(next.armor, 10);
+    assert.ok(next.cards.some(({ kind }) => kind === 'knife'));
+    assert.equal(next.cards.some(({ kind }) => kind === 'long_spear'), false);
+
     await page.goto(`${lockedURL}&mapCraft=1`);
     await start();
     await fixed();
@@ -202,7 +247,7 @@ async function run() {
         console.log('Editor: recipe form, tree, validation, persistence, narrow layout and map test entry passed.');
         await game(page, origin);
         assert.deepEqual(errors, []);
-        console.log('Game: locked map, battle modal, material hint, camp chaining, one undo and unlocked map passed.');
+        console.log('Game: locked and unlocked map, camp synthesis, one undo, return journal, supply exchange and fresh departure passed.');
     } finally {
         await browser?.close();
         if (server.listening) await new Promise((resolve) => server.close(resolve));

@@ -20,7 +20,7 @@ export class MapPointPresentation extends Component {
     refresh(game: GameReadModel): void {
         const kind = this.nodeKind as NodeKind,
             branch = this.branch as Route | '';
-        this.node.active = kind === 'fixed' || game.fixedDone;
+        this.node.active = kind === game.scenario.fixedNodeId || game.fixedDone;
         const available = game.currentNode === kind && (!branch || game.route === branch),
             visited = game.visited.indexOf(kind) >= 0 && (!branch || game.route === branch),
             excluded = branch && game.route && game.route !== branch;
@@ -32,7 +32,7 @@ export class MapPointPresentation extends Component {
                   ? '点击进入'
                   : excluded
                     ? '另一条路线'
-                    : kind === 'rest'
+                    : game.scenario.nodes[kind]?.type === 'rest'
                       ? '恢复 / 整理 / 丢弃现金'
                       : '待探索';
         if (this.plate) {

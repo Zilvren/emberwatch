@@ -1,0 +1,22 @@
+{
+  "project": "The end",
+  "date": "2026-11-16",
+  "status": "read-only-architecture-assessment-stored-and-read-back",
+  "implementationChanged": false,
+  "documents": [
+    {
+      "file": "docs/architecture.md",
+      "uri": "viking://~/resources/projects/the-end/docs/architecture.md",
+      "sha256": "9c06d5f60a78bfdce1d677792785b7e057e5ec34ef989847a9106320da622616",
+      "readBackVerified": true
+    },
+    {
+      "file": "docs/architecture-audit.json",
+      "uri": "viking://~/resources/projects/the-end/docs/architecture-audit.json",
+      "sha256": "851faa46dc11c279505790be25f2d7ed359385777aba0957b70517da8c8efddd",
+      "readBackVerified": true
+    }
+  ],
+  "semanticIndexing": "Background completion not checked",
+  "self": "viking://~/resources/projects/the-end/docs/architecture-audit-sync.json"
+}

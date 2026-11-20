@@ -101,10 +101,13 @@
     "_components": [
       {
         "__id__": 455
+      },
+      {
+        "__id__": 457
       }
     ],
     "_prefab": {
-      "__id__": 457
+      "__id__": 459
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -10616,6 +10619,25 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "378pOzoslND7/8tiy8Umua"
+  },
+  {
+    "__type__": "2e9c2asKOhOJYTuMw1uMxMI",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 458
+    },
+    "key": "battle",
+    "_id": "42bc9ufhz342EOlJWIfk4RP"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "d766f+Aquh6Y47dry0NyFQ0"
   },
   {
     "__type__": "cc.PrefabInfo",
