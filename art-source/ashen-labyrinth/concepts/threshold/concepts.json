@@ -1,0 +1,144 @@
+{
+  "project": "The end",
+  "date": "2026-11-19",
+  "title": "焦土迷宫人物与入口概念图",
+  "status": {
+    "faces": "用户指定了两位角色各自采用的半幅特写。",
+    "scene": "已按指定原图合成并核对修改范围。",
+    "concepts": "人物全身与独立背景为本轮概念稿。"
+  },
+  "requirements": {
+    "version": "v0.7",
+    "markdown": "docs/designs/ashen-labyrinth-art-brief.md",
+    "word": "docs/designs/焦土迷宫美术设计需求.docx",
+    "markdownSha256": "e49cb8c4af41bc07e1f58dd421a27122741c3ec36810e1fc8ec9d5cae63c646c",
+    "wordSha256": "6f3cafa5f1cdd7dc7f858fb792da2c139272a5750fe0c5413da20de3d78e0811",
+    "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-art-brief.md",
+    "wordArchive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-art-brief-word"
+  },
+  "selections": [
+    {
+      "role": "守门人",
+      "choice": "第一张附件的右半幅",
+      "file": "art-source/ashen-labyrinth/concepts/threshold/selection/keeper-reference.png",
+      "attachment": "codex-clipboard-e0fe3ca8-831b-41ec-b145-666d36d240fd.png",
+      "sha256": "cd38f2c05176f1a0ce95d578788c0f368712855ffd3d8deb4b4b95ba18408485",
+      "xywh": [
+        887,
+        0,
+        887,
+        887
+      ],
+      "archive": "viking://~/resources/projects/the-end/docs/sources/ashen-labyrinth-head-selection/keeper/keeper-reference.png"
+    },
+    {
+      "role": "求生者",
+      "choice": "第二张附件的左半幅",
+      "file": "art-source/ashen-labyrinth/concepts/threshold/selection/hero-reference.png",
+      "attachment": "codex-clipboard-675eea0c-d98e-476a-9d06-64ad3438c1e4.png",
+      "sha256": "ac32a03bfca22744456fea054a9245fcf64e9fc5dade6d1a364021cc1edfb5f4",
+      "xywh": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "archive": "viking://~/resources/projects/the-end/docs/sources/ashen-labyrinth-head-selection/hero/hero-reference.png"
+    },
+    {
+      "role": "门前底图",
+      "choice": "第三张附件原图",
+      "file": "art-source/ashen-labyrinth/concepts/threshold/selection/original-scene.png",
+      "attachment": "codex-clipboard-39173675-aa52-4e3f-b8d5-04f41ab418ce.png",
+      "sha256": "d4e62a56477085af76532b332deb2711f8a76ec9bd2a3d8a3ed5797d3ea5e492",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "archive": "viking://~/resources/projects/the-end/docs/sources/ashen-labyrinth-head-selection/original-scene.png"
+    }
+  ],
+  "outputs": {
+    "matchingPortraits": {
+      "file": "art-source/ashen-labyrinth/concepts/threshold/face-folds.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "016b853fae32e78db3361d9b5cfa77ca6c7b5d5559be8f34d13e02a78fed729b",
+      "bytes": 2523221,
+      "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-threshold-concepts/faces/face-folds.png"
+    },
+    "originalSceneComposite": {
+      "file": "art-source/ashen-labyrinth/concepts/threshold/scene-selected.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "a5814e2d5edee02f7f724b09df14c28cb1fb02ef4fd08c43a1b4f2e94e8b2a28",
+      "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-threshold-concepts/scene-selected.png"
+    },
+    "characterConcept": {
+      "file": "art-source/ashen-labyrinth/concepts/threshold/characters.png",
+      "width": 1586,
+      "height": 992,
+      "bytes": 2406190,
+      "sha256": "95f0297bce0dfffd04fa3e356a4ecfa09b5665bea454f9e370ce81dff9adc5f7",
+      "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-threshold-concepts/characters/characters.png",
+      "description": "青年求生者、灰围巾、腰侧牌匣与架挡牌。守门人低坐，在三张战斗牌中扶正回击。"
+    },
+    "entranceBackground": {
+      "file": "art-source/ashen-labyrinth/concepts/threshold/entrance.png",
+      "width": 1586,
+      "height": 992,
+      "bytes": 1872024,
+      "sha256": "d2a52e7570e1a1624e067c08940042cf34da7a3a22616e60e5605f65d30338fa",
+      "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-threshold-concepts/background/entrance.png",
+      "description": "两片错墙、折入暗处的入口，以及留有摆牌位置的空桌、坐位和摊灯。"
+    }
+  },
+  "production": {
+    "scene": "两张附件的指定半幅直接组成面部板。用场景上两处头部的既有配准合回底图，在用户输入画布上输出 1440 × 900 PNG。",
+    "character": "内置 ImageGen 画全身与持牌动作，指定面孔随后按全身图的头部位置配准合成。",
+    "characterSourceCalls": [
+      "exec-7b9c03b1-7ee3-46c9-8002-8f3010babe30",
+      "exec-92e29535-0b30-47c3-a5e6-6de92966e038"
+    ],
+    "bodyRegistration": [
+      {
+        "cx": 404.5,
+        "cy": 104.5,
+        "size": 161,
+        "rot": -1,
+        "score": 0.819
+      },
+      {
+        "cx": 1173,
+        "cy": 292.5,
+        "size": 178.25,
+        "rot": -1.5,
+        "score": 0.727
+      }
+    ],
+    "environmentTool": "内置 ImageGen",
+    "environmentCall": "exec-2811b8e8-bc18-4dea-a108-509b848c6514",
+    "environmentReferences": [
+      "art-source/ashen-labyrinth/studies/threshold-faces-02/mouth-correction/scene-preview.png",
+      "art-source/ashen-labyrinth/threshold-concept.png"
+    ]
+  },
+  "verification": {
+    "referenceHalfDifferences": {
+      "survivor": 0,
+      "gatekeeper": 0
+    },
+    "sceneRgbDifferences": {
+      "leftHead": 3010,
+      "rightHead": 8013,
+      "outsideHeads": 0
+    },
+    "documentPages": 6,
+    "documentArt": {
+      "scene": 2,
+      "faces": 3,
+      "bothConcepts": 6
+    }
+  },
+  "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-threshold-concepts/concepts.json"
+}

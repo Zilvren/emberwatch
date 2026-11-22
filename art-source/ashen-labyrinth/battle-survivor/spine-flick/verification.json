@@ -1,0 +1,259 @@
+{
+  "project": "The end",
+  "date": "2026-11-21",
+  "status": "independent visual review draft",
+  "format": "native Spine 3.8.75",
+  "editable": "art-source/ashen-labyrinth/battle-survivor/spine-flick/survivor-flick.spine",
+  "reference": "art-source/ashen-labyrinth/battle-survivor/turnaround-golden.png",
+  "export": {
+    "engine": "3.8.75",
+    "bones": 12,
+    "attachments": 10,
+    "playableClips": [
+      "guard-flick",
+      "think"
+    ],
+    "release": 0.44,
+    "editableRotationKeys": {
+      "right-forearm": 12,
+      "right-hand": 16,
+      "right-index": 10
+    },
+    "atlasPages": [
+      "survivor-flick-parts.png"
+    ],
+    "projectSha256": "0e2d4ca4b3e2d920fb6d882b4d5a55d4f6870618abee1ce62344beab3550454d"
+  },
+  "textureRgbaIdenticalByPart": {
+    "guard": 1440,
+    "head": 14243,
+    "lantern": 1440,
+    "left-hand-support": 4087,
+    "repel": 1440,
+    "right-bracer": 12672,
+    "right-index": 449,
+    "right-palm": 2143,
+    "right-sleeve": 5288,
+    "torso": 103437
+  },
+  "web": {
+    "scene": "db://assets/SurvivorFlickSpineReview.scene",
+    "buildExitCode": 0
+  },
+  "runtime": {
+    "scene": "SurvivorFlickSpineReview",
+    "bones": 12,
+    "slots": 10,
+    "normal": {
+      "release": 0.4502999484539032,
+      "elapsedMs": 1199,
+      "speed": 1,
+      "duration": 1.2000000476837158,
+      "guardAtEnd": false
+    },
+    "half": {
+      "release": 0.4412500262260437,
+      "elapsedMs": 2401,
+      "speed": 0.5,
+      "duration": 1.2000000476837158,
+      "guardAtEnd": false
+    },
+    "pauseTimeDelta": 0,
+    "fingertipGap": 1.916847822164984,
+    "poses": [
+      {
+        "t": 0,
+        "forearm": [
+          39.99853515625,
+          638.9960327148438
+        ],
+        "wrist": [
+          47.00727462768555,
+          731.9923095703125
+        ],
+        "indexTip": [
+          56.3807258605957,
+          762.6753540039062
+        ],
+        "lantern": [
+          112.9999771118164,
+          603
+        ],
+        "guard": [
+          195.99996948242188,
+          706
+        ],
+        "repel": [
+          239.99996948242188,
+          777
+        ],
+        "guardVisible": true,
+        "file": "output/playwright/survivor-flick-spine/think.png"
+      },
+      {
+        "t": 0.32,
+        "forearm": [
+          39.99853515625,
+          638.9960327148438
+        ],
+        "wrist": [
+          99.08023071289062,
+          711.154052734375
+        ],
+        "indexTip": [
+          141.269287109375,
+          726.657958984375
+        ],
+        "lantern": [
+          112.9999771118164,
+          603
+        ],
+        "guard": [
+          195.99996948242188,
+          708.6666870117188
+        ],
+        "repel": [
+          239.99996948242188,
+          777
+        ],
+        "guardVisible": true,
+        "file": "output/playwright/survivor-flick-spine/raise.png"
+      },
+      {
+        "t": 0.44,
+        "forearm": [
+          39.99853515625,
+          638.9960327148438
+        ],
+        "wrist": [
+          113.7979965209961,
+          696.01416015625
+        ],
+        "indexTip": [
+          178.5742950439453,
+          715.2813110351562
+        ],
+        "lantern": [
+          112.9999771118164,
+          603
+        ],
+        "guard": [
+          195.99996948242188,
+          714
+        ],
+        "repel": [
+          239.99996948242188,
+          777
+        ],
+        "guardVisible": true,
+        "file": "output/playwright/survivor-flick-spine/contact.png"
+      },
+      {
+        "t": 0.56,
+        "forearm": [
+          39.99853515625,
+          638.9960327148438
+        ],
+        "wrist": [
+          124.10250854492188,
+          679.2943115234375
+        ],
+        "indexTip": [
+          163.3446044921875,
+          652.9880981445312
+        ],
+        "lantern": [
+          112.9999771118164,
+          603
+        ],
+        "guard": [
+          258.39996337890625,
+          703.9199829101562
+        ],
+        "repel": [
+          239.99996948242188,
+          777
+        ],
+        "guardVisible": true,
+        "file": "output/playwright/survivor-flick-spine/flight.png"
+      },
+      {
+        "t": 0.82,
+        "forearm": [
+          39.99853515625,
+          638.9960327148438
+        ],
+        "wrist": [
+          79.8939208984375,
+          723.2918701171875
+        ],
+        "indexTip": [
+          107.26531219482422,
+          740.913818359375
+        ],
+        "lantern": [
+          112.9999771118164,
+          603
+        ],
+        "guard": [
+          325.9999694824219,
+          693
+        ],
+        "repel": [
+          239.99996948242188,
+          777
+        ],
+        "guardVisible": false,
+        "file": "output/playwright/survivor-flick-spine/return.png"
+      },
+      {
+        "t": 1.2,
+        "forearm": [
+          39.99853515625,
+          638.9960327148438
+        ],
+        "wrist": [
+          47.00727462768555,
+          731.9923095703125
+        ],
+        "indexTip": [
+          56.3807258605957,
+          762.6753540039062
+        ],
+        "lantern": [
+          112.9999771118164,
+          603
+        ],
+        "guard": [
+          325.9999694824219,
+          693
+        ],
+        "repel": [
+          239.99996948242188,
+          777
+        ],
+        "guardVisible": false,
+        "file": "output/playwright/survivor-flick-spine/settled.png"
+      }
+    ],
+    "fixedRegions": [
+      {
+        "left": 386,
+        "top": 71,
+        "width": 84,
+        "height": 70,
+        "pixelsPerPose": 5880,
+        "maximumChangedPixels": 0
+      },
+      {
+        "left": 374,
+        "top": 284,
+        "width": 106,
+        "height": 281,
+        "pixelsPerPose": 29786,
+        "maximumChangedPixels": 0
+      }
+    ],
+    "errors": []
+  }
+}

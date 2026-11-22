@@ -1,0 +1,20 @@
+[
+  {
+    "actor": "survivor",
+    "currentSha256": "14652372dc0ed06d7b04cb0d34cdc7e450be68b51ad655488bf0fb5601ae516e",
+    "backupSha256": "14652372dc0ed06d7b04cb0d34cdc7e450be68b51ad655488bf0fb5601ae516e",
+    "backup": "art-source/spine08/backups/20261117-before-binding-fix/survivor.spine"
+  },
+  {
+    "actor": "wanderer",
+    "currentSha256": "9c7a4814f0de66959540d7c46b01ef8b1d018dbc1343c877fd682ed275ac594e",
+    "backupSha256": "9c7a4814f0de66959540d7c46b01ef8b1d018dbc1343c877fd682ed275ac594e",
+    "backup": "art-source/spine08/backups/20261117-before-binding-fix/wanderer.spine"
+  },
+  {
+    "actor": "brute",
+    "currentSha256": "9d158210a9fd685f22b9add7c505baac7bbb9110e3db0c873c1fcc192d96395d",
+    "backupSha256": "9d158210a9fd685f22b9add7c505baac7bbb9110e3db0c873c1fcc192d96395d",
+    "backup": "art-source/spine08/backups/20261117-before-binding-fix/brute.spine"
+  }
+]

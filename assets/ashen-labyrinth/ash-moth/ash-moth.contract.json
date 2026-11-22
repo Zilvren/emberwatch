@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-ash-moth",
+  "sourceSha256": "8e609c7e1891082e7ebe7045bd6224b36f90e70d2701e2605c568c2e8c6b4ed4",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "flight",
+    "thorax",
+    "abdomen",
+    "hind-left",
+    "hind-right",
+    "fore-left",
+    "fore-right",
+    "head",
+    "feeler-left",
+    "feeler-right",
+    "far-left-leg",
+    "far-right-leg",
+    "leg-left",
+    "leg-left-shin",
+    "leg-right",
+    "leg-right-shin",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 1.8,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.68,
+      "loop": false
+    },
+    "attack": {
+      "duration": 0.86,
+      "loop": false,
+      "contact": 0.43
+    },
+    "hurt": {
+      "duration": 0.39,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.12,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    -110.07552875451364,
+    156.99986571208845
+  ],
+  "approachBone": "Approach",
+  "parts": [
+    {
+      "name": "leg-right-shin"
+    },
+    {
+      "name": "leg-left-shin"
+    },
+    {
+      "name": "hind-right"
+    },
+    {
+      "name": "fore-right"
+    },
+    {
+      "name": "thorax"
+    },
+    {
+      "name": "leg-right"
+    },
+    {
+      "name": "head"
+    },
+    {
+      "name": "feeler-right"
+    },
+    {
+      "name": "leg-left"
+    },
+    {
+      "name": "far-right-leg"
+    },
+    {
+      "name": "abdomen"
+    },
+    {
+      "name": "chest-undercoat"
+    },
+    {
+      "name": "fore-left"
+    },
+    {
+      "name": "feeler-left"
+    },
+    {
+      "name": "hind-left"
+    },
+    {
+      "name": "far-left-leg"
+    }
+  ]
+}

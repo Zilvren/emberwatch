@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-veil-idol",
+  "sourceSha256": "9414232082eb352205d33a236243a7570074dd4126643a4fbd6fa324d1c4da79",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "altar",
+    "plinth",
+    "robe",
+    "neck",
+    "mask",
+    "collar",
+    "left-sleeve",
+    "left-hand",
+    "right-sleeve",
+    "right-hand",
+    "pennant-left",
+    "pennant-left-tip",
+    "pennant-right",
+    "pennant-right-tip",
+    "belt",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 3.2,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.86,
+      "loop": false
+    },
+    "attack": {
+      "duration": 1.24,
+      "loop": false,
+      "contact": 0.68
+    },
+    "hurt": {
+      "duration": 0.45,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.36,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    -171.80227860355203,
+    228.58841243461694
+  ],
+  "approachBone": "Approach",
+  "flight": 0.17,
+  "parts": [
+    {
+      "name": "far-sleeve-lining"
+    },
+    {
+      "name": "right-cuff"
+    },
+    {
+      "name": "collar-facing"
+    },
+    {
+      "name": "belt"
+    },
+    {
+      "name": "robe"
+    },
+    {
+      "name": "near-sleeve-lining"
+    },
+    {
+      "name": "plinth"
+    },
+    {
+      "name": "inner-robe"
+    },
+    {
+      "name": "collar"
+    },
+    {
+      "name": "neck"
+    },
+    {
+      "name": "pennant-right"
+    },
+    {
+      "name": "pennant-left"
+    },
+    {
+      "name": "right-hand"
+    },
+    {
+      "name": "mask"
+    },
+    {
+      "name": "left-sleeve"
+    },
+    {
+      "name": "left-hand"
+    },
+    {
+      "name": "left-cuff"
+    },
+    {
+      "name": "right-sleeve"
+    }
+  ]
+}

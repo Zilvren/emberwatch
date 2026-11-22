@@ -52,17 +52,19 @@ export class RouteMap extends Component {
                 this.points.set(data.id, view);
             }
             view.node.setPosition(data.x, data.y);
-            view.show(data, readonly);
+            view.show(data, readonly, this.model.landscape);
         }
-        this.drawPaths();
-        if (this.title) this.title.string = `第 ${game.day} 天 · 灰烬街区`;
+        this.drawPaths(!!game.scenario.fieldDeck && !game.scenario.labyrinth);
+        if (this.title) this.title.string = `第 ${game.day} 天 · ${game.scenario.title}`;
         const next = this.model.points.find((point) => point.state === 'available');
         if (this.hint)
             this.hint.string = readonly
                 ? '查看本次探索路线 · 当前房间内不能移动'
                 : game.currentNode === 'choice'
-                  ? '选择一条路径，然后前往高亮地点'
-                  : '滚动查看路线 · ' + (next?.title ?? '正在返回避难所');
+                  ? game.scenario.labyrinth ? '选一条路。两条路在折光回廊汇合。' : game.scenario.fieldDeck
+                      ? '选择行进路线 · 两条路都通往营地'
+                      : '选择一条路径，然后前往高亮地点'
+                  : (game.scenario.labyrinth ? '下一站 · ' : '滚动查看路线 · ') + (next?.title ?? '正在返回避难所');
         if (this.close) this.close.node.active = readonly;
         if (this.enter) {
             this.enter.node.active = !readonly;
@@ -86,18 +88,33 @@ export class RouteMap extends Component {
             this.focusKey = key;
         }
     }
-    private drawPaths(): void {
+    private drawPaths(field: boolean): void {
         const g = this.paths,
             model = this.model;
         if (!g || !model) return;
         g.clear();
+        if (model.landscape) {
+            // Slate survey markings behind the native clickable route graph.
+            g.strokeColor = new Color(195, 166, 145, 28);
+            g.lineWidth = .7;
+            for (let x = -522; x <= 522; x += 58) {
+                g.moveTo(x, -66);
+                g.lineTo(x, -505);
+            }
+            for (let y = -66; y >= -505; y -= 56) {
+                g.moveTo(-522, y);
+                g.lineTo(522, y);
+            }
+            g.stroke();
+        } else if (field) this.drawTideLines(g, model.height);
         const points = new Map(model.points.map((point) => [point.id, point]));
         for (const edge of model.edges) {
             const a = points.get(edge.from)!,
                 b = points.get(edge.to)!;
             const steps = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 15);
             g.fillColor = new Color().fromHEX(
-                edge.visited ? '#6d7855' : edge.excluded ? '#b3b29b' : '#8b9177'
+                model.landscape ? edge.visited ? '#e0bd86' : edge.excluded ? '#584960' : '#926f73'
+                    : edge.visited ? '#586e4b' : edge.excluded ? '#bab8a1' : field ? '#816e4c' : '#8b9177'
             );
             for (let i = 2; i < steps - 1; i++) {
                 const t = i / steps,
@@ -107,6 +124,7 @@ export class RouteMap extends Component {
                 g.fill();
             }
         }
+        if (model.landscape) return;
         g.strokeColor = new Color(120, 126, 102, 25);
         g.lineWidth = 1;
         for (let band = 0; band < 7; band++) {
@@ -115,6 +133,31 @@ export class RouteMap extends Component {
             for (let y = 100; y < model.height; y += 50)
                 g.lineTo(x + Math.sin(y * 0.009 + band) * 38, -y);
             g.stroke();
+        }
+    }
+    private drawTideLines(g: Graphics, height: number): void {
+        // Former shorelines and gauge ticks stay outside the playable routes.
+        for (const side of [-1, 1]) {
+            g.strokeColor = new Color(69, 107, 104, 59);
+            for (let band = 0; band < 3; band++) {
+                g.lineWidth = band ? 1 : 2;
+                for (let y = 0; y <= height; y += 32) {
+                    const x =
+                        side *
+                        (408 +
+                            28 * band +
+                            48 * Math.sin(y / 174 + side) +
+                            22 * Math.sin(y / 63 + band / 5));
+                    if (y === 0) g.moveTo(x, 0);
+                    else g.lineTo(x, -y);
+                }
+                g.stroke();
+            }
+            for (let y = 24; y < height; y += 32) {
+                g.moveTo(side * 530, -y);
+                g.lineTo(side * (y % 128 === 24 ? 512 : 522), -y);
+                g.stroke();
+            }
         }
     }
     inspect(): object {

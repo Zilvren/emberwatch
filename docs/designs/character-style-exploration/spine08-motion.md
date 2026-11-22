@@ -1,3 +1,40 @@
+# The end：当前独立部件骨架（2026-11-18）
+
+项目 The end，Pink/Cocos 4.0.0-beta.1、Spine 3.8.75。当前版本更新于 2026-11-18（Asia/Shanghai）。用户于 11 月 17 日明确否决整图网格绑定，要求每个部位具有独立拆解图。下方旧版本记录保留为历史，当前实现以本节和 docs/spine08-verification.json 为准。
+
+| 角色 | 独立 PNG | 骨骼/控制 | 当前编辑工程 |
+| --- | --- | --- | --- |
+| 主角 survivor | 19 | 27 | art-source/spine08/survivor-parts.spine |
+| 游荡者 wanderer | 16 | 26 | art-source/spine08/wanderer-parts.spine |
+| 重型怪 brute | 18 | 27 | art-source/spine08/brute-parts.spine |
+
+53 张实际透明 PNG 位于 art-source/spine08/parts/对应角色/。头、躯干、腰胯、衣摆、双侧上臂/前臂/手、大腿/小腿/脚分别成图，主角另有背包、腰包和刀；重型怪另有肩甲和肩关节补底。Root、Approach 和脚部 IK 目标为控制，不承载绘图。
+
+每个部件使用自己的 Spine region attachment 和明确的对应骨骼。活跃数据已移除 Artwork 整图网格及 Corpse 整体死亡附件。待机、预备、攻击、受击、死亡十五个动作均使用独立部件；死亡由逐部位骨骼倒下与腿、手臂屈折完成，末姿势继续可单独编辑。动作节奏和倒下终姿势仍是可编辑候选，技术通过不表示自然度已最终定稿。
+
+原 master08-thin.png 保持原字节，SHA-256 为 42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f。37 张部件直接提取可见原画；16 张对隐藏上臂、膝踝、背包和手部等做补绘/清理，源图、提示词保留在 art-source/spine08/reconstruction-sources/ 及 spine08-parts-prompts.json。头脸、兜帽和铁盔使用原画提取。补绘部分不宣称逐像素等同原画。
+
+拆图边界由 tools/spine/parts-layout.cjs 明确记录。图像通过 Cocos 原生 Spine 渲染纹理导出 RGBA，检查真实 alpha 与非空彩色内容；临时图片和骨架采用唯一加载标识防止缓存串图。原始补绘图保留。每个 parts.json 记录对应骨骼、固定注册、来源和轮廓。运行合同的逐部件轮廓只服务接触与诊断，实际绘图读取独立 PNG 的打包图集。
+
+本轮修复：手臂不再接受背包图案/权重；肩甲独立于上臂；调整髋/膝/踝坐标和游荡者大腿裁片；上臂位于披风后，刀柄位于手指后；肩部补底只填关节缺口，保持原衣摆外轮廓。每段动作从 setup pose 应用轨道，清除被中断动作留下的未打键变换；原单次命中、完成、取消、暂停及减少动态效果约定继续保留。
+
+原三份不带 -parts 的 .spine 以及用户手调的主角文件均保持。备份为 art-source/spine08/backups/20261117-before-binding-fix/，含哈希记录。现在应编辑上表带 -parts 的新工程。Scene/Prefab 身份、原显示比例与站位保持，原 SkeletonData UUID 保留；PNG 发布使用原子替换，普通构建不运行作者工具。
+
+手动编辑：使用 Spine 3.8.75，图片路径为 art-source/spine08/parts/对应角色/。切 Animate，选 idle 或另一动作，选择对应骨骼调整；腿优先移动 Front/RearFootTarget。开启 Auto Key 或修改后按 K 打键，播放检查后保存。GUI 导出 JSON 到 assets/resources/actors/spine08/，保留骨架名 survivor/wanderer/brute 和既有 .meta；开启 Nonessential data，关闭 Pack 与 Animation clean up。只改姿势不重打包图片。
+
+修改攻击接触姿势、时点、动作总长或 setup 绑定时，需要同步 .contract.json 的 contactTip、motions 和绑定/轮廓。author:spine 是按脚本重建命令，会覆盖生成工程和动画；手调后使用 Spine 导出。普通 build:web 不重做动作。
+
+作者入口：decompose.cjs、export-parts-browser.cjs、prepare-part-repairs.cjs、finish-part-repairs.cjs、audit-parts.py、author.mjs，均位于 tools/spine/。补绘准备从已保留的工作区来源重建，不依赖默认生成目录；需要 Python/Pillow/OpenCV、Cocos 预览、本地 MCP 和 Spine。运行包不依赖这些作者环境。
+
+验证与媒体：docs/spine08-verification.json、docs/spine08-part-image-audit.json、docs/spine08-mcp-report.json，以及 output/playwright/spine08-binding-fix/。技术、具体画面观察、用户最终主观认可、微信真机/性能分别列项。旧 docs/spine08-verification.json 的可编辑/视觉验收已由用户反馈判为失败，历史技术运行结果保留。
+
+归档：viking://~/resources/projects/the-end/designs/character-style-exploration/spine08-motion.md。
+
+
+---
+
+## 历史记录：已被当前分件版取代
+
 # The end：Spine 08 角色骨骼动作
 
 - 项目：The end，Pink/Cocos 4.0.0-beta.1。
@@ -54,3 +91,19 @@ SpineActorRig 隔离 sp.Skeleton 播放、速度、暂停、采样、取消和�
 - 完整证据矩阵：docs/spine08-verification.json；MCP 调用：docs/spine08-mcp-report.json。
 
 技术实现与本轮执行者视觉审查已交付。用户最终主观视觉认可、微信真机及性能证据保持未验证；本次没有更改玩法、日期/日志或保存规则。
+
+## 2026-11-17：手动编辑与导回游戏
+
+状态：针对当前工程核对的操作指南；本次未修改动画。使用已安装的 Spine 3.8.75，直接打开 art-source/spine08/survivor.spine、wanderer.spine 或 brute.spine。可先另存副本作为练习；骨架名保留 survivor/wanderer/brute，避免导出名称变化。若显示缺图，将树中 Images 路径设为 C:/Users/Knock/Desktop/The end/assets/resources/actors/spine08/。
+
+切到 Animate（动画）模式，在 Animations 列表选 idle。Setup（设置）会改变绑定姿势，不用于这一轮动作微调。在底部 Dopesheet 选择已有关键帧，然后在树中选择骨骼，用旋转/移动工具调姿势。未启用 Auto Key 时，修改后按 K（Key Edited）或点属性旁的钥匙按钮记录；移动时间线前必须记录，否则未打键修改会丢失。启用 Auto Key 则修改会自动打键。按播放按钮检查循环衔接。
+
+第一次优先调主角 idle：Breath 是局部呼吸，Cloth 是衣摆，Pack 是背包，Front/RearUpperArm、Forearm、Hand 是前/后侧手臂，Chest/Torso 是胸腔/躯干。Front/RearFootTarget 是腿部 IK 目标，调整腿部优先移动目标；普通微调不改骨骼层级、绑定、名称、原比例或贴图。头脚稳定与循环起止相接仍是本项目的待机要求。
+
+调好后保存 .spine，再用主菜单 Export（导出，默认 Ctrl+E），选择 JSON，输出到 assets/resources/actors/spine08/，覆盖相应角色的 .json。保留 Nonessential data，关闭 Animation clean up 和 Pack；本轮只改动作，不重新打包现有 atlas 或替换纹理。保留既有 .meta。随后在项目根目录运行 npm run build:web，刷新预览；预览未启动时运行 npm run preview 并打开其输出地址。已有角色绑定不需要重复执行 connect:spine。
+
+手调后不要运行 npm run author:spine：它会从 rig-authoring.cjs 的预设重建 .authoring.json、.spine 和运行 JSON，覆盖手工动画。手调 .spine 是新的编辑源，旧 .authoring.json 不会自动跟随；需要再次脚本制作时，应先合并手工修改。普通 build:web 不执行该作者命令。
+
+攻击和大幅骨架调整多一个接入步骤：保留 idle/prepare/attack/hurt/death 名称与单次 impact 事件。当前主角/游荡者/重型攻击接触为 0.40/0.45/0.54 秒。修改攻击接触姿势后，需重新采样 AttackTip 并同步对应 .contract.json 的 contactTip；修改时长或接触时间还需同步 motions.*.duration、motions.attack.contact。修改绑定、权重或几何则需同步合同中的骨骼/蒙皮轮廓。仅导出 JSON 不会自动更新这些项目接触数据，因此新手第一轮从不涉及接触合同的 idle 开始。
+
+已核对当前 .authoring.json 的绝对贴图路径、作者工具覆盖行为和运行代码读取合同的方式。Spine 界面操作参考原厂 [Keys](https://esotericsoftware.com/spine-keys) 与 [Export](https://esotericsoftware.com/spine-export)；页面包含新版本功能，本指南仅采用本项目需要的基础动画、打键和 JSON 导出操作。

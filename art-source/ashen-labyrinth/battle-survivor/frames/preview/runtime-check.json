@@ -1,0 +1,146 @@
+{
+  "scene": "SurvivorFrameReview",
+  "engine": "4.0.0",
+  "clips": [
+    [
+      "Fan",
+      0.64
+    ],
+    [
+      "Think",
+      3.4
+    ],
+    [
+      "FlickLantern",
+      1.2
+    ],
+    [
+      "FlickGuard",
+      1.2
+    ],
+    [
+      "FlickRepel",
+      1.2
+    ]
+  ],
+  "textures": [
+    [
+      1826,
+      1896
+    ],
+    [
+      2048,
+      2048
+    ]
+  ],
+  "cardClicks": [
+    {
+      "name": "Lantern",
+      "click": [
+        563.4802347564697,
+        202.81859720726112
+      ],
+      "events": [
+        0
+      ],
+      "active": [
+        false,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Guard",
+      "click": [
+        617.8829981231689,
+        169.59254699707026
+      ],
+      "events": [
+        0,
+        1
+      ],
+      "active": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "name": "Repel",
+      "click": [
+        645.8678160095214,
+        120.16423049926743
+      ],
+      "events": [
+        0,
+        1,
+        2
+      ],
+      "active": [
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  "contacts": [
+    {
+      "name": "Lantern",
+      "frameName": "touch-low",
+      "inside": true,
+      "tipOnCard": [
+        -19.5,
+        0
+      ],
+      "overlapFrames": [],
+      "travelled": [
+        110.92,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Guard",
+      "frameName": "touch-middle",
+      "inside": true,
+      "tipOnCard": [
+        -19.5,
+        9
+      ],
+      "overlapFrames": [],
+      "travelled": [
+        0,
+        102.84,
+        0
+      ]
+    },
+    {
+      "name": "Repel",
+      "frameName": "touch-high",
+      "inside": true,
+      "tipOnCard": [
+        -19.5,
+        -24
+      ],
+      "overlapFrames": [],
+      "travelled": [
+        0,
+        0,
+        101.98
+      ]
+    }
+  ],
+  "pauseTimeDelta": 0,
+  "halfSpeed": true,
+  "smallerViewport": [
+    1024,
+    768
+  ],
+  "errors": [],
+  "film": {
+    "frames": 221,
+    "fps": 25,
+    "duration": 8.84,
+    "source": "Cocos Web Desktop AnimationState samples"
+  }
+}

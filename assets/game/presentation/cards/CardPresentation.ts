@@ -10,12 +10,13 @@ import {
     Node,
     ScrollView,
     Sprite,
+    SpriteAtlas,
     SpriteFrame,
     UITransform,
 } from 'cc';
 import { CARD, CardDefinition, CardKind, titleColor } from '../../core/content/CardCatalog';
 import { PaperPanel } from '../primitives/PaperPanel';
-import { CardDisplayModel, cardReferenceViewModel, cardViewModel } from './CardViewModel';
+import { CardDisplayModel, type CardViewOptions, cardReferenceViewModel, cardViewModel } from './CardViewModel';
 import type { CardDesignReference } from './CardDesignReference';
 const { ccclass, property } = _decorator;
 @ccclass('CardPresentation')
@@ -32,6 +33,10 @@ export class CardPresentation extends Component {
     @property(Label) statusLabel: Label | null = null;
     @property(Label) weightLabel: Label | null = null;
     @property(Sprite) artwork: Sprite | null = null;
+    @property(SpriteAtlas) tideIllustrations: SpriteAtlas | null = null;
+    @property(SpriteAtlas) labyrinthArt: SpriteAtlas | null = null;
+    @property(JsonAsset) labyrinthTheme: JsonAsset | null = null;
+    private fieldFace = false;
     @property(Node) disabledOverlay: Node | null = null;
     @property(Node) visualRoot: Node | null = null;
     @property(Node) selectionOutline: Node | null = null;
@@ -75,6 +80,7 @@ export class CardPresentation extends Component {
             scroll.elastic = false;
             this.detailsLabel.overflow = Label.Overflow.RESIZE_HEIGHT;
         }
+        if (this.labyrinthArt && this.labyrinthTheme) this.layoutPaintedFace();
     }
     onDestroy(): void {
         this.getComponent(Animation)?.off(Animation.EventType.FINISHED, this.finished, this);
@@ -86,8 +92,9 @@ export class CardPresentation extends Component {
         id = '',
         definitions: Readonly<Record<string, CardDefinition>> = CARD,
         costUnit = '物资',
-        options: { runDeck?: boolean; neededForSynthesis?: boolean } = {}
+        options: CardViewOptions = {}
     ): void {
+        this.fieldFace = !!options.field;
         this.showModel(
             cardViewModel(definitions[kind], definitions, costUnit, options),
             blocked,
@@ -101,9 +108,11 @@ export class CardPresentation extends Component {
         caption = '点击 / 拖动',
         id = ''
     ): void {
+        this.fieldFace = false;
         this.showModel(cardReferenceViewModel(data), blocked, caption, id);
     }
     private showModel(model: CardDisplayModel, blocked: string, caption: string, id: string): void {
+        const material = this.labyrinthTheme?.json ?? this.theme?.json;
         this.kind = model.id;
         this.cardId = id;
         this.blocked = blocked;
@@ -116,15 +125,18 @@ export class CardPresentation extends Component {
         if (this.costBadge) this.costBadge.active = model.showCost;
         if (this.titleLabel) {
             this.titleLabel.string = model.displayTitle;
-            this.titleLabel.color = new Color().fromHEX(this.theme?.json.colors.ink ?? '#454238');
+            this.titleLabel.color = new Color().fromHEX(material?.colors.ink ?? '#454238');
         }
         if (this.typeLabel) {
             this.typeLabel.string = model.tag;
             this.typeLabel.color = new Color().fromHEX(
-                this.theme?.json.card.typeText ?? titleColor(model.accent)
+                material?.card.typeText ?? titleColor(model.accent)
             );
         }
-        if (this.effectLabel) this.effectLabel.string = model.effect;
+        if (this.effectLabel) {
+            this.effectLabel.string = model.effect;
+            if (this.labyrinthTheme) this.effectLabel.color = new Color().fromHEX('#ead3b5');
+        }
         if (this.descriptionLabel) {
             this.descriptionLabel.string = this.effectLabel
                 ? model.description
@@ -137,18 +149,59 @@ export class CardPresentation extends Component {
         }
         if (this.weightLabel) this.weightLabel.string = model.weight;
         if (this.artwork)
-            this.artwork.spriteFrame = this.illustrations[model.artIndex] ?? this.illustrations[2];
+            this.artwork.spriteFrame =
+                this.labyrinthArt?.getSpriteFrame(model.id) ??
+                this.labyrinthArt?.getSpriteFrame(model.art) ??
+                (this.fieldFace && this.tideIllustrations
+                    ? this.tideIllustrations.getSpriteFrame(model.id)
+                    : null) ??
+                this.illustrations[model.artIndex] ??
+                this.illustrations[2];
         this.showKeywords(
-            this.compact
+            this.compact || this.labyrinthTheme
                 ? model.keywords.filter(
                       (word) => word === '可作为合成材料' || word === '已有搭配 · 缺此材料'
                   )
                 : model.keywords
         );
         if (this.typeLabel) this.typeLabel.node.active = !this.compact;
-        if (this.weightLabel) this.weightLabel.node.active = !this.compact;
+        if (this.weightLabel) this.weightLabel.node.active = !this.compact && !!model.weight;
         if (this.disabledOverlay) this.disabledOverlay.active = !!blocked;
         this.applyAppearance();
+    }
+    private layoutPaintedFace(): void {
+        const panel = this.panel, size = panel?.getComponent(UITransform);
+        const palette = this.labyrinthTheme!.json.colors;
+        if (!panel || !size) return;
+        panel.metalTrim = true;
+        panel.lineWidth = 1.2;
+        panel.corner = 8;
+        panel.innerLine = new Color().fromHEX('#62506a');
+        const place = (node: Node | undefined, x: number, y: number, w: number, h: number) => {
+            node?.setPosition(x, y, 0);
+            node?.getComponent(UITransform)?.setContentSize(w, h);
+        };
+        const w = size.width, h = size.height;
+        if (this.artwork) {
+            this.artwork.sizeMode = Sprite.SizeMode.CUSTOM;
+            place(this.artwork.node, 0, h * .107, w - 16, h * .414);
+            place(this.disabledOverlay ?? undefined, 0, h * .107, w - 16, h * .414);
+        }
+        place(this.frontContent?.getChildByName('EffectRule') ?? undefined, 0, -h * .111, w - 22, 1);
+        place(this.frontContent?.getChildByName('FooterRule') ?? undefined, 0, -h * .406, w - 22, 1);
+        place(this.effectLabel?.node, 0, -h * .183, w - 23, h * .134);
+        place(this.descriptionLabel?.node, 0, -h * .322, w - 24, h * .14);
+        this.normalText = new Color().fromHEX(palette.muted);
+        this.blockedText = new Color().fromHEX(palette.danger);
+        for (const label of [this.descriptionLabel, this.detailsLabel, this.costUnitLabel, this.weightLabel])
+            if (label) label.color = this.normalText;
+        const cost = this.costBadge?.getComponent(PaperPanel) ?? this.costBadge?.getComponentInChildren(PaperPanel);
+        if (cost && cost !== panel) {
+            cost.fill = new Color().fromHEX('#19151f');
+            cost.line = new Color().fromHEX('#8e7467');
+            cost.corner = 6;
+            cost.redraw();
+        }
     }
     private showKeywords(keywords: string[]): void {
         const shown =
@@ -230,27 +283,41 @@ export class CardPresentation extends Component {
         };
     }
     private applyAppearance(): void {
-        const colors = this.theme?.json.colors;
+        const colors = (this.labyrinthTheme ?? this.theme)?.json.colors;
         if (this.panel) {
+            if (this.labyrinthTheme) {
+                this.panel.fill = new Color().fromHEX(this.selected && !this.blocked ? colors.paperSelected : colors.paper);
+                this.panel.line = new Color().fromHEX(this.selected || this.hovered ? colors.ochre : colors.line);
+                this.panel.fieldStock = false;
+                this.panel.redraw();
+            } else {
             this.panel.fill = new Color().fromHEX(
                 this.selected && !this.blocked
-                    ? (colors?.paperSelected ?? '#ece0ca')
-                    : (colors?.paper ?? '#f2eadb')
+                    ? this.fieldFace
+                        ? '#C9DECA'
+                        : (colors?.paperSelected ?? '#ece0ca')
+                    : this.fieldFace
+                      ? '#D8D3C0'
+                      : (colors?.paper ?? '#f2eadb')
             );
             this.panel.line = new Color().fromHEX(
                 this.blocked
                     ? (colors?.lineSoft ?? '#b3a68e')
                     : this.hovered
                       ? (colors?.ochre ?? '#bb9b6d')
-                      : (colors?.line ?? '#6f6757')
+                      : this.fieldFace
+                        ? '#333941'
+                        : (colors?.line ?? '#6f6757')
             );
+            this.panel.fieldStock = this.fieldFace;
             this.panel.redraw();
+            }
         }
         if (this.costLabel)
             this.costLabel.color = new Color().fromHEX(
                 this.blocked ? (colors?.danger ?? '#9a6455') : (colors?.ink ?? '#454238')
             );
-        if (this.selectionOutline) this.selectionOutline.active = this.selected && !this.blocked;
+        if (this.selectionOutline) this.selectionOutline.active = !this.labyrinthTheme && this.selected && !this.blocked;
     }
     playDraw(reduced: boolean): void {
         if (!reduced && this.drawClip) this.play(this.drawClip);

@@ -13,6 +13,15 @@ export interface SpineRigContract {
     contactTip: readonly [number, number];
     contactBone: string;
     approachBone: string;
+    /** In a ranged clip, release precedes the single impact event by this travel time. */
+    flight?: number;
+    parts?: readonly {
+        name: string;
+        bone: string;
+        image: string;
+        vertexStart: number;
+        vertexCount: number;
+    }[];
 }
 export interface BoneTransform {
     a: number;

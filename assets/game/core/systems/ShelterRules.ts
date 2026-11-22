@@ -10,7 +10,8 @@ export class ShelterRules {
         private readonly feedback: RuleFeedback,
         private readonly content: CardSet,
         private readonly scenario: GameScenario,
-        private readonly journal: JournalRules
+        private readonly journal: JournalRules,
+        private readonly restoreStarter: () => void
     ) {}
     returnToShelter(): void {
         if (
@@ -23,17 +24,21 @@ export class ShelterRules {
             .filter((c) => c.zone === 'overflow')
             .map((c) => this.content.cards[c.kind].name);
         this.state.cards = this.state.cards.filter((c) => c.zone === 'base');
+        const discoveries = this.state.cards.filter((card) => card.found).length;
         if (this.scenario.runDeck) {
             this.state.cards = this.state.cards.filter(
                 (card) => this.content.cards[card.kind].role === 'supply'
             );
             const stored = this.state.storedSupplies ?? (this.state.storedSupplies = {});
             for (const { kind } of this.state.cards) stored[kind] = (stored[kind] ?? 0) + 1;
+        } else if (this.scenario.fieldDeck) {
+            this.restoreStarter();
         }
         this.state.battle = null;
         this.state.settlement = {
             returnedSupplies: this.state.supplies,
             returnedCards: this.state.cards.length,
+            ...(this.scenario.fieldDeck ? { discoveredCards: discoveries } : {}),
             lostOverflow: lost,
             wasCritical: this.state.critical,
             repairCost: this.scenario.runDeck || this.state.armor === 10
@@ -50,7 +55,11 @@ export class ShelterRules {
         this.state.day++;
         this.journal.record(mapClearMilestone(this.scenario.id));
         if (this.journal.current) this.state.phase = 'journal';
-        this.feedback.log('返回避难所，带回物品已入库，感染临界已解除。');
+        this.feedback.log(
+            this.scenario.fieldDeck
+                ? `返回避难所，本次发现 ${discoveries} 张牌。下次从基础牌组出发。`
+                : '返回避难所，带回物品已入库，感染临界已解除。'
+        );
         this.state.revision++;
     }
     repairAtShelter(): ActionResult {

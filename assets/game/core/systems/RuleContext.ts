@@ -9,7 +9,7 @@ export type CombatState = Pick<
 >;
 export type RewardState = Pick<
     GameState,
-    'cards' | 'fixedDone' | 'pathIndex' | 'phase' | 'rewards' | 'supplies' | 'visited'
+    'cards' | 'fixedDone' | 'pathIndex' | 'phase' | 'rewards' | 'supplies' | 'visited' | 'discoveryPool'
 >;
 export type ExplorationState = Pick<
     GameState,
@@ -22,6 +22,7 @@ export type ExplorationState = Pick<
     | 'phase'
     | 'returnElapsed'
     | 'rewards'
+    | 'discoveryPool'
     | 'route'
     | 'settlement'
     | 'supplies'

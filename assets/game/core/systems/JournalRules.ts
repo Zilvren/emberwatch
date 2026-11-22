@@ -7,13 +7,18 @@ export class JournalRules {
     constructor(
         private readonly state: JournalState,
         private readonly feedback: RuleFeedback,
-        readonly catalog: JournalCatalog
+        readonly catalog: JournalCatalog,
+        private readonly scenario: { fieldDeck?: boolean; labyrinth?: true }
     ) {}
     get current(): (JournalDefinition & { day: number }) | null {
         const record = this.state.journalEntries.find((entry) => !entry.read);
         if (!record) return null;
         const definition = this.catalog.entries.find((entry) => entry.id === record.id)!;
-        return { ...definition, day: record.day };
+        return {
+            ...definition,
+            ...this.localText(definition),
+            day: record.day,
+        };
     }
     record(milestone: string): void {
         const previous = Object.prototype.hasOwnProperty.call(this.state.milestones, milestone)
@@ -40,9 +45,15 @@ export class JournalRules {
                 });
                 triggered.add(definition.id);
                 added = true;
-                this.feedback.log(`关键日志已解锁：${definition.title}。`);
+                this.feedback.log(
+                    `关键日志已解锁：${this.localText(definition)?.title ?? definition.title}。`
+                );
             }
         } while (added);
+    }
+    private localText(definition: JournalDefinition) {
+        return this.scenario.labyrinth ? definition.labyrinthText
+            : this.scenario.fieldDeck ? definition.fieldText : undefined;
     }
     continue(): ActionResult {
         const entry = this.state.journalEntries.find((entry) => !entry.read);
@@ -52,7 +63,7 @@ export class JournalRules {
         this.state.phase = this.current ? 'journal' : 'shelter';
         return this.feedback.result(
             true,
-            this.current ? '还有一篇关键日志。' : '可以在避难所整备后出发。'
+            this.current ? '还有一篇关键日志。' : '已记入日志，可以再次出发。'
         );
     }
 }

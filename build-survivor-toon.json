@@ -1,0 +1,29 @@
+{
+  "name": "the-end-survivor-toon",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "survivor-toon",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "677663bd-40e0-4402-9b89-b029d054b442",
+  "scenes": [
+    {
+      "url": "db://assets/SurvivorToonReview.scene",
+      "uuid": "677663bd-40e0-4402-9b89-b029d054b442"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

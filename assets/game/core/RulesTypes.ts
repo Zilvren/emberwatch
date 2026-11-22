@@ -38,6 +38,26 @@ export interface Battle {
     discard: CombatCard[];
     weapon: CombatCard | null;
     equippedTurn: number;
+    /** Saved candidates for an opening or a surviving elite's first exposed core. */
+    discovery?: CardKind[];
+    attackedThisTurn?: boolean;
+    coreExposed?: boolean;
+    calm?: CalmBattle;
+    cardChoice?: { mode: 'discard-to-top' | 'retain-hand'; ids: string[] };
+}
+export interface CalmBattle {
+    persistent: number;
+    temporary: number;
+    applied: number;
+    limit: number;
+    deferred: 'scheduled' | 'extra-turn' | null;
+    freeSkill: boolean;
+    calibrated: boolean;
+    spent: number;
+    guardPerLayer: number;
+    drawOnDefer: number;
+    counter: number;
+    retained: string | null;
 }
 export interface Rewards {
     source: NodeKind;
@@ -45,6 +65,7 @@ export interface Rewards {
     cards: CardKind[];
     supplyTaken: boolean;
     cardTaken: boolean;
+    discovery?: true;
 }
 export interface ActionResult {
     ok: boolean;
@@ -55,6 +76,7 @@ export interface ActionResult {
 export interface Settlement {
     returnedSupplies: number;
     returnedCards: number;
+    discoveredCards?: number;
     lostOverflow: string[];
     wasCritical: boolean;
     repairCost: number;

@@ -1,0 +1,12 @@
+rotor.png
+size: 546,918
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: false
+  xy: 0, 0
+  size: 546, 918
+  orig: 546, 918
+  offset: 0, 0
+  index: -1

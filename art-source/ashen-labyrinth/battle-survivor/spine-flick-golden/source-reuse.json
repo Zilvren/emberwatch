@@ -1,0 +1,357 @@
+{
+  "originalProjectSha256": "bfad971fe86732f92c66098c8b18ec9d5a0f587c493c64ea62ad4219891bec1f",
+  "originalBones": 45,
+  "originalParts": {
+    "back-flap.png": "23dfdcb92a7b8716f8162abe2a7daf87b034ee3dfc600698e23e6c981c141f1e",
+    "card-case.png": "9e80762339a47fbe87092856ea2c35b01ac5401251feada5e13c33490d26ddeb",
+    "card.png": "111526e13ba85464d2cd55971755f0e3d78ae3b62a2742f4c473dde45fcac859",
+    "cast-bracer.png": "f55f67a083e65e59f3f03af2667f7512e34303a4935d03987b93cefc2b4e1018",
+    "cast-index.png": "9482752cf6a75721302136c2613dff4b1b5e4a81e7c2b026c9cc5c89b1f05c20",
+    "cast-middle.png": "22252c157bd79839370a6b1e29cea8a2a863056119dd0968c93639906554da14",
+    "cast-palm.png": "20354f40281517ca3f672525701fc94227c73827f03dc41d79129c3775fa0ebf",
+    "cast-sleeve.png": "a21d141b2cf50aa7ea6c159f5e13d164274d788fb0f7be367bcd4e5082d052e6",
+    "cast-thumb.png": "d3aac51d0ded1538f5c8e26ecf38bfa548035d989f7f89298010bbdd6ef9b4a4",
+    "chest.png": "ec1df7fd721aadb0ab9d4496e81020df272214a4e2045bca3785a1380ef5130e",
+    "coat-skirt.png": "e41ec35293e3aa4ce368f3ffb907f195659e18c734ba87a0608d2c2068534f48",
+    "far-boot.png": "339ca44548e66f790c8265fff6c1a9de75ef25e00454505aa4d3009f1de004db",
+    "far-shin.png": "ee6bef9ee5f70ba3eed9a497522508adff157caac61ce5d1dfa38704c4e39cbe",
+    "far-thigh.png": "f509367f82fdf3d341a1b800e6c3044437dc795ec1bfe6001c33624cd71b6837",
+    "hair-lock.png": "de0971b9772b48de1063d392f43bcfb866e1a8e4b492ac6476b1305fee223030",
+    "head.png": "d31a13d573054c84c98b11f1e9292e96f893f1d30dcf51aa870c414f533e4696",
+    "hips-lining.png": "5b81ca0d11e19394fd2679e3674444a89a94210f568da655f6ee5c88f1a1bf4c",
+    "hips.png": "2224e6b10ffc39993bc95d68a325ae4344a0589ab1e81b52dcfcb86f294cc932",
+    "hood.png": "57088687ef344ec1022e20e639621d21e5ad56d22a2c687add9161cf9a7a20e7",
+    "inner-skirt.png": "c2e7dac2b347b9cf1fb1e161b9bff9a2577f8706c94d9e8e816f1277b091f0fe",
+    "inner-tunic.png": "7b2fe5aec219bc0104cbcd7688c39cba71dd288f013d4b2bb488dde1a2308196",
+    "knee-lining.png": "6e8808725189ae86ca8f7de3f7b97cd79a3a5ec83662c5bcd59e0b082f1fab13",
+    "mantle.png": "d56142ecc5a61a03fd789f6303f3732665d5b2196eb6b819fe9737984156108e",
+    "near-boot.png": "5f122d0c25f26e8b170b9962f8443167f24b0c2423853cb92fb60a1ca43ffe8a",
+    "near-bracer.png": "f0d6bc52f3772c9869a5e94365f692e2a0f630f56813a78d4aa78d994181290d",
+    "near-hand.png": "b54384759abf0b7ee746b2882301c81e753a7d00d1c4cbef66c7e61180bb7c04",
+    "near-shin.png": "06140eecdf6e2159c051c528218da122e4988b5b9483325cbd931ecec4752aaf",
+    "near-sleeve.png": "b8134694a0b9d149344a2fdafa45b3cd89fb6cc70aa5467f6f5f79990bff957e",
+    "near-thigh.png": "33ba3d4ab61daeb2d096b9d343bb46e96a9e0503e3ffb17c586d463f8075dd58",
+    "near-trouser-lining.png": "4e6ce8573bae13edaecfb4bf1559e68bd9a4a3c4183a8838e5c877d0058e7bfb",
+    "near-underarm.png": "4155ed0200f49d53aa3d115bada71e328c9b721e1346962cd86c887f60d48327",
+    "ration-bag.png": "52243cae450f7ae8027cd4f0fd24438efffdb8f579cf0f2c7e93d40df3068f3f",
+    "scarf.png": "acb1530a15dbd4c62533bf0966c1c1fb570b1e9f21452df094bf06c82f3792c4",
+    "strap.png": "a599ccc4339ca8cc5c4cdc6c84d4b4b9b930d26219c2806fec4e32806d9ef636",
+    "tunic-lining.png": "b1400391f011741c1a4d897d07d9738dc0e4310e4590e06e396db582306b57a9"
+  },
+  "originalClips": [
+    "attack",
+    "card-flight",
+    "carry-card",
+    "death",
+    "hurt",
+    "idle",
+    "prepare"
+  ],
+  "quarterAttachments": {
+    "quarter-far-leg": {
+      "slot": "q-far-leg-art",
+      "sourceBounds": [
+        504,
+        840,
+        744,
+        1488
+      ],
+      "texels": [
+        240,
+        648
+      ],
+      "vertices": 190,
+      "triangles": 288
+    },
+    "quarter-near-leg": {
+      "slot": "q-near-leg-art",
+      "sourceBounds": [
+        336,
+        936,
+        528,
+        1512
+      ],
+      "texels": [
+        192,
+        576
+      ],
+      "vertices": 160,
+      "triangles": 246
+    },
+    "quarter-tunic": {
+      "slot": "q-tunic-art",
+      "sourceBounds": [
+        288,
+        240,
+        696,
+        1248
+      ],
+      "texels": [
+        402,
+        992
+      ],
+      "vertices": 387,
+      "triangles": 614
+    },
+    "quarter-mantle": {
+      "slot": "q-mantle-art",
+      "sourceBounds": [
+        288,
+        312,
+        744,
+        696
+      ],
+      "texels": [
+        456,
+        384
+      ],
+      "vertices": 205,
+      "triangles": 334
+    },
+    "quarter-near-mantle": {
+      "slot": "q-near-mantle-art",
+      "sourceBounds": [
+        288,
+        288,
+        528,
+        504
+      ],
+      "texels": [
+        240,
+        216
+      ],
+      "vertices": 73,
+      "triangles": 106
+    },
+    "quarter-satchel": {
+      "slot": "q-satchel-art",
+      "sourceBounds": [
+        288,
+        648,
+        432,
+        864
+      ],
+      "texels": [
+        144,
+        216
+      ],
+      "vertices": 63,
+      "triangles": 94
+    },
+    "quarter-card-case": {
+      "slot": "q-case-art",
+      "sourceBounds": [
+        576,
+        600,
+        672,
+        768
+      ],
+      "texels": [
+        96,
+        168
+      ],
+      "vertices": 40,
+      "triangles": 56
+    },
+    "quarter-scarf": {
+      "slot": "q-head-art",
+      "sourceBounds": [
+        336,
+        240,
+        648,
+        360
+      ],
+      "texels": [
+        312,
+        120
+      ],
+      "vertices": 67,
+      "triangles": 96
+    },
+    "quarter-right-arm": {
+      "slot": "q-near-arm-art",
+      "sourceBounds": [
+        384,
+        264,
+        552,
+        528
+      ],
+      "texels": [
+        168,
+        264
+      ],
+      "vertices": 65,
+      "triangles": 92
+    },
+    "quarter-left-inner-wrap": {
+      "slot": "q-left-wrap",
+      "sourceBounds": [
+        480,
+        456,
+        696,
+        576
+      ],
+      "texels": [
+        216,
+        120
+      ],
+      "vertices": 51,
+      "triangles": 72
+    },
+    "quarter-left-cup": {
+      "slot": "q-left-cup",
+      "sourceBounds": [
+        384,
+        480,
+        528,
+        576
+      ],
+      "texels": [
+        144,
+        96
+      ],
+      "vertices": 32,
+      "triangles": 42
+    }
+  },
+  "headLocalContactRegions": {
+    "cheek": [
+      [
+        23.4165,
+        9.9069
+      ],
+      [
+        23.7299,
+        -0.64
+      ],
+      [
+        20.7528,
+        -6.8292
+      ],
+      [
+        16.8356,
+        -8.8662
+      ],
+      [
+        11.2731,
+        -5.9674
+      ],
+      [
+        7.9826,
+        -1.1195
+      ],
+      [
+        9.5495,
+        5.0187
+      ],
+      [
+        14.4069,
+        11.6387
+      ],
+      [
+        19.1076,
+        12.7583
+      ]
+    ],
+    "mouth": [
+      [
+        12.1349,
+        -7.691
+      ],
+      [
+        12.84,
+        -10.7465
+      ],
+      [
+        12.84,
+        -15.2121
+      ],
+      [
+        11.8998,
+        -18.3496
+      ],
+      [
+        10.3329,
+        -17.8759
+      ],
+      [
+        9.3928,
+        -14.8204
+      ],
+      [
+        9.3928,
+        -10.6681
+      ],
+      [
+        10.7246,
+        -7.5343
+      ]
+    ],
+    "eye": [
+      [
+        27.4905,
+        0.8486
+      ],
+      [
+        28.744,
+        -1.2667
+      ],
+      [
+        28.744,
+        -6.2025
+      ],
+      [
+        27.5688,
+        -9.728
+      ],
+      [
+        25.9236,
+        -9.963
+      ],
+      [
+        24.6701,
+        -6.6725
+      ],
+      [
+        25.1401,
+        -2.3636
+      ]
+    ]
+  },
+  "referenceHashes": {
+    "turnaround-golden-master.png": "8a41f4aca887b4132bd2156dc8ecaf456aff68e76c96051ba3d698f3f801cdf4",
+    "turnaround-golden.png": "4c266904e6f1a6f40d6b4b230e5fa5e8c7d87d6fcfe8a36272189cacbe59b26d",
+    "head-turnaround.png": "258b9515b66c1ce21962f9bd829a34bbe41b49f547c746f903097e1d1ab66f32",
+    "spine-flick-golden/reference/head-three-quarter.png": "94c4359bcff657c605d72cf3377f6242c789be30fd31515b1d13161b492eb19a",
+    "spine-flick-golden/reference/body-think-three-quarter.png": "c804f3c5054c60401a252f526eb48cf67b9b51dab06f424ebc1fc5d6524eb248",
+    "spine-flick-golden/reference/body-cloth-underpaint.png": "d2a35d7ff95e241239a51961ed9caaf2da4200ee744c55a85092befd8e9804ce",
+    "spine-flick-golden/reference/right-cheek-support.png": "9a1feb2245e3a89d882ccd3989bd6ab9ae415f5d04038953fec3790d7a064196",
+    "spine-flick-golden/reference/right-wrist-release.png": "c7585dd1d10bab6c8f492c05ff73b475c1643d91eeec6885efcd58ccbbddb123"
+  },
+  "activeOldArt": [
+    "cast-sleeve"
+  ],
+  "flickHand": "anatomical right",
+  "bodyRegistration": {
+    "scale": 0.9799528301886793,
+    "offset": [
+      30.54481,
+      15.37146
+    ],
+    "nearToe": [
+      482.303,
+      1497.06
+    ],
+    "farToe": [
+      701.812,
+      1460.802
+    ],
+    "upperPlate": "registered to posed master at 262 shared landmarks"
+  },
+  "gestureReference": "right-cheek-support.png for cheek support; right-wrist-release.png for the R3-referenced dorsal right hand with visible thumb",
+  "forearms": "independently cut from body-think-three-quarter.png; painted clean upper body from body-cloth-underpaint.png",
+  "head": "one three-quarter painting with a fixed cheek/jaw correction; all vertices follow the head bone",
+  "cameraYaw": 33,
+  "headYaw": 33,
+  "cardBack": "paper-back"
+}

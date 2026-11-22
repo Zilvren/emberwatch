@@ -14,7 +14,11 @@ export class EntrySelection extends Component {
         this.choices.forEach((button, index) => {
             const tier = ENTRY_TIERS[ENTRY_TIER_IDS[index]];
             button.actionId = 'entry-tier-' + tier.id;
-            button.setText(`${tier.name}\n入场 ${tier.cost} 物资\n每回合 ${tier.stamina} 体力`);
+            const price =
+                game.supplies < tier.cost
+                    ? `还差 ${tier.cost - game.supplies} 物资`
+                    : `入场 ${tier.cost} 物资`;
+            button.setText(`${tier.name}\n${price}\n每回合 ${tier.stamina} 体力`);
             button.setEnabled(game.supplies >= tier.cost);
             button.setVariant(tier.id === selection ? 'primary' : 'secondary');
         });

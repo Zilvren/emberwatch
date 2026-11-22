@@ -1,0 +1,22 @@
+{
+  "actor": "stone-claw",
+  "editor": "3.8.75",
+  "bones": 16,
+  "slots": 14,
+  "images": 14,
+  "meshes": [],
+  "ik": 2,
+  "impact": 0.55,
+  "clips": {
+    "idle": 2.5,
+    "prepare": 0.74,
+    "attack": 1.05,
+    "hurt": 0.41,
+    "death": 1.18
+  },
+  "atlasPages": [
+    "stone-claw-parts.png"
+  ],
+  "projectSha256": "4f3da65ca1595d7252e0dabc847c3edb216938ee4cc3add064c2833177911e96",
+  "runtimeSha256": "91f22bc827f8f038cb17531b89b907825ab3d3ae599b7f810ac174bd12e7bf33"
+}

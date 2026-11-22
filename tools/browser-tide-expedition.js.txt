@@ -1,0 +1,134 @@
+const url = 'http://127.0.0.1:7457/';
+const checkpoint = () => page.evaluate(() => globalThis.__survivalGame.exportState());
+const discovery = () => page.evaluate(() => globalThis.__survivalGame.battle?.discovery ?? []);
+const until = (predicate) => page.waitForFunction(predicate, undefined, { timeout: 14000 });
+const quiet = () => until(()=>!cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector').toastRoot.active);
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto(url + '?seed=17&save=on&scenario=tide');
+await idle();
+const initial = await checkpoint();
+assert(initial.cards.length === 20 && initial.scenarioVersion === 2, 'New game did not open on the field deck.');
+await screenshot('01-departure');
+await click('journal-start');
+await click('entry-tier-low');
+await click('modal-close');
+assert(JSON.stringify(await checkpoint()) === JSON.stringify(initial), 'Comparing an entry cost changed the save.');
+await click('journal-start'); await click('entry-confirm');
+await click('enter-fixed');
+assert((await state()).supplies === 6 && (await state()).currentNode === 'choice', 'The cache did not settle once.');
+await screenshot('02-fork');
+await click('route-A'); await click('enter-enemy1');
+const draft = await discovery();
+assert(draft.length === 3 && new Set(draft).size === 3, 'Expected three distinct discoveries.');
+const beforeDraft = await checkpoint();
+await click('reward-select-0'); await page.reload(); await idle();
+assert(JSON.stringify(await checkpoint()) === JSON.stringify(beforeDraft), 'Reload rerolled or claimed a discovery.');
+const draftIndex = Math.max(0, draft.findIndex(kind => kind === 'follow_up' || kind === 'shield_push'));
+await click('reward-select-' + draftIndex);
+await screenshot('03-discovery');
+await click('discover-confirm');
+let battle = await state();
+assert(battle.hand.length === 6 && battle.stamina === 3 && battle.cards.length === 21, 'Taking a card did not add it to hand for free.');
+assert(battle.heroRig?.actor === 'surveyor', 'The old protagonist was still bound.');
+await quiet();
+await screenshot('04-combat');
+await page.setViewportSize({width:1024,height:768});
+await page.waitForTimeout(250);
+await screenshot('05-combat-small');
+await page.setViewportSize({width:1440,height:900});
+await page.waitForTimeout(200);
+const attack = battle.hand.find(c => ['attack','heavy','follow_up','shield_push'].includes(c.kind) && !c.blocked);
+assert(attack,'Seed should have a valid targeted attack.');
+const beforeCancel = await checkpoint();
+await drag('card-'+attack.id, 55, 855);
+assert(JSON.stringify(await checkpoint()) === JSON.stringify(beforeCancel),'An off-stage release played a card.');
+// Real-time first cast: observe the actual Spine release and hit, then use the reduced-motion path.
+await page.emulateMedia({ reducedMotion:'no-preference' }); await idle();
+await until(()=>globalThis.__emberUI.snapshot().reducedMotion===false);
+await click('card-'+attack.id);
+assert((await state()).selectedCard===attack.id, 'The real attack did not arm after the viewport change.');
+await page.evaluate(()=>{
+    const root=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot');
+    const layer=root.getComponent('GameDirector').effectsRoot;
+    globalThis.__tideCastEvents=[];
+    layer.on(cc.Node.EventType.CHILD_ADDED, node=>globalThis.__tideCastEvents.push(node.name));
+});
+const p = await hitPoint('enemy-target');
+await page.mouse.click(p.x,p.y);
+await until(() => globalThis.__tideCastEvents.includes('TidalPulse'));
+await page.screenshot({path:'output/playwright/06-resonance.png'});
+await idle();
+const afterHit=await checkpoint();
+assert(afterHit.battle.hp < beforeCancel.battle.hp && !afterHit.battle.hand.some(c=>c.id===attack.id), 'The attack failed to resolve.');
+await page.reload(); await idle();
+assert(JSON.stringify(await checkpoint()) === JSON.stringify(afterHit),'A resolved attack replayed on reload.');
+await page.emulateMedia({reducedMotion:'reduce'});
+async function battleToMap() {
+    for (let step=0;step<110;step++) {
+        const s=await state();
+        if (s.phase!=='battle') { assert(s.phase==='map','Combat ended in '+s.phase); return; }
+        if ((await discovery()).length) {
+            const mid=await checkpoint();
+            assert(mid.battle.coreExposed,'Unexpected second opening offer.');
+            await page.reload();await idle();
+            assert(JSON.stringify(await checkpoint())===JSON.stringify(mid),'Mid-turn discovery did not resume exactly.');
+            await click('reward-select-0');await screenshot('08b-exposed-core');await click('discover-confirm');
+            assert((await state()).stamina===mid.battle.stamina,'Taking a mid-turn discovery refilled stamina.');
+            continue;
+        }
+        const move=await page.evaluate(()=>{
+            const g=globalThis.__survivalGame,b=g.battle;
+            const cards=b.hand.filter(c=>!g.cardBlocked(c));
+            const def=c=>g.content.cards[c.kind];
+            const damage=cards.filter(c=>def(c).effect.type==='damage').sort((a,b)=>g.attackDamage(b.kind)-g.attackDamage(a.kind));
+            let pick=damage.find(c=>g.attackDamage(c.kind)>=b.hp) || cards.find(c=>def(c).cost===0&&
+                (def(c).effect.type==='damage'||(def(c).effect.type==='block'&&b.block<g.incomingDamage)));
+            if (!pick && b.block<g.incomingDamage && g.armor<7) pick=cards.find(c=>def(c).effect.type==='block');
+            pick=pick||damage[0]||cards.find(c=>def(c).effect.type==='draw'||def(c).effect.type==='equip'||
+                (def(c).effect.type==='block'&&b.block<g.incomingDamage));
+            return pick ? {id:pick.id,attack:def(pick).effect.type==='damage'} : null;
+        });
+        if (!move) await click('end-turn');
+        else {await click('card-'+move.id);if(move.attack)await click('enemy-target');}
+    }
+    throw Error('Combat exceeded the action guard.');
+}
+await battleToMap();
+await click('enter-scavenge'); await click('enter-rest'); await screenshot('07-camp');
+await click('rest-bag'); await click('bag-filter-found');
+const found=(await state()).cards.find(c=>!initial.cards.some(b=>b.id===c.id));
+await click('inspect-'+found.id);
+assert(!(await state()).hits.some(h=>h.enabled&&(h.id.startsWith('toggle-')||h.id.startsWith('discard-'))),'Camp allowed removing field cards.');
+await click('bag-reader-close'); await click('modal-close'); await click('rest-done'); await click('enter-enemy2');
+await click('reward-select-0'); await click('discover-confirm');
+assert((await state()).cards.length === 22,'First discovery did not persist into the second encounter.');
+await quiet();await screenshot('08-rotor'); await battleToMap();
+await until(()=>globalThis.__emberUI.snapshot().phase==='journal'); await idle();
+await click('journal-start'); await screenshot('09-home');
+const home=await checkpoint();
+assert(home.day===2 && home.cards.length===20 && home.cards.every(c=>!c.found) && home.settlement.discoveredCards===3,'Return did not clear exactly the expedition cards.');
+await page.reload(); await idle();
+assert(JSON.stringify(await checkpoint())===JSON.stringify(home),'Return settlement was applied twice.');
+// Short route, skip, and failure on live buttons.
+await click('shelter-done'); await click('entry-tier-emergency'); await click('entry-confirm');
+await click('enter-fixed'); await click('route-B'); await click('enter-scavenge'); await click('enter-rest'); await click('rest-done'); await click('enter-enemy2');
+await click('rewards-done');
+assert((await state()).cards.length===20 && !(await discovery()).length,'Skip added a card.');
+for (let n=0;n<16&&(await state()).phase==='battle';n++) await click('end-turn');
+assert((await state()).phase==='failure' && (await state()).day===3,'Formal failure should advance one day.');
+await click('journal-start');
+const retry=await checkpoint();
+assert(retry.cards.length===20&&retry.armor===10&&retry.supplies===10&&retry.journalEntries.some(e=>e.id==='street-cleared'&&e.read),'Retry lost the journal or failed to restore the base loadout.');
+// This Playwright context is disposable. Seed a real v1 save, then enter through today's default.
+await page.evaluate(()=>{localStorage.removeItem('the-end.run.v1');localStorage.removeItem('the-end.run.v1.backup');});
+await page.goto(url+'?seed=18&ruleset=stamina-v1&save=on');await idle();
+await click('journal-start');await click('entry-confirm');
+const oldRun=await checkpoint();
+await page.goto(url+'?seed=18&save=on&scenario=tide');await idle();
+assert(JSON.stringify(await checkpoint())===JSON.stringify(oldRun), 'Opening a v1 save changed its paid entry or cards.');
+assert((await state()).statusBar.values.rulesNotice.includes('重开可进入盐原'),'Legacy players cannot find the new world.');
+await click('restart');await click('modal-cancel');
+assert(JSON.stringify(await checkpoint())===JSON.stringify(oldRun),'Cancelling restart mutated the old expedition.');
+await click('restart');await click('modal-confirm');
+assert((await checkpoint()).scenarioVersion===2 && (await state()).cards.length===20,'Confirmed restart did not open the field game.');
+return {passed:true,actions:trace.length,seed:17,discovery:draft,normalCast:true,cancelledDrag:true,routeA:'success',routeB:'skip and fail',reloads:4,legacyResumeAndSwitch:true,returnDay:home.day,failureDay:retry.day,runtimeErrors};

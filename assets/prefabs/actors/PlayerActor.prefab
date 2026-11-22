@@ -1395,9 +1395,32 @@
     "skeleton": {
       "__id__": 58
     },
+    "tideSkeleton": {
+      "__uuid__": "c0c2e6a2-e00a-46e1-b144-58b8d65e8138",
+      "__expectedType__": "sp.SkeletonData"
+    },
+    "tideContract": {
+      "__uuid__": "a4f396c8-4d7b-4aa5-816e-4090ad682021",
+      "__expectedType__": "cc.JsonAsset"
+    },
     "contract": {
       "__uuid__": "d38d9f7b-f98f-4bc8-ad69-74bb37402b3a",
       "__expectedType__": "cc.JsonAsset"
+    },
+    "labyrinthSkeleton": {
+      "__uuid__": "753b3bfa-85fa-4718-8289-24c65ff01c58",
+      "__expectedType__": "sp.SkeletonData"
+    },
+    "labyrinthContract": {
+      "__uuid__": "475ab5e7-2e78-4a51-8231-8385df26b25c",
+      "__expectedType__": "cc.JsonAsset"
+    },
+    "labyrinthScale": 0.5523809523809524,
+    "labyrinthOffset": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": -112,
+      "z": 0
     }
   },
   {

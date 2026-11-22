@@ -18,7 +18,7 @@ export interface UiState {
     discardId: string;
     discardFromBag: boolean;
     page: number;
-    bagFilter: 'all' | 'deck' | 'overflow';
+    bagFilter: 'all' | 'deck' | 'overflow' | 'found';
     bagSort: 'original' | 'name' | 'cost' | 'weight';
     deckEdit: boolean;
     inspectedCard: string;
@@ -26,6 +26,7 @@ export interface UiState {
     bagDetails: boolean;
     rewardSelection: number;
     rewardContext: string;
+    rewardPage: number;
     entryTier: 'emergency' | 'low' | 'standard' | 'high';
     recipes: RecipeBrowseState;
     busy: boolean;
@@ -46,6 +47,7 @@ export function initialUiState(): UiState {
         bagDetails: false,
         rewardSelection: -1,
         rewardContext: '',
+        rewardPage: 0,
         entryTier: 'standard',
         recipes: initialRecipeBrowse(),
         busy: false,

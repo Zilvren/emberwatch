@@ -1,4 +1,16 @@
-import { _decorator, Color, Component, Graphics, Node, Tween, tween, UITransform, Vec3 } from 'cc';
+import {
+    _decorator,
+    Color,
+    Component,
+    Graphics,
+    Node,
+    Sprite,
+    SpriteFrame,
+    Tween,
+    tween,
+    UITransform,
+    Vec3,
+} from 'cc';
 const { ccclass, property } = _decorator;
 
 /** Scene depth and short impact feedback; no game rules or character scaling. */
@@ -6,6 +18,21 @@ const { ccclass, property } = _decorator;
 export class SceneAtmosphere extends Component {
     @property(Node) backdrop: Node | null = null;
     @property(Graphics) dust: Graphics | null = null;
+    @property(SpriteFrame) tideBackdrop: SpriteFrame | null = null;
+    @property(SpriteFrame) labyrinthBackdrop: SpriteFrame | null = null;
+    @property(SpriteFrame) labyrinthCourt: SpriteFrame | null = null;
+    private previousBackdrop: SpriteFrame | null = null;
+    setFieldLook(field: boolean): void {
+        this.setLook(field ? 'tide' : 'legacy');
+    }
+    setLook(look: 'tide' | 'labyrinth' | 'court' | 'legacy'): void {
+        const sprite = this.backdrop?.getComponent(Sprite);
+        if (!sprite) return;
+        if (!this.previousBackdrop) this.previousBackdrop = sprite.spriteFrame;
+        sprite.spriteFrame = (look === 'tide' ? this.tideBackdrop
+            : look === 'court' ? this.labyrinthCourt
+            : look === 'labyrinth' ? this.labyrinthBackdrop : null) ?? this.previousBackdrop;
+    }
     private elapsed = 0;
     private reduced = false;
     private query: MediaQueryList | null = null;

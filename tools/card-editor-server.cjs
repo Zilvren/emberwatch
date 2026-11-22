@@ -57,6 +57,7 @@ function createEditorServer(options = {}) {
                 return json(response, 200, { ...read(), savedAt: new Date().toISOString(), backup });
             }
             if (request.method !== 'GET' && request.method !== 'HEAD') return json(response, 405, { error: '不支持此操作。' });
+            if (address.pathname === '/favicon.ico') return sendFile(response, path.join(project, 'build/web-desktop/favicon.ico'));
             if (address.pathname === '/api/status') return json(response, 200, { gameBuilt: fs.existsSync(path.join(project, 'build/web-desktop/application.js')) });
             if (address.pathname === '/shared/catalog.js' || address.pathname === '/shared/recipes.js') {
                 const file = address.pathname === '/shared/catalog.js' ? schemaPath : path.join(path.dirname(schemaPath), 'RecipeCatalog.ts');
@@ -69,11 +70,11 @@ function createEditorServer(options = {}) {
                 response.writeHead(200, { 'Content-Type': mime['.js'], 'Cache-Control': 'no-store' });
                 return response.end(ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ES2020 } }).outputText);
             }
-            if (address.pathname === '/shared/ui-theme.json') return sendFile(response, path.join(project, 'assets/resources/ui/field-card-theme.json'));
-            if (address.pathname === '/shared/ui-art.json') return sendFile(response, path.join(project, 'assets/resources/ui/cards/items-manifest.json'));
-            if (address.pathname === '/art/ui-card-items.png') return sendFile(response, path.join(project, 'assets/resources/ui/cards/items.png'));
-            if (address.pathname === '/art/ui-card-materials.png') return sendFile(response, path.join(project, 'assets/resources/ui/cards/materials.png'));
-            if (address.pathname === '/art/card-art.png') return sendFile(response, path.join(project, 'assets/resources/art/card-art.png'));
+            const interfaceArt = path.join(project, 'assets/ashen-labyrinth/interface');
+            if (address.pathname === '/shared/ui-theme.json') return sendFile(response, path.join(interfaceArt, 'theme.json'));
+            if (address.pathname === '/shared/ui-art.json') return sendFile(response, path.join(interfaceArt, 'illustrations.json'));
+            if (address.pathname === '/art/labyrinth-cards.png') return sendFile(response, path.join(interfaceArt, 'illustrations.png'));
+            if (address.pathname === '/art/labyrinth-shelter.jpg') return sendFile(response, path.join(interfaceArt, 'shelter.jpg'));
             if (address.pathname === '/play') { response.writeHead(302, { Location: '/play/?cards=live' }); return response.end(); }
             if (address.pathname.startsWith('/play/')) {
                 const build = path.join(project, 'build/web-desktop');

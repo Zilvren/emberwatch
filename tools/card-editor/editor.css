@@ -42,3 +42,94 @@
     .recipe-workspace > * { padding: 17px; }
     .map-craft-test { margin-left: 5px; }
 }
+.deck-dialog {
+    width: min(600px, calc(100vw - 28px));
+    padding: 24px;
+    border: 1px solid #cbc8b8;
+    border-radius: 9px;
+    background: #f4f0e3;
+    color: #29372d;
+}
+.deck-dialog-header, .deck-dialog-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.deck-dialog-header p, .deck-dialog-footer p {
+    color: #566151;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.deck-dialog-header p { margin-top: 7px; }
+.deck-options { display: grid; gap: 9px; margin: 19px 0; }
+.deck-option {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 13px;
+    align-items: start;
+    padding: 13px 14px;
+    border-radius: 5px;
+    border: 1px solid #cccdbf;
+    background: #faf8ee;
+    cursor: pointer;
+}
+.deck-option:has(input:checked) { background: #e6ecdc; border-color: #abbc9f; }
+.deck-option input { width: 17px; height: 17px; accent-color: #476849; }
+.deck-option strong, .deck-option small { display: block; }
+.deck-option small { margin-top: 5px; color: #566151; line-height: 1.65; }
+.deck-size { color: #52664f; font-size: 12px; white-space: nowrap; }
+@media (max-width: 510px) {
+    .deck-dialog { padding: 17px; }
+    .deck-dialog-footer { align-items: stretch; flex-direction: column; }
+}
+
+:root {
+    --ink: #efe1d0;
+    --paper: #2b2734;
+    --line: #615568;
+    --danger: #eba193;
+    --gold: #d4b487;
+}
+body { background: #191622; color: var(--ink); }
+.topbar { background: #211b29; border-color: #665567; }
+.workshop-nav { background: #2b2534; color: #eedfce; border-bottom: 1px solid var(--line); }
+.workshop-nav a[aria-current="page"] { background: #caae82; color: #201927; }
+.recipe-workspace { background: var(--line); }
+.recipe-workspace > * { background: var(--paper); }
+.recipe-list-row, .recipe-editor select, .tree-root { background: #352d40; color: var(--ink); border-color: var(--line); }
+.recipe-list-row[aria-current="true"] { background: #4c3b52; border-color: #b09182; box-shadow: inset 3px 0 #b09182; }
+.recipe-list-row span, .recipe-note, .tree-recipe, .tree-note { color: #cebacb; }
+.recipe-side, .recipe-branches li { border-color: var(--line); }
+.recipe-side legend, .recipe-preview h3, .recipe-add-row, .tree-card { color: #ead6bf; }
+.brand-symbol { background: #332838; border-color: #9f826d; color: #dec297; }
+.brand-separator, .brand small { color: #ad96a8; }
+.save-state, .quiet { color: #c7b3c4; }
+.outline { color: #e4d5e2; border-color: #837084; }
+.primary { background: #caae82; color: #201927; border-color: #e1c396; }
+.primary:hover { background: #e0c296; }
+.library, .inspector { background: var(--paper); border-color: #66596c; }
+.library-header, .inspector-heading, .library-footer { border-color: #4e4256; }
+.eyebrow, .preview-hint, .field-note, .preview-caption { color: #bdadbe; }
+.count, .subtle-badge { color: #e0c4a4; background: #423646; }
+.preview-area {
+    background: linear-gradient(150deg, #251e2aaa, #181422ed), url('/art/labyrinth-shelter.jpg') center / cover;
+    color: var(--ink);
+}
+.card-row, .icon-button, .search, .inspector select, .field input, .field textarea,
+.library select, .art-option { color: #eee2d6; background: #332d3e; border-color: #5c4e61; }
+.card-row:hover, .icon-button:hover, .art-option:hover { background: #44394c; }
+.card-row.selected, .art-option:has(input:checked) { color: #f3dfc6; background: #4d3d53; border-color: #c6a17e; }
+.row-info small, .row-indicator, .empty-list, .field small, .library-footer { color: #c4b2c3; }
+.deck-summary, .deck-summary>div, .property-group, .references { color: var(--ink); background: #2d2636; border-color: #645367; }
+.deck-summary strong, .section-line h1, .inspector h2, .preview-heading h2 { color: #ead6bf; }
+.property-group legend, .field-label, .check-field, .field>span, .art-option small { color: #d2bfd2; }
+.painted-tile { display: block; width: 100%; height: 100%; background-image: url('/art/labyrinth-cards.png'); background-repeat: no-repeat; }
+.deck-dialog { background: #2d2636; border-color: #977f91; color: var(--ink); }
+.deck-dialog-header p, .deck-dialog-footer p, .deck-option small { color: #cebacb; }
+.deck-option { background: #352d40; border-color: #66566a; }
+.deck-option:has(input:checked) { background: #4c3b52; border-color: #b09182; }
+.deck-size { color: #dbbb94; }
+.deck-option input { accent-color: #b99570; }
+
+dialog::backdrop { background: #17121dcc; backdrop-filter: blur(5px); }

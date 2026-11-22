@@ -2651,7 +2651,19 @@
       {
         "__id__": 169
       }
-    ]
+    ],
+    "labyrinthPaper": {
+      "__uuid__": "43fd84d2-7d81-48db-83e1-5f7da7b2fecc@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "interfaceTheme": {
+      "__uuid__": "b212e864-a51b-40a9-8c3b-e4bd22864bac",
+      "__expectedType__": "cc.JsonAsset"
+    },
+    "shelterArtwork": {
+      "__uuid__": "2fc4ad83-bd3f-4c8b-bfbc-55f36e924494@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    }
   },
   {
     "__type__": "75982P1tERAtLUyVjBmBKj9",

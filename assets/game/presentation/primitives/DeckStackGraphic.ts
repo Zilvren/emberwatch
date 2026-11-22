@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Graphics, JsonAsset, Node, UITransform } from 'cc';
+import { _decorator, Color, Component, Graphics, JsonAsset, Node, Sprite, SpriteFrame, UITransform } from 'cc';
 const { ccclass, property, requireComponent, executeInEditMode } = _decorator;
 
 /** The deck is a small stack of worn cards, using the same ink and canvas as the actors. */
@@ -7,6 +7,21 @@ const { ccclass, property, requireComponent, executeInEditMode } = _decorator;
 @requireComponent(Graphics)
 export class DeckStackGraphic extends Component {
     @property(JsonAsset) theme: JsonAsset | null = null;
+    private painted: Node | null = null;
+    setPaintedBack(frame: SpriteFrame): void {
+        if (!this.painted) {
+            const cover = new Node('PaintedBack');
+            cover.layer = this.node.layer;
+            this.node.addChild(cover);
+            cover.setSiblingIndex(0);
+            cover.addComponent(UITransform);
+            this.painted = cover;
+        }
+        const sprite = this.painted.getComponent(Sprite) ?? this.painted.addComponent(Sprite);
+        sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+        sprite.spriteFrame = frame;
+        this.redraw();
+    }
     onEnable(): void {
         this.node.on(Node.EventType.SIZE_CHANGED, this.redraw, this);
         this.redraw();
@@ -18,6 +33,11 @@ export class DeckStackGraphic extends Component {
         const g = this.getComponent(Graphics),
             size = this.getComponent(UITransform)?.contentSize;
         if (!g || !size) return;
+        if (this.painted) {
+            g.clear();
+            this.painted.getComponent(UITransform)!.setContentSize(size.width - 5, size.height - 5);
+            return;
+        }
         const w = size.width / 2 - 5,
             h = size.height / 2 - 5,
             colors = this.theme?.json.colors,

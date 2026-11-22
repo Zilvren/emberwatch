@@ -1,0 +1,56 @@
+{
+  "project": "The end",
+  "date": "2026-11-19",
+  "title": "门前择牌 · 人物面部碎色",
+  "status": "局部画风试稿，待用户评审",
+  "file": "art-source/ashen-labyrinth/threshold-card-choice-face-color.png",
+  "width": 1586,
+  "height": 992,
+  "sha256": "efdbcc0d2d71bf61ff44043ed197d253d3cf1c2b9b51966c62bf679a21c294d8",
+  "source": {
+    "file": "art-source/ashen-labyrinth/references/threshold-card-choice-close-source.png",
+    "sha256": "4b8237b17b8f48068f9bdda829cb6371969024fa61a271e43bd3e29896436cff",
+    "uri": "viking://~/resources/projects/the-end/docs/sources/ashen-labyrinth-card-choice-close/threshold-card-choice-close-source.png",
+    "selection": "用户此次附图。求生者在左侧举牌，光头守门人坐在右侧，提灯位于桌子的右端。"
+  },
+  "userDirection": "在这一版的两张人物脸上加一点画风的破碎感。",
+  "treatment": {
+    "survivor": "颧骨下与靠围巾的面颊用暖赭和冷灰紫的短色块衔接。",
+    "gatekeeper": "眉弓、鼻侧和眼下往颊侧的转折做较宽的冷暖碎色，保留垂落的眼睑和嘴角。"
+  },
+  "generation": {
+    "tool": "内置 ImageGen",
+    "modelId": null,
+    "method": "从用户底图裁出两张脸，在同一张放大局部图上绘制碎色，按皮肤范围羽化合回原图。",
+    "sourceCrops": [
+      {
+        "role": "求生者",
+        "xywh": [
+          362,
+          147,
+          136,
+          136
+        ]
+      },
+      {
+        "role": "守门人",
+        "xywh": [
+          1155,
+          241,
+          150,
+          150
+        ]
+      }
+    ],
+    "callId": "exec-010d17c4-7fe0-40b0-aaf5-c2cf16a075b9",
+    "prompt": "This is a precision paint-over on the provided two-panel close crop of the SAME game illustration. Render the identical two-panel 2:1 image, without a gutter, without typography. Registration to the attached image is essential: exactly preserve the crop boundary, the position and size of every head, silhouettes, eye placement, hair shapes, scarf, the bald scalp outline, and the downcast expressions. This sheet will be composited back into the original illustration at its original scale.\n\nThe one visible change: give the exposed facial SKIN a broken-colour hand-drawn finish with readable, gently ragged-edged, matte little notes of colour. The original two faces are large uniform flat fills. Within those fills, introduce close-value transitions made of irregular interlocking touches of the original skin colour, a slightly cool mauve-brown, and a slightly warm clay ochre. Keep these hues very muted, but let the boundaries of the colour notes be visible. The character on the left most needs this: make a little cluster of five to eight connected but interrupted organic colour touches across his visible cheek, including one low, broader cool half-tone interrupted by two little warm notes, and a smaller hint where his cheek approaches the scarf. Avoid one smooth bright cheek highlight. On the keeper at right, break the diagonal halftone from below his outer eye to the cheek, add a smaller separate group at the brow and temple, and one by the side of the nose. Let some edges skip and dissolve as they travel over the skin. In both faces, vary the size and finish of the marks; use some colour notes about one fifth of the width of the visible cheek and two or three smaller notes alongside. Think fine dry, broken color in a handsome drawn 2D game character, matte expressive illustration, still a little less realistic than life. Raised plane catches muted ochre; recessed plane takes a touch of cool mauve. Large, quiet islands of base skin colour between the groups. At thumbnail scale the overall lighting and values stay intact. At full resolution the little irregular warm and cool colour passages should unmistakably read as intentional DRAWING. No special effects, glints, white streaks, sweaty gloss, pink blush, literal skin cracks, scars, damage, dirt, freckles, tattoos, aging, mosaic, faceted glass, hard ink outlines, photoreal pores, or oil brush texture. No extra construction detail in eyes, noses or lips. Do not invent extra cast shadow shapes across the heads. The rest of each panel stays exactly as supplied."
+  },
+  "verification": {
+    "comparison": "比较磁盘上两张 1586 × 992 PNG 解码后的 RGB 像素。",
+    "survivorPixels": 981,
+    "gatekeeperPixels": 4381,
+    "outsideMaskChanged": 0
+  },
+  "assetArchive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/face-color/threshold-card-choice-face-color.png",
+  "recordUri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/face-color/threshold-card-choice-face-color.json"
+}

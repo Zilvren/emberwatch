@@ -1,0 +1,26 @@
+{
+  "actor": "veil-idol",
+  "editor": "3.8.75",
+  "bones": 16,
+  "slots": 18,
+  "images": 18,
+  "meshes": [
+    "pennant-left",
+    "pennant-right"
+  ],
+  "ik": 0,
+  "impact": 0.68,
+  "clips": {
+    "idle": 3.2,
+    "prepare": 0.86,
+    "attack": 1.24,
+    "hurt": 0.45,
+    "death": 1.36
+  },
+  "atlasPages": [
+    "veil-idol-parts.png",
+    "veil-idol-parts2.png"
+  ],
+  "projectSha256": "1c1ebbdcb8ba3139554e6bc77cba339095ffb5c1732f330dd493cdef7f691825",
+  "runtimeSha256": "9414232082eb352205d33a236243a7570074dd4126643a4fbd6fa324d1c4da79"
+}

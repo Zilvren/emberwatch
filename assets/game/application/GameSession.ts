@@ -1,6 +1,13 @@
 import type { GameReadModel } from '../core/GameReadModel';
 import { ActionResult, SurvivalGame } from '../core/SurvivalGame';
-import { Route, GameScenario, RUN_DECK_SCENARIO } from '../core/content/GameScenario';
+import {
+    Route,
+    GameScenario,
+    ASHEN_LABYRINTH_SCENARIO,
+    FIELD_SCENARIO,
+    RUN_DECK_SCENARIO,
+} from '../core/content/GameScenario';
+import { getCatalog } from '../core/content/CardCatalog';
 import { EntryTierId } from '../core/content/EntryTiers';
 import type { RunPersistence } from './RunPersistence';
 export type GameCommand =
@@ -23,6 +30,8 @@ export type GameCommand =
     | { type: 'choose-route'; route: Route }
     | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
+    | { type: 'discover'; kind: string | null }
+    | { type: 'resolve-combat-choice'; id: string | null }
     | { type: 'discard-supplies'; amount: number }
     | { type: 'repair' }
     | { type: 'synthesize'; recipeId: string };
@@ -39,10 +48,19 @@ export class GameSession {
     get newGameRuleset(): GameScenario['ruleset'] {
         return this.defaultScenario.ruleset;
     }
+    get fieldUpdateAvailable(): boolean {
+        return !!this.defaultScenario.fieldDeck &&
+            (this.game.scenario.id !== this.defaultScenario.id || !this.game.scenario.fieldDeck);
+    }
+    get newGameDestination(): string {
+        return this.defaultScenario.title;
+    }
     constructor(
         seed?: number,
         private readonly saves?: RunPersistence,
-        private readonly defaultScenario: GameScenario = RUN_DECK_SCENARIO,
+        private readonly defaultScenario: GameScenario = getCatalog().labyrinth
+            ? ASHEN_LABYRINTH_SCENARIO
+            : getCatalog().expedition ? FIELD_SCENARIO : RUN_DECK_SCENARIO,
         private readonly mapSynthesisUnlocked = false
     ) {
         const loaded = saves?.load();
@@ -56,7 +74,9 @@ export class GameSession {
                 ? this.game.scenario.ruleset === 'tutorial-v1' &&
                   this.defaultScenario.ruleset === 'stamina-v1'
                     ? '已恢复旧规则探索，进度已保留。重开新探索后启用体力系统。'
-                    : '已继续上次的探索进度。'
+                    : this.fieldUpdateAvailable
+                      ? `已继续旧版探索。重开可进入${this.newGameDestination}。`
+                      : '已继续上次的探索进度。'
                 : '');
     }
     get saveStatus(): string {
@@ -116,6 +136,12 @@ export class GameSession {
                 break;
             case 'claim-card':
                 result = g.claimCard(command.index);
+                break;
+            case 'discover':
+                result = g.discover(command.kind);
+                break;
+            case 'resolve-combat-choice':
+                result = g.resolveCombatChoice(command.id);
                 break;
             case 'finish-rewards':
                 result = g.finishRewards();

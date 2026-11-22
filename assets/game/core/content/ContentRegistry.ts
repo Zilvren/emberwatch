@@ -6,6 +6,20 @@ export interface CardSet {
     readonly supplyPool: readonly CardKind[];
     readonly initialDeck: readonly CardKind[];
 }
+/** Old expeditions keep the same authored names. Rules use stable IDs in both settings. */
+export function scenarioCardSet(base: CardSet, scenario: { fieldDeck?: boolean; labyrinth?: true }): CardSet {
+    const fieldCards = { ...base.cards };
+    const faces = base.catalog.expedition?.faces ?? {};
+    for (const id of Object.keys(faces))
+        fieldCards[id] = Object.freeze({ ...base.cards[id], ...faces[id] });
+    Object.freeze(fieldCards);
+    return Object.freeze({
+        ...base,
+        get cards() {
+            return scenario.fieldDeck && !scenario.labyrinth ? fieldCards : base.cards;
+        },
+    });
+}
 export function createCardSet(raw: Catalog = getCatalog()): CardSet {
     const catalog: Catalog = JSON.parse(JSON.stringify(raw));
     const cards: Record<CardKind, CardDefinition> = Object.create(null),
@@ -13,11 +27,28 @@ export function createCardSet(raw: Catalog = getCatalog()): CardSet {
         supplyPool: CardKind[] = [],
         initialDeck: CardKind[] = [];
     for (const card of catalog.cards) {
+        if (card.effect.labyrinth) Object.freeze(card.effect.labyrinth);
         Object.freeze(card.effect);
         Object.freeze(card);
         cards[card.id] = card;
         if (card.reward) (card.role === 'supply' ? supplyPool : rewardPool).push(card.id);
         for (let n = 0; n < card.initialCount; n++) initialDeck.push(card.id);
+    }
+    if (catalog.labyrinth) {
+        Object.freeze(catalog.labyrinth.starter);
+        for (const deck of catalog.labyrinth.decks) {
+            Object.freeze(deck.cards);
+            Object.freeze(deck);
+        }
+        Object.freeze(catalog.labyrinth.decks);
+        Object.freeze(catalog.labyrinth.enabledDecks);
+        Object.freeze(catalog.labyrinth);
+    }
+    if (catalog.expedition) {
+        Object.freeze(catalog.expedition.starter);
+        catalog.expedition.discoveryGroups.forEach((group) => Object.freeze(group));
+        Object.freeze(catalog.expedition.discoveryGroups);
+        Object.freeze(catalog.expedition);
     }
     Object.freeze(catalog.cards);
     for (const recipe of catalog.recipes ?? []) {

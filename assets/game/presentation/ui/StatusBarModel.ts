@@ -9,6 +9,7 @@ export interface StatusBarInput {
     capacity: number;
     overflow: number;
     overflowCapacity: number;
+    fieldCards?: number;
     saveStatus: string;
     muted: boolean;
     actionsEnabled: boolean;
@@ -32,7 +33,11 @@ export const defaultStatus: StatusBarInput = {
 /** Display decisions only. A warning never changes command eligibility or game rules. */
 export function statusBarView(input: Readonly<StatusBarInput>) {
     const suppliesTone: StatusTone =
-        input.supplies <= 0 ? 'danger' : input.supplies <= 1 ? 'warning' : 'normal';
+        input.supplies <= 0 && input.fieldCards === undefined
+            ? 'danger'
+            : input.supplies <= 1
+              ? 'warning'
+              : 'normal';
     const armorTone: StatusTone = input.critical
         ? 'danger'
         : input.armor <= 2
@@ -55,19 +60,38 @@ export function statusBarView(input: Readonly<StatusBarInput>) {
         supplies: String(input.supplies),
         suppliesTone,
         suppliesHint:
-            input.supplies <= 0 ? '补给用尽' : input.supplies <= 1 ? '补给偏低' : '生存补给',
-        armorTitle: input.critical ? '护甲 · 感染临界' : input.armor <= 2 ? '护甲 · 偏低' : '护甲',
+            input.fieldCards !== undefined
+                ? input.supplies === 0
+                    ? '可紧急出发'
+                    : '入场与修复'
+                : input.supplies <= 0
+                  ? '补给用尽'
+                  : input.supplies <= 1
+                    ? '补给偏低'
+                    : '生存补给',
+        armorTitle: input.critical
+            ? input.fieldCards !== undefined
+                ? '护甲 · 失压临界'
+                : '护甲 · 感染临界'
+            : input.armor <= 2
+              ? '护甲 · 偏低'
+              : '护甲',
         armor: `${input.armor} / ${input.armorMax}`,
         armorTone,
         armorRatio: input.armorMax > 0 ? Math.max(0, Math.min(1, input.armor / input.armorMax)) : 0,
-        bag: `背包 ${input.carried} / ${input.capacity}`,
+        bag:
+            input.fieldCards !== undefined
+                ? `牌组 · ${input.fieldCards} 张`
+                : `背包 ${input.carried} / ${input.capacity}`,
         carryTone,
         carryHint:
-            input.overflow > 0
-                ? `暂存 ${input.overflow} / ${input.overflowCapacity}`
-                : input.carried >= input.capacity
-                  ? '携带已满'
-                  : `剩余 ${input.capacity - input.carried} 负重`,
+            input.fieldCards !== undefined
+                ? ''
+                : input.overflow > 0
+                  ? `暂存 ${input.overflow} / ${input.overflowCapacity}`
+                  : input.carried >= input.capacity
+                    ? '携带已满'
+                    : `剩余 ${input.capacity - input.carried} 负重`,
         save,
         saveTone,
         audio: input.muted ? '声音关' : '声音开',

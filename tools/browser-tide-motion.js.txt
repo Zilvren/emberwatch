@@ -1,0 +1,35 @@
+const base='http://127.0.0.1:7457/';
+await page.goto(base+'?seed=17&save=off&preview=encounter&scenario=tide');await idle();
+const effects = () => page.evaluate(()=>globalThis.__tideEffects);
+async function observe() {
+    await page.evaluate(()=>{
+        const director=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');
+        globalThis.__tideEffects=[];
+        director.effectsRoot.on(cc.Node.EventType.CHILD_ADDED,node=>{
+            globalThis.__tideEffects.push({name:node.name,at:performance.now()});
+        });
+    });
+}
+await observe();
+const turnStart=await state();
+const attack=turnStart.hand.find(c=>['attack','heavy'].includes(c.kind)&&!c.blocked);
+await click('card-'+attack.id);await click('enemy-target');
+assert((await effects()).filter(e=>e.name==='TidalPulse').length===1,'A surveyor attack should release exactly one wave.');
+assert((await effects()).filter(e=>e.name==='PressureImpact').length===1,'The surveyor hit must use the pressure-ring effect.');
+await click('end-turn');await click('end-turn');
+const buoy=await page.evaluate(()=>{
+    const root=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot');
+    const actor=root.getComponentsInChildren('ActorPresentation').find(a=>a.actorId==='wanderer'&&a.node.activeInHierarchy);
+    return actor.inspectRig();
+});
+assert(buoy.actor==='buoy'&&buoy.attackTravel>0&&buoy.contactError<5,'Buoy lunge missed the target silhouette: '+JSON.stringify(buoy));
+await page.goto(base+'?seed=31&save=off&scenario=tide');await idle();
+await click('journal-start');await click('entry-confirm');await click('enter-fixed');await click('route-B');
+await click('enter-scavenge');await click('enter-rest');await click('rest-done');await click('enter-enemy2');await click('rewards-done');
+await observe();await click('end-turn');await click('end-turn');
+const s=await state();
+assert(s.battle.intent==='attack'&&s.battle.damage===7,'Rotor did not telegraph its charged attack.');
+assert((await effects()).filter(e=>e.name==='TidalPulse').length===1,'Rotor preparation emitted damage or its shot was missing.');
+assert((await effects()).filter(e=>e.name==='PressureImpact').length===1,'The rotor did not use the new impact or triggered twice.');
+await screenshot('rotor-charged');
+return {passed:true,normalMotion:true,pulsesPerAttack:1,buoyTravel:buoy.attackTravel,buoyContactError:buoy.contactError,rotorChargedDamage:s.battle.damage,runtimeErrors};

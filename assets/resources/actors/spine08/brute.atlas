@@ -1,26 +1,150 @@
 
-master08-thin.png
-size: 1536,1024
+brute-parts.png
+size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-master08-thin
+Cloth
   rotate: false
-  xy: 0, 0
-  size: 1536, 1024
-  orig: 1536, 1024
+  xy: 748, 365
+  size: 181, 205
+  orig: 181, 205
+  offset: 0, 0
+  index: -1
+FrontFoot
+  rotate: false
+  xy: 361, 605
+  size: 185, 100
+  orig: 185, 100
+  offset: 0, 0
+  index: -1
+FrontForearm
+  rotate: false
+  xy: 550, 580
+  size: 132, 125
+  orig: 132, 125
+  offset: 0, 0
+  index: -1
+FrontHand
+  rotate: false
+  xy: 258, 610
+  size: 99, 95
+  orig: 99, 95
+  offset: 0, 0
+  index: -1
+FrontThigh
+  rotate: false
+  xy: 2, 481
+  size: 124, 143
+  orig: 124, 143
+  offset: 0, 0
+  index: -1
+FrontUpperArm
+  rotate: false
+  xy: 595, 406
+  size: 149, 164
+  orig: 149, 164
+  offset: 0, 0
+  index: -1
+Head
+  rotate: false
+  xy: 2, 237
+  size: 206, 220
+  orig: 206, 220
+  offset: 0, 0
+  index: -1
+Pelvis
+  rotate: false
+  xy: 686, 574
+  size: 220, 131
+  orig: 220, 131
+  offset: 0, 0
+  index: -1
+RearFoot
+  rotate: false
+  xy: 2, 628
+  size: 163, 77
+  orig: 163, 77
+  offset: 0, 0
+  index: -1
+RearForearm
+  rotate: false
+  xy: 130, 461
+  size: 131, 145
+  orig: 131, 145
+  offset: 0, 0
+  index: -1
+RearHand
+  rotate: false
+  xy: 169, 623
+  size: 85, 82
+  orig: 85, 82
+  offset: 0, 0
+  index: -1
+RearShoulderPlate
+  rotate: false
+  xy: 265, 454
+  size: 172, 147
+  orig: 172, 147
+  offset: 0, 0
+  index: -1
+RearThigh
+  rotate: false
+  xy: 441, 428
+  size: 150, 148
+  orig: 150, 148
+  offset: 0, 0
+  index: -1
+Torso
+  rotate: false
+  xy: 212, 2
+  size: 303, 422
+  orig: 303, 422
   offset: 0, 0
   index: -1
 
-brute-corpse.png
-size: 1774,887
+brute-parts2.png
+size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-brute-corpse
+TorsoFill
   rotate: false
-  xy: 41, 86
-  size: 1634, 744
-  orig: 1774, 887
-  offset: 41, 57
+  xy: 2, 2
+  size: 856, 794
+  orig: 856, 794
+  offset: 0, 0
+  index: -1
+
+brute-parts3.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+FrontShin
+  rotate: false
+  xy: 2, 2
+  size: 491, 794
+  orig: 491, 794
+  offset: 0, 0
+  index: -1
+RearShin
+  rotate: false
+  xy: 497, 2
+  size: 491, 794
+  orig: 491, 794
+  offset: 0, 0
+  index: -1
+
+brute-parts4.png
+size: 512,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+RearUpperArm
+  rotate: false
+  xy: 2, 2
+  size: 411, 794
+  orig: 411, 794
+  offset: 0, 0
   index: -1

@@ -1,0 +1,178 @@
+{
+  "frameCount": 60,
+  "distinctImages": 54,
+  "fps": 50,
+  "durationMs": 1200,
+  "dimensions": [
+    576,
+    944
+  ],
+  "anchor": [
+    199,
+    919
+  ],
+  "threeViewRgbPixelCount": 117680,
+  "exactProfilePixelsPerFrame": 76821,
+  "profileRegions": {
+    "hair_face_neck": {
+      "pixelsPerFrame": 14243,
+      "mismatchedPixelsInAllFrames": 0
+    },
+    "scarf": {
+      "pixelsPerFrame": 6552,
+      "mismatchedPixelsInAllFrames": 0
+    },
+    "back_of_mantle": {
+      "pixelsPerFrame": 8128,
+      "mismatchedPixelsInAllFrames": 0
+    },
+    "leather_case": {
+      "pixelsPerFrame": 2387,
+      "mismatchedPixelsInAllFrames": 0
+    },
+    "satchel": {
+      "pixelsPerFrame": 7037,
+      "mismatchedPixelsInAllFrames": 0
+    },
+    "lower_cloak_pants_boots": {
+      "pixelsPerFrame": 38546,
+      "mismatchedPixelsInAllFrames": 0
+    }
+  },
+  "fullLowerBodyRgbaInvariant": true,
+  "changesOutsideMotionZone": 0,
+  "stationaryCards": {
+    "lantern": {
+      "center": [
+        312,
+        316
+      ],
+      "rgbaIdenticalAcrossFrames": true
+    },
+    "repel": {
+      "center": [
+        439,
+        142
+      ],
+      "rgbaIdenticalAcrossFrames": true
+    }
+  },
+  "contactMs": 440,
+  "contactGapPixels": 1.0,
+  "bodyConnectivitySamples": [
+    {
+      "frame": 0,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 8,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 16,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 20,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 22,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 25,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 30,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 36,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 43,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 52,
+      "visibleBodyComponents": 1
+    },
+    {
+      "frame": 59,
+      "visibleBodyComponents": 1
+    }
+  ],
+  "referenceHashes": {
+    "turnaround-golden.png": "4c266904e6f1a6f40d6b4b230e5fa5e8c7d87d6fcfe8a36272189cacbe59b26d",
+    "profile.png": "f1e0860e6a81a4327d2feab6ff991901ecf66a7d0c083b490fffdc5368d1a9d8",
+    "think.png": "37a9c2966be6667d407b2596d03fd831b0b8c51e4d3d81844291b7b17fc0e6c8",
+    "near-bracer.png": "f0d6bc52f3772c9869a5e94365f692e2a0f630f56813a78d4aa78d994181290d",
+    "touch-middle.png": "7ac852a3e9ba89459c5a75f3c258d8a21ff276ee23fd381984c5834ce7613a12"
+  },
+  "filePreviews": {
+    "guard-flick": {
+      "decodedFrames": 47,
+      "durationMs": 1200,
+      "fixedRegionsRGBIdentical": true
+    },
+    "guard-flick-half-speed": {
+      "decodedFrames": 47,
+      "durationMs": 2400,
+      "fixedRegionsRGBIdentical": true
+    }
+  },
+  "losslessPreview": {
+    "decoded_frame_count": 54,
+    "total_duration_ms": 1200,
+    "timeline_verified": true,
+    "alpha_and_visible_rgb_exact": true,
+    "file_sha256": "73a5933aa29914132bd0140c29c546609326efec9e77eaccd94fe3a3eabb5546"
+  },
+  "poseRestMatchesTerminalCharacter": true,
+  "asset": {
+    "action": "guard-flick",
+    "project": "The end",
+    "date": "2026-11-21",
+    "revision": 2,
+    "source": {
+      "profile": "art-source/ashen-labyrinth/battle-survivor/frames/source/profile.png",
+      "identitySource": "art-source/ashen-labyrinth/battle-survivor/turnaround-golden.png",
+      "baseMethod": "original right profile with one fixed local underpaint for the lowered arm"
+    },
+    "forge": {
+      "commit": "25203d03900b46b444bdd72a75768c33d1895ad6",
+      "exportConsoleWarnings": 0,
+      "preservesSourcePNGBytes": true
+    }
+  },
+  "selfReview": {
+    "browserPlayback": [
+      {
+        "speed": 1,
+        "elapsedMs": 1213,
+        "distinctDisplayedFrames": 60
+      },
+      {
+        "speed": 0.5,
+        "elapsedMs": 2413,
+        "distinctDisplayedFrames": 60
+      }
+    ],
+    "browserErrors": [],
+    "visualPoseChecks": [
+      "think",
+      "windup",
+      "contact",
+      "departure",
+      "recovery"
+    ],
+    "poseReferenceImage": "reference-and-poses.png",
+    "adjustments": [
+      "cover the hard elbow overlap using the support arm layer",
+      "place the inactive lantern card clear of the moving forearm"
+    ]
+  }
+}

@@ -57,7 +57,8 @@
 
 ## 7. 当前接入
 
-- 新开探索使用 `stamina-expedition` 第 2 版。旧版存档保留已有进度和卡组模式，重开后启用新卡组与合成规则。
+- 2026-11-22 合并焦土迷宫后，正式新局进入焦土迷宫。合成探索继续使用 `stamina-expedition@2`，从工坊「配方编辑」点击「试玩游戏」进入。旧合成存档直接续接原规则。
+- 两个分支曾共用 `stamina-expedition@2`。进度通过历史卡牌配置签名识别，旧退潮盐原读入时转为 `tide-expedition@2`。原有地图位置、抽牌状态、关键日志和仓库记录随各自存档恢复。
 - 游戏配方表用原生 Cocos 面板呈现。工坊的「试玩时解锁地图合成」提供临时测试入口，试玩关闭自动保存。正式地图当前只读。
 - 正式卡牌目录中的配方表初始为空，暂不预置具体物资卡。编辑器中加入奖励池的物资牌后，可投放至旧街搜刮。物资卡配置兑换物资点，不进入初始战斗卡组。
 - 相关代码为 `assets/game/core/content/RecipeCatalog.ts`、`assets/game/core/systems/SynthesisRules.ts`、`assets/game/application/GameSession.ts`、`assets/prefabs/ui/RecipePopup.prefab` 和 `tools/card-editor/recipes.js`。

@@ -57,6 +57,9 @@ test('weapons generate their configured temporary card next turn and preserve th
 });
 test('deleting an ordinary definition removes it from initial decks and reward pools', () => {
     const catalog = base(); catalog.cards = catalog.cards.filter(card => card.id !== 'evade');
+    delete catalog.expedition.starter.evade;
+    delete catalog.expedition.faces.evade;
+    catalog.expedition.discoveryGroups = catalog.expedition.discoveryGroups.map(group => group.filter(id => id !== 'evade'));
     const { SurvivalGame, CARD, REWARD_POOL } = gameWith(catalog), game = new SurvivalGame(1);
     assert.equal(CARD.evade, undefined); assert.ok(!REWARD_POOL.includes('evade')); assert.ok(!game.cards.some(card => card.kind === 'evade'));
 });

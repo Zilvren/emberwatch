@@ -1,26 +1,118 @@
 
-master08-thin.png
-size: 1536,1024
+wanderer-parts.png
+size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-master08-thin
+Cloth
   rotate: false
-  xy: 0, 0
-  size: 1536, 1024
-  orig: 1536, 1024
+  xy: 658, 94
+  size: 37, 67
+  orig: 37, 67
   offset: 0, 0
   index: -1
-
-wanderer-corpse.png
-size: 2172,724
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
-wanderer-corpse
+FrontFoot
   rotate: false
-  xy: 185, 195
-  size: 1845, 467
-  orig: 2172, 724
-  offset: 185, 62
+  xy: 390, 5
+  size: 89, 100
+  orig: 89, 100
+  offset: 0, 0
+  index: -1
+FrontForearm
+  rotate: false
+  xy: 534, 11
+  size: 63, 113
+  orig: 63, 113
+  offset: 0, 0
+  index: -1
+FrontHand
+  rotate: false
+  xy: 483, 22
+  size: 47, 83
+  orig: 47, 83
+  offset: 0, 0
+  index: -1
+FrontShin
+  rotate: false
+  xy: 2, 228
+  size: 171, 794
+  orig: 171, 794
+  offset: 0, 0
+  index: -1
+FrontThigh
+  rotate: false
+  xy: 286, 32
+  size: 100, 192
+  orig: 100, 192
+  offset: 0, 0
+  index: -1
+FrontUpperArm
+  rotate: false
+  xy: 475, 273
+  size: 124, 749
+  orig: 124, 749
+  offset: 0, 0
+  index: -1
+Head
+  rotate: false
+  xy: 390, 109
+  size: 134, 150
+  orig: 134, 150
+  offset: 0, 0
+  index: -1
+Pelvis
+  rotate: false
+  xy: 584, 165
+  size: 115, 104
+  orig: 115, 104
+  offset: 0, 0
+  index: -1
+RearFoot
+  rotate: false
+  xy: 601, 7
+  size: 106, 72
+  orig: 106, 72
+  offset: 0, 0
+  index: -1
+RearForearm
+  rotate: false
+  xy: 528, 128
+  size: 52, 141
+  orig: 52, 141
+  offset: 0, 0
+  index: -1
+RearHand
+  rotate: false
+  xy: 601, 83
+  size: 53, 78
+  orig: 53, 78
+  offset: 0, 0
+  index: -1
+RearShin
+  rotate: false
+  xy: 177, 228
+  size: 162, 794
+  orig: 162, 794
+  offset: 0, 0
+  index: -1
+RearThigh
+  rotate: false
+  xy: 2, 2
+  size: 77, 222
+  orig: 77, 222
+  offset: 0, 0
+  index: -1
+RearUpperArm
+  rotate: false
+  xy: 343, 263
+  size: 128, 759
+  orig: 128, 759
+  offset: 0, 0
+  index: -1
+Torso
+  rotate: false
+  xy: 83, 14
+  size: 199, 210
+  orig: 199, 210
+  offset: 0, 0
   index: -1

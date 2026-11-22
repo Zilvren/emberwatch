@@ -1,0 +1,45 @@
+{
+  "actor": "survivor",
+  "editor": "3.8.75",
+  "bones": 45,
+  "slots": 36,
+  "images": 35,
+  "meshes": [
+    "near-underarm",
+    "coat-skirt",
+    "mantle",
+    "near-sleeve",
+    "tunic-lining",
+    "hips-lining",
+    "back-flap",
+    "inner-skirt",
+    "far-thigh",
+    "cast-middle",
+    "hood",
+    "near-trouser-lining",
+    "near-thigh",
+    "cast-index",
+    "ration-bag"
+  ],
+  "ik": 2,
+  "impact": 0.58,
+  "clips": {
+    "idle": 2.56,
+    "prepare": 0.67,
+    "attack": 1.1,
+    "hurt": 0.47,
+    "death": 1.38
+  },
+  "auxiliary": {
+    "card-flight": 0.246,
+    "carry-card": 1
+  },
+  "atlasPages": [
+    "survivor-parts.png",
+    "survivor-parts2.png",
+    "survivor-parts3.png",
+    "survivor-parts4.png"
+  ],
+  "projectSha256": "bfad971fe86732f92c66098c8b18ec9d5a0f587c493c64ea62ad4219891bec1f",
+  "runtimeSha256": "281a778d95719a55da785a7cd2a416fa32c1052e8bf0222a3a17e03a06b81615"
+}

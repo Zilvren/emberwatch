@@ -22,11 +22,11 @@ source.cards.push({
 });
 catalog.installCatalog(source);
 const { GameSession } = load(path.join(root, 'assets/game/application/GameSession.ts'));
-const { STAMINA_SCENARIO } = load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
+const { RUN_DECK_SCENARIO, STAMINA_SCENARIO } = load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
 const { shelterSummary } = load(
     path.join(root, 'assets/game/presentation/ui/ShelterSummaryModel.ts')
 );
-function returned({ supplies, armor = 6, critical = false, storedSupplies, scenario }) {
+function returned({ supplies, armor = 6, critical = false, storedSupplies, scenario = RUN_DECK_SCENARIO }) {
     const session = new GameSession(17, undefined, scenario),
         game = session.game;
     assert.equal(session.execute({ type: 'start', tier: 'emergency' }).ok, true);
@@ -88,7 +88,7 @@ test('shelter projection shows exploration progress and leaves supplies untouche
         before = session.game.exportState();
     const summary = shelterSummary(session.view);
     assert.equal(summary.repairVisible, false);
-    assert.equal(summary.doneCaption, '整备出发');
+    assert.equal(summary.doneCaption, '再次出发');
     assert.match(summary.values['shelter/progress-summary'], /已通关 1 次/);
     assert.equal(Object.keys(summary.values).some(key => key.includes('daily')), false);
     assert.deepEqual(session.game.exportState(), before);

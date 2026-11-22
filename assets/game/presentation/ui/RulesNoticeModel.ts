@@ -1,5 +1,17 @@
 /** Current-rule disclosure never migrates or resets a saved expedition. */
-export function rulesNotice(currentRuleset: string, newGameRuleset: string) {
+export function rulesNotice(currentRuleset: string, newGameRuleset: string, fieldUpdate = false, destination = '退潮盐原') {
+    if (fieldUpdate && destination !== '退潮盐原')
+        return {
+            caption: `旧版探索 · 重开可去${destination}`,
+            help: `当前进度继续使用原地图。确认重开后进入${destination}。\n\n`,
+            restart: `\n\n新探索将从${destination}开始。`,
+        };
+    if (currentRuleset === 'stamina-v1' && fieldUpdate)
+        return {
+            caption: '旧版探索 · 重开可进入盐原',
+            help: '这局沿用旧版行囊和营地规则。选择「重开」并确认后，会从第 1 天进入退潮盐原。\n\n',
+            restart: '\n\n新探索将从退潮盐原开始，以基础牌组进入战斗，再在途中发现新牌。',
+        };
     const legacy = currentRuleset === 'tutorial-v1';
     const upgrade = legacy && newGameRuleset === 'stamina-v1';
     return {

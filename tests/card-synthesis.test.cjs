@@ -41,6 +41,7 @@ test('recipes reject ineligible cards, dangling references, duplicates, invalid 
     assert.throws(edit((raw) => { delete raw.cards.find(({ id }) => id === 'knife').canSynthesize; }), /未勾选/);
     assert.throws(edit((raw) => { raw.recipes[0].materials[0].card = 'missing'; }), /不存在/);
     assert.throws(edit((raw) => { raw.recipes[0].products[0].card = 'cloth_supplies'; }), /须为战斗卡/);
+    assert.throws(edit((raw) => { raw.recipes[0].products[0].card = 'lab_press'; }), /仅用于焦土迷宫/);
     assert.throws(edit((raw) => { raw.recipes[0].products.pop(); }), /至少需要/);
     assert.throws(edit((raw) => { raw.recipes[0].materials[0].count = 1.5; }), /整数/);
     assert.throws(edit((raw) => { raw.recipes[0].materials.push(raw.recipes[0].materials[0]); }), /合并数量/);
@@ -53,7 +54,7 @@ test('recipes reject ineligible cards, dangling references, duplicates, invalid 
 });
 
 test('contextual card-face hint appears for a partial recipe and the graph shows both directions', () => {
-    const session = new GameSession(17);
+    const session = new GameSession(17, undefined, RUN_DECK_SCENARIO);
     const { cards, recipes } = session.game.content.catalog;
     const wood = cards.find(({ id }) => id === 'wood_stick');
     assert.equal(missingSynthesisMaterials(recipes, []).size, 0);
@@ -113,7 +114,7 @@ test('gameplay locks under the battle overlay and settled supply cards survive a
         getItem: (key) => values.get(key) ?? null,
         setItem: (key, value) => values.set(key, value),
     });
-    const session = new GameSession(17, saves);
+    const session = new GameSession(17, saves, RUN_DECK_SCENARIO);
     start(session);
     takeFixedReward(session);
     command(session, 'choose-route', { route: 'B' });
@@ -176,8 +177,10 @@ test('pre-synthesis saves keep their original rules until the player starts a ne
         return (value >>> 0).toString(16);
     }
     const base = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../assets/resources/data/cards.json'), 'utf8'));
-    const oldSchema = validateCatalog(base);
-    delete oldSchema.recipes;
+    const legacyIds = new Set(['attack', 'dodge', 'knife', 'evade', 'repair', 'heavy', 'cash', 'slash']);
+    const validated = validateCatalog(base);
+    const oldSchema = { version: validated.version, fixedReward: validated.fixedReward,
+        cards: validated.cards.filter(({ id }) => legacyIds.has(id)) };
     oldSchema.cards.find(({ id }) => id === 'attack').text = '固有能力，永不丢失';
     installCatalog(base);
     try {
@@ -189,7 +192,7 @@ test('pre-synthesis saves keep their original rules until the player starts a ne
         };
         let stored = JSON.stringify({ ...body, checksum: hash(JSON.stringify(body)) });
         const saves = new SaveRepository({ getItem: () => stored, setItem: (_key, value) => { stored = value; } });
-        const session = new GameSession(42, saves);
+        const session = new GameSession(42, saves, RUN_DECK_SCENARIO);
         assert.equal(session.restored, true);
         assert.deepEqual(session.game.exportState(), body.state);
         command(session, 'open-recipes');

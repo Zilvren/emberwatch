@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>frames</key>
+	<dict>
+		<key>sweep-low</key>
+		<dict>
+			<key>frame</key>
+			<string>{{2,2},{300,944}}</string>
+			<key>offset</key>
+			<string>{-31.0,0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceSize</key>
+			<string>{512,944}</string>
+		</dict>
+		<key>sweep-high</key>
+		<dict>
+			<key>frame</key>
+			<string>{{306,2},{386,944}}</string>
+			<key>offset</key>
+			<string>{12.0,0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceSize</key>
+			<string>{512,944}</string>
+		</dict>
+	</dict>
+	<key>metadata</key>
+	<dict>
+		<key>format</key>
+		<integer>2</integer>
+		<key>realTextureFileName</key>
+		<string>survivor-cels-2.png</string>
+		<key>textureFileName</key>
+		<string>survivor-cels-2.png</string>
+		<key>size</key>
+		<string>{694,948}</string>
+	</dict>
+</dict>
+</plist>

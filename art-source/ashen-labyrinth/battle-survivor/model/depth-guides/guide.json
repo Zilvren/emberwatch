@@ -1,0 +1,1107 @@
+{
+  "project": "The end",
+  "asset": "青年求生者三视图深度参考",
+  "date": "2026-11-21",
+  "status": "建模工作参考，内部层次为估算，待美术审阅",
+  "use": "Blender 正交校形，模型源位于 art-source/ashen-labyrinth/battle-survivor/model/Survivor.blend。",
+  "source": {
+    "turnaround-golden-master.png": {
+      "path": "turnaround-golden-master.png",
+      "sha256": "8a41f4aca887b4132bd2156dc8ecaf456aff68e76c96051ba3d698f3f801cdf4"
+    },
+    "head-turnaround.png": {
+      "path": "head-turnaround.png",
+      "sha256": "258b9515b66c1ce21962f9bd829a34bbe41b49f547c746f903097e1d1ab66f32"
+    }
+  },
+  "inference": {
+    "repository": "onnx-community/depth-anything-v2-small",
+    "revision": "4472b7362082ad9968fee890ca0f1e5aca36b93d",
+    "sha256": "afb6a5c28f3b6bf1618c6e43f02073ef9dfdc70e937502d51603e57b0a1df10c"
+  },
+  "method": "两次本地相对深度推断合并，使用正反轮廓和对侧深度范围重定标。面部有手工跨视图配对点，使用可见褶层与遮挡关系约束外表面。原稿颜色没有直接换算为高度。",
+  "orientation": {
+    "front": "镜头位于 Blender -Y，灰阶表示 -Y；图像向右为 +X。",
+    "right": "原画人物面向画面右方。镜头位于 Blender -X，灰阶表示 -X；图像向右为 -Y。",
+    "back": "镜头位于 Blender +Y，灰阶表示 +Y；图像向右为 -X。"
+  },
+  "calibration": {
+    "reviewSheetPixels": [
+      1585,
+      992
+    ],
+    "characterHeightInReviewPixels": 907.0,
+    "footBaseline": 921,
+    "hairTop": 14,
+    "beltCentre": 360.5,
+    "horizontalOriginsFrontRightBack": [
+      308.75,
+      768.5,
+      1279.5
+    ],
+    "headPanelXYOnBodyMaster": [
+      [
+        678,
+        18
+      ],
+      [
+        2415,
+        18
+      ],
+      [
+        4166,
+        18
+      ]
+    ],
+    "sideRowsToCorrespondingFrontRows": {
+      "side": [
+        0.0,
+        32.0,
+        245.0,
+        306.0,
+        330.0,
+        393.0,
+        404.0,
+        443.0,
+        451.0,
+        492.0,
+        509.0,
+        546.0,
+        605.0,
+        640.0,
+        757.0
+      ],
+      "front": [
+        0.0,
+        32.0,
+        245.0,
+        302.0,
+        330.0,
+        395.0,
+        403.0,
+        449.0,
+        458.0,
+        492.0,
+        516.0,
+        553.0,
+        607.0,
+        640.0,
+        757.0
+      ]
+    },
+    "sourcePixelPolicy": "原图的像素位置、裁切和长宽保留。侧脸的垂直对应只用于深度估算。"
+  },
+  "encoding": {
+    "background": 0,
+    "validCodes": [
+      1,
+      65535
+    ],
+    "rangeInBodyHeights": [
+      -0.22,
+      0.22
+    ],
+    "zeroDepthCode": 32768,
+    "decode": "signed depth in body heights = ((code - 1) / 65534 - 0.5) * 0.44",
+    "brighter": "nearer camera",
+    "blender": "数据贴图使用 Non-Color。沿当前正交相机轴阅读；使用角色自身高度换算为场景长度。"
+  },
+  "limits": [
+    "头发下面的头皮、披风下面的肩背、布袋里面以及侧视图遮住的远侧肢体只能推断。",
+    "侧面只提供一个方向；远侧眼、耳的前后位置参考近侧配对。",
+    "来源为绘制三视图，真实绝对尺寸和内部厚度未知。"
+  ],
+  "views": {
+    "head-front": {
+      "cropXYWH": [
+        0,
+        0,
+        692,
+        758
+      ],
+      "size": [
+        692,
+        758
+      ],
+      "pairedAndEstimatedAnchors": [
+        {
+          "feature": "额中眉骨",
+          "pixel": [
+            370,
+            302
+          ],
+          "targetSignedArtUnits": 64.777,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 65.996
+        },
+        {
+          "feature": "鼻根",
+          "pixel": [
+            371,
+            330
+          ],
+          "targetSignedArtUnits": 65.063,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 64.503
+        },
+        {
+          "feature": "鼻梁中段",
+          "pixel": [
+            372,
+            366
+          ],
+          "targetSignedArtUnits": 70.786,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 70.108
+        },
+        {
+          "feature": "鼻尖",
+          "pixel": [
+            373,
+            395
+          ],
+          "targetSignedArtUnits": 75.937,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 74.067
+        },
+        {
+          "feature": "鼻翼近端",
+          "pixel": [
+            351,
+            403
+          ],
+          "targetSignedArtUnits": 67.352,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 68.259
+        },
+        {
+          "feature": "鼻翼远端",
+          "pixel": [
+            394,
+            403
+          ],
+          "targetSignedArtUnits": 67.352,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 67.926
+        },
+        {
+          "feature": "鼻下",
+          "pixel": [
+            373,
+            414
+          ],
+          "targetSignedArtUnits": 69.641,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 69.069
+        },
+        {
+          "feature": "人中",
+          "pixel": [
+            372,
+            432
+          ],
+          "targetSignedArtUnits": 68.497,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 68.14
+        },
+        {
+          "feature": "闭合唇中心",
+          "pixel": [
+            372,
+            449
+          ],
+          "targetSignedArtUnits": 68.211,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 67.628
+        },
+        {
+          "feature": "下唇",
+          "pixel": [
+            372,
+            458
+          ],
+          "targetSignedArtUnits": 68.497,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 67.924
+        },
+        {
+          "feature": "颏前缘",
+          "pixel": [
+            373,
+            492
+          ],
+          "targetSignedArtUnits": 64.777,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 64.098
+        },
+        {
+          "feature": "下巴转折",
+          "pixel": [
+            372,
+            516
+          ],
+          "targetSignedArtUnits": 59.626,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 56.706
+        },
+        {
+          "feature": "近眼外眦",
+          "pixel": [
+            277,
+            322
+          ],
+          "targetSignedArtUnits": 47.894,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 47.841
+        },
+        {
+          "feature": "近眼内眦",
+          "pixel": [
+            342,
+            339
+          ],
+          "targetSignedArtUnits": 61.629,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 61.19
+        },
+        {
+          "feature": "近侧上睑",
+          "pixel": [
+            312,
+            322
+          ],
+          "targetSignedArtUnits": 57.337,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 57.719
+        },
+        {
+          "feature": "远眼外眦",
+          "pixel": [
+            467,
+            322
+          ],
+          "targetSignedArtUnits": 47.894,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 47.459
+        },
+        {
+          "feature": "远眼内眦",
+          "pixel": [
+            401,
+            339
+          ],
+          "targetSignedArtUnits": 61.629,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 60.82
+        },
+        {
+          "feature": "远侧上睑",
+          "pixel": [
+            431,
+            322
+          ],
+          "targetSignedArtUnits": 57.337,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 57.514
+        },
+        {
+          "feature": "近侧耳轮",
+          "pixel": [
+            215,
+            337
+          ],
+          "targetSignedArtUnits": 5.543,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 6.727
+        },
+        {
+          "feature": "近侧耳屏",
+          "pixel": [
+            241,
+            365
+          ],
+          "targetSignedArtUnits": 16.417,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 17.373
+        },
+        {
+          "feature": "近侧耳垂",
+          "pixel": [
+            239,
+            394
+          ],
+          "targetSignedArtUnits": 13.555,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 13.487
+        },
+        {
+          "feature": "远侧耳轮",
+          "pixel": [
+            523,
+            337
+          ],
+          "targetSignedArtUnits": 5.543,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 6.765
+        },
+        {
+          "feature": "远侧耳垂",
+          "pixel": [
+            503,
+            394
+          ],
+          "targetSignedArtUnits": 13.555,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 13.936
+        },
+        {
+          "feature": "近颧弓转面",
+          "pixel": [
+            281,
+            365
+          ],
+          "targetSignedArtUnits": 45.891,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 45.721
+        },
+        {
+          "feature": "远颧弓转面",
+          "pixel": [
+            462,
+            365
+          ],
+          "targetSignedArtUnits": 45.891,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 45.6
+        },
+        {
+          "feature": "近下颌角",
+          "pixel": [
+            283,
+            454
+          ],
+          "targetSignedArtUnits": 24.715,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 24.619
+        },
+        {
+          "feature": "远下颌角",
+          "pixel": [
+            457,
+            454
+          ],
+          "targetSignedArtUnits": 24.715,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 24.972
+        },
+        {
+          "feature": "前颈转折",
+          "pixel": [
+            373,
+            553
+          ],
+          "targetSignedArtUnits": 41.312,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 40.686
+        }
+      ],
+      "encodedValidRange": [
+        29978,
+        45543
+      ],
+      "initialCrossViewCarvingSupport": 0.9046
+    },
+    "head-right": {
+      "cropXYWH": [
+        692,
+        0,
+        692,
+        758
+      ],
+      "size": [
+        692,
+        758
+      ],
+      "pairedAndEstimatedAnchors": [
+        {
+          "feature": "额中眉骨",
+          "pixel": [
+            497,
+            306
+          ],
+          "targetSignedArtUnits": 8.862,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 9.126
+        },
+        {
+          "feature": "鼻根",
+          "pixel": [
+            498,
+            330
+          ],
+          "targetSignedArtUnits": 8.576,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 8.56
+        },
+        {
+          "feature": "鼻梁中段",
+          "pixel": [
+            518,
+            366
+          ],
+          "targetSignedArtUnits": 8.29,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 8.318
+        },
+        {
+          "feature": "鼻尖",
+          "pixel": [
+            536,
+            393
+          ],
+          "targetSignedArtUnits": 8.003,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 7.929
+        },
+        {
+          "feature": "鼻翼近端",
+          "pixel": [
+            506,
+            404
+          ],
+          "targetSignedArtUnits": 14.299,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 13.82
+        },
+        {
+          "feature": "鼻下",
+          "pixel": [
+            514,
+            411
+          ],
+          "targetSignedArtUnits": 8.003,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 8.282
+        },
+        {
+          "feature": "人中",
+          "pixel": [
+            510,
+            422
+          ],
+          "targetSignedArtUnits": 8.29,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 8.507
+        },
+        {
+          "feature": "颏前缘",
+          "pixel": [
+            497,
+            492
+          ],
+          "targetSignedArtUnits": 8.003,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 7.969
+        },
+        {
+          "feature": "下巴转折",
+          "pixel": [
+            479,
+            509
+          ],
+          "targetSignedArtUnits": 8.29,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 8.365
+        },
+        {
+          "feature": "近眼外眦",
+          "pixel": [
+            438,
+            316
+          ],
+          "targetSignedArtUnits": 35.474,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 35.771
+        },
+        {
+          "feature": "近眼内眦",
+          "pixel": [
+            486,
+            333
+          ],
+          "targetSignedArtUnits": 16.874,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 16.625
+        },
+        {
+          "feature": "近侧上睑",
+          "pixel": [
+            471,
+            322
+          ],
+          "targetSignedArtUnits": 25.459,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 25.963
+        },
+        {
+          "feature": "近侧耳轮",
+          "pixel": [
+            290,
+            323
+          ],
+          "targetSignedArtUnits": 53.216,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 53.19
+        },
+        {
+          "feature": "近侧耳屏",
+          "pixel": [
+            328,
+            354
+          ],
+          "targetSignedArtUnits": 45.776,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 45.856
+        },
+        {
+          "feature": "近侧耳垂",
+          "pixel": [
+            318,
+            396
+          ],
+          "targetSignedArtUnits": 46.348,
+          "source": "visible-pair",
+          "resultSignedArtUnits": 46.222
+        },
+        {
+          "feature": "近颧弓转面",
+          "pixel": [
+            431,
+            362
+          ],
+          "targetSignedArtUnits": 34.33,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 34.408
+        },
+        {
+          "feature": "近下颌角",
+          "pixel": [
+            357,
+            451
+          ],
+          "targetSignedArtUnits": 33.757,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 33.738
+        },
+        {
+          "feature": "前颈转折",
+          "pixel": [
+            415,
+            546
+          ],
+          "targetSignedArtUnits": 8.003,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 8.091
+        }
+      ],
+      "encodedValidRange": [
+        28773,
+        50339
+      ],
+      "initialCrossViewCarvingSupport": 0.9034
+    },
+    "head-back": {
+      "cropXYWH": [
+        1384,
+        0,
+        692,
+        758
+      ],
+      "size": [
+        692,
+        758
+      ],
+      "pairedAndEstimatedAnchors": [],
+      "encodedValidRange": [
+        27359,
+        42238
+      ],
+      "initialCrossViewCarvingSupport": 0.9239
+    },
+    "body-front": {
+      "cropXYWH": [
+        399,
+        0,
+        1360,
+        3467
+      ],
+      "size": [
+        1360,
+        3467
+      ],
+      "pairedAndEstimatedAnchors": [
+        {
+          "feature": "围巾前襟",
+          "pixel": [
+            303,
+            196
+          ],
+          "targetSignedArtUnits": 63.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 63.387
+        },
+        {
+          "feature": "斜肩带胸前",
+          "pixel": [
+            312,
+            258
+          ],
+          "targetSignedArtUnits": 76.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 76.458
+        },
+        {
+          "feature": "腰带前表面",
+          "pixel": [
+            303,
+            362
+          ],
+          "targetSignedArtUnits": 79.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 79.394
+        },
+        {
+          "feature": "牌匣卡片露边",
+          "pixel": [
+            358,
+            384
+          ],
+          "targetSignedArtUnits": 79.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 79.421
+        },
+        {
+          "feature": "牌匣前袋",
+          "pixel": [
+            359,
+            419
+          ],
+          "targetSignedArtUnits": 87.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 87.426
+        },
+        {
+          "feature": "侧袋前缘",
+          "pixel": [
+            215,
+            476
+          ],
+          "targetSignedArtUnits": -4.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": -4.245
+        },
+        {
+          "feature": "右手套掌面",
+          "pixel": [
+            175,
+            497
+          ],
+          "targetSignedArtUnits": 37.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 37.603
+        },
+        {
+          "feature": "左手套掌面",
+          "pixel": [
+            428,
+            497
+          ],
+          "targetSignedArtUnits": 34.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 34.417
+        },
+        {
+          "feature": "右膝束带",
+          "pixel": [
+            251,
+            737
+          ],
+          "targetSignedArtUnits": 28.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 28.433
+        },
+        {
+          "feature": "左膝束带",
+          "pixel": [
+            357,
+            737
+          ],
+          "targetSignedArtUnits": 28.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 28.434
+        },
+        {
+          "feature": "右靴鞋头",
+          "pixel": [
+            246,
+            900
+          ],
+          "targetSignedArtUnits": 95.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 95.252
+        },
+        {
+          "feature": "左靴鞋头",
+          "pixel": [
+            370,
+            900
+          ],
+          "targetSignedArtUnits": 95.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 95.306
+        }
+      ],
+      "encodedValidRange": [
+        28570,
+        49161
+      ],
+      "initialCrossViewCarvingSupport": 0.9622
+    },
+    "body-right": {
+      "cropXYWH": [
+        2006,
+        0,
+        1360,
+        3467
+      ],
+      "size": [
+        1360,
+        3467
+      ],
+      "pairedAndEstimatedAnchors": [
+        {
+          "feature": "近肩外沿",
+          "pixel": [
+            752,
+            239
+          ],
+          "targetSignedArtUnits": 132.75,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 124.84
+        },
+        {
+          "feature": "收口袋外侧",
+          "pixel": [
+            720,
+            477
+          ],
+          "targetSignedArtUnits": 117.75,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 117.615
+        },
+        {
+          "feature": "近臂绑带",
+          "pixel": [
+            793,
+            448
+          ],
+          "targetSignedArtUnits": 143.75,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 143.656
+        },
+        {
+          "feature": "近手套掌背",
+          "pixel": [
+            799,
+            491
+          ],
+          "targetSignedArtUnits": 149.75,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 148.739
+        },
+        {
+          "feature": "近靴外壁",
+          "pixel": [
+            792,
+            900
+          ],
+          "targetSignedArtUnits": 86.75,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 86.671
+        },
+        {
+          "feature": "牌匣外壁",
+          "pixel": [
+            849,
+            414
+          ],
+          "targetSignedArtUnits": -26.25,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": -26.059
+        }
+      ],
+      "encodedValidRange": [
+        23033,
+        57497
+      ],
+      "initialCrossViewCarvingSupport": 0.9113
+    },
+    "body-back": {
+      "cropXYWH": [
+        3791,
+        0,
+        1360,
+        3467
+      ],
+      "size": [
+        1360,
+        3467
+      ],
+      "pairedAndEstimatedAnchors": [
+        {
+          "feature": "兜帽后襟",
+          "pixel": [
+            1287,
+            230
+          ],
+          "targetSignedArtUnits": 78.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 78.421
+        },
+        {
+          "feature": "背带中央",
+          "pixel": [
+            1297,
+            295
+          ],
+          "targetSignedArtUnits": 60.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 60.442
+        },
+        {
+          "feature": "行囊后缘",
+          "pixel": [
+            1369,
+            476
+          ],
+          "targetSignedArtUnits": 85.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 85.005
+        },
+        {
+          "feature": "右靴跟",
+          "pixel": [
+            1330,
+            901
+          ],
+          "targetSignedArtUnits": 30.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 30.374
+        },
+        {
+          "feature": "左靴跟",
+          "pixel": [
+            1218,
+            901
+          ],
+          "targetSignedArtUnits": 30.5,
+          "source": "estimated-plane",
+          "resultSignedArtUnits": 30.422
+        }
+      ],
+      "encodedValidRange": [
+        24133,
+        47012
+      ],
+      "initialCrossViewCarvingSupport": 0.9514
+    }
+  },
+  "validation": {
+    "format": "16-bit linear grayscale PNG, color type 0",
+    "artifactChecks": {
+      "head-front": {
+        "pixelCoverage": 278089,
+        "grayscaleLevels": 13720,
+        "sameCropAsSheet": true,
+        "zeroOnlyOutside": true,
+        "maxOutsideCrossViewEnvelopeArtUnits": 0.0,
+        "sha256": "bc5e2279e10bcab0f882ddf562b2205c63e0a8eb7ff98269cd68afa130b912c4"
+      },
+      "head-right": {
+        "pixelCoverage": 258652,
+        "grayscaleLevels": 20604,
+        "sameCropAsSheet": true,
+        "zeroOnlyOutside": true,
+        "maxOutsideCrossViewEnvelopeArtUnits": 0.0,
+        "sha256": "b4fb1b10aff4f8b5dcbb406d45a87869dc1bd63a14e2095ce0d31bd1511d6dd4"
+      },
+      "head-back": {
+        "pixelCoverage": 272277,
+        "grayscaleLevels": 13605,
+        "sameCropAsSheet": true,
+        "zeroOnlyOutside": true,
+        "maxOutsideCrossViewEnvelopeArtUnits": 0.0,
+        "sha256": "c35a0b7914cd7e34aebf81b4511eb6884edebc586ca9da9efab91a50332da227"
+      },
+      "body-front": {
+        "pixelCoverage": 2008045,
+        "grayscaleLevels": 19261,
+        "sameCropAsSheet": true,
+        "zeroOnlyOutside": true,
+        "maxOutsideCrossViewEnvelopeArtUnits": 0.0,
+        "sha256": "447fb0fe85a743cc0c4860178e3b99369fbdd7a48016d68e4f0b934ae4fff3c0"
+      },
+      "body-right": {
+        "pixelCoverage": 1387893,
+        "grayscaleLevels": 32507,
+        "sameCropAsSheet": true,
+        "zeroOnlyOutside": true,
+        "maxOutsideCrossViewEnvelopeArtUnits": 0.0,
+        "sha256": "d4107639a47a4f93642eed3368ec0b572d925a258494c8ffa718952a734e639e"
+      },
+      "body-back": {
+        "pixelCoverage": 2031051,
+        "grayscaleLevels": 20943,
+        "sameCropAsSheet": true,
+        "zeroOnlyOutside": true,
+        "maxOutsideCrossViewEnvelopeArtUnits": 0.0,
+        "sha256": "4c0cf051cd5ce051e653eed48b4bcf37a04903004b20b63843e39e1cae8c768c"
+      },
+      "head-opposed-surfaces": {
+        "testedRays": 264191,
+        "crossedOverHalfAPixel": 0,
+        "minimumThicknessArtUnits": 0.7
+      },
+      "body-opposed-surfaces": {
+        "testedRays": 489031,
+        "crossedOverHalfAPixel": 0,
+        "minimumThicknessArtUnits": 0.7
+      }
+    },
+    "heldOutCrossViewPoints": [
+      [
+        "正面鼻梁中下段投到侧面",
+        [
+          373,
+          375
+        ],
+        520.6,
+        [
+          516,
+          534
+        ]
+      ],
+      [
+        "侧面耳廓中段投到正面",
+        [
+          298,
+          350
+        ],
+        238.9,
+        [
+          204,
+          245
+        ]
+      ]
+    ],
+    "noseAheadOfEarInFrontArtUnits": 67.34,
+    "earAheadOfNoseInProfileArtUnits": 45.26,
+    "blenderReferenceLibrary": {
+      "blenderVersion": "4.5.15 LTS",
+      "file": "Survivor-depth-reference.blend",
+      "scenes": [
+        "深度参考 · 头部",
+        "深度参考 · 全身"
+      ],
+      "collections": [
+        "求生者 · 三视图深度参考",
+        "头部 · 正交深度参考",
+        "全身 · 正交深度参考"
+      ],
+      "nativeReferenceCount": 6,
+      "registeredHeightMetersInExistingScene": 1.8040500190109015,
+      "samples": {
+        "body-front": {
+          "packedSha256": "447fb0fe85a743cc0c4860178e3b99369fbdd7a48016d68e4f0b934ae4fff3c0",
+          "readBackSample16": 44841,
+          "sourceSample16": 44841,
+          "colourSpace": "Non-Color",
+          "sampleXYFromTop": [
+            652,
+            1326
+          ],
+          "projection": "orthographic",
+          "width": 1360,
+          "height": 3467
+        },
+        "body-right": {
+          "packedSha256": "d4107639a47a4f93642eed3368ec0b572d925a258494c8ffa718952a734e639e",
+          "readBackSample16": 50909,
+          "sourceSample16": 50909,
+          "colourSpace": "Non-Color",
+          "sampleXYFromTop": [
+            505,
+            1650
+          ],
+          "projection": "orthographic",
+          "width": 1360,
+          "height": 3467
+        },
+        "body-back": {
+          "packedSha256": "4c0cf051cd5ce051e653eed48b4bcf37a04903004b20b63843e39e1cae8c768c",
+          "readBackSample16": 44265,
+          "sourceSample16": 44265,
+          "colourSpace": "Non-Color",
+          "sampleXYFromTop": [
+            670,
+            880
+          ],
+          "projection": "orthographic",
+          "width": 1360,
+          "height": 3467
+        },
+        "head-front": {
+          "packedSha256": "bc5e2279e10bcab0f882ddf562b2205c63e0a8eb7ff98269cd68afa130b912c4",
+          "readBackSample16": 44931,
+          "sourceSample16": 44931,
+          "colourSpace": "Non-Color",
+          "sampleXYFromTop": [
+            373,
+            395
+          ],
+          "projection": "orthographic",
+          "width": 692,
+          "height": 758
+        },
+        "head-right": {
+          "packedSha256": "b4fb1b10aff4f8b5dcbb406d45a87869dc1bd63a14e2095ce0d31bd1511d6dd4",
+          "readBackSample16": 41503,
+          "sourceSample16": 41503,
+          "colourSpace": "Non-Color",
+          "sampleXYFromTop": [
+            290,
+            323
+          ],
+          "projection": "orthographic",
+          "width": 692,
+          "height": 758
+        },
+        "head-back": {
+          "packedSha256": "c35a0b7914cd7e34aebf81b4511eb6884edebc586ca9da9efab91a50332da227",
+          "readBackSample16": 38423,
+          "sourceSample16": 38423,
+          "colourSpace": "Non-Color",
+          "sampleXYFromTop": [
+            340,
+            250
+          ],
+          "projection": "orthographic",
+          "width": 692,
+          "height": 758
+        }
+      },
+      "sha256": "00aa530e395090af4c27b4fdcd4dd39f33baa1297880766596a04c37dcdc878a"
+    }
+  },
+  "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/depth-guides"
+}

@@ -1,7 +1,11 @@
+import { FIELD_SCENARIO, STAMINA_SCENARIO } from './GameScenario';
+
 export interface JournalDefinition {
     id: string;
     title: string;
     body: string;
+    fieldText?: { title: string; body: string };
+    labyrinthText?: { title: string; body: string };
     conditions: { milestone: string; count: number }[];
     prerequisites: string[];
 }
@@ -36,6 +40,9 @@ export function validateJournalCatalog(raw: unknown): JournalCatalog {
             entry.body.length > 5000
         )
             throw new Error(`关键日志文案无效：${entry.id}`);
+        for (const text of [entry.fieldText, entry.labyrinthText])
+            if (text && (!text.title || typeof text.body !== 'string' || !text.body.trim()))
+                throw new Error(`探索日志文案无效：${entry.id}`);
         if (
             !Array.isArray(entry.conditions) ||
             !entry.conditions.length ||
@@ -90,5 +97,6 @@ export function getJournalCatalog(): JournalCatalog {
     return JSON.parse(JSON.stringify(installed));
 }
 export function mapClearMilestone(scenarioId: string): string {
-    return `map-cleared:${scenarioId}`;
+    // The salt-field journal already uses the street milestone in existing saves.
+    return `map-cleared:${scenarioId === FIELD_SCENARIO.id ? STAMINA_SCENARIO.id : scenarioId}`;
 }

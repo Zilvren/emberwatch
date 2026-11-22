@@ -9,6 +9,7 @@ import {
     Prefab,
     ResolutionPolicy,
     resources,
+    SpriteFrame,
     sys,
     UITransform,
     Vec2,
@@ -29,12 +30,17 @@ import { MapPointPresentation } from './map/MapPointPresentation';
 import { ButtonAction } from './ui/ButtonAction';
 import { StatusBar } from './ui/StatusBar';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
+import { launchPulse, ringImpact } from './effects/TideResonance';
+import { flyCardBack } from './effects/FlyingCardBack';
 import { enterEncounterPreview } from './dev/EncounterPreview';
 import {
+    FIELD_SCENARIO,
     RUN_DECK_SCENARIO,
     STAMINA_SCENARIO,
     TUTORIAL_SCENARIO,
 } from '../core/content/GameScenario';
+import { RouteMap } from './map/RouteMap';
+import { installLabyrinthInterface } from './ui/LabyrinthInterface';
 import { UiActionRouter } from './ui/UiActionRouter';
 import { ACTION_EVENT, ActionInputEvent, CARD_DROP_EVENT, CardDropInputEvent } from './ui/UIEvents';
 import { initialUiState } from './ui/UiState';
@@ -94,6 +100,9 @@ export class GameDirector extends Component {
     @property(Prefab) attackTemplate: Prefab | null = null;
     @property(Prefab) blockTemplate: Prefab | null = null;
     @property(Prefab) healTemplate: Prefab | null = null;
+    @property(SpriteFrame) labyrinthPaper: SpriteFrame | null = null;
+    @property(JsonAsset) interfaceTheme: JsonAsset | null = null;
+    @property(SpriteFrame) shelterArtwork: SpriteFrame | null = null;
     private game!: GameReadModel;
     private session!: GameSession;
     private audio = new GameAudio();
@@ -147,6 +156,7 @@ export class GameDirector extends Component {
         const query = typeof location === 'undefined' ? null : new URLSearchParams(location.search);
         const saving =
             query?.get('save') !== 'off' && (seed === null || query?.get('save') === 'on');
+        const mapSynthesis = query?.get('save') === 'off' && query?.get('mapCraft') === '1';
         this.session = new GameSession(
             seed === null ? undefined : Number(seed),
             saving ? new SaveRepository(sys.localStorage) : undefined,
@@ -154,8 +164,12 @@ export class GameDirector extends Component {
                 ? TUTORIAL_SCENARIO
                 : seed !== null && query?.get('ruleset') === 'stamina-v1'
                   ? STAMINA_SCENARIO
-                  : RUN_DECK_SCENARIO,
-            query?.get('save') === 'off' && query?.get('mapCraft') === '1'
+                  : seed !== null && query?.get('scenario') === 'tide'
+                    ? FIELD_SCENARIO
+                    : mapSynthesis || (seed !== null && query?.get('scenario') === 'synthesis')
+                      ? RUN_DECK_SCENARIO
+                      : undefined,
+            mapSynthesis
         );
         if (!saving && seed !== null && query?.get('preview') === 'encounter')
             enterEncounterPreview(this.session);
@@ -168,6 +182,8 @@ export class GameDirector extends Component {
         this.motionQuery?.addEventListener('change', this.motionChanged);
         view.setDesignResolutionSize(1440, 900, ResolutionPolicy.SHOW_ALL);
         this.scene = bindScene(this.hud, this.screenRoots, this.popupRoots, this.game.scenario);
+        if (this.interfaceTheme)
+            installLabyrinthInterface(this.scene, this.interfaceTheme, this.shelterArtwork, this.labyrinthPaper);
         this.hand = this.scene.screens.battle.getComponentInChildren(HandPresentation);
         if (this.hand) this.hand.dragLayer = this.dragLayer;
         this.renderer = new GameRenderer(
@@ -181,7 +197,9 @@ export class GameDirector extends Component {
             () => ({
                 blocked: this.session.synthesisBlocked,
                 canUndo: this.session.canUndoSynthesis,
-            })
+            }),
+            () => this.session.fieldUpdateAvailable,
+            () => this.session.newGameDestination
         );
         this.router = new UiActionRouter(this.session, this.ui, {
             act: (command, sound) => this.act(command, sound),
@@ -290,18 +308,22 @@ export class GameDirector extends Component {
             run = g.run;
         let pending = 1;
         const complete = () => {
-            if (--pending || g.run !== run) return;
+            if (--pending || g.run !== run || !this.isValid) return;
             this.ui.busy = false;
             this.refresh();
         };
         const impact = () => {
-            if (g.run !== run) return;
+            if (g.run !== run || !this.isValid) return;
             const result = this.session.execute({ type: 'play-card', id });
+            if (!result.ok) {
+                this.message(result.message);
+                return;
+            }
             if (this.attackKind(card.kind)) {
                 if (this.enemy) {
                     pending++;
                     this.enemy.playAction(
-                        g.phase === 'rewards' ? 'death' : 'hurt',
+                        !g.battle ? 'death' : 'hurt',
                         this.ui.reduced,
                         undefined,
                         complete
@@ -310,12 +332,16 @@ export class GameDirector extends Component {
                 this.effect('attack', this.enemy, `−${oldHp - (g.battle?.hp ?? 0)}`);
             } else if (this.game.content.cards[card.kind].effect.type === 'heal')
                 this.effect('heal', this.hero, `+${g.armor - oldArmor} 护甲`);
-            else
+            else if (this.game.content.cards[card.kind].effect.type === 'draw')
+                this.effect('block', this.hero, '抽牌');
+            else if ((g.battle?.block ?? oldBlock) !== oldBlock || this.game.content.cards[card.kind].effect.type === 'equip')
                 this.effect(
                     'block',
                     this.hero,
                     this.game.content.cards[card.kind].effect.type === 'equip'
-                        ? '武器就绪'
+                        ? g.scenario.fieldDeck
+                            ? '仪器就绪'
+                            : '武器就绪'
                         : `+${(g.battle?.block ?? oldBlock) - oldBlock} 格挡`
                 );
             this.message(result.message);
@@ -328,38 +354,72 @@ export class GameDirector extends Component {
                   ? 'heal'
                   : 'block'
         );
-        if (this.attackKind(card.kind) && this.hero) {
+        if (g.scenario.labyrinth) {
+            presentation?.playAction(() => {}, () => {}, this.ui.reduced);
+            this.flyPlayedCard(this.attackKind(card.kind), () => { impact(); complete(); });
+        } else if (this.attackKind(card.kind) && this.hero) {
             presentation?.playAction(
                 () => {},
                 () => {},
                 this.ui.reduced
             );
-            this.hero.playAction('attack', this.ui.reduced, impact, complete, this.enemy);
+            this.hero.playAction('attack', this.ui.reduced, impact, complete, this.enemy, () =>
+                this.pulse(this.hero, this.enemy)
+            );
         } else if (presentation) presentation.playAction(impact, complete, this.ui.reduced);
         else {
             impact();
             complete();
         }
     }
+    private flyPlayedCard(attack: boolean, done: () => void): void {
+        const rig = this.hero?.spineRig, layer = this.effectsRoot, ink = this.labyrinthPaper;
+        if (this.ui.reduced || !layer || !ink || !rig) {
+            done();
+            return;
+        }
+        const transform = layer.getComponent(UITransform)!;
+        const start = transform.convertToNodeSpaceAR(rig.paperWorld(new Vec3()));
+        const aim = attack && this.enemy?.spineRig ? this.enemy.spineRig : rig;
+        const end = transform.convertToNodeSpaceAR(aim.aimWorld(new Vec3()));
+        if (attack) this.enemy?.impactAnchor?.setWorldPosition(aim.aimWorld(new Vec3()));
+        else end.y += 58;
+        rig.setPaperInFlight(true);
+        flyCardBack(layer, ink, start, end, () => {
+            rig.setPaperInFlight(false);
+            done();
+        });
+    }
     private enemyTurn(): void {
         const g = this.game,
             b = g.battle;
-        if (this.ui.busy || !b) return;
+        if (this.ui.busy || !b || b.discovery || b.cardChoice) return;
+        if (b.calm?.deferred === 'scheduled') {
+            this.act({ type: 'end-turn' });
+            return;
+        }
         this.ui.busy = true;
         this.ui.selectedCard = '';
         this.refreshBattle(this.scene.screens.battle);
         const run = g.run,
             attacking = b.intent === 'attack',
-            damage = Math.max(0, g.incomingDamage - b.block);
+            damage = Math.max(0, g.incomingDamage - b.block), oldHp = b.hp;
         this.audio.play(attacking ? 'enemy' : 'block');
         let pending = 1;
+        let counterKill = false;
         const complete = () => {
-            if (--pending) return;
+            if (--pending || !this.isValid) return;
+            if (counterKill && this.enemy) {
+                counterKill = false;
+                pending = 1;
+                this.enemy.playAction('death', this.ui.reduced, undefined, complete);
+                return;
+            }
             this.ui.busy = false;
             this.refresh();
         };
         const impact = () => {
-            if (run !== g.run) return;
+            if (run !== g.run || !this.isValid) return;
             const result = this.session.execute({ type: 'end-turn' });
             if (attacking) {
                 if (damage && this.hero) {
@@ -377,6 +437,9 @@ export class GameDirector extends Component {
                     damage ? `−${damage}` : '完全格挡'
                 );
             } else this.effect('block', this.enemy, '正在蓄势');
+            counterKill = !!(attacking && !damage && b.calm?.deferred === 'extra-turn' && b.calm.counter && !g.battle);
+            if (counterKill)
+                this.effect('attack', this.enemy, `−${oldHp}`);
             this.message(result.message);
         };
         if (this.enemy)
@@ -385,12 +448,23 @@ export class GameDirector extends Component {
                 this.ui.reduced,
                 impact,
                 complete,
-                this.hero
+                this.hero,
+                () => this.pulse(this.enemy, this.hero)
             );
         else {
             impact();
             complete();
         }
+    }
+    private pulse(from: ActorPresentation | null, to: ActorPresentation | null): void {
+        const rig = from?.spineRig,
+            target = to?.spineRig,
+            layer = this.effectsRoot;
+        if (!rig?.flight || !target || !layer || this.ui.reduced) return;
+        const ui = layer.getComponent(UITransform)!;
+        const start = ui.convertToNodeSpaceAR(rig.contactWorld(new Vec3()));
+        const end = ui.convertToNodeSpaceAR(target.aimWorld(new Vec3()));
+        launchPulse(layer, start, end, rig.flight, from === this.hero);
     }
     private effect(
         kind: 'attack' | 'block' | 'heal',
@@ -413,9 +487,13 @@ export class GameDirector extends Component {
         const position = this.effectsRoot
             .getComponent(UITransform)!
             .convertToNodeSpaceAR(anchor.worldPosition);
-        const effect = instantiate(template);
-        effect.setPosition(position);
-        this.effectsRoot.addChild(effect);
+        if (kind === 'attack' && this.game.scenario.fieldDeck) {
+            ringImpact(this.effectsRoot, position, actor !== this.hero, this.ui.reduced);
+        } else {
+            const effect = instantiate(template);
+            effect.setPosition(position);
+            this.effectsRoot.addChild(effect);
+        }
         const floating = instantiate(this.floatTemplate);
         floating.getComponentInChildren(Label)!.string = text;
         floating.setPosition(position);
@@ -443,7 +521,7 @@ export class GameDirector extends Component {
                 ...this.bounds(a.node),
                 enabled: a.enabled && !this.ui.busy,
             }));
-        if (g.phase === 'battle')
+        if (g.phase === 'battle' && !g.battle?.discovery && !g.battle?.cardChoice)
             for (const card of this.hand?.entries() ?? [])
                 hits.push({
                     id: 'card-' + card.cardId,
@@ -497,6 +575,9 @@ export class GameDirector extends Component {
             heroMotion: this.hero?.motion,
             heroArmed: this.hero?.isArmed,
             enemyMotion: this.enemy?.motion,
+            enemyRig: this.enemy?.inspectRig(),
+            routeMap: this.scene.screens.map.getComponentInChildren(RouteMap)?.inspect(),
+            flyingCard: this.effectsRoot?.getChildByName('FlyingCardBack')?.activeInHierarchy ?? false,
             effects: this.effectsRoot?.children.length ?? 0,
             hits,
         };

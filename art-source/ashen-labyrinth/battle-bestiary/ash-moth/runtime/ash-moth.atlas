@@ -1,0 +1,118 @@
+
+ash-moth-parts.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+abdomen
+  rotate: false
+  xy: 415, 90
+  size: 158, 215
+  orig: 158, 215
+  offset: 0, 0
+  index: -1
+chest-undercoat
+  rotate: false
+  xy: 193, 32
+  size: 144, 186
+  orig: 144, 186
+  offset: 0, 0
+  index: -1
+far-left-leg
+  rotate: false
+  xy: 577, 128
+  size: 91, 177
+  orig: 91, 177
+  offset: 0, 0
+  index: -1
+far-right-leg
+  rotate: false
+  xy: 684, 699
+  size: 81, 122
+  orig: 81, 122
+  offset: 0, 0
+  index: -1
+feeler-left
+  rotate: false
+  xy: 2, 2
+  size: 110, 161
+  orig: 110, 161
+  offset: 0, 0
+  index: -1
+feeler-right
+  rotate: false
+  xy: 2, 167
+  size: 187, 132
+  orig: 187, 132
+  offset: 0, 0
+  index: -1
+fore-left
+  rotate: false
+  xy: 2, 303
+  size: 245, 237
+  orig: 245, 237
+  offset: 0, 0
+  index: -1
+fore-right
+  rotate: false
+  xy: 2, 544
+  size: 445, 277
+  orig: 445, 277
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 251, 222
+  size: 160, 121
+  orig: 160, 121
+  offset: 0, 0
+  index: -1
+hind-left
+  rotate: false
+  xy: 251, 347
+  size: 169, 193
+  orig: 169, 193
+  offset: 0, 0
+  index: -1
+hind-right
+  rotate: false
+  xy: 424, 309
+  size: 218, 225
+  orig: 218, 225
+  offset: 0, 0
+  index: -1
+leg-left
+  rotate: false
+  xy: 116, 13
+  size: 71, 72
+  orig: 71, 72
+  offset: 0, 0
+  index: -1
+leg-left-shin
+  rotate: false
+  xy: 646, 384
+  size: 56, 150
+  orig: 56, 150
+  offset: 0, 0
+  index: -1
+leg-right
+  rotate: false
+  xy: 116, 89
+  size: 73, 74
+  orig: 73, 74
+  offset: 0, 0
+  index: -1
+leg-right-shin
+  rotate: false
+  xy: 341, 60
+  size: 65, 158
+  orig: 65, 158
+  offset: 0, 0
+  index: -1
+thorax
+  rotate: false
+  xy: 451, 538
+  size: 229, 283
+  orig: 229, 283
+  offset: 0, 0
+  index: -1

@@ -12,6 +12,7 @@ export interface EnemyDefinition {
     rewardSupplies: number;
     rewardChoices: number;
     ensureRewardOpeningHand?: boolean;
+    discoverAtHalf?: boolean;
 }
 interface NodeDefinitionBase {
     title: string;
@@ -26,6 +27,7 @@ export type NodeDefinition = NodeDefinitionBase &
               cost: number;
               supplies: readonly [number, number];
               cardReward: 'fixed' | 'random';
+              discover?: boolean;
           }
     );
 export interface GameScenario {
@@ -34,6 +36,9 @@ export interface GameScenario {
     battleResource?: 'supplies' | 'stamina';
     suppliesHaveWeight?: boolean;
     runDeck?: boolean;
+    /** Field discoveries belong to the current expedition. Earlier scenario versions retain their inventory. */
+    fieldDeck?: boolean;
+    labyrinth?: true;
     scavengeFees?: Record<NodeKind, number>;
     id: string;
     version: number;
@@ -127,10 +132,90 @@ export const RUN_DECK_SCENARIO: GameScenario = {
     version: 2,
     runDeck: true,
 };
+export const FIELD_SCENARIO: GameScenario = {
+    ...STAMINA_SCENARIO,
+    id: 'tide-expedition',
+    version: 2,
+    fieldDeck: true,
+    title: '退潮盐原',
+    nodes: {
+        fixed: { ...STAMINA_SCENARIO.nodes.fixed, title: '旧水标' },
+        scavenge: { ...STAMINA_SCENARIO.nodes.scavenge, title: '搁浅的转运舱' },
+        rest: { ...STAMINA_SCENARIO.nodes.rest, title: '避风浮舱' },
+        enemy1: { ...STAMINA_SCENARIO.nodes.enemy1, title: '巡标机' },
+        enemy2: { ...STAMINA_SCENARIO.nodes.enemy2, title: '失控闸轮' },
+    },
+    routes: {
+        A: ['enemy1', 'scavenge', 'rest', 'enemy2'],
+        B: ['scavenge', 'rest', 'enemy2'],
+    },
+    routeDescriptions: { A: '闸脊线 · 多一战，可再发现一次', B: '干潮沟 · 绕过巡标机，直取补给' },
+    enemies: {
+        enemy1: {
+            ...STAMINA_SCENARIO.enemies.enemy1,
+            title: '巡标机',
+            hp: 16,
+            attack: 3,
+            strongAttack: 5,
+            rewardSupplies: 4,
+        },
+        enemy2: {
+            ...STAMINA_SCENARIO.enemies.enemy2,
+            title: '失控闸轮',
+            hp: 26,
+            attack: 4,
+            strongAttack: 7,
+            discoverAtHalf: true,
+        },
+    },
+};
+export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
+    kind: 'expedition',
+    ruleset: 'stamina-v1',
+    battleResource: 'stamina',
+    suppliesHaveWeight: false,
+    fieldDeck: true,
+    labyrinth: true,
+    id: 'ashen-labyrinth',
+    version: 1,
+    title: '焦土迷宫',
+    initialDay: 1,
+    initialSupplies: 10,
+    initialArmor: 10,
+    fixedNodeId: 'threshold',
+    nodes: {
+        threshold: { type: 'scavenge', title: '门槛补给', icon: 'supply', cost: 0, supplies: [2, 2], cardReward: 'random' },
+        lampPassage: { type: 'battle', title: '悬灯窄道', icon: 'battle', enemyId: 'ash-moth' },
+        fallenShelves: { type: 'scavenge', title: '倒架储室', icon: 'scavenge', cost: 0, supplies: [2, 3], cardReward: 'random', discover: true },
+        ashGallery: { type: 'battle', title: '灰烬长廊', icon: 'battle', enemyId: 'stone-claw' },
+        serviceDuct: { type: 'scavenge', title: '检修暗槽', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random' },
+        abandonedStall: { type: 'scavenge', title: '空置货摊', icon: 'supply', cost: 0, supplies: [2, 2], cardReward: 'random', discover: true },
+        lightCut: { type: 'battle', title: '折光回廊', icon: 'battle', enemyId: 'ash-moth' },
+        leeAlcove: { type: 'rest', title: '背风壁龛', icon: 'rest', restoreArmor: 2 },
+        copperChest: { type: 'scavenge', title: '旧铜匣', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random', discover: true },
+        lampCourt: { type: 'battle', title: '沉灯庭', icon: 'elite', enemyId: 'veil-idol' },
+    },
+    routes: {
+        A: ['lampPassage', 'fallenShelves', 'ashGallery', 'lightCut', 'leeAlcove', 'copperChest', 'lampCourt'],
+        B: ['serviceDuct', 'abandonedStall', 'lightCut', 'leeAlcove', 'copperChest', 'lampCourt'],
+    },
+    routeDescriptions: {
+        A: '悬灯道 · 多两场战斗，可多发现两次',
+        B: '检修道 · 绕开前段战斗，先搜刮补给',
+    },
+    enemies: {
+        'ash-moth': { title: '灰灯蛾', actorId: 'ash-moth', hp: 8, attack: 1, strongAttack: 2, rewardSupplies: 1, rewardChoices: 3 },
+        'stone-claw': { title: '叩石螯', actorId: 'stone-claw', hp: 11, attack: 2, strongAttack: 3, rewardSupplies: 2, rewardChoices: 3 },
+        'veil-idol': { title: '垂幡守像', actorId: 'veil-idol', hp: 14, attack: 2, strongAttack: 4, rewardSupplies: 3, rewardChoices: 3 },
+    },
+};
 export function hasId(definitions: Readonly<Record<string, unknown>>, id: unknown): id is string {
     return typeof id === 'string' && Object.prototype.hasOwnProperty.call(definitions, id);
 }
-export function nodeTitle(scenario: Pick<GameScenario, 'nodes'>, id: string): string {
+export function nodeTitle(
+    scenario: { readonly nodes: Readonly<Record<string, { readonly title: string }>> },
+    id: string
+): string {
     return scenario.nodes[id]?.title ?? id;
 }
 export interface RouteProgress {
@@ -257,6 +342,8 @@ export function registerScenario(scenario: GameScenario): GameScenario {
 registerScenario(TUTORIAL_SCENARIO);
 registerScenario(STAMINA_SCENARIO);
 registerScenario(RUN_DECK_SCENARIO);
+registerScenario(FIELD_SCENARIO);
+registerScenario(ASHEN_LABYRINTH_SCENARIO);
 export function getScenario(id: string, version: number): GameScenario {
     const scenario = scenarios.get(id + '@' + version);
     if (!scenario) throw new Error('此存档使用的章节版本尚不受支持，已保留原存档。');

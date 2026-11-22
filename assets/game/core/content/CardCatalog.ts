@@ -4,8 +4,41 @@
 import { RecipeDefinition, validateRecipes } from './RecipeCatalog';
 
 export type CardKind = string;
-export type EffectType = 'damage' | 'block' | 'heal' | 'equip' | 'none';
+export type EffectType = 'damage' | 'block' | 'heal' | 'equip' | 'draw' | 'skill' | 'power' | 'none';
 export type CardRole = 'basic' | 'normal' | 'temporary' | 'cash' | 'supply';
+const LABYRINTH_RULES = {
+    calm: ['damage', 'block', 'skill'],
+    'temporary-calm': ['block', 'skill'],
+    'gain-stamina': ['skill'],
+    'next-skill-free': ['skill'],
+    'calm-block': ['block'],
+    'discard-to-top': ['block'],
+    'draw-on-defer': ['power'],
+    'temporary-to-block': ['skill'],
+    'raise-calm-limit': ['power'],
+    'calibrate-attack': ['skill'],
+    'block-per-spent-calm': ['skill'],
+    'deferred-damage': ['damage'],
+    'deferred-draw': ['block'],
+    'retain-hand': ['skill'],
+    'deferred-counter': ['block'],
+} as const;
+export type LabyrinthRule = keyof typeof LABYRINTH_RULES;
+export interface LabyrinthEffect {
+    rule: LabyrinthRule;
+    amount: number;
+    threshold?: number;
+}
+export interface DiscoveryDeck {
+    id: string;
+    name: string;
+    cards: string[];
+}
+export interface LabyrinthCatalog {
+    starter: Record<string, number>;
+    decks: DiscoveryDeck[];
+    enabledDecks: string[];
+}
 export interface CardDefinition {
     id: string;
     name: string;
@@ -20,13 +53,28 @@ export interface CardDefinition {
     reward: boolean;
     supplyValue?: number;
     canSynthesize?: boolean;
-    effect: { type: EffectType; amount: number; generatedCard?: string };
+    chapter?: 'ashen-labyrinth';
+    effect: {
+        type: EffectType;
+        amount: number;
+        generatedCard?: string;
+        bonusWhen?: 'after-attack' | 'behind-cover';
+        bonus?: number;
+        extraDraw?: number;
+        labyrinth?: LabyrinthEffect;
+    };
 }
 export interface Catalog {
     version: number;
     fixedReward: string;
     cards: CardDefinition[];
     recipes: RecipeDefinition[];
+    expedition?: {
+        starter: Record<string, number>;
+        discoveryGroups: string[][];
+        faces?: Record<string, { name: string; text: string }>;
+    };
+    labyrinth?: LabyrinthCatalog;
 }
 export function isBattleCard(card: Pick<CardDefinition, 'role'>): boolean {
     return card.role === 'basic' || card.role === 'normal';
@@ -37,6 +85,9 @@ export const EFFECT_NAMES: Record<EffectType, string> = {
     block: '格挡',
     heal: '修复',
     equip: '装备',
+    draw: '抽牌',
+    skill: '技能',
+    power: '能力',
     none: '遗物',
 };
 export const SYSTEM_ROLES: Record<string, CardRole> = {
@@ -95,6 +146,9 @@ export function validateCatalog(raw: unknown): Catalog {
         if (!integer(card.weight, 0, 30)) issues.push(`${label}：重量需为 0～30 的整数。`);
         if (!integer(card.initialCount, 0, 8)) issues.push(`${label}：初始数量需为 0～8 的整数。`);
         if (typeof card.reward !== 'boolean') issues.push(`${label}：奖励池设置无效。`);
+        if (card.chapter !== undefined &&
+            (card.chapter !== 'ashen-labyrinth' || card.role !== 'normal' || card.initialCount !== 0 || card.reward))
+            issues.push(`${label}：焦土迷宫牌仅由章节的起手和发现牌组投放。`);
         if (ART_IDS.indexOf(card.art) < 0) issues.push(`${label}：请选择现有插画。`);
         if (typeof card.color !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(card.color))
             issues.push(`${label}：颜色格式无效。`);
@@ -102,8 +156,8 @@ export function validateCatalog(raw: unknown): Catalog {
             issues.push(`${label}：卡牌身份无效。`);
         if (card.canSynthesize !== undefined && typeof card.canSynthesize !== 'boolean')
             issues.push(`${label}：合成材料设置无效。`);
-        if (card.canSynthesize && !isBattleCard(card))
-            issues.push(`${label}：只有战斗卡可以作为合成材料。`);
+        if (card.canSynthesize && (card.chapter || !isBattleCard(card)))
+            issues.push(`${label}：只有合成探索可用的战斗卡可以作为材料。`);
         if (card.supplyValue !== undefined && !integer(card.supplyValue, 1, 999))
             issues.push(`${label}：兑换物资点需为 1～999 的整数。`);
         if (Object.prototype.hasOwnProperty.call(SYSTEM_ROLES, card.id)) {
@@ -121,12 +175,35 @@ export function validateCatalog(raw: unknown): Catalog {
             continue;
         }
         if (
-            ['damage', 'block', 'heal'].indexOf(effect.type) >= 0 &&
+            ['damage', 'block', 'heal', 'draw'].indexOf(effect.type) >= 0 &&
             !integer(effect.amount, 1, 999)
         )
             issues.push(`${label}：效果数值需为 1～999 的整数。`);
-        if (['equip', 'none'].indexOf(effect.type) >= 0 && effect.amount !== 0)
+        if (['equip', 'none', 'skill', 'power'].indexOf(effect.type) >= 0 && effect.amount !== 0)
             issues.push(`${label}：此类型的效果数值应为 0。`);
+        const addition = effect.labyrinth;
+        if (addition !== undefined) {
+            const types = addition && Object.prototype.hasOwnProperty.call(LABYRINTH_RULES, addition.rule)
+                ? LABYRINTH_RULES[addition.rule as LabyrinthRule] as readonly string[]
+                : [];
+            if (card.chapter !== 'ashen-labyrinth' || types.indexOf(effect.type) < 0 ||
+                !integer(addition?.amount, 1, 12) ||
+                (addition.rule === 'calm-block' ? !integer(addition.threshold, 1, 12) : addition.threshold !== undefined))
+                issues.push(`${label}：焦土迷宫的附加效果、数值或条件无效。`);
+        } else if (effect.type === 'skill' || effect.type === 'power')
+            issues.push(`${label}：技能和能力需要配置可执行的效果。`);
+        if (
+            (effect.bonusWhen !== undefined || effect.bonus !== undefined) &&
+            (effect.type !== 'damage' ||
+                ['after-attack', 'behind-cover'].indexOf(effect.bonusWhen) < 0 ||
+                !integer(effect.bonus, 1, 99))
+        )
+            issues.push(`${label}：攻击加成的触发条件或数值无效。`);
+        if (
+            effect.extraDraw !== undefined &&
+            (effect.type !== 'damage' || !integer(effect.extraDraw, 1, 6))
+        )
+            issues.push(`${label}：追加抽牌须为攻击效果，数量为 1～6。`);
         if (
             card.role === 'temporary' &&
             (card.initialCount !== 0 ||
@@ -181,10 +258,18 @@ export function validateCatalog(raw: unknown): Catalog {
             reward: card.reward,
             ...(card.role === 'supply' ? { supplyValue: card.supplyValue ?? 1 } : {}),
             ...(card.canSynthesize === true ? { canSynthesize: true } : {}),
+            ...(card.chapter ? { chapter: card.chapter } : {}),
             effect: {
                 type: effect.type,
                 amount: effect.amount,
                 ...(effect.type === 'equip' ? { generatedCard: effect.generatedCard } : {}),
+                ...(effect.bonusWhen ? { bonusWhen: effect.bonusWhen, bonus: effect.bonus } : {}),
+                ...(effect.extraDraw ? { extraDraw: effect.extraDraw } : {}),
+                ...(addition ? { labyrinth: {
+                    rule: addition.rule,
+                    amount: addition.amount,
+                    ...(addition.threshold === undefined ? {} : { threshold: addition.threshold }),
+                } } : {}),
             },
         });
     }
@@ -198,15 +283,111 @@ export function validateCatalog(raw: unknown): Catalog {
             definitions[card.effect.generatedCard ?? '']?.role !== 'temporary'
         )
             issues.push(`${card.name}：装备必须引用一张存在的临时牌。`);
-    if (typeof input.fixedReward !== 'string' || definitions[input.fixedReward]?.role !== 'normal')
+    if (typeof input.fixedReward !== 'string' || definitions[input.fixedReward]?.role !== 'normal' || definitions[input.fixedReward]?.chapter)
         issues.push('固定搜刮奖励必须引用一张存在的普通牌。');
     if (!cards.some((card) => card.role === 'normal' && card.reward))
         issues.push('奖励池至少需要一张普通牌。');
     if (cards.reduce((sum, card) => sum + card.initialCount, 0) > 30)
         issues.push('初始卡牌数量不能超过 30 张。');
     const recipes = validateRecipes(input.recipes, definitions, issues);
+    const field = input.expedition;
+    if (field !== undefined) {
+        const eligible = (id: string) =>
+            !definitions[id]?.chapter && ['basic', 'normal'].indexOf(definitions[id]?.role) >= 0;
+        if (
+            !field?.starter ||
+            typeof field.starter !== 'object' ||
+            Array.isArray(field.starter) ||
+            !Object.keys(field.starter).length ||
+            Object.keys(field.starter).some(
+                (id) => !eligible(id) || !integer(field.starter[id], 1, 20)
+            )
+        )
+            issues.push('探索基础牌组的卡牌或张数无效。');
+        if (
+            !Array.isArray(field?.discoveryGroups) ||
+            field.discoveryGroups.length < 1 ||
+            field.discoveryGroups.length > 3 ||
+            field.discoveryGroups.some(
+                (group: unknown) =>
+                    !Array.isArray(group) ||
+                    !group.length ||
+                    group.some((id) => definitions[id]?.role !== 'normal' || !!definitions[id]?.chapter)
+            )
+        )
+            issues.push('发现牌池须包含 1～3 组有效普通牌。');
+        for (const id of Object.keys(field?.faces ?? {})) {
+            const face = field.faces[id];
+            if (
+                !definitions[id] ||
+                !face ||
+                typeof face.name !== 'string' ||
+                !face.name.trim() ||
+                face.name.length > 18 ||
+                typeof face.text !== 'string' ||
+                face.text.length > 80
+            )
+                issues.push('探索牌面的卡牌引用或说明无效。');
+        }
+    }
+    const labyrinth = input.labyrinth;
+    if (labyrinth !== undefined) {
+        const eligible = (value: unknown) =>
+            typeof value === 'string' && definitions[value]?.chapter === 'ashen-labyrinth';
+        const starter = labyrinth?.starter;
+        if (!starter || typeof starter !== 'object' || Array.isArray(starter) ||
+            !Object.keys(starter).length ||
+            Object.keys(starter).some((id) => !eligible(id) || !integer(starter[id], 1, 20)) ||
+            !Object.keys(starter).some((id) => definitions[id]?.effect.type === 'damage'))
+            issues.push('焦土迷宫的基础牌组无效，至少需要一张攻击牌。');
+        const decks = labyrinth?.decks;
+        const ids = new Set<string>();
+        if (!Array.isArray(decks) || !decks.length || decks.length > 12) {
+            issues.push('焦土迷宫需要 1～12 个可配置发现牌组。');
+        } else for (const deck of decks) {
+            if (!deck || typeof deck.id !== 'string' || !/^[a-z][a-z0-9-]{1,39}$/.test(deck.id) ||
+                ids.has(deck.id) || typeof deck.name !== 'string' || !deck.name.trim() || deck.name.length > 24 ||
+                !Array.isArray(deck.cards) || new Set(deck.cards).size !== deck.cards.length ||
+                !deck.cards.every(eligible)) {
+                issues.push('发现牌组的 ID、名称或卡牌引用无效。');
+                continue;
+            }
+            ids.add(deck.id);
+        }
+        const enabled = labyrinth?.enabledDecks;
+        if (!Array.isArray(enabled) || new Set(enabled).size !== enabled.length || !enabled.every((id) => ids.has(id)))
+            issues.push('所选发现牌组无效。');
+    }
     if (issues.length) throw new CatalogError(issues);
-    return { version: 1, fixedReward: input.fixedReward, cards, recipes };
+    return {
+        version: 1,
+        fixedReward: input.fixedReward,
+        cards,
+        recipes,
+        ...(field
+            ? {
+                  expedition: {
+                      starter: { ...field.starter },
+                      discoveryGroups: field.discoveryGroups.map((group: string[]) =>
+                          group.slice()
+                      ),
+                      ...(field.faces ? { faces: JSON.parse(JSON.stringify(field.faces)) } : {}),
+                  },
+              }
+            : {}),
+        ...(labyrinth ? { labyrinth: {
+            starter: { ...labyrinth.starter },
+            decks: labyrinth.decks.map(({ id, name, cards }: DiscoveryDeck) => ({ id, name, cards: [...cards] })),
+            enabledDecks: [...labyrinth.enabledDecks],
+        } } : {}),
+    };
+}
+
+export function activeDiscoveryCards(profile: LabyrinthCatalog): string[] {
+    const enabled = new Set(profile.enabledDecks), cards = new Set<string>();
+    for (const deck of profile.decks)
+        if (enabled.has(deck.id)) for (const card of deck.cards) cards.add(card);
+    return [...cards];
 }
 
 export function installCatalog(raw: unknown): Catalog {
@@ -231,8 +412,33 @@ export function effectSummary(
     definitions: Record<string, CardDefinition> = CARD
 ): string {
     const effect = card.effect;
-    if (effect.type === 'damage') return `造成 ${effect.amount} 点伤害`;
-    if (effect.type === 'block') return `获得 ${effect.amount} 点格挡`;
+    let primary = '';
+    if (effect.type === 'damage')
+        primary = `造成 ${effect.amount} 点伤害` + (effect.extraDraw ? `，抽 ${effect.extraDraw} 张` : '');
+    if (effect.type === 'draw') primary = `抽 ${effect.amount} 张牌`;
+    if (effect.type === 'block') primary = `获得 ${effect.amount} 点格挡`;
+    if (effect.labyrinth) {
+        const { rule, amount, threshold } = effect.labyrinth;
+        const effects: Record<LabyrinthRule, string> = {
+            calm: `施加 ${amount} 层镇静`,
+            'temporary-calm': `施加 ${amount} 层临时镇静`,
+            'gain-stamina': `获得 ${amount} 体力，本场消耗`,
+            'next-skill-free': '本回合下一张技能牌免费',
+            'calm-block': `镇静达到 ${threshold} 层时再获得 ${amount} 格挡`,
+            'discard-to-top': '可将一张弃牌放到抽牌堆顶',
+            'draw-on-defer': `本场安排暂缓时抽 ${amount} 张牌`,
+            'temporary-to-block': `消耗所有临时镇静，每层获得 ${amount} 格挡`,
+            'raise-calm-limit': `本场镇静上限及自动暂缓门槛均提高 ${amount}`,
+            'calibrate-attack': '本回合下一张攻击伤害乘以出牌前的镇静层数，并消耗这些层',
+            'block-per-spent-calm': `本回合每消耗一层镇静获得 ${amount} 格挡`,
+            'deferred-damage': `敌人行动已暂缓时额外造成 ${amount} 伤害`,
+            'deferred-draw': `敌人行动已暂缓时抽 ${amount} 张牌`,
+            'retain-hand': '从手牌选一张留到下回合',
+            'deferred-counter': `本回合完全挡住那次暂缓的攻击时反击 ${amount}`,
+        };
+        return [primary, effects[rule]].filter(Boolean).join('，');
+    }
+    if (primary) return primary;
     if (effect.type === 'heal') return `恢复 ${effect.amount} 点护甲`;
     if (effect.type === 'equip')
         return `下回合起每回合生成「${definitions[effect.generatedCard ?? '']?.name ?? effect.generatedCard}」`;
@@ -257,6 +463,13 @@ export function cardReferences(catalog: Catalog, id: string): string[] {
         refs: string[] = [];
     if (card?.initialCount) refs.push(`初始卡组 ${card.initialCount} 张`);
     if (card?.reward) refs.push('随机奖励池');
+    if (catalog.expedition?.starter[id])
+        refs.push(`探索基础牌组 ${catalog.expedition.starter[id]} 张`);
+    if (catalog.expedition?.discoveryGroups.some((group) => group.indexOf(id) >= 0))
+        refs.push('战斗发现池');
+    if (catalog.labyrinth?.starter[id]) refs.push(`焦土迷宫基础牌组 ${catalog.labyrinth.starter[id]} 张`);
+    for (const deck of catalog.labyrinth?.decks ?? [])
+        if (deck.cards.indexOf(id) >= 0) refs.push(deck.name);
     if (catalog.fixedReward === id) refs.push('固定搜刮奖励');
     for (const source of catalog.cards)
         if (source.effect.generatedCard === id) refs.push(`${source.name}的生成牌`);

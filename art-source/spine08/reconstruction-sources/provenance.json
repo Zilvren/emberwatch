@@ -1,0 +1,138 @@
+[
+  {
+    "actor": "survivor",
+    "name": "Pack",
+    "mode": "reconstructed-region",
+    "prompt": "Edit the first reference cutout, the tan backpack. Remove ALL orange cloak fragments and white bandaged-arm pixels on its right edge; reconstruct the backpack behind them into ONE complete square tan pack. Preserve its original shape, small lid pocket, side pockets, dark fine outlines, buckle, worn flat tan/olive palette, not a new design. Second image is costume reference only; use ONLY its left character. No arm, hand, orange clothing or body attached. Production independent 2D skeletal animation PNG. Flat matte ink and flat low-saturation colors exactly matching the reference, crisp fine contour. TRUE transparent RGBA outside the single part. NO soft shadow, NO glow, NO bloom, NO vignette, NO haze or translucent surrounding halo; alpha outside the hard painted edge must be zero. No checkerboard, text, labels, white background, ground or additional parts. Do not make a full character. Provide generous plain transparent margin.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-fbbfff28-ad86-4986-9b75-7c963799a77b.png",
+    "output_hint": "Generated images are saved to C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb as C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-fbbfff28-ad86-4986-9b75-7c963799a77b.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "retainedSource": "art-source/spine08/reconstruction-sources/survivor-Pack.png"
+  },
+  {
+    "actor": "survivor",
+    "name": "Pelvis",
+    "mode": "reconstructed-region",
+    "prompt": "Edit the first reference cutout into ONLY the original waist and pelvis of the trousers. REMOVE the hanging square belt pouch completely, reconstruct olive trouser cloth and plain belt underneath. Keep the original crotch, waist shape, low-saturation olive/brown colors and fine lines. NO thighs extending past the upper hip joint, no pouch, arms or torso. Second image's LEFT character is reference only. Production independent 2D skeletal animation PNG. Flat matte ink and flat low-saturation colors exactly matching the reference, crisp fine contour. TRUE transparent RGBA outside the single part. NO soft shadow, NO glow, NO bloom, NO vignette, NO haze or translucent surrounding halo; alpha outside the hard painted edge must be zero. No checkerboard, text, labels, white background, ground or additional parts. Do not make a full character. Provide generous plain transparent margin.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-93cae6d3-a8bc-434c-8a17-f34db324a701.png",
+    "output_hint": "Generated images are saved to C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb as C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-93cae6d3-a8bc-434c-8a17-f34db324a701.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "retainedSource": "art-source/spine08/reconstruction-sources/survivor-Pelvis.png"
+  },
+  {
+    "actor": "survivor",
+    "name": "FrontHand",
+    "mode": "reconstructed-region",
+    "prompt": "Edit the first reference cutout into ONLY this original front-side gripping hand with its brown fingerless glove. Remove all wooden cleaver handle or blade fragments. Complete the fingers in a clean gripping pose with empty center so a separate cleaver handle can be inserted. Keep the original shape, glove, thin outlines, color and viewing angle. No forearm, weapon or other body part. Second image's LEFT character is reference only. Production independent 2D skeletal animation PNG. Flat matte ink and flat low-saturation colors exactly matching the reference, crisp fine contour. TRUE transparent RGBA outside the single part. NO soft shadow, NO glow, NO bloom, NO vignette, NO haze or translucent surrounding halo; alpha outside the hard painted edge must be zero. No checkerboard, text, labels, white background, ground or additional parts. Do not make a full character. Provide generous plain transparent margin.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-a5ea0990-9aa1-4731-a191-2b33ef507f68.png",
+    "output_hint": "Generated images are saved to C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb as C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-a5ea0990-9aa1-4731-a191-2b33ef507f68.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "retainedSource": "art-source/spine08/reconstruction-sources/survivor-FrontHand.png"
+  },
+  {
+    "actor": "survivor",
+    "name": "RearUpperArm",
+    "mode": "reconstructed-limb",
+    "prompt": "Create ONLY ONE thin pale upper arm from shoulder to elbow for the LEFT hooded survivor in the reference. This arm is hidden behind the poncho in the original; reconstruct it for the skeleton. No poncho or sleeve, no backpack, no torso, no hand. At the elbow only, the beginning of the original cream bandages is visible. Vertical, proximal joint at TOP and distal joint at BOTTOM, rounded overlap caps. Preserve original slender arm thickness. Draw ONLY the arm segment, not any other item. Production independent 2D skeletal animation PNG. Flat matte ink and flat low-saturation colors exactly matching the reference, crisp fine contour. TRUE transparent RGBA outside the single part. NO soft shadow, NO glow, NO bloom, NO vignette, NO haze or translucent surrounding halo; alpha outside the hard painted edge must be zero. No checkerboard, text, labels, white background, ground or additional parts. Do not make a full character. Provide generous plain transparent margin.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-424a3869-cc67-4a71-b4d8-b0c39607a6d3.png",
+    "output_hint": "Generated images are saved to C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb as C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-424a3869-cc67-4a71-b4d8-b0c39607a6d3.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "retainedSource": "art-source/spine08/reconstruction-sources/survivor-RearUpperArm.png"
+  },
+  {
+    "actor": "survivor",
+    "name": "FrontUpperArm",
+    "mode": "reconstructed-limb",
+    "prompt": "Create ONLY ONE thin pale upper arm from shoulder to elbow for the LEFT hooded survivor in the reference. This arm is hidden behind the poncho in the original; reconstruct it for the skeleton. No poncho or sleeve, no backpack, no torso, no hand. Bare pale skin, same simple fine brown outline as the original character. Vertical, proximal joint at TOP and distal joint at BOTTOM, rounded overlap caps. Preserve original slender arm thickness. Draw ONLY the arm segment, not any other item. Production independent 2D skeletal animation PNG. Flat matte ink and flat low-saturation colors exactly matching the reference, crisp fine contour. TRUE transparent RGBA outside the single part. NO soft shadow, NO glow, NO bloom, NO vignette, NO haze or translucent surrounding halo; alpha outside the hard painted edge must be zero. No checkerboard, text, labels, white background, ground or additional parts. Do not make a full character. Provide generous plain transparent margin.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-55ce7582-d41f-4688-adfe-0c21fa2c01fb.png",
+    "output_hint": "Generated images are saved to C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb as C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-55ce7582-d41f-4688-adfe-0c21fa2c01fb.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "retainedSource": "art-source/spine08/reconstruction-sources/survivor-FrontUpperArm.png"
+  },
+  {
+    "actor": "wanderer",
+    "name": "FrontUpperArm",
+    "mode": "reconstructed-limb",
+    "prompt": "Create ONLY ONE skinny pale upper arm from shoulder to elbow for the CENTER infected wanderer in the reference. This part was partly hidden by the ragged jacket. No jacket, torso, forearm, hand or other part. Very slender pale arm with angular simple anatomy and original thin dark brown contour. Vertical, shoulder at TOP, elbow at BOTTOM, rounded overlap caps. Preserve the muted character style, no new details. Production independent 2D skeletal animation PNG. Flat matte ink and flat low-saturation colors exactly matching the reference, crisp fine contour. TRUE transparent RGBA outside the single part. NO soft shadow, NO glow, NO bloom, NO vignette, NO haze or translucent surrounding halo; alpha outside the hard painted edge must be zero. No checkerboard, text, labels, white background, ground or additional parts. Do not make a full character. Provide generous plain transparent margin.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-c6d0b8a9-7941-4d4d-ad7c-8f5a6e174a04.png",
+    "output_hint": "Generated images are saved to C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb as C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-c6d0b8a9-7941-4d4d-ad7c-8f5a6e174a04.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "retainedSource": "art-source/spine08/reconstruction-sources/wanderer-FrontUpperArm.png"
+  },
+  {
+    "actor": "survivor",
+    "name": "FrontForearm",
+    "mode": "reconstructed-limb",
+    "prompt": "Create ONLY ONE thin pale forearm from elbow to wrist for the LEFT hooded survivor in the reference. This arm is hidden behind the poncho in the original; reconstruct it for the skeleton. No poncho or sleeve, no backpack, no torso, no hand. Bare pale skin, same simple fine brown outline as the original character. Vertical, proximal joint at TOP and distal joint at BOTTOM, rounded overlap caps. Preserve original slender arm thickness. Draw ONLY the arm segment, not any other item. Production independent 2D skeletal animation PNG. Flat matte ink and flat low-saturation colors exactly matching the reference, crisp fine contour. TRUE transparent RGBA outside the single part. NO soft shadow, NO glow, NO bloom, NO vignette, NO haze or translucent surrounding halo; alpha outside the hard painted edge must be zero. No checkerboard, text, labels, white background, ground or additional parts. Do not make a full character. Provide generous plain transparent margin.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-1226cb38-1bf0-48bb-8a42-c8670359374e.png",
+    "output_hint": "Generated images are saved to C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb as C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-1226cb38-1bf0-48bb-8a42-c8670359374e.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "retainedSource": "art-source/spine08/reconstruction-sources/survivor-FrontForearm.png"
+  },
+  {
+    "actor": "wanderer",
+    "name": "RearUpperArm",
+    "mode": "reconstructed-limb",
+    "prompt": "Create ONLY ONE skinny pale upper arm from shoulder to elbow for the CENTER infected wanderer in the reference. This part was partly hidden by the ragged jacket. No jacket, torso, forearm, hand or other part. Very slender pale arm with angular simple anatomy and original thin dark brown contour. Vertical, shoulder at TOP, elbow at BOTTOM, rounded overlap caps. Preserve the muted character style, no new details. Production independent 2D skeletal animation PNG. Flat matte ink and flat low-saturation colors exactly matching the reference, crisp fine contour. TRUE transparent RGBA outside the single part. NO soft shadow, NO glow, NO bloom, NO vignette, NO haze or translucent surrounding halo; alpha outside the hard painted edge must be zero. No checkerboard, text, labels, white background, ground or additional parts. Do not make a full character. Provide generous plain transparent margin.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-1062d892-1054-49d7-9f76-3504676fda40.png",
+    "output_hint": "Generated images are saved to C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb as C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-1062d892-1054-49d7-9f76-3504676fda40.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "retainedSource": "art-source/spine08/reconstruction-sources/wanderer-RearUpperArm.png"
+  },
+  {
+    "actor": "brute",
+    "name": "TorsoFill",
+    "mode": "reconstructed-region",
+    "prompt": "Edit the first reference torso cutout of the RIGHT armored brute. Complete the missing coat/chest behind both shoulders, especially the upper right socket revealed when the arm is raised. This must be ONLY the torso, without the separate lower hanging coat-tail, chest armor and original diagonal strap, with closed shoulder outlines and hidden joint overlap. No head, arms, hands, trousers or shoulder armor plate. Preserve the existing center chest, seams, muted ochre, dark metal, fine linework and proportions. Do not invent new equipment. The separate shoulder plate and arms will be attached over it. Production single skeletal-animation cutout. Match the approved 08 style exactly: thin dark-brown contours, flat low-saturation shading, no redesign. True transparent alpha outside this part. No shadow, glow, halo, backdrop, other parts, text or labels.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-e09b08dd-6bbc-4cd6-8981-b9578560209f.png",
+    "retainedSource": "art-source/spine08/reconstruction-sources/brute-TorsoFill.png"
+  },
+  {
+    "actor": "survivor",
+    "name": "FrontShin",
+    "mode": "reconstructed-limb",
+    "prompt": "Reconstruct ONLY the near LOWER LEG from knee at TOP to ankle at BOTTOM for the LEFT hooded survivor in the second reference. First reference is the rough cropped part. Remove ALL boot/cuff, thigh, opposite leg or body fragments. Create one complete separate knee-to-ankle segment, straight vertical with rounded hidden joint overlap at both ends. Same pale lower leg and cream wrap details, original olive trouser hem at knee only; slender original proportions. No foot or shoe. Production single skeletal-animation cutout. Match the approved 08 style exactly: thin dark-brown contours, flat low-saturation shading, no redesign. True transparent alpha outside this part. No shadow, glow, halo, backdrop, other parts, text or labels.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-2b25ab55-4260-431b-b219-9a07c74908dc.png",
+    "retainedSource": "art-source/spine08/reconstruction-sources/survivor-FrontShin.png"
+  },
+  {
+    "actor": "brute",
+    "name": "RearUpperArm",
+    "mode": "reconstructed-limb",
+    "prompt": "Draw ONLY the FAR SIDE UPPER ARM of the RIGHT armored brute. A thick ochre coat SLEEVE from shoulder at TOP to elbow at BOTTOM, vertical, a rounded shoulder continuation cap and overlapping elbow cuff. Preserve the original ochre cloth, angular fold shapes and fine brown lines. Absolutely no shoulder armor plate, chest, strap, forearm or glove. This single sleeve will pivot under a separately attached metal shoulder plate. Production single skeletal-animation cutout. Match the approved 08 style exactly: thin dark-brown contours, flat low-saturation shading, no redesign. True transparent alpha outside this part. No shadow, glow, halo, backdrop, other parts, text or labels.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-913a45d8-33d3-497e-9bed-e013a090fe6d.png",
+    "retainedSource": "art-source/spine08/reconstruction-sources/brute-RearUpperArm.png"
+  },
+  {
+    "actor": "survivor",
+    "name": "RearShin",
+    "mode": "reconstructed-limb",
+    "prompt": "Reconstruct ONLY the far LOWER LEG from knee at TOP to ankle at BOTTOM for the LEFT hooded survivor in the second reference. First reference is the rough cropped part. Remove ALL boot/cuff, thigh, opposite leg or body fragments. Create one complete separate knee-to-ankle segment, straight vertical with rounded hidden joint overlap at both ends. Same pale lower leg and cream wrap details, original olive trouser hem at knee only; slender original proportions. No foot or shoe. Production single skeletal-animation cutout. Match the approved 08 style exactly: thin dark-brown contours, flat low-saturation shading, no redesign. True transparent alpha outside this part. No shadow, glow, halo, backdrop, other parts, text or labels.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-0de39aa0-7101-48a1-8230-020c4162e24f.png",
+    "retainedSource": "art-source/spine08/reconstruction-sources/survivor-RearShin.png"
+  },
+  {
+    "actor": "wanderer",
+    "name": "FrontShin",
+    "mode": "reconstructed-limb",
+    "prompt": "Reconstruct ONLY the near LOWER LEG from knee at TOP to ankle at BOTTOM for the CENTER thin infected wanderer in the second reference. First reference is the rough cropped part. Remove ALL boot/cuff, thigh, opposite leg or body fragments. Create one complete separate knee-to-ankle segment, straight vertical with rounded hidden joint overlap at both ends. Same very skinny pale lower leg, ragged gray olive cloth at knee only; original dark thin contour. No foot or shoe. Production single skeletal-animation cutout. Match the approved 08 style exactly: thin dark-brown contours, flat low-saturation shading, no redesign. True transparent alpha outside this part. No shadow, glow, halo, backdrop, other parts, text or labels.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-6a58a2ee-2456-400a-bd68-52e10b955446.png",
+    "retainedSource": "art-source/spine08/reconstruction-sources/wanderer-FrontShin.png"
+  },
+  {
+    "actor": "brute",
+    "name": "RearShin",
+    "mode": "reconstructed-limb",
+    "prompt": "Reconstruct ONLY the far LOWER LEG from knee at TOP to ankle at BOTTOM for the RIGHT armored brute in the second reference. First reference is the rough cropped part. Remove ALL boot/cuff, thigh, opposite leg or body fragments. Create one complete separate knee-to-ankle segment, straight vertical with rounded hidden joint overlap at both ends. Same thick olive-brown trouser-covered lower leg and original cloth folds, short massive proportions; no boot or ankle armor. No foot or shoe. Production single skeletal-animation cutout. Match the approved 08 style exactly: thin dark-brown contours, flat low-saturation shading, no redesign. True transparent alpha outside this part. No shadow, glow, halo, backdrop, other parts, text or labels.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-3d460ff1-ff62-4ac1-a7d3-0788f60af8a0.png",
+    "retainedSource": "art-source/spine08/reconstruction-sources/brute-RearShin.png"
+  },
+  {
+    "actor": "brute",
+    "name": "FrontShin",
+    "mode": "reconstructed-limb",
+    "prompt": "Reconstruct ONLY the near LOWER LEG from knee at TOP to ankle at BOTTOM for the RIGHT armored brute in the second reference. First reference is the rough cropped part. Remove ALL boot/cuff, thigh, opposite leg or body fragments. Create one complete separate knee-to-ankle segment, straight vertical with rounded hidden joint overlap at both ends. Same thick olive-brown trouser-covered lower leg and original cloth folds, short massive proportions; no boot or ankle armor. No foot or shoe. Production single skeletal-animation cutout. Match the approved 08 style exactly: thin dark-brown contours, flat low-saturation shading, no redesign. True transparent alpha outside this part. No shadow, glow, halo, backdrop, other parts, text or labels.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-52f72104-423f-47b3-ad18-e9005e59ff6b.png",
+    "retainedSource": "art-source/spine08/reconstruction-sources/brute-FrontShin.png"
+  },
+  {
+    "actor": "wanderer",
+    "name": "RearShin",
+    "mode": "reconstructed-limb",
+    "prompt": "Reconstruct ONLY the far LOWER LEG from knee at TOP to ankle at BOTTOM for the CENTER thin infected wanderer in the second reference. First reference is the rough cropped part. Remove ALL boot/cuff, thigh, opposite leg or body fragments. Create one complete separate knee-to-ankle segment, straight vertical with rounded hidden joint overlap at both ends. Same very skinny pale lower leg, ragged gray olive cloth at knee only; original dark thin contour. No foot or shoe. Production single skeletal-animation cutout. Match the approved 08 style exactly: thin dark-brown contours, flat low-saturation shading, no redesign. True transparent alpha outside this part. No shadow, glow, halo, backdrop, other parts, text or labels.",
+    "sourcePath": "C:\\Users\\Knock\\.codex\\generated_images\\01a1e522-756c-7592-b5cc-cd0b913329fb\\exec-cf499254-e9fd-41a7-ae34-2174938c25f7.png",
+    "retainedSource": "art-source/spine08/reconstruction-sources/wanderer-RearShin.png"
+  }
+]

@@ -1,0 +1,182 @@
+{
+"skeleton": { "hash": "3dLjjPiNV3Hc5W8HQfjc/SQM8J0", "spine": "3.8.75", "images": "./parts/", "audio": "C:\\Users\\Knock\\Desktop\\The end\\art-source\\ashen-labyrinth\\battle-survivor\\spine-flick" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "torso", "parent": "root", "length": 150, "y": 559 },
+	{ "name": "head", "parent": "torso", "length": 70, "x": -1, "y": 208 },
+	{ "name": "left-support", "parent": "torso", "length": 45, "rotation": 169, "x": 67, "y": 34 },
+	{ "name": "right-upper-arm", "parent": "torso", "length": 49.98, "rotation": -19.89, "x": -7, "y": 97 },
+	{ "name": "right-forearm", "parent": "right-upper-arm", "length": 93.26, "rotation": 105.58, "x": 49.98 },
+	{ "name": "right-hand", "parent": "right-forearm", "length": 41.62, "rotation": 28.62, "x": 93.26 },
+	{ "name": "right-index", "parent": "right-hand", "length": 27.48, "rotation": -129.6, "x": 41.62 },
+	{ "name": "index-tip", "parent": "right-index", "x": 27.48 },
+	{ "name": "lantern-card", "parent": "root", "x": 113, "y": 603 },
+	{ "name": "guard-card", "parent": "root", "x": 196, "y": 706 },
+	{ "name": "repel-card", "parent": "root", "x": 240, "y": 777 }
+],
+"slots": [
+	{ "name": "torso", "bone": "torso", "attachment": "torso" },
+	{ "name": "right-bracer", "bone": "right-forearm", "attachment": "right-bracer" },
+	{ "name": "right-sleeve", "bone": "right-upper-arm", "attachment": "right-sleeve" },
+	{ "name": "right-index", "bone": "right-index", "attachment": "right-index" },
+	{ "name": "right-palm", "bone": "right-hand", "attachment": "right-palm" },
+	{ "name": "left-hand-support", "bone": "left-support", "attachment": "left-hand-support" },
+	{ "name": "head", "bone": "head", "attachment": "head" },
+	{ "name": "lantern", "bone": "lantern-card", "attachment": "lantern" },
+	{ "name": "guard", "bone": "guard-card", "attachment": "guard" },
+	{ "name": "repel", "bone": "repel-card", "attachment": "repel" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"right-palm": {
+				"right-palm": {
+					"x": 19.09,
+					"y": -4.87,
+					"scaleX": 0.82,
+					"scaleY": 0.82,
+					"rotation": -26.31,
+					"width": 65,
+					"height": 46
+				}
+			},
+			"repel": {
+				"repel": { "rotation": -10, "width": 32, "height": 45 }
+			},
+			"lantern": {
+				"lantern": { "rotation": 12, "width": 32, "height": 45 }
+			},
+			"head": {
+				"head": { "x": -15, "y": 69.5, "width": 138, "height": 141 }
+			},
+			"right-index": {
+				"right-index": {
+					"x": 9.79,
+					"y": -1.93,
+					"scaleX": 0.82,
+					"scaleY": 0.82,
+					"rotation": -1.71,
+					"width": 45,
+					"height": 13
+				}
+			},
+			"guard": {
+				"guard": { "width": 32, "height": 45 }
+			},
+			"right-bracer": {
+				"right-bracer": {
+					"x": 45.9,
+					"y": -9.35,
+					"scaleX": 0.6288,
+					"scaleY": 0.6288,
+					"rotation": 71.93,
+					"width": 117,
+					"height": 184
+				}
+			},
+			"torso": {
+				"torso": { "x": -24.5, "y": -178, "width": 193, "height": 770 }
+			},
+			"left-hand-support": {
+				"left-hand-support": { "x": 25.02, "y": 2.32, "rotation": -169, "width": 92, "height": 59 }
+			},
+			"right-sleeve": {
+				"right-sleeve": { "x": 29.34, "y": -3.21, "rotation": 19.89, "width": 113, "height": 74 }
+			}
+		}
+	}
+],
+"events": {
+	"release": { "string": "guard" }
+},
+"animations": {
+	"guard-flick": {
+		"slots": {
+			"guard": {
+				"attachment": [
+					{ "name": "guard" },
+					{ "time": 0.69, "name": null }
+				]
+			}
+		},
+		"bones": {
+			"guard-card": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.44 },
+					{ "time": 0.69, "angle": 95 }
+				],
+				"translate": [
+					{ "curve": "stepped" },
+					{ "time": 0.26 },
+					{ "time": 0.44, "y": 8 },
+					{ "time": 0.69, "x": 130, "y": -13 }
+				]
+			},
+			"right-forearm": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.12, "curve": 0.333, "c3": 0.667, "c4": 0.62 },
+					{ "time": 0.22, "angle": -15, "curve": 0.333, "c2": 0.29, "c3": 0.667, "c4": 0.84 },
+					{ "time": 0.32, "angle": -35, "curve": 0.333, "c2": 0.5, "c3": 0.667, "c4": 0.46 },
+					{ "time": 0.4, "angle": -40, "curve": 0.333, "c2": 0.17, "c3": 0.667, "c4": 0.67 },
+					{ "time": 0.44, "angle": -48, "curve": 0.333, "c2": 0.33, "c3": 0.667 },
+					{ "time": 0.51, "angle": -62, "curve": 0.333, "c3": 0.667, "c4": 0.53 },
+					{ "time": 0.59, "angle": -58, "curve": 0.333, "c2": 0.17, "c3": 0.667, "c4": 0.63 },
+					{ "time": 0.73, "angle": -38, "curve": 0.333, "c2": 0.3, "c3": 0.667, "c4": 0.8 },
+					{ "time": 0.89, "angle": -10, "curve": 0.333, "c2": 0.46, "c3": 0.667 },
+					{ "time": 1.02, "curve": "stepped" },
+					{ "time": 1.2 }
+				]
+			},
+			"right-hand": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.12, "curve": 0.333, "c3": 0.667, "c4": 0.52 },
+					{ "time": 0.22, "angle": -12.57, "curve": 0.333, "c2": 0.49, "c3": 0.667, "c4": 0.83 },
+					{ "time": 0.24, "angle": -15.02, "curve": 0.333, "c2": 0.22, "c3": 0.667, "c4": 0.41 },
+					{ "time": 0.32, "angle": -22.37, "curve": 0.333, "c2": 0.34, "c3": 0.667, "c4": 0.69 },
+					{ "time": 0.34, "angle": -25.55, "curve": 0.333, "c2": 0.46, "c3": 0.667, "c4": 0.56 },
+					{ "time": 0.4, "angle": -32, "curve": 0.333, "c2": 0.23, "c3": 0.667, "c4": 0.78 },
+					{ "time": 0.44, "angle": -40, "curve": 0.333, "c2": 0.46, "c3": 0.667, "c4": 0.45 },
+					{ "time": 0.51, "angle": -46.77, "curve": 0.333, "c2": 0.4, "c3": 0.667, "c4": 0.74 },
+					{ "time": 0.52, "angle": -48.09, "curve": 0.333, "c2": 0.31, "c3": 0.667, "c4": 0.74 },
+					{ "time": 0.59, "angle": -55.92, "curve": 0.333, "c2": 0.33, "c3": 0.667, "c4": 0.66 },
+					{ "time": 0.6, "angle": -56.8, "curve": 0.333, "c2": -0.18, "c3": 0.667, "c4": 0.65 },
+					{ "time": 0.73, "angle": -36, "curve": 0.333, "c2": 0.33, "c3": 0.667, "c4": 0.81 },
+					{ "time": 0.89, "angle": -9, "curve": 0.333, "c2": 0.47, "c3": 0.667 },
+					{ "time": 1.02, "curve": "stepped" },
+					{ "time": 1.2 }
+				]
+			},
+			"right-index": {
+				"rotate": [
+					{ "curve": "stepped" },
+					{ "time": 0.19, "curve": 0.333, "c3": 0.667 },
+					{ "time": 0.31, "angle": 28, "curve": 0.333, "c3": 0.667 },
+					{ "time": 0.4, "angle": 23, "curve": 0.333, "c3": 0.667 },
+					{ "time": 0.44, "angle": 105, "curve": 0.333, "c3": 0.667, "c4": 0.57 },
+					{ "time": 0.48, "angle": 90, "curve": 0.333, "c2": 0.22, "c3": 0.667, "c4": 0.79 },
+					{ "time": 0.55, "angle": 38, "curve": 0.333, "c2": 0.47, "c3": 0.667, "c4": 0.97 },
+					{ "time": 0.65, "angle": 4, "curve": 0.333, "c2": 0.79, "c3": 0.667 },
+					{ "time": 1.02, "curve": "stepped" },
+					{ "time": 1.2 }
+				]
+			}
+		},
+		"events": [
+			{ "time": 0.44, "name": "release" }
+		]
+	},
+	"think": {
+		"slots": {
+			"guard": {
+				"attachment": [
+					{ "name": "guard" }
+				]
+			}
+		}
+	}
+}
+}

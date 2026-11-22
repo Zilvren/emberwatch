@@ -763,6 +763,7 @@
     "__prefab": {
       "__id__": 36
     },
+    "tideBackdrop": { "__uuid__": "b2e8e8aa-6472-4fd7-b6f7-2914d5cd8e23@f9941", "__expectedType__": "cc.SpriteFrame" },
     "backdrop": {
       "__id__": 3
     },

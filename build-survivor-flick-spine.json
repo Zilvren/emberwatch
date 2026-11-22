@@ -1,0 +1,29 @@
+{
+  "name": "the-end-survivor-flick-golden",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "survivor-flick-golden",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "a2ddd0e7-d3ba-4d3f-aa0b-9354dd5ca45c",
+  "scenes": [
+    {
+      "url": "db://assets/SurvivorFlickSpineReview.scene",
+      "uuid": "a2ddd0e7-d3ba-4d3f-aa0b-9354dd5ca45c"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

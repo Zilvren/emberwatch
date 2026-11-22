@@ -11,7 +11,7 @@ const length=(a,b)=>Math.hypot(b[0]-a[0],b[1]-a[1]);
 const roles = {
  survivor:{prefab:'PlayerActor',facing:1,hip:[266,398],chest:[270,292],neck:[277,236],
   front:[[308,277],[339,386],[353,439],[470,536]],rear:[[207,281],[178,369],[166,430]],
-  legs:{Front:[[291,423],[303,520],[327,584]],Rear:[[238,423],[222,520],[194,584]]},
+  legs:{Front:[[294,418],[304,532],[309,570]],Rear:[[238,418],[215,533],[181,574]]},
   footCut:562,legStart:426,legRange:[170,350],duration:.84,contact:.40,death:1.12,
   strike:{Chest:-7,Head:7,FrontUpperArm:78,FrontForearm:-20,FrontHand:-8,RearUpperArm:-25,RearForearm:38},
   ready:{Chest:4,Head:-4,FrontUpperArm:-15,FrontForearm:20,FrontHand:-5,RearUpperArm:-10,RearForearm:16},
@@ -20,13 +20,13 @@ const roles = {
   weapon:p=>p[0]>342+Math.max(0,p[1]-444)*.72&&p[1]>433&&p[1]<557},
  wanderer:{prefab:'WandererActor',facing:-1,hip:[721,389],chest:[716,260],neck:[670,206],
   front:[[665,238],[625,398],[592,512],[589,550]],rear:[[785,281],[808,425],[825,507]],
-  legs:{Front:[[686,425],[663,530],[638,594]],Rear:[[751,425],[775,531],[799,594]]},
+  legs:{Front:[[686,365],[659,528],[642,570]],Rear:[[751,365],[776,536],[796,592]]},
   footCut:568,legStart:427,legRange:[600,815],duration:.94,contact:.45,death:1.18,
   strike:{Chest:8,Head:-4,FrontUpperArm:-75,FrontForearm:-12,FrontHand:-5,RearUpperArm:12,RearForearm:-9},
   ready:{Chest:-5,Head:3,FrontUpperArm:17,FrontForearm:8,FrontHand:4,RearUpperArm:12,RearForearm:8},material:[620,420,626,438],armRadius:3.5,deathDrop:48},
  brute:{prefab:'BruteActor',facing:-1,hip:[1209,419],chest:[1221,276],neck:[1159,225],
-  front:[[1038,282],[969,421],[971,503],[954,547]],rear:[[1345,279],[1385,422],[1372,507]],
-  legs:{Front:[[1137,496],[1102,555],[1066,608]],Rear:[[1274,496],[1309,553],[1350,608]]},
+  front:[[1038,282],[969,421],[971,503],[954,547]],rear:[[1328,245],[1385,422],[1372,507]],
+  legs:{Front:[[1137,476],[1102,556],[1080,580]],Rear:[[1274,476],[1309,553],[1335,587]]},
   footCut:579,legStart:510,legRange:[968,1420],duration:1.10,contact:.54,death:1.28,
   strike:{Chest:8,Head:-5,FrontUpperArm:-60,FrontForearm:-20,FrontHand:3,RearUpperArm:13,RearForearm:-8},
   ready:{Chest:-6,Head:4,FrontUpperArm:17,FrontForearm:26,FrontHand:-8,RearUpperArm:8,RearForearm:10},material:[984,353,994,377],armRadius:8.8,deathDrop:30}
@@ -68,6 +68,8 @@ function makeRig(actor){
  add('Breath','Chest',config.chest);
  add('Cloth','Chest',[config.chest[0],mix(config.chest[1],config.hip[1],.60)]);
  add('Pack','Chest',[config.hip[0]-config.facing*80,config.chest[1]]);
+ if(actor==='survivor')add('Pouch','Hips',[240,387]);
+ if(actor==='brute')add('RearShoulderPlate','Chest',[1325,173]);
  for(const side of ['Rear','Front']){
   const p=side==='Front'?config.front:config.rear;
   add(side+'UpperArm','Chest',p[0],p[1]);add(side+'Forearm',side+'UpperArm',p[1],p[2]);
@@ -155,7 +157,9 @@ function makeRig(actor){
  skeleton.skins[0].attachments.Corpse={corpse:{path:actor+'-corpse',width:body.size[0],height:body.size[1],scaleX:bodyScale,scaleY:bodyScale}};
  skeleton.skins[0].attachments.CorpseHead={head:{type:'mesh',path:'master08-thin',uvs:headIndices.flatMap(i=>geometry.vertices[i].slice(2,4)),triangles:headTriangles.map(i=>headMap.get(i)),vertices:headLocal.flatMap(([x,y])=>[1,index.get('CorpseHead'),round(x),round(y),1]),hull:0,width:1536,height:1024}};
  const corpse={bodyWidth,bodyHeight,neckX,neckY,headAngle,bodyMeta:body,bodyOffsetX,bodyBottomOffset};
- return {actor,config,geometry,bones,frames,influences,skeleton,corpse,sourceSha256:geometry.sourceSha256};
+ const result={actor,config,geometry,bones,frames,influences,skeleton,corpse,sourceTransform:{scale,ox,oy},sourceSha256:geometry.sourceSha256};
+ const manifest=path.join(ROOT,'art-source/spine08/parts',actor,'parts.json');
+ return fs.existsSync(manifest)?require('./part-rig.cjs').withParts(result,ROOT):result;
 }
 function pose(rotation={},translations={}){
  const result={};for(const [name,rotate] of Object.entries(rotation))result[name]={rotate};
@@ -190,13 +194,16 @@ function motionsFor(rig){
   const p=pose({PoseRoot:fall,Head:-f*12*v,FrontUpperArm:-f*12*v,FrontForearm:f*4*v,
    FrontHand:(rig.actor==='survivor'?-32:0)*v,RearUpperArm:f*10*v,RearForearm:-f*6*v,
    FrontFoot:fall,RearFoot:fall},{PoseRoot:[f*15*v,0],Approach:[0,0]});
+  if(rig.parts){
+   Object.assign(p,{FrontThigh:{rotate:-f*18*v},FrontShin:{rotate:f*34*v},RearThigh:{rotate:f*9*v},RearShin:{rotate:-f*16*v},FrontForearm:{rotate:f*22*v},RearForearm:{rotate:-f*18*v},FrontFoot:{rotate:fall+f*16*v},RearFoot:{rotate:fall-f*7*v}});
+  }
   const matrices=poseMatrices(rig,p);
   const minY=Math.min(...used.map(index=>rig.influences[index].reduce((s,[i,x,y,w])=>s+point(matrices[rig.bones[i].name],x,y)[1]*w,0)));
   p.PoseRoot.y=round(-112-minY);
-  const landed=rig.corpse,drop=14*(1-smooth((t-.58)/.42));
-  const local=inversePoint({pos:[p.PoseRoot.x,p.PoseRoot.y],angle:fall},f*35-landed.bodyOffsetX,-112-landed.bodyBottomOffset+drop);
-  p.Corpse={x:local[0],y:local[1],rotate:0};
-  p.CorpseHead={x:landed.neckX,y:landed.neckY,rotate:landed.headAngle};
+  if(!rig.parts){const landed=rig.corpse,drop=14*(1-smooth((t-.58)/.42));
+   const local=inversePoint({pos:[p.PoseRoot.x,p.PoseRoot.y],angle:fall},f*35-landed.bodyOffsetX,-112-landed.bodyBottomOffset+drop);
+   p.Corpse={x:local[0],y:local[1],rotate:0};p.CorpseHead={x:landed.neckX,y:landed.neckY,rotate:landed.headAngle};
+  }
   return p;
  });
  const contract={idle:{duration:3,loop:true},attack:{duration:c.duration,contact:c.contact,loop:false},prepare:{duration:.66,loop:false},hurt:{duration:.38,loop:false},death:{duration:c.death,loop:false}};
@@ -211,7 +218,7 @@ function motionsFor(rig){
  ],contract,contactTip,attackPoses};
 }
 function contractFor(rig,motions){
- return {schemaVersion:1,actor:rig.actor,sourceSha256:rig.sourceSha256,sourcePixelsChanged:false,baseline:-112,boneNames:rig.bones.map(b=>b.name),influences:rig.influences,triangles:rig.geometry.indices,neutralVertices:rig.geometry.vertices.map(v=>[v[0],v[1]]),motions:motions.contract,contactTip:motions.contactTip,contactBone:'AttackTip',approachBone:'Approach'};
+ return {schemaVersion:1,actor:rig.actor,sourceSha256:rig.sourceSha256,sourcePixelsChanged:false,baseline:-112,boneNames:rig.bones.map(b=>b.name),influences:rig.influences,triangles:rig.geometry.indices,neutralVertices:rig.geometry.vertices.map(v=>[v[0],v[1]]),parts:rig.parts?.map(p=>({name:p.name,bone:p.bone,vertexStart:p.vertexStart,vertexCount:p.vertexCount,image:'art-source/spine08/parts/'+rig.actor+'/'+p.name+'.png'})),motions:motions.contract,contactTip:motions.contactTip,contactBone:'AttackTip',approachBone:'Approach'};
 }
 function atlas(actor){
  let text='\nmaster08-thin.png\nsize: 1536,1024\nformat: RGBA8888\nfilter: Linear,Linear\nrepeat: none\nmaster08-thin\n  rotate: false\n  xy: 0, 0\n  size: 1536, 1024\n  orig: 1536, 1024\n  offset: 0, 0\n  index: -1\n';

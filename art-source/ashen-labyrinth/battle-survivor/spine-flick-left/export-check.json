@@ -1,0 +1,39 @@
+{
+  "engine": "3.8.75",
+  "bones": 57,
+  "attachments": 39,
+  "playableClips": [
+    "attack",
+    "card-flight",
+    "carry-card",
+    "death",
+    "guard-flick",
+    "hurt",
+    "idle",
+    "prepare",
+    "think",
+    "think-empty"
+  ],
+  "release": 0.44,
+  "editableRotationKeys": {
+    "hips": 20,
+    "chest": 22,
+    "head": 18,
+    "near-sleeve": 30,
+    "near-bracer": 39,
+    "near-hand": 36,
+    "cast-sleeve": 56,
+    "cast-bracer": 55,
+    "cast-palm": 50,
+    "cast-index": 29,
+    "mantle-tip": 24,
+    "back-flap-tip": 25
+  },
+  "atlasPages": [
+    "survivor-flick-parts.png",
+    "survivor-flick-parts2.png",
+    "survivor-flick-parts3.png",
+    "survivor-flick-parts4.png"
+  ],
+  "projectSha256": "a3c6435e781162529983233c2335bfb62a0569dd77ea0d1aa6a319adb19adb2a"
+}

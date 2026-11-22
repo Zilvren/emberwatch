@@ -25,7 +25,27 @@ export class InventoryRules {
             ? this.state.cards.filter((card) => this.content.cards[card.kind].role === 'supply')
             : this.state.cards;
     }
+    restoreStarter(): void {
+        const starter = this.scenario.labyrinth
+            ? this.content.catalog.labyrinth?.starter
+            : this.content.catalog.expedition?.starter;
+        if (this.scenario.fieldDeck && starter) {
+            this.state.cards = [];
+            for (const kind of Object.keys(starter))
+                for (let i = 0; i < starter[kind]; i++) this.state.cards.push(this.owned(kind));
+        } else {
+            this.state.cards = this.content.initialDeck
+                .filter((kind) => !this.scenario.runDeck || isBattleCard(this.content.cards[kind]))
+                .map((kind) => this.owned(kind));
+        }
+    }
+    addDiscovery(kind: CardKind): OwnedCard {
+        const card = this.owned(kind, true);
+        this.state.cards.push(card);
+        return card;
+    }
     get baseWeight(): number {
+        if (this.scenario.fieldDeck) return 0;
         return (
             (this.scenario.suppliesHaveWeight === false ? 0 : this.state.supplies) +
             this.carriedCards
@@ -34,6 +54,7 @@ export class InventoryRules {
         );
     }
     get overflowWeight(): number {
+        if (this.scenario.fieldDeck) return 0;
         return this.carriedCards
             .filter((c) => c.zone === 'overflow')
             .reduce((n, c) => n + this.content.cards[c.kind].weight, 0);
@@ -66,7 +87,8 @@ export class InventoryRules {
         }
     }
     rewardZone(kind: CardKind): OwnedCard['zone'] {
-        return (this.scenario.runDeck && isBattleCard(this.content.cards[kind])) ||
+        return this.scenario.fieldDeck ||
+            (this.scenario.runDeck && isBattleCard(this.content.cards[kind])) ||
             this.baseWeight + this.content.cards[kind].weight <= 30
             ? 'base'
             : 'overflow';
@@ -78,6 +100,8 @@ export class InventoryRules {
             : '基础负重和临时溢出区均不足';
     }
     discardCard(id: string): ActionResult {
+        if (this.scenario.fieldDeck)
+            return this.feedback.result(false, '探索中已持有的牌会随牌组一起使用。');
         if (this.state.phase !== 'rewards' && this.state.phase !== 'rest')
             return this.feedback.result(false, '只能在奖励或休整时整理背包。');
         const index = this.state.cards.findIndex((c) => c.id === id);
@@ -108,7 +132,8 @@ export class InventoryRules {
         return this.feedback.result(true, `已释放 ${amount} 点负重。`);
     }
     toggleCard(id: string): ActionResult {
-        if (this.scenario.runDeck) return this.feedback.result(false, '整套本局卡组都会进入战斗。');
+        if (this.scenario.runDeck || this.scenario.fieldDeck)
+            return this.feedback.result(false, '探索牌组中的每张牌都会参与抽取。');
         if (this.state.phase !== 'rest')
             return this.feedback.result(false, '只有休整节点可调整出手卡组。');
         const card = this.state.cards.find((c) => c.id === id);

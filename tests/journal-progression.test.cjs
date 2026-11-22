@@ -7,7 +7,7 @@ const source = (file) => load(path.join(root, 'assets/game', file));
 source('core/content/CardCatalog.ts').installCatalog(require('../assets/resources/data/cards.json'));
 const { SurvivalGame } = source('core/SurvivalGame.ts');
 const { GameSession } = source('application/GameSession.ts');
-const { STAMINA_SCENARIO, TUTORIAL_SCENARIO } = source('core/content/GameScenario.ts');
+const { FIELD_SCENARIO, STAMINA_SCENARIO, TUTORIAL_SCENARIO } = source('core/content/GameScenario.ts');
 const { validateGameState } = source('core/state/GameState.ts');
 const { validateJournalCatalog, mapClearMilestone } = source('core/content/JournalCatalog.ts');
 const { SaveRepository } = source('infrastructure/SaveRepository.ts');
@@ -179,7 +179,7 @@ test('additional opening journals cannot be skipped by starting an expedition', 
 });
 
 test('pending and read journals persist across sessions without duplicate day advancement or triggers', () => {
-    const store = storage(), session = new GameSession(17, new SaveRepository(store));
+    const store = storage(), session = new GameSession(17, new SaveRepository(store), FIELD_SCENARIO);
     ok(session.execute({ type: 'start', tier: 'emergency' }));
     Object.assign(session.game, { fixedDone: true, route: 'A', pathIndex: 4 });
     session.advanceTime(1);

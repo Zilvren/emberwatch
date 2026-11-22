@@ -1,8 +1,6 @@
 # the end
 
-项目：The end · 更新日期：2026-11-14 · 状态：可运行的教学原型与本地卡牌编辑器。
-
-使用 Pink / COCOS 4 制作的末日生存卡牌教学原型。流程从第 1 天日志开始，经过固定搜刮、A/B 路线、战斗、休整和避难所结算，在第 2 天日志结束。
+The end 是用 Pink/Cocos 制作的架空废土卡牌游戏。2026-11-22 起，正式新局进入焦土迷宫。玩家扮演青年求生者，从 12 张基础牌起步，在十个地点组成的地图上选路。战后与指定搜刮点可以补充随行牌组。返家后恢复基础牌组，可继续下一趟探索。
 
 ## 本地卡牌编辑器
 
@@ -10,7 +8,7 @@
 npm run cards
 ```
 
-打开 <http://127.0.0.1:7460/>，可新增、复制、修改、删除卡牌，配置初始卡组和奖励池，预览卡面并实际试玩。数据保存到 `assets/resources/data/cards.json`。
+打开 <http://127.0.0.1:7460/>，点击「发现牌组」。共用配合、蓄压倍率和快速暂缓初始全选。保存并试玩后，发现候选来自所选牌组的去重并集，每次最多三张。全关时直接结算物资。
 
 首次试玩或修改游戏脚本后先执行 `npm run build:web`。之后修改卡牌数据时，点击「保存并试玩」即可读取最新数据，不需要反复构建；当前对局保持原配置，独立预览与发布版本使用构建中打包的数据。
 
@@ -45,12 +43,13 @@ GameRoot (GameDirector)
 | 开场、地图、战斗、奖励、休整、结算等页面 | `assets/prefabs/screens/` |
 | 顶栏、背包、帮助、记录、确认弹窗 | `assets/prefabs/ui/` |
 | 手牌和奖励卡面的布局与插画引用 | `assets/prefabs/cards/HandCard.prefab`、`RewardCard.prefab` |
-| 幸存者与两种感染者 | `assets/prefabs/actors/` |
+| 青年求生者与三只迷宫怪物 | `assets/prefabs/actors/`、`assets/ashen-labyrinth/` |
+| 迷宫牌面、避难所绘画和 UI 色板 | `assets/ashen-labyrinth/interface/` |
 | 待机、攻击、受击、发牌、出牌和飘字关键帧 | `assets/animations/` |
 | 伤害、格挡、修复和飘字效果 | `assets/prefabs/effects/` |
 | 像素插画及可直接选用的 SpriteFrame | `assets/resources/art/` 下的 PNG 与 `*-frames.plist` |
 
-角色动画只修改 `Visual` 子节点，页面中角色实例的位置和缩放由编辑器保存。攻击动画里的 `notifyImpact` 事件负责结算命中，完成事件解除操作锁。编辑动作时保留事件。`HandPresentation` 负责按实际手牌数量摆放卡牌，间距、扇形角度、悬停高度与缩放可以在 Inspector 调整。
+迷宫四个战斗角色由 Spine 3.8 驱动。主角确认出牌后由独立牌背投射物承接出牌结算。怪物通过 Spine 命中与完成事件结算动作。原生演员和插画的制作命令见 `tools/spine/install-labyrinth-actors.cjs`、`tools/author-labyrinth-interface.py`。`HandPresentation` 负责手牌交互。
 
 `ShapeGraphic` 是保存到 Prefab 的绘图组件，形状、颜色、边框和像素块均可在 Inspector 调整；它重画自己的 Graphics，不生成页面节点。固定界面不再由脚本整页重建。
 
@@ -66,17 +65,16 @@ npm run preview
 - 攻击牌：点击选牌再点击敌人，或将牌拖向敌人。
 - 防御、修复和武器牌：点击使用，或拖入战斗场地。
 - 拖出有效区域可以取消。动画结算期间锁定重复操作。
-- 奖励卡与物资分别领取；可以先打开背包整理空间。
-- 装不下的物资会先显示实际可领取量和损失确认；满背包时保留奖励供整理后领取。离开未领完的奖励需要确认。
-- 现金只在休整时丢弃；休整时也能调整出战卡组。
+- 正式新局的物资自动入账。战斗胜利后和指定搜刮点可比较最多三张发现牌，拿一张或略过。选中的牌从下一场开始可抽。
+- 发现牌在本次探索内有效，成功返家后恢复基础牌组。营地恢复护甲并可查阅牌组。
 - 顶部可打开背包、手册和记录，或关闭音效。
-- 长按手牌查看完整说明；第 2 天明确是当前教学终点，重玩第 1 天需要确认。
+- 长按手牌查看完整说明。正式探索成败都推进一天。旧进度可继续，重开需要确认。
 
 ## 规则与实现
 
 原始规格保存在 `docs/tutorial-spec.md`，确认过的规则和实现约定见 `docs/implementation-notes.md`。
 
-修复后无法支付每日消耗时，先提示风险。玩家仍然可以确认修复。每日消耗在结算最后执行，不足部分记录为缺口，物资最低为 0。
+修复只支付实际修复费。正式探索失败时恢复初始物资、护甲和牌组，保留天数与关键日志。
 
 当前实现位于 `assets/game/`：`core/SurvivalGame.ts` 委派各规则模块，`application/GameSession.ts` 执行命令与保存，`infrastructure/SaveRepository.ts` 管理进度存储。`presentation/GameDirector.ts` 协调场景和命中回调，`GameRenderer.ts` 绑定界面，`ui/UiActionRouter.ts` 转换输入意图；卡牌、角色和音效各在对应表现目录。根目录 `assets/SurvivalRules.ts` 是兼容导入入口，旧版页面绘制代码在 `tools/editor-authoring/` 留档。
 
@@ -98,10 +96,10 @@ node tools/mcp-check.cjs
 npm test
 ```
 
-当前 86 条测试覆盖规则、配置、卡牌保存服务、玩家存档、展示模型及误操作保护。浏览器驱动位于 `tools/browser-*.js.txt`，通过实际点击、拖动验证卡牌编辑器和完整路线。`?seed=17` 可固定随机种子，不带参数时正常随机。
+用 `npm run typecheck` 检查引擎类型。运行主游戏预览后，`npm run test:tide-browser` 可用独立浏览器检查首图、发现、取消和读档。`?seed=17&save=off` 提供独立的固定种子试玩。
 
-完整作品的玩法与美术复审见 `docs/full-game-review.md`，机器可读验证见 `docs/full-game-review-verification.json`。本轮实机截图使用 `output/playwright/review-01-*`（改前）、`review-02-*` 和 `review-03-*`（改后）；`tools/run-full-review-suite.cjs` 复用独立的 `fullreview` Playwright 会话。普通构建不运行资源编写工具。
+焦土迷宫的图文评审见 `docs/vertical-slice.md`，验证报告与截图位于 `output/playwright/ashen-labyrinth/`。普通构建直接使用已导入的原生资源。
 
 本次原生场景迁移的验证记录见 `docs/native-ui-migration.md`；本地运行报告和截图位于 `output/`，构建日志位于 `temp/prefab-build.log`。
 
-原创像素美术使用 image_gen 制作，来源见 `docs/art-manifest.json`。用户参考图片只用于风格和配色方向，没有沿用其建筑、角色、文字或标识。最初的背景连通性测试保存在 `samples/background-smoke/`。
+盐原角色、场景和卡图的原始提示及参考来源见 `art-source/tide/provenance.json`。早期像素与 08 方案的资料继续保存在 `docs/art-manifest.json` 和 `samples/background-smoke/`。

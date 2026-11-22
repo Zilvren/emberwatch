@@ -9,6 +9,7 @@ const { ccclass, property } = _decorator;
 type MotionRequest = {
     kind: SpineMotion;
     impact?: () => void;
+    release?: () => void;
     complete?: () => void;
     advance?: (fraction: number) => void;
     sample?: number;
@@ -19,15 +20,27 @@ type MotionRequest = {
 export class SpineActorRig extends Component {
     @property(sp.Skeleton) skeleton: sp.Skeleton | null = null;
     @property(JsonAsset) contract: JsonAsset | null = null;
+    @property(sp.SkeletonData) tideSkeleton: sp.SkeletonData | null = null;
+    @property(JsonAsset) tideContract: JsonAsset | null = null;
+    @property(sp.SkeletonData) labyrinthSkeleton: sp.SkeletonData | null = null;
+    @property(JsonAsset) labyrinthContract: JsonAsset | null = null;
+    @property(Vec3) labyrinthOffset = new Vec3();
+    @property labyrinthScale = 1;
+    private legacySkeleton: sp.SkeletonData | null = null;
+    private legacyContract: JsonAsset | null = null;
+    private home: { position: Vec3; scale: Vec3 } | null = null;
+    private look: 'legacy' | 'tide' | 'labyrinth' = 'legacy';
     private pending: MotionRequest | null = null;
     private generation = 0;
     private action: SpineMotion = 'idle';
     private callbacks: {
         impact?: () => void;
+        release?: () => void;
         complete?: () => void;
         advance?: (fraction: number) => void;
     } = {};
     private pendingImpact = false;
+    private pendingRelease = false;
     private pendingComplete = false;
     private bindings: NonNullable<ReturnType<sp.Skeleton['findBone']>>[] = [];
     private readonly point = new Vec3();
@@ -36,6 +49,57 @@ export class SpineActorRig extends Component {
     }
     get ready(): boolean {
         return !!this.skeleton?.findBone('PoseRoot');
+    }
+    setFieldLook(field: boolean): boolean {
+        return this.setLook(field ? 'tide' : 'legacy');
+    }
+    setLook(look: 'legacy' | 'tide' | 'labyrinth'): boolean {
+        if (this.look === look || !this.skeleton) return false;
+        const data = look === 'labyrinth' ? this.labyrinthSkeleton : look === 'tide' ? this.tideSkeleton : this.legacySkeleton;
+        const contract = look === 'labyrinth' ? this.labyrinthContract : look === 'tide' ? this.tideContract : this.legacyContract;
+        if (look !== 'legacy' && (!data || !contract)) return this.setLook('legacy');
+        if (!this.legacySkeleton) {
+            this.legacySkeleton = this.skeleton.skeletonData;
+            this.legacyContract = this.contract;
+        }
+        this.home ??= { position: this.node.position.clone(), scale: this.node.scale.clone() };
+        this.cancel();
+        this.look = look;
+        this.bindings = [];
+        this.contract = contract;
+        this.skeleton.skeletonData = data;
+        if (look === 'labyrinth') {
+            this.node.setPosition(Vec3.add(new Vec3(), this.home.position, this.labyrinthOffset));
+            this.node.setScale(this.home.scale.x * this.labyrinthScale, this.home.scale.y * this.labyrinthScale, this.home.scale.z);
+        } else {
+            this.node.setPosition(this.home.position);
+            this.node.setScale(this.home.scale);
+        }
+        return true;
+    }
+    get flight(): number {
+        return this.data.flight ?? 0;
+    }
+    get poseFamily(): string {
+        return this.look === 'labyrinth' || this.data.actor.startsWith('ashen-')
+            ? 'ashen-spine' : this.look === 'tide' ? 'tide-spine' : 'master08-spine';
+    }
+    aimWorld(out: Vec3): Vec3 {
+        this.syncWorldPose();
+        const aim = this.skeleton?.findBone('Aim');
+        return aim
+            ? Vec3.transformMat4(out, new Vec3(aim.worldX, aim.worldY, 0), this.node.worldMatrix)
+            : out.set(this.node.worldPosition);
+    }
+    paperWorld(out: Vec3): Vec3 {
+        this.syncWorldPose();
+        const bone = this.skeleton?.findBone('float-guard');
+        return bone ? Vec3.transformMat4(out, new Vec3(bone.worldX, bone.worldY, 0), this.node.worldMatrix)
+            : this.aimWorld(out);
+    }
+    setPaperInFlight(value: boolean): void {
+        if (this.look !== 'labyrinth' || !this.ready || this.action !== 'idle') return;
+        this.skeleton?.setAnimation(1, value ? 'paper-out' : 'paper-return', false);
     }
     get approach(): number {
         return this.skeleton?.findBone(this.data.approachBone)?.x ?? 0;
@@ -65,15 +129,17 @@ export class SpineActorRig extends Component {
         this.pending = null;
         this.callbacks = {};
         this.pendingImpact = false;
+        this.pendingRelease = false;
         this.pendingComplete = false;
     }
     play(
         kind: SpineMotion,
         impact?: () => void,
         complete?: () => void,
-        advance?: (fraction: number) => void
+        advance?: (fraction: number) => void,
+        release?: () => void
     ): void {
-        this.pending = { kind, impact, complete, advance };
+        this.pending = { kind, impact, complete, advance, release };
         this.flush();
     }
     sample(kind: SpineMotion, time: number): void {
@@ -94,18 +160,21 @@ export class SpineActorRig extends Component {
             impact: request.impact,
             complete: request.complete,
             advance: request.advance,
+            release: request.release,
         };
         this.pendingImpact = false;
+        this.pendingRelease = false;
         this.pendingComplete = false;
         skeleton.paused = false;
-        if (request.kind === 'idle') skeleton.setToSetupPose();
+        if (this.look === 'labyrinth') skeleton.clearTrack(1);
+        skeleton.setToSetupPose();
         const entry = skeleton.setAnimation(0, request.kind, this.data.motions[request.kind].loop);
         if (!entry) throw new Error('Spine 动作缺失：' + request.kind);
         skeleton.setTrackEventListener(entry, (_track, event) => {
             if (token !== this.generation) return;
             const value = event as { data?: { name?: string } };
-            if (value.data?.name !== 'impact') return;
-            this.pendingImpact = true;
+            if (value.data?.name === 'impact') this.pendingImpact = true;
+            if (value.data?.name === 'release') this.pendingRelease = true;
         });
         skeleton.setTrackCompleteListener(entry, () => {
             if (token !== this.generation || this.data.motions[request.kind].loop) return;
@@ -124,6 +193,12 @@ export class SpineActorRig extends Component {
     private afterPoseUpdate(): void {
         this.syncWorldPose();
         this.callbacks.advance?.(this.approach);
+        if (this.pendingRelease) {
+            this.pendingRelease = false;
+            const release = this.callbacks.release;
+            this.callbacks.release = undefined;
+            release?.();
+        }
         if (this.pendingImpact) {
             this.pendingImpact = false;
             const hit = this.callbacks.impact;
@@ -209,6 +284,7 @@ export class SpineActorRig extends Component {
             speed: this.skeleton?.timeScale,
             bones: this.data.boneNames.length,
             weightedVertices: this.data.influences.filter((w) => w.length > 1).length,
+            independentParts: this.data.parts?.length ?? 0,
             source: this.data.sourceSha256,
             approach: this.approach,
             markers,

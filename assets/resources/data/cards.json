@@ -2,6 +2,32 @@
   "version": 1,
   "fixedReward": "heavy",
   "recipes": [],
+  "expedition": {
+    "starter": { "attack": 5, "dodge": 5, "heavy": 3, "evade": 3, "knife": 1, "repair": 1, "rummage": 2 },
+    "discoveryGroups": [["follow_up", "shield_push"], ["scrap_shiv", "rummage"], ["heavy", "evade"]],
+    "faces": {
+      "attack": { "name": "压掌", "text": "零体力的起手攻击。" },
+      "dodge": { "name": "滑步", "text": "格挡在敌方行动后清空。" },
+      "knife": { "name": "读潮环", "text": "占用仪器槽，本场持续生效。" },
+      "slash": { "name": "发振", "text": "打出或回合结束时消失。" },
+      "evade": { "name": "折光屏", "text": "格挡可以挡住临界时的伤害。" },
+      "heavy": { "name": "沉锚", "text": "以压舱锚块击穿目标。" },
+      "repair": { "name": "盐封修补", "text": "护甲已满或降到 0 时无法使用。" },
+      "follow_up": { "name": "追波", "text": "先打攻击牌，再用此牌多造成 4 伤害。" },
+      "shield_push": { "name": "返压", "text": "已有 4 格挡时额外造成 3 伤害。" },
+      "scrap_shiv": { "name": "叠响", "text": "两枚共鸣环送回一次回声。" },
+      "rummage": { "name": "开匣", "text": "最多持有 6 张手牌，多余的留在牌堆。" }
+    }
+  },
+  "labyrinth": {
+    "starter": {"lab_press":4,"lab_step":4,"lab_anchor":1,"lab_screen":1,"lab_cell":1,"lab_open":1},
+    "decks": [
+      {"id":"shared","name":"共用配合","cards":["lab_bypass","lab_probe","lab_damper","lab_pulse","lab_test_hit","lab_crust","lab_loop_box","lab_reading","lab_relief"]},
+      {"id":"calibration","name":"蓄压倍率","cards":["lab_valve","lab_calibration","lab_bracelet"]},
+      {"id":"defer","name":"快速暂缓","cards":["lab_vent","lab_opening","lab_steady","lab_clip","lab_return_shield"]}
+    ],
+    "enabledDecks": ["shared","calibration","defer"]
+  },
   "cards": [
     {
       "id": "attack",
@@ -107,6 +133,30 @@
       }
     },
     {
+      "id": "follow_up", "name": "追击", "tag": "攻击 · 连击", "cost": 1, "weight": 0,
+      "text": "本回合先打过攻击牌，再用此牌多造成 4 点伤害。", "color": "#b66f51", "art": "slash",
+      "role": "normal", "initialCount": 0, "reward": false,
+      "effect": { "type": "damage", "amount": 2, "bonusWhen": "after-attack", "bonus": 4 }
+    },
+    {
+      "id": "shield_push", "name": "借势反击", "tag": "攻击 · 掩体", "cost": 1, "weight": 0,
+      "text": "已有至少 4 格挡时，多造成 3 点伤害。格挡保留。", "color": "#788e78", "art": "evade",
+      "role": "normal", "initialCount": 0, "reward": false,
+      "effect": { "type": "damage", "amount": 3, "bonusWhen": "behind-cover", "bonus": 3 }
+    },
+    {
+      "id": "scrap_shiv", "name": "废铁短刃", "tag": "攻击 · 过牌", "cost": 1, "weight": 0,
+      "text": "先打出短刃腾出手位，再从牌堆抽牌。", "color": "#ad825b", "art": "knife",
+      "role": "normal", "initialCount": 0, "reward": false,
+      "effect": { "type": "damage", "amount": 3, "extraDraw": 1 }
+    },
+    {
+      "id": "rummage", "name": "翻找行囊", "tag": "技能 · 过牌", "cost": 1, "weight": 0,
+      "text": "最多持有 6 张手牌。放不下的牌留在牌堆。", "color": "#9a9566", "art": "cash",
+      "role": "normal", "initialCount": 0, "reward": false,
+      "effect": { "type": "draw", "amount": 2 }
+    },
+    {
       "id": "cash",
       "name": "旧世界现金",
       "tag": "遗物 · 无战斗效果",
@@ -138,6 +188,501 @@
       "effect": {
         "type": "damage",
         "amount": 4
+      }
+    },
+    {
+      "id": "lab_press",
+      "name": "压掌",
+      "tag": "攻击",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#b97b58",
+      "art": "attack",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "damage",
+        "amount": 4
+      }
+    },
+    {
+      "id": "lab_step",
+      "name": "滑步",
+      "tag": "技能 · 防御",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "dodge",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 4
+      }
+    },
+    {
+      "id": "lab_anchor",
+      "name": "沉锚",
+      "tag": "攻击 · 镇静",
+      "cost": 2,
+      "weight": 0,
+      "text": "",
+      "color": "#b97b58",
+      "art": "heavy",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "damage",
+        "amount": 8,
+        "labyrinth": {
+          "rule": "calm",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_screen",
+      "name": "折光屏",
+      "tag": "技能 · 镇静",
+      "cost": 2,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 8,
+        "labyrinth": {
+          "rule": "calm",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_cell",
+      "name": "备用电芯",
+      "tag": "技能 · 消耗",
+      "cost": 0,
+      "weight": 0,
+      "text": "消耗只持续到这场战斗结束。",
+      "color": "#b7a072",
+      "art": "repair",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "skill",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "gain-stamina",
+          "amount": 2
+        }
+      }
+    },
+    {
+      "id": "lab_open",
+      "name": "开匣",
+      "tag": "技能 · 抽牌",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#b7a072",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "draw",
+        "amount": 2
+      }
+    },
+    {
+      "id": "lab_bypass",
+      "name": "旁路开关",
+      "tag": "技能 · 体力",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#b7a072",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "skill",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "next-skill-free",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_probe",
+      "name": "逆相探针",
+      "tag": "技能 · 镇静",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#b7a072",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "skill",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "calm",
+          "amount": 2
+        }
+      }
+    },
+    {
+      "id": "lab_damper",
+      "name": "阻尼片",
+      "tag": "技能 · 镇静",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "dodge",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 3,
+        "labyrinth": {
+          "rule": "calm",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_pulse",
+      "name": "短效脉冲",
+      "tag": "技能 · 临时镇静",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 3,
+        "labyrinth": {
+          "rule": "temporary-calm",
+          "amount": 2
+        }
+      }
+    },
+    {
+      "id": "lab_test_hit",
+      "name": "测隙击",
+      "tag": "攻击 · 镇静",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#b97b58",
+      "art": "slash",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "damage",
+        "amount": 3,
+        "labyrinth": {
+          "rule": "calm",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_crust",
+      "name": "盐壳护板",
+      "tag": "技能 · 防御",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 3,
+        "labyrinth": {
+          "rule": "calm-block",
+          "amount": 3,
+          "threshold": 2
+        }
+      }
+    },
+    {
+      "id": "lab_loop_box",
+      "name": "回线盒",
+      "tag": "技能 · 回收",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 3,
+        "labyrinth": {
+          "rule": "discard-to-top",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_reading",
+      "name": "临界读数",
+      "tag": "能力 · 抽牌",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#9a8baf",
+      "art": "repair",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "power",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "draw-on-defer",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_relief",
+      "name": "泄压护片",
+      "tag": "技能 · 防御",
+      "cost": 0,
+      "weight": 0,
+      "text": "",
+      "color": "#b7a072",
+      "art": "dodge",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "skill",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "temporary-to-block",
+          "amount": 2
+        }
+      }
+    },
+    {
+      "id": "lab_valve",
+      "name": "扩容阀",
+      "tag": "能力 · 镇静",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#9a8baf",
+      "art": "repair",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "power",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "raise-calm-limit",
+          "amount": 2
+        }
+      }
+    },
+    {
+      "id": "lab_calibration",
+      "name": "蓄压校准",
+      "tag": "技能 · 倍率",
+      "cost": 1,
+      "weight": 0,
+      "text": "已暂缓的层数留给那次结算。",
+      "color": "#b7a072",
+      "art": "heavy",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "skill",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "calibrate-attack",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_bracelet",
+      "name": "回压护腕",
+      "tag": "技能 · 防御",
+      "cost": 0,
+      "weight": 0,
+      "text": "",
+      "color": "#b7a072",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "skill",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "block-per-spent-calm",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_vent",
+      "name": "急卸阀",
+      "tag": "技能 · 临时镇静",
+      "cost": 1,
+      "weight": 0,
+      "text": "临时镇静在本回合结束时清除。",
+      "color": "#b7a072",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "skill",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "temporary-calm",
+          "amount": 3
+        }
+      }
+    },
+    {
+      "id": "lab_opening",
+      "name": "抢隙猛击",
+      "tag": "攻击 · 暂缓",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#b97b58",
+      "art": "heavy",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "damage",
+        "amount": 4,
+        "labyrinth": {
+          "rule": "deferred-damage",
+          "amount": 3
+        }
+      }
+    },
+    {
+      "id": "lab_steady",
+      "name": "回稳屏",
+      "tag": "技能 · 暂缓",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 4,
+        "labyrinth": {
+          "rule": "deferred-draw",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_clip",
+      "name": "预挂夹",
+      "tag": "技能 · 保留",
+      "cost": 0,
+      "weight": 0,
+      "text": "",
+      "color": "#b7a072",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "skill",
+        "amount": 0,
+        "labyrinth": {
+          "rule": "retain-hand",
+          "amount": 1
+        }
+      }
+    },
+    {
+      "id": "lab_return_shield",
+      "name": "回流盾",
+      "tag": "技能 · 暂缓",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "dodge",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 4,
+        "labyrinth": {
+          "rule": "deferred-counter",
+          "amount": 3
+        }
       }
     }
   ]

@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Graphics, Label, Node } from 'cc';
+import { _decorator, Color, Component, Graphics, Label, Node, UITransform } from 'cc';
 import { ButtonAction } from '../ui/ButtonAction';
 import type { RoutePointModel } from './RouteMapModel';
 const { ccclass, property, requireComponent } = _decorator;
@@ -27,15 +27,21 @@ export class RoutePoint extends Component {
         this.hovering = false;
         this.draw();
     }
-    show(data: RoutePointModel, readonly = false): void {
+    private landscape = false;
+    show(data: RoutePointModel, readonly = false, landscape = false): void {
         this.data = data;
+        this.landscape = landscape;
+        this.node.setScale(landscape ? .75 : 1, landscape ? .75 : 1, 1);
         if (this.title) {
             this.title.string = data.title;
-            this.title.color = new Color().fromHEX('#434b3c');
+            this.title.color = new Color().fromHEX(landscape ? '#eee1d0' : '#e8dbce');
         }
         if (this.status) {
+            this.status.color = new Color().fromHEX('#d0b58e');
+            this.status.node.getComponent(UITransform)!.width = data.decisionHint ? 340 : 180;
             this.status.string =
-                data.state === 'visited'
+                data.decisionHint ??
+                (data.state === 'visited'
                     ? '已完成'
                     : data.state === 'available'
                       ? readonly
@@ -45,7 +51,7 @@ export class RoutePoint extends Component {
                             : '点击进入'
                       : data.state === 'excluded'
                         ? '另一条路径'
-                        : '未到达';
+                        : '未到达');
         }
         if (this.action) {
             this.action.actionId = data.action || 'map-home';
@@ -60,7 +66,8 @@ export class RoutePoint extends Component {
         if (!d || !g) return;
         const active = d.state === 'available',
             visited = d.state === 'visited';
-        const ink = active ? '#6f5a34' : d.state === 'excluded' ? '#878b78' : '#48503e';
+        const ink = this.landscape ? active ? '#edcf9f' : d.state === 'excluded' ? '#7f7085' : '#bb9f88'
+            : active ? '#6f5a34' : '#9c8799';
         g.clear();
         g.strokeColor = new Color().fromHEX(ink);
         g.lineWidth = active || this.hovering ? 2.2 : 1.7;
@@ -91,8 +98,56 @@ export class RoutePoint extends Component {
             g.fill();
             g.stroke();
         };
-        const paper = active ? '#cfbf98' : '#c2c0aa';
-        if (d.icon === 'battle' || d.icon === 'elite') {
+        const paper = this.landscape ? active ? '#75583e' : '#3f354b' : active ? '#cfbf98' : '#b9a6ba';
+        if (this.landscape) {
+            shape([-31, -19, -31, 19, -21, 28, 21, 28, 31, 19, 31, -19, 21, -28, -21, -28], paper);
+            g.strokeColor = new Color().fromHEX(active ? '#f3d5a4' : '#c3a3a0');
+            g.lineWidth = 2;
+            switch (d.icon) {
+                case 'battle':
+                    line([-16, -14, 14, 16]);
+                    line([-14, 14, 15, -15]);
+                    line([-8, -11, -17, -2]);
+                    break;
+                case 'elite':
+                    line([-17, -15, -17, 11, 0, 20, 17, 11, 17, -15, 0, -22, -17, -15]);
+                    line([-9, -1, 9, -1]);
+                    break;
+                case 'rest':
+                    line([-17, -14, -12, -7, -1, -9, 16, -15]);
+                    line([-9, -2, -11, 7, -2, 17, 1, 7, 10, 12, 12, 1, 6, -5]);
+                    break;
+                case 'home':
+                    line([-15, -15, -15, 15, 8, 15, 8, -15]);
+                    line([-8, -19, -8, 8, 16, 8, 16, -19]);
+                    break;
+                default:
+                    line([-18, 8, -18, -13, 18, -13, 18, 8, -18, 8]);
+                    line([-18, 8, -12, 15, 13, 15, 18, 8]);
+                    if (d.icon === 'supply') line([-5, -2, 5, -2, 0, -2, 0, -8, 0, 3]);
+            }
+        } else if (d.fieldSymbol === 'buoy') {
+            shape([-29, 5, -17, 17, 13, 18, 29, 5, 21, -8, -20, -8], '#a4bab0');
+            g.fillColor = new Color().fromHEX('#826236');
+            g.circle(-17, 5, 4);
+            g.fill();
+            line([-17, -7, -24, -19, -31, -20]);
+            line([-5, -7, -11, -23, -18, -24]);
+            line([12, -7, 20, -19, 28, -20]);
+            line([13, 18, 19, 29]);
+        } else if (d.fieldSymbol === 'rotor') {
+            g.lineWidth = 6;
+            for (let i = 0; i < 3; i++) {
+                const a = (i * Math.PI * 2) / 3 + 0.18;
+                g.arc(0, 0, 25, a, a + 1.52, false);
+                g.stroke();
+            }
+            g.fillColor = new Color().fromHEX('#61897d');
+            g.circle(0, 0, 8);
+            g.fill();
+            g.lineWidth = 2;
+            line([-10, 0, 10, 0]);
+        } else if (d.icon === 'battle' || d.icon === 'elite') {
             if (d.icon === 'elite') {
                 shape([-24, 24, 14, 29, 26, 18, 27, -18, 0, -28, -27, -18], paper);
                 shape([14, 29, 24, 35, 34, 22, 26, 18], '#aa947e');

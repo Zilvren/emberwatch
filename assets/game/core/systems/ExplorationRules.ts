@@ -1,4 +1,5 @@
 import { CardSet } from '../content/ContentRegistry';
+import { activeDiscoveryCards } from '../content/CardCatalog';
 import { GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
 import { Random } from '../Random';
 import { ActionResult, NodeKind, Route } from '../RulesTypes';
@@ -17,7 +18,8 @@ export class ExplorationRules {
         private readonly shelter: ShelterRules,
         private readonly random: Random,
         private readonly scenario: GameScenario,
-        private readonly fail: (reason: string) => void
+        private readonly fail: (reason: string) => void,
+        private readonly collectSupplies: (source: string, amount: number, discoveries?: number) => void
     ) {}
     get currentNode(): NodeKind | 'choice' | 'return' {
         return currentNodeId(this.state, this.scenario);
@@ -42,6 +44,9 @@ export class ExplorationRules {
         this.state.visited = [];
         this.state.battle = null;
         this.state.rewards = null;
+        this.state.discoveryPool = this.scenario.labyrinth
+            ? activeDiscoveryCards(this.content.catalog.labyrinth!)
+            : undefined;
         this.state.settlement = null;
         this.state.failureReason = '';
         this.state.returnElapsed = 0;
@@ -78,6 +83,14 @@ export class ExplorationRules {
                     `进入需要 ${fee} 点物资，目前只有 ${this.state.supplies} 点。可以重新开始教学。`
                 );
             this.inventory.spend(fee);
+            const supplies =
+                definition.supplies[0] === definition.supplies[1]
+                    ? definition.supplies[0]
+                    : this.random.int(definition.supplies[0], definition.supplies[1]);
+            if (this.scenario.fieldDeck) {
+                this.collectSupplies(node, supplies, definition.discover ? 3 : 0);
+                return this.feedback.result(true, `${definition.title} · 找到 ${supplies} 物资`);
+            }
             this.state.phase = 'rewards';
             const pool =
                 this.scenario.runDeck && this.content.supplyPool.length
@@ -85,10 +98,7 @@ export class ExplorationRules {
                     : this.content.rewardPool;
             this.state.rewards = {
                 source: node,
-                supplies:
-                    definition.supplies[0] === definition.supplies[1]
-                        ? definition.supplies[0]
-                        : this.random.int(definition.supplies[0], definition.supplies[1]),
+                supplies,
                 cards: [
                     definition.cardReward === 'fixed'
                         ? this.content.catalog.fixedReward
@@ -108,7 +118,7 @@ export class ExplorationRules {
             this.state.armor += restored;
             this.feedback.log(
                 this.state.critical
-                    ? '感染临界，营地无法恢复护甲。'
+                    ? '护甲临界，无法在这里恢复。'
                     : `进入营地，恢复 ${restored} 点护甲。`
             );
         } else this.combat.startBattle(definition.enemyId);

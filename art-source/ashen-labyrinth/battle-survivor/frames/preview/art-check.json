@@ -1,0 +1,26 @@
+{
+  "source": "turnaround-golden.png",
+  "sourceCropOrigin": [
+    600,
+    0
+  ],
+  "frameSize": [
+    512,
+    944
+  ],
+  "uniqueFullFigurePNGs": 15,
+  "matchingHeadRectRGBA": [
+    0,
+    0,
+    271,
+    153
+  ],
+  "opaqueHeadPixelsComparedPerFrame": 12410,
+  "matchingLowerRectRGBA": [
+    0,
+    605,
+    512,
+    339
+  ],
+  "maxMismatchedPixelsPerFrame": 0
+}

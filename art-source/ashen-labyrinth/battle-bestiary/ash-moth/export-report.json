@@ -1,0 +1,22 @@
+{
+  "actor": "ash-moth",
+  "editor": "3.8.75",
+  "bones": 17,
+  "slots": 16,
+  "images": 16,
+  "meshes": [],
+  "ik": 0,
+  "impact": 0.43,
+  "clips": {
+    "idle": 1.8,
+    "prepare": 0.68,
+    "attack": 0.86,
+    "hurt": 0.39,
+    "death": 1.12
+  },
+  "atlasPages": [
+    "ash-moth-parts.png"
+  ],
+  "projectSha256": "245a3a30e11cc8b290d2671f384205315786d097e4668d483986f1ef6665d846",
+  "runtimeSha256": "8e609c7e1891082e7ebe7045bd6224b36f90e70d2701e2605c568c2e8c6b4ed4"
+}

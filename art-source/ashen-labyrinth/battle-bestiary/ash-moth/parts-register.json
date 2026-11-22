@@ -1,0 +1,535 @@
+{
+  "actor": "ash-moth",
+  "source": "../monster-concepts.png",
+  "sourceSha256": "85f47145ec5fab61f305e6f5c5c201cd6488410d94f3cfabef69468bae0b9122",
+  "jointUnderpaint": "source-parts.png",
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    271,
+    604
+  ],
+  "scale": 0.6,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "thorax",
+      "bone": "thorax",
+      "sourceXYWH": [
+        164,
+        226,
+        229,
+        283
+      ],
+      "png": [
+        229,
+        283
+      ],
+      "sha256": "0829e2d05b9e42d28a97f9122858589e34f65eb9442007ddd5c5134c41599703",
+      "pivotUV": [
+        0.436681,
+        0.30742
+      ],
+      "setupPivot": [
+        -4.2,
+        174.6
+      ],
+      "size": [
+        137.4,
+        169.8
+      ],
+      "angle": 0,
+      "visiblePixels": 14035,
+      "hiddenPixels": 4746,
+      "reconstructionCell": 5
+    },
+    {
+      "name": "abdomen",
+      "bone": "abdomen",
+      "sourceXYWH": [
+        188,
+        323,
+        158,
+        215
+      ],
+      "png": [
+        158,
+        215
+      ],
+      "sha256": "bb336297fe14984d511abc577d6612482bd286d205bb8147070c73e92d8c8af0",
+      "pivotUV": [
+        0.468354,
+        0.237209
+      ],
+      "setupPivot": [
+        -5.4,
+        138
+      ],
+      "size": [
+        94.8,
+        129
+      ],
+      "angle": 0,
+      "visiblePixels": 8166,
+      "hiddenPixels": 2009,
+      "reconstructionCell": 6
+    },
+    {
+      "name": "hind-left",
+      "bone": "hind-left",
+      "sourceXYWH": [
+        64,
+        283,
+        169,
+        193
+      ],
+      "png": [
+        169,
+        193
+      ],
+      "sha256": "c077df9761de9c0a3babfd87c1918b0159ea4e8d169c0f68d290ebdadc55bc01",
+      "pivotUV": [
+        0.91716,
+        0.088083
+      ],
+      "setupPivot": [
+        -31.2,
+        182.4
+      ],
+      "size": [
+        101.4,
+        115.8
+      ],
+      "angle": 0,
+      "visiblePixels": 7978,
+      "hiddenPixels": 2674,
+      "reconstructionCell": 2
+    },
+    {
+      "name": "hind-right",
+      "bone": "hind-right",
+      "sourceXYWH": [
+        307,
+        270,
+        218,
+        225
+      ],
+      "png": [
+        218,
+        225
+      ],
+      "sha256": "bb36bc84fb220ed772177cf7b561f6b5c7ae3ab55d29767f24d55c349cf37312",
+      "pivotUV": [
+        -0.027523,
+        0.093333
+      ],
+      "setupPivot": [
+        18,
+        187.8
+      ],
+      "size": [
+        130.8,
+        135
+      ],
+      "angle": 0,
+      "visiblePixels": 15039,
+      "hiddenPixels": 2585,
+      "reconstructionCell": 3
+    },
+    {
+      "name": "fore-left",
+      "bone": "fore-left",
+      "sourceXYWH": [
+        2,
+        137,
+        245,
+        237
+      ],
+      "png": [
+        245,
+        237
+      ],
+      "sha256": "cd6ed9d34c6715916bd6cb7f700c1e111b4cdd846d9cf792f570e2edd1a82fc1",
+      "pivotUV": [
+        0.893878,
+        0.594937
+      ],
+      "setupPivot": [
+        -30,
+        195.6
+      ],
+      "size": [
+        147,
+        142.2
+      ],
+      "angle": 0,
+      "visiblePixels": 23285,
+      "hiddenPixels": 1346,
+      "reconstructionCell": 0
+    },
+    {
+      "name": "fore-right",
+      "bone": "fore-right",
+      "sourceXYWH": [
+        269,
+        94,
+        445,
+        277
+      ],
+      "png": [
+        445,
+        277
+      ],
+      "sha256": "e580f42dbcfb52ce1358cb8316553ccc1e4191b410892cb5cd49fc5ea153e6a4",
+      "pivotUV": [
+        0.051685,
+        0.65704
+      ],
+      "setupPivot": [
+        12.6,
+        196.8
+      ],
+      "size": [
+        267,
+        166.2
+      ],
+      "angle": 0,
+      "visiblePixels": 50408,
+      "hiddenPixels": 1522,
+      "reconstructionCell": 1
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "sourceXYWH": [
+        184,
+        203,
+        160,
+        121
+      ],
+      "png": [
+        160,
+        121
+      ],
+      "sha256": "5608f71933451d7405cc717e66909c5fdbf43c83442f7cdf8d936e0ac8929666",
+      "pivotUV": [
+        0.425,
+        0.528926
+      ],
+      "setupPivot": [
+        -11.4,
+        202.2
+      ],
+      "size": [
+        96,
+        72.6
+      ],
+      "angle": 0,
+      "visiblePixels": 5428,
+      "hiddenPixels": 0,
+      "reconstructionCell": 4
+    },
+    {
+      "name": "feeler-left",
+      "bone": "feeler-left",
+      "sourceXYWH": [
+        181,
+        95,
+        110,
+        161
+      ],
+      "png": [
+        110,
+        161
+      ],
+      "sha256": "ebd47cd10e962203046567074c74f84e4aec2702d4cf2ae6d77b0ae79d5ffe23",
+      "pivotUV": [
+        0.390909,
+        0.950311
+      ],
+      "setupPivot": [
+        -28.2,
+        213.6
+      ],
+      "size": [
+        66,
+        96.6
+      ],
+      "angle": 0,
+      "visiblePixels": 2738,
+      "hiddenPixels": 6,
+      "reconstructionCell": 7
+    },
+    {
+      "name": "feeler-right",
+      "bone": "feeler-right",
+      "sourceXYWH": [
+        234,
+        102,
+        187,
+        132
+      ],
+      "png": [
+        187,
+        132
+      ],
+      "sha256": "249cc7ac115ef1ade89b71dbb2af66baa7c62435401a29614deeb37230d2af52",
+      "pivotUV": [
+        0.048128,
+        1.045455
+      ],
+      "setupPivot": [
+        -16.8,
+        218.4
+      ],
+      "size": [
+        112.2,
+        79.2
+      ],
+      "angle": 0,
+      "visiblePixels": 4484,
+      "hiddenPixels": 9,
+      "reconstructionCell": 8
+    },
+    {
+      "name": "far-left-leg",
+      "bone": "far-left-leg",
+      "sourceXYWH": [
+        167,
+        355,
+        91,
+        177
+      ],
+      "png": [
+        91,
+        177
+      ],
+      "sha256": "825d9212ce1eda453ee34a25a129cbe65b8b4d7ebd1cee8a044c7c4b2ed20660",
+      "pivotUV": [
+        0.714286,
+        0.135593
+      ],
+      "setupPivot": [
+        -23.4,
+        135
+      ],
+      "size": [
+        54.6,
+        106.2
+      ],
+      "angle": 0,
+      "visiblePixels": 1978,
+      "hiddenPixels": 97,
+      "reconstructionCell": 9
+    },
+    {
+      "name": "far-right-leg",
+      "bone": "far-right-leg",
+      "sourceXYWH": [
+        303,
+        366,
+        81,
+        122
+      ],
+      "png": [
+        81,
+        122
+      ],
+      "sha256": "15186432ddd81c6142c408345181293ddee78a9de4972bf8275b375bd281890b",
+      "pivotUV": [
+        0.271605,
+        0.163934
+      ],
+      "setupPivot": [
+        32.4,
+        130.8
+      ],
+      "size": [
+        48.6,
+        73.2
+      ],
+      "angle": 0,
+      "visiblePixels": 1068,
+      "hiddenPixels": 232,
+      "reconstructionCell": 9
+    },
+    {
+      "name": "leg-left",
+      "bone": "leg-left",
+      "sourceXYWH": [
+        169,
+        303,
+        71,
+        72
+      ],
+      "png": [
+        71,
+        72
+      ],
+      "sha256": "701ad65c97b466e9dbf770f68027520c489ecb95c5309267a79fc3a35b28e344",
+      "pivotUV": [
+        0.704225,
+        0.708333
+      ],
+      "setupPivot": [
+        -31.2,
+        150
+      ],
+      "size": [
+        42.6,
+        43.2
+      ],
+      "angle": 0,
+      "visiblePixels": 635,
+      "hiddenPixels": 61,
+      "reconstructionCell": 10
+    },
+    {
+      "name": "leg-left-shin",
+      "bone": "leg-left-shin",
+      "sourceXYWH": [
+        152,
+        304,
+        56,
+        150
+      ],
+      "png": [
+        56,
+        150
+      ],
+      "sha256": "d2446d65c96ceeac73ddb20fdf5af6b18beef4221099024aff410d0d493d7cb8",
+      "pivotUV": [
+        0.642857,
+        0.126667
+      ],
+      "setupPivot": [
+        -49.8,
+        168.6
+      ],
+      "size": [
+        33.6,
+        90
+      ],
+      "angle": 0,
+      "visiblePixels": 1315,
+      "hiddenPixels": 0,
+      "reconstructionCell": 10
+    },
+    {
+      "name": "leg-right",
+      "bone": "leg-right",
+      "sourceXYWH": [
+        273,
+        297,
+        73,
+        74
+      ],
+      "png": [
+        73,
+        74
+      ],
+      "sha256": "162f571c535f7a21f5aa5e1e42c9086b1a0da1dc3d38c808ffe50412b8f4c563",
+      "pivotUV": [
+        0.726027,
+        0.716216
+      ],
+      "setupPivot": [
+        33,
+        152.4
+      ],
+      "size": [
+        43.8,
+        44.4
+      ],
+      "angle": 0,
+      "visiblePixels": 696,
+      "hiddenPixels": 100,
+      "reconstructionCell": 11
+    },
+    {
+      "name": "leg-right-shin",
+      "bone": "leg-right-shin",
+      "sourceXYWH": [
+        249,
+        294,
+        65,
+        158
+      ],
+      "png": [
+        65,
+        158
+      ],
+      "sha256": "b38fd410d37efb91351c1ded38226699dfe115b19ff46400de18af5ce07c1bb8",
+      "pivotUV": [
+        0.707692,
+        0.132911
+      ],
+      "setupPivot": [
+        14.4,
+        173.4
+      ],
+      "size": [
+        39,
+        94.8
+      ],
+      "angle": 0,
+      "visiblePixels": 1457,
+      "hiddenPixels": 0,
+      "reconstructionCell": 11
+    },
+    {
+      "name": "chest-undercoat",
+      "bone": "thorax",
+      "sourceXYWH": [
+        206,
+        240,
+        144,
+        186
+      ],
+      "png": [
+        144,
+        186
+      ],
+      "sha256": "19b1e1cbdb3fb08e8c5afc6353569cfb54972103a01e5b3de7fa49034ada03b4",
+      "pivotUV": [
+        0.402778,
+        0.392473
+      ],
+      "setupPivot": [
+        -4.2,
+        174.6
+      ],
+      "size": [
+        86.4,
+        111.6
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 17313,
+      "reconstructionCell": 5,
+      "underlay": true
+    }
+  ],
+  "drawOrder": [
+    "chest-undercoat",
+    "hind-left",
+    "hind-right",
+    "fore-right",
+    "fore-left",
+    "far-left-leg",
+    "far-right-leg",
+    "abdomen",
+    "thorax",
+    "leg-left",
+    "leg-left-shin",
+    "leg-right",
+    "leg-right-shin",
+    "feeler-right",
+    "feeler-left",
+    "head"
+  ],
+  "setupAudit": {
+    "visiblePixels": 138710,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

@@ -1,5 +1,51 @@
 # The end 素材生产与原生接入规格
 
+## 2026-11-21 求生者单件制作 · 脸部精修参考
+
+按部件制作，第一件为青年脸部与颈根。脸模校形以精修侧光稿的眼睑、鼻翼、唇缘、耳廓为直接对照，用对应的 16 位正交深度确定距离。人物造型、绑定与三渲二动作分阶段验收。
+
+精修稿及两张 768 × 710 单通道深度裁切保存在 [脸部参考目录](../../art-source/ashen-labyrinth/battle-survivor/model/parts/01-head/references/)。`face-detail-review.png` 并列同一局部的精修侧光稿、原深度再照明及新深度再照明。裁切相对于定稿头部面板的坐标、线性深度编码、源文件哈希与方向光校验见 `reference.json`。这组资料的美术状态为待审阅。
+
+## 2026-11-21 青年求生者正交深度参考
+
+本组资料供 Blender 角色校形使用，状态为待美术审阅。头部取自用户定稿的 `head-turnaround.png`，全身取自腿部加长后的 `turnaround-golden-master.png`。头部原尺寸为 2076 × 758，全身原尺寸为 5539 × 3467。两张整图和正面、朝画面右方的侧面、背面各自的单图位于 [模型深度参考目录](../../art-source/ashen-labyrinth/battle-survivor/model/depth-guides/)。
+
+数据采用 16 位单通道线性 PNG。数值 0 表示背景，32768 表示相机轴的相对原点。其余有效灰度在三个方向和两个尺寸之间共用全身高度的 −0.22 至 +0.22 范围，较亮的位置更靠近对应相机。在 Blender 中按 Non-Color 读取，沿相机轴对照可见表面。裁切、符号、原稿哈希、面部配对点和校验结果见同目录 `guide.json`。
+
+可将 `Survivor-depth-reference.blend` 中的「头部 · 正交深度参考」或「全身 · 正交深度参考」集合作为参考追加到角色工程。六张纹理已打包到该文件并按当前模型的单位对齐。Blender 4.5.15 重读参考库时逐张核对了文件哈希和一个 16 位像素样本。
+
+先以鼻尖、下巴、耳轮及外轮廓核对正交位置，再检查眼睑、围巾与披风的层次。头发下面的头皮、披风里面的肩背和被遮住的远侧肢体仍需推定。预览中的侧光图由深度梯度生成。游戏演员、绑定与动作另行验收。
+
+## 2026-11-20 青年求生者持牌左手
+
+R3 把左手腕、纸牌夹持点登记到同一坐标系，拇指在牌前，食指在牌后，中指有独立屈伸。肘端布褶连续承接前臂，撑地时使用手掌真实轮廓求接触高度。35 张透明图像与 45 根骨骼保存在 `art-source/ashen-labyrinth/battle-survivor/spine/survivor.spine`。以 `spine/preview/left-hand-motion-r3.gif` 与 `spine/preview/left-hand-comparison.png` 核对袖口和手指，验收明细在该目录的 `verification.json`。
+
+## 2026-11-20 青年求生者动作复审
+
+动作修订以黄金腰线版右侧面为造型基准。肘、膝按身体关节重新绑定，衣料跨关节变形。手在匣口取牌，离手继承手腕速度，已经飞出的牌可以独立于受击播放。倒下动作记录了衣摆接地变形和分时落脚。工程保留五段人物主动作和两条持牌辅助轨道。修订记录见 `art-source/ashen-labyrinth/battle-survivor/spine/motion-review.md`，可编辑包为 `art-source/ashen-labyrinth/battle-survivor/survivor-spine-3.8.75-r2.zip`。
+
+## 2026-11-19 焦土迷宫青年求生者骨骼动画
+
+战斗演员以黄金腰线三视图的右侧面拆件。静置时核对头肩与腿部比例，持牌站姿在 `idle` 时间线展开。32 张透明图像对应 37 根骨骼、33 个插槽、3 片加权披布和 2 条腿部 IK。卡牌在 `attack` 第 0.36 秒离手，第 0.58 秒命中。角色工程位于 `art-source/ashen-labyrinth/battle-survivor/spine/survivor.spine`，原生 Prefab 位于 `assets/prefabs/actors/AshenSurvivor.prefab`，独立动作场景为 `assets/SurvivorSpineReview.scene`。同目录 `verification.json` 和 `delivery.json` 分别记录实播与异地解包复核。动作的视觉状态为待评审。
+
+## 2026-11-19 焦土迷宫怪物与战斗背景
+
+本轮造型以用户最后提交的三怪原图为准。灰灯蛾、叩石螯、垂幡守像的可见部位从该图分取。翅根、螯指和披布转动时会揭开遮挡，关节内部用独立补绘纹理补足。脚底基准、插槽顺序、各部件的轮廓来源和旋转中心记录在各自的 `parts-register.json`。
+
+| 怪物 | 透明 PNG（含专用衬层） | 骨骼及控制 | 攻击节奏 |
+| --- | ---: | ---: | --- |
+| 灰灯蛾 | 16（1 张衬层） | 17 | 收翼后俯冲，0.43 秒接触 |
+| 叩石螯 | 14（2 张衬层） | 16 | 抬螯、合指，0.55 秒接触，两条近侧腿使用 IK |
+| 垂幡守像 | 18（4 张衬层） | 16 | 收袖后挥臂，0.68 秒接触，两条垂幡以加权网格弯曲 |
+
+每只怪提供 Spine 3.8.75 编辑工程以及待机、预备、攻击、受击、死亡五段动作。资源包还包含折光回廊与沉灯井庭两张空场背景，构图保留左右站位及手牌区。原生播放记录见 [制作与播放核验](../../art-source/ashen-labyrinth/battle-bestiary/verification.json)，目录和使用方式见 [战斗素材包](../../art-source/ashen-labyrinth/battle-bestiary/README.md)。
+
+## 2026-11-18 · 盐原素材接入
+
+已实装三幅场景原画、三张角色贴图及一张 4 列 × 3 行的卡图集。生产原稿位于 `art-source/tide/`，输出位于 `assets/resources/tide/`。普通构建直接读取已导入资源。更换角色原稿后，按原始画布像素调好注册点，再显式执行 `node tools/author-tide-art.cjs`。脚本导出 Spine 3.8 网格、骨骼、五段动作、事件、接触几何和卡图 plist。所有资源通过 Pink 生成的 .meta 与正式 Prefab 引用接入。
+
+主角和闸轮使用 release 与 impact 两个事件，巡标机采用实体接触点。角色、仪器和地面位置分别由网格、接触骨骼和基线控制。实际游戏中的判定见 `SpineActorRig.ts`、`ActorPresentation.ts` 与 `GameDirector.ts`。
+
 - 项目：The end，Pink/Cocos 4.0.0-beta.1，Web desktop。
 - 日期：2026-11-15，Asia/Shanghai。
 - 状态：本轮背景与材质规格已实施并导入原生游戏；角色动作规格继续作为后续制作依据，不表示本轮增加了人物绘制帧。
@@ -122,3 +168,9 @@ Animation 驱动 NativeBones 的角度、位置和 approach 属性；NativeActor
 - 死亡采用骨骼倒下加侧卧身体附件，原头/兜帽/铁盔网格复用。身体图由内置 image_gen 参考原 08 生成，源与运行 PNG 保持相同字节；透明边界、原始尺寸和哈希见 tools/spine/corpse-regions.json，提示词来源见 character-style-exploration/spine08-corpse-prompts.json。
 - 显式制作入口 npm run author:spine -- --mcp <本地MCP目录> --spine <Spine.com>。MCP 经 stdio 写五动作、导入新临时工程、导出并验证；3.8 曲线序列化由适配器转换。先用 Pink SDK 导入资源分配元数据，再执行 npm run connect:spine。普通构建不运行作者工具。
 - 三角色正常/半速、暂停恢复、中断、死亡保持、减少动态效果和主游戏真实输入均有本轮证据。web-desktop 构建与微信小游戏测试编译通过；微信真机、性能和发布不属于已通过结论。详情与未验证边界为 docs/spine08-verification.json。
+
+## 2026-11-18：独立拆解与绑定返工
+
+项目 The end。当前活跃源为 art-source/spine08/{actor}-parts.spine、同名 .authoring.json 和 parts/{actor}/ 下各部位独立 PNG、parts.json。主角 19 张/27 骨骼，游荡者 16 张/26 骨骼，重型怪 18 张/27 骨骼；Root/Approach/IK 为控制。图片与骨骼明确对应，取消整图 Artwork 网格及整体 Corpse 末姿势。普通构建不生成素材，手调后不能用作者命令覆盖动画。
+
+真实 alpha 经渲染纹理导出与 53 文件审计，Windows 发布为原子替换；唯一图片加载 URL 与临时骨架 UUID 防止缓存串图。原画/既有 UUID、Prefab 身份与比例保持。原文件及用户编辑备份保持。作者步骤、源图与提示词见 character-style-exploration/spine08-motion.md、spine08-parts-prompts.json；记录复用 docs/spine08-verification.json。

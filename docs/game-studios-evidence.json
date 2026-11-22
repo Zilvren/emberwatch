@@ -1,6 +1,336 @@
 {
   "schemaVersion": 1,
+  "ashenLabyrinthSurvivorToon": {
+    "date": "2026-11-20",
+    "scope": "主角胸前悬浮牌、思考待机和右手弹牌的独立三渲二试样",
+    "technicalOutcome": "SUPPORTED",
+    "modelSha256": "beecc1d2249aade5527c4b23b08fbe1901f05245e4f89312e32d6c1543d39918",
+    "testsPassed": 159,
+    "nativeInteraction": "实际键盘出牌返回待机，三个机位各点一张浮牌，逐一核对指尖和飞行。1024×768 下复测转机位、拖动、全身和慢放。",
+    "scene": "assets/SurvivorToonReview.scene",
+    "record": "art-source/ashen-labyrinth/battle-survivor/toon/preview/runtime-check.json",
+    "preview": "art-source/ashen-labyrinth/battle-survivor/toon/preview/survivor-toon.webm",
+    "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/animation/toon-runtime-check.json",
+    "visualReview": "已查看斜侧和默认机位。造型与动作手感待用户评审。"
+  },
+  "ashenLabyrinthSurvivorMotion": {
+    "date": "2026-11-20",
+    "scope": "焦土迷宫主角的独立 Spine 工程、Cocos Prefab 和动作预览场景",
+    "record": "art-source/ashen-labyrinth/battle-survivor/spine/verification.json",
+    "package": "art-source/ashen-labyrinth/battle-survivor/survivor-spine-3.8.75-r3.zip",
+    "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/animation",
+    "technicalOutcome": "SUPPORTED",
+    "visibleSourcePixels": 456837,
+    "missingVisiblePixels": 0,
+    "changedVisiblePixels": 0,
+    "clips": 5,
+    "nativeControls": 8,
+    "testsPassed": 159,
+    "playbackSeconds": 7.08,
+    "editorRoundtrip": "Spine 3.8.75 异地重开，35 张透明贴图、皮肤与全部动作已核对。",
+    "visualReview": "检查了持牌左手 7 个原生姿势和连续手部近景，在完整场景复测连点、打断、离手和落地。",
+    "revision": 3,
+    "review": "art-source/ashen-labyrinth/battle-survivor/spine/motion-review.md",
+    "motionAudit": {
+      "oldZipSha256": "4c1497de91662d86194af38f9cf936c1aff9a5a3b4734fdb75bed1df2099e9ac",
+      "oldHipToKneeAndAnkle": [
+        125.7699966430664,
+        57.040000915527344
+      ],
+      "nowHipToKneeAndAnkle": [
+        90.7300033569336,
+        91.95999908447266
+      ],
+      "firstCardDistance": [
+        65.91318338042788,
+        0.68797930651452
+      ],
+      "releaseVelocityStep": [
+        589.2904772494009,
+        6.745395085233465
+      ],
+      "minOpaqueY": [
+        -35.74048154827631,
+        0.11366516337493238
+      ],
+      "headJumpOnPreReleaseInterruption": [
+        8.166606090988736,
+        0.04317017389661732
+      ],
+      "fps": 24,
+      "recording": "continuous native scene"
+    },
+    "leftHandReview": {
+      "leftHandRole": "持牌的远侧左手",
+      "baselineRevision": 2,
+      "wristToPinchBefore": 18.670000076293945,
+      "wristToPinchAfter": 27.780000686645508,
+      "otherHandReference": 30.729999542236328,
+      "caseDrawDistance": 1.5701768518220265,
+      "actualRenderedContact": [
+        {
+          "clip": "prepare",
+          "time": 0.49,
+          "frontThumbPixels": 201,
+          "backIndexPixels": 49
+        },
+        {
+          "clip": "attack",
+          "time": 0.355,
+          "frontThumbPixels": 212,
+          "backIndexPixels": 47
+        }
+      ],
+      "elbowAndWristChecked": 7,
+      "interrupt": {
+        "keptPinch": true,
+        "fingerAngleChange": 1.1920928955078125e-7,
+        "stowed": true,
+        "airborne": true,
+        "empty": true,
+        "finished": true
+      },
+      "lowestVisibleFallY": 0.11366516337493238,
+      "comparison": "art-source/ashen-labyrinth/battle-survivor/spine/preview/left-hand-comparison.png",
+      "motion": "art-source/ashen-labyrinth/battle-survivor/spine/preview/left-hand-motion-r3.gif",
+      "scope": "独立 Cocos 动作场景及 Spine 工程，手感待审阅"
+    }
+  },
+  "ashenLabyrinthBestiaryReview": {
+    "date": "2026-11-19",
+    "project": "The end",
+    "selectedSource": "art-source/ashen-labyrinth/battle-bestiary/monster-concepts.png",
+    "selectedSha256": "85f47145ec5fab61f305e6f5c5c201cd6488410d94f3cfabef69468bae0b9122",
+    "delivery": "art-source/ashen-labyrinth/battle-bestiary-spine-3.8.zip",
+    "deliverySha256": "a029fbdaf1b75f0f4cb5115d0661354a53dfe211fd199fa719ad00df94461f98",
+    "relocation": "解压最终 ZIP 到新的目录，Spine 3.8.75 重新打开三份 .spine。再次导出的 bones、slots、skins、IK、events 和 animations 与交付运行数据逐项相符，全部插槽的相对 PNG 路径可用。",
+    "existingSpineRegression": {
+      "file": "tests/spine-actor-motion.test.cjs",
+      "passed": 8
+    },
+    "editor": "Spine 3.8.75",
+    "runtime": "Pink/Cocos 4.0.0-beta.1 / sp.Skeleton realtime",
+    "actors": 3,
+    "independentImages": 48,
+    "visiblePartImages": 41,
+    "underlayImages": 7,
+    "bonesAndControls": 49,
+    "animations": 15,
+    "backgrounds": 2,
+    "assertions": "三次攻击各一个 impact，三个待机循环返回首姿势，死亡停姿稳定。石螯近足 IK、守像石座与垂幡网格通过原生采样。",
+    "film": "art-source/ashen-labyrinth/battle-bestiary/preview/battle-motion.gif",
+    "verification": "art-source/ashen-labyrinth/battle-bestiary/verification.json",
+    "scope": "选定怪物原画、可编辑 Spine 和艺术评审预览",
+    "visual": "原画已选定，动作与战斗背景待用户审阅。",
+    "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-bestiary/verification.json"
+  },
   "project": "The end",
+  "tideExpeditionReview": {
+    "date": "2026-11-18",
+    "timeZone": "Asia/Shanghai",
+    "project": "The end",
+    "status": "桌面首图、原生交互与存档通过。本轮美术和动作保留用户最终审阅。",
+    "sourceRevision": "ec5686a plus working-tree changes",
+    "platform": "Pink/Cocos 4.0.0-beta.1 Web Desktop",
+    "scene": "assets/TheEnd.scene",
+    "sceneUuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e",
+    "exportMainSha256": "8741afa2c630f32940a20ac0c6871e5195aca4940fce4f43bce53388e60b685b",
+    "preChange": "Complete main-scene export build/web-spine08-parts-final3, seed 17, 55 real actions. The previously served build/web-desktop lacked application.js; the normal export was rebuilt and opened successfully.",
+    "commands": {
+      "npm test": {
+        "exit": 0,
+        "tests": 155,
+        "passed": 155
+      },
+      "npm run typecheck": {
+        "exit": 0
+      },
+      "npm run check:architecture": {
+        "exit": 0,
+        "files": 88,
+        "failures": 0
+      },
+      "npm run build:web": {
+        "exit": 0,
+        "output": "build/web-desktop"
+      },
+      "npm run skills:inspect": {
+        "sceneMatches": true,
+        "missingMetadata": []
+      },
+      "npm run test:tide-browser": {
+        "exit": 0,
+        "passed": true,
+        "actions": 75,
+        "seed": 17,
+        "discovery": [
+          "shield_push",
+          "heavy",
+          "rummage"
+        ],
+        "normalCast": true,
+        "cancelledDrag": true,
+        "routeA": "success",
+        "routeB": "skip and fail",
+        "reloads": 4,
+        "legacyResumeAndSwitch": true,
+        "returnDay": 2,
+        "failureDay": 3,
+        "runtimeErrors": []
+      },
+      "node tools/test-core-loop-browser.cjs browser-tide-motion": {
+        "exit": 0,
+        "passed": true,
+        "normalMotion": true,
+        "pulsesPerAttack": 1,
+        "buoyTravel": 542.3046798098403,
+        "buoyContactError": 0.9225566441268027,
+        "rotorChargedDamage": 7,
+        "runtimeErrors": []
+      },
+      "npm run skills:playtest (v1 compatibility scenarios)": {
+        "browser-stamina-system": {
+          "passed": true,
+          "hits": 55,
+          "errors": []
+        },
+        "browser-quality-fixes": {
+          "passed": true,
+          "hits": 47,
+          "errors": []
+        }
+      }
+    },
+    "designDecisions": {
+      "userConfirmed": [
+        "架空退潮盐原、潮闸遗迹、测潮人",
+        "参考《无主之地 3》的实机线影，减少道具密度，脱离旧原稿与小刀铁锈题材",
+        "新发现牌本趟探索共享，返家后恢复基础牌组"
+      ],
+      "implementedTuning": [
+        "20 张基础牌、每回合抽 5、上限 6",
+        "每场一次开场发现；失控闸轮首次半血并存活时再发现一次",
+        "两条路线的额外战斗和补给差异，三组发现候选",
+        "巡标机 16 生命、闸轮 26 生命。中途发现不会推进回合或补充体力"
+      ]
+    },
+    "balance": {
+      "seeds": "1–64",
+      "runs": 512,
+      "routes": [
+        {
+          "route": "A",
+          "tier": "emergency",
+          "strategy": "attack-only",
+          "runs": 64,
+          "wins": 49,
+          "meanEndTurns": 5.39,
+          "meanArmorOnSuccess": 0.1
+        },
+        {
+          "route": "A",
+          "tier": "emergency",
+          "strategy": "block-and-attack",
+          "runs": 64,
+          "wins": 64,
+          "meanEndTurns": 7.06,
+          "meanArmorOnSuccess": 6.77
+        },
+        {
+          "route": "A",
+          "tier": "standard",
+          "strategy": "attack-only",
+          "runs": 64,
+          "wins": 64,
+          "meanEndTurns": 2.98,
+          "meanArmorOnSuccess": 4.7
+        },
+        {
+          "route": "A",
+          "tier": "standard",
+          "strategy": "block-and-attack",
+          "runs": 64,
+          "wins": 64,
+          "meanEndTurns": 3.58,
+          "meanArmorOnSuccess": 9.52
+        },
+        {
+          "route": "B",
+          "tier": "emergency",
+          "strategy": "attack-only",
+          "runs": 64,
+          "wins": 59,
+          "meanEndTurns": 3.55,
+          "meanArmorOnSuccess": 0.1
+        },
+        {
+          "route": "B",
+          "tier": "emergency",
+          "strategy": "block-and-attack",
+          "runs": 64,
+          "wins": 64,
+          "meanEndTurns": 4.2,
+          "meanArmorOnSuccess": 6.86
+        },
+        {
+          "route": "B",
+          "tier": "standard",
+          "strategy": "attack-only",
+          "runs": 64,
+          "wins": 64,
+          "meanEndTurns": 1.88,
+          "meanArmorOnSuccess": 5.34
+        },
+        {
+          "route": "B",
+          "tier": "standard",
+          "strategy": "block-and-attack",
+          "runs": 64,
+          "wins": 64,
+          "meanEndTurns": 2.08,
+          "meanArmorOnSuccess": 9.48
+        }
+      ]
+    },
+    "evidence": {
+      "startAt": "2026-11-18T01:30:35.439Z",
+      "screens": "output/playwright/core-loop/browser-tide-expedition/",
+      "video": "output/playwright/core-loop/browser-tide-motion/tide-encounters.webm",
+      "videoSha256": "b5f01ced0a8402982290b1bc2f36ea98d8b7961c9d64380169b2caf3884db2f5",
+      "samples": "output/playwright/core-loop/browser-tide-motion/motion-samples.jpg",
+      "baselineScreens": "output/playwright/core-loop/browser-stamina-system/",
+      "sourceArt": "art-source/tide/provenance.json",
+      "runtimeArt": "assets/resources/tide/",
+      "viewed": [
+        "01-departure.png",
+        "02-fork.png",
+        "03-discovery.png",
+        "04-combat.png",
+        "05-combat-small.png",
+        "06-resonance.png",
+        "07-camp.png",
+        "08-rotor.png",
+        "08b-exposed-core.png",
+        "09-home.png",
+        "normal-speed recording sampled across attacks, contact, recoil, map and rotor encounter"
+      ],
+      "correctionsFromPlay": [
+        "手牌遮脚和敌人意图距离",
+        "暗底上的略过发现按钮",
+        "正常速度画面发现旧刀痕残留，改成对应共鸣环，复验新命中节点只触发一次"
+      ]
+    },
+    "matrix": {
+      "rules": "SUPPORTED",
+      "nativeBuild": "SUPPORTED",
+      "testedDesktopMouseAndReload": "SUPPORTED",
+      "executorVisualReview": "SUPPORTED for the inspected views and time samples",
+      "finalUserArtApproval": "NEEDS EVIDENCE",
+      "humanLongTermBalance": "NEEDS EVIDENCE",
+      "mobileAndFrameTime": "NOT ASSESSED"
+    },
+    "archive": "viking://~/resources/projects/the-end/docs/game-studios-evidence.json"
+  },
   "recordedAt": "2026-11-15T05:37:32.283Z",
   "timezone": "Asia/Shanghai",
   "task": "Install six skills, adapt them for Pink/Cocos, and apply them to this project",
@@ -552,12 +882,14 @@
     "historicalRecordNote": "其余字段保留此前技能安装与应用的历史验收；本次结果以 latestTaskReview 指向的记录为准。"
   },
   "latestSpineReview": {
-    "date": "2026-11-17",
+    "date": "2026-11-18",
     "record": "docs/spine08-verification.json",
     "technicalOutcome": "SUPPORTED",
     "executorVisualOutcome": "SUPPORTED",
+    "scope": "53 actual independent part PNGs, corrected bindings and all per-part actions",
     "userFinalVisualApproval": "NEEDS EVIDENCE",
-    "wechat": "compile passed; device runtime and performance unverified"
+    "wechat": "test compile passed; device runtime and performance unverified",
+    "priorCombinedArtwork": "FAILED by user feedback"
   },
   "mergeReview20261120": {
     "recordedAt": "2026-11-20T22:46:57.7656445+08:00",
@@ -588,6 +920,60 @@
         "status": "NEEDS EVIDENCE",
         "reason": "本机服务拒绝连接，待同步内容已登记。",
         "record": "docs/openviking-sync-pending.json"
+      }
+    ]
+  },
+  "mergeReview20261122": {
+    "project": "The end",
+    "date": "2026-11-22",
+    "status": "resolved and verified on Pink/Cocos Web Desktop",
+    "upstreamHead": "dd1c8f4",
+    "upstreamCommits": ["1eb7b91", "f4169d9"],
+    "localStash": "719b9f2",
+    "resolvedFiles": 27,
+    "unmergedFiles": 0,
+    "scenarios": {
+      "newGame": "ashen-labyrinth@1",
+      "recipePlaytest": "stamina-expedition@2",
+      "saltField": "tide-expedition@2",
+      "compatibility": "Two historical catalogs shared stamina-expedition@2. The saved catalog signature identifies the salt-field runs to migrate on load."
+    },
+    "code": [
+      "assets/game/application/GameSession.ts",
+      "assets/game/infrastructure/SaveRepository.ts",
+      "assets/game/core/content/CardCatalog.ts",
+      "tools/card-editor/editor.js"
+    ],
+    "matrix": [
+      {
+        "claim": "两套规则和存档兼容",
+        "status": "SUPPORTED",
+        "evidence": "174 项测试通过。两种原 stamina-expedition@2 配置签名分别恢复自己的章节。TypeScript 和架构检查通过。"
+      },
+      {
+        "claim": "合并版原生场景与打包",
+        "status": "SUPPORTED",
+        "evidence": "Pink/Cocos Web Desktop 构建通过。合成弹窗和焦土迷宫角色在同一个正式场景加载。",
+        "buildLog": "temp/builder/log/web-desktop-build-1795323624194.log"
+      },
+      {
+        "claim": "配方工坊、营地合成与仓库兑换",
+        "status": "SUPPORTED",
+        "evidence": "使用临时配方验证保存、循环拦截、关系树、地图测试权限、战斗配方只读、营地合成和撤销、物资入库兑换及再次出发。正式配方表初始为空。",
+        "browserLog": "temp/combined-synthesis-browser.log",
+        "screenshot": "output/playwright/synthesis/editor.png"
+      },
+      {
+        "claim": "新牌面、发现牌组和焦土迷宫探索",
+        "status": "SUPPORTED",
+        "evidence": "浏览器通过 107 次原生操作并走通两条路线。测试覆盖退潮盐原续档、只勾一组和全关、旧图集兼容提示及重载修复。",
+        "browserReport": "output/playwright/ashen-labyrinth/verification.json"
+      },
+      {
+        "claim": "退潮盐原在原试玩入口独立运行",
+        "status": "SUPPORTED",
+        "evidence": "浏览器通过 75 次原生操作，覆盖通关、失败恢复、四次重新加载和旧规则重开。",
+        "browserReport": "output/playwright/core-loop/browser-tide-expedition/browser-report.json"
       }
     ]
   }

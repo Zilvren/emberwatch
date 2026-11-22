@@ -1,0 +1,705 @@
+{
+  "project": "The end",
+  "date": "2026-11-19",
+  "status": {
+    "design": "用户最后提交的三怪原图已选定",
+    "art": "可见部位由所选图拆出，隐藏关节使用补绘",
+    "runtime": "三份编辑工程经 Spine 导出，十五段动作在项目既有 Cocos 桌面构建中的实时 sp.Skeleton 播放核验通过",
+    "aestheticApproval": "动作节奏与两张战斗背景待用户审阅"
+  },
+  "selected": {
+    "attachment": "codex-clipboard-4c43719a-112d-4508-a7b5-c60a19449f2b.png",
+    "sha256": "85f47145ec5fab61f305e6f5c5c201cd6488410d94f3cfabef69468bae0b9122",
+    "source": "monster-concepts.png",
+    "width": 1585,
+    "height": 992
+  },
+  "tools": {
+    "spine": "3.8.75",
+    "engine": "4.0.0-beta.1",
+    "renderer": "Pink / Cocos sp.Skeleton realtime",
+    "build": "web-spine08-parts-reviewed",
+    "designViewport": [
+      1440,
+      900
+    ],
+    "captureViewport": [
+      960,
+      600
+    ]
+  },
+  "actors": {
+    "ash-moth": {
+      "sourceParts": 15,
+      "underlays": 1,
+      "images": 16,
+      "bones": 17,
+      "meshes": {},
+      "ik": 0,
+      "clips": {
+        "idle": 1.8,
+        "prepare": 0.68,
+        "attack": 0.86,
+        "hurt": 0.39,
+        "death": 1.12
+      },
+      "impact": 0.43,
+      "atlasPages": [
+        "ash-moth-parts.png"
+      ],
+      "setupAudit": {
+        "visiblePixels": 138710,
+        "differentPixels": 0,
+        "missingPixels": 0
+      },
+      "editorImagePath": "./parts/",
+      "projectSha256": "245a3a30e11cc8b290d2671f384205315786d097e4668d483986f1ef6665d846",
+      "runtimeSha256": "8e609c7e1891082e7ebe7045bd6224b36f90e70d2701e2605c568c2e8c6b4ed4",
+      "layers": [
+        {
+          "id": "thorax",
+          "bone": "thorax",
+          "sha256": "0829e2d05b9e42d28a97f9122858589e34f65eb9442007ddd5c5134c41599703",
+          "underlay": false,
+          "selectedSourcePixels": 14035
+        },
+        {
+          "id": "abdomen",
+          "bone": "abdomen",
+          "sha256": "bb336297fe14984d511abc577d6612482bd286d205bb8147070c73e92d8c8af0",
+          "underlay": false,
+          "selectedSourcePixels": 8166
+        },
+        {
+          "id": "hind-left",
+          "bone": "hind-left",
+          "sha256": "c077df9761de9c0a3babfd87c1918b0159ea4e8d169c0f68d290ebdadc55bc01",
+          "underlay": false,
+          "selectedSourcePixels": 7978
+        },
+        {
+          "id": "hind-right",
+          "bone": "hind-right",
+          "sha256": "bb36bc84fb220ed772177cf7b561f6b5c7ae3ab55d29767f24d55c349cf37312",
+          "underlay": false,
+          "selectedSourcePixels": 15039
+        },
+        {
+          "id": "fore-left",
+          "bone": "fore-left",
+          "sha256": "cd6ed9d34c6715916bd6cb7f700c1e111b4cdd846d9cf792f570e2edd1a82fc1",
+          "underlay": false,
+          "selectedSourcePixels": 23285
+        },
+        {
+          "id": "fore-right",
+          "bone": "fore-right",
+          "sha256": "e580f42dbcfb52ce1358cb8316553ccc1e4191b410892cb5cd49fc5ea153e6a4",
+          "underlay": false,
+          "selectedSourcePixels": 50408
+        },
+        {
+          "id": "head",
+          "bone": "head",
+          "sha256": "5608f71933451d7405cc717e66909c5fdbf43c83442f7cdf8d936e0ac8929666",
+          "underlay": false,
+          "selectedSourcePixels": 5428
+        },
+        {
+          "id": "feeler-left",
+          "bone": "feeler-left",
+          "sha256": "ebd47cd10e962203046567074c74f84e4aec2702d4cf2ae6d77b0ae79d5ffe23",
+          "underlay": false,
+          "selectedSourcePixels": 2738
+        },
+        {
+          "id": "feeler-right",
+          "bone": "feeler-right",
+          "sha256": "249cc7ac115ef1ade89b71dbb2af66baa7c62435401a29614deeb37230d2af52",
+          "underlay": false,
+          "selectedSourcePixels": 4484
+        },
+        {
+          "id": "far-left-leg",
+          "bone": "far-left-leg",
+          "sha256": "825d9212ce1eda453ee34a25a129cbe65b8b4d7ebd1cee8a044c7c4b2ed20660",
+          "underlay": false,
+          "selectedSourcePixels": 1978
+        },
+        {
+          "id": "far-right-leg",
+          "bone": "far-right-leg",
+          "sha256": "15186432ddd81c6142c408345181293ddee78a9de4972bf8275b375bd281890b",
+          "underlay": false,
+          "selectedSourcePixels": 1068
+        },
+        {
+          "id": "leg-left",
+          "bone": "leg-left",
+          "sha256": "701ad65c97b466e9dbf770f68027520c489ecb95c5309267a79fc3a35b28e344",
+          "underlay": false,
+          "selectedSourcePixels": 635
+        },
+        {
+          "id": "leg-left-shin",
+          "bone": "leg-left-shin",
+          "sha256": "d2446d65c96ceeac73ddb20fdf5af6b18beef4221099024aff410d0d493d7cb8",
+          "underlay": false,
+          "selectedSourcePixels": 1315
+        },
+        {
+          "id": "leg-right",
+          "bone": "leg-right",
+          "sha256": "162f571c535f7a21f5aa5e1e42c9086b1a0da1dc3d38c808ffe50412b8f4c563",
+          "underlay": false,
+          "selectedSourcePixels": 696
+        },
+        {
+          "id": "leg-right-shin",
+          "bone": "leg-right-shin",
+          "sha256": "b38fd410d37efb91351c1ded38226699dfe115b19ff46400de18af5ce07c1bb8",
+          "underlay": false,
+          "selectedSourcePixels": 1457
+        },
+        {
+          "id": "chest-undercoat",
+          "bone": "thorax",
+          "sha256": "19b1e1cbdb3fb08e8c5afc6353569cfb54972103a01e5b3de7fa49034ada03b4",
+          "underlay": true,
+          "selectedSourcePixels": 0
+        }
+      ],
+      "playback": {
+        "bones": 17,
+        "slots": 16,
+        "tracks": {
+          "idle": {
+            "duration": 1.8,
+            "hits": 0,
+            "completes": 1,
+            "travel": 57.325,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "prepare": {
+            "duration": 0.68,
+            "hits": 0,
+            "completes": 1,
+            "travel": 118.576,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "attack": {
+            "duration": 0.86,
+            "hits": 1,
+            "completes": 1,
+            "travel": 138.704,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "hurt": {
+            "duration": 0.39,
+            "hits": 0,
+            "completes": 1,
+            "travel": 133.38,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "death": {
+            "duration": 1.12,
+            "hits": 0,
+            "completes": 1,
+            "travel": 405.015,
+            "endDelta": 368.802,
+            "terminalDrift": 0,
+            "footError": 0,
+            "plinthDrift": 0
+          }
+        },
+        "missing": [],
+        "meshVertexCount": 0,
+        "meshFlex": 0
+      }
+    },
+    "stone-claw": {
+      "sourceParts": 12,
+      "underlays": 2,
+      "images": 14,
+      "bones": 16,
+      "meshes": {},
+      "ik": 2,
+      "clips": {
+        "idle": 2.5,
+        "prepare": 0.74,
+        "attack": 1.05,
+        "hurt": 0.41,
+        "death": 1.18
+      },
+      "impact": 0.55,
+      "atlasPages": [
+        "stone-claw-parts.png"
+      ],
+      "setupAudit": {
+        "visiblePixels": 150488,
+        "differentPixels": 0,
+        "missingPixels": 0
+      },
+      "editorImagePath": "./parts/",
+      "projectSha256": "4f3da65ca1595d7252e0dabc847c3edb216938ee4cc3add064c2833177911e96",
+      "runtimeSha256": "91f22bc827f8f038cb17531b89b907825ab3d3ae599b7f810ac174bd12e7bf33",
+      "layers": [
+        {
+          "id": "hull",
+          "bone": "hull",
+          "sha256": "ee9b59ae3ff0015052f3e1aa1553a32d4bdaf638e37e684514b02668fd8d16ad",
+          "underlay": false,
+          "selectedSourcePixels": 51645
+        },
+        {
+          "id": "shield",
+          "bone": "shield",
+          "sha256": "321ba25c06e453000eb74cc0230b96c8d7ad0f7da9adb7174d5c9feb52f91e80",
+          "underlay": false,
+          "selectedSourcePixels": 25209
+        },
+        {
+          "id": "claw-arm",
+          "bone": "claw-arm",
+          "sha256": "b86219d46a0e5bdcd30022aff63cf7c6cc9c035c42e6d8d1daa4bf0bafac0132",
+          "underlay": false,
+          "selectedSourcePixels": 5955
+        },
+        {
+          "id": "palm",
+          "bone": "palm",
+          "sha256": "ed2d3d51bfea2a0e81ccff5d8cc75fef11123aa258569741247a99f62264e1cd",
+          "underlay": false,
+          "selectedSourcePixels": 14549
+        },
+        {
+          "id": "finger",
+          "bone": "finger",
+          "sha256": "5841b105f3cbe4b24b253b3cc17744a101999e54c885242dc039392a42ef0813",
+          "underlay": false,
+          "selectedSourcePixels": 11968
+        },
+        {
+          "id": "far-claw",
+          "bone": "far-claw",
+          "sha256": "dcc2cb4bee9280e209ccd1537870f9a7fc0af775498aeb0a6a00af2507d22490",
+          "underlay": false,
+          "selectedSourcePixels": 5006
+        },
+        {
+          "id": "near-fore-thigh",
+          "bone": "near-fore-thigh",
+          "sha256": "3c3f8d6a5d20bee2005fdca038ad5a2ae6b01e056da9f1fe84d8c61d87459cd8",
+          "underlay": false,
+          "selectedSourcePixels": 12062
+        },
+        {
+          "id": "near-fore-shin",
+          "bone": "near-fore-shin",
+          "sha256": "d232f6ec9d7d50f863f36408b8a5f6b88e8df60b9685efcae4498492690fc953",
+          "underlay": false,
+          "selectedSourcePixels": 3932
+        },
+        {
+          "id": "near-hind-thigh",
+          "bone": "near-hind-thigh",
+          "sha256": "6b74afa93f9f74e7eeb686c02e4ddec93f709df44f416b72311feb6b680e333f",
+          "underlay": false,
+          "selectedSourcePixels": 5584
+        },
+        {
+          "id": "near-hind-shin",
+          "bone": "near-hind-shin",
+          "sha256": "7c7bfbddffe299f40a34bfe7537c885598fefc0d0d94fadaa5c629646cc2fb06",
+          "underlay": false,
+          "selectedSourcePixels": 5074
+        },
+        {
+          "id": "far-fore-leg",
+          "bone": "far-fore-leg",
+          "sha256": "208d51fec6e6c6ea035312889fed00b9fc53f2ae85032b81d1f8554834316583",
+          "underlay": false,
+          "selectedSourcePixels": 7220
+        },
+        {
+          "id": "far-hind-leg",
+          "bone": "far-hind-leg",
+          "sha256": "a325e9e98d6fbddcd4f5d74d30ed3f3fcac33e299ebc018596704e1c42245e0d",
+          "underlay": false,
+          "selectedSourcePixels": 2284
+        },
+        {
+          "id": "shell-underplate",
+          "bone": "hull",
+          "sha256": "69ffac49cc92214918c073064e5141f1d9ad332dc19267b4a9e12625b17effa3",
+          "underlay": true,
+          "selectedSourcePixels": 0
+        },
+        {
+          "id": "pincer-socket",
+          "bone": "palm",
+          "sha256": "375b39c681911bb122cdae6d6d560a81c3122855e27406786bb0e5b89c19cfe8",
+          "underlay": true,
+          "selectedSourcePixels": 0
+        }
+      ],
+      "playback": {
+        "bones": 16,
+        "slots": 14,
+        "tracks": {
+          "idle": {
+            "duration": 2.5,
+            "hits": 0,
+            "completes": 1,
+            "travel": 21.039,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "prepare": {
+            "duration": 0.74,
+            "hits": 0,
+            "completes": 1,
+            "travel": 144.196,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "attack": {
+            "duration": 1.05,
+            "hits": 1,
+            "completes": 1,
+            "travel": 136.497,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "hurt": {
+            "duration": 0.41,
+            "hits": 0,
+            "completes": 1,
+            "travel": 38.251,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "death": {
+            "duration": 1.18,
+            "hits": 0,
+            "completes": 1,
+            "travel": 77.074,
+            "endDelta": 74.4,
+            "terminalDrift": 0,
+            "footError": 0,
+            "plinthDrift": 0
+          }
+        },
+        "missing": [],
+        "meshVertexCount": 0,
+        "meshFlex": 0
+      }
+    },
+    "veil-idol": {
+      "sourceParts": 14,
+      "underlays": 4,
+      "images": 18,
+      "bones": 16,
+      "meshes": {
+        "pennant-right": {
+          "vertices": 10,
+          "maxWeights": 2
+        },
+        "pennant-left": {
+          "vertices": 10,
+          "maxWeights": 2
+        }
+      },
+      "ik": 0,
+      "clips": {
+        "idle": 3.2,
+        "prepare": 0.86,
+        "attack": 1.24,
+        "hurt": 0.45,
+        "death": 1.36
+      },
+      "impact": 0.68,
+      "atlasPages": [
+        "veil-idol-parts.png",
+        "veil-idol-parts2.png"
+      ],
+      "setupAudit": {
+        "visiblePixels": 238702,
+        "differentPixels": 0,
+        "missingPixels": 0
+      },
+      "editorImagePath": "./parts/",
+      "projectSha256": "1c1ebbdcb8ba3139554e6bc77cba339095ffb5c1732f330dd493cdef7f691825",
+      "runtimeSha256": "9414232082eb352205d33a236243a7570074dd4126643a4fbd6fa324d1c4da79",
+      "layers": [
+        {
+          "id": "plinth",
+          "bone": "plinth",
+          "sha256": "9c4a32ce9705f57d2b01469923bd2060fa697f3b0bb181d13f92a2a941c973aa",
+          "underlay": false,
+          "selectedSourcePixels": 52279
+        },
+        {
+          "id": "robe",
+          "bone": "robe",
+          "sha256": "99ab91b03ae5234a95929497f93b568f09f08b5413a16426740f713eae37854d",
+          "underlay": false,
+          "selectedSourcePixels": 51401
+        },
+        {
+          "id": "neck",
+          "bone": "neck",
+          "sha256": "7b67ad02059942f92ce2a732b9ea2b8dc939df25df7d502906c5a388e4ce4bf7",
+          "underlay": false,
+          "selectedSourcePixels": 3594
+        },
+        {
+          "id": "mask",
+          "bone": "mask",
+          "sha256": "9efff3d2aa5c623299d877e5a518e7d7e5b2eb441ae7910973dd5b3f84ff02dc",
+          "underlay": false,
+          "selectedSourcePixels": 6735
+        },
+        {
+          "id": "collar",
+          "bone": "collar",
+          "sha256": "7f53be584fddefe7cbcd0f6b1374f2d03d63ad9618dc40af614ba368e4755fe8",
+          "underlay": false,
+          "selectedSourcePixels": 35306
+        },
+        {
+          "id": "left-sleeve",
+          "bone": "left-sleeve",
+          "sha256": "9af28ab10d27cfe8dfd82f03627909522154521bab1ab5ae08c1f7f32dc9478a",
+          "underlay": false,
+          "selectedSourcePixels": 12467
+        },
+        {
+          "id": "left-hand",
+          "bone": "left-hand",
+          "sha256": "785531d32cf59edef527800864cae05a931ec6bec2a71741f53de6fa52c0830e",
+          "underlay": false,
+          "selectedSourcePixels": 2507
+        },
+        {
+          "id": "right-sleeve",
+          "bone": "right-sleeve",
+          "sha256": "f739fbad1148719932d1239c9093d10bcdf817d8b34e45eb5bde7ec3e4f7b5c7",
+          "underlay": false,
+          "selectedSourcePixels": 21444
+        },
+        {
+          "id": "right-hand",
+          "bone": "right-hand",
+          "sha256": "0e24b93cd7bb5e1b960e212fc0da852c29f51cafc312e165e5b38cbab40b901f",
+          "underlay": false,
+          "selectedSourcePixels": 5622
+        },
+        {
+          "id": "pennant-left",
+          "bone": "pennant-left",
+          "sha256": "f66fe48bb55f33257ea28573a97e0453905f2d8206522a25325697ae46f97828",
+          "underlay": false,
+          "selectedSourcePixels": 18866
+        },
+        {
+          "id": "pennant-right",
+          "bone": "pennant-right",
+          "sha256": "660129cafebcb9c55abfc39ed2577bcbe0b3675bc4fa9cce792c44d0bf454c33",
+          "underlay": false,
+          "selectedSourcePixels": 20488
+        },
+        {
+          "id": "belt",
+          "bone": "belt",
+          "sha256": "0eb50afb4b28fc07d6ba127f408d7817ff1e1bf327c1788f4cb3133f2a8434a6",
+          "underlay": false,
+          "selectedSourcePixels": 7014
+        },
+        {
+          "id": "left-cuff",
+          "bone": "left-sleeve",
+          "sha256": "d422549f4104874aca2687a0201dd961b41f554623a4714b1733eb29b3f58476",
+          "underlay": false,
+          "selectedSourcePixels": 363
+        },
+        {
+          "id": "right-cuff",
+          "bone": "right-sleeve",
+          "sha256": "6737843f80e9ae174ea9700087702df8bfce524f3fae33dcf3a2b869939cf65f",
+          "underlay": false,
+          "selectedSourcePixels": 616
+        },
+        {
+          "id": "inner-robe",
+          "bone": "robe",
+          "sha256": "ea4567a1f8f5311d4ef527ba1b93439ff4f0088a3b57244457fcffb93aee9669",
+          "underlay": true,
+          "selectedSourcePixels": 0
+        },
+        {
+          "id": "collar-facing",
+          "bone": "collar",
+          "sha256": "760c21af425967599742481c5e9929084b2310dd1bc481f4556fe61c1d82dc79",
+          "underlay": true,
+          "selectedSourcePixels": 0
+        },
+        {
+          "id": "near-sleeve-lining",
+          "bone": "left-sleeve",
+          "sha256": "735bda4dc2cc8449765c7e40b16f2320df7523c2648efe32183ce625aaf6daac",
+          "underlay": true,
+          "selectedSourcePixels": 0
+        },
+        {
+          "id": "far-sleeve-lining",
+          "bone": "right-sleeve",
+          "sha256": "a87e31201c580f45c73660f9761792d856458c8bce9c6a136606a1722cbe78b1",
+          "underlay": true,
+          "selectedSourcePixels": 0
+        }
+      ],
+      "playback": {
+        "bones": 16,
+        "slots": 18,
+        "tracks": {
+          "idle": {
+            "duration": 3.2,
+            "hits": 0,
+            "completes": 1,
+            "travel": 26.08,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "prepare": {
+            "duration": 0.86,
+            "hits": 0,
+            "completes": 1,
+            "travel": 72.887,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "attack": {
+            "duration": 1.24,
+            "hits": 1,
+            "completes": 1,
+            "travel": 81.98,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "hurt": {
+            "duration": 0.45,
+            "hits": 0,
+            "completes": 1,
+            "travel": 59.464,
+            "endDelta": 0,
+            "terminalDrift": null,
+            "footError": 0,
+            "plinthDrift": 0
+          },
+          "death": {
+            "duration": 1.36,
+            "hits": 0,
+            "completes": 1,
+            "travel": 71.877,
+            "endDelta": 66.258,
+            "terminalDrift": 0,
+            "footError": 0,
+            "plinthDrift": 0
+          }
+        },
+        "missing": [],
+        "meshVertexCount": 10,
+        "meshFlex": 66.204
+      }
+    }
+  },
+  "images": {
+    "monster-concepts.png": {
+      "width": 1585,
+      "height": 992,
+      "sha256": "85f47145ec5fab61f305e6f5c5c201cd6488410d94f3cfabef69468bae0b9122"
+    },
+    "styles/A.png": {
+      "width": 1585,
+      "height": 992,
+      "sha256": "ce5e3fadbb1ca631ff6fc5df5734f95e84baf7879876269add88247d2ca1d34e"
+    },
+    "styles/B.png": {
+      "width": 1585,
+      "height": 992,
+      "sha256": "4fc9636cddb1e46123aed7ea665cd71b1ed285a0d2bce790de9b302318f35a05"
+    },
+    "styles/C.png": {
+      "width": 1586,
+      "height": 992,
+      "sha256": "fab7f19781c36323219086a1500905e8d4af2378c589890956ef1c677335b900"
+    },
+    "styles/comparison.png": {
+      "width": 1420,
+      "height": 882,
+      "sha256": "90cb3b26c8ebbc6e473a4ac7b9bb8771a27dc9c93f6493e1885302d8302b1c59"
+    },
+    "backgrounds/light-cut-passage.png": {
+      "width": 1586,
+      "height": 992,
+      "sha256": "e1eb79b8731f8cdfd7d71bee84058d45e27c0a25d8264d4efdd6961c0a46f777"
+    },
+    "backgrounds/sunken-lamp-court.png": {
+      "width": 1585,
+      "height": 992,
+      "sha256": "8e205b7e138cc4e833df630a399acd0dbd1af3b1f45e9aa5b7e443a3135e7b06"
+    },
+    "preview/battle-setup.png": {
+      "width": 960,
+      "height": 600,
+      "sha256": "417ff0586fa03ea697cf6c0b9f967fecf20d9d3a3ee4615c824f9fc9449b739b"
+    }
+  },
+  "preview": {
+    "capturedFrames": 126,
+    "encodedFrames": 123,
+    "seconds": 8.4,
+    "width": 720,
+    "height": 450,
+    "format": "GIF",
+    "fps": 15,
+    "sha256": "ec6725f7e4e6bbef32707e8f617a2e04e07b470269ae08f137b94e05dcb75293"
+  },
+  "runtimeErrors": [],
+  "workflow": {
+    "authoring": "tools/spine/bestiary-author.cjs",
+    "cutlines": "tools/spine/bestiary-cutlines.cjs",
+    "sourceMatte": "tools/spine/bestiary-source-art.cjs",
+    "reconstruction": "tools/spine/bestiary-underpaint.cjs",
+    "motions": "tools/spine/bestiary-motion.cjs",
+    "playback": "tools/spine/bestiary-preview.cjs"
+  },
+  "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-bestiary/"
+}

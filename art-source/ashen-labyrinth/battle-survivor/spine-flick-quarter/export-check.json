@@ -1,0 +1,48 @@
+{
+  "engine": "3.8.75",
+  "bones": 59,
+  "images": 50,
+  "handedness": "right hand leaves chin to flick; left hand supports the elbow and withdraws",
+  "playableClips": [
+    "attack",
+    "card-flight",
+    "carry-card",
+    "death",
+    "fan-in",
+    "guard-flick",
+    "hurt",
+    "idle",
+    "lantern-flick",
+    "prepare",
+    "repel-flick",
+    "spent-guard",
+    "spent-lantern",
+    "spent-repel",
+    "think",
+    "think-without-guard",
+    "think-without-lantern",
+    "think-without-repel"
+  ],
+  "release": 0.44,
+  "editableRotationKeys": {
+    "hips": 15,
+    "chest": 15,
+    "head": 18,
+    "near-sleeve": 47,
+    "near-bracer": 57,
+    "near-hand": 51,
+    "cast-sleeve": 35,
+    "cast-bracer": 39,
+    "cast-palm": 27,
+    "coat-skirt-tip": 18
+  },
+  "atlasPages": [
+    "survivor-flick-parts.png",
+    "survivor-flick-parts2.png",
+    "survivor-flick-parts3.png",
+    "survivor-flick-parts4.png",
+    "survivor-flick-parts5.png",
+    "survivor-flick-parts6.png"
+  ],
+  "projectSha256": "268d4c9ba921ed6c31208ff84d3ba71a6bbf6df5561a514d1df993665ecaf9b0"
+}

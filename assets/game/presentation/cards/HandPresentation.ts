@@ -55,11 +55,22 @@ export class HandPresentation extends Component {
             card.configure(
                 entry.kind,
                 game.cardBlocked(entry),
-                selected === entry.id ? '选择敌人为目标' : '点击 / 拖动',
+                selected === entry.id
+                    ? '选择敌人为目标'
+                    : game.scenario.fieldDeck
+                      ? ''
+                      : '点击 / 拖动',
                 entry.id,
                 game.content.cards,
                 game.scenario.battleResource === 'stamina' ? '体力' : '物资',
-                { runDeck: game.scenario.runDeck }
+                {
+                    field: game.scenario.fieldDeck,
+                    runDeck: game.scenario.runDeck,
+                    damage: game.content.cards[entry.kind].effect.type === 'damage'
+                        ? game.attackDamage(entry.kind)
+                        : undefined,
+                    cost: game.cardCost(entry.kind),
+                }
             );
             card.setSelected(selected === entry.id);
             card.node.getComponent(CardInteraction)?.sync();

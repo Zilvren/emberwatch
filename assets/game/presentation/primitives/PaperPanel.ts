@@ -11,6 +11,8 @@ export class PaperPanel extends Component {
     @property(Color) innerLine = new Color(179, 166, 142, 110);
     @property lineWidth = 1.2;
     @property corner = 5;
+    fieldStock = false;
+    metalTrim = false;
     onEnable(): void {
         this.node.on(Node.EventType.SIZE_CHANGED, this.redraw, this);
         this.redraw();
@@ -40,6 +42,37 @@ export class PaperPanel extends Component {
         g.close();
         g.fill();
         g.stroke();
+        if (this.metalTrim) {
+            const inset = Math.min(5, h * .24);
+            g.strokeColor = this.innerLine;
+            g.lineWidth = .8;
+            g.moveTo(-w + inset, -h + inset + r);
+            g.lineTo(-w + inset, h - inset - r);
+            g.lineTo(-w + inset + r, h - inset);
+            g.lineTo(w - inset - r, h - inset);
+            g.lineTo(w - inset, h - inset - r);
+            g.lineTo(w - inset, -h + inset + r);
+            g.lineTo(w - inset - r, -h + inset);
+            g.lineTo(-w + inset + r, -h + inset);
+            g.close();
+            g.stroke();
+            return;
+        }
+        if (this.fieldStock) {
+            g.strokeColor = new Color(40, 50, 56, 195);
+            g.lineWidth = 2;
+            g.moveTo(-w + 4, h - 29);
+            g.lineTo(-w + 4, h - 9);
+            g.lineTo(-w + 9, h - 4);
+            g.lineTo(-w + 34, h - 4);
+            g.stroke();
+            g.lineWidth = 1.3;
+            for (let i = 0; i < 3; i++) {
+                g.moveTo(w - 11 - i * 5, -h + 5);
+                g.lineTo(w - 6 - i * 5, -h + 10);
+            }
+            g.stroke();
+        }
         g.strokeColor = this.innerLine;
         g.lineWidth = 0.65;
         g.moveTo(-w + 8, h - 5);

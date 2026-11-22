@@ -1,11 +1,11 @@
 {
-  "date": "2026-11-17",
-  "mcpRoot": "C:/Users/Knock/Desktop/spine-MCP",
-  "spine": "C:/Users/Knock/Desktop/Spine3.8.75/Spine.com",
+  "date": "2026-11-18",
+  "mcpRoot": "C:\\Users\\Knock\\Desktop\\spine-MCP",
+  "spine": "C:\\Users\\Knock\\Desktop\\Spine3.8.75\\Spine.com",
   "actors": [
     {
       "actor": "survivor",
-      "bones": 28,
+      "bones": 27,
       "version": "3.8.75",
       "animations": [
         "attack",
@@ -14,6 +14,87 @@
         "idle",
         "prepare"
       ],
+      "parts": [
+        {
+          "name": "Pack",
+          "bone": "Pack"
+        },
+        {
+          "name": "RearUpperArm",
+          "bone": "RearUpperArm"
+        },
+        {
+          "name": "RearForearm",
+          "bone": "RearForearm"
+        },
+        {
+          "name": "RearHand",
+          "bone": "RearHand"
+        },
+        {
+          "name": "RearThigh",
+          "bone": "RearThigh"
+        },
+        {
+          "name": "RearShin",
+          "bone": "RearShin"
+        },
+        {
+          "name": "RearFoot",
+          "bone": "RearFoot"
+        },
+        {
+          "name": "Pelvis",
+          "bone": "Hips"
+        },
+        {
+          "name": "FrontThigh",
+          "bone": "FrontThigh"
+        },
+        {
+          "name": "FrontShin",
+          "bone": "FrontShin"
+        },
+        {
+          "name": "FrontFoot",
+          "bone": "FrontFoot"
+        },
+        {
+          "name": "FrontUpperArm",
+          "bone": "FrontUpperArm"
+        },
+        {
+          "name": "Torso",
+          "bone": "Breath"
+        },
+        {
+          "name": "Cloth",
+          "bone": "Cloth"
+        },
+        {
+          "name": "Pouch",
+          "bone": "Pouch"
+        },
+        {
+          "name": "FrontForearm",
+          "bone": "FrontForearm"
+        },
+        {
+          "name": "Weapon",
+          "bone": "Weapon"
+        },
+        {
+          "name": "FrontHand",
+          "bone": "FrontHand"
+        },
+        {
+          "name": "Head",
+          "bone": "Head"
+        }
+      ],
+      "packed": null,
+      "sourceOnly": true,
+      "editorImages": "./parts/survivor/",
       "contactTip": [
         159.065777,
         33.279058
@@ -22,12 +103,271 @@
       "steps": [
         {
           "tool": "spine_control_bones",
-          "elapsedMs": 15,
+          "elapsedMs": 18,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 9,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 7,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 6,
           "exitCode": null
         },
         {
           "tool": "spine_control_bones",
           "elapsedMs": 11,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_import_json",
+          "elapsedMs": 6905,
+          "exitCode": 0
+        },
+        {
+          "tool": "spine_export",
+          "elapsedMs": 10183,
+          "exitCode": 0
+        }
+      ]
+    },
+    {
+      "actor": "wanderer",
+      "bones": 26,
+      "version": "3.8.75",
+      "animations": [
+        "attack",
+        "death",
+        "hurt",
+        "idle",
+        "prepare"
+      ],
+      "parts": [
+        {
+          "name": "RearUpperArm",
+          "bone": "RearUpperArm"
+        },
+        {
+          "name": "RearForearm",
+          "bone": "RearForearm"
+        },
+        {
+          "name": "RearHand",
+          "bone": "RearHand"
+        },
+        {
+          "name": "RearThigh",
+          "bone": "RearThigh"
+        },
+        {
+          "name": "RearShin",
+          "bone": "RearShin"
+        },
+        {
+          "name": "RearFoot",
+          "bone": "RearFoot"
+        },
+        {
+          "name": "Pelvis",
+          "bone": "Hips"
+        },
+        {
+          "name": "FrontThigh",
+          "bone": "FrontThigh"
+        },
+        {
+          "name": "FrontShin",
+          "bone": "FrontShin"
+        },
+        {
+          "name": "FrontFoot",
+          "bone": "FrontFoot"
+        },
+        {
+          "name": "FrontUpperArm",
+          "bone": "FrontUpperArm"
+        },
+        {
+          "name": "Torso",
+          "bone": "Breath"
+        },
+        {
+          "name": "Cloth",
+          "bone": "Cloth"
+        },
+        {
+          "name": "FrontForearm",
+          "bone": "FrontForearm"
+        },
+        {
+          "name": "FrontHand",
+          "bone": "FrontHand"
+        },
+        {
+          "name": "Head",
+          "bone": "Head"
+        }
+      ],
+      "packed": null,
+      "sourceOnly": true,
+      "editorImages": "./parts/wanderer/",
+      "contactTip": [
+        -149.961206,
+        38.793082
+      ],
+      "normalizedCurves": 172,
+      "steps": [
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 10,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 11,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 9,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 10,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 12,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_import_json",
+          "elapsedMs": 9138,
+          "exitCode": 0
+        },
+        {
+          "tool": "spine_export",
+          "elapsedMs": 9367,
+          "exitCode": 0
+        }
+      ]
+    },
+    {
+      "actor": "brute",
+      "bones": 27,
+      "version": "3.8.75",
+      "animations": [
+        "attack",
+        "death",
+        "hurt",
+        "idle",
+        "prepare"
+      ],
+      "parts": [
+        {
+          "name": "RearUpperArm",
+          "bone": "RearUpperArm"
+        },
+        {
+          "name": "RearForearm",
+          "bone": "RearForearm"
+        },
+        {
+          "name": "RearHand",
+          "bone": "RearHand"
+        },
+        {
+          "name": "RearThigh",
+          "bone": "RearThigh"
+        },
+        {
+          "name": "RearShin",
+          "bone": "RearShin"
+        },
+        {
+          "name": "RearFoot",
+          "bone": "RearFoot"
+        },
+        {
+          "name": "Pelvis",
+          "bone": "Hips"
+        },
+        {
+          "name": "FrontThigh",
+          "bone": "FrontThigh"
+        },
+        {
+          "name": "FrontShin",
+          "bone": "FrontShin"
+        },
+        {
+          "name": "TorsoFill",
+          "bone": "Breath"
+        },
+        {
+          "name": "FrontFoot",
+          "bone": "FrontFoot"
+        },
+        {
+          "name": "FrontUpperArm",
+          "bone": "FrontUpperArm"
+        },
+        {
+          "name": "Torso",
+          "bone": "Breath"
+        },
+        {
+          "name": "RearShoulderPlate",
+          "bone": "RearShoulderPlate"
+        },
+        {
+          "name": "Cloth",
+          "bone": "Cloth"
+        },
+        {
+          "name": "FrontForearm",
+          "bone": "FrontForearm"
+        },
+        {
+          "name": "FrontHand",
+          "bone": "FrontHand"
+        },
+        {
+          "name": "Head",
+          "bone": "Head"
+        }
+      ],
+      "packed": null,
+      "sourceOnly": true,
+      "editorImages": "./parts/brute/",
+      "contactTip": [
+        -159.038706,
+        -9.782495
+      ],
+      "normalizedCurves": 172,
+      "steps": [
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 6,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 8,
+          "exitCode": null
+        },
+        {
+          "tool": "spine_control_bones",
+          "elapsedMs": 8,
           "exitCode": null
         },
         {
@@ -41,129 +381,17 @@
           "exitCode": null
         },
         {
-          "tool": "spine_control_bones",
-          "elapsedMs": 11,
-          "exitCode": null
-        },
-        {
           "tool": "spine_import_json",
-          "elapsedMs": 7512,
+          "elapsedMs": 8711,
           "exitCode": 0
         },
         {
           "tool": "spine_export",
-          "elapsedMs": 7726,
-          "exitCode": 0
-        }
-      ]
-    },
-    {
-      "actor": "wanderer",
-      "bones": 28,
-      "version": "3.8.75",
-      "animations": [
-        "attack",
-        "death",
-        "hurt",
-        "idle",
-        "prepare"
-      ],
-      "contactTip": [
-        -149.961206,
-        38.793082
-      ],
-      "normalizedCurves": 172,
-      "steps": [
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 22,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 16,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 10,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 13,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 15,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_import_json",
-          "elapsedMs": 7743,
-          "exitCode": 0
-        },
-        {
-          "tool": "spine_export",
-          "elapsedMs": 7750,
-          "exitCode": 0
-        }
-      ]
-    },
-    {
-      "actor": "brute",
-      "bones": 28,
-      "version": "3.8.75",
-      "animations": [
-        "attack",
-        "death",
-        "hurt",
-        "idle",
-        "prepare"
-      ],
-      "contactTip": [
-        -159.038706,
-        -9.782495
-      ],
-      "normalizedCurves": 172,
-      "steps": [
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 9,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 14,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 12,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 11,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_control_bones",
-          "elapsedMs": 16,
-          "exitCode": null
-        },
-        {
-          "tool": "spine_import_json",
-          "elapsedMs": 7721,
-          "exitCode": 0
-        },
-        {
-          "tool": "spine_export",
-          "elapsedMs": 7680,
+          "elapsedMs": 9213,
           "exitCode": 0
         }
       ]
     }
-  ]
+  ],
+  "scope": "Final independent-image rig; 53 normal body parts; all 15 actions use per-part bones, including death."
 }

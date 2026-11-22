@@ -1,0 +1,29 @@
+{
+  "name": "the-end-survivor-frames",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "survivor-frames",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "260162ef-b44c-4718-b686-f5021acfc7b0",
+  "scenes": [
+    {
+      "url": "db://assets/SurvivorFrameReview.scene",
+      "uuid": "260162ef-b44c-4718-b686-f5021acfc7b0"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

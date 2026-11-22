@@ -13,6 +13,7 @@ const height = 900;
 async function editor(page, origin) {
     const save = page.getByRole('button', { name: /保存到项目/ });
     await page.goto(origin);
+    await page.getByRole('button', { name: '选择卡牌：基础攻击', exact: true }).click();
     const keyword = page.getByLabel('可作为合成材料', { exact: true });
     await keyword.waitFor();
     assert.equal(await keyword.isChecked(), true);
@@ -77,7 +78,7 @@ function gameControls(page) {
 }
 
 async function game(page, origin) {
-    const lockedURL = `${origin}play/?cards=live&seed=17&save=off`;
+    const lockedURL = `${origin}play/?cards=live&seed=17&save=off&scenario=synthesis`;
     const { snapshot, state, phase, idle, clickHit, click } = gameControls(page);
     const start = async () => {
         await idle();
@@ -221,7 +222,7 @@ async function game(page, origin) {
     assert.ok((await state()).cards.some(({ kind }) => kind === 'simple_spear'));
     await page.screenshot({ path: path.join(output, 'map-unlocked.png') });
 
-    await page.goto(`${origin}play/?seed=17&save=off&preview=encounter`);
+    await page.goto(`${origin}play/?seed=17&save=off&scenario=synthesis&preview=encounter`);
     await phase('battle');
     await click('recipe-open');
     assert.equal((await snapshot()).hits.some(({ id }) => id === 'recipe-pick'), false);
@@ -236,7 +237,12 @@ async function run() {
     const server = createEditorServer({ catalogFile, backupDirectory: path.join(scratch, 'backups') });
     let browser;
     try {
-        browser = await chromium.launch({ channel: process.env.PLAYWRIGHT_CHANNEL || 'chrome', headless: true });
+        const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE;
+        browser = await chromium.launch({
+            ...(executablePath ? { executablePath } : { channel: process.env.PLAYWRIGHT_CHANNEL || 'chrome' }),
+            headless: true,
+            args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
+        });
         server.listen(0, '127.0.0.1');
         await once(server, 'listening');
         const origin = `http://127.0.0.1:${server.address().port}/`;

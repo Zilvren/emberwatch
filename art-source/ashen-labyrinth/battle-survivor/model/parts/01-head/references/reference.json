@@ -1,0 +1,351 @@
+{
+  "project": "The end",
+  "date": "2026-11-21",
+  "part": "01 · 青年求生者脸部",
+  "status": "精修侧光与深度参考，待美术审阅",
+  "lightingMaster": "face-sidelight-detail.png",
+  "lightingSource": "ImageGen 以既有脸部侧光板为输入，细化眼睑、鼻翼、唇缘和耳廓。",
+  "lightingSha256": "d2a85581a0191d0e97f6b18bf02ff28b74403f095aa328977916e254c7700476",
+  "sourceGeometry": "model/depth-guides/guide.json",
+  "method": "裁切配准后，以原 16 位深度固定大体积，局部相对深度与同向侧光梯度共同约束次级曲面，积分得到更新的线性深度。眼球内部用平滑曲面约束。",
+  "encoding": {
+    "background": 0,
+    "validCodes": [
+      1,
+      65535
+    ],
+    "rangeInBodyHeights": [
+      -0.22,
+      0.22
+    ],
+    "zeroDepthCode": 32768,
+    "decode": "signed depth in body heights = ((code - 1) / 65534 - 0.5) * 0.44",
+    "brighter": "nearer camera",
+    "blender": "数据贴图使用 Non-Color。沿当前正交相机轴阅读；使用角色自身高度换算为场景长度。"
+  },
+  "coordinatePolicy": "每张图对应原头部面板中的裁切，宽高均为原裁切的两倍。采样原点在左上。深度仍沿当前相机轴。",
+  "artScope": "只精修脸部，画面边缘的既有发束供定位。深度属于美术估算。",
+  "panels": {
+    "front": {
+      "view": "front",
+      "nativeCrop": [
+        172,
+        218,
+        556,
+        573
+      ],
+      "scaleRelativeToHeadSheet": 2,
+      "size": [
+        768,
+        710
+      ],
+      "validCodes": [
+        32614,
+        45166
+      ],
+      "distinctDepthCodes": 12213,
+      "geometricUpdateNativePxP95": 11.483,
+      "meanAbsoluteUpdateOnFeaturesNativePx": 5.609,
+      "lowFrequencyDriftNativePxP95": 3.235,
+      "refinedFeaturePixels": 32190,
+      "relativeDepthFitScales": [
+        230.0,
+        109.265,
+        91.005
+      ],
+      "directionalIterations": [
+        0.0532,
+        0.04155,
+        0.04051,
+        0.04022,
+        0.04002,
+        0.03988,
+        0.03977
+      ],
+      "directionalLightResidualBefore": 0.12687,
+      "directionalLightResidualAfter": 0.05839,
+      "registeredFeaturePairs": [
+        [
+          [
+            278,
+            322
+          ],
+          [
+            275,
+            320
+          ]
+        ],
+        [
+          [
+            312,
+            320
+          ],
+          [
+            307,
+            317
+          ]
+        ],
+        [
+          [
+            341,
+            338
+          ],
+          [
+            336,
+            333
+          ]
+        ],
+        [
+          [
+            401,
+            338
+          ],
+          [
+            402,
+            334
+          ]
+        ],
+        [
+          [
+            432,
+            320
+          ],
+          [
+            435,
+            317
+          ]
+        ],
+        [
+          [
+            468,
+            322
+          ],
+          [
+            466,
+            321
+          ]
+        ],
+        [
+          [
+            372,
+            396
+          ],
+          [
+            372,
+            395
+          ]
+        ],
+        [
+          [
+            351,
+            404
+          ],
+          [
+            350,
+            404
+          ]
+        ],
+        [
+          [
+            395,
+            404
+          ],
+          [
+            395,
+            404
+          ]
+        ],
+        [
+          [
+            332,
+            449
+          ],
+          [
+            330,
+            446
+          ]
+        ],
+        [
+          [
+            372,
+            449
+          ],
+          [
+            372,
+            445.5
+          ]
+        ],
+        [
+          [
+            413,
+            449
+          ],
+          [
+            411,
+            446
+          ]
+        ],
+        [
+          [
+            372,
+            516
+          ],
+          [
+            371,
+            512
+          ]
+        ]
+      ],
+      "pngSha256": "36f28b61eb36b404a6aac56b2d4a0d378f5cacbc5747e1efc9b0966d4f1ba6df",
+      "maximumDecodedErrorInHeadPixels": 0.01064,
+      "sidelightSha256": "11b42be06dd3ad9ecfe0dadf31c266042cd50772ed90fafc7707739e42640853"
+    },
+    "right": {
+      "view": "right",
+      "nativeCrop": [
+        210,
+        218,
+        594,
+        573
+      ],
+      "scaleRelativeToHeadSheet": 2,
+      "size": [
+        768,
+        710
+      ],
+      "validCodes": [
+        28900,
+        43644
+      ],
+      "distinctDepthCodes": 13463,
+      "geometricUpdateNativePxP95": 9.99,
+      "meanAbsoluteUpdateOnFeaturesNativePx": 4.702,
+      "lowFrequencyDriftNativePxP95": 2.531,
+      "refinedFeaturePixels": 33326,
+      "relativeDepthFitScales": [
+        230.0,
+        147.673,
+        55.998,
+        20.393
+      ],
+      "directionalIterations": [
+        0.07113,
+        0.05426,
+        0.0517,
+        0.05108,
+        0.05086,
+        0.05075,
+        0.05069
+      ],
+      "directionalLightResidualBefore": 0.11021,
+      "directionalLightResidualAfter": 0.05136,
+      "registeredFeaturePairs": [
+        [
+          [
+            436,
+            316
+          ],
+          [
+            433,
+            319
+          ]
+        ],
+        [
+          [
+            471,
+            320
+          ],
+          [
+            468,
+            316
+          ]
+        ],
+        [
+          [
+            484,
+            336
+          ],
+          [
+            475,
+            334
+          ]
+        ],
+        [
+          [
+            290,
+            320
+          ],
+          [
+            288,
+            319
+          ]
+        ],
+        [
+          [
+            318,
+            396
+          ],
+          [
+            317,
+            396
+          ]
+        ],
+        [
+          [
+            536,
+            393
+          ],
+          [
+            536,
+            392
+          ]
+        ],
+        [
+          [
+            514,
+            413
+          ],
+          [
+            512,
+            413
+          ]
+        ],
+        [
+          [
+            478,
+            445
+          ],
+          [
+            478,
+            445
+          ]
+        ],
+        [
+          [
+            510,
+            443
+          ],
+          [
+            508,
+            443
+          ]
+        ],
+        [
+          [
+            480,
+            509
+          ],
+          [
+            480,
+            510
+          ]
+        ]
+      ],
+      "pngSha256": "ee66bc36bb741b3688048f73fc8982e0073b098d4a53dde37afde0f066205fca",
+      "maximumDecodedErrorInHeadPixels": 0.01064,
+      "sidelightSha256": "45132b93aea4ed6490ce265de3d7c60e42a6ffcb19bef75dfcd868312aadefda"
+    }
+  },
+  "review": "face-detail-review.png",
+  "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/depth-guides/face-detail/reference.json"
+}

@@ -1,0 +1,554 @@
+{
+  "project": "The End",
+  "date": "2026-11-19",
+  "status": "造型评审草案",
+  "character": "青年求生者",
+  "toonMotionReview": {
+    "date": "2026-11-20",
+    "status": "独立 Cocos 三渲二动作试样，供视觉评审",
+    "scene": "assets/SurvivorToonReview.scene",
+    "model": "assets/ashen-survivor-toon/survivor.glb",
+    "review": "art-source/ashen-labyrinth/battle-survivor/toon/review.md",
+    "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/animation/toon-review.md"
+  },
+  "turnaround": "当前全身三视图在已调整肩宽的上一版上再加长腿部15像素，正面服装腰线以下占全高61.797%。三个角度沿用原头肩，上身与靴底已回读校验。",
+  "modelReview": {
+    "date": "2026-11-19",
+    "status": "按用户指定的黄金腰线完成15像素腿长修订，供造型评审",
+    "headSheet": {
+      "source": "用户回传的头部三视图",
+      "local": "art-source/ashen-labyrinth/battle-survivor/head-turnaround.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/head-turnaround/head-turnaround.png",
+      "sha256": "258B9515B66C1CE21962F9BD829A34BBE41B49F547C746F903097E1D1AB66F32"
+    },
+    "bodySheet": {
+      "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-golden-master.png",
+      "sha256": "8a41f4aca887b4132bd2156dc8ecaf456aff68e76c96051ba3d698f3f801cdf4",
+      "size": [
+        5539,
+        3467
+      ],
+      "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/golden-waist/master"
+    },
+    "preview": {
+      "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-golden.png",
+      "size": [
+        1585,
+        992
+      ],
+      "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/golden-waist/preview/turnaround-golden.png",
+      "sha": "4c266904e6f1a6f40d6b4b230e5fa5e8c7d87d6fcfe8a36272189cacbe59b26d",
+      "bytes": 2021352
+    },
+    "comparison": {
+      "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-golden-comparison.png",
+      "size": [
+        890,
+        929
+      ],
+      "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/golden-waist/comparison/turnaround-golden-comparison.png",
+      "sha": "7b9eca9567e6b4eb8b763700cb012fbd63732c0b35f9f4b16008b0d9ab09dec2",
+      "bytes": 871338
+    },
+    "registration": {
+      "direction": "全身稿直接复用用户所选的正、右侧、背面头部图像。三个角度的头部统一比例、只作平移。发梢边缘与原背景融合，颈根服从服装的围巾遮挡。母稿用原头部分辨率，服装、身体及背景来自前一版全身比例稿。",
+      "sourceFile": "art-source/ashen-labyrinth/battle-survivor/head-turnaround.png",
+      "headSheetSha256": "258b9515b66c1ce21962f9bd829a34bbe41b49f547c746f903097e1d1ab66f32",
+      "sourceCells": [
+        {
+          "view": "正面",
+          "x": 0
+        },
+        {
+          "view": "右侧面",
+          "x": 692
+        },
+        {
+          "view": "背面",
+          "x": 1384
+        }
+      ],
+      "cellDimensions": [
+        692,
+        758
+      ],
+      "sizeInMaster": [
+        692,
+        758
+      ],
+      "cellOriginsInMaster": [
+        [
+          678,
+          18
+        ],
+        [
+          2415,
+          18
+        ],
+        [
+          4166,
+          18
+        ]
+      ],
+      "comparisonInstructions": "新比例对照图按同一尺度对齐脚底，金色虚线标记理论黄金分割线，青色实线标记上层横腰带中线。头肩和上身整体平移核对，裁回与上一版相同的姿势位置后逐像素一致。",
+      "verified": [
+        {
+          "view": "front",
+          "referencePixels": 141514,
+          "unequalPixels": 0,
+          "maxRgbError": 0
+        },
+        {
+          "view": "profile",
+          "referencePixels": 157290,
+          "unequalPixels": 0,
+          "maxRgbError": 0
+        },
+        {
+          "view": "back",
+          "referencePixels": 140692,
+          "unequalPixels": 0,
+          "maxRgbError": 0
+        }
+      ],
+      "verifiedArea": "完整头部实色内区，避开发梢抗锯齿和围巾遮挡边界。直接对比源图及回读的母稿 PNG 三个 RGB 通道。",
+      "sourceMatte": "tools/spine/bestiary-source-art.cjs",
+      "archiveReadback": {
+        "master": "六个 PNG 归档分块回读后逐像素匹配。",
+        "previewAndComparison": "PNG 下载回读与本地 SHA-256 匹配。"
+      },
+      "faceAndHairTranslationVerified": [
+        {
+          "before": [
+            678,
+            70
+          ],
+          "after": [
+            678,
+            18
+          ],
+          "pixels": 363300,
+          "same": true
+        },
+        {
+          "before": [
+            2415,
+            70
+          ],
+          "after": [
+            2415,
+            18
+          ],
+          "pixels": 363300,
+          "same": true
+        },
+        {
+          "before": [
+            4166,
+            70
+          ],
+          "after": [
+            4166,
+            18
+          ],
+          "pixels": 363300,
+          "same": true
+        }
+      ],
+      "upperBodyAndFootRegistration": {
+        "master": {
+          "fullWidth": 5539,
+          "upperRegionOriginalY": [
+            55,
+            1967
+          ],
+          "verticalTranslationPx": -52,
+          "upperRgbIdentical": true,
+          "bootsAndLabelsRgbIdentical": true
+        },
+        "preview": {
+          "fullWidth": 1585,
+          "upperRegionOriginalY": [
+            16,
+            563
+          ],
+          "verticalTranslationPx": -15,
+          "upperRgbIdentical": true,
+          "bootsAndLabelsRgbIdentical": true
+        }
+      }
+    },
+    "proportionDraft": {
+      "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-face-visible.png",
+      "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/face-visible/turnaround-face-visible.png",
+      "sha256": "77719A3AB3F4AA716A154B21A732E0AA3DEDAA12A2A19C7AF013B71A8EBB1200",
+      "measurement": "按正面最高发梢至下巴为一个头长。上一稿约 5.71 头身，本稿约 6.32 头身。成图中三个发顶约在 y=42，靴底在 y=920–921。",
+      "direction": "缩小整颗头部在全身所占比例，收短侧面的可见颈段。三面保持自然站姿，围巾低于下巴，披风、斜带和随身牌匣沿用角色设定。",
+      "generationPrompt": "Edit the full-body turnaround in Image 1 for an animation production model. Deliver one polished, clean, landscape full-body turnaround of the SAME young adult man. Image 2 is the user's chosen head turnaround: keep the drawing of each of those heads, hair, warm open brown eyes, straight resting lips, jaw shape and age. Image 3 is an underdrawing of the new joint heights and sensible figure proportions. Use its three body axes and horizontal landmarks underneath the clothed characters; omit construction marks from the final.\n\nMake a visible anatomical correction: in Image 1 the mass of hair/head is oversized on narrow shoulders and the middle neck is elongated. Scale each whole head including hair to about 85% of its old size relative to body height, keeping the internal face proportions from Image 2. About 6.6 standing head heights counted from the highest hair tuft to the chin; a lean young adult with functional shoulders, not a fashion model. Keep enough mass at the shoulders, ribcage and pelvis to support the head and the crossbody bag, with a natural compact neck. Chin sits clearly above the scarf, just a short strip of bare neck above the clavicles. The profile ear sits above the shoulder and the side neck tapers naturally into the trapezius. Give the profile ribcage real front-to-back depth under the same worn cloak. Three equally scaled orthographic rotations: front left, true side facing screen right in center, exact back right. Align all three crowns, chin/eye levels, shoulder joints, elbows, belt/hip, knees, ankles and boot soles. Slight relaxation of arms, wrists about hip-joint height, fingertips midway down upper thighs. Hips to soles approximately half of standing height. Set the feet under the hips supporting his weight, knees unlocked, distribute weight evenly. No heroic V shape, short legs, oversized boots, long neck or lanky stretched limbs.\n\nUse the same specific indigo asymmetrical weathered cloak, grey scarf down at the neck, diagonal strap, fingerless gloves, forearm wraps, cloth satchel on the man's right hip and small rectangular card case on his left hip exactly as in Image 1; keep the items on the same anatomical sides through rotation. Same quiet mauve ground, soft diffuse light, matte two-dimensional animation with restrained flecks of color, same adult expression as Image 2. Keep the original small bottom labels “正面”, “右侧面”, “背面”, ample padding for crown and soles, 1586 by 992 canvas. No diagram, ruler, guidelines, text other than those three labels, portrait inset, or extra figures."
+    },
+    "imageGen": {
+      "headTurnaroundPrompt": "Identity-preserving edit of the supplied character portrait. Make a wide horizontal animation model sheet of THREE matching head-and-shoulder views on the same dusty grey mauve ground. Use this uploaded artwork as the sole model. Rotate this particular painted young man's head. Its proportions, expression, palette, highlights and layered brown hair tufts are already decided.\n\nLeft third: reproduce the submitted FRONT PORTRAIT at matching proportions and color, eyes looking straight at the viewer. There is no design change to this view. Center: a strict 90-degree orthographic right-facing profile of that same head, only one eye visible. Right third: exact straight-back view, ears and nape visible under the layered hair, no cheek. All three columns have the same scale, crown line, eye height and chin height. Leave a little quiet margin above the tallest hair tufts, show hair, entire face, neck, and the settled loose taupe scarf around collarbones with indigo cloak just entering at the bottom. Sheet aspect ratio about 2.74:1. Even thirds. No words, borders, dividers, inset, logos, or other elements.\n\nSpecific recognizable features from the portrait: the tousled high crown with one curved cowlick and broad overlapping featherlike locks sweeping asymmetrically across his brow, open almond eyes with large warm brown irises visible and the soft space above the upper eyelid, broad relaxed eyebrows, the gently rounded nose tip, warm ochre cheeks and youthful gently tapered jaw ending in a soft rounded chin, closed lips with flattened corners, a faint cupid's bow and a slightly full lower lip. Eyes, mouth and ears sit at the same vertical levels after rotation. The side view has softly recessed lips below the nose, the upper lip nearly aligned with the lower and the jaw naturally tucked back. This is a quiet, alert early-twenties survivor. Match the restrained, matte 2D game shading and small irregular color planes of the reference. Keep all scarf fabric below the neck and every facial landmark plainly visible, keep the expression calm.",
+      "studioPlateUse": "本轮 ImageGen 生成空白背景，用于清除旧头发外缘；人物沿用头部原图。",
+      "studioPlatePrompt": "Prepare the empty studio backdrop layer of this 1585×992 full-body character sheet for a precise cutout composite. Restore only the original muted dusty mauve background, edge to edge, continuing its softly varying purple-grey tone and subtle fine diffuse surface at the locations covered by all three characters, their clothing, captions and foot shadows. Deliver just the continuous opaque, softly mottled, low-contrast dusty mauve field matching the native image behind the heads and shoulders. No figures, text, markings, horizons, lines or new imagery. Keep brightness and hues of the reference. The existing selected character drawings will be placed separately in production."
+    },
+    "previousRegisteredMaster": {
+      "body": {
+        "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-matched-master.png",
+        "sha256": "0ab5f81bca5141ef68edb9a9b63b6dab5ba230ab7a1a046387d0691b29276eef",
+        "size": [
+          5539,
+          3467
+        ],
+        "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/registered/master"
+      },
+      "preview": {
+        "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-matched.png",
+        "size": [
+          1585,
+          992
+        ],
+        "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/registered/preview/turnaround-matched.png",
+        "bytes": 1987472,
+        "sha": "29d26f910300308b5f50fa0f67f77499a7ca9d6d0b01529619457f7b0ae50245"
+      },
+      "headComparison": {
+        "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-head-comparison.png",
+        "size": [
+          1140,
+          715
+        ],
+        "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/registered/comparison/turnaround-head-comparison.png",
+        "bytes": 933756,
+        "sha": "122f7f0c5890f912b589df2e85e25fa8cca956dc728439ffa1fca83efc160ea6"
+      },
+      "origins": [
+        [
+          678,
+          115
+        ],
+        [
+          2415,
+          115
+        ],
+        [
+          4166,
+          115
+        ]
+      ]
+    },
+    "proportionRefinement": {
+      "date": "2026-11-19",
+      "status": "造型评审稿",
+      "brief": "用户要求腿再长一点、肩再宽一点，并询问当前与黄金比例的距离。",
+      "leg": {
+        "changePct": 2.92,
+        "measure": "髋部设计定位点至靴底。服装遮挡髋点，长度百分比按设计点计算。上段移动，伸长分布于大腿和小腿，靴子和地面位置保留。",
+        "standingHeightGainInPreview": 13
+      },
+      "shoulders": {
+        "changePct": 4,
+        "measure": "正背肩部局部横向展开，颈部、腰带和侧面纵深沿用原先几何。正背肩线的成图轮廓取相同躯干位置。",
+        "before": {
+          "front": 220,
+          "back": 217
+        },
+        "after": {
+          "front": 228,
+          "back": 226
+        }
+      },
+      "measurement": {
+        "units": "在 1585 × 992 正面预览中，身高以发梢至靴底计算。以身体中线上层横向棕色腰带上下缘的中点作服装参照。",
+        "before": {
+          "hairTop": 42,
+          "bootSole": 921,
+          "beltBounds": [
+            378,
+            399
+          ],
+          "beltCenter": 388.5,
+          "height": 879,
+          "goldenY": 377.74812388884243,
+          "beltToFloorPct": 60.580204778157,
+          "gapPx": 10.751876111157571,
+          "gapPct": 1.2231940968324935,
+          "shoulderRow": 242,
+          "visibleShoulders": {
+            "front": 220,
+            "back": 217
+          }
+        },
+        "after": {
+          "hairTop": 29,
+          "bootSole": 921,
+          "beltBounds": [
+            365,
+            386
+          ],
+          "beltCenter": 375.5,
+          "height": 892,
+          "goldenY": 369.7136820350937,
+          "beltToFloorPct": 61.15470852017937,
+          "gapPx": 5.786317964906289,
+          "gapPct": 0.648690354810121,
+          "shoulderRow": 229,
+          "visibleShoulders": {
+            "front": 228,
+            "back": 226
+          }
+        },
+        "fixedHeightBeltRisePx": 5.79,
+        "extraLegPixelsIfUpperLengthFixed": 15.15,
+        "goldenLongFraction": 0.6180339887498949,
+        "source": "https://mathcs.clarku.edu/~djoyce/java/elements/bookVI/defVI3.html"
+      },
+      "imageGen": {
+        "use": "内置 ImageGen 生成服装比例草图，取肩部外轮廓和上下段位移后，使用已配准的母稿定量调整。",
+        "prompt": "Localized silhouette tailoring edit for the fictional young survivor's existing three-view game art sheet in the attached image. Return the same wide, opaque, full-body front / right-facing profile / back orthographic model sheet, same positions and grounded soles. Change only two proportions by a small amount. Lengthen the legs about three per cent from the hip to the soles, distributing the extra length between thighs and lower legs, leaving boots at their actual size and on the original ground line. Let the whole torso with its head travel upwards slightly; keep the physical size of each approved head completely consistent. Make the shoulders in the front and back views about four per cent broader through the outer shoulder caps and the way the indigo cape falls, roughly five pixels outward on either side at this sheet's size. Feather the effect into the sleeves above the elbows and the clavicles below the low grey neck scarf. Keep the middle view an exact right-facing side projection, with consistent leg length. Preserve the current lean young build, all facial features and hair, waist, original shoulder-strap and card case, draped indigo fabric, boots, straight poses, original small Chinese captions and the softly textured mauve ground. No framing change, new items, diagrams, highlights or extra details. A restrained revision by the original artist."
+      }
+    },
+    "activeProportionPass": "goldenWaist",
+    "previousProportionSheet": {
+      "bodySheet": {
+        "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-longer-legs-master.png",
+        "sha256": "0aaa9b53bbc7066aadee1cad6f9377a5e51f5ae36cd347e499ab4bd57893c126",
+        "size": [
+          5539,
+          3467
+        ],
+        "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/proportion-refinement/master"
+      },
+      "preview": {
+        "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-longer-legs.png",
+        "size": [
+          1585,
+          992
+        ],
+        "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/proportion-refinement/preview/turnaround-longer-legs.png",
+        "sha": "97c4a681518919d7facfe11ccdccb4a8a61f9162c4c49c93f6331dee42e0ab68",
+        "bytes": 2009240
+      },
+      "comparison": {
+        "local": "art-source/ashen-labyrinth/battle-survivor/turnaround-proportion-comparison.png",
+        "size": [
+          890,
+          929
+        ],
+        "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/proportion-refinement/comparison/turnaround-proportion-comparison.png",
+        "sha": "c5fd04b0469a269cf9f26f40807cceb674f230b7b0e6e5e80380792da41117f1",
+        "bytes": 875634
+      },
+      "status": "本次沿用头肩、腰带和鞋底的直接来源"
+    },
+    "goldenWaist": {
+      "date": "2026-11-19",
+      "request": "相较已调整肩宽的上一版，腿部再增加15个预览像素，按上层横腰带中线对齐黄金分割；头部与肩部沿用上一版。",
+      "legPixelsAtReviewScale": 15,
+      "distribution": {
+        "thigh": 8,
+        "shin": 7
+      },
+      "checks": {
+        "master": {
+          "fullWidth": 5539,
+          "upperRegionOriginalY": [
+            55,
+            1967
+          ],
+          "verticalTranslationPx": -52,
+          "upperRgbIdentical": true,
+          "bootsAndLabelsRgbIdentical": true
+        },
+        "preview": {
+          "fullWidth": 1585,
+          "upperRegionOriginalY": [
+            16,
+            563
+          ],
+          "verticalTranslationPx": -15,
+          "upperRgbIdentical": true,
+          "bootsAndLabelsRgbIdentical": true
+        }
+      },
+      "before": {
+        "hairTop": 29,
+        "bootSole": 921,
+        "beltBounds": [
+          365,
+          386
+        ],
+        "beltCenter": 375.5,
+        "height": 892,
+        "goldenY": 369.7136820350937,
+        "beltToFloorPct": 61.15470852017937,
+        "gapPx": 5.786317964906289,
+        "gapPct": 0.648690354810121,
+        "shoulderRow": 229,
+        "visibleShoulders": {
+          "front": 228,
+          "back": 226
+        }
+      },
+      "after": {
+        "hairTop": 14,
+        "bootSole": 921,
+        "beltBounds": [
+          350,
+          371
+        ],
+        "beltCenter": 360.5,
+        "height": 907,
+        "goldenY": 360.4431722038453,
+        "beltToFloorPct": 61.79713340683572,
+        "gapPx": 0.056827796154721,
+        "gapPct": 0.006265468153770826,
+        "shoulderRow": 214,
+        "visibleShoulders": {
+          "front": 228,
+          "back": 226
+        }
+      },
+      "measurement": "同一正面、1585×992 预览。靴底至上层横腰带中线为下段，靴底至发梢为全高。母稿按整像素平移52像素，对应预览的15像素。",
+      "archiveReadback": {
+        "masterTiles": 6,
+        "masterPixelsMatched": true,
+        "previewAndComparisonShaMatched": true
+      },
+      "imageGen": {
+        "use": "内置 ImageGen 衣料比例参考，用定量纵向调整将该轮廓套用到上一版双分辨率原图。",
+        "prompt": "Edit the existing three-view character sheet in place, with one exact adjustment to the rig proportions. On this 1585 by 992 reference, raise the pelvis, torso and entire previous head-and-shoulder assembly by exactly 15 pixels, as one rigid layer, preserving every shape and width. Keep all three soles on the original ground line, and the boots at the original size. Add those 15 pixels of vertical length only through the trousered thighs and the wrapped lower legs, approximately 8 pixels in the thighs and 7 in the shins. Place the new knee and upper wrap curves consistently across the left front, middle right-facing side, and rear views. Use the same dark indigo costume and grey wraps. Existing faces, hair, shoulders, neck, equipment, boots, hands, captions, sheet dimensions, style, camera, ground and colors are locked. Keep the character scale and the ground; the top hair tufts may sit 15 pixels closer to the top of the canvas. This is a finished clean model sheet with no ruler, inset, lines or added text."
+      }
+    }
+  },
+  "frontFace": "按三视图的正面眉眼及选定的侧脸绘制。围巾落至颈根，嘴唇、下巴和下颌线完整露出。原侧脸中遮住的下半脸为本轮新增设计。",
+  "animation": "持牌左手已按 R3 修订，腕口、指节、卡面遮挡与撑地都已在实际 Cocos 场景核对。",
+  "motionReview": {
+    "date": "2026-11-20",
+    "status": "左手修订已交付，手感待用户评审",
+    "source": "art-source/ashen-labyrinth/battle-survivor/turnaround-golden-master.png",
+    "projectFile": "art-source/ashen-labyrinth/battle-survivor/spine/survivor.spine",
+    "package": "art-source/ashen-labyrinth/battle-survivor/survivor-spine-3.8.75-r3.zip",
+    "packageSha256": "7914d1427523e37a0492008e4876201005c1dc95da5efb836125a356ef5915af",
+    "runtime": "art-source/ashen-labyrinth/battle-survivor/spine/runtime",
+    "evidence": "art-source/ashen-labyrinth/battle-survivor/spine/verification.json",
+    "preview": "art-source/ashen-labyrinth/battle-survivor/spine/preview/survivor-motion.gif",
+    "scene": "assets/SurvivorSpineReview.scene",
+    "prefab": "assets/prefabs/actors/AshenSurvivor.prefab",
+    "bones": 45,
+    "slots": 36,
+    "textures": 35,
+    "legIK": 2,
+    "releaseSeconds": 0.36,
+    "impactSeconds": 0.58,
+    "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/animation",
+    "revision": 3,
+    "weightedMeshSlots": 15,
+    "auxiliary": {
+      "card-flight": 0.246,
+      "carry-card": 1
+    },
+    "comparison": "art-source/ashen-labyrinth/battle-survivor/spine/preview/left-hand-comparison.png",
+    "motionAudit": {
+      "oldZipSha256": "4c1497de91662d86194af38f9cf936c1aff9a5a3b4734fdb75bed1df2099e9ac",
+      "oldHipToKneeAndAnkle": [
+        125.7699966430664,
+        57.040000915527344
+      ],
+      "nowHipToKneeAndAnkle": [
+        90.7300033569336,
+        91.95999908447266
+      ],
+      "firstCardDistance": [
+        65.91318338042788,
+        0.68797930651452
+      ],
+      "releaseVelocityStep": [
+        589.2904772494009,
+        6.745395085233465
+      ],
+      "minOpaqueY": [
+        -35.74048154827631,
+        0.11366516337493238
+      ],
+      "headJumpOnPreReleaseInterruption": [
+        8.166606090988736,
+        0.04317017389661732
+      ],
+      "fps": 24,
+      "recording": "continuous native scene"
+    },
+    "review": "art-source/ashen-labyrinth/battle-survivor/spine/motion-review.md",
+    "priorPackageSha256": "7f29cc7b1e62d69caad51e52219d349d5a657759c5abc6d75028c37742108f59",
+    "leftHandReview": {
+      "leftHandRole": "持牌的远侧左手",
+      "baselineRevision": 2,
+      "wristToPinchBefore": 18.670000076293945,
+      "wristToPinchAfter": 27.780000686645508,
+      "otherHandReference": 30.729999542236328,
+      "caseDrawDistance": 1.5701768518220265,
+      "actualRenderedContact": [
+        {
+          "clip": "prepare",
+          "time": 0.49,
+          "frontThumbPixels": 201,
+          "backIndexPixels": 49
+        },
+        {
+          "clip": "attack",
+          "time": 0.355,
+          "frontThumbPixels": 212,
+          "backIndexPixels": 47
+        }
+      ],
+      "elbowAndWristChecked": 7,
+      "interrupt": {
+        "keptPinch": true,
+        "fingerAngleChange": 1.1920928955078125e-07,
+        "stowed": true,
+        "airborne": true,
+        "empty": true,
+        "finished": true
+      },
+      "lowestVisibleFallY": 0.11366516337493238,
+      "comparison": "art-source/ashen-labyrinth/battle-survivor/spine/preview/left-hand-comparison.png",
+      "motion": "art-source/ashen-labyrinth/battle-survivor/spine/preview/left-hand-motion-r3.gif",
+      "scope": "独立 Cocos 动作场景及 Spine 工程，手感待审阅"
+    }
+  },
+  "paths": {
+    "sources": [
+      "art-source/ashen-labyrinth/concepts/threshold/characters.png",
+      "art-source/ashen-labyrinth/concepts/threshold/scene-with-selected-detail.png"
+    ],
+    "local": [
+      "art-source/ashen-labyrinth/battle-survivor/turnaround.png",
+      "art-source/ashen-labyrinth/battle-survivor/front-face.png"
+    ],
+    "archive": [
+      "turnaround/turnaround.png",
+      "front-face/front-face.png"
+    ]
+  },
+  "blenderLikenessReview": {
+    "date": "2026-11-21",
+    "status": "头部校形工作稿，待继续修改。此前三维版本的角色相似度已被用户否定。",
+    "headReference": "art-source/ashen-labyrinth/battle-survivor/head-turnaround.png",
+    "bodyReference": "art-source/ashen-labyrinth/battle-survivor/turnaround-golden-master.png",
+    "editableCheckpoint": "art-source/ashen-labyrinth/battle-survivor/model/Survivor-head-review.blend",
+    "comparison": "art-source/ashen-labyrinth/battle-survivor/model/head-orthographic-review.png",
+    "comparisonMethod": "同一正交尺度对照设定图与 Blender 正面、右侧面实际渲染，头部保持游戏模型原有尺寸。",
+    "observations": [
+      "额发已分束，双眼、鼻部和唇线已随连续面部网格重新定位。",
+      "侧脸下颌线、耳前与后颈发梢、围巾绕颈折叠仍有差异。",
+      "此检查点尚待进行新的思考待机和右手弹牌动画。"
+    ],
+    "savedModel": "art-source/ashen-labyrinth/battle-survivor/model/Survivor.blend",
+    "orthographicDepth": {
+      "status": "已从头部及全身原三视图制作，供造型对位。",
+      "guide": "art-source/ashen-labyrinth/battle-survivor/model/depth-guides/guide.json",
+      "blender": "art-source/ashen-labyrinth/battle-survivor/model/depth-guides/Survivor-depth-reference.blend",
+      "archive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-survivor/turnaround/depth-guides/guide.json",
+      "verification": "各角度共享灰度刻度，六张原生 16 位单通道 PNG 已在 Blender 按 Non-Color 读回，对照原 PNG 校验像素值。"
+    }
+  }
+}

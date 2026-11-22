@@ -5,6 +5,8 @@
       "id": "departure",
       "title": "离开庇护",
       "body": "收音机只剩下沙沙声。\n最后一箱补给，撑不过太久。\n\n你带上菜刀、急救零件，\n还有一叠早已失去价值的现金。\n\n今天，必须出去走一趟。",
+      "fieldText": { "title": "无水的潮声", "body": "海退走的第七十年，水标又响了。\n\n你把读潮环扣上腕带。闸脊外一滴水也没有，\n仪表上的潮线却在一格格往上爬。\n\n先去旧水标。那里记录着上一次回声。" },
+      "labyrinthText": { "title": "灰里的门槛", "body": "昨晚风停后，焦土上多了一道门。\n\n门旁的灯一直亮着。守门人没问你的名字，只说回廊里还能找到补给。\n\n你扣紧牌匣，往门槛走去。" },
       "conditions": [{ "milestone": "campaign-started", "count": 1 }],
       "prerequisites": []
     },
@@ -18,8 +20,16 @@
     {
       "id": "street-cleared",
       "title": "灰烬街区的归路",
+      "fieldText": { "title": "闸下的回声", "body": "闸轮沉进盐尘，水标终于安静下来。\n你带回的记录上，留下了第三道潮线。\n\n浮舱的灯亮着。明早再读一次。" },
       "body": "灰烬街区的道路终于走通。\n沿途的威胁已经清除，回家的路也记在了心里。\n\n门闩重新落下。\n你带回的不只是物资，\n还有下一次出发的底气。",
       "conditions": [{ "milestone": "map-cleared:stamina-expedition", "count": 1 }],
+      "prerequisites": ["departure"]
+    },
+    {
+      "id": "labyrinth-cleared",
+      "title": "沉灯熄灭之后",
+      "body": "沉灯庭的布幡垂了下来。走过折光回廊时，照在墙上的亮痕已经移到了另一边。\n\n你把补给摆上避难所的架子，重新数了一遍牌匣里的基础牌。",
+      "conditions": [{ "milestone": "map-cleared:ashen-labyrinth", "count": 1 }],
       "prerequisites": ["departure"]
     }
   ]

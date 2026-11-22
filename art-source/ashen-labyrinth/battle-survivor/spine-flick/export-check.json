@@ -1,0 +1,19 @@
+{
+  "engine": "3.8.75",
+  "bones": 12,
+  "attachments": 10,
+  "playableClips": [
+    "guard-flick",
+    "think"
+  ],
+  "release": 0.44,
+  "editableRotationKeys": {
+    "right-forearm": 12,
+    "right-hand": 16,
+    "right-index": 10
+  },
+  "atlasPages": [
+    "survivor-flick-parts.png"
+  ],
+  "projectSha256": "0e2d4ca4b3e2d920fb6d882b4d5a55d4f6870618abee1ce62344beab3550454d"
+}

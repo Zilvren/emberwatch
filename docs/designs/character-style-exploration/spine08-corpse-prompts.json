@@ -1,7 +1,7 @@
 {
   "project": "The end",
   "date": "2026-11-17",
-  "status": "implemented; executor in-engine visual review recorded; user final subjective approval not recorded",
+  "status": "historical; superseded by fully articulated independent-part death animation",
   "tool": "built-in image_gen",
   "reference": "assets/resources/actors/sketch08/master08-thin.png",
   "headPolicy": "Original head/hood/helmet mesh is reused; generated assets contain body only.",
@@ -77,5 +77,7 @@
     "method": "Native scene screenshot and normal/half-speed playback telemetry plus decoded video frames; not a claim of full continuous video viewing or measured frame rate.",
     "observation": "Bodies and original heads meet the ground; rejected deep-fold candidate retained separately.",
     "userFinalApproval": "not recorded"
-  }
+  },
+  "activeConsumption": false,
+  "supersededBy": "docs/designs/character-style-exploration/spine08-motion.md"
 }

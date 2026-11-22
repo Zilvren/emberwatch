@@ -1,0 +1,29 @@
+{
+  "name": "the-end-survivor-spine-review",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "survivor-spine-review",
+  "designResolution": {
+    "width": 1440,
+    "height": 900,
+    "fitWidth": true,
+    "fitHeight": true
+  },
+  "packages": {
+    "web-desktop": {
+      "resolution": {
+        "designWidth": 1440,
+        "designHeight": 900
+      }
+    }
+  },
+  "startScene": "ff7ef100-f5b0-4583-8cb1-1ebd2678eb8c",
+  "scenes": [
+    {
+      "url": "db://assets/SurvivorSpineReview.scene",
+      "uuid": "ff7ef100-f5b0-4583-8cb1-1ebd2678eb8c"
+    }
+  ],
+  "debug": false,
+  "sourceMaps": true
+}

@@ -1,0 +1,76 @@
+
+survivor-flick-parts.png
+size: 512,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+guard
+  rotate: false
+  xy: 199, 965
+  size: 32, 45
+  orig: 32, 45
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 123, 95
+  size: 138, 141
+  orig: 138, 141
+  offset: 0, 0
+  index: -1
+lantern
+  rotate: false
+  xy: 199, 916
+  size: 32, 45
+  orig: 32, 45
+  offset: 0, 0
+  index: -1
+left-hand-support
+  rotate: false
+  xy: 240, 32
+  size: 92, 59
+  orig: 92, 59
+  offset: 0, 0
+  index: -1
+repel
+  rotate: false
+  xy: 199, 867
+  size: 32, 45
+  orig: 32, 45
+  offset: 0, 0
+  index: -1
+right-bracer
+  rotate: false
+  xy: 2, 52
+  size: 117, 184
+  orig: 117, 184
+  offset: 0, 0
+  index: -1
+right-index
+  rotate: false
+  xy: 71, 35
+  size: 45, 13
+  orig: 45, 13
+  offset: 0, 0
+  index: -1
+right-palm
+  rotate: false
+  xy: 2, 2
+  size: 65, 46
+  orig: 65, 46
+  offset: 0, 0
+  index: -1
+right-sleeve
+  rotate: false
+  xy: 123, 17
+  size: 113, 74
+  orig: 113, 74
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 2, 240
+  size: 193, 770
+  orig: 193, 770
+  offset: 0, 0
+  index: -1

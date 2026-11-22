@@ -1,0 +1,472 @@
+{
+  "actor": "stone-claw",
+  "source": "../monster-concepts.png",
+  "sourceSha256": "85f47145ec5fab61f305e6f5c5c201cd6488410d94f3cfabef69468bae0b9122",
+  "jointUnderpaint": "source-parts.png",
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    667,
+    891
+  ],
+  "scale": 0.55,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "hull",
+      "bone": "hull",
+      "sourceXYWH": [
+        414,
+        495,
+        630,
+        356
+      ],
+      "png": [
+        630,
+        356
+      ],
+      "sha256": "ee9b59ae3ff0015052f3e1aa1553a32d4bdaf638e37e684514b02668fd8d16ad",
+      "pivotUV": [
+        0.514286,
+        0.539326
+      ],
+      "setupPivot": [
+        39.05,
+        112.2
+      ],
+      "size": [
+        346.5,
+        195.8
+      ],
+      "angle": 0,
+      "visiblePixels": 51645,
+      "hiddenPixels": 33837,
+      "reconstructionCell": 0
+    },
+    {
+      "name": "shield",
+      "bone": "shield",
+      "sourceXYWH": [
+        435,
+        495,
+        400,
+        183
+      ],
+      "png": [
+        400,
+        183
+      ],
+      "sha256": "321ba25c06e453000eb74cc0230b96c8d7ad0f7da9adb7174d5c9feb52f91e80",
+      "pivotUV": [
+        0.6675,
+        0.327869
+      ],
+      "setupPivot": [
+        19.25,
+        184.8
+      ],
+      "size": [
+        220,
+        100.65
+      ],
+      "angle": 0,
+      "visiblePixels": 25209,
+      "hiddenPixels": 0,
+      "reconstructionCell": 1
+    },
+    {
+      "name": "claw-arm",
+      "bone": "claw-arm",
+      "sourceXYWH": [
+        420,
+        614,
+        185,
+        155
+      ],
+      "png": [
+        185,
+        155
+      ],
+      "sha256": "b86219d46a0e5bdcd30022aff63cf7c6cc9c035c42e6d8d1daa4bf0bafac0132",
+      "pivotUV": [
+        0.708108,
+        0.432258
+      ],
+      "setupPivot": [
+        -63.8,
+        115.5
+      ],
+      "size": [
+        101.75,
+        85.25
+      ],
+      "angle": 0,
+      "visiblePixels": 5955,
+      "hiddenPixels": 1640,
+      "reconstructionCell": 2
+    },
+    {
+      "name": "palm",
+      "bone": "palm",
+      "sourceXYWH": [
+        232,
+        598,
+        280,
+        222
+      ],
+      "png": [
+        280,
+        222
+      ],
+      "sha256": "ed2d3d51bfea2a0e81ccff5d8cc75fef11123aa258569741247a99f62264e1cd",
+      "pivotUV": [
+        0.782143,
+        0.427928
+      ],
+      "setupPivot": [
+        -118.8,
+        108.9
+      ],
+      "size": [
+        154,
+        122.1
+      ],
+      "angle": 0,
+      "visiblePixels": 14549,
+      "hiddenPixels": 990,
+      "reconstructionCell": 3
+    },
+    {
+      "name": "finger",
+      "bone": "finger",
+      "sourceXYWH": [
+        225,
+        583,
+        236,
+        139
+      ],
+      "png": [
+        236,
+        139
+      ],
+      "sha256": "5841b105f3cbe4b24b253b3cc17744a101999e54c885242dc039392a42ef0813",
+      "pivotUV": [
+        0.754237,
+        0.726619
+      ],
+      "setupPivot": [
+        -145.2,
+        113.85
+      ],
+      "size": [
+        129.8,
+        76.45
+      ],
+      "angle": 0,
+      "visiblePixels": 11968,
+      "hiddenPixels": 0,
+      "reconstructionCell": 4
+    },
+    {
+      "name": "far-claw",
+      "bone": "far-claw",
+      "sourceXYWH": [
+        553,
+        695,
+        154,
+        111
+      ],
+      "png": [
+        154,
+        111
+      ],
+      "sha256": "dcc2cb4bee9280e209ccd1537870f9a7fc0af775498aeb0a6a00af2507d22490",
+      "pivotUV": [
+        0.720779,
+        0.288288
+      ],
+      "setupPivot": [
+        -1.65,
+        90.2
+      ],
+      "size": [
+        84.7,
+        61.05
+      ],
+      "angle": 0,
+      "visiblePixels": 5006,
+      "hiddenPixels": 0,
+      "reconstructionCell": 5
+    },
+    {
+      "name": "near-fore-thigh",
+      "bone": "near-fore-thigh",
+      "sourceXYWH": [
+        717,
+        625,
+        185,
+        198
+      ],
+      "png": [
+        185,
+        198
+      ],
+      "sha256": "3c3f8d6a5d20bee2005fdca038ad5a2ae6b01e056da9f1fe84d8c61d87459cd8",
+      "pivotUV": [
+        0.308108,
+        0.328283
+      ],
+      "setupPivot": [
+        58.85,
+        110.55
+      ],
+      "size": [
+        101.75,
+        108.9
+      ],
+      "angle": 0,
+      "visiblePixels": 12062,
+      "hiddenPixels": 162,
+      "reconstructionCell": 6
+    },
+    {
+      "name": "near-fore-shin",
+      "bone": "near-fore-shin",
+      "sourceXYWH": [
+        793,
+        759,
+        97,
+        143
+      ],
+      "png": [
+        97,
+        143
+      ],
+      "sha256": "d232f6ec9d7d50f863f36408b8a5f6b88e8df60b9685efcae4498492690fc953",
+      "pivotUV": [
+        0.391753,
+        0.216783
+      ],
+      "setupPivot": [
+        90.2,
+        55.55
+      ],
+      "size": [
+        53.35,
+        78.65
+      ],
+      "angle": 0,
+      "visiblePixels": 3932,
+      "hiddenPixels": 0,
+      "reconstructionCell": 7
+    },
+    {
+      "name": "near-hind-thigh",
+      "bone": "near-hind-thigh",
+      "sourceXYWH": [
+        866,
+        671,
+        170,
+        122
+      ],
+      "png": [
+        170,
+        122
+      ],
+      "sha256": "6b74afa93f9f74e7eeb686c02e4ddec93f709df44f416b72311feb6b680e333f",
+      "pivotUV": [
+        0.282353,
+        0.418033
+      ],
+      "setupPivot": [
+        135.85,
+        92.95
+      ],
+      "size": [
+        93.5,
+        67.1
+      ],
+      "angle": 0,
+      "visiblePixels": 5584,
+      "hiddenPixels": 779,
+      "reconstructionCell": 8
+    },
+    {
+      "name": "near-hind-shin",
+      "bone": "near-hind-shin",
+      "sourceXYWH": [
+        950,
+        707,
+        118,
+        184
+      ],
+      "png": [
+        118,
+        184
+      ],
+      "sha256": "7c7bfbddffe299f40a34bfe7537c885598fefc0d0d94fadaa5c629646cc2fb06",
+      "pivotUV": [
+        0.338983,
+        0.25
+      ],
+      "setupPivot": [
+        177.65,
+        75.9
+      ],
+      "size": [
+        64.9,
+        101.2
+      ],
+      "angle": 0,
+      "visiblePixels": 5074,
+      "hiddenPixels": 0,
+      "reconstructionCell": 9
+    },
+    {
+      "name": "far-fore-leg",
+      "bone": "far-fore-leg",
+      "sourceXYWH": [
+        433,
+        696,
+        185,
+        206
+      ],
+      "png": [
+        185,
+        206
+      ],
+      "sha256": "208d51fec6e6c6ea035312889fed00b9fc53f2ae85032b81d1f8554834316583",
+      "pivotUV": [
+        0.848649,
+        0.160194
+      ],
+      "setupPivot": [
+        -42.35,
+        89.1
+      ],
+      "size": [
+        101.75,
+        113.3
+      ],
+      "angle": 0,
+      "visiblePixels": 7220,
+      "hiddenPixels": 198,
+      "reconstructionCell": 10
+    },
+    {
+      "name": "far-hind-leg",
+      "bone": "far-hind-leg",
+      "sourceXYWH": [
+        616,
+        744,
+        97,
+        128
+      ],
+      "png": [
+        97,
+        128
+      ],
+      "sha256": "a325e9e98d6fbddcd4f5d74d30ed3f3fcac33e299ebc018596704e1c42245e0d",
+      "pivotUV": [
+        0.762887,
+        0.054688
+      ],
+      "setupPivot": [
+        12.65,
+        77
+      ],
+      "size": [
+        53.35,
+        70.4
+      ],
+      "angle": 0,
+      "visiblePixels": 2284,
+      "hiddenPixels": 113,
+      "reconstructionCell": 11
+    },
+    {
+      "name": "shell-underplate",
+      "bone": "hull",
+      "sourceXYWH": [
+        480,
+        518,
+        505,
+        264
+      ],
+      "png": [
+        505,
+        264
+      ],
+      "sha256": "69ffac49cc92214918c073064e5141f1d9ad332dc19267b4a9e12625b17effa3",
+      "pivotUV": [
+        0.510891,
+        0.640152
+      ],
+      "setupPivot": [
+        39.05,
+        112.2
+      ],
+      "size": [
+        277.75,
+        145.2
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 85826,
+      "reconstructionCell": 0,
+      "underlay": true
+    },
+    {
+      "name": "pincer-socket",
+      "bone": "palm",
+      "sourceXYWH": [
+        378,
+        637,
+        101,
+        109
+      ],
+      "png": [
+        101,
+        109
+      ],
+      "sha256": "375b39c681911bb122cdae6d6d560a81c3122855e27406786bb0e5b89c19cfe8",
+      "pivotUV": [
+        0.722772,
+        0.513761
+      ],
+      "setupPivot": [
+        -118.8,
+        108.9
+      ],
+      "size": [
+        55.55,
+        59.95
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 6986,
+      "reconstructionCell": 3,
+      "underlay": true
+    }
+  ],
+  "drawOrder": [
+    "shell-underplate",
+    "pincer-socket",
+    "far-fore-leg",
+    "far-hind-leg",
+    "hull",
+    "near-hind-thigh",
+    "near-hind-shin",
+    "far-claw",
+    "claw-arm",
+    "palm",
+    "finger",
+    "near-fore-thigh",
+    "near-fore-shin",
+    "shield"
+  ],
+  "setupAudit": {
+    "visiblePixels": 150488,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

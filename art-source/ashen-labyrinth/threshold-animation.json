@@ -1,0 +1,18 @@
+{
+  "project": "The end",
+  "date": "2026-11-19",
+  "title": "门槛 · 二维动画游戏画面",
+  "status": "按已选定的画法制作的评审样张",
+  "file": "art-source/ashen-labyrinth/threshold-animation.png",
+  "brief": "docs/designs/焦土迷宫美术设计需求.docx",
+  "version": "v0.4",
+  "world": "焦土中央的迷宫；物资告竭的求生者；敬畏迷宫卡牌的守门人。",
+  "technique": "内置 ImageGen。横向探索镜头，二维动画角色、干净填色和局部柔和渐变；第一版的大色块作背景。",
+  "reference": "art-source/ashen-labyrinth/threshold-concept.png",
+  "assetArchive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-threshold-animation",
+  "width": 1586,
+  "height": 992,
+  "sha256": "b26307da25c7d74766dad1adecedb5990a80311d27e74249fee4ff4617557a75",
+  "briefSha256": "e8b9c6c14802ceeaacf83d3bef3e62745e865be042a9efb51e42598954c2fb5e",
+  "prompt": "Re-stage this single labyrinth gate in a brand new WIDE SIDE-SCROLLING VIDEO GAME exploration shot, pulling the camera back more than twice as far. The reference is for the BIG SIMPLE BACKGROUND SHAPES of the ash slope, off-register wall, dark doorway and lit sill only. Entirely replace its human artwork and remove all its painting texture. Clean smooth digital 2D ANIMATION GAME SPRITES. Flat local fill colors with tiny soft gradients only at the underside of a jaw or in a sleeve; simplified faces with a small single eyelid, grouped hair, cloth in broad simple untextured fills, no oil or visible brush marks or inked outlines or photorealism. A polished playable-game view, not a painting or character portrait. \nOne lean adult player on the left, SIX heads tall, at 35–40 percent of the picture height, standing on navigable ground facing right. Short dusty ochre jacket, dull blue trousers, scarf flicking a little, downcast eyes, pinching an empty bag mouth-down. On the right a quiet bald gatekeeper with downturned lids in a broad dark plum sleeve sits FULLY VISIBLE on his stool at a small knee-high card stall, flattening one of three cream cards on clean cloth beside a warm lamp. The table legs, both people's feet and gap between them are entirely in frame. A tiny neat stacked-card interaction glyph just above the stall. In the middle an obviously walkable route into a tall narrow maze entrance, one blind turn. The broad plain-color cool violet walls, gray slope, lighter sky on left and graphic foreground provide depth. Strong readable silhouettes and clear warm / cool colors. No other HUD text, captions, split panels or props. One 16:10 horizontal image."
+}

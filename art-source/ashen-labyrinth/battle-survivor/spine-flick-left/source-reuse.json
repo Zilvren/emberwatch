@@ -1,0 +1,161 @@
+{
+  "originalProjectSha256": "bfad971fe86732f92c66098c8b18ec9d5a0f587c493c64ea62ad4219891bec1f",
+  "originalBones": 45,
+  "reusedImages": [
+    {
+      "file": "back-flap.png",
+      "sha256": "23dfdcb92a7b8716f8162abe2a7daf87b034ee3dfc600698e23e6c981c141f1e"
+    },
+    {
+      "file": "card-case.png",
+      "sha256": "9e80762339a47fbe87092856ea2c35b01ac5401251feada5e13c33490d26ddeb"
+    },
+    {
+      "file": "card.png",
+      "sha256": "111526e13ba85464d2cd55971755f0e3d78ae3b62a2742f4c473dde45fcac859"
+    },
+    {
+      "file": "cast-bracer.png",
+      "sha256": "f55f67a083e65e59f3f03af2667f7512e34303a4935d03987b93cefc2b4e1018"
+    },
+    {
+      "file": "cast-index.png",
+      "sha256": "9482752cf6a75721302136c2613dff4b1b5e4a81e7c2b026c9cc5c89b1f05c20"
+    },
+    {
+      "file": "cast-middle.png",
+      "sha256": "22252c157bd79839370a6b1e29cea8a2a863056119dd0968c93639906554da14"
+    },
+    {
+      "file": "cast-palm.png",
+      "sha256": "20354f40281517ca3f672525701fc94227c73827f03dc41d79129c3775fa0ebf"
+    },
+    {
+      "file": "cast-sleeve.png",
+      "sha256": "a21d141b2cf50aa7ea6c159f5e13d164274d788fb0f7be367bcd4e5082d052e6"
+    },
+    {
+      "file": "cast-thumb.png",
+      "sha256": "d3aac51d0ded1538f5c8e26ecf38bfa548035d989f7f89298010bbdd6ef9b4a4"
+    },
+    {
+      "file": "chest.png",
+      "sha256": "ec1df7fd721aadb0ab9d4496e81020df272214a4e2045bca3785a1380ef5130e"
+    },
+    {
+      "file": "coat-skirt.png",
+      "sha256": "e41ec35293e3aa4ce368f3ffb907f195659e18c734ba87a0608d2c2068534f48"
+    },
+    {
+      "file": "far-boot.png",
+      "sha256": "339ca44548e66f790c8265fff6c1a9de75ef25e00454505aa4d3009f1de004db"
+    },
+    {
+      "file": "far-shin.png",
+      "sha256": "ee6bef9ee5f70ba3eed9a497522508adff157caac61ce5d1dfa38704c4e39cbe"
+    },
+    {
+      "file": "far-thigh.png",
+      "sha256": "f509367f82fdf3d341a1b800e6c3044437dc795ec1bfe6001c33624cd71b6837"
+    },
+    {
+      "file": "hair-lock.png",
+      "sha256": "de0971b9772b48de1063d392f43bcfb866e1a8e4b492ac6476b1305fee223030"
+    },
+    {
+      "file": "head.png",
+      "sha256": "d31a13d573054c84c98b11f1e9292e96f893f1d30dcf51aa870c414f533e4696"
+    },
+    {
+      "file": "hips-lining.png",
+      "sha256": "5b81ca0d11e19394fd2679e3674444a89a94210f568da655f6ee5c88f1a1bf4c"
+    },
+    {
+      "file": "hips.png",
+      "sha256": "2224e6b10ffc39993bc95d68a325ae4344a0589ab1e81b52dcfcb86f294cc932"
+    },
+    {
+      "file": "hood.png",
+      "sha256": "57088687ef344ec1022e20e639621d21e5ad56d22a2c687add9161cf9a7a20e7"
+    },
+    {
+      "file": "inner-skirt.png",
+      "sha256": "c2e7dac2b347b9cf1fb1e161b9bff9a2577f8706c94d9e8e816f1277b091f0fe"
+    },
+    {
+      "file": "inner-tunic.png",
+      "sha256": "7b2fe5aec219bc0104cbcd7688c39cba71dd288f013d4b2bb488dde1a2308196"
+    },
+    {
+      "file": "knee-lining.png",
+      "sha256": "6e8808725189ae86ca8f7de3f7b97cd79a3a5ec83662c5bcd59e0b082f1fab13"
+    },
+    {
+      "file": "mantle.png",
+      "sha256": "d56142ecc5a61a03fd789f6303f3732665d5b2196eb6b819fe9737984156108e"
+    },
+    {
+      "file": "near-boot.png",
+      "sha256": "5f122d0c25f26e8b170b9962f8443167f24b0c2423853cb92fb60a1ca43ffe8a"
+    },
+    {
+      "file": "near-bracer.png",
+      "sha256": "f0d6bc52f3772c9869a5e94365f692e2a0f630f56813a78d4aa78d994181290d"
+    },
+    {
+      "file": "near-hand.png",
+      "sha256": "b54384759abf0b7ee746b2882301c81e753a7d00d1c4cbef66c7e61180bb7c04"
+    },
+    {
+      "file": "near-shin.png",
+      "sha256": "06140eecdf6e2159c051c528218da122e4988b5b9483325cbd931ecec4752aaf"
+    },
+    {
+      "file": "near-sleeve.png",
+      "sha256": "b8134694a0b9d149344a2fdafa45b3cd89fb6cc70aa5467f6f5f79990bff957e"
+    },
+    {
+      "file": "near-thigh.png",
+      "sha256": "33ba3d4ab61daeb2d096b9d343bb46e96a9e0503e3ffb17c586d463f8075dd58"
+    },
+    {
+      "file": "near-trouser-lining.png",
+      "sha256": "4e6ce8573bae13edaecfb4bf1559e68bd9a4a3c4183a8838e5c877d0058e7bfb"
+    },
+    {
+      "file": "near-underarm.png",
+      "sha256": "4155ed0200f49d53aa3d115bada71e328c9b721e1346962cd86c887f60d48327"
+    },
+    {
+      "file": "ration-bag.png",
+      "sha256": "52243cae450f7ae8027cd4f0fd24438efffdb8f579cf0f2c7e93d40df3068f3f"
+    },
+    {
+      "file": "scarf.png",
+      "sha256": "acb1530a15dbd4c62533bf0966c1c1fb570b1e9f21452df094bf06c82f3792c4"
+    },
+    {
+      "file": "strap.png",
+      "sha256": "a599ccc4339ca8cc5c4cdc6c84d4b4b9b930d26219c2806fec4e32806d9ef636"
+    },
+    {
+      "file": "tunic-lining.png",
+      "sha256": "b1400391f011741c1a4d897d07d9738dc0e4310e4590e06e396db582306b57a9"
+    }
+  ],
+  "auxiliaryCards": [
+    "lantern.png",
+    "repel.png"
+  ],
+  "bones": 57,
+  "slots": 45,
+  "existingRightHand": [
+    "right-palm.png",
+    "right-index.png"
+  ],
+  "newClips": [
+    "think",
+    "guard-flick",
+    "think-empty"
+  ]
+}

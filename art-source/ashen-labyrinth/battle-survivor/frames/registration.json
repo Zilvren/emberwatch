@@ -1,0 +1,42 @@
+{
+  "canvas": [
+    512,
+    944
+  ],
+  "baseline": 919,
+  "fingers": {
+    "touch-low": [
+      322.74,
+      269.61
+    ],
+    "touch-middle": [
+      410.7,
+      201.37
+    ],
+    "touch-high": [
+      451.64,
+      149.42
+    ]
+  },
+  "exposures": [
+    "think",
+    "inhale",
+    "lift",
+    "coil",
+    "reach-middle",
+    "touch-low",
+    "touch-middle",
+    "touch-high",
+    "sweep-middle",
+    "recoil",
+    "return",
+    "reach-low",
+    "reach-high",
+    "sweep-low",
+    "sweep-high"
+  ],
+  "atlases": [
+    "survivor-cels",
+    "survivor-cels-2"
+  ]
+}

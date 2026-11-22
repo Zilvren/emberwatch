@@ -38,11 +38,12 @@ export class InventoryGrid extends Component {
     private filterKey = '';
     refresh(game: GameReadModel, ui: Readonly<UiState>): void {
         if (!this.content || !this.cardPrefab) return;
+        const field = !!game.scenario.fieldDeck;
+        const runBattleDeck = !!game.scenario.runDeck && ui.bagFilter === 'deck';
         const cards = visibleInventory(game, ui.bagFilter, ui.bagSort);
-        const missing =
-            game.scenario.runDeck && ui.bagFilter === 'deck'
-                ? missingSynthesisMaterials(game.content.catalog.recipes, game.usableCards)
-                : new Set<string>();
+        const missing = runBattleDeck
+            ? missingSynthesisMaterials(game.content.catalog.recipes, game.usableCards)
+            : new Set<string>();
         const alive = new Set(game.cards.map((card) => card.id));
         const shown = new Set(cards.map((card) => card.id));
         for (const [id, view] of this.entries) {
@@ -85,33 +86,36 @@ export class InventoryGrid extends Component {
             this.filterKey = key;
         }
         if (this.summary)
-            this.summary.string =
-                game.scenario.runDeck && ui.bagFilter === 'deck'
-                    ? `${game.usableCards.length} 张战斗牌 · 本局使用`
-                    : `携带 ${game.baseWeight}/30    暂存 ${game.overflowWeight}/10    共 ${game.carriedCards.length} 张`;
+            this.summary.string = field
+                ? `随行牌组 ${game.cards.length} 张 · 本次发现 ${game.cards.filter((card) => card.found).length} 张`
+                : runBattleDeck
+                  ? `${game.usableCards.length} 张战斗牌 · 本局使用`
+                  : `携带 ${game.baseWeight}/30    暂存 ${game.overflowWeight}/10    共 ${game.carriedCards.length} 张`;
         if (this.hint)
-            this.hint.string =
-                game.scenario.runDeck && ui.bagFilter === 'deck'
-                    ? '滚动浏览 · 在配方表查看材料搭配'
-                    : ui.deckEdit
-                      ? '营地编组：点击卡牌加入或移出出战牌组 · 不释放负重'
-                      : '滚动浏览 · 点击卡牌查看大图与操作';
+            this.hint.string = runBattleDeck
+                ? '滚动浏览 · 在配方表查看材料搭配'
+                : ui.deckEdit
+                  ? '营地编组：点击卡牌加入或移出出战牌组 · 不释放负重'
+                  : field
+                    ? '点击查看牌面 · 本次发现保留至返家'
+                    : '滚动浏览 · 点击卡牌查看大图与操作';
         if (this.emptyLabel) {
             this.emptyLabel.node.active = cards.length === 0 && !ui.bagReader;
             this.emptyLabel.string =
-                ui.bagFilter === 'overflow'
-                    ? '暂存区是空的\n切换「全部卡牌」查看行囊'
-                    : ui.bagFilter === 'deck'
-                      ? '当前没有出战牌\n切换「全部卡牌」查看可编组的牌'
-                      : '行囊里暂时没有卡牌';
+                ui.bagFilter === 'found'
+                    ? '这次探索还没有拿取发现牌'
+                    : ui.bagFilter === 'overflow'
+                      ? '暂存区是空的\n切换「全部卡牌」查看行囊'
+                      : ui.bagFilter === 'deck'
+                        ? '当前没有出战牌\n切换「全部卡牌」查看可编组的牌'
+                        : '行囊里暂时没有卡牌';
         }
         this.modeButton?.setText(ui.deckEdit ? '结束编组' : '整理出战牌');
+        if (this.modeButton) this.modeButton.node.active = !field && !game.scenario.runDeck;
         this.modeButton?.setEnabled(game.phase === 'rest');
-        if (this.modeButton) this.modeButton.node.active = !game.scenario.runDeck;
         const title = this.node.getChildByName('InventoryTitle')?.getComponent(Label);
         if (title)
-            title.string =
-                game.scenario.runDeck && ui.bagFilter === 'deck' ? '本局卡组' : '行囊 / 本次探索';
+            title.string = field ? '随行牌组' : runBattleDeck ? '本局卡组' : '行囊 / 本次探索';
         this.sortButton?.setText(
             '排序：' +
                 { original: '获得顺序', name: '名称', cost: '费用', weight: '负重' }[ui.bagSort]
@@ -119,8 +123,15 @@ export class InventoryGrid extends Component {
         this.filters.forEach((button) => {
             if (button.actionId === 'bag-filter-all')
                 button.setText(game.scenario.runDeck ? '物资行囊' : '全部卡牌');
+            if (
+                button.actionId === 'bag-filter-found' ||
+                button.actionId === 'bag-filter-overflow'
+            ) {
+                button.actionId = field ? 'bag-filter-found' : 'bag-filter-overflow';
+                button.setText(field ? '本次发现' : '暂存卡牌');
+            }
             if (button.actionId === 'bag-filter-deck')
-                button.setText(game.scenario.runDeck ? '本局卡组' : '出战牌组');
+                button.setText(field ? '基础牌' : game.scenario.runDeck ? '本局卡组' : '出战卡牌');
             button.setVariant(
                 button.actionId === 'bag-filter-' + ui.bagFilter ? 'primary' : 'quiet'
             );
@@ -145,15 +156,17 @@ export class InventoryGrid extends Component {
         readerView?.card?.setExpanded(ui.bagDetails);
         if (this.readerTitle) this.readerTitle.string = state.name;
         if (this.readerBody)
-            this.readerBody.string = `${state.status}${game.scenario.runDeck && ui.bagFilter === 'deck' ? '' : `\n负重 ${state.weight}`}\n\n${state.effect}\n\n${state.toggleHint}`;
+            this.readerBody.string = field
+                ? `${state.status} · ${game.content.cards[selected.kind].cost} 体力\n\n${state.effect}\n${game.content.cards[selected.kind].text}`
+                : `${state.status}${runBattleDeck ? '' : `\n负重 ${state.weight}`}\n\n${state.effect}\n\n${state.toggleHint}`;
         if (this.toggle) {
             this.toggle.actionId = 'toggle-' + selected.id;
             this.toggle.setText(state.toggleLabel);
-            this.toggle.node.active = !game.scenario.runDeck && game.phase === 'rest';
+            this.toggle.node.active = !field && !game.scenario.runDeck && game.phase === 'rest';
             this.toggle.setEnabled(state.canToggle);
         }
         if (this.discard) {
-            this.discard.node.active = !game.scenario.runDeck || ui.bagFilter !== 'deck';
+            this.discard.node.active = !field && !runBattleDeck;
             this.discard.actionId = 'discard-' + selected.id;
             this.discard.setText(state.discardLabel);
             this.discard.setEnabled(state.canDiscard);

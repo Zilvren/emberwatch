@@ -1,0 +1,90 @@
+{
+  "project": "The end",
+  "date": "2026-11-19",
+  "title": "门前择牌 · 双人面部试稿二",
+  "status": "待评审",
+  "art": {
+    "survivor": "年轻求生者眉头略收，近侧眼睑提起，眼睛看向手中的牌。颧侧用灰紫切入暖肤色。",
+    "gatekeeper": "守门人半睁双眼，较重的上眼睑压住虹膜。眼神往摊上落，嘴角略微收紧。"
+  },
+  "sources": {
+    "portrait": "art-source/ashen-labyrinth/references/approved-face-color.png",
+    "drawing": "art-source/ashen-labyrinth/references/character-style-reference.png",
+    "scene": "art-source/ashen-labyrinth/threshold-card-choice-clarity.png"
+  },
+  "generator": {
+    "tool": "内置 ImageGen",
+    "call": "exec-98472d44-cb20-4573-9fc5-afc8f51a8113",
+    "prompt": "Create one new CHARACTER FACE STUDY for an original illustrated survival deckbuilding game, a finished 2:1 horizontal diptych of two close head crops touching at the middle. It is an ALTERNATIVE DRAWING of the two people in reference 1, at the quiet moment before the survivor selects a card from the labyrinth gatekeeper. The change must be immediately visible in their features and in how they look at the cards, even when small. Develop fresh interior drawings of the eyes, cheeks, and noses rather than doing a colour-only filter. Keep the head pitches, approximate landmark positions, outside head shapes, youth's existing dark hair masses and scarf and keeper's bald head and plum collar, the precise placement of each crop, and the existing lighting direction of reference 1. These portraits should still slot into the existing game scene at those head positions. Two contiguous square image panels, filled to their edges, no border, graphic layout, text or extra objects. Reference 2 informs the restraint and grown-up quality of the DRAWING ONLY. Exactly the two humans from reference 1, with their faces exposed as in reference 1.\n\nLEFT: an adult, hungry but quick-witted traveler. The face has spring in it. Lift the near upper lid just enough to see a dark warm-brown iris looking low to the right at a card he is weighing. The outer brow stays quiet, the inner brow tightens just a fraction. A lean, slightly angular cheek with a short light-catching edge; a slim straight nose and a steady mouth half hidden by the scarf, as in the source. Draw one elegant tapered upper eyelid and an actual iris with a discernible direction. His head is down but his attention is awake. No angry scowl, generic handsome anime smirk, droopy sleepy look, exaggerated eyeballs or white catchlights.\n\nRIGHT: the keeper is older, unhurried and exacting about the cards he handles. A broader cheek, longer nose with a clear bridge and a quieter, heavier brow give him a different facial rhythm. The near upper lid is hooded but plainly half-open, with a visible narrow sliver of a dark iris directed DOWN and a little LEFT toward the card he is straightening. Make the two eyelids subtly asymmetric. A slight tuck at one corner of the mouth reads like concentration rather than grief. A few bends in the shading under the eye convey age without deep etched wrinkles. One can tell by these two glances alone that the traveler's deciding which card to take and the keeper is checking its place on the table.\n\nART: mature, exceptionally clean 2D game character drawing with natural adult proportions, one small step less realistic than reference 2. Matte skin. Colour describes the changing angle of the bone: a connected clay/ochre skin midtone, cool dusty violet-brown lightly breaking through at the turn below the cheekbone, and muted warmth returning beside the nose. Broken colour is in the DRAWING of intact skin. Use sparse irregular, short, interlocking notes with some edges lost and others crisp, varying in size and direction; across each cheek leave a whole undisturbed field of base colour. No symmetric parallel paint streaks or stripes, geometric shards, facepaint, freckles, scars, cracks, oil paint, thick brush marks, airbrushed skin, coarse all-over noise, photographic pores or black ink outlines. Focus the sharpest edges at the upper lid, nasal plane and the little turn of the mouth. Skin lights are muted warm ochre. The slivers of sclera are shadowed rosy cocoa, close in value to the adjacent skin; NO pale beige triangular eye wedges, white eye dots, ivory or silvery strokes on cheeks. Substantial variation of warm/cool notes, modest range of light and dark, eyes readable at gameplay distance. Muted slate-indigo and grey-violet surroundings, warm and cool light integrated, quietly tense and specific, a hand-authored game keyframe. Deliver ONLY this one two-character study."
+  },
+  "portraits": {
+    "file": "art-source/ashen-labyrinth/studies/threshold-faces-02/mouth-correction/portraits.png",
+    "width": 1774,
+    "height": 887,
+    "sha256": "370f53c029e0ba76f6cfd93f892efae94dbfdf359a7293da2b5266251da17442",
+    "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/face-study-02/mouth-correction/portraits.png"
+  },
+  "scenePreview": {
+    "file": "art-source/ashen-labyrinth/studies/threshold-faces-02/mouth-correction/scene-preview.png",
+    "width": 1440,
+    "height": 900,
+    "sha256": "db7671d361a9ca0f7d1f103da80c0a66fb3ea7d250c695073507cf8469c0959c",
+    "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/face-study-02/mouth-correction/scene/scene-preview.png",
+    "method": "将特写的两张脸按清晰版全景的原位置合成，缩至游戏画面尺寸。"
+  },
+  "review": {
+    "sceneWidths": [
+      1440,
+      1024
+    ],
+    "observation": "在静态游戏构图中查看了眉眼对牌的方向。以原图 1586 像素宽度检查求生者眼周，最亮的取样仍是暖灰褐。",
+    "eyeRegion": {
+      "xywh": [
+        441,
+        215,
+        20,
+        22
+      ],
+      "brightestRGB": "#98786D"
+    }
+  },
+  "recordUri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/face-study-02/study.json",
+  "mouthCorrection": {
+    "feedback": "侧脸嘴角不对",
+    "role": "左侧求生者",
+    "treatment": "在鼻底和围巾之间补出自然闭合的唇线。嘴角向面颊收回，唇缘前端保留一点下唇，围巾贴在下方。",
+    "previousPortrait": "art-source/ashen-labyrinth/studies/threshold-faces-02/portraits.png",
+    "previousScene": "art-source/ashen-labyrinth/studies/threshold-faces-02/scene-preview.png",
+    "tool": "内置 ImageGen",
+    "call": "exec-6bf43fc3-0fa0-432d-ae86-0fc078d83a50",
+    "sourceCropXYWH": [
+      305,
+      387,
+      431,
+      384
+    ],
+    "verification": [
+      {
+        "View": "特写",
+        "ChangedPixels": 10059,
+        "Bounds": [
+          437,
+          628,
+          576,
+          732
+        ]
+      },
+      {
+        "View": "全景",
+        "ChangedPixels": 258,
+        "Bounds": [
+          389,
+          219,
+          411,
+          236
+        ]
+      }
+    ],
+    "prompt": "Do a tiny but anatomically important DRAWING CORRECTION to this exact cropped right-facing male profile from a 2D game. The survivor's bowed head, eye, nose and raised scarf are already established. Focus exclusively on the mouth between the nose and the diagonal top edge of the scarf. In the input the skin under the nose runs into a little point on the scarf, with no intelligible mouth corner. Draw a believable, naturally CLOSED mouth for this precise down-tilted profile.\n\nShow a short philtrum descending back from the base of the nose to a modest upper lip, then a SHORT tapered, soft, warm umber lip seam that travels up and back toward the cheek in image coordinates. The commissure is behind the front of the lips toward the cheek; a very small, quiet compression there anchors it. Keep the actual front lip silhouette subtly stepped and the upper lip only a touch ahead of the lower. The line has a slightly fuller middle and tapers away at its far end. Allow a narrow breathing space between the corner and the scarf edge, and a glimpse of lower lip before the cloth overlaps it. Adjust ONLY the few millimetres of cloth directly below the lip if needed to make the overlap anatomically legible. Keep his expression alert, neutral and restrained, no smile, pout, lipstick or open mouth. Avoid a long straight ink line across the cheek, a deep triangular notch, a dangling hook at the mouth corner, or any pale lip highlight. The corner should look right when the crop is very small.\n\nChange only this small lower-face area. Strictly match the existing identity, pose and positions, dark eye looking downward, exact hairline and nose tip, scarf, matte muted warm/cool broken colour, clean 2D game style and the original crop and light. The mouth line should use existing mid-dark skin tones rather than black, and the upper lip should be the same earthy flesh family. No new marks away from the mouth. Return the exact complete input crop with the edited mouth, with no overlay, text or frame."
+  }
+}

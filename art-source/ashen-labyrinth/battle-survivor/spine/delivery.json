@@ -1,0 +1,18 @@
+{
+  "project": "The end",
+  "date": "2026-11-20",
+  "revision": 3,
+  "zip": "art-source/ashen-labyrinth/battle-survivor/survivor-spine-3.8.75-r3.zip",
+  "bytes": 33525286,
+  "sha256": "7914d1427523e37a0492008e4876201005c1dc95da5efb836125a356ef5915af",
+  "files": 65,
+  "zipReadback": true,
+  "relocatedEditor": {
+    "editor": "3.8.75",
+    "relocated": true,
+    "equivalentTimelinesAndSkin": true,
+    "availableImages": 35,
+    "embeddedRelativeImagePath": "./parts/",
+    "zipSha256": "7914d1427523e37a0492008e4876201005c1dc95da5efb836125a356ef5915af"
+  }
+}

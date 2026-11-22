@@ -1,0 +1,28 @@
+{
+  "project": "The end",
+  "date": "2026-11-19",
+  "title": "门前择牌 · 人物碎色画风试稿",
+  "status": "概念图，待用户评审",
+  "file": "art-source/ashen-labyrinth/threshold-card-choice-broken-color.png",
+  "width": 1586,
+  "height": 992,
+  "sha256": "c73c4179d44a7c12d879d010c01d7e1d8a7e710ff98732b6482bf6d990027a10",
+  "generator": {
+    "tool": "内置 ImageGen",
+    "modelId": null,
+    "finalCall": "call_4MdoSlH1EXlf30ZouBtOmy9V"
+  },
+  "styleReference": {
+    "file": "art-source/ashen-labyrinth/references/character-style-reference.png",
+    "sha256": "3583e32c32934b59eb0a681e8481e43b633c9da43881c74e82e00ac78dd0112a",
+    "role": "终稿直接传入的三角色参考图。取人物的色层、形体和边缘处理。"
+  },
+  "brief": "docs/designs/ashen-labyrinth-art-brief.md",
+  "sceneReference": "art-source/ashen-labyrinth/threshold-concept.png",
+  "userDirection": "破碎感指画风。人物较三角色参考稍微少一点写实感，保持二维游戏感。",
+  "rendering": "靛蓝披布的中间调混入冷灰的小片颜色，同一条褶线在亮面清楚、进暗部后减弱。手、脸和卡牌符号保留完整形状。远墙用大明暗分区。",
+  "scene": "迷宫位于画面左侧。求生者拿旧架挡牌与摊上候选作比较。守门人扶住印有返向箭头的回击牌。两人的站位和战术牌说明接下来要进入迷宫。",
+  "review": "形体与色层试稿。人物画幅比设计需求中的游戏中景更近。桌布和地面仍有连续纹理，卡面区保持简明。",
+  "assetArchive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/broken-color/threshold-card-choice-broken-color.png",
+  "recordUri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/broken-color/threshold-card-choice-broken-color.json"
+}

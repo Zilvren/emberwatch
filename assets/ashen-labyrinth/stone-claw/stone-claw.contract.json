@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-stone-claw",
+  "sourceSha256": "91f22bc827f8f038cb17531b89b907825ab3d3ae599b7f810ac174bd12e7bf33",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "stance",
+    "hull",
+    "shield",
+    "claw-arm",
+    "palm",
+    "finger",
+    "far-claw",
+    "near-fore-thigh",
+    "near-fore-shin",
+    "near-hind-thigh",
+    "near-hind-shin",
+    "far-fore-leg",
+    "far-hind-leg",
+    "fore-plant",
+    "hind-plant",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 2.5,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.74,
+      "loop": false
+    },
+    "attack": {
+      "duration": 1.05,
+      "loop": false,
+      "contact": 0.55
+    },
+    "hurt": {
+      "duration": 0.41,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.18,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    -197.9413961666371,
+    36.322896928982395
+  ],
+  "approachBone": "Approach",
+  "parts": [
+    {
+      "name": "near-hind-thigh"
+    },
+    {
+      "name": "near-fore-shin"
+    },
+    {
+      "name": "near-fore-thigh"
+    },
+    {
+      "name": "hull"
+    },
+    {
+      "name": "far-claw"
+    },
+    {
+      "name": "pincer-socket"
+    },
+    {
+      "name": "finger"
+    },
+    {
+      "name": "near-hind-shin"
+    },
+    {
+      "name": "far-hind-leg"
+    },
+    {
+      "name": "claw-arm"
+    },
+    {
+      "name": "shield"
+    },
+    {
+      "name": "palm"
+    },
+    {
+      "name": "far-fore-leg"
+    },
+    {
+      "name": "shell-underplate"
+    }
+  ]
+}

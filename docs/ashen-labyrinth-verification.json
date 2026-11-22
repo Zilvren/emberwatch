@@ -1,0 +1,125 @@
+{
+  "project": "The end",
+  "date": "2026-11-22",
+  "platform": "Pink/Cocos 4.0.0-beta.1 Web Desktop",
+  "status": "首图桌面版功能与画面自查通过",
+  "scene": "assets/TheEnd.scene",
+  "scenario": "ashen-labyrinth@1",
+  "build": {
+    "commands": [
+      "npm run typecheck",
+      "npm run check:architecture",
+      "npm test",
+      "npm run build:web"
+    ],
+    "unitPasses": 166,
+    "startupWithoutEditorApi": {
+      "scene": "TheEnd",
+      "scenario": "ashen-labyrinth",
+      "nodes": 10,
+      "starter": 12,
+      "theme": "ashen-labyrinth",
+      "enabled": [
+        "shared",
+        "calibration",
+        "defer"
+      ]
+    },
+    "entry": "build/web-desktop/index.html",
+    "buildLog": "temp/builder/log/web-desktop-build-1795291473613.log"
+  },
+  "nativeBrowser": {
+    "command": "node tools/check-labyrinth-browser.cjs",
+    "actionCount": 107,
+    "viewports": [
+      "1440×900",
+      "1024×768"
+    ],
+    "routes": [
+      {
+        "lane": "A",
+        "locationCount": 8,
+        "encounters": [
+          "ash-moth",
+          "stone-claw",
+          "ash-moth",
+          "veil-idol"
+        ],
+        "returnArmor": 7,
+        "shelterReload": true
+      },
+      {
+        "lane": "B",
+        "locationCount": 7,
+        "encounters": [
+          "ash-moth",
+          "veil-idol"
+        ],
+        "returnArmor": 10,
+        "shelterReload": true
+      }
+    ],
+    "normalSpeedAttacks": [
+      "ash-moth",
+      "stone-claw",
+      "veil-idol"
+    ],
+    "cardBackFlewDuringIdle": true,
+    "selectedCardAppearedInNextBattle": true,
+    "pendingOfferReload": true,
+    "legacySaveContinuedInItsChapter": true,
+    "editor": {
+      "selectedOneDeck": [
+        "lab_calibration",
+        "lab_bracelet",
+        "lab_valve"
+      ],
+      "deselectAllSkippedOffer": true
+    },
+    "runtimeErrors": [],
+    "consoleErrors": [],
+    "report": "output/playwright/ashen-labyrinth/verification.json",
+    "screenshots": [
+      "output/playwright/ashen-labyrinth/02-ten-node-map.png",
+      "output/playwright/ashen-labyrinth/03-ash-moth.png",
+      "output/playwright/ashen-labyrinth/03-stone-claw.png",
+      "output/playwright/ashen-labyrinth/03-veil-idol.png",
+      "output/playwright/ashen-labyrinth/04-flying-back.png",
+      "output/playwright/ashen-labyrinth/05-smaller-viewport.png",
+      "output/playwright/ashen-labyrinth/06-discovery.png",
+      "output/playwright/ashen-labyrinth/08-shelter.png",
+      "output/playwright/ashen-labyrinth/09-deck-editor.png"
+    ]
+  },
+  "legacyBrowser": {
+    "command": "npm run test:tide-browser",
+    "actionCount": 75,
+    "report": "output/playwright/core-loop/browser-tide-expedition/browser-report.json",
+    "passed": true
+  },
+  "balance": {
+    "command": "node tools/labyrinth-balance.cjs",
+    "strategy": "两种固定出牌策略，用基础牌，不拿发现奖励",
+    "runs": 768,
+    "returned": 768,
+    "report": "output/playwright/ashen-labyrinth/balance.json"
+  },
+  "visualReview": {
+    "checked": [
+      "角色和怪物站位",
+      "地图全貌",
+      "手牌费用与效果",
+      "独立牌背",
+      "发现选项",
+      "休整与避难所",
+      "卡牌工坊"
+    ],
+    "cardIllustrations": 23,
+    "source": "art-source/ashen-labyrinth/interface/",
+    "pending": [
+      "用户美术确认",
+      "玩家长期平衡",
+      "移动端"
+    ]
+  }
+}

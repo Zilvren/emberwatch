@@ -1,0 +1,157 @@
+{
+  "project": "The end",
+  "date": "2026-11-17",
+  "timezone": "Asia/Shanghai",
+  "recordedAt": "2026-11-17T15:10:40.737Z",
+  "objective": "修正仅导出动作预览场景的问题，交付当前主游戏场景的 Web 包。",
+  "status": "SUPPORTED_WITH_VISUAL_ISSUE",
+  "original": {
+    "directory": "build/web-desktop-001",
+    "startScene": "db://assets/ActorMotionReview.scene",
+    "scenes": [
+      {
+        "uuid": "5426ca0d-7b75-457c-b725-ba5a0669b471",
+        "url": "db://assets/ActorMotionReview.scene"
+      }
+    ]
+  },
+  "export": {
+    "directory": "build/web-desktop-game",
+    "config": "temp/web-game-export-build-config.json",
+    "sourceConfig": "build-config.json",
+    "sourceStartScene": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e",
+    "launchScene": "db://assets/TheEnd.scene",
+    "scenes": [
+      {
+        "url": "db://assets/TheEnd.scene",
+        "uuid": "86d36187-47fe-4fe2-8e38-2e48b58dcf9e"
+      }
+    ],
+    "remoteBundles": [],
+    "preview": "http://127.0.0.1:7477/"
+  },
+  "build": {
+    "command": "node tools/pink.cjs build --project . --platform web-desktop --build-config temp/web-game-export-build-config.json",
+    "exitCode": 0,
+    "log": "temp/web-game-export-build.log",
+    "environmentRetry": "首次受限构建生成文件后，因 SDK AppData 缓存 EPERM 在清理阶段退出 1；使用相同命令取得所需写入权限后重新构建，最终退出 0。"
+  },
+  "browser": {
+    "report": "output/playwright/web-game-export-20261117/browser-report.json",
+    "session": "the-end-export-game-20261117",
+    "passed": true,
+    "productionStamina": true,
+    "entrySelectionAndCancel": true,
+    "entryPaidOnce": true,
+    "noSupplyCarryWeight": true,
+    "cardUnit": "体力",
+    "paidCardDoesNotSpendSupplies": true,
+    "turnRefresh": true,
+    "saveResume": true,
+    "cancelledDragFree": true,
+    "newBattleRefresh": true,
+    "dailySettlementRemoved": true,
+    "fullRouteA": true,
+    "smallViewport": true,
+    "actions": 55,
+    "runtimeErrors": [],
+    "consoleErrors": []
+  },
+  "zip": {
+    "path": "build/the-end-web-game.zip",
+    "bytes": 72155577,
+    "sha256": "0a5dbc3b27d1f264c8d153cfcc6dd09cb510a5fe5430d136e8574aaa70e998d6",
+    "passed": true,
+    "launchScene": "db://assets/TheEnd.scene",
+    "files": 263,
+    "requiredFiles": [
+      "web-desktop-game/index.html",
+      "web-desktop-game/src/settings.json",
+      "web-desktop-game/README.txt",
+      "web-desktop-game/assets/main/config.json"
+    ],
+    "sourceFiles": 263
+  },
+  "evidenceMatrix": [
+    {
+      "claim": "导出启动主游戏 TheEnd 场景",
+      "status": "SUPPORTED",
+      "evidence": [
+        "build/web-desktop-game/src/settings.json",
+        "temp/web-game-export-zip-verification.json"
+      ]
+    },
+    {
+      "claim": "Pink/Cocos Web 原生构建完成",
+      "status": "SUPPORTED",
+      "exitCode": 0,
+      "evidence": [
+        "temp/web-game-export-build.log"
+      ]
+    },
+    {
+      "claim": "已测主游戏路线和交互正常",
+      "status": "SUPPORTED",
+      "actions": 55,
+      "evidence": [
+        "output/playwright/web-game-export-20261117/browser-report.json"
+      ]
+    },
+    {
+      "claim": "独立 QA 存档恢复正常",
+      "status": "SUPPORTED",
+      "evidence": [
+        "output/playwright/web-game-export-20261117/browser-report.json"
+      ]
+    },
+    {
+      "claim": "角色画面无明显瑕疵",
+      "status": "FAILED",
+      "observation": "战斗和避难所截图中，角色多个部位周围出现黑底矩形。该问题未在本次导出工作中修复。",
+      "viewedScreenshots": [
+        "output/playwright/web-game-export-20261117/stamina-battle.png",
+        "output/playwright/web-game-export-20261117/stamina-shelter.png"
+      ]
+    },
+    {
+      "claim": "用户最终画面认可",
+      "status": "NEEDS EVIDENCE",
+      "reason": "本次未取得用户对新导出画面的最终认可。"
+    },
+    {
+      "claim": "其他平台或线上发布",
+      "status": "NOT APPLICABLE",
+      "reason": "仅本地 Web Desktop 导出与测试。"
+    }
+  ],
+  "sourceProtection": {
+    "workflowWritesToSourceAssets": false,
+    "beforeInspection": "temp/web-game-export-inspection.json",
+    "afterInspection": "temp/web-game-export-inspection-after.json",
+    "status": "CONCURRENT_CHANGES_OBSERVED",
+    "changedFiles": [
+      "assets/game/presentation/actors/SpineActorRig.ts",
+      "assets/game/presentation/actors/SpineRigGeometry.ts",
+      "assets/resources/actors/spine08/brute-parts.png",
+      "assets/resources/actors/spine08/brute.contract.json",
+      "assets/resources/actors/spine08/brute.json",
+      "assets/resources/actors/spine08/survivor-parts.png",
+      "assets/resources/actors/spine08/survivor.atlas",
+      "assets/resources/actors/spine08/survivor.contract.json",
+      "assets/resources/actors/spine08/survivor.json",
+      "assets/resources/actors/spine08/wanderer-parts.png",
+      "assets/resources/actors/spine08/wanderer.contract.json"
+    ],
+    "note": "本次工作只新建构建配置、导出文件、说明和证据。期间检测到其他来源对角色脚本与贴图的改动，未回滚或改写；不能声称工作区整体哈希不变。"
+  },
+  "limitations": [
+    "流程验证覆盖已测路线 A 及报告列明的交互，不代表所有种子或其他平台。",
+    "角色黑底矩形是已观察到的画面问题，技术通过不表示发布品质通过。",
+    "工作区角色资源期间并发变化，结论对应实际测试的导出包。"
+  ],
+  "openViking": {
+    "documentation": "viking://~/resources/projects/the-end/docs/web-game-export.md",
+    "verification": "viking://~/resources/projects/the-end/docs/web-game-export-verification.json",
+    "readme": "viking://~/resources/projects/the-end/docs/web-game-export-readme.txt"
+  }
+}

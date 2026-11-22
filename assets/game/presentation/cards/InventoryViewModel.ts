@@ -2,7 +2,7 @@ import type { GameReadModel } from '../../core/GameReadModel';
 import type { OwnedCard } from '../../core/SurvivalGame';
 import { effectSummary } from '../../core/content/CardCatalog';
 
-export type BagFilter = 'all' | 'deck' | 'overflow';
+export type BagFilter = 'all' | 'deck' | 'overflow' | 'found';
 export type BagSort = 'original' | 'name' | 'cost' | 'weight';
 export function visibleInventory(
     game: GameReadModel,
@@ -13,9 +13,13 @@ export function visibleInventory(
     const cards = source.filter(
         (card) =>
             filter === 'all' ||
-            (filter === 'overflow'
-                ? card.zone === 'overflow'
-                : card.zone === 'base' && card.selected && card.kind !== 'cash')
+            (game.scenario.fieldDeck
+                ? filter === 'found'
+                    ? card.found
+                    : !card.found
+                : filter === 'overflow'
+                  ? card.zone === 'overflow'
+                  : card.zone === 'base' && card.selected && card.kind !== 'cash')
     );
     if (sort !== 'original')
         cards.sort((a, b) => {
@@ -46,16 +50,22 @@ export function inventoryCardView(card: Readonly<OwnedCard>, game: GameReadModel
             discardLabel: canDiscard ? '丢弃物资卡' : '当前仅可查看',
         };
     }
-    const status =
-        card.zone === 'overflow'
-            ? '暂存 · 不可战斗'
-            : card.kind === 'cash'
-              ? '旧物 · 不进入抽牌'
-              : card.selected
-                ? '已编入出战'
-                : '携带 · 未编入';
-    const canToggle = game.phase === 'rest' && card.zone === 'base' && card.kind !== 'cash';
+    const field = !!game.scenario.fieldDeck;
+    const status = field
+        ? card.found
+            ? '本次发现'
+            : '基础牌组'
+        : card.zone === 'overflow'
+          ? '暂存 · 不可战斗'
+          : card.kind === 'cash'
+            ? '旧物 · 不进入抽牌'
+            : card.selected
+              ? '已编入出战'
+              : '携带 · 未编入';
+    const canToggle =
+        !field && game.phase === 'rest' && card.zone === 'base' && card.kind !== 'cash';
     const canDiscard =
+        !field &&
         (game.phase === 'rest' || game.phase === 'rewards') &&
         card.kind !== 'attack' &&
         card.kind !== 'dodge' &&

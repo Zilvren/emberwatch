@@ -1,0 +1,58 @@
+// Install the exported character as a native prefab and build its separate, selectable motion review.
+const fs=require('node:fs');
+const path=require('node:path');
+const crypto=require('node:crypto');
+const {root,read,ref,vec,asset,uuid,script,ensureMeta,Graph,cleanComponent,spriteTemplate}=require('../native-assets.cjs');
+const {dir}=require('./survivor-battle.cjs');
+const file='assets/prefabs/actors/AshenSurvivor.prefab';
+const sceneFile='assets/SurvivorSpineReview.scene';
+const folder='assets/ashen-survivor';
+const source=path.join(dir,'runtime');
+const info=JSON.parse(fs.readFileSync(path.join(dir,'export-report.json')));
+function seed(file,template,userData={}){
+  const out=path.join(root,file+'.meta');
+  if(fs.existsSync(out))return read(file+'.meta').uuid;
+  const m=read(template+'.meta'),id=crypto.randomUUID();
+  fs.writeFileSync(out,JSON.stringify({ver:m.ver,importer:m.importer,imported:false,uuid:id,files:[],subMetas:{},userData},null,2)+'\n');
+  return id;
+}
+fs.mkdirSync(path.join(root,folder),{recursive:true});
+for(const f of ['survivor.json','survivor.atlas',...info.atlasPages])fs.copyFileSync(path.join(source,f),path.join(root,folder,f));
+const backdrop='light-cut-passage.png';
+fs.copyFileSync(path.join(dir,'../../battle-bestiary/backgrounds',backdrop),path.join(root,folder,backdrop));
+const atlas=seed(folder+'/survivor.atlas','assets/resources/tide/surveyor.atlas');
+const skeleton=seed(folder+'/survivor.json','assets/resources/tide/surveyor.json',{atlasUuid:atlas});
+for(const pg of info.atlasPages)seed(folder+'/'+pg,'assets/resources/tide/surveyor.png',{type:'texture',hasAlpha:true,fixAlphaTransparencyArtifacts:false});
+const bgId=seed(folder+'/'+backdrop,'assets/resources/tide/sluice.png',{type:'sprite-frame',hasAlpha:false});
+seed('assets/game/presentation/actors/SurvivorSpineReview.ts','assets/game/presentation/actors/ActorMotionReview.ts');
+ensureMeta(file,'prefab');
+const prefab=new Graph(file,'AshenSurvivor');
+const actor=prefab.node('AshenSurvivor',null,0,0,450,450);
+const template=read('assets/prefabs/actors/PlayerActor.prefab').find(c=>c.__type__==='sp.Skeleton');
+prefab.component(actor,'sp.Skeleton',{...cleanComponent(template),_skeletonData:asset(skeleton,'sp.SkeletonData'),defaultSkin:'default',defaultAnimation:'idle',loop:true,_premultipliedAlpha:false,_cacheMode:0});
+prefab.save();
+
+const sceneId=ensureMeta(sceneFile,'scene'),scene=new Graph(sceneFile,'SurvivorSpineReview');
+const assetScene=scene.graph[scene.graph[0].scene.__id__];
+scene.graph[0]._name=assetScene._name='SurvivorSpineReview';assetScene._id=sceneId;
+const canvas=scene.root;
+scene.graph[canvas]._children=scene.graph[canvas]._children.filter(c=>scene.graph[c.__id__]._name==='Camera');
+scene.root=scene.node('SurvivorSpineReview',canvas);const base=scene.root;
+const bg=scene.node('LabyrinthPassage',base,0,0,1440,900);
+const spriteId=Object.values(read(folder+'/'+backdrop+'.meta').subMetas).find(c=>c.importer==='sprite-frame')?.uuid||bgId+'@f9941';
+scene.component(bg,'cc.Sprite',{...cleanComponent(spriteTemplate),_spriteFrame:asset(spriteId,'cc.SpriteFrame'),_sizeMode:0,_type:0,_isTrimmedMode:false});
+const actorX=-108,baseline=-258;
+scene.shape('FootShadow',actorX+3,baseline,128,13,'322c3b',53,true);
+const mount=scene.node('ActorStage',base,actorX,baseline,1,1);scene.graph[mount]._lscale=vec(1.38,1.38,1);
+scene.root=mount;const hero=scene.linked(file,'Survivor',0,0);scene.root=base;
+scene.shape('ControlsBackground',0,-389,1440,122,'2a2530',232);
+const status=scene.label('CurrentMotion','青年求生者  ·  待机',0,-348,1000,40,22,'eee0d0');
+const actions=[['Idle','待机','playIdle'],['Prepare','取牌','playPrepare'],['Attack','出牌','playAttack'],['Hurt','受击','playHurt'],['Death','倒下','playDeath'],['Sequence','连播','playSequence'],['Speed','速度 ×1','toggleSpeed'],['Pause','暂停','togglePause']];
+const buttons=actions.map(([id,title,method],i)=>scene.button(id,title,(i-3.5)*171,-402,method,'SurvivorSpineReview'));
+scene.component(base,script('SurvivorSpineReview'),{actor:ref(hero),status:ref(status.label),speedCaption:ref(buttons[6].caption),pauseCaption:ref(buttons[7].caption)});
+const pref=scene.graph[assetScene._prefab.__id__];pref.fileId=sceneId;pref.nestedPrefabInstanceRoots=scene.links;
+scene.save();
+const config=read('build-actor-review.json');
+Object.assign(config,{name:'the-end-survivor-spine-review',outputName:'survivor-spine-review',startScene:sceneId,scenes:[{url:'db://'+sceneFile,uuid:sceneId}]});
+fs.writeFileSync(path.join(root,'build-survivor-review.json'),JSON.stringify(config,null,2)+'\n');
+console.log(JSON.stringify({scene:sceneFile,id:sceneId,prefab:file,skeleton,atlas,texturePages:info.atlasPages.length}));

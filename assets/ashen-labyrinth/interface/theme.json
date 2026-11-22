@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "name": "ashen-labyrinth",
+  "colors": {
+    "canvas": "#1e1a26",
+    "paper": "#2b2634",
+    "paperShade": "#393240",
+    "paperSelected": "#42334c",
+    "ink": "#f4e6d3",
+    "muted": "#c4b5c8",
+    "line": "#776579",
+    "lineSoft": "#504554",
+    "ochre": "#d3b286",
+    "olive": "#a4b49f",
+    "brown": "#947255",
+    "danger": "#f2aa8e",
+    "disabled": "#312833"
+  },
+  "button": {
+    "height": 48,
+    "compactHeight": 38,
+    "largeHeight": 54,
+    "paddingX": 14,
+    "fontSize": 18,
+    "lineWidth": 1.15,
+    "pressOffset": 2,
+    "pressScale": 0.99,
+    "pressDuration": 0.09,
+    "focusLine": "#e4c493",
+    "disabledFill": "#34303d",
+    "disabledLine": "#53495a",
+    "disabledText": "#b2a5b6",
+    "variants": {
+      "primary": {
+        "fill": "#c7a779",
+        "hover": "#e0c092",
+        "pressed": "#b38f63",
+        "line": "#d9bc92",
+        "activeLine": "#f3d2a0",
+        "text": "#211923"
+      },
+      "secondary": {
+        "fill": "#332b3b",
+        "hover": "#4a3b52",
+        "pressed": "#413447",
+        "line": "#8b7485",
+        "activeLine": "#c1a5be",
+        "text": "#f0dfd0"
+      },
+      "quiet": {
+        "fill": "#2b2634",
+        "hover": "#41374a",
+        "pressed": "#4b3c52",
+        "line": "#5f5263",
+        "activeLine": "#c2a997",
+        "text": "#eddecb"
+      },
+      "danger": {
+        "fill": "#55393d",
+        "hover": "#754c4e",
+        "pressed": "#674344",
+        "line": "#9c6b67",
+        "activeLine": "#d69985",
+        "text": "#f6e4d8"
+      }
+    },
+    "darkDisabledFill": "#34303d",
+    "darkDisabledLine": "#59505d",
+    "darkDisabledText": "#ada0af",
+    "darkQuietHover": "#4b3c50",
+    "darkQuietPressed": "#57445a",
+    "darkFocusLine": "#e4c493",
+    "darkQuietText": "#f0dfce"
+  },
+  "card": {
+    "width": 224,
+    "height": 340,
+    "padding": 10,
+    "radius": 7,
+    "lineWidth": 1.4,
+    "titleSize": 22,
+    "bodySize": 16,
+    "smallSize": 12,
+    "hoverLift": 10,
+    "hoverScale": 1.02,
+    "readingLift": 113,
+    "typeText": "#d1b08a"
+  },
+  "panel": {
+    "padding": 28,
+    "margin": 20,
+    "gap": 14,
+    "buttonHeight": 50,
+    "titleSize": 28,
+    "bodySize": 18,
+    "lineHeight": 29,
+    "subtitleSize": 14,
+    "lineWidth": 1.1,
+    "backdrop": "#191520",
+    "backdropAlpha": 190
+  },
+  "hud": {
+    "height": 80,
+    "buttonHeight": 38,
+    "labelSize": 13,
+    "valueSize": 22,
+    "hintSize": 12,
+    "warning": "#e1af79",
+    "wideMin": 1180,
+    "compactMin": 720
+  }
+}

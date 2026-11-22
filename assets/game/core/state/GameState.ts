@@ -10,6 +10,7 @@ import {
     validMilestoneId,
 } from '../content/JournalCatalog';
 import type { Battle, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
+import { CALM_LIMIT, CALM_PER_TURN, MAX_CALM_LIMIT, MAX_BONUS_STAMINA } from '../systems/LabyrinthCombat';
 export interface GameState {
     schemaVersion: 2;
     scenarioId: string;
@@ -31,6 +32,7 @@ export interface GameState {
     fixedDone: boolean;
     pathIndex: number;
     visited: NodeKind[];
+    discoveryPool?: string[];
     battle: Battle | null;
     rewards: Rewards | null;
     settlement: Settlement | null;
@@ -132,7 +134,6 @@ export function validateGameState(
     s.logs.forEach((v) => text(v, 'log'));
     list(s.visited, 100, 'visited');
     s.visited.forEach((v) => requireValue(v, hasId(scenario.nodes, v), 'visited node'));
-    list(s.cards, scenario.runDeck ? Number.MAX_SAFE_INTEGER : 100, 'cards');
     if (s.storedSupplies !== undefined) {
         object(s.storedSupplies, 'stored supplies');
         for (const kind of Object.keys(s.storedSupplies)) {
@@ -140,6 +141,16 @@ export function validateGameState(
             integer(s.storedSupplies[kind], 1, Number.MAX_SAFE_INTEGER, 'stored supply count');
         }
     }
+    if (scenario.labyrinth && ['map', 'battle', 'rest', 'rewards'].indexOf(s.phase) >= 0)
+        requireValue(s.discoveryPool, Array.isArray(s.discoveryPool), 'expedition discovery pool');
+    if (s.discoveryPool !== undefined) {
+        list(s.discoveryPool, 200, 'discovery pool');
+        requireValue(s.discoveryPool, !!scenario.labyrinth &&
+            new Set(s.discoveryPool).size === s.discoveryPool.length &&
+            s.discoveryPool.every((kind) => typeof kind === 'string' && definitions[kind]?.chapter === 'ashen-labyrinth'),
+            'discovery pool references');
+    }
+    list(s.cards, scenario.runDeck ? Number.MAX_SAFE_INTEGER : scenario.fieldDeck ? 10000 : 100, 'cards');
     const owned = new Set<string>(),
         combat = new Set<string>();
     let highestId = 0;
@@ -192,7 +203,18 @@ export function validateGameState(
     const overflowWeight = s.cards
         .filter((c) => c.zone === 'overflow')
         .reduce((n, c) => n + definitions[c.kind].weight, 0);
-    requireValue(baseWeight, baseWeight <= 30 && overflowWeight <= 10, 'inventory weight');
+    if (scenario.fieldDeck) {
+        requireValue(
+            s.cards,
+            s.cards.every(
+                (c) =>
+                    c.selected &&
+                    c.zone === 'base' &&
+                    (definitions[c.kind].role === 'normal' || definitions[c.kind].role === 'basic')
+            ),
+            'field deck'
+        );
+    } else requireValue(baseWeight, baseWeight <= 30 && overflowWeight <= 10, 'inventory weight');
     requireValue(s.battle, (s.phase === 'battle') === (s.battle !== null), 'battle phase');
     if (s.battle) {
         const b = s.battle;
@@ -208,12 +230,37 @@ export function validateGameState(
         if (scenario.battleResource === 'stamina') {
             const budget = entryTier(savedTier)!.stamina;
             integer(b.maxStamina, budget, budget, 'maxStamina');
-            integer(b.stamina, 0, budget, 'stamina');
+            integer(b.stamina, 0, scenario.labyrinth ? MAX_BONUS_STAMINA : budget, 'stamina');
         } else {
             integer(b.maxStamina ?? 0, 0, 0, 'legacy maxStamina');
             integer(b.stamina ?? 0, 0, 0, 'legacy stamina');
         }
         flag(b.boosted, 'boosted');
+        if (scenario.fieldDeck) flag(b.attackedThisTurn, 'attack history');
+        if (b.coreExposed !== undefined) {
+            flag(b.coreExposed, 'core exposed');
+            requireValue(
+                b.coreExposed,
+                !!scenario.enemies[b.enemy].discoverAtHalf && b.hp * 2 <= b.maxHp,
+                'elite discovery'
+            );
+        }
+        if (b.discovery !== undefined) {
+            list(b.discovery, 3, 'discovery');
+            requireValue(
+                b.discovery,
+                !!scenario.fieldDeck && !scenario.labyrinth &&
+                    (b.turn === 1 || !!b.coreExposed) &&
+                    b.discovery.length > 0 &&
+                    new Set(b.discovery).size === b.discovery.length &&
+                    b.discovery.every(
+                        (kind) =>
+                            Object.prototype.hasOwnProperty.call(definitions, kind) &&
+                            definitions[kind].role === 'normal'
+                    ),
+                'discovery options'
+            );
+        }
         requireValue(b.intent, b.intent === 'attack' || b.intent === 'prepare', 'intent');
         for (const [name, cards] of [
             ['draw', b.draw],
@@ -235,6 +282,32 @@ export function validateGameState(
                 'weapon'
             );
         }
+        if (scenario.labyrinth) {
+            const calm = b.calm!;
+            object(calm, 'calm');
+            integer(calm.limit, CALM_LIMIT, MAX_CALM_LIMIT, 'calm limit');
+            integer(calm.persistent, 0, calm.limit, 'persistent calm');
+            integer(calm.temporary, 0, calm.limit - calm.persistent, 'temporary calm');
+            integer(calm.applied, 0, CALM_PER_TURN, 'calm applied this turn');
+            integer(calm.spent, 0, MAX_CALM_LIMIT + CALM_PER_TURN, 'calm spent this turn');
+            integer(calm.guardPerLayer, 0, 12, 'guard per layer');
+            integer(calm.drawOnDefer, 0, 6, 'draw on defer');
+            integer(calm.counter, 0, 12, 'deferred counter');
+            flag(calm.calibrated, 'calibrated');
+            flag(calm.freeSkill, 'free skill');
+            requireValue(calm.deferred, [null, 'scheduled', 'extra-turn'].indexOf(calm.deferred) >= 0, 'defer state');
+            requireValue(calm.retained, calm.retained === null || b.hand.some((c) => c.id === calm.retained), 'retained hand card');
+            if (b.cardChoice !== undefined) {
+                const choice = b.cardChoice;
+                object(choice, 'combat card choice');
+                list(choice.ids, 10000, 'combat choice ids');
+                const choices = choice.mode === 'discard-to-top' ? b.discard
+                    : choice.mode === 'retain-hand' ? b.hand : null;
+                requireValue(choice.ids, !!choices && choice.ids.length > 0 &&
+                    new Set(choice.ids).size === choice.ids.length &&
+                    choice.ids.every((id) => choices.some((c) => c.id === id)), 'combat card choice');
+            }
+        } else requireValue(b.calm, b.calm === undefined && b.cardChoice === undefined, 'legacy combat effects');
     }
     requireValue(s.rewards, (s.phase === 'rewards') === (s.rewards !== null), 'rewards phase');
     if (s.rewards) {
@@ -245,6 +318,10 @@ export function validateGameState(
         flag(r.supplyTaken, 'supplyTaken');
         flag(r.cardTaken, 'cardTaken');
         list(r.cards, 3, 'reward cards');
+        if (scenario.labyrinth)
+            requireValue(r.discovery, r.discovery === true && r.supplyTaken && r.cards.length > 0 &&
+                new Set(r.cards).size === r.cards.length && r.cards.every((kind) => (s.discoveryPool?.indexOf(kind) ?? -1) >= 0),
+                'labyrinth reward candidates');
         r.cards.forEach((kind) =>
             requireValue(
                 kind,
@@ -265,6 +342,8 @@ export function validateGameState(
             integer(t[key], 0, 100000, key);
         flag(t.repaired, 'repaired');
         flag(t.wasCritical, 'wasCritical');
+        if (t.discoveredCards !== undefined)
+            integer(t.discoveredCards, 0, 100000, 'discovered cards');
         list(t.lostOverflow, 100, 'lostOverflow');
         t.lostOverflow.forEach((v) => text(v, 'lost card'));
     }
@@ -291,6 +370,7 @@ export function validateGameState(
         fixedDone: s.fixedDone,
         pathIndex: s.pathIndex,
         visited: s.visited,
+        ...(s.discoveryPool === undefined ? {} : { discoveryPool: s.discoveryPool }),
         battle: s.battle
             ? { ...s.battle, stamina: s.battle.stamina ?? 0, maxStamina: s.battle.maxStamina ?? 0 }
             : null,
@@ -299,6 +379,9 @@ export function validateGameState(
             ? {
                   returnedSupplies: s.settlement.returnedSupplies,
                   returnedCards: s.settlement.returnedCards,
+                  ...(s.settlement.discoveredCards !== undefined
+                      ? { discoveredCards: s.settlement.discoveredCards }
+                      : {}),
                   lostOverflow: s.settlement.lostOverflow,
                   wasCritical: s.settlement.wasCritical,
                   repairCost: s.settlement.repairCost,

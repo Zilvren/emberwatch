@@ -1,0 +1,266 @@
+{
+  "project": "The end",
+  "date": "2026-11-21",
+  "status": "visual review draft",
+  "source": {
+    "art_source": "host_image",
+    "tool": "built-in ImageGen",
+    "sheet": "source-sheet.png",
+    "prompt": "prompt.txt",
+    "source_sha256": "489932d22cbb36d578873542b17af5cc0dabd51837bf26e81f2389eb33705044",
+    "references": [
+      {
+        "path": "art-source/ashen-labyrinth/battle-survivor/turnaround-golden.png",
+        "sha256": "4c266904e6f1a6f40d6b4b230e5fa5e8c7d87d6fcfe8a36272189cacbe59b26d"
+      },
+      {
+        "path": "art-source/ashen-labyrinth/battle-survivor/frames/source/model-cel.png",
+        "sha256": "6046a0a98fb5c1620f4b8065353d6e6c2ea18dedf11eb262a8642dd6bf51f2e1"
+      },
+      {
+        "path": "art-source/ashen-labyrinth/battle-survivor/frames/preview/native-gesture-strip.png",
+        "sha256": "4999162721d5e5bc8aac59cde608cb148e4b874ecf4eb8a01a43d102b427c3fe"
+      }
+    ],
+    "cards": {
+      "path": "assets/ashen-survivor-frames/survivor-props.png",
+      "sha256": "9eba3162b27d6e5f75b869e2d003e550b70946f452685e94754b3a60f470c1c0"
+    }
+  },
+  "agent_sprite_forge_commit": "25203d03900b46b444bdd72a75768c33d1895ad6",
+  "alpha_cleanup": {
+    "mode": "both",
+    "floor": 12,
+    "solid_min": 32,
+    "attach_radius": 2,
+    "connectivity": 8,
+    "floor_px": 731262,
+    "detached_px": 1,
+    "detached_components": 1,
+    "max_removed_alpha": 13
+  },
+  "registration": {
+    "canvas": [
+      400,
+      456
+    ],
+    "anchor": [
+      128,
+      441
+    ],
+    "ground_y_by_frame": [
+      441,
+      441,
+      441,
+      441,
+      441,
+      441,
+      441,
+      441
+    ],
+    "boot_x_span_by_frame": [
+      [
+        94,
+        161
+      ],
+      [
+        94,
+        161
+      ],
+      [
+        94,
+        161
+      ],
+      [
+        95,
+        161
+      ],
+      [
+        94,
+        161
+      ],
+      [
+        95,
+        161
+      ],
+      [
+        94,
+        161
+      ],
+      [
+        95,
+        161
+      ]
+    ],
+    "crop_boxes_file": "source-crops.json"
+  },
+  "motion": {
+    "selected": "guard",
+    "duration_ms": 1200,
+    "release_ms": 440,
+    "source_frame_count": 8,
+    "exposure_ms": [
+      120,
+      80,
+      120,
+      120,
+      40,
+      120,
+      160,
+      440
+    ],
+    "contact_gap_px": 1.0,
+    "unselected_card_center_pixels_static": {
+      "lantern": true,
+      "repel": true
+    },
+    "card_placement": {
+      "asset": "assets/ashen-survivor-frames/survivor-props.png",
+      "cardSize": [
+        20,
+        28
+      ],
+      "stationaryCards": {
+        "lantern": [
+          193,
+          169,
+          12
+        ],
+        "repel": [
+          296,
+          91,
+          -11
+        ]
+      },
+      "guardByFrame": [
+        [
+          246,
+          137,
+          0
+        ],
+        [
+          246,
+          137,
+          0
+        ],
+        [
+          246,
+          132,
+          0
+        ],
+        [
+          246,
+          127,
+          0
+        ],
+        [
+          246,
+          127,
+          0
+        ],
+        [
+          300,
+          136,
+          -32
+        ],
+        [
+          352,
+          142,
+          -66
+        ],
+        null
+      ],
+      "bodyOffset": [
+        0,
+        10
+      ],
+      "contactSheetPixel": [
+        235,
+        127
+      ]
+    }
+  },
+  "preview": {
+    "gif": "survivor-guard-flick.gif",
+    "gif_duration_ms": 1200,
+    "gif_frames": 8,
+    "webp": "clip/clips/clip-00.webp",
+    "webp_checks": {
+      "file": "clips/clip-00.webp",
+      "decoded_frames": [
+        {
+          "index": 0,
+          "start_ms": 0,
+          "duration_ms": 120,
+          "clip_positions": [
+            0
+          ]
+        },
+        {
+          "index": 1,
+          "start_ms": 120,
+          "duration_ms": 80,
+          "clip_positions": [
+            1
+          ]
+        },
+        {
+          "index": 2,
+          "start_ms": 200,
+          "duration_ms": 120,
+          "clip_positions": [
+            2
+          ]
+        },
+        {
+          "index": 3,
+          "start_ms": 320,
+          "duration_ms": 120,
+          "clip_positions": [
+            3
+          ]
+        },
+        {
+          "index": 4,
+          "start_ms": 440,
+          "duration_ms": 40,
+          "clip_positions": [
+            4
+          ]
+        },
+        {
+          "index": 5,
+          "start_ms": 480,
+          "duration_ms": 120,
+          "clip_positions": [
+            5
+          ]
+        },
+        {
+          "index": 6,
+          "start_ms": 600,
+          "duration_ms": 160,
+          "clip_positions": [
+            6
+          ]
+        },
+        {
+          "index": 7,
+          "start_ms": 760,
+          "duration_ms": 440,
+          "clip_positions": [
+            7
+          ]
+        }
+      ],
+      "decoded_frame_count": 8,
+      "total_duration_ms": 1200,
+      "native_loop_count": 1,
+      "timeline_verified": true,
+      "alpha_and_visible_rgb_exact": true,
+      "hidden_rgb_guaranteed": false,
+      "lossless": true,
+      "file_sha256": "0fd155f3260fdc5e43943f03fd804f2613172005a2334e0837042eb06f5b46a8"
+    }
+  }
+}

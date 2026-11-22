@@ -1,0 +1,602 @@
+{
+  "actor": "veil-idol",
+  "source": "../monster-concepts.png",
+  "sourceSha256": "85f47145ec5fab61f305e6f5c5c201cd6488410d94f3cfabef69468bae0b9122",
+  "jointUnderpaint": "source-parts.png",
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    1334,
+    895
+  ],
+  "scale": 0.41,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "plinth",
+      "bone": "plinth",
+      "sourceXYWH": [
+        1080,
+        608,
+        455,
+        293
+      ],
+      "png": [
+        455,
+        293
+      ],
+      "sha256": "9c4a32ce9705f57d2b01469923bd2060fa697f3b0bb181d13f92a2a941c973aa",
+      "pivotUV": [
+        0.558242,
+        0.979522
+      ],
+      "setupPivot": [
+        0,
+        0
+      ],
+      "size": [
+        186.55,
+        120.13
+      ],
+      "angle": 0,
+      "visiblePixels": 52279,
+      "hiddenPixels": 12014,
+      "reconstructionCell": 11
+    },
+    {
+      "name": "robe",
+      "bone": "robe",
+      "sourceXYWH": [
+        1128,
+        200,
+        397,
+        634
+      ],
+      "png": [
+        397,
+        634
+      ],
+      "sha256": "99ab91b03ae5234a95929497f93b568f09f08b5413a16426740f713eae37854d",
+      "pivotUV": [
+        0.458438,
+        0.782334
+      ],
+      "setupPivot": [
+        -9.84,
+        81.59
+      ],
+      "size": [
+        162.77,
+        259.94
+      ],
+      "angle": 0,
+      "visiblePixels": 51401,
+      "hiddenPixels": 33988,
+      "reconstructionCell": 3
+    },
+    {
+      "name": "neck",
+      "bone": "neck",
+      "sourceXYWH": [
+        1223,
+        86,
+        182,
+        136
+      ],
+      "png": [
+        182,
+        136
+      ],
+      "sha256": "7b67ad02059942f92ce2a732b9ea2b8dc939df25df7d502906c5a388e4ce4bf7",
+      "pivotUV": [
+        0.516484,
+        0.882353
+      ],
+      "setupPivot": [
+        -6.97,
+        282.49
+      ],
+      "size": [
+        74.62,
+        55.76
+      ],
+      "angle": 0,
+      "visiblePixels": 3594,
+      "hiddenPixels": 2923,
+      "reconstructionCell": 1
+    },
+    {
+      "name": "mask",
+      "bone": "mask",
+      "sourceXYWH": [
+        1244,
+        24,
+        133,
+        150
+      ],
+      "png": [
+        133,
+        150
+      ],
+      "sha256": "9efff3d2aa5c623299d877e5a518e7d7e5b2eb441ae7910973dd5b3f84ff02dc",
+      "pivotUV": [
+        0.43609,
+        0.586667
+      ],
+      "setupPivot": [
+        -13.12,
+        321.03
+      ],
+      "size": [
+        54.53,
+        61.5
+      ],
+      "angle": 0,
+      "visiblePixels": 6735,
+      "hiddenPixels": 0,
+      "reconstructionCell": 0
+    },
+    {
+      "name": "collar",
+      "bone": "collar",
+      "sourceXYWH": [
+        1152,
+        91,
+        383,
+        287
+      ],
+      "png": [
+        383,
+        287
+      ],
+      "sha256": "7f53be584fddefe7cbcd0f6b1374f2d03d63ad9618dc40af614ba368e4755fe8",
+      "pivotUV": [
+        0.490862,
+        0.466899
+      ],
+      "setupPivot": [
+        2.46,
+        274.7
+      ],
+      "size": [
+        157.03,
+        117.67
+      ],
+      "angle": 0,
+      "visiblePixels": 35306,
+      "hiddenPixels": 19,
+      "reconstructionCell": 2
+    },
+    {
+      "name": "left-sleeve",
+      "bone": "left-sleeve",
+      "sourceXYWH": [
+        1040,
+        256,
+        218,
+        333
+      ],
+      "png": [
+        218,
+        333
+      ],
+      "sha256": "9af28ab10d27cfe8dfd82f03627909522154521bab1ab5ae08c1f7f32dc9478a",
+      "pivotUV": [
+        0.816514,
+        0.15015
+      ],
+      "setupPivot": [
+        -47.56,
+        241.49
+      ],
+      "size": [
+        89.38,
+        136.53
+      ],
+      "angle": 0,
+      "visiblePixels": 12467,
+      "hiddenPixels": 1835,
+      "reconstructionCell": 4
+    },
+    {
+      "name": "left-hand",
+      "bone": "left-hand",
+      "sourceXYWH": [
+        1040,
+        389,
+        117,
+        167
+      ],
+      "png": [
+        117,
+        167
+      ],
+      "sha256": "785531d32cf59edef527800864cae05a931ec6bec2a71741f53de6fa52c0830e",
+      "pivotUV": [
+        0.820513,
+        0.11976
+      ],
+      "setupPivot": [
+        -81.18,
+        199.26
+      ],
+      "size": [
+        47.97,
+        68.47
+      ],
+      "angle": 0,
+      "visiblePixels": 2507,
+      "hiddenPixels": 206,
+      "reconstructionCell": 5
+    },
+    {
+      "name": "right-sleeve",
+      "bone": "right-sleeve",
+      "sourceXYWH": [
+        1360,
+        239,
+        175,
+        425
+      ],
+      "png": [
+        175,
+        425
+      ],
+      "sha256": "f739fbad1148719932d1239c9093d10bcdf817d8b34e45eb5bde7ec3e4f7b5c7",
+      "pivotUV": [
+        0.377143,
+        0.101176
+      ],
+      "setupPivot": [
+        37.72,
+        251.33
+      ],
+      "size": [
+        71.75,
+        174.25
+      ],
+      "angle": 0,
+      "visiblePixels": 21444,
+      "hiddenPixels": 4616,
+      "reconstructionCell": 6
+    },
+    {
+      "name": "right-hand",
+      "bone": "right-hand",
+      "sourceXYWH": [
+        1440,
+        402,
+        95,
+        241
+      ],
+      "png": [
+        95,
+        241
+      ],
+      "sha256": "0e24b93cd7bb5e1b960e212fc0da852c29f51cafc312e165e5b38cbab40b901f",
+      "pivotUV": [
+        0.273684,
+        0.099585
+      ],
+      "setupPivot": [
+        54.12,
+        192.29
+      ],
+      "size": [
+        38.95,
+        98.81
+      ],
+      "angle": 0,
+      "visiblePixels": 5622,
+      "hiddenPixels": 109,
+      "reconstructionCell": 7
+    },
+    {
+      "name": "pennant-left",
+      "bone": "pennant-left",
+      "sourceXYWH": [
+        1117,
+        237,
+        167,
+        566
+      ],
+      "png": [
+        167,
+        566
+      ],
+      "sha256": "f66fe48bb55f33257ea28573a97e0453905f2d8206522a25325697ae46f97828",
+      "pivotUV": [
+        0.808383,
+        0.04947
+      ],
+      "setupPivot": [
+        -33.62,
+        258.3
+      ],
+      "size": [
+        68.47,
+        232.06
+      ],
+      "angle": 0,
+      "visiblePixels": 18866,
+      "hiddenPixels": 129,
+      "reconstructionCell": 8
+    },
+    {
+      "name": "pennant-right",
+      "bone": "pennant-right",
+      "sourceXYWH": [
+        1289,
+        259,
+        151,
+        559
+      ],
+      "png": [
+        151,
+        559
+      ],
+      "sha256": "660129cafebcb9c55abfc39ed2577bcbe0b3675bc4fa9cce792c44d0bf454c33",
+      "pivotUV": [
+        0.476821,
+        0.014311
+      ],
+      "setupPivot": [
+        11.07,
+        257.48
+      ],
+      "size": [
+        61.91,
+        229.19
+      ],
+      "angle": 0,
+      "visiblePixels": 20488,
+      "hiddenPixels": 1074,
+      "reconstructionCell": 9
+    },
+    {
+      "name": "belt",
+      "bone": "belt",
+      "sourceXYWH": [
+        1192,
+        329,
+        236,
+        129
+      ],
+      "png": [
+        236,
+        129
+      ],
+      "sha256": "0eb50afb4b28fc07d6ba127f408d7817ff1e1bf327c1788f4cb3133f2a8434a6",
+      "pivotUV": [
+        0.508475,
+        0.511628
+      ],
+      "setupPivot": [
+        -9.02,
+        205
+      ],
+      "size": [
+        96.76,
+        52.89
+      ],
+      "angle": 0,
+      "visiblePixels": 7014,
+      "hiddenPixels": 2342,
+      "reconstructionCell": 10
+    },
+    {
+      "name": "left-cuff",
+      "bone": "left-sleeve",
+      "sourceXYWH": [
+        1113,
+        383,
+        44,
+        40
+      ],
+      "png": [
+        44,
+        40
+      ],
+      "sha256": "d422549f4104874aca2687a0201dd961b41f554623a4714b1733eb29b3f58476",
+      "pivotUV": [
+        0.340909,
+        0.625
+      ],
+      "setupPivot": [
+        -84.46,
+        199.67
+      ],
+      "size": [
+        18.04,
+        16.4
+      ],
+      "angle": 0,
+      "visiblePixels": 363,
+      "hiddenPixels": 0,
+      "reconstructionCell": 4
+    },
+    {
+      "name": "right-cuff",
+      "bone": "right-sleeve",
+      "sourceXYWH": [
+        1447,
+        396,
+        56,
+        54
+      ],
+      "png": [
+        56,
+        54
+      ],
+      "sha256": "6737843f80e9ae174ea9700087702df8bfce524f3fae33dcf3a2b869939cf65f",
+      "pivotUV": [
+        0.303571,
+        0.555556
+      ],
+      "setupPivot": [
+        53.3,
+        192.29
+      ],
+      "size": [
+        22.96,
+        22.14
+      ],
+      "angle": 0,
+      "visiblePixels": 616,
+      "hiddenPixels": 0,
+      "reconstructionCell": 6
+    },
+    {
+      "name": "inner-robe",
+      "bone": "robe",
+      "sourceXYWH": [
+        1183,
+        234,
+        274,
+        548
+      ],
+      "png": [
+        274,
+        548
+      ],
+      "sha256": "ea4567a1f8f5311d4ef527ba1b93439ff4f0088a3b57244457fcffb93aee9669",
+      "pivotUV": [
+        0.463504,
+        0.843066
+      ],
+      "setupPivot": [
+        -9.84,
+        81.59
+      ],
+      "size": [
+        112.34,
+        224.68
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 104369,
+      "reconstructionCell": 3,
+      "underlay": true
+    },
+    {
+      "name": "collar-facing",
+      "bone": "collar",
+      "sourceXYWH": [
+        1219,
+        136,
+        210,
+        146
+      ],
+      "png": [
+        210,
+        146
+      ],
+      "sha256": "760c21af425967599742481c5e9929084b2310dd1bc481f4556fe61c1d82dc79",
+      "pivotUV": [
+        0.57619,
+        0.609589
+      ],
+      "setupPivot": [
+        2.46,
+        274.7
+      ],
+      "size": [
+        86.1,
+        59.86
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 17747,
+      "reconstructionCell": 1,
+      "underlay": true
+    },
+    {
+      "name": "near-sleeve-lining",
+      "bone": "left-sleeve",
+      "sourceXYWH": [
+        1119,
+        280,
+        121,
+        268
+      ],
+      "png": [
+        121,
+        268
+      ],
+      "sha256": "735bda4dc2cc8449765c7e40b16f2320df7523c2648efe32183ce625aaf6daac",
+      "pivotUV": [
+        0.818182,
+        0.097015
+      ],
+      "setupPivot": [
+        -47.56,
+        241.49
+      ],
+      "size": [
+        49.61,
+        109.88
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 11679,
+      "reconstructionCell": 4,
+      "underlay": true
+    },
+    {
+      "name": "far-sleeve-lining",
+      "bone": "right-sleeve",
+      "sourceXYWH": [
+        1384,
+        250,
+        117,
+        363
+      ],
+      "png": [
+        117,
+        363
+      ],
+      "sha256": "a87e31201c580f45c73660f9761792d856458c8bce9c6a136606a1722cbe78b1",
+      "pivotUV": [
+        0.358974,
+        0.088154
+      ],
+      "setupPivot": [
+        37.72,
+        251.33
+      ],
+      "size": [
+        47.97,
+        148.83
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 18416,
+      "reconstructionCell": 6,
+      "underlay": true
+    }
+  ],
+  "drawOrder": [
+    "inner-robe",
+    "collar-facing",
+    "near-sleeve-lining",
+    "far-sleeve-lining",
+    "plinth",
+    "right-sleeve",
+    "right-hand",
+    "right-cuff",
+    "robe",
+    "belt",
+    "left-sleeve",
+    "left-hand",
+    "left-cuff",
+    "pennant-right",
+    "pennant-left",
+    "neck",
+    "collar",
+    "mask"
+  ],
+  "setupAudit": {
+    "visiblePixels": 238702,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

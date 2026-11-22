@@ -26,7 +26,7 @@ const amount=await page.evaluate(kind=>globalThis.__survivalGame.content.cards[k
 await click('card-'+hit.id);let target=await hitPoint('enemy-target');await page.mouse.click(target.x,target.y);
 await page.waitForFunction(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return d.hero.motion==='attack'&&d.hero.rendererKind==='spine-3.8';});
 const detailed=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return{renderer:d.hero.rendererKind,pose:d.hero.pose,rig:d.hero.inspectRig()};});
-assert(detailed.renderer==='spine-3.8'&&detailed.rig.bones>=26&&detailed.rig.weightedVertices>100,'Attack has unresolved native slots or unplanted feet');await screenshot('fixed-attack-detail');await idle();
+assert(detailed.renderer==='spine-3.8'&&detailed.rig.bones>=26&&detailed.rig.independentParts>=16,'Attack is missing independent body-part attachments');await screenshot('fixed-attack-detail');await idle();
 s=await state();assert(s.phase==='battle'&&s.battle.hp===hp-amount&&s.stamina===energy-cost,'Attack applied a duplicate impact or fee');
 // Toggle after a lethal impact, while the presentation is still waiting for its completion.
 let lethal;for(let i=0;i<3&&!lethal;i++){s=await state();lethal=s.hand.find(c=>['attack','slash','heavy'].includes(c.kind)&&!c.blocked);if(!lethal)await click('end-turn');}

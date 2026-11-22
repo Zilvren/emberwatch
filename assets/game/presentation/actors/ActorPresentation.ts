@@ -133,6 +133,12 @@ export class ActorPresentation extends Component {
             if (!this.playingAction) this.playIdle();
         }
     }
+    setFieldLook(value: boolean): void {
+        if (this.spineRig?.setFieldLook(value) && this.enabledInHierarchy) this.playIdle();
+    }
+    setLook(look: 'legacy' | 'tide' | 'labyrinth'): void {
+        if (this.spineRig?.setLook(look) && this.enabledInHierarchy) this.playIdle();
+    }
     setReducedMotion(value: boolean): void {
         if (this.reducedMotion === value) return;
         this.reducedMotion = value;
@@ -203,7 +209,8 @@ export class ActorPresentation extends Component {
         reduced = false,
         impact?: () => void,
         complete?: () => void,
-        target?: ActorPresentation | null
+        target?: ActorPresentation | null,
+        release?: () => void
     ): void {
         if (this.spineRig) {
             if (kind !== 'attack') this.resetApproach();
@@ -211,6 +218,8 @@ export class ActorPresentation extends Component {
             this.impact = impact ?? null;
             this.complete = complete ?? null;
             this.playingAction = !reduced;
+            if (kind === 'attack' && this.spineRig.flight && target?.spineRig)
+                target.impactAnchor?.setWorldPosition(target.spineRig.aimWorld(new Vec3()));
             if (reduced) {
                 if (kind === 'death') this.spineRig.sample(kind, this.spineRig.duration(kind));
                 this.notifyImpact();
@@ -220,7 +229,7 @@ export class ActorPresentation extends Component {
                 done?.();
                 return;
             }
-            if (kind === 'attack' && target) this.prepareMelee(target);
+            if (kind === 'attack' && target && !this.spineRig.flight) this.prepareMelee(target);
             this.spineRig.play(
                 kind,
                 () => {
@@ -240,7 +249,8 @@ export class ActorPresentation extends Component {
                     ? (fraction) => {
                           this.approach = fraction;
                       }
-                    : undefined
+                    : undefined,
+                release
             );
             return;
         }
@@ -292,7 +302,7 @@ export class ActorPresentation extends Component {
         hit?.();
     }
     get pose(): string {
-        if (this.spineRig) return 'master08-spine:' + this.action;
+        if (this.spineRig) return this.spineRig.poseFamily + ':' + this.action;
         if (this.nativeSkin) return 'master08-native:' + this.action;
         if (this.paperDoll) return 'paperdoll08:' + this.action;
         return this.artwork?.spriteFrame?.name ?? '';

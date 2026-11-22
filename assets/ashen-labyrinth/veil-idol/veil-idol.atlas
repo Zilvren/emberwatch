@@ -1,0 +1,138 @@
+
+veil-idol-parts.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+belt
+  rotate: false
+  xy: 110, 789
+  size: 236, 129
+  orig: 236, 129
+  offset: 0, 0
+  index: -1
+collar
+  rotate: false
+  xy: 226, 481
+  size: 383, 287
+  orig: 383, 287
+  offset: 0, 0
+  index: -1
+collar-facing
+  rotate: false
+  xy: 536, 772
+  size: 210, 146
+  orig: 210, 146
+  offset: 0, 0
+  index: -1
+far-sleeve-lining
+  rotate: false
+  xy: 835, 384
+  size: 117, 363
+  orig: 117, 363
+  offset: 0, 0
+  index: -1
+left-cuff
+  rotate: false
+  xy: 2, 878
+  size: 44, 40
+  orig: 44, 40
+  offset: 0, 0
+  index: -1
+left-hand
+  rotate: false
+  xy: 887, 751
+  size: 117, 167
+  orig: 117, 167
+  offset: 0, 0
+  index: -1
+left-sleeve
+  rotate: false
+  xy: 613, 431
+  size: 218, 333
+  orig: 218, 333
+  offset: 0, 0
+  index: -1
+mask
+  rotate: false
+  xy: 750, 768
+  size: 133, 150
+  orig: 133, 150
+  offset: 0, 0
+  index: -1
+near-sleeve-lining
+  rotate: false
+  xy: 101, 517
+  size: 121, 268
+  orig: 121, 268
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 350, 782
+  size: 182, 136
+  orig: 182, 136
+  offset: 0, 0
+  index: -1
+plinth
+  rotate: false
+  xy: 2, 184
+  size: 455, 293
+  orig: 455, 293
+  offset: 0, 0
+  index: -1
+right-cuff
+  rotate: false
+  xy: 50, 864
+  size: 56, 54
+  orig: 56, 54
+  offset: 0, 0
+  index: -1
+right-hand
+  rotate: false
+  xy: 2, 619
+  size: 95, 241
+  orig: 95, 241
+  offset: 0, 0
+  index: -1
+right-sleeve
+  rotate: false
+  xy: 461, 2
+  size: 175, 425
+  orig: 175, 425
+  offset: 0, 0
+  index: -1
+
+veil-idol-parts2.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+inner-robe
+  rotate: false
+  xy: 403, 88
+  size: 274, 548
+  orig: 274, 548
+  offset: 0, 0
+  index: -1
+pennant-left
+  rotate: false
+  xy: 681, 70
+  size: 167, 566
+  orig: 167, 566
+  offset: 0, 0
+  index: -1
+pennant-right
+  rotate: false
+  xy: 852, 77
+  size: 151, 559
+  orig: 151, 559
+  offset: 0, 0
+  index: -1
+robe
+  rotate: false
+  xy: 2, 2
+  size: 397, 634
+  orig: 397, 634
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,40 @@
+await page.setViewportSize({width:1440,height:900});
+await page.goto('http://127.0.0.1:7467/?seed=17&save=off&preview=encounter&review=parts-joints');
+await idle();
+const before=await page.evaluate(()=>JSON.stringify(__survivalGame.exportState()));
+await page.evaluate(()=>{
+ const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector'),screen=d.scene.screens.battle,world=screen.getChildByName('World');
+ globalThis.__jointActors=world.getComponentsInChildren('ActorPresentation').sort((a,b)=>['player','wanderer','brute'].indexOf(a.actorId)-['player','wanderer','brute'].indexOf(b.actorId));
+ for(const n of screen.children)if(!['World','SceneEdgeShade'].includes(n.name))n.active=false;
+ d.hud.active=false;if(d.toastRoot)d.toastRoot.active=false;
+ __jointActors.forEach((a,i)=>{a.node.active=true;a.node.setPosition([-500,0,480][i],-205,0);const s=a.node.scale.clone();a.node.setScale(s.x*.84,s.y*.84,s.z);});
+});
+await page.waitForFunction(()=>__jointActors.every(a=>a.spineRig?.ready));
+const reset=()=>page.evaluate(()=>{for(const a of __jointActors){const r=a.spineRig;r.cancel();r.skeleton.clearTracks();r.skeleton.setToSetupPose();r.pause();r.skeleton._skeleton.updateWorldTransform();}});
+await reset();await page.waitForTimeout(100);await page.screenshot({path:'output/playwright/spine08/parts-neutral.png'});
+const results=[];
+for(const actorId of ['player','wanderer','brute'])for(const change of ['RearUpperArm','RearForearm','FrontUpperArm','FrontForearm','FrontFootTarget','RearFootTarget']){
+ await reset();
+ const result=await page.evaluate(({actorId,change})=>{
+  const a=__jointActors.find(a=>a.actorId===actorId),r=a.spineRig,s=r.skeleton,c=r.contract.json;
+  const pos=name=>{const b=s.findBone(name);return b?{x:b.worldX,y:b.worldY}:null;};
+  const fixed=['Head','Chest','Hips',...(actorId==='player'?['Pack']:[]),...(actorId==='brute'?['RearShoulderPlate']:[]),change.startsWith('Rear')?'FrontHand':'RearHand'];
+  const original=Object.fromEntries(fixed.map(n=>[n,pos(n)]));
+  const endpoint=change.includes('Foot')?change.replace('Target',''):change.startsWith('Rear')?'RearHand':'FrontHand',start=pos(endpoint),b=s.findBone(change);
+  if(change.includes('FootTarget')){b.x+=change.startsWith('Rear')?-18:18;b.y+=30;}else b.rotation+=change.includes('Forearm')?65:55;
+  s._skeleton.updateWorldTransform();
+  const drift=Object.fromEntries(fixed.map(n=>{const p=pos(n),q=original[n];return[n,Math.hypot(p.x-q.x,p.y-q.y)];}));
+  const end=pos(endpoint),motion=Math.hypot(end.x-start.x,end.y-start.y);
+  const bindings=c.parts.map(p=>({part:p.name,bone:p.bone,present:!!s.findSlot(p.name)}));
+  return {actorId,change,drift,motion,bindings};
+ },{actorId,change});
+ await page.waitForTimeout(80);assert(Object.values(result.drift).every(d=>d<.001),'Isolated joint dragged unrelated body part: '+JSON.stringify(result));assert(result.motion>1,'Joint did not move its endpoint: '+JSON.stringify(result));assert(result.bindings.every(b=>b.present),'Independent slot missing');
+ await page.screenshot({path:'output/playwright/spine08/joint-'+actorId+'-'+change+'.png'});results.push(result);
+}
+await reset();
+await page.evaluate(()=>{
+ const a=__jointActors[0],s=a.spineRig.skeleton;s.findBone('RearUpperArm').rotation-=55;s.findBone('RearForearm').rotation+=70;s.findBone('FrontUpperArm').rotation+=70;s.findBone('FrontForearm').rotation-=40;s.findBone('FrontFootTarget').x+=20;s.findBone('FrontFootTarget').y+=35;s._skeleton.updateWorldTransform();
+});
+await page.waitForTimeout(100);await page.screenshot({path:'output/playwright/spine08/parts-hero-edit.png'});
+const after=await page.evaluate(()=>JSON.stringify(__survivalGame.exportState()));assert(before===after,'Joint diagnostics changed game state');
+return {passed:true,presentationOnly:true,gameStateUnchanged:true,checks:results,runtimeErrors};

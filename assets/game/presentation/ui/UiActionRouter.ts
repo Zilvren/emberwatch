@@ -26,8 +26,22 @@ export class UiActionRouter {
         if (this.ui.busy || !this.session.view) return;
         const id = event.id,
             g = this.session.view;
+        const choice = g.battle?.cardChoice;
         if (this.ui.overlay === 'recipes' || id === 'recipe-open' || id === 'rest-synthesis') {
-            this.recipeAction(event);
+            if (!choice && !g.battle?.discovery) this.recipeAction(event);
+            return;
+        }
+        if (choice && !this.ui.overlay && (id === 'claim-supplies' || id === 'reward-bag')) {
+            this.ui.rewardPage = Math.max(0, Math.min(Math.ceil(choice.ids.length / 3) - 1,
+                this.ui.rewardPage + (id === 'reward-bag' ? 1 : -1)));
+            this.ui.rewardSelection = -1;
+            this.actions.refresh();
+            return;
+        }
+        if (choice && !this.ui.overlay && (id === 'resolve-choice-confirm' || id === 'rewards-done')) {
+            const selected = choice.ids[this.ui.rewardSelection];
+            if (id === 'resolve-choice-confirm' && !selected) return;
+            this.actions.act({ type: 'resolve-combat-choice', id: id === 'rewards-done' ? null : selected });
             return;
         }
         if (id === 'card-select') {
@@ -37,7 +51,7 @@ export class UiActionRouter {
         if (id === 'bag' || id === 'rest-bag' || id === 'reward-bag') {
             this.ui.overlay = 'bag';
             this.ui.page = 0;
-            this.ui.deckEdit = id === 'rest-bag' && !g.scenario.runDeck;
+            this.ui.deckEdit = id === 'rest-bag' && !g.scenario.runDeck && !g.scenario.fieldDeck;
             if (g.scenario.runDeck) this.ui.bagFilter = id === 'rest-bag' ? 'deck' : 'all';
             if (this.ui.deckEdit) this.ui.bagFilter = 'all';
             this.ui.bagReader = false;
@@ -48,16 +62,24 @@ export class UiActionRouter {
             else return;
         } else if (id.startsWith('bag-filter-') && this.ui.overlay === 'bag') {
             const filter = id.slice(11);
-            if (filter === 'all' || filter === 'deck' || filter === 'overflow')
+            if (
+                filter === 'all' ||
+                filter === 'deck' ||
+                filter === 'overflow' ||
+                (filter === 'found' && g.scenario.fieldDeck)
+            )
                 this.ui.bagFilter = filter;
         } else if (id === 'bag-sort' && this.ui.overlay === 'bag') {
-            const sorts: UiState['bagSort'][] = ['original', 'name', 'cost', 'weight'];
+            const sorts: UiState['bagSort'][] = g.scenario.fieldDeck
+                ? ['original', 'name', 'cost']
+                : ['original', 'name', 'cost', 'weight'];
             this.ui.bagSort = sorts[(sorts.indexOf(this.ui.bagSort) + 1) % sorts.length];
         } else if (
             id === 'bag-mode' &&
             this.ui.overlay === 'bag' &&
             g.phase === 'rest' &&
-            !g.scenario.runDeck
+            !g.scenario.runDeck &&
+            !g.scenario.fieldDeck
         ) {
             this.ui.deckEdit = !this.ui.deckEdit;
             if (this.ui.deckEdit) this.ui.bagFilter = 'all';
@@ -81,12 +103,25 @@ export class UiActionRouter {
         } else if (
             id.startsWith('reward-select-') &&
             !this.ui.overlay &&
-            g.phase === 'rewards' &&
-            !g.rewards?.cardTaken
+            (choice || g.battle?.discovery || (g.phase === 'rewards' && !g.rewards?.cardTaken))
         ) {
             const index = Number(id.slice(14));
-            if (!Number.isInteger(index) || !g.rewards?.cards[index]) return;
+            if (!Number.isInteger(index) || !(choice?.ids ?? g.battle?.discovery ?? g.rewards?.cards)?.[index])
+                return;
             this.ui.rewardSelection = index;
+        } else if (
+            (g.battle?.discovery || g.rewards?.discovery) &&
+            !this.ui.overlay &&
+            (id === 'discover-confirm' || id === 'rewards-done')
+        ) {
+            const kind = (g.battle?.discovery ?? g.rewards!.cards)[this.ui.rewardSelection];
+            if (id === 'discover-confirm' && !kind) return;
+            this.ui.rewardSelection = -1;
+            this.actions.act(
+                { type: 'discover', kind: id === 'discover-confirm' ? kind : null },
+                'loot'
+            );
+            return;
         } else if (id.startsWith('entry-tier-') && this.ui.overlay === 'entry') {
             const tier = entryTier(id.slice(11));
             if (!tier || g.supplies < tier.cost) return;
@@ -125,6 +160,7 @@ export class UiActionRouter {
             this.actions.act({ type: 'discard-supplies', amount: 1 });
             return;
         } else if (this.ui.overlay) return;
+        else if (g.battle?.discovery || choice || g.rewards?.discovery) return;
         else if (id === 'journal-start') {
             if (g.phase === 'journal') {
                 if (g.currentJournal?.id === 'departure' && g.pendingJournalCount === 1)

@@ -95,7 +95,9 @@ for (const task of tasks) {
     const scenario = fs.readFileSync(path.join(root, 'tools', task + '.js.txt'), 'utf8');
     // Only relocate artifact filenames; controls, assertions and game rules are unchanged.
     let body = (helper + '\n' + scenario).replaceAll('output/playwright/', relativeOutput + '/');
-    if (!['browser-stamina-system', 'browser-hand-shelter', 'browser-quality-fixes'].includes(task))
+    if (['browser-stamina-system', 'browser-hand-shelter', 'browser-quality-fixes'].includes(task))
+        body = body.replace(/\?seed=(\d+)(?!\d)(?![^'"`\s]*ruleset=)/g, '?ruleset=stamina-v1&seed=$1');
+    else
         body = body.replaceAll(
             'http://127.0.0.1:7457/?',
             'http://127.0.0.1:7457/?ruleset=tutorial-v1&'

@@ -184,7 +184,7 @@ export class ButtonPresentation extends Component {
         this.panel.fill = new Color().fromHEX(palette.fill);
         this.panel.fill.a = palette.fillAlpha;
         this.panel.line = new Color().fromHEX(palette.line);
-        this.panel.innerLine.a = 0;
+        this.panel.innerLine.a = this.panel.metalTrim && palette.fillAlpha ? 105 : 0;
         this.panel.redraw();
         if (this.caption) {
             this.caption.color = new Color().fromHEX(palette.text);

@@ -43,4 +43,4 @@ export type GameReadModel = ReadonlyValue<
         | 'content'
     >
 > &
-    Pick<SurvivalGame, 'cardBlocked' | 'rewardCardBlocked' | 'rewardZone'>;
+    Pick<SurvivalGame, 'cardBlocked' | 'rewardCardBlocked' | 'rewardZone' | 'attackDamage' | 'cardCost'>;

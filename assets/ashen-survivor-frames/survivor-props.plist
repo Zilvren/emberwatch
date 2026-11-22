@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>frames</key>
+	<dict>
+		<key>lantern</key>
+		<dict>
+			<key>frame</key>
+			<string>{{2,2},{96,136}}</string>
+			<key>offset</key>
+			<string>{0,0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceSize</key>
+			<string>{96,136}</string>
+		</dict>
+		<key>guard</key>
+		<dict>
+			<key>frame</key>
+			<string>{{102,2},{96,136}}</string>
+			<key>offset</key>
+			<string>{0,0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceSize</key>
+			<string>{96,136}</string>
+		</dict>
+		<key>repel</key>
+		<dict>
+			<key>frame</key>
+			<string>{{202,2},{96,136}}</string>
+			<key>offset</key>
+			<string>{0,0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceSize</key>
+			<string>{96,136}</string>
+		</dict>
+	</dict>
+	<key>metadata</key>
+	<dict>
+		<key>format</key>
+		<integer>2</integer>
+		<key>realTextureFileName</key>
+		<string>survivor-props.png</string>
+		<key>textureFileName</key>
+		<string>survivor-props.png</string>
+		<key>size</key>
+		<string>{300,140}</string>
+	</dict>
+</dict>
+</plist>

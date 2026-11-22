@@ -43,7 +43,7 @@ export class SelectableCard extends Component {
             id,
             game.content.cards,
             game.scenario.battleResource === 'stamina' ? '体力' : '物资',
-            { runDeck: game.scenario.runDeck, neededForSynthesis }
+            { field: game.scenario.fieldDeck, runDeck: game.scenario.runDeck, neededForSynthesis }
         );
         this.card?.setSelected(selected);
         if (this.badge) {

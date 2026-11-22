@@ -1,0 +1,272 @@
+{
+  "project": "The End / 焦土迷宫",
+  "date": "2026-11-22",
+  "scope": "主角独立原生骨骼动作评审",
+  "status": "完成实机自查，当前身体与右手姿态待用户审阅",
+  "preview": "http://127.0.0.1:7494/?v=c8019238",
+  "scene": "assets/SurvivorFlickSpineReview.scene",
+  "userScreenshotSha256": "2e32830e52d586ec2f598252c58d07869bc3fc03222e6d660335a8905f8b6373",
+  "rightHand": {
+    "rest": "右掌托右侧下颌，弯指贴近侧脸颊，左掌托右肘",
+    "play": "确认后右手离腮，翻腕以指侧拨选中的牌",
+    "nativeChain": [
+      "contact-guard",
+      "near-hand",
+      "near-bracer",
+      "near-sleeve",
+      "chest",
+      "hips",
+      "PoseRoot",
+      "root"
+    ],
+    "cheekMarkerParent": "near-hand",
+    "singleVisibleHandPerSample": true,
+    "supportView": "reference/right-cheek-support.png",
+    "releaseView": "reference/right-wrist-release.png"
+  },
+  "body": {
+    "sources": {
+      "source": "turnaround-golden-master.png",
+      "sourceSha256": "8a41f4aca887b4132bd2156dc8ecaf456aff68e76c96051ba3d698f3f801cdf4",
+      "sourceSize": [
+        5539,
+        3467
+      ],
+      "headReference": "head-turnaround.png",
+      "headPainting": "reference/head-three-quarter.png",
+      "headYawDegrees": 33.0,
+      "headPaintingSha256": "94c4359bcff657c605d72cf3377f6242c789be30fd31515b1d13161b492eb19a",
+      "nativeFaceAspectScaleRatio": 0.99943,
+      "restCheekJawWidthGainPercent": {
+        "690": 4.73,
+        "730": 5.61,
+        "760": 5.65,
+        "790": 6.32
+      },
+      "unchangedFeatureMaxDeviation": 0.00461,
+      "independentArmSources": [
+        "right-cheek-support.png, right arm and palm at the jaw",
+        "body-think-three-quarter.png, left arm and supporting palm",
+        "right-wrist-release.png, dorsal right hand in flight"
+      ],
+      "bodyPainting": "reference/body-think-three-quarter.png",
+      "bodyPaintingSha256": "c804f3c5054c60401a252f526eb48cf67b9b51dab06f424ebc1fc5d6524eb248",
+      "underpaintSha256": "d2a35d7ff95e241239a51961ed9caaf2da4200ee744c55a85092befd8e9804ce",
+      "cameraYawDegrees": 33,
+      "bodyRegistration": {
+        "lowerSilhouetteIoU": 0.99388,
+        "bootSilhouetteIoU": 0.98703,
+        "soleYInNativeCapture": [
+          867,
+          848
+        ],
+        "soleYInPaintingAtSameScale": [
+          868,
+          848
+        ],
+        "stanceDepthPixels": 19
+      },
+      "atlas": {
+        "regions": 51,
+        "visibleTexels": 2181271,
+        "visibleRGBAExact": true
+      },
+      "byteIdenticalR3Textures": 35,
+      "board": "turnaround-comparison.png",
+      "screenshotComparison": {
+        "matchedFeatures": 368,
+        "p90RegistrationErrorPixels": 1.088,
+        "nativePixelScaleCapture": true
+      }
+    },
+    "priorSupportCoverage": {
+      "palm": {
+        "total": 1024,
+        "exposed": 775,
+        "fraction": 0.7568359375
+      },
+      "fingertips": {
+        "total": 269,
+        "exposed": 112,
+        "fraction": 0.4163568773234201
+      }
+    },
+    "currentSupportCoverage": {
+      "palm": {
+        "total": 1554,
+        "exposed": 1525,
+        "fraction": 0.9813384813384813
+      },
+      "fingertips": {
+        "total": 362,
+        "exposed": 362,
+        "fraction": 1
+      }
+    },
+    "stance": {
+      "lowerSilhouetteIoU": 0.99388,
+      "bootSilhouetteIoU": 0.98703,
+      "soleYInNativeCapture": [
+        867,
+        848
+      ],
+      "soleYInPaintingAtSameScale": [
+        868,
+        848
+      ],
+      "stanceDepthPixels": 19
+    },
+    "screenshotComparison": {
+      "matchedFeatures": 368,
+      "p90RegistrationErrorPixels": 1.088,
+      "nativePixelScaleCapture": true
+    }
+  },
+  "face": {
+    "sourceReference": "../head-turnaround.png",
+    "threeQuarterPaint": "reference/head-three-quarter.png",
+    "samePixelsAndAttachmentAsPriorBuild": true,
+    "meanAbsoluteDifferenceInNativeFaceCapture": 4e-05,
+    "restCheekJawWidthGainPercent": {
+      "690": 4.73,
+      "730": 5.61,
+      "760": 5.65,
+      "790": 6.32
+    },
+    "maximumLocalVertexDrift": 4.046016829903763e-05
+  },
+  "rig": {
+    "engine": "3.8.75",
+    "bones": 60,
+    "inputBones": 45,
+    "ik": 2,
+    "images": 51,
+    "atlasPages": 7,
+    "premultipliedAlpha": false,
+    "editableSha256": "c801923824d2b0442867a01b1e3e533225448ab5dfcf7329fab6fc0d7b993570",
+    "sourceClips": [
+      "attack",
+      "card-flight",
+      "carry-card",
+      "death",
+      "hurt",
+      "idle",
+      "prepare"
+    ],
+    "importedRuntimeMatchesExport": true
+  },
+  "play": {
+    "normalTakes": [
+      {
+        "back": "lantern",
+        "elapsedMs": 1239,
+        "remaining": [
+          "guard",
+          "repel"
+        ]
+      },
+      {
+        "back": "guard",
+        "elapsedMs": 1209,
+        "remaining": [
+          "repel"
+        ]
+      },
+      {
+        "back": "repel",
+        "elapsedMs": 1230,
+        "remaining": []
+      }
+    ],
+    "startIdleSeconds": 3.22,
+    "observedStartsAndEvents": {
+      "starts": [
+        "lantern-flick",
+        "guard-flick",
+        "repel-flick",
+        "guard-flick",
+        "repel-flick",
+        "lantern-flick"
+      ],
+      "releases": [
+        "lantern",
+        "guard",
+        "repel",
+        "guard",
+        "repel",
+        "lantern"
+      ]
+    },
+    "halfSpeedMs": 2424,
+    "pauseDrift": 0,
+    "touchSeconds": 0.385,
+    "releaseSeconds": 0.44,
+    "durationSeconds": 1.2,
+    "frameSamples": 384,
+    "visibleBackSamples": 1125,
+    "preTouchMotion": 0,
+    "otherCardMotion": 0,
+    "allCardsOffscreenBeforeHiding": true,
+    "visibleMeshTrianglesReversed": 0
+  },
+  "pose": {
+    "maximumShinSwingDegrees": 0.9516455274729338,
+    "maximumBootRotationDegrees": 0,
+    "maximumPlantedPointDrift": 5.9861583047772275e-05,
+    "renderedEvidence": {
+      "samples": 51,
+      "handToHand": 0,
+      "unselected": 0,
+      "rightWristGap": 0,
+      "leftWristGap": 0,
+      "rightElbowGap": 0,
+      "leftElbowGap": 0,
+      "jaw": 0,
+      "brush": 2,
+      "necklineHolePixels": 0,
+      "frontClothAcrossJaw": 1,
+      "supportAtRest": 177,
+      "forearmOverlapAtRelease": 0,
+      "cheekAtRest": 292,
+      "cheekDuringFlick": 0,
+      "mouthOverlap": 0,
+      "eyeOverlap": 0,
+      "exposedSupportingHand": {
+        "palm": {
+          "total": 1554,
+          "exposed": 1525,
+          "fraction": 0.9813384813384813
+        },
+        "fingertips": {
+          "total": 362,
+          "exposed": 362,
+          "fraction": 1
+        }
+      }
+    }
+  },
+  "media": {
+    "right-cheek-and-play.png": "d6742f84d74f943908fe394a093cc685690cb884aa0c5cc48ab1f35f8ea7af2c",
+    "body-before-after.png": "1c0e460dd55341737c7fda1c24bf1487db9fd147f916a88559ceed5f251cbdf3",
+    "turnaround-comparison.png": "12ea227df6aabd4f34b1e806b8f8c84d38babf3825b953661a1f9f7bc3eaaf9e",
+    "face-comparison.png": "29a0d6e8967b46a716f4a62163c8cd793775834f82ac35883336470ecf20cf2c",
+    "right-hand-review.webm": "aeeb0fa2beb50ca77a30f7f5f6b6f5dea191535457846747161c196e6d3f0337",
+    "motion-before-after.webm": "5a009eff760ec56b0a014f997adc682dd3367f7352f0d94a891d0a77ed12e372"
+  },
+  "video": {
+    "frames": 194,
+    "fps": 30,
+    "seconds": 6.467
+  },
+  "checks": {
+    "pinkBuild": 0,
+    "typecheck": 0,
+    "nativeInputsAndGeometry": 0,
+    "renderedJoints": 0,
+    "browserErrors": []
+  },
+  "limits": [
+    "三视图给出正、侧、背，当前动作所需的三分之四姿势及遮挡后衣料为补绘。",
+    "本次验证针对独立评审场景。"
+  ]
+}

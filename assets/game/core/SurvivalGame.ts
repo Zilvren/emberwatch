@@ -10,8 +10,8 @@ import {
     Route,
     Settlement,
 } from './RulesTypes';
-import { CardKind, isBattleCard } from './content/CardCatalog';
-import { CardSet, createCardSet } from './content/ContentRegistry';
+import { CardKind } from './content/CardCatalog';
+import { CardSet, createCardSet, scenarioCardSet } from './content/ContentRegistry';
 import {
     GameScenario,
     STAMINA_SCENARIO,
@@ -63,6 +63,7 @@ export class SurvivalGame {
     fixedDone = false;
     pathIndex = 0;
     visited: NodeKind[] = [];
+    discoveryPool?: string[];
     battle: Battle | null = null;
     rewards: Rewards | null = null;
     settlement: Settlement | null = null;
@@ -73,16 +74,23 @@ export class SurvivalGame {
     returnElapsed = 0;
     private nextId = 0;
     readonly random: Random;
+    readonly content: CardSet;
     constructor(
         public readonly seed = Math.floor(Math.random() * 0xffffffff),
         public readonly scenario: GameScenario = TUTORIAL_SCENARIO,
-        public readonly content: CardSet = createCardSet(),
+        content: CardSet = createCardSet(),
         journals: JournalCatalog = getJournalCatalog()
     ) {
         this.scenario = JSON.parse(JSON.stringify(scenario));
+        this.content = scenarioCardSet(content, this.scenario);
         this.random = new Random(seed);
         this.feedback = new RuleFeedback(this);
-        this.journalRules = new JournalRules(this, this.feedback, validateJournalCatalog(journals));
+        this.journalRules = new JournalRules(
+            this,
+            this.feedback,
+            validateJournalCatalog(journals),
+            this.scenario
+        );
         const newId = (prefix: string) => prefix + '-' + ++this.nextId,
             fail = (reason: string) => this.fail(reason);
         this.inventoryRules = new InventoryRules(
@@ -92,6 +100,17 @@ export class SurvivalGame {
             newId,
             this.scenario
         );
+        this.rewardRules = new RewardRules(
+            this,
+            this.feedback,
+            this.content,
+            this.inventoryRules,
+            fail,
+            this.scenario,
+            this.random
+        );
+        const collectSupplies = (source: string, amount: number, discoveries?: number) =>
+            this.rewardRules.collectFieldSupplies(source, amount, discoveries);
         this.combatRules = new CombatRules(
             this,
             this.feedback,
@@ -101,22 +120,16 @@ export class SurvivalGame {
             newId,
             fail,
             this.scenario,
-            () => this.currentNode
+            () => this.currentNode,
+            collectSupplies
         );
         this.shelterRules = new ShelterRules(
             this,
             this.feedback,
             this.content,
             this.scenario,
-            this.journalRules
-        );
-        this.rewardRules = new RewardRules(
-            this,
-            this.feedback,
-            this.content,
-            this.inventoryRules,
-            fail,
-            this.scenario
+            this.journalRules,
+            () => this.inventoryRules.restoreStarter()
         );
         this.explorationRules = new ExplorationRules(
             this,
@@ -127,7 +140,8 @@ export class SurvivalGame {
             this.shelterRules,
             this.random,
             this.scenario,
-            fail
+            fail,
+            collectSupplies
         );
         this.synthesis = new SynthesisRules(
             this,
@@ -161,6 +175,7 @@ export class SurvivalGame {
                 fixedDone: this.fixedDone,
                 pathIndex: this.pathIndex,
                 visited: this.visited,
+                discoveryPool: this.discoveryPool,
                 battle: this.battle,
                 rewards: this.rewards,
                 settlement: this.settlement,
@@ -186,7 +201,13 @@ export class SurvivalGame {
         return game;
     }
     reset(scenario?: GameScenario): void {
-        if (scenario) Object.assign(this.scenario, JSON.parse(JSON.stringify(scenario)));
+        if (scenario) {
+            delete this.scenario.runDeck;
+            delete this.scenario.fieldDeck;
+            delete this.scenario.labyrinth;
+            delete this.scenario.scavengeFees;
+            Object.assign(this.scenario, JSON.parse(JSON.stringify(scenario)));
+        }
         this.phase = 'journal';
         this.day = this.scenario.initialDay;
         this.milestones = {};
@@ -200,6 +221,7 @@ export class SurvivalGame {
         this.fixedDone = false;
         this.pathIndex = 0;
         this.visited = [];
+        this.discoveryPool = undefined;
         this.battle = null;
         this.rewards = null;
         this.settlement = null;
@@ -208,17 +230,12 @@ export class SurvivalGame {
         this.logs = [];
         this.run++;
         this.synthesis.close();
-        this.cards = this.createInitialDeck();
+        this.inventoryRules.restoreStarter();
         this.feedback.log(
-            `第 ${this.day} 天 · 护甲 ${this.armor}，物资 ${this.supplies}，负重 ${this.baseWeight} / 30。`
+            `第 ${this.day} 天 · 护甲 ${this.armor}，物资 ${this.supplies}，${this.scenario.fieldDeck ? `基础牌组 ${this.cards.length} 张` : `负重 ${this.baseWeight} / 30`}。`
         );
         this.journalRules.record('campaign-started');
         this.revision++;
-    }
-    private createInitialDeck(): OwnedCard[] {
-        return this.content.initialDeck
-            .filter((kind) => !this.scenario.runDeck || isBattleCard(this.content.cards[kind]))
-            .map((kind) => this.inventoryRules.owned(kind));
     }
     get baseWeight(): number {
         return this.inventoryRules.baseWeight;
@@ -249,7 +266,7 @@ export class SurvivalGame {
         const result = this.explorationRules.start(tier);
         if (result.ok) {
             if (prepareFreshRun) {
-                this.cards = this.createInitialDeck();
+                this.inventoryRules.restoreStarter();
                 this.armor = this.scenario.initialArmor;
                 this.critical = false;
                 if (completedRun) this.run++;
@@ -280,7 +297,7 @@ export class SurvivalGame {
     retry(): ActionResult {
         if (this.phase !== 'failure') return this.feedback.result(false, '当前没有失败的探索。');
         this.phase = 'shelter';
-        return this.feedback.result(true, '已恢复出发补给，可以再次整备出发。');
+        return this.feedback.result(true, '已恢复出发补给，可以再次出发。');
     }
     chooseRoute(route: Route): ActionResult {
         return this.explorationRules.chooseRoute(route);
@@ -290,6 +307,18 @@ export class SurvivalGame {
     }
     cardBlocked(card: CombatCard): string {
         return this.combatRules.cardBlocked(card);
+    }
+    discover(kind: CardKind | null): ActionResult {
+        return this.rewards?.discovery ? this.rewardRules.discover(kind) : this.combatRules.discover(kind);
+    }
+    resolveCombatChoice(id: string | null): ActionResult {
+        return this.combatRules.resolveChoice(id);
+    }
+    cardCost(kind: CardKind): number {
+        return this.combatRules.cardCost(kind);
+    }
+    attackDamage(kind: CardKind): number {
+        return this.combatRules.attackDamage(kind);
     }
     play(id: string): ActionResult {
         return this.combatRules.play(id);

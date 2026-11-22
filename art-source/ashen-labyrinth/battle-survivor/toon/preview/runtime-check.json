@@ -1,0 +1,93 @@
+{
+  "scene": "SurvivorToonReview",
+  "clips": [
+    "FlickLantern",
+    "Think",
+    "Fan",
+    "FlickGuard",
+    "FlickRepel"
+  ],
+  "renderers": [
+    {
+      "name": "WovenCostume",
+      "skin": true,
+      "texture": [
+        2048,
+        1536
+      ]
+    },
+    {
+      "name": "ArticulatedHands",
+      "skin": true,
+      "texture": [
+        384,
+        1152
+      ]
+    },
+    {
+      "name": "CardLantern",
+      "skin": false,
+      "texture": [
+        384,
+        256
+      ]
+    },
+    {
+      "name": "CardGuard",
+      "skin": false,
+      "texture": [
+        384,
+        256
+      ]
+    },
+    {
+      "name": "CardRepel",
+      "skin": false,
+      "texture": [
+        384,
+        256
+      ]
+    }
+  ],
+  "view": 1080,
+  "input": [
+    {
+      "card": "Lantern",
+      "clip": "FlickLantern",
+      "contactPixels": 0.00005733197088679196,
+      "displacementMetres": [
+        0.29310344482709055,
+        0,
+        0
+      ]
+    },
+    {
+      "card": "Guard",
+      "clip": "FlickGuard",
+      "contactPixels": 0.000052501276063926314,
+      "displacementMetres": [
+        0,
+        0.29310344482709055,
+        0
+      ]
+    },
+    {
+      "card": "Repel",
+      "clip": "FlickRepel",
+      "contactPixels": 0.000059432540098310954,
+      "displacementMetres": [
+        0,
+        0,
+        0.2931034504422131
+      ]
+    }
+  ],
+  "realTimeGuardTravelMetres": 0.7799940581303452,
+  "errors": [],
+  "frames": 116,
+  "fps": 24,
+  "aspect": [
+    1080,
+    675
+  ]
+}

@@ -1,26 +1,151 @@
 
-master08-thin.png
-size: 1536,1024
+survivor-parts.png
+size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-master08-thin
+Cloth
   rotate: false
-  xy: 0, 0
-  size: 1536, 1024
-  orig: 1536, 1024
+  xy: 182, 717
+  size: 66, 84
+  orig: 66, 84
+  offset: 0, 0
+  index: -1
+FrontFoot
+  rotate: false
+  xy: 252, 706
+  size: 122, 95
+  orig: 122, 95
+  offset: 0, 0
+  index: -1
+FrontForearm
+  rotate: false
+  xy: 328, 171
+  size: 134, 530
+  orig: 134, 530
+  offset: 0, 0
+  index: -1
+FrontHand
+  rotate: false
+  xy: 466, 139
+  size: 508, 514
+  orig: 508, 514
+  offset: 0, 0
+  index: -1
+FrontThigh
+  rotate: false
+  xy: 866, 657
+  size: 76, 144
+  orig: 76, 144
+  offset: 0, 0
+  index: -1
+FrontUpperArm
+  rotate: false
+  xy: 237, 328
+  size: 87, 374
+  orig: 87, 374
+  offset: 0, 0
+  index: -1
+Head
+  rotate: false
+  xy: 594, 667
+  size: 159, 134
+  orig: 159, 134
+  offset: 0, 0
+  index: -1
+Pouch
+  rotate: false
+  xy: 110, 728
+  size: 68, 73
+  orig: 68, 73
+  offset: 0, 0
+  index: -1
+RearFoot
+  rotate: false
+  xy: 378, 705
+  size: 85, 96
+  orig: 85, 96
+  offset: 0, 0
+  index: -1
+RearForearm
+  rotate: false
+  xy: 61, 733
+  size: 45, 68
+  orig: 45, 68
+  offset: 0, 0
+  index: -1
+RearHand
+  rotate: false
+  xy: 2, 742
+  size: 55, 59
+  orig: 55, 59
+  offset: 0, 0
+  index: -1
+RearThigh
+  rotate: false
+  xy: 757, 662
+  size: 105, 139
+  orig: 105, 139
+  offset: 0, 0
+  index: -1
+RearUpperArm
+  rotate: false
+  xy: 2, 2
+  size: 156, 540
+  orig: 156, 540
+  offset: 0, 0
+  index: -1
+Torso
+  rotate: false
+  xy: 2, 546
+  size: 231, 167
+  orig: 231, 167
+  offset: 0, 0
+  index: -1
+Weapon
+  rotate: false
+  xy: 467, 694
+  size: 123, 107
+  orig: 123, 107
   offset: 0, 0
   index: -1
 
-survivor-corpse.png
-size: 2172,724
+survivor-parts2.png
+size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-survivor-corpse
+Pack
   rotate: false
-  xy: 74, 87
-  size: 2040, 609
-  orig: 2172, 724
-  offset: 74, 28
+  xy: 2, 2
+  size: 476, 794
+  orig: 476, 794
+  offset: 0, 0
+  index: -1
+RearShin
+  rotate: false
+  xy: 482, 2
+  size: 336, 794
+  orig: 336, 794
+  offset: 0, 0
+  index: -1
+
+survivor-parts3.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+FrontShin
+  rotate: false
+  xy: 669, 2
+  size: 297, 794
+  orig: 297, 794
+  offset: 0, 0
+  index: -1
+Pelvis
+  rotate: false
+  xy: 2, 254
+  size: 663, 542
+  orig: 663, 542
+  offset: 0, 0
   index: -1

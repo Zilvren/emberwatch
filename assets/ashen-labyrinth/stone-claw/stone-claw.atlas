@@ -1,0 +1,104 @@
+
+stone-claw-parts.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+claw-arm
+  rotate: false
+  xy: 633, 222
+  size: 185, 155
+  orig: 185, 155
+  offset: 0, 0
+  index: -1
+far-claw
+  rotate: false
+  xy: 616, 107
+  size: 154, 111
+  orig: 154, 111
+  offset: 0, 0
+  index: -1
+far-fore-leg
+  rotate: false
+  xy: 636, 381
+  size: 185, 206
+  orig: 185, 206
+  offset: 0, 0
+  index: -1
+far-hind-leg
+  rotate: false
+  xy: 920, 538
+  size: 97, 128
+  orig: 97, 128
+  offset: 0, 0
+  index: -1
+finger
+  rotate: false
+  xy: 774, 67
+  size: 236, 139
+  orig: 236, 139
+  offset: 0, 0
+  index: -1
+hull
+  rotate: false
+  xy: 2, 457
+  size: 630, 356
+  orig: 630, 356
+  offset: 0, 0
+  index: -1
+near-fore-shin
+  rotate: false
+  xy: 920, 670
+  size: 97, 143
+  orig: 97, 143
+  offset: 0, 0
+  index: -1
+near-fore-thigh
+  rotate: false
+  xy: 825, 336
+  size: 185, 198
+  orig: 185, 198
+  offset: 0, 0
+  index: -1
+near-hind-shin
+  rotate: false
+  xy: 511, 269
+  size: 118, 184
+  orig: 118, 184
+  offset: 0, 0
+  index: -1
+near-hind-thigh
+  rotate: false
+  xy: 822, 210
+  size: 170, 122
+  orig: 170, 122
+  offset: 0, 0
+  index: -1
+palm
+  rotate: false
+  xy: 636, 591
+  size: 280, 222
+  orig: 280, 222
+  offset: 0, 0
+  index: -1
+pincer-socket
+  rotate: false
+  xy: 511, 156
+  size: 101, 109
+  orig: 101, 109
+  offset: 0, 0
+  index: -1
+shell-underplate
+  rotate: false
+  xy: 2, 189
+  size: 505, 264
+  orig: 505, 264
+  offset: 0, 0
+  index: -1
+shield
+  rotate: false
+  xy: 2, 2
+  size: 400, 183
+  orig: 400, 183
+  offset: 0, 0
+  index: -1

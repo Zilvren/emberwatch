@@ -1,0 +1,49 @@
+{
+  "engine": "3.8.75",
+  "bones": 60,
+  "images": 51,
+  "handedness": "the anatomical right palm leaves the near cheek to flick the selected back; the left palm supports the right elbow",
+  "playableClips": [
+    "attack",
+    "card-flight",
+    "carry-card",
+    "death",
+    "fan-in",
+    "guard-flick",
+    "hurt",
+    "idle",
+    "lantern-flick",
+    "prepare",
+    "repel-flick",
+    "spent-guard",
+    "spent-lantern",
+    "spent-repel",
+    "think",
+    "think-without-guard",
+    "think-without-lantern",
+    "think-without-repel"
+  ],
+  "release": 0.44,
+  "editableRotationKeys": {
+    "hips": 11,
+    "chest": 11,
+    "head": 12,
+    "near-sleeve": 60,
+    "near-bracer": 58,
+    "near-hand": 60,
+    "cast-sleeve": 31,
+    "cast-bracer": 52,
+    "cast-palm": 39,
+    "coat-skirt-tip": 13
+  },
+  "atlasPages": [
+    "survivor-flick-parts.png",
+    "survivor-flick-parts2.png",
+    "survivor-flick-parts3.png",
+    "survivor-flick-parts4.png",
+    "survivor-flick-parts5.png",
+    "survivor-flick-parts6.png",
+    "survivor-flick-parts7.png"
+  ],
+  "projectSha256": "c801923824d2b0442867a01b1e3e533225448ab5dfcf7329fab6fc0d7b993570"
+}

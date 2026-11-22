@@ -20,7 +20,7 @@ const checkSurface=async kind=>{
   if(shadow.actorActive)assert(Math.abs(shadow.dx)<.05&&Math.abs(shadow.dy+2)<.05,'Contact shadow drifted from the feet');
  }
  assert(surface.rigs.every(r=>r.source==='42c8f2393d8b08eb7f69f4900e12b9e04d9e768587b96aff3637964900243e1f'),'08 artwork source changed');
- assert(surface.rigs.every(r=>r.bones>=26&&r.runtimeReady&&r.weightedVertices>100),'Spine actor bindings are incomplete');
+ assert(surface.rigs.every(r=>r.bones>=26&&r.runtimeReady&&r.independentParts>=16),'Independent Spine actor part bindings are incomplete');
  return surface;
 };
 await page.setViewportSize({width:1440,height:900});await page.emulateMedia({reducedMotion:'no-preference'});

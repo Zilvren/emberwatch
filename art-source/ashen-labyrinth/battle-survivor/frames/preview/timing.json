@@ -1,0 +1,186 @@
+{
+  "fps": 25,
+  "thinkSeconds": 3.4,
+  "fanSeconds": 0.64,
+  "attackSeconds": 1.2,
+  "releaseAt": 0.44,
+  "poses": {
+    "think": [
+      [
+        0,
+        "think"
+      ],
+      [
+        31,
+        "inhale"
+      ],
+      [
+        58,
+        "think"
+      ]
+    ],
+    "fan": [
+      [
+        0,
+        "think"
+      ]
+    ],
+    "flicks": {
+      "low": [
+        [
+          0,
+          "think"
+        ],
+        [
+          2,
+          "lift"
+        ],
+        [
+          5,
+          "coil"
+        ],
+        [
+          8,
+          "reach-low"
+        ],
+        [
+          11,
+          "touch-low"
+        ],
+        [
+          12,
+          "sweep-low"
+        ],
+        [
+          16,
+          "recoil"
+        ],
+        [
+          21,
+          "return"
+        ],
+        [
+          25,
+          "think"
+        ]
+      ],
+      "middle": [
+        [
+          0,
+          "think"
+        ],
+        [
+          2,
+          "lift"
+        ],
+        [
+          5,
+          "coil"
+        ],
+        [
+          8,
+          "reach-middle"
+        ],
+        [
+          11,
+          "touch-middle"
+        ],
+        [
+          12,
+          "sweep-middle"
+        ],
+        [
+          16,
+          "recoil"
+        ],
+        [
+          21,
+          "return"
+        ],
+        [
+          25,
+          "think"
+        ]
+      ],
+      "high": [
+        [
+          0,
+          "think"
+        ],
+        [
+          2,
+          "lift"
+        ],
+        [
+          5,
+          "coil"
+        ],
+        [
+          8,
+          "reach-high"
+        ],
+        [
+          11,
+          "touch-high"
+        ],
+        [
+          12,
+          "sweep-high"
+        ],
+        [
+          16,
+          "recoil"
+        ],
+        [
+          21,
+          "return"
+        ],
+        [
+          25,
+          "think"
+        ]
+      ]
+    }
+  },
+  "cards": [
+    {
+      "width": 43,
+      "height": 60.92,
+      "angle": 13,
+      "rest": [
+        341.7402162633121,
+        278.22345444029463
+      ],
+      "contact": [
+        341.7402162633121,
+        265.22345444029463
+      ]
+    },
+    {
+      "width": 43,
+      "height": 60.92,
+      "angle": 0,
+      "rest": [
+        430.2,
+        223.37
+      ],
+      "contact": [
+        430.2,
+        210.37
+      ]
+    },
+    {
+      "width": 43,
+      "height": 60.92,
+      "angle": -12,
+      "rest": [
+        475.70375879393544,
+        142.99873555333494
+      ],
+      "contact": [
+        475.70375879393544,
+        129.99873555333494
+      ]
+    }
+  ]
+}

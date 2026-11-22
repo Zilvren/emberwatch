@@ -1,0 +1,92 @@
+{
+  "project": "The end",
+  "date": "2026-11-19",
+  "title": "门前择牌全景清晰度校正",
+  "status": "双人面部特写已由用户确认。本次全景为评审稿。",
+  "approvedFaceReference": {
+    "file": "art-source/ashen-labyrinth/references/approved-face-color.png",
+    "width": 1774,
+    "height": 887,
+    "sha256": "6681f7d414322e80fb7ba8d821a57b2d0207a6c5f1a3a09917e7bce11f44050f",
+    "scope": "求生者及守门人的面部碎色、五官和神态。",
+    "uri": "viking://~/resources/projects/the-end/docs/sources/ashen-labyrinth-face-color-approved/approved-face-color.png"
+  },
+  "sourceScene": {
+    "file": "art-source/ashen-labyrinth/references/threshold-card-choice-close-source.png",
+    "sha256": "4b8237b17b8f48068f9bdda829cb6371969024fa61a271e43bd3e29896436cff",
+    "width": 1586,
+    "height": 992
+  },
+  "file": "art-source/ashen-labyrinth/threshold-card-choice-clarity.png",
+  "width": 3172,
+  "height": 1984,
+  "sha256": "b4ffe0bd838fbe5271c477d7c7cec0ec28d9a29e366fc3d49a344564a0509fd9",
+  "diagnosis": "用户本次贴出的全景与早期近景底图文件一致。左侧面部在原图中约六十像素宽，眉眼和颧侧调子接近。眼周小块暖米色与深色眼线紧邻，缩小时容易显白。",
+  "nativeComparison": {
+    "width": 1586,
+    "height": 992,
+    "eyeSampleXY": [
+      449,
+      226
+    ],
+    "original": "#CEAF97",
+    "corrected": "#8A6051",
+    "eyePatchXYWH": [
+      441,
+      215,
+      20,
+      22
+    ],
+    "originalPeakRGB": [
+      206,
+      175,
+      151
+    ],
+    "correctedPeakRGB": [
+      173,
+      126,
+      106
+    ]
+  },
+  "generation": {
+    "tool": "内置 ImageGen",
+    "fullCall": "exec-cc29c799-b1e5-439a-a0a5-2ec98f3204f4",
+    "eyeCall": "exec-53db8a15-6fdf-484c-825e-30079de7bf30",
+    "method": "取全景清晰度校正图作底，将已确认的高分辨率特写按原脸位合回。求生者眼角单独叠入暖褐色的游戏尺寸画稿。",
+    "sceneSourceResolution": [
+      1585,
+      992
+    ],
+    "registration": [
+      {
+        "Role": "survivor",
+        "dx": 0.5,
+        "dy": 0.5,
+        "Score": 0.628
+      },
+      {
+        "Role": "gatekeeper",
+        "dx": -1,
+        "dy": 0,
+        "Score": 0.912
+      }
+    ]
+  },
+  "preview": {
+    "type": "概念图的静态缩图",
+    "widths": [
+      1440,
+      1024
+    ],
+    "observation": "两种宽度均能分清向下的视线、颊侧色面和三张卡牌的招式形状。"
+  },
+  "brief": {
+    "version": "v0.6",
+    "file": "docs/designs/焦土迷宫美术设计需求.docx",
+    "sha256": "4207dcd65e0bd2ff83cb8af645a0dd7f4ba2e5036db558bb1654a9876f7aae0f",
+    "page": 3,
+    "uri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-art-brief.md"
+  },
+  "assetArchive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/clarity/threshold-card-choice-clarity.png",
+  "recordUri": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-card-choice/clarity/threshold-card-choice-clarity.json"
+}

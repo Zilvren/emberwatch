@@ -40,7 +40,7 @@ const finishPreparedMap = async (supplies, armor = 10) => {
     await page.waitForFunction(() => ['journal', 'shelter'].includes(globalThis.__emberUI.snapshot().phase));
     await idle();
 };
-async function firstClear(attempt, save, bank, armor = 10, ruleset = '') {
+async function firstClear(attempt, save, bank, armor = 10, ruleset = 'stamina-v1') {
     await page.goto(`http://127.0.0.1:7457/?seed=17&save=${save ? 'on' : 'off'}&qa=core-loop-${attempt}&ruleset=${ruleset}`);
     await idle();
     await startFormal('journal-start');

@@ -47,14 +47,26 @@ export function shelterSummary(game: GameReadModel) {
     }
     return {
         values: {
-            'banner/text2': '整理带回的物品，按需修复护甲，然后再次出发。',
-            'shelter/loot-title': settlement ? '本次带回' : '出发储备',
-            'shelter/returned': settlement
-                ? `${settlement.returnedSupplies} 物资  ·  ${settlement.returnedCards} 张卡牌`
-                : `${game.supplies} 物资  ·  ${game.cards.length} 张卡牌`,
-            'shelter/losses': lost.length
-                ? `暂存损失 ${lost.length} 件：${lost.slice(0, 3).join('、')}${lost.length > 3 ? '等' : ''}`
-                : '携带物品已清点 · 暂存无损失',
+            'banner/text2': game.scenario.fieldDeck
+                ? '物资已经入库，护甲可在这里修复。'
+                : '整理带回的物品，按需修复护甲，然后再次出发。',
+            'shelter/loot-title': game.scenario.fieldDeck
+                ? '避难所储备'
+                : settlement
+                  ? '本次带回'
+                  : '出发储备',
+            'shelter/returned': game.scenario.fieldDeck
+                ? `${game.supplies} 物资 · 基础牌组 ${game.cards.length} 张`
+                : settlement
+                  ? `${settlement.returnedSupplies} 物资  ·  ${settlement.returnedCards} 张卡牌`
+                  : `${game.supplies} 物资  ·  ${game.cards.length} 张卡牌`,
+            'shelter/losses': game.scenario.fieldDeck
+                ? settlement?.discoveredCards
+                    ? `本次发现 ${settlement.discoveredCards} 张，返家已恢复基础牌组。`
+                    : '下次从基础牌组出发。'
+                : lost.length
+                  ? `暂存损失 ${lost.length} 件：${lost.slice(0, 3).join('、')}${lost.length > 3 ? '等' : ''}`
+                  : '携带物品已清点 · 暂存无损失',
             'shelter/armor': `${game.armor} / 10`,
             'shelter/repair-hint': settlement?.repaired
                 ? `已花费 ${settlement.repairSpent} 物资，护甲恢复完整。`
@@ -70,6 +82,6 @@ export function shelterSummary(game: GameReadModel) {
         repairVisible: needsRepair,
         repairEnabled: canRepair,
         repairCaption: `修复护甲 · ${cost} 物资`,
-        doneCaption: '整备出发',
+        doneCaption: game.scenario.fieldDeck || settlement ? '再次出发' : '整备出发',
     };
 }

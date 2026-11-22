@@ -1,0 +1,1193 @@
+{
+  "actor": "survivor",
+  "source": "profile-source.png",
+  "sourceSha256": "5fb5c0fa92a706fbc9a53464ad7ee36cdf4d7d68f92c0f983c629bdb8f87d181",
+  "jointUnderpaint": "../joint-underpaint.png",
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    298,
+    1840
+  ],
+  "scale": 0.24,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "hips",
+      "bone": "hips",
+      "sourceXYWH": [
+        94,
+        617,
+        406,
+        239
+      ],
+      "png": [
+        406,
+        239
+      ],
+      "sha256": "2224e6b10ffc39993bc95d68a325ae4344a0589ab1e81b52dcfcb86f294cc932",
+      "pivotUV": [
+        0.571429,
+        1.259414
+      ],
+      "setupPivot": [
+        6.72,
+        221.28
+      ],
+      "size": [
+        97.44,
+        57.36
+      ],
+      "angle": 0,
+      "visiblePixels": 5498,
+      "hiddenPixels": 23002,
+      "reconstructionCell": 1
+    },
+    {
+      "name": "chest",
+      "bone": "chest",
+      "sourceXYWH": [
+        94,
+        339,
+        406,
+        476
+      ],
+      "png": [
+        406,
+        476
+      ],
+      "sha256": "ec1df7fd721aadb0ab9d4496e81020df272214a4e2045bca3785a1380ef5130e",
+      "pivotUV": [
+        0.581281,
+        0.80042
+      ],
+      "setupPivot": [
+        7.68,
+        268.8
+      ],
+      "size": [
+        97.44,
+        114.24
+      ],
+      "angle": 0,
+      "visiblePixels": 10143,
+      "hiddenPixels": 57240,
+      "reconstructionCell": 0
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "sourceXYWH": [
+        163,
+        10,
+        315,
+        350
+      ],
+      "png": [
+        315,
+        350
+      ],
+      "sha256": "d31a13d573054c84c98b11f1e9292e96f893f1d30dcf51aa870c414f533e4696",
+      "pivotUV": [
+        0.492063,
+        0.885714
+      ],
+      "setupPivot": [
+        4.8,
+        364.8
+      ],
+      "size": [
+        75.6,
+        84
+      ],
+      "angle": 0,
+      "visiblePixels": 47829,
+      "hiddenPixels": 4415,
+      "reconstructionCell": 0
+    },
+    {
+      "name": "hair-lock",
+      "bone": "hair-lock",
+      "sourceXYWH": [
+        166,
+        109,
+        129,
+        167
+      ],
+      "png": [
+        129,
+        167
+      ],
+      "sha256": "de0971b9772b48de1063d392f43bcfb866e1a8e4b492ac6476b1305fee223030",
+      "pivotUV": [
+        0.651163,
+        0.269461
+      ],
+      "setupPivot": [
+        -11.52,
+        404.64
+      ],
+      "size": [
+        30.96,
+        40.08
+      ],
+      "angle": 0,
+      "visiblePixels": 6642,
+      "hiddenPixels": 0,
+      "reconstructionCell": 0
+    },
+    {
+      "name": "hood",
+      "bone": "hood",
+      "sourceXYWH": [
+        94,
+        331,
+        177,
+        248
+      ],
+      "png": [
+        177,
+        248
+      ],
+      "sha256": "57088687ef344ec1022e20e639621d21e5ad56d22a2c687add9161cf9a7a20e7",
+      "pivotUV": [
+        0.99435,
+        0.173387
+      ],
+      "setupPivot": [
+        -6.72,
+        351.84
+      ],
+      "size": [
+        42.48,
+        59.52
+      ],
+      "angle": 0,
+      "visiblePixels": 6768,
+      "hiddenPixels": 8973,
+      "reconstructionCell": 11
+    },
+    {
+      "name": "scarf",
+      "bone": "scarf",
+      "sourceXYWH": [
+        133,
+        269,
+        330,
+        182
+      ],
+      "png": [
+        330,
+        182
+      ],
+      "sha256": "acb1530a15dbd4c62533bf0966c1c1fb570b1e9f21452df094bf06c82f3792c4",
+      "pivotUV": [
+        0.548485,
+        0.434066
+      ],
+      "setupPivot": [
+        3.84,
+        358.08
+      ],
+      "size": [
+        79.2,
+        43.68
+      ],
+      "angle": 0,
+      "visiblePixels": 18220,
+      "hiddenPixels": 0,
+      "reconstructionCell": 5
+    },
+    {
+      "name": "mantle",
+      "bone": "mantle",
+      "sourceXYWH": [
+        94,
+        321,
+        385,
+        446
+      ],
+      "png": [
+        385,
+        446
+      ],
+      "sha256": "d56142ecc5a61a03fd789f6303f3732665d5b2196eb6b819fe9737984156108e",
+      "pivotUV": [
+        0.576623,
+        0.186099
+      ],
+      "setupPivot": [
+        4.32,
+        344.64
+      ],
+      "size": [
+        92.4,
+        107.04
+      ],
+      "angle": 0,
+      "visiblePixels": 49213,
+      "hiddenPixels": 3424,
+      "reconstructionCell": 11
+    },
+    {
+      "name": "back-flap",
+      "bone": "back-flap",
+      "sourceXYWH": [
+        94,
+        676,
+        205,
+        863
+      ],
+      "png": [
+        205,
+        863
+      ],
+      "sha256": "23dfdcb92a7b8716f8162abe2a7daf87b034ee3dfc600698e23e6c981c141f1e",
+      "pivotUV": [
+        0.57561,
+        0.136732
+      ],
+      "setupPivot": [
+        -20.64,
+        251.04
+      ],
+      "size": [
+        49.2,
+        207.12
+      ],
+      "angle": 0,
+      "visiblePixels": 32186,
+      "hiddenPixels": 9229,
+      "reconstructionCell": 11,
+      "backingPixels": 20182
+    },
+    {
+      "name": "coat-skirt",
+      "bone": "coat-skirt",
+      "sourceXYWH": [
+        94,
+        693,
+        406,
+        689
+      ],
+      "png": [
+        406,
+        689
+      ],
+      "sha256": "e41ec35293e3aa4ce368f3ffb907f195659e18c734ba87a0608d2c2068534f48",
+      "pivotUV": [
+        0.55665,
+        0.169811
+      ],
+      "setupPivot": [
+        5.28,
+        247.2
+      ],
+      "size": [
+        97.44,
+        165.36
+      ],
+      "angle": 0,
+      "visiblePixels": 46124,
+      "hiddenPixels": 57294,
+      "reconstructionCell": 11,
+      "backingPixels": 59620
+    },
+    {
+      "name": "tunic-lining",
+      "bone": "tunic-lining",
+      "sourceXYWH": [
+        325,
+        860,
+        175,
+        457
+      ],
+      "png": [
+        175,
+        457
+      ],
+      "sha256": "b1400391f011741c1a4d897d07d9738dc0e4310e4590e06e396db582306b57a9",
+      "pivotUV": [
+        0.451429,
+        -0.070022
+      ],
+      "setupPivot": [
+        25.44,
+        242.88
+      ],
+      "size": [
+        42,
+        109.68
+      ],
+      "angle": 0,
+      "visiblePixels": 15697,
+      "hiddenPixels": 2722,
+      "reconstructionCell": 0
+    },
+    {
+      "name": "strap",
+      "bone": "strap",
+      "sourceXYWH": [
+        331,
+        414,
+        154,
+        409
+      ],
+      "png": [
+        154,
+        409
+      ],
+      "sha256": "a599ccc4339ca8cc5c4cdc6c84d4b4b9b930d26219c2806fec4e32806d9ef636",
+      "pivotUV": [
+        0.655844,
+        0.117359
+      ],
+      "setupPivot": [
+        32.16,
+        330.72
+      ],
+      "size": [
+        36.96,
+        98.16
+      ],
+      "angle": 0,
+      "visiblePixels": 11477,
+      "hiddenPixels": 3301,
+      "reconstructionCell": 1
+    },
+    {
+      "name": "ration-bag",
+      "bone": "ration-bag",
+      "sourceXYWH": [
+        94,
+        723,
+        247,
+        364
+      ],
+      "png": [
+        247,
+        364
+      ],
+      "sha256": "52243cae450f7ae8027cd4f0fd24438efffdb8f579cf0f2c7e93d40df3068f3f",
+      "pivotUV": [
+        0.534413,
+        0.321429
+      ],
+      "setupPivot": [
+        -17.28,
+        240
+      ],
+      "size": [
+        59.28,
+        87.36
+      ],
+      "angle": 0,
+      "visiblePixels": 34767,
+      "hiddenPixels": 1966,
+      "reconstructionCell": 1
+    },
+    {
+      "name": "card-case",
+      "bone": "card-case",
+      "sourceXYWH": [
+        363,
+        731,
+        134,
+        198
+      ],
+      "png": [
+        134,
+        198
+      ],
+      "sha256": "9e80762339a47fbe87092856ea2c35b01ac5401251feada5e13c33490d26ddeb",
+      "pivotUV": [
+        0.455224,
+        0.308081
+      ],
+      "setupPivot": [
+        30.24,
+        251.52
+      ],
+      "size": [
+        32.16,
+        47.52
+      ],
+      "angle": 0,
+      "visiblePixels": 12018,
+      "hiddenPixels": 0,
+      "reconstructionCell": 1
+    },
+    {
+      "name": "near-sleeve",
+      "bone": "near-sleeve",
+      "sourceXYWH": [
+        124,
+        467,
+        337,
+        405
+      ],
+      "png": [
+        337,
+        405
+      ],
+      "sha256": "b8134694a0b9d149344a2fdafa45b3cd89fb6cc70aa5467f6f5f79990bff957e",
+      "pivotUV": [
+        0.581602,
+        -0.111111
+      ],
+      "setupPivot": [
+        5.28,
+        340.32
+      ],
+      "size": [
+        80.88,
+        97.2
+      ],
+      "angle": 0,
+      "visiblePixels": 36569,
+      "hiddenPixels": 10473,
+      "reconstructionCell": 2
+    },
+    {
+      "name": "near-bracer",
+      "bone": "near-bracer",
+      "sourceXYWH": [
+        209,
+        741,
+        216,
+        257
+      ],
+      "png": [
+        216,
+        257
+      ],
+      "sha256": "f0d6bc52f3772c9869a5e94365f692e2a0f630f56813a78d4aa78d994181290d",
+      "pivotUV": [
+        0.439815,
+        -0.198444
+      ],
+      "setupPivot": [
+        1.44,
+        276
+      ],
+      "size": [
+        51.84,
+        61.68
+      ],
+      "angle": 0,
+      "visiblePixels": 12658,
+      "hiddenPixels": 976,
+      "reconstructionCell": 3
+    },
+    {
+      "name": "near-hand",
+      "bone": "near-hand",
+      "sourceXYWH": [
+        289,
+        910,
+        140,
+        211
+      ],
+      "png": [
+        140,
+        211
+      ],
+      "sha256": "b54384759abf0b7ee746b2882301c81e753a7d00d1c4cbef66c7e61180bb7c04",
+      "pivotUV": [
+        0.421429,
+        0.208531
+      ],
+      "setupPivot": [
+        12,
+        212.64
+      ],
+      "size": [
+        33.6,
+        50.64
+      ],
+      "angle": 0,
+      "visiblePixels": 10238,
+      "hiddenPixels": 0,
+      "reconstructionCell": 4
+    },
+    {
+      "name": "near-thigh",
+      "bone": "near-thigh",
+      "sourceXYWH": [
+        128,
+        1086,
+        358,
+        435
+      ],
+      "png": [
+        358,
+        435
+      ],
+      "sha256": "33ba3d4ab61daeb2d096b9d343bb46e96a9e0503e3ffb17c586d463f8075dd58",
+      "pivotUV": [
+        0.530726,
+        -0.372414
+      ],
+      "setupPivot": [
+        4.8,
+        219.84
+      ],
+      "size": [
+        85.92,
+        104.4
+      ],
+      "angle": 0,
+      "visiblePixels": 44452,
+      "hiddenPixels": 28328,
+      "reconstructionCell": 8
+    },
+    {
+      "name": "near-shin",
+      "bone": "near-shin",
+      "sourceXYWH": [
+        173,
+        1399,
+        240,
+        324
+      ],
+      "png": [
+        240,
+        324
+      ],
+      "sha256": "06140eecdf6e2159c051c528218da122e4988b5b9483325cbd931ecec4752aaf",
+      "pivotUV": [
+        0.579167,
+        -0.299383
+      ],
+      "setupPivot": [
+        3.36,
+        129.12
+      ],
+      "size": [
+        57.6,
+        77.76
+      ],
+      "angle": 0,
+      "visiblePixels": 26825,
+      "hiddenPixels": 2417,
+      "reconstructionCell": 9
+    },
+    {
+      "name": "near-boot",
+      "bone": "near-boot",
+      "sourceXYWH": [
+        180,
+        1628,
+        320,
+        224
+      ],
+      "png": [
+        320,
+        224
+      ],
+      "sha256": "5f122d0c25f26e8b170b9962f8443167f24b0c2423853cb92fb60a1ca43ffe8a",
+      "pivotUV": [
+        0.31875,
+        0.25
+      ],
+      "setupPivot": [
+        -3.84,
+        37.44
+      ],
+      "size": [
+        76.8,
+        53.76
+      ],
+      "angle": 0,
+      "visiblePixels": 29513,
+      "hiddenPixels": 0,
+      "reconstructionCell": 10
+    },
+    {
+      "name": "near-trouser-lining",
+      "bone": "near-thigh",
+      "sourceXYWH": [
+        185,
+        909,
+        246,
+        562
+      ],
+      "png": [
+        246,
+        562
+      ],
+      "sha256": "4e6ce8573bae13edaecfb4bf1559e68bd9a4a3c4183a8838e5c877d0058e7bfb",
+      "pivotUV": [
+        0.54065,
+        0.02669
+      ],
+      "setupPivot": [
+        4.8,
+        219.84
+      ],
+      "size": [
+        59.04,
+        134.88
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 104561,
+      "reconstructionCell": 8,
+      "underlay": true
+    },
+    {
+      "name": "hips-lining",
+      "bone": "hips",
+      "sourceXYWH": [
+        163,
+        823,
+        282,
+        450
+      ],
+      "png": [
+        282,
+        450
+      ],
+      "sha256": "5b81ca0d11e19394fd2679e3674444a89a94210f568da655f6ee5c88f1a1bf4c",
+      "pivotUV": [
+        0.578014,
+        0.211111
+      ],
+      "setupPivot": [
+        6.72,
+        221.28
+      ],
+      "size": [
+        67.68,
+        108
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 89076,
+      "reconstructionCell": 1,
+      "underlay": true
+    },
+    {
+      "name": "inner-tunic",
+      "bone": "chest",
+      "sourceXYWH": [
+        143,
+        349,
+        322,
+        560
+      ],
+      "png": [
+        322,
+        560
+      ],
+      "sha256": "7b2fe5aec219bc0104cbcd7688c39cba71dd288f013d4b2bb488dde1a2308196",
+      "pivotUV": [
+        0.580745,
+        0.6625
+      ],
+      "setupPivot": [
+        7.68,
+        268.8
+      ],
+      "size": [
+        77.28,
+        134.4
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 137213,
+      "reconstructionCell": 0,
+      "underlay": true,
+      "backingPixels": 137213
+    },
+    {
+      "name": "inner-skirt",
+      "bone": "hips",
+      "sourceXYWH": [
+        117,
+        731,
+        362,
+        636
+      ],
+      "png": [
+        362,
+        636
+      ],
+      "sha256": "c2e7dac2b347b9cf1fb1e161b9bff9a2577f8706c94d9e8e816f1277b091f0fe",
+      "pivotUV": [
+        0.577348,
+        0.294025
+      ],
+      "setupPivot": [
+        6.72,
+        221.28
+      ],
+      "size": [
+        86.88,
+        152.64
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 135776,
+      "reconstructionCell": 11,
+      "underlay": true,
+      "backingPixels": 135776
+    },
+    {
+      "name": "knee-lining",
+      "bone": "near-shin",
+      "sourceXYWH": [
+        203,
+        1391,
+        184,
+        118
+      ],
+      "png": [
+        184,
+        118
+      ],
+      "sha256": "6e8808725189ae86ca8f7de3f7b97cd79a3a5ec83662c5bcd59e0b082f1fab13",
+      "pivotUV": [
+        0.592391,
+        -0.754237
+      ],
+      "setupPivot": [
+        3.36,
+        129.12
+      ],
+      "size": [
+        44.16,
+        28.32
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 13287,
+      "reconstructionCell": 9,
+      "underlay": true
+    },
+    {
+      "name": "near-underarm",
+      "bone": "near-sleeve",
+      "sourceXYWH": [
+        223,
+        411,
+        160,
+        396
+      ],
+      "png": [
+        160,
+        396
+      ],
+      "sha256": "4155ed0200f49d53aa3d115bada71e328c9b721e1346962cd86c887f60d48327",
+      "pivotUV": [
+        0.60625,
+        0.027778
+      ],
+      "setupPivot": [
+        5.28,
+        340.32
+      ],
+      "size": [
+        38.4,
+        95.04
+      ],
+      "angle": 0,
+      "visiblePixels": 0,
+      "hiddenPixels": 44664,
+      "reconstructionCell": 2,
+      "underlay": true
+    },
+    {
+      "name": "far-thigh",
+      "bone": "far-thigh",
+      "sha256": "f509367f82fdf3d341a1b800e6c3044437dc795ec1bfe6001c33624cd71b6837",
+      "png": [
+        207,
+        348
+      ],
+      "source": "../joint-underpaint.png",
+      "reconstructionCell": 8,
+      "pivotUV": [
+        0.52,
+        0.09
+      ],
+      "setupPivot": [
+        5.28,
+        219.36
+      ],
+      "size": [
+        57.464396,
+        150.948142
+      ],
+      "battleOnly": true
+    },
+    {
+      "name": "far-shin",
+      "bone": "far-shin",
+      "sha256": "ee6bef9ee5f70ba3eed9a497522508adff157caac61ce5d1dfa38704c4e39cbe",
+      "png": [
+        172,
+        325
+      ],
+      "source": "../joint-underpaint.png",
+      "reconstructionCell": 9,
+      "pivotUV": [
+        0.5,
+        0.09
+      ],
+      "setupPivot": [
+        4.8,
+        129.12
+      ],
+      "size": [
+        34.149385,
+        67.215056
+      ],
+      "battleOnly": true
+    },
+    {
+      "name": "far-boot",
+      "bone": "far-boot",
+      "sha256": "339ca44548e66f790c8265fff6c1a9de75ef25e00454505aa4d3009f1de004db",
+      "png": [
+        323,
+        233
+      ],
+      "source": "../joint-underpaint.png",
+      "reconstructionCell": 10,
+      "pivotUV": [
+        0.23,
+        0.27
+      ],
+      "setupPivot": [
+        -3.84,
+        37.44
+      ],
+      "size": [
+        72.492381,
+        52.293266
+      ],
+      "battleOnly": true
+    },
+    {
+      "name": "cast-sleeve",
+      "bone": "cast-sleeve",
+      "sha256": "a21d141b2cf50aa7ea6c159f5e13d164274d788fb0f7be367bcd4e5082d052e6",
+      "png": [
+        202,
+        336
+      ],
+      "source": "../joint-underpaint.png",
+      "elbowBacking": "../left-elbow.png",
+      "reconstructionCell": 2,
+      "pivotUV": [
+        0.58,
+        0.13
+      ],
+      "setupPivot": [
+        12,
+        338.4
+      ],
+      "size": [
+        39.995216,
+        80.152645
+      ],
+      "battleOnly": true
+    },
+    {
+      "name": "cast-bracer",
+      "bone": "cast-bracer",
+      "sha256": "f55f67a083e65e59f3f03af2667f7512e34303a4935d03987b93cefc2b4e1018",
+      "png": [
+        285,
+        284
+      ],
+      "source": "../joint-underpaint.png",
+      "reconstructionCell": 5,
+      "pivotUV": [
+        0.18,
+        0.83
+      ],
+      "setupPivot": [
+        26.4,
+        276.48
+      ],
+      "size": [
+        50.749703,
+        64.835428
+      ],
+      "battleOnly": true
+    },
+    {
+      "name": "cast-palm",
+      "bone": "cast-palm",
+      "slot": "cast-palm",
+      "sha256": "20354f40281517ca3f672525701fc94227c73827f03dc41d79129c3775fa0ebf",
+      "png": [
+        156,
+        139
+      ],
+      "source": "../left-hand-release.png",
+      "sourceCell": 0,
+      "registeredRect": [
+        128,
+        94,
+        312,
+        278
+      ],
+      "setupPivot": [
+        69.12,
+        317.28
+      ],
+      "size": [
+        25.116,
+        22.379
+      ],
+      "wrist": [
+        164,
+        287
+      ],
+      "pinch": [
+        499,
+        204
+      ],
+      "sourceUnitsToStage": 0.0805,
+      "battleOnly": true,
+      "alternateAttachment": false
+    },
+    {
+      "name": "cast-middle",
+      "bone": "cast-middle",
+      "slot": "cast-middle",
+      "sha256": "22252c157bd79839370a6b1e29cea8a2a863056119dd0968c93639906554da14",
+      "png": [
+        110,
+        34
+      ],
+      "source": "../left-hand-release.png",
+      "sourceCell": 0,
+      "registeredRect": [
+        346,
+        158,
+        220,
+        68
+      ],
+      "setupPivot": [
+        78.814323,
+        332.837026
+      ],
+      "size": [
+        17.71,
+        5.474
+      ],
+      "wrist": [
+        164,
+        287
+      ],
+      "pinch": [
+        499,
+        204
+      ],
+      "sourceUnitsToStage": 0.0805,
+      "battleOnly": true,
+      "alternateAttachment": false
+    },
+    {
+      "name": "cast-index",
+      "bone": "cast-index",
+      "slot": "cast-index",
+      "sha256": "9482752cf6a75721302136c2613dff4b1b5e4a81e7c2b026c9cc5c89b1f05c20",
+      "png": [
+        136,
+        47
+      ],
+      "source": "../left-hand-release.png",
+      "sourceCell": 0,
+      "registeredRect": [
+        306,
+        92,
+        272,
+        94
+      ],
+      "setupPivot": [
+        75.353501,
+        333.997246
+      ],
+      "size": [
+        21.896,
+        7.567
+      ],
+      "wrist": [
+        164,
+        287
+      ],
+      "pinch": [
+        499,
+        204
+      ],
+      "sourceUnitsToStage": 0.0805,
+      "battleOnly": true,
+      "alternateAttachment": false
+    },
+    {
+      "name": "cast-thumb",
+      "bone": "cast-thumb",
+      "slot": "cast-thumb",
+      "sha256": "d3aac51d0ded1538f5c8e26ecf38bfa548035d989f7f89298010bbdd6ef9b4a4",
+      "png": [
+        113,
+        64
+      ],
+      "source": "../left-hand-poses.png",
+      "sourceCell": 0,
+      "registeredRect": [
+        298,
+        166,
+        226,
+        128
+      ],
+      "setupPivot": [
+        79.340044,
+        327.747446
+      ],
+      "size": [
+        18.193,
+        10.304
+      ],
+      "wrist": [
+        164,
+        287
+      ],
+      "pinch": [
+        499,
+        204
+      ],
+      "sourceUnitsToStage": 0.0805,
+      "battleOnly": true,
+      "alternateAttachment": false
+    },
+    {
+      "name": "card",
+      "bone": "held-card",
+      "sha256": "111526e13ba85464d2cd55971755f0e3d78ae3b62a2742f4c473dde45fcac859",
+      "png": [
+        170,
+        256
+      ],
+      "source": "../joint-underpaint.png",
+      "reconstructionCell": 7,
+      "additionalSlot": "flight-card",
+      "battleOnly": true
+    }
+  ],
+  "drawOrder": [
+    "far-thigh",
+    "far-shin",
+    "far-boot",
+    "near-trouser-lining",
+    "hips-lining",
+    "inner-tunic",
+    "inner-skirt",
+    "knee-lining",
+    "near-underarm",
+    "near-thigh",
+    "near-shin",
+    "near-boot",
+    "tunic-lining",
+    "back-flap",
+    "coat-skirt",
+    "chest",
+    "hips",
+    "strap",
+    "ration-bag",
+    "cast-sleeve",
+    "cast-bracer",
+    "cast-middle",
+    "cast-palm",
+    "cast-index",
+    "held-card",
+    "card-case",
+    "cast-thumb",
+    "near-sleeve",
+    "near-bracer",
+    "near-hand",
+    "hood",
+    "mantle",
+    "head",
+    "hair-lock",
+    "scarf",
+    "flight-card"
+  ],
+  "setupAudit": {
+    "visiblePixels": 456837,
+    "differentPixels": 0,
+    "missingPixels": 0
+  },
+  "leftHand": {
+    "wrist": [
+      164,
+      287
+    ],
+    "pinch": [
+      499,
+      204
+    ],
+    "unit": 0.0805,
+    "cardUV": [
+      0.14537444933920704,
+      0.06984126984126984
+    ],
+    "role": "Left hand drawing from the card case",
+    "jointCell": [
+      768,
+      512
+    ],
+    "fingerLayers": [
+      "cast-middle",
+      "cast-palm",
+      "cast-index",
+      "held-card",
+      "cast-thumb"
+    ],
+    "sources": [
+      "../left-hand-poses.png",
+      "../left-hand-release.png"
+    ]
+  },
+  "cleanCoat": "../coat-underpaint.png",
+  "selectedTurnaround": "../turnaround-golden-master.png",
+  "selectedSha256": "8a41f4aca887b4132bd2156dc8ecaf456aff68e76c96051ba3d698f3f801cdf4",
+  "crop": {
+    "left": 625,
+    "top": 0,
+    "width": 306,
+    "height": 934,
+    "density": 2
+  },
+  "setupDrawOrder": [
+    "near-trouser-lining",
+    "hips-lining",
+    "inner-tunic",
+    "inner-skirt",
+    "knee-lining",
+    "near-underarm",
+    "near-thigh",
+    "near-shin",
+    "near-boot",
+    "tunic-lining",
+    "back-flap",
+    "coat-skirt",
+    "chest",
+    "hips",
+    "strap",
+    "ration-bag",
+    "card-case",
+    "near-sleeve",
+    "near-bracer",
+    "near-hand",
+    "hood",
+    "mantle",
+    "head",
+    "hair-lock",
+    "scarf"
+  ]
+}

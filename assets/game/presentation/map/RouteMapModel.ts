@@ -12,6 +12,8 @@ export interface RoutePointModel {
     y: number;
     state: RoutePointState;
     action: string;
+    decisionHint?: string;
+    fieldSymbol?: 'buoy' | 'rotor';
 }
 export interface RouteEdgeModel {
     from: string;
@@ -24,6 +26,7 @@ export interface RouteMapModel {
     edges: RouteEdgeModel[];
     height: number;
     focusY: number;
+    landscape: boolean;
 }
 /** Adapt authored scenario routes; drawing components do not know the tutorial topology. */
 export function routeMapModel(game: GameReadModel): RouteMapModel {
@@ -47,7 +50,8 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
     const depth = Math.max(1, ...prefixes.map((p) => p.steps.length));
     const suffix = routes[0][1].slice(routes[0][1].length - common);
     const layers = depth + suffix.length + 2,
-        height = Math.max(1100, layers * 230 + 160);
+        landscape = !!game.scenario.labyrinth,
+        height = landscape ? 560 : Math.max(1100, layers * 230 + 160);
     const points: RoutePointModel[] = [],
         edges: RouteEdgeModel[] = [];
     const add = (
@@ -80,9 +84,21 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
             title: kind === 'home' ? '避难所' : (game.scenario.nodes[kind]?.title ?? kind),
             icon: kind === 'home' ? ('home' as const) : game.scenario.nodes[kind].icon,
             layer,
-            x,
-            y: -(height - 100 - layer * 230),
+            x: landscape ? -475 + layer * (950 / Math.max(1, layers - 1)) : x,
+            y: landscape ? -height * .45 - (branch ? (x > 0 ? 96 : -92) : 0)
+                : -(height - 100 - layer * 230),
             state,
+            fieldSymbol: game.scenario.fieldDeck && !game.scenario.labyrinth
+                ? game.scenario.nodes[kind]?.icon === 'battle'
+                    ? ('buoy' as const)
+                    : game.scenario.nodes[kind]?.icon === 'elite'
+                      ? ('rotor' as const)
+                      : undefined
+                : undefined,
+            decisionHint:
+                game.scenario.fieldDeck && choice && game.currentNode === 'choice'
+                    ? game.scenario.routeDescriptions?.[branch]
+                    : undefined,
             action:
                 kind === 'home'
                     ? ''
@@ -134,5 +150,5 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
         points.find((point) => point.state === 'available') ??
         [...points].reverse().find((point) => point.state === 'visited') ??
         start;
-    return { points, edges, height, focusY: focus.y };
+    return { points, edges, height, focusY: focus.y, landscape };
 }

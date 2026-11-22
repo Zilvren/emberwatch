@@ -5,6 +5,7 @@ export const CARD_ART_IDS = [...ART_IDS, 'rope', 'battery'];
 const keywordLabels: Record<string, string> = {
     basic: '基础牌',
     weapon: '武器',
+    instrument: '仪器',
     consumable: '消耗品',
     supply: '物资卡',
     synthesis: '可作为合成材料',
@@ -13,6 +14,7 @@ const keywordLabels: Record<string, string> = {
 const keywordDescriptions: Record<string, string> = {
     basic: '可在初始卡组中获得。',
     weapon: '打出后进入武器槽，并按武器规则生成攻击牌。',
+    instrument: '装入仪器槽，下回合起生成发振。',
     consumable: '使用并结算效果后永久消失。',
     supply: '带回避难所后，可以兑换成物资点。',
     synthesis: '可以按配方使用本局卡组中的卡牌进行合成。',
@@ -59,27 +61,39 @@ function displayModel(input: DisplayInput) {
     };
 }
 export type CardDisplayModel = ReturnType<typeof displayModel>;
+export interface CardViewOptions {
+    field?: boolean;
+    runDeck?: boolean;
+    neededForSynthesis?: boolean;
+    damage?: number;
+    cost?: number;
+}
 
 /** Compatibility adapter for the existing teaching catalog and web editor. */
 export function cardViewModel(
     data: CardDefinition,
     definitions: Readonly<Record<string, CardDefinition>> = CARD,
     costUnit = '物资',
-    options: { runDeck?: boolean; neededForSynthesis?: boolean } = {}
+    options: CardViewOptions = {}
 ): CardDisplayModel {
+    const { field, damage, cost } = options;
     const effect = effectSummary(data, definitions),
         detail = data.text === effect ? '' : data.text;
+    const [baseEffect, ...additional] = data.effect.labyrinth ? effect.split('，') : [effect];
     const primary =
         data.effect.type === 'equip'
             ? `生成「${definitions[data.effect.generatedCard ?? '']?.name ?? data.effect.generatedCard}」`
-            : effect;
+            : data.effect.type === 'damage' && damage !== undefined && damage !== data.effect.amount
+              ? `造成 ${damage} 点伤害`
+              : baseEffect.length > 21 && data.effect.labyrinth ? '查看效果说明' : baseEffect;
+    const context = [additional.join('，'), primary === '查看效果说明' ? baseEffect : '', detail].filter(Boolean).join('。');
     const keywords =
         data.role === 'supply'
             ? ['supply']
             : data.role === 'basic'
               ? ['basic']
               : data.effect.type === 'equip'
-                ? ['weapon']
+                ? [field ? 'instrument' : 'weapon']
                 : [];
     if (data.canSynthesize) {
         keywords.push('synthesis');
@@ -88,19 +102,29 @@ export function cardViewModel(
     return displayModel({
         id: data.id,
         title: data.name,
-        tag: data.tag,
-        cost: data.cost,
+        tag: field && data.effect.type === 'equip' ? '仪器 · 持续' : data.tag,
+        cost: cost ?? data.cost,
         costUnit,
         showCost: data.role !== 'cash' && data.role !== 'supply',
         effect: primary,
-        description: (data.effect.type === 'equip' ? '从下回合起，每回合 1 张。' : '') + detail,
-        fullDescription: effect + (detail ? '\n\n' + detail : ''),
-        weight:
-            data.role === 'temporary'
-                ? '本场临时'
-                : options.runDeck && data.role !== 'supply'
-                  ? '本局卡组'
-                  : `负重 ${data.weight}`,
+        description:
+            field && data.role === 'temporary'
+                ? '打出或回合结束时消失。'
+                : (data.effect.type === 'equip' ? '从下回合起，每回合 1 张。' : '') + context,
+        fullDescription:
+            effect +
+            (field && data.role === 'temporary'
+                ? '\n\n打出或回合结束时消失。'
+                : detail
+                  ? '\n\n' + detail
+                  : ''),
+        weight: data.role === 'temporary'
+            ? '本场临时'
+            : field
+              ? ''
+              : options.runDeck && data.role !== 'supply'
+                ? '本局卡组'
+                : `负重 ${data.weight}`,
         art: data.art,
         accent: data.color,
         temporary: data.role === 'temporary',

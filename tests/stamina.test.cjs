@@ -12,7 +12,8 @@ const { GameSession } = load(path.join(root, 'assets/game/application/GameSessio
 const { ENTRY_TIERS } = load(path.join(root, 'assets/game/core/content/EntryTiers.ts'));
 const { SaveRepository } = load(path.join(root, 'assets/game/infrastructure/SaveRepository.ts'));
 const { validateGameState } = load(path.join(root, 'assets/game/core/state/GameState.ts'));
-const { TUTORIAL_SCENARIO, STAMINA_SCENARIO } = load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
+const { FIELD_SCENARIO, STAMINA_SCENARIO, TUTORIAL_SCENARIO } =
+    load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
 const ok = (result) => assert.equal(result.ok, true, result.message);
 const storage = () => {
     const values = new Map();
@@ -23,14 +24,12 @@ const storage = () => {
     };
 };
 function encounter(tier = 'standard', repo) {
-    const session = new GameSession(17, repo);
+    const session = new GameSession(17, repo, FIELD_SCENARIO);
     ok(session.execute({ type: 'start', tier }));
     ok(session.execute({ type: 'enter-node' }));
-    ok(session.execute({ type: 'claim-supplies' }));
-    ok(session.execute({ type: 'claim-card', index: 0 }));
-    ok(session.execute({ type: 'finish-rewards' }));
     ok(session.execute({ type: 'choose-route', route: 'A' }));
     ok(session.execute({ type: 'enter-node' }));
+    ok(session.execute({ type: 'discover', kind: null }));
     return session;
 }
 function paidUtility(session) {
@@ -59,7 +58,6 @@ test('new sessions use stamina and charge the selected tier once before explorat
         assert.equal(session.execute({ type: 'start', tier: id }).ok, false);
         assert.deepEqual(session.game.exportState(), before);
         ok(session.execute({ type: 'enter-node' }));
-        ok(session.execute({ type: 'finish-rewards' }));
         ok(session.execute({ type: 'choose-route', route: 'A' }));
         ok(session.execute({ type: 'enter-node' }));
         assert.equal(session.game.battle.stamina, tier.stamina);
@@ -75,13 +73,12 @@ test('unaffordable and unknown tiers cannot partially charge or start', () => {
     assert.deepEqual(session.game.exportState(), before);
 });
 test('zero supplies can use the emergency tier and do not cause in-map supply failure', () => {
-    const session = new GameSession(17);
+    const session = new GameSession(17, undefined, FIELD_SCENARIO);
     session.game.supplies = 0;
     ok(session.execute({ type: 'start', tier: 'emergency' }));
     ok(session.execute({ type: 'enter-node' }));
-    ok(session.execute({ type: 'finish-rewards' }));
     assert.equal(session.game.phase, 'map');
-    assert.equal(session.game.supplies, 0);
+    assert.equal(session.game.supplies, 4);
     ok(session.execute({ type: 'choose-route', route: 'A' }));
     ok(session.execute({ type: 'enter-node' }));
     assert.equal(session.game.battle.maxStamina, 1);
@@ -122,17 +119,17 @@ test('unused stamina never carries into the next turn', () => {
     assert.equal(session.game.supplies, supplies);
 });
 test('supply points have no exploration weight and rewards are not discarded for bag capacity', () => {
-    const session = new GameSession(17),
+    const session = new GameSession(17, undefined, FIELD_SCENARIO),
         weight = session.game.baseWeight;
     session.game.supplies = 200;
     assert.equal(session.game.baseWeight, weight);
     ok(session.execute({ type: 'start', tier: 'standard' }));
-    ok(session.execute({ type: 'enter-node' }));
     const before = session.game.supplies;
-    ok(session.execute({ type: 'claim-supplies' }));
+    ok(session.execute({ type: 'enter-node' }));
     assert.equal(session.game.supplies, before + 4);
     assert.equal(session.game.baseWeight, weight);
     assert.equal(session.execute({ type: 'discard-supplies', amount: 1 }).ok, false);
+    assert.equal(session.execute({ type: 'claim-supplies' }).ok, false);
 });
 test('reload preserves spent stamina and chosen tier instead of granting a fresh turn', () => {
     const store = storage(),

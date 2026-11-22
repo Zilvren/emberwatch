@@ -1,0 +1,910 @@
+{
+  "passed": true,
+  "count": 53,
+  "parts": [
+    {
+      "actor": "survivor",
+      "name": "Pack",
+      "bone": "Pack",
+      "path": "art-source/spine08/parts/survivor/Pack.png",
+      "width": 476,
+      "height": 794,
+      "sha256": "fa7e6e7a705d4dc1f8533d697ee1e89ab070c1c8767c501739e4c8b7dfdd0ae2",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-region"
+    },
+    {
+      "actor": "survivor",
+      "name": "RearUpperArm",
+      "bone": "RearUpperArm",
+      "path": "art-source/spine08/parts/survivor/RearUpperArm.png",
+      "width": 156,
+      "height": 540,
+      "sha256": "7b3073f6c2cb42dc958d59ed8c789f1bff273cc8e826fea9b2cf85c188a48667",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "survivor",
+      "name": "RearForearm",
+      "bone": "RearForearm",
+      "path": "art-source/spine08/parts/survivor/RearForearm.png",
+      "width": 45,
+      "height": 68,
+      "sha256": "b309e6c3e0652e587dd7bdd09c656d1768d237d45e77eada47eeee1419803f39",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "RearHand",
+      "bone": "RearHand",
+      "path": "art-source/spine08/parts/survivor/RearHand.png",
+      "width": 55,
+      "height": 59,
+      "sha256": "0cdf3dbea8bbabd092a045702807bca3b99f95a8532ea01a426bb2b85a223cd8",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "RearThigh",
+      "bone": "RearThigh",
+      "path": "art-source/spine08/parts/survivor/RearThigh.png",
+      "width": 105,
+      "height": 139,
+      "sha256": "1b8f504b3ff527e7ece6ad3067f9f2ac169fba89bb62b7e47236e847fe3eb031",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "RearShin",
+      "bone": "RearShin",
+      "path": "art-source/spine08/parts/survivor/RearShin.png",
+      "width": 336,
+      "height": 794,
+      "sha256": "6637b6a35b846430c1037c958a969454e9adfa6d38a13a7b361de11edd1d1a36",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "survivor",
+      "name": "RearFoot",
+      "bone": "RearFoot",
+      "path": "art-source/spine08/parts/survivor/RearFoot.png",
+      "width": 85,
+      "height": 96,
+      "sha256": "a04af8d616e0a4f00873da1fbfc4a7f675a5d96af590dfa05ec4dc870785dbac",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "Pelvis",
+      "bone": "Hips",
+      "path": "art-source/spine08/parts/survivor/Pelvis.png",
+      "width": 663,
+      "height": 542,
+      "sha256": "7ea4e6ca9a28e0883316590d5ad68615bd901b044ce6e9104c94e106a32c9d4b",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-region"
+    },
+    {
+      "actor": "survivor",
+      "name": "FrontThigh",
+      "bone": "FrontThigh",
+      "path": "art-source/spine08/parts/survivor/FrontThigh.png",
+      "width": 76,
+      "height": 144,
+      "sha256": "4856f7b5d4d02e3ea76b71ddfc93af15b32042a315710b90c11ba85744b7beab",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "FrontShin",
+      "bone": "FrontShin",
+      "path": "art-source/spine08/parts/survivor/FrontShin.png",
+      "width": 297,
+      "height": 794,
+      "sha256": "b21b282947cc6cc676192ea795a61ad01be53985f134f050bb3221b8ad50f070",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "survivor",
+      "name": "FrontFoot",
+      "bone": "FrontFoot",
+      "path": "art-source/spine08/parts/survivor/FrontFoot.png",
+      "width": 122,
+      "height": 95,
+      "sha256": "9450549c3d8c74a7ebbdc503d319940c965c6e1870b67efee1a2b2aacbe458de",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "Torso",
+      "bone": "Breath",
+      "path": "art-source/spine08/parts/survivor/Torso.png",
+      "width": 231,
+      "height": 167,
+      "sha256": "59181034ebcd15a6970a61492f45610f04e5a7c9c8764f73ad53b8c43b2520d7",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "Cloth",
+      "bone": "Cloth",
+      "path": "art-source/spine08/parts/survivor/Cloth.png",
+      "width": 66,
+      "height": 84,
+      "sha256": "9eaba72a180c5f4137ab9700344d2182467486cd7d55dc756967fa960fa326f5",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "Pouch",
+      "bone": "Pouch",
+      "path": "art-source/spine08/parts/survivor/Pouch.png",
+      "width": 68,
+      "height": 73,
+      "sha256": "4b57887c214a1e3e8412d1f56ca6e2fa562449f444fe5388bb023d23a0fc02a8",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "FrontUpperArm",
+      "bone": "FrontUpperArm",
+      "path": "art-source/spine08/parts/survivor/FrontUpperArm.png",
+      "width": 87,
+      "height": 374,
+      "sha256": "a6908ce2cce138f8549de99830dd15e4d5f7508d17f99d3ac25ec8c1471d234c",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "survivor",
+      "name": "FrontForearm",
+      "bone": "FrontForearm",
+      "path": "art-source/spine08/parts/survivor/FrontForearm.png",
+      "width": 134,
+      "height": 530,
+      "sha256": "bd381a087bcaeb9d9895fc5deef4bb0f0d6a5bf2027c07582291193f92572015",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "survivor",
+      "name": "FrontHand",
+      "bone": "FrontHand",
+      "path": "art-source/spine08/parts/survivor/FrontHand.png",
+      "width": 508,
+      "height": 514,
+      "sha256": "adbd554bc3214533292164c4b70aa46f557dec7d2a410be2a4fef37901c9ee42",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-region"
+    },
+    {
+      "actor": "survivor",
+      "name": "Weapon",
+      "bone": "Weapon",
+      "path": "art-source/spine08/parts/survivor/Weapon.png",
+      "width": 123,
+      "height": 107,
+      "sha256": "b064f2e5307c5fc4f49e403d66a4d4feee9fa42f263f0974d609940ef30d23e6",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "survivor",
+      "name": "Head",
+      "bone": "Head",
+      "path": "art-source/spine08/parts/survivor/Head.png",
+      "width": 159,
+      "height": 134,
+      "sha256": "a5652d3c3e625bebe91c845704499d4841b3bde12d2aef2f2b8b7016324f1426",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "RearUpperArm",
+      "bone": "RearUpperArm",
+      "path": "art-source/spine08/parts/wanderer/RearUpperArm.png",
+      "width": 128,
+      "height": 759,
+      "sha256": "9b887ae1ac039bbfef839c94e158e0ba4adb43fcc47abda008adc2f04251a923",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "wanderer",
+      "name": "RearForearm",
+      "bone": "RearForearm",
+      "path": "art-source/spine08/parts/wanderer/RearForearm.png",
+      "width": 52,
+      "height": 141,
+      "sha256": "d72581c90d6d24f180e6679959a0b28f5d2a2d1eacf90a2836521529f470e772",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "RearHand",
+      "bone": "RearHand",
+      "path": "art-source/spine08/parts/wanderer/RearHand.png",
+      "width": 53,
+      "height": 78,
+      "sha256": "059a44a93dae797db3733e3be0943ec8236d1298036aa41af9c1e9301616f0d8",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "RearThigh",
+      "bone": "RearThigh",
+      "path": "art-source/spine08/parts/wanderer/RearThigh.png",
+      "width": 77,
+      "height": 222,
+      "sha256": "6b56547f50e1c694f66d2044f710ea51b28f171aca7b8b5a177072755da92541",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "RearShin",
+      "bone": "RearShin",
+      "path": "art-source/spine08/parts/wanderer/RearShin.png",
+      "width": 162,
+      "height": 794,
+      "sha256": "632e926873ce02092e6d5bd32eb19f2a679f821f45d3ccbaa3ec28044890d290",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "wanderer",
+      "name": "RearFoot",
+      "bone": "RearFoot",
+      "path": "art-source/spine08/parts/wanderer/RearFoot.png",
+      "width": 106,
+      "height": 72,
+      "sha256": "8e8e3021627e330565e9b9424197d2f8b4987604b71356ca7f51908eb69d0b27",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "Pelvis",
+      "bone": "Hips",
+      "path": "art-source/spine08/parts/wanderer/Pelvis.png",
+      "width": 115,
+      "height": 104,
+      "sha256": "ceb5d8a36a69281e236f85214fd4af22ddaa7db2c6be35df6cb283d55b78a340",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "FrontThigh",
+      "bone": "FrontThigh",
+      "path": "art-source/spine08/parts/wanderer/FrontThigh.png",
+      "width": 100,
+      "height": 192,
+      "sha256": "9ae42dfd62b1ed57d5d9fe4c8460f5cc0eb6e7b55656b750700c30288168e305",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "FrontShin",
+      "bone": "FrontShin",
+      "path": "art-source/spine08/parts/wanderer/FrontShin.png",
+      "width": 171,
+      "height": 794,
+      "sha256": "fbaed42378aa641fe1bbcefcfea3b8e727720e14d4f143037b693cc23daf94aa",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "wanderer",
+      "name": "FrontFoot",
+      "bone": "FrontFoot",
+      "path": "art-source/spine08/parts/wanderer/FrontFoot.png",
+      "width": 89,
+      "height": 100,
+      "sha256": "555e3863c24fa124f0bbd0771bec660009a8354879826326593600c3be97c620",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "Torso",
+      "bone": "Breath",
+      "path": "art-source/spine08/parts/wanderer/Torso.png",
+      "width": 199,
+      "height": 210,
+      "sha256": "dd52068d3df6c078a6d07154f87785e427061079e5a0a24c6223fc7b0c3eb0c3",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "Cloth",
+      "bone": "Cloth",
+      "path": "art-source/spine08/parts/wanderer/Cloth.png",
+      "width": 37,
+      "height": 67,
+      "sha256": "a1476638f0605eff8818cf8d0abd81a43b388a5827c3e54ad10c6ec3fa1e2875",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "FrontUpperArm",
+      "bone": "FrontUpperArm",
+      "path": "art-source/spine08/parts/wanderer/FrontUpperArm.png",
+      "width": 124,
+      "height": 749,
+      "sha256": "4392537e9edb440ce00f4435e4feefe4acf27f1da2eddb55b156112b6aee9ab3",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "wanderer",
+      "name": "FrontForearm",
+      "bone": "FrontForearm",
+      "path": "art-source/spine08/parts/wanderer/FrontForearm.png",
+      "width": 63,
+      "height": 113,
+      "sha256": "f332e1c9ceb3735d8a7f0b7eb787aa2fee6652f7a4ab78bbf34b71428f28d4b2",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "FrontHand",
+      "bone": "FrontHand",
+      "path": "art-source/spine08/parts/wanderer/FrontHand.png",
+      "width": 47,
+      "height": 83,
+      "sha256": "54c0fb4650b3e6628952fe7d0a1dd0d6d5d64ca75d100ea692270bcc0b4d0cfd",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "wanderer",
+      "name": "Head",
+      "bone": "Head",
+      "path": "art-source/spine08/parts/wanderer/Head.png",
+      "width": 134,
+      "height": 150,
+      "sha256": "f3e7576b5f32f3a13c28da5a9a35dfbe57a49b6feea5053c4fe93c0a47c84f01",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "RearShoulderPlate",
+      "bone": "RearShoulderPlate",
+      "path": "art-source/spine08/parts/brute/RearShoulderPlate.png",
+      "width": 172,
+      "height": 147,
+      "sha256": "dd424bafec6f30c928708692624d81c018df607a27d3eb130a62c6b7336fe536",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "RearUpperArm",
+      "bone": "RearUpperArm",
+      "path": "art-source/spine08/parts/brute/RearUpperArm.png",
+      "width": 411,
+      "height": 794,
+      "sha256": "3df603e52fcb03ddff840e7217dfa95b7768c0e9b9eb8907575b9746d1c0c51b",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "brute",
+      "name": "RearForearm",
+      "bone": "RearForearm",
+      "path": "art-source/spine08/parts/brute/RearForearm.png",
+      "width": 131,
+      "height": 145,
+      "sha256": "5a0ee9b35c4ef1a23ce9b1ddb8aa3884d02ebc11a7f9e85401523bea6c4a9741",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "RearHand",
+      "bone": "RearHand",
+      "path": "art-source/spine08/parts/brute/RearHand.png",
+      "width": 85,
+      "height": 82,
+      "sha256": "8d0279259c782b0fbe332ce879de2af9a9dedd01e8f16e8fc1042cf41f68be46",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "RearThigh",
+      "bone": "RearThigh",
+      "path": "art-source/spine08/parts/brute/RearThigh.png",
+      "width": 150,
+      "height": 148,
+      "sha256": "e975c4c150895485c7ba4a2907792ae12731d34f0d6699a48c2297e596b2bcdb",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "RearShin",
+      "bone": "RearShin",
+      "path": "art-source/spine08/parts/brute/RearShin.png",
+      "width": 491,
+      "height": 794,
+      "sha256": "f196bee38fcf93d29327b144751bf8372ba5dc68b03534785fdf175865aacc1b",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "brute",
+      "name": "RearFoot",
+      "bone": "RearFoot",
+      "path": "art-source/spine08/parts/brute/RearFoot.png",
+      "width": 163,
+      "height": 77,
+      "sha256": "e24c58c0a79436e0c816da46d59a37f82351cb7bbb93dd858814bb888322c7ae",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "Pelvis",
+      "bone": "Hips",
+      "path": "art-source/spine08/parts/brute/Pelvis.png",
+      "width": 220,
+      "height": 131,
+      "sha256": "2b44b36ceef4065d171bbcbc2b97460257f271d018cd96abfd8ed06b5d00496f",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "FrontThigh",
+      "bone": "FrontThigh",
+      "path": "art-source/spine08/parts/brute/FrontThigh.png",
+      "width": 124,
+      "height": 143,
+      "sha256": "7092bbeb4b31046abaac28fd3825bab474c15dfb272a974f8a9d740434a782ca",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "FrontShin",
+      "bone": "FrontShin",
+      "path": "art-source/spine08/parts/brute/FrontShin.png",
+      "width": 491,
+      "height": 794,
+      "sha256": "addb64639f04f69bad059b6f68417d1625af5d66445c100fba35ee78b0474bfa",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-limb"
+    },
+    {
+      "actor": "brute",
+      "name": "FrontFoot",
+      "bone": "FrontFoot",
+      "path": "art-source/spine08/parts/brute/FrontFoot.png",
+      "width": 185,
+      "height": 100,
+      "sha256": "9feca3628a59db716ea9c7108790fed4ab387bb56b3cff67c2efce38734602eb",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "Torso",
+      "bone": "Breath",
+      "path": "art-source/spine08/parts/brute/Torso.png",
+      "width": 303,
+      "height": 422,
+      "sha256": "e46b1fa1f0c383c90c4ab708108787ebea6a824b72d51f99de4e6bbc2b38f205",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "Cloth",
+      "bone": "Cloth",
+      "path": "art-source/spine08/parts/brute/Cloth.png",
+      "width": 181,
+      "height": 205,
+      "sha256": "9b8f5025aa9623ba5207a2f2b7981748a04d452877733adef3ef40b4b8422c2b",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "FrontUpperArm",
+      "bone": "FrontUpperArm",
+      "path": "art-source/spine08/parts/brute/FrontUpperArm.png",
+      "width": 149,
+      "height": 164,
+      "sha256": "15a39bbd7a345a0586c824c39d514228e24adae3a84ac86d10a86b09cb3d7044",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "FrontForearm",
+      "bone": "FrontForearm",
+      "path": "art-source/spine08/parts/brute/FrontForearm.png",
+      "width": 132,
+      "height": 125,
+      "sha256": "be70c4fe617ec0ec1af9312079fb37c2365b119fc1b22b09f5405d7f9f66cba8",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "FrontHand",
+      "bone": "FrontHand",
+      "path": "art-source/spine08/parts/brute/FrontHand.png",
+      "width": 99,
+      "height": 95,
+      "sha256": "5f8ae1041abd3afefbf00e04a008223c844447ee0e5ab4533cde90adb20b7ddc",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "Head",
+      "bone": "Head",
+      "path": "art-source/spine08/parts/brute/Head.png",
+      "width": 206,
+      "height": 220,
+      "sha256": "6b36d19699b46cfd829ec80babbb693cacf79fb040b1d78a04038bc34b9c50aa",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "native-source"
+    },
+    {
+      "actor": "brute",
+      "name": "TorsoFill",
+      "bone": "Breath",
+      "path": "art-source/spine08/parts/brute/TorsoFill.png",
+      "width": 856,
+      "height": 794,
+      "sha256": "3ef32867df666e09d4b6eedd5f932af235ab4e6d574ddefeb142eb632cb46976",
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "transparent": true,
+      "mode": "reconstructed-region"
+    }
+  ],
+  "project": "The end",
+  "date": "2026-11-18",
+  "method": "Read-only PNG RGBA inspection plus explicit part/bone mapping; original source and reconstruction provenance retained."
+}

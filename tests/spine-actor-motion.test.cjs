@@ -38,24 +38,32 @@ test('Spine character data includes articulated limbs, foot IK and every require
   for(const n of ['Hips','Torso','Chest','Head','FrontUpperArm','FrontForearm','FrontHand','RearUpperArm','RearForearm','RearHand','FrontThigh','FrontShin','FrontFoot','RearThigh','RearShin','RearFoot','AttackTip','Approach'])assert.ok(d.bones.some(b=>b.name===n),id+' '+n);
   assert.equal(d.ik.length,2);for(const ik of d.ik){assert.equal(ik.bones.length,2);assert.match(ik.target,/FootTarget$/);}
   for(const n of ['idle','attack','prepare','hurt','death'])assert.ok(d.animations[n]);
-  for(const n of ['FrontSleeve','RearSleeve']){assert.ok(d.slots.some(s=>s.name===n));assert.ok(d.animations.attack.slots[n].attachment.some(k=>k.name===n));}
+  for(const n of ['FrontUpperArm','RearUpperArm','FrontForearm','RearForearm','FrontHand','RearHand','FrontThigh','RearThigh','FrontShin','RearShin','FrontFoot','RearFoot','Torso','Pelvis','Head']){assert.ok(d.slots.some(s=>s.name===n),id+' independent '+n);assert.ok(d.animations.attack.slots[n].attachment.some(k=>k.name===n));}
   const impacts=d.animations.attack.events.filter(e=>e.name==='impact');assert.equal(impacts.length,1);assert.ok(Math.abs(impacts[0].time-c.motions.attack.contact)<1e-6);
   let bezier=0;function walk(v){if(!v||typeof v!=='object')return;if(v.curve!==undefined){assert.equal(Array.isArray(v.curve),false);if(typeof v.curve==='number')bezier++;}for(const n of Object.values(v))walk(n);}walk(d.animations);assert.ok(bezier>30);
  }
 });
-test('weighted meshes preserve approved neutral UV geometry after the actual Spine roundtrip',()=>{
+test('every body part has its own PNG, atlas region and correctly registered bone attachment',()=>{
  for(const id of ids){
-  const d=read('assets/resources/actors/spine08/'+id+'.json'),m=mesh(d),source=read('assets/resources/actors/native08/'+id+'-geometry.json');
-  const a=source.vertices[0],bx=source.vertices.reduce((v,n)=>Math.abs(n[2]-a[2])>Math.abs(v[2]-a[2])?n:v),by=source.vertices.reduce((v,n)=>Math.abs(n[3]-a[3])>Math.abs(v[3]-a[3])?n:v);
-  const sx=(bx[0]-a[0])/(bx[2]-a[2]),sy=(by[1]-a[1])/(by[3]-a[3]),ox=a[0]-a[2]*sx,oy=a[1]-a[3]*sy;
-  const matrices=poseMatrices({bones:d.bones}),weights=decode(d);
-  for(const index of new Set(m.triangles)){
-   const w=weights[index];assert.ok(w.length>0);assert.ok(Math.abs(w.reduce((s,x)=>s+x[3],0)-1)<.0001);
-   const p=w.reduce((p,[i,x,y,k])=>{const v=point(matrices[d.bones[i].name],x,y);return[p[0]+v[0]*k,p[1]+v[1]*k];},[0,0]);
-   const expected=[m.uvs[index*2]*sx+ox,m.uvs[index*2+1]*sy+oy];
-   assert.ok(Math.hypot(p[0]-expected[0],p[1]-expected[1])<.13,id+' neutral vertex '+index);
+  const d=read('assets/resources/actors/spine08/'+id+'.json'),c=read('assets/resources/actors/spine08/'+id+'.contract.json'),manifest=read('art-source/spine08/parts/'+id+'/parts.json'),atlas=fs.readFileSync(path.join(root,'assets/resources/actors/spine08/'+id+'.atlas'),'utf8');
+  assert.equal(c.parts.length,id==='survivor'?19:id==='brute'?18:16);assert.equal(d.slots.some(s=>s.name==='Artwork'),false);
+  for(const p of c.parts){const slot=d.slots.find(s=>s.name===p.name),image=fs.readFileSync(path.join(root,p.image)),region=d.skins[0].attachments[p.name][p.name],source=manifest.parts.find(s=>s.name===p.name);
+   assert.equal(image.subarray(1,4).toString(),'PNG');assert.equal(image.readUInt32BE(16),source.width);assert.equal(image.readUInt32BE(20),source.height);
+   assert.equal(slot.bone,p.bone,id+' '+p.name+' wrong bone');assert.equal(region.path??p.name,p.name);assert.ok(atlas.split(/\r?\n/).includes(p.name));
+   assert.ok(Number.isInteger(p.vertexStart)&&p.vertexCount>0,id+' missing diagnostic region '+p.name);
+   assert.equal(region.type,undefined,'Part must use its own image rather than the old combined mesh');
+   for(let i=p.vertexStart;i<p.vertexStart+p.vertexCount;i++){assert.equal(c.influences[i].length,1);assert.equal(c.boneNames[c.influences[i][0][0]],p.bone);}
   }
-  assert.ok(weights.filter(w=>w.length>1).length>100,id+' has no local blending');
+ }
+});
+test('isolated arm and shin rotations cannot move the backpack, torso or opposite limb',()=>{
+ for(const id of ids){const d=read('assets/resources/actors/spine08/'+id+'.json'),c=read('assets/resources/actors/spine08/'+id+'.contract.json');
+  const vertex=(part,pose)=>{const m=poseMatrices({bones:d.bones},pose),p=c.parts.find(p=>p.name===part),w=c.influences[p.vertexStart];return w.reduce((p,[i,x,y,k])=>{const v=point(m[c.boneNames[i]],x,y);return[p[0]+v[0]*k,p[1]+v[1]*k];},[0,0]);};
+  for(const [bone,stays,moves]of [['RearUpperArm',['Torso','Head','FrontHand',...(id==='survivor'?['Pack']:[])],'RearHand'],['FrontForearm',['Torso','RearHand'],'FrontHand'],['FrontShin',['RearFoot','Pelvis'],'FrontFoot']]){
+   const pose={[bone]:{rotate:65}};for(const name of stays){const a=vertex(name,{}),b=vertex(name,pose);assert.ok(Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6,id+' '+bone+' drags '+name);}
+   // Foot rotation is independent by design, but its ankle still follows the shin.
+   const a=vertex(moves,{}),b=vertex(moves,pose);assert.ok(Math.hypot(a[0]-b[0],a[1]-b[1])>1,id+' '+bone+' does not move '+moves);
+  }
  }
 });
 test('idle preserves head, pelvis and planted feet without global squash',()=>{
@@ -65,21 +73,16 @@ test('idle preserves head, pelvis and planted feet without global squash',()=>{
   for(const t of Object.values(a.bones))assert.equal(t.scale,undefined);
  }
 });
-test('death lands its body attachment and original head mesh on the original floor',()=>{
+test('death keeps every independent part editable and lands the articulated body on the floor',()=>{
  for(const id of ids){
-  const d=read('assets/resources/actors/spine08/'+id+'.json'),m=mesh(d),a=d.animations.death,matrices=poseMatrices({bones:d.bones},poseAtEnd(a)),weights=decode(d);
+  const d=read('assets/resources/actors/spine08/'+id+'.json'),a=d.animations.death,matrices=poseMatrices({bones:d.bones},poseAtEnd(a));
   for(const track of Object.values(a.ik))assert.equal(track.at(-1).mix??1,0);
-  assert.equal(a.slots.Artwork.color.at(-1).color,'ffffff00');
-  assert.equal(a.slots.Corpse.attachment.at(-1).name,'corpse');
-  assert.equal(a.slots.CorpseHead.attachment.at(-1).name,'head');
-  const meta=read('tools/spine/corpse-regions.json')[id],body=d.skins[0].attachments.Corpse.corpse,scale=body.width*(body.scaleY??1)/meta.size[0];
-  const bodyY=matrices.Corpse[5]+(meta.size[1]/2-meta.bbox[3])*scale;
-  assert.ok(Math.abs(bodyY+112)<.15,id+' corpse body ground '+bodyY);
-  const head=d.skins[0].attachments.CorpseHead.head,headWeights=decode(d,head);
-  assert.equal(head.path,'master08-thin');
-  const y=Math.min(...headWeights.map(w=>w.reduce((s,[i,x,y,k])=>s+point(matrices[d.bones[i].name],x,y)[1]*k,0)));
-  assert.ok(y>=-113&&y<-107,id+' corpse head ground '+y);
-  assert.equal(hash('assets/resources/actors/spine08/'+id+'-corpse.png'),meta.sha256);
+  const c=read('assets/resources/actors/spine08/'+id+'.contract.json');
+  for(const p of c.parts){assert.equal(a.slots[p.name].attachment.at(-1).name,p.name);assert.equal(a.slots[p.name].color.at(-1).color??'ffffffff','ffffffff');}
+  assert.ok(d.slots.every(s=>!['Corpse','CorpseHead','Artwork'].includes(s.name)));
+  for(const bone of ['FrontThigh','FrontShin','RearThigh','RearShin','FrontForearm','RearForearm'])assert.ok(a.bones[bone]?.rotate?.length>2,id+' death does not articulate '+bone);
+  const y=Math.min(...c.influences.map(w=>w.reduce((s,[i,x,y,k])=>s+point(matrices[c.boneNames[i]],x,y)[1]*k,0)));
+  assert.ok(Math.abs(y+112)<.35,id+' articulated death floor '+y);
  }
 });
 test('original 08 art and the shared Spine texture are byte-identical',()=>{

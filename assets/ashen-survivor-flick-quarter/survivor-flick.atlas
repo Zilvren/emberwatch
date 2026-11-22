@@ -1,0 +1,386 @@
+
+survivor-flick-parts.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back-flap
+  rotate: false
+  xy: 739, 150
+  size: 205, 863
+  orig: 205, 863
+  offset: 0, 0
+  index: -1
+far-boot
+  rotate: false
+  xy: 412, 8
+  size: 323, 233
+  orig: 323, 233
+  offset: 0, 0
+  index: -1
+hips
+  rotate: false
+  xy: 2, 2
+  size: 406, 239
+  orig: 406, 239
+  offset: 0, 0
+  index: -1
+quarter-flick-palm
+  rotate: false
+  xy: 462, 247
+  size: 134, 114
+  orig: 134, 114
+  offset: 0, 0
+  index: -1
+quarter-left-cup
+  rotate: false
+  xy: 600, 265
+  size: 120, 96
+  orig: 120, 96
+  offset: 0, 0
+  index: -1
+quarter-left-inner-wrap
+  rotate: false
+  xy: 739, 2
+  size: 264, 144
+  orig: 264, 144
+  offset: 0, 0
+  index: -1
+quarter-near-leg
+  rotate: false
+  xy: 462, 365
+  size: 264, 648
+  orig: 264, 648
+  offset: 0, 0
+  index: -1
+quarter-tunic
+  rotate: false
+  xy: 2, 245
+  size: 456, 768
+  orig: 456, 768
+  offset: 0, 0
+  index: -1
+
+survivor-flick-parts2.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+card
+  rotate: false
+  xy: 198, 399
+  size: 170, 256
+  orig: 170, 256
+  offset: 0, 0
+  index: -1
+card-case
+  rotate: false
+  xy: 235, 659
+  size: 134, 198
+  orig: 134, 198
+  offset: 0, 0
+  index: -1
+cast-bracer
+  rotate: false
+  xy: 616, 2
+  size: 285, 284
+  orig: 285, 284
+  offset: 0, 0
+  index: -1
+cast-index
+  rotate: false
+  xy: 116, 878
+  size: 136, 47
+  orig: 136, 47
+  offset: 0, 0
+  index: -1
+cast-middle
+  rotate: false
+  xy: 2, 891
+  size: 110, 34
+  orig: 110, 34
+  offset: 0, 0
+  index: -1
+cast-palm
+  rotate: false
+  xy: 802, 786
+  size: 156, 139
+  orig: 156, 139
+  offset: 0, 0
+  index: -1
+cast-thumb
+  rotate: false
+  xy: 256, 861
+  size: 113, 64
+  orig: 113, 64
+  offset: 0, 0
+  index: -1
+hair-lock
+  rotate: false
+  xy: 102, 707
+  size: 129, 167
+  orig: 129, 167
+  offset: 0, 0
+  index: -1
+hood
+  rotate: false
+  xy: 696, 290
+  size: 177, 248
+  orig: 177, 248
+  offset: 0, 0
+  index: -1
+knee-lining
+  rotate: false
+  xy: 493, 807
+  size: 184, 118
+  orig: 184, 118
+  offset: 0, 0
+  index: -1
+near-boot
+  rotate: false
+  xy: 372, 385
+  size: 320, 224
+  orig: 320, 224
+  offset: 0, 0
+  index: -1
+near-bracer
+  rotate: false
+  xy: 176, 124
+  size: 216, 257
+  orig: 216, 257
+  offset: 0, 0
+  index: -1
+near-hand
+  rotate: false
+  xy: 707, 571
+  size: 140, 211
+  orig: 140, 211
+  offset: 0, 0
+  index: -1
+paper-back
+  rotate: false
+  xy: 2, 227
+  size: 170, 256
+  orig: 170, 256
+  offset: 0, 0
+  index: -1
+quarter-card-case
+  rotate: false
+  xy: 2, 743
+  size: 96, 144
+  orig: 96, 144
+  offset: 0, 0
+  index: -1
+quarter-chin-fist
+  rotate: false
+  xy: 681, 799
+  size: 117, 126
+  orig: 117, 126
+  offset: 0, 0
+  index: -1
+quarter-near-mantle
+  rotate: false
+  xy: 396, 117
+  size: 216, 264
+  orig: 216, 264
+  offset: 0, 0
+  index: -1
+quarter-right-arm
+  rotate: false
+  xy: 851, 542
+  size: 168, 240
+  orig: 168, 240
+  offset: 0, 0
+  index: -1
+quarter-satchel
+  rotate: false
+  xy: 2, 487
+  size: 192, 216
+  orig: 192, 216
+  offset: 0, 0
+  index: -1
+quarter-upper-linen
+  rotate: false
+  xy: 373, 845
+  size: 116, 80
+  orig: 116, 80
+  offset: 0, 0
+  index: -1
+scarf
+  rotate: false
+  xy: 373, 613
+  size: 330, 182
+  orig: 330, 182
+  offset: 0, 0
+  index: -1
+
+survivor-flick-parts3.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+coat-skirt
+  rotate: false
+  xy: 2, 318
+  size: 406, 689
+  orig: 406, 689
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 462, 17
+  size: 315, 350
+  orig: 315, 350
+  offset: 0, 0
+  index: -1
+inner-skirt
+  rotate: false
+  xy: 412, 371
+  size: 362, 636
+  orig: 362, 636
+  offset: 0, 0
+  index: -1
+quarter-mantle
+  rotate: false
+  xy: 2, 2
+  size: 456, 312
+  orig: 456, 312
+  offset: 0, 0
+  index: -1
+strap
+  rotate: false
+  xy: 781, 137
+  size: 154, 409
+  orig: 154, 409
+  offset: 0, 0
+  index: -1
+tunic-lining
+  rotate: false
+  xy: 778, 550
+  size: 175, 457
+  orig: 175, 457
+  offset: 0, 0
+  index: -1
+
+survivor-flick-parts4.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cast-sleeve
+  rotate: false
+  xy: 422, 411
+  size: 202, 336
+  orig: 202, 336
+  offset: 0, 0
+  index: -1
+far-shin
+  rotate: false
+  xy: 246, 422
+  size: 172, 325
+  orig: 172, 325
+  offset: 0, 0
+  index: -1
+far-thigh
+  rotate: false
+  xy: 2, 71
+  size: 207, 348
+  orig: 207, 348
+  offset: 0, 0
+  index: -1
+near-shin
+  rotate: false
+  xy: 2, 423
+  size: 240, 324
+  orig: 240, 324
+  offset: 0, 0
+  index: -1
+near-sleeve
+  rotate: false
+  xy: 628, 2
+  size: 337, 405
+  orig: 337, 405
+  offset: 0, 0
+  index: -1
+near-underarm
+  rotate: false
+  xy: 464, 11
+  size: 160, 396
+  orig: 160, 396
+  offset: 0, 0
+  index: -1
+quarter-head
+  rotate: false
+  xy: 628, 411
+  size: 312, 336
+  orig: 312, 336
+  offset: 0, 0
+  index: -1
+ration-bag
+  rotate: false
+  xy: 213, 43
+  size: 247, 364
+  orig: 247, 364
+  offset: 0, 0
+  index: -1
+
+survivor-flick-parts5.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+chest
+  rotate: false
+  xy: 288, 2
+  size: 406, 476
+  orig: 406, 476
+  offset: 0, 0
+  index: -1
+hips-lining
+  rotate: false
+  xy: 2, 39
+  size: 282, 450
+  orig: 282, 450
+  offset: 0, 0
+  index: -1
+mantle
+  rotate: false
+  xy: 364, 482
+  size: 385, 446
+  orig: 385, 446
+  offset: 0, 0
+  index: -1
+near-thigh
+  rotate: false
+  xy: 2, 493
+  size: 358, 435
+  orig: 358, 435
+  offset: 0, 0
+  index: -1
+near-trouser-lining
+  rotate: false
+  xy: 753, 366
+  size: 246, 562
+  orig: 246, 562
+  offset: 0, 0
+  index: -1
+
+survivor-flick-parts6.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+inner-tunic
+  rotate: false
+  xy: 294, 138
+  size: 322, 560
+  orig: 322, 560
+  offset: 0, 0
+  index: -1
+quarter-far-leg
+  rotate: false
+  xy: 2, 2
+  size: 288, 696
+  orig: 288, 696
+  offset: 0, 0
+  index: -1
