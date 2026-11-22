@@ -1,6 +1,6 @@
 import { createCardSet } from '../core/content/ContentRegistry';
 import { FIELD_SCENARIO, RUN_DECK_SCENARIO, getScenario, type GameScenario } from '../core/content/GameScenario';
-import { GameState, migrateLegacyGameState, validateGameState } from '../core/state/GameState';
+import { GameState, validateGameState } from '../core/state/GameState';
 import type { RunPersistence, SaveLoad } from '../application/RunPersistence';
 export type { SaveLoad } from '../application/RunPersistence';
 export interface SaveStorage {
@@ -82,7 +82,7 @@ export class SaveRepository implements RunPersistence {
     private decode(text: string): GameState {
         const envelope = JSON.parse(text);
         if (envelope?.format !== 'the-end-save') throw new Error('存档格式无效。');
-        if (envelope.version !== 1 && envelope.version !== 2)
+        if (envelope.version !== 1 && envelope.version !== 2 && envelope.version !== 3)
             throw new SaveReadError('存档版本暂不受支持，原存档已保留。', true);
         const { checksum, ...body } = envelope;
         if (checksum !== hash(JSON.stringify(body))) throw new Error('存档完整性校验失败。');
@@ -105,10 +105,7 @@ export class SaveRepository implements RunPersistence {
                 '卡牌配置已改变，未加载或覆盖原存档。可恢复原配置，或通过“重开”开始新进度。',
                 true
             );
-        return validateGameState(
-            envelope.version === 1 ? migrateLegacyGameState(state) : state,
-            this.content.cards
-        );
+        return validateGameState(state, this.content.cards);
     }
     load(): SaveLoad {
         const result: SaveLoad = { state: null, recovered: false, warning: '' };
@@ -151,7 +148,7 @@ export class SaveRepository implements RunPersistence {
         try {
             const body = {
                 format: 'the-end-save',
-                version: 2,
+                version: 3,
                 savedAt: new Date().toISOString(),
                 catalogHash: this.catalogHash(getScenario(state.scenarioId, state.scenarioVersion)),
                 state: validateGameState(state, this.content.cards),

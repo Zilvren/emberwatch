@@ -18,7 +18,7 @@ await click('end-turn');const nextTurn=await page.evaluate(()=>globalThis.__surv
 await page.reload();await idle();assert(JSON.stringify(await page.evaluate(()=>globalThis.__survivalGame.exportState()))===JSON.stringify(nextTurn),'Reload changed next-turn draw order, equipment or costs');
 await screenshot('production-resumed-battle');
 await click('restart');await click('modal-cancel');await page.reload();await idle();assert((await state()).phase==='battle','Cancelling new-game confirmation discarded progress');
-await click('restart');await click('modal-confirm');s=await state();assert(s.phase==='journal'&&s.day===1&&s.armor===10,'Confirmed new game did not reset progress');
+await click('restart');await click('modal-confirm');s=await state();assert(s.phase==='journal'&&s.day===1&&s.health===10,'Confirmed new game did not reset progress');
 await page.reload();await idle();assert((await state()).phase==='journal','Confirmed new-game checkpoint was not saved');await screenshot('production-journal');
 assert(runtimeErrors.length===0,runtimeErrors.join('\n'));
 return {passed:true,pendingRewardResume:true,noDuplicateClaim:true,battleResume:true,nextTurnAndRngResume:true,restartConfirmation:true,automaticSave:true,nativeActorSource:s.heroPose,trace,runtimeErrors};

@@ -48,19 +48,11 @@ export class RewardRules {
         const r = this.state.rewards;
         if (this.state.phase !== 'rewards' || !r || r.supplyTaken)
             return this.feedback.result(false, '没有可领取的物资。');
-        const amount =
-            this.scenario.suppliesHaveWeight === false
-                ? r.supplies
-                : Math.min(r.supplies, Math.max(0, 30 - this.inventory.baseWeight));
+        const amount = r.supplies;
         this.state.supplies += amount;
         r.supplyTaken = true;
-        this.feedback.log(
-            `领取物资 ${amount} / ${r.supplies}。${amount < r.supplies ? '超出负重的部分已放弃。' : ''}`
-        );
-        return this.feedback.result(
-            true,
-            `领取 ${amount} 点物资${amount < r.supplies ? `，其余 ${r.supplies - amount} 点放弃` : ''}。`
-        );
+        this.feedback.log(`领取物资 ${amount}。`);
+        return this.feedback.result(true, `领取 ${amount} 点物资。`);
     }
     claimCard(index: number): ActionResult {
         const r = this.state.rewards;

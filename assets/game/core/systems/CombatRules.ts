@@ -1,5 +1,5 @@
 import { CardSet } from '../content/ContentRegistry';
-import { GameScenario } from '../content/GameScenario';
+import { GameScenario, MAX_HEALTH } from '../content/GameScenario';
 import { Random } from '../Random';
 import { ActionResult, CombatCard, OwnedCard } from '../RulesTypes';
 import { InventoryRules } from './InventoryRules';
@@ -177,10 +177,7 @@ export class CombatRules {
             return stamina ? '体力不足' : '物资不足';
         if (effect.type === 'none') return '遗物不能在战斗中使用';
         if (effect.type === 'equip' && this.state.battle?.weapon) return '武器槽已占用';
-        if (effect.type === 'heal' && this.state.armor === 0)
-            return this.scenario.labyrinth ? '护甲临界，无法修复'
-                : this.scenario.fieldDeck ? '压力服临界，无法修复' : '感染临界，无法修复';
-        if (effect.type === 'heal' && this.state.armor === 10) return '护甲已满';
+        if (effect.type === 'heal' && this.state.health === MAX_HEALTH) return '血量已满';
         return '';
     }
     play(id: string): ActionResult {
@@ -210,7 +207,7 @@ export class CombatRules {
             }
             if (effect.type === 'block') b.block += effect.amount;
             if (effect.type === 'heal')
-                this.state.armor = Math.min(10, this.state.armor + effect.amount);
+                this.state.health = Math.min(MAX_HEALTH, this.state.health + effect.amount);
             if (b.hp > 0 && (effect.type === 'draw' || effect.extraDraw))
                 this.drawCards(effect.type === 'draw' ? effect.amount : effect.extraDraw!);
             if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count),
@@ -261,12 +258,9 @@ export class CombatRules {
             this.feedback.log(
                 `敌人攻击 ${this.incomingDamage}，格挡 ${b.block}，实际伤害 ${damage}。`
             );
-            if (damage > 0 && this.state.armor === 0) {
-                this.fail(
-                    this.scenario.labyrinth ? '护甲临界时再次受到未格挡的伤害。' : this.scenario.fieldDeck
-                        ? '压力服临界时再次受到未格挡的伤害。'
-                        : '感染临界时再次受到实际伤害。'
-                );
+            this.state.health = Math.max(0, this.state.health - damage);
+            if (this.state.health === 0) {
+                this.fail('血量耗尽，本次探索失败。');
                 return this.feedback.result(
                     true,
                     this.scenario.kind === 'tutorial'
@@ -274,8 +268,6 @@ export class CombatRules {
                         : '探索失败，已撤回避难所。'
                 );
             }
-            this.state.armor = Math.max(0, this.state.armor - damage);
-            if (this.state.armor === 0) this.state.critical = true;
             if (damage === 0 && b.calm?.deferred === 'extra-turn' && b.calm.counter) {
                 b.hp = Math.max(0, b.hp - b.calm.counter);
                 this.feedback.log(`回流盾完全接下暂缓的攻击，反击 ${b.calm.counter} 伤害。`);

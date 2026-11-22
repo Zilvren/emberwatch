@@ -22,7 +22,7 @@ function run(seed, route, tier, strategy) {
     for (let step = 0; step < 240 && g.phase !== 'failure'; step++) {
         if (g.phase === 'map' && g.currentNode === 'return') {
             session.advanceTime(1);
-            return { success: g.day === 2, armor: g.armor, turns, encounters };
+            return { success: g.day === 2, health: g.health, turns, encounters };
         }
         if (g.phase === 'map') {
             doIt({ type: 'enter-node' });
@@ -48,7 +48,7 @@ function run(seed, route, tier, strategy) {
             }
         }
     }
-    return { success: false, armor: 0, turns, encounters };
+    return { success: false, health: 0, turns, encounters };
 }
 const samples = [];
 for (const tier of ['emergency', 'low', 'standard']) {
@@ -56,7 +56,7 @@ for (const tier of ['emergency', 'low', 'standard']) {
         const runs = Array.from({ length: 64 }, (_, seed) => run(seed + 1, route, tier, strategy));
         const victories = runs.filter((result) => result.success);
         samples.push({ tier, route, strategy, runs: runs.length, cleared: victories.length,
-            averageArmor: +(victories.reduce((n, r) => n + r.armor, 0) / (victories.length || 1)).toFixed(2),
+            averageHealth: +(victories.reduce((n, r) => n + r.health, 0) / (victories.length || 1)).toFixed(2),
             meanEndTurns: +(runs.reduce((n, r) => n + r.turns, 0) / runs.length).toFixed(2) });
     }
 }

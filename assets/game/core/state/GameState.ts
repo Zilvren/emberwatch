@@ -1,4 +1,4 @@
-import { CARD, CardDefinition, isBattleCard } from '../content/CardCatalog';
+import { CARD, CardDefinition, carriedWeight, isBattleCard } from '../content/CardCatalog';
 import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO } from '../content/GameScenario';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
 import { isPhase } from './GamePhase';
@@ -9,10 +9,10 @@ import {
     mapClearMilestone,
     validMilestoneId,
 } from '../content/JournalCatalog';
-import type { Battle, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
+import type { Battle, CombatCard, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
 import { CALM_LIMIT, CALM_PER_TURN, MAX_CALM_LIMIT, MAX_BONUS_STAMINA } from '../systems/LabyrinthCombat';
 export interface GameState {
-    schemaVersion: 2;
+    schemaVersion: 3;
     scenarioId: string;
     scenarioVersion: number;
     seed: number;
@@ -24,8 +24,7 @@ export interface GameState {
     journalEntries: JournalRecord[];
     supplies: number;
     entryTier: EntryTierId | null;
-    armor: number;
-    critical: boolean;
+    health: number;
     cards: OwnedCard[];
     storedSupplies?: Record<string, number>;
     route: Route | null;
@@ -72,8 +71,8 @@ export function validateGameState(
     journals: JournalCatalog = getJournalCatalog()
 ): GameState {
     object(raw, 'state');
-    const s = raw as GameState;
-    integer(s.schemaVersion, 2, 2, 'schemaVersion');
+    const s = migrateLegacyGameState(raw, definitions) as GameState;
+    integer(s.schemaVersion, 3, 3, 'schemaVersion');
     text(s.scenarioId, 'scenarioId', 80);
     integer(s.scenarioVersion, 1, 100000, 'scenarioVersion');
     const scenario = getScenario(s.scenarioId, s.scenarioVersion);
@@ -108,15 +107,14 @@ export function validateGameState(
         (s.phase === 'journal') === s.journalEntries.some((entry) => !entry.read),
         'journal phase'
     );
-    integer(s.supplies, 0, scenario.suppliesHaveWeight === false ? 1000000000 : 30, 'supplies');
+    integer(s.supplies, 0, 1000000000, 'supplies');
     const savedTier = s.entryTier ?? null;
     if (scenario.battleResource === 'stamina') {
         requireValue(savedTier, savedTier === null || !!entryTier(savedTier), 'entry tier');
         if (['map', 'battle', 'rewards', 'rest'].indexOf(s.phase) >= 0)
             requireValue(savedTier, !!entryTier(savedTier), 'entry tier for active expedition');
     } else requireValue(savedTier, savedTier === null, 'legacy entry tier');
-    integer(s.armor, 0, 10, 'armor');
-    flag(s.critical, 'critical');
+    integer(s.health, 0, 10, 'health');
     flag(s.fixedDone, 'fixedDone');
     requireValue(s.phase, isPhase(s.phase), 'phase');
     requireValue(s.route, s.route === null || hasId(scenario.routes, s.route), 'route');
@@ -178,6 +176,8 @@ export function validateGameState(
         flag(card.selected, 'selected');
         flag(card.found, 'found');
         requireValue(card.zone, card.zone === 'base' || card.zone === 'overflow', 'zone');
+        if (definitions[card.kind].role !== 'supply') requireValue(card.zone, card.zone === 'base', 'weightless card zone');
+        else requireValue(card, !card.selected, 'supply item');
         if (scenario.runDeck) {
             const definition = definitions[card.kind];
             requireValue(
@@ -191,18 +191,11 @@ export function validateGameState(
     });
     if (scenario.runDeck && (s.settlement || s.phase === 'shelter' || s.phase === 'failure'))
         requireValue(s.cards, s.cards.length === 0, 'closed run cards');
-    const baseWeight =
-        (scenario.suppliesHaveWeight === false ? 0 : s.supplies) +
-        s.cards
-            .filter(
-                (c) =>
-                    c.zone === 'base' &&
-                    (!scenario.runDeck || definitions[c.kind].role === 'supply')
-            )
-            .reduce((n, c) => n + definitions[c.kind].weight, 0);
+    const baseWeight = s.cards.filter(c => c.zone === 'base')
+        .reduce((n, c) => n + carriedWeight(definitions[c.kind]), 0);
     const overflowWeight = s.cards
         .filter((c) => c.zone === 'overflow')
-        .reduce((n, c) => n + definitions[c.kind].weight, 0);
+        .reduce((n, c) => n + carriedWeight(definitions[c.kind]), 0);
     if (scenario.fieldDeck) {
         requireValue(
             s.cards,
@@ -336,12 +329,11 @@ export function validateGameState(
         for (const key of [
             'returnedSupplies',
             'returnedCards',
-            'repairCost',
-            'repairSpent',
+            'treatmentCost',
+            'treatmentSpent',
         ] as const)
             integer(t[key], 0, 100000, key);
-        flag(t.repaired, 'repaired');
-        flag(t.wasCritical, 'wasCritical');
+        flag(t.treated, 'treated');
         if (t.discoveredCards !== undefined)
             integer(t.discoveredCards, 0, 100000, 'discovered cards');
         list(t.lostOverflow, 100, 'lostOverflow');
@@ -350,7 +342,7 @@ export function validateGameState(
     requireValue(s.nextId, s.nextId >= highestId, 'nextId');
     // An explicit field list prevents prototype keys and future fields from entering the model.
     const result: GameState = {
-        schemaVersion: 2,
+        schemaVersion: 3,
         scenarioId: s.scenarioId,
         scenarioVersion: s.scenarioVersion,
         seed: s.seed,
@@ -362,8 +354,7 @@ export function validateGameState(
         journalEntries: s.journalEntries.map(({ id, day, read }) => ({ id, day, read })),
         supplies: s.supplies,
         entryTier: savedTier,
-        armor: s.armor,
-        critical: s.critical,
+        health: s.health,
         cards: s.cards,
         storedSupplies: s.storedSupplies,
         route: s.route,
@@ -383,10 +374,9 @@ export function validateGameState(
                       ? { discoveredCards: s.settlement.discoveredCards }
                       : {}),
                   lostOverflow: s.settlement.lostOverflow,
-                  wasCritical: s.settlement.wasCritical,
-                  repairCost: s.settlement.repairCost,
-                  repaired: s.settlement.repaired,
-                  repairSpent: s.settlement.repairSpent,
+                  treatmentCost: s.settlement.treatmentCost,
+                  treated: s.settlement.treated,
+                  treatmentSpent: s.settlement.treatmentSpent,
               }
             : null,
         logs: s.logs,
@@ -398,8 +388,51 @@ export function validateGameState(
     return JSON.parse(JSON.stringify(result));
 }
 
+/** Decode earlier armor/weight saves without rerolling any deck or encounter. */
+export function migrateLegacyGameState(raw: unknown, definitions: Readonly<Record<string, CardDefinition>> = CARD): unknown {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw) || (raw as GameState).schemaVersion === 3) return raw;
+    const s = upgradeJournal(raw) as any;
+    if (s.schemaVersion !== 2) return s;
+    s.schemaVersion = 3;
+    s.health = s.health ?? s.armor;
+    delete s.armor;
+    delete s.critical;
+    if (s.settlement) {
+        const t = s.settlement;
+        t.treatmentCost = t.treatmentCost ?? t.repairCost;
+        t.treated = t.treated ?? t.repaired;
+        t.treatmentSpent = t.treatmentSpent ?? t.repairSpent;
+    }
+    if (Array.isArray(s.cards)) {
+        for (const card of s.cards) {
+            const definition = card && definitions[card.kind];
+            if (!definition) continue;
+            if (definition.role === 'supply') {
+                card.selected = false;
+                continue;
+            }
+            if (card.zone !== 'overflow') continue;
+            card.zone = 'base';
+            const battle = s.battle;
+            if (battle && card.selected && isBattleCard(definition) &&
+                [battle.hand, battle.draw, battle.discard].every(pile => Array.isArray(pile) &&
+                    !pile.some((c: CombatCard) => c.id === card.id || c.origin === card.id)) &&
+                battle.weapon?.origin !== card.id) {
+                battle.discard.push({ id: card.id, kind: card.kind, origin: card.id, temporary: false });
+            }
+        }
+    }
+    if (Array.isArray(s.logs)) s.logs = s.logs.map((line: unknown) =>
+        typeof line === 'string'
+            ? line.replace(/护甲/g, '血量')
+                .replace(/，(?:负重 \d+ \/ \d+|释放 \d+ 负重)/g, '')
+                .replace(/超出负重的部分已放弃。/g, '其余物资已放弃。')
+            : line);
+    return s;
+}
+
 /** Upgrade the old terminal teaching loop without replaying paid costs or deleting progress. */
-export function migrateLegacyGameState(raw: unknown): unknown {
+function upgradeJournal(raw: unknown): unknown {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return raw;
     const s = JSON.parse(JSON.stringify(raw));
     if (

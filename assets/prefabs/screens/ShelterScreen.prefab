@@ -1451,7 +1451,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "整理带回的物品，按需修复护甲，然后再次出发。",
+    "_string": "整理带回的物品，按需治疗伤势，然后再次出发。",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -2227,7 +2227,7 @@
       "b": 191,
       "a": 255
     },
-    "_string": "护甲维护 · 可选",
+    "_string": "血量维护 · 可选",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -2320,7 +2320,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "armor",
+    "_name": "health",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2479,7 +2479,7 @@
     "__prefab": {
       "__id__": 108
     },
-    "key": "shelter/armor",
+    "key": "shelter/health",
     "format": "{value}",
     "_id": "",
     "normalColor": {
@@ -2916,7 +2916,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "支付 1 物资 · 完全修复",
+    "_string": "支付 1 物资 · 完全恢复",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 0,

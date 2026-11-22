@@ -17,7 +17,7 @@ const click=async(id)=>{
   if(before.inventoryMode==='deck'){await click('bag-mode');before=await state();}
   await click('inspect-'+cardId);before=await state();
  }
- const p=await hitPoint(id);await page.mouse.move(p.x,p.y);await page.waitForTimeout(150);await page.mouse.click(p.x,p.y);await page.waitForTimeout(85);await idle();const after=await state();trace.push({action:id,from:before.phase,to:after.phase,supplies:after.supplies,armor:after.armor});return after;
+ const p=await hitPoint(id);await page.mouse.move(p.x,p.y);await page.waitForTimeout(150);await page.mouse.click(p.x,p.y);await page.waitForTimeout(85);await idle();const after=await state();trace.push({action:id,from:before.phase,to:after.phase,supplies:after.supplies,health:after.health});return after;
 };
 const claimSupplies=async()=>{let s=await state();const button=s.hits.find(h=>h.id==='claim-supplies');if(!button?.enabled)return s;s=await click('claim-supplies');if(s.overlay==='supply-overflow')s=await click('modal-confirm');return s;};
 const claimAvailableCard=async()=>{const index=await page.evaluate(()=>{const g=globalThis.__survivalGame,r=g.rewards;return !r||r.cardTaken?-1:r.cards.findIndex(kind=>!g.rewardCardBlocked(kind));});if(index>=0)return click('claim-card-'+index);return state();};
@@ -35,7 +35,7 @@ const fight=async({basicOnly=false,preferWeapon=false,capture=false,skipRepair=f
   while((await state()).phase==='battle'&&guard++<100){
     let s=await state();const b=s.battle;
     if(preferWeapon&&!b.weapon&&b.turn<=3){const knife=s.hand.find(c=>c.kind==='knife'&&!c.blocked);if(knife){await play(knife);assert((await state()).heroArmed,'Equipped knife did not update the actor equipment state');weaponDemonstrated=true;continue;}}
-    let card=s.hand.find(c=>c.kind==='repair'&&!c.blocked&&s.armor<=7&&!basicOnly&&!skipRepair);
+    let card=s.hand.find(c=>c.kind==='repair'&&!c.blocked&&s.health<=7&&!basicOnly&&!skipRepair);
     if(!card)card=s.hand.find(c=>!c.blocked&&c.kind==='slash'&&!basicOnly);
     if(!card&&!basicOnly&&!(preferWeapon&&b.weapon&&b.turn===1))card=s.hand.find(c=>!c.blocked&&c.kind==='heavy');
     if(!card)card=s.hand.find(c=>c.kind==='attack'&&!c.blocked);

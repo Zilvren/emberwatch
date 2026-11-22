@@ -24,4 +24,4 @@ await click('journal-start');s=await state();assert(s.phase==='shelter','Journal
 const repair=s.hits.find(h=>h.id==='shelter-repair');if(repair?.enabled)await click('shelter-repair');
 s=await state();assert(s.day===2,'Reading or repairing advanced another day');
 await screenshot('v2-shelter');assert(!s.heroArmed&&s.heroMotion==='idle'&&s.heroPose==='master08-spine:idle'&&s.heroRenderer==='spine-3.8','Actor equipment state did not clear after returning home');assert(runtimeErrors.length===0,'Browser runtime errors: '+runtimeErrors.join('\n'));
-return {passed:true,route:'A',first,second,dragCancelled:true,impactBusy:impactState.busy,final:{phase:s.phase,supplies:s.supplies,armor:s.armor,settlement:s.settlement},actions:trace.length,trace,runtimeErrors};
+return {passed:true,route:'A',first,second,dragCancelled:true,impactBusy:impactState.busy,final:{phase:s.phase,supplies:s.supplies,health:s.health,settlement:s.settlement},actions:trace.length,trace,runtimeErrors};

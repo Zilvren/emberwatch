@@ -79,6 +79,20 @@ export interface Catalog {
 export function isBattleCard(card: Pick<CardDefinition, 'role'>): boolean {
     return card.role === 'basic' || card.role === 'normal';
 }
+export function carriedWeight(card: Pick<CardDefinition, 'role' | 'weight'>): number {
+    return card.role === 'supply' ? card.weight : 0;
+}
+
+/** Keep the authored v1 catalog available for old save signatures. Only supply
+ * items have an effective weight, and old medical cards use the current terms. */
+export function playableCard(card: CardDefinition): CardDefinition {
+    const weight = carriedWeight(card);
+    if (card.effect.type !== 'heal') return weight === card.weight ? card : { ...card, weight };
+    const name = card.name === '修复' ? '急救' : card.name === '盐封修补' ? '应急包扎' : card.name;
+    const text = card.text === '护甲为 0 时无法使用' || card.text === '护甲已满或降到 0 时无法使用。'
+        ? '血量已满时无法使用。' : card.text.replace(/护甲/g, '血量');
+    return { ...card, weight, name, text };
+}
 export const ART_IDS = ['attack', 'dodge', 'knife', 'evade', 'repair', 'heavy', 'slash', 'cash'];
 export const EFFECT_NAMES: Record<EffectType, string> = {
     damage: '伤害',
@@ -396,7 +410,7 @@ export function installCatalog(raw: unknown): Catalog {
     REWARD_POOL.length = 0;
     INITIAL_DECK.length = 0;
     for (const card of next.cards) {
-        CARD[card.id] = card;
+        CARD[card.id] = playableCard(card);
         if (card.reward) REWARD_POOL.push(card.id);
         for (let count = 0; count < card.initialCount; count++) INITIAL_DECK.push(card.id);
     }
@@ -439,7 +453,7 @@ export function effectSummary(
         return [primary, effects[rule]].filter(Boolean).join('，');
     }
     if (primary) return primary;
-    if (effect.type === 'heal') return `恢复 ${effect.amount} 点护甲`;
+    if (effect.type === 'heal') return `恢复 ${effect.amount} 点血量`;
     if (effect.type === 'equip')
         return `下回合起每回合生成「${definitions[effect.generatedCard ?? '']?.name ?? effect.generatedCard}」`;
     return card.role === 'supply' ? `带回避难所兑换 ${card.supplyValue ?? 1} 物资点` : '只能在休整时丢弃';

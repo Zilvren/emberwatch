@@ -22,25 +22,26 @@ const fatalBattle = async () => {
         Object.assign(game, { fixedDone: true, route: 'A', pathIndex: 0 });
         const result = game.enterNode();
         if (!result.ok) throw new Error(result.message);
-        Object.assign(game, { armor: 0, critical: true });
+        game.health = 1;
         Object.assign(game.battle, { block: 0, intent: 'attack' });
         game.revision++;
     });
     await page.waitForFunction(() => globalThis.__emberUI.snapshot().hits.some(hit => hit.id === 'end-turn' && hit.enabled));
     await click('end-turn');
-    assert((await state()).phase === 'failure', 'Fatal enemy turn did not show failure');
+    const defeated = await state();
+    assert(defeated.phase === 'failure' && defeated.health === 0, 'Fatal enemy turn did not show failure at zero health');
 };
-const finishPreparedMap = async (supplies, armor = 10) => {
-    await page.evaluate(({ supplies, armor }) => {
+const finishPreparedMap = async (supplies, health = 10) => {
+    await page.evaluate(({ supplies, health }) => {
         const game = globalThis.__survivalGame;
         Object.assign(game, { fixedDone: true, route: 'A', pathIndex: game.scenario.routes.A.length,
-            visited: ['fixed', ...game.scenario.routes.A], supplies, armor, returnElapsed: 0 });
+            visited: ['fixed', ...game.scenario.routes.A], supplies, health, returnElapsed: 0 });
         game.revision++;
-    }, { supplies, armor });
+    }, { supplies, health });
     await page.waitForFunction(() => ['journal', 'shelter'].includes(globalThis.__emberUI.snapshot().phase));
     await idle();
 };
-async function firstClear(attempt, save, bank, armor = 10, ruleset = 'stamina-v1') {
+async function firstClear(attempt, save, bank, health = 10, ruleset = 'stamina-v1') {
     await page.goto(`http://127.0.0.1:7457/?seed=17&save=${save ? 'on' : 'off'}&qa=core-loop-${attempt}&ruleset=${ruleset}`);
     await idle();
     await startFormal('journal-start');
@@ -49,12 +50,13 @@ async function firstClear(attempt, save, bank, armor = 10, ruleset = 'stamina-v1
         let result = await progress();
         assert(result.day === index + 1 && result.entries.length === 1 && result.current === null,
             'Ordinary failure changed journal progress or did not advance exactly one day');
-        assert((await state()).supplies === 10 && (await state()).armor === 10, 'Failure recovery changed');
         await click('journal-start');
-        assert((await state()).phase === 'shelter', 'Retry did not return to shelter');
+        const recovered = await state();
+        assert(recovered.phase === 'shelter' && recovered.supplies === 10 && recovered.health === 10,
+            'Retry did not return to shelter with initial supplies and health');
         await startFormal('shelter-done');
     }
-    await finishPreparedMap(bank, armor);
+    await finishPreparedMap(bank, health);
     const result = await progress(), labels = await visibleText();
     assert(result.current?.id === 'street-cleared' && result.current.day === attempt + 1, 'First clear has wrong journal date');
     assert(labels['journal/text1'] === `第 ${attempt + 1} 天 · ${result.current.title}`, 'Native journal title did not bind actual date');
@@ -67,7 +69,7 @@ const fast = await firstClear(2, false, 1, 6, 'stamina-v1');
 await click('journal-start');
 assert((await state()).phase === 'shelter', 'Reading a journal did not return to shelter');
 const repair = await click('shelter-repair');
-assert(repair.supplies === 0 && repair.armor === 10 && repair.overlay === null, 'Repair could not spend the last supply directly');
+assert(repair.supplies === 0 && repair.health === 10 && repair.overlay === null, 'Repair could not spend the last supply directly');
 assert(!/每日|今晚的生存消耗/.test(Object.values(await visibleText()).join('\n')), 'Shelter still shows daily settlement copy');
 const slow = await firstClear(10, true, 5);
 assert(slow.body === fast.body && slow.day !== fast.day, 'Story content depends on elapsed days');

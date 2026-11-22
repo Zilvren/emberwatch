@@ -5,7 +5,7 @@ export type InventoryState = Pick<GameState, 'battle' | 'cards' | 'phase' | 'sup
 export type SynthesisState = Pick<GameState, 'cards' | 'phase' | 'revision'>;
 export type CombatState = Pick<
     GameState,
-    'armor' | 'battle' | 'critical' | 'entryTier' | 'phase' | 'rewards' | 'supplies'
+    'health' | 'battle' | 'entryTier' | 'phase' | 'rewards' | 'supplies'
 >;
 export type RewardState = Pick<
     GameState,
@@ -13,9 +13,8 @@ export type RewardState = Pick<
 >;
 export type ExplorationState = Pick<
     GameState,
-    | 'armor'
+    | 'health'
     | 'battle'
-    | 'critical'
     | 'entryTier'
     | 'fixedDone'
     | 'pathIndex'
@@ -31,10 +30,9 @@ export type ExplorationState = Pick<
 >;
 export type ShelterState = Pick<
     GameState,
-    | 'armor'
+    | 'health'
     | 'battle'
     | 'cards'
-    | 'critical'
     | 'day'
     | 'phase'
     | 'revision'

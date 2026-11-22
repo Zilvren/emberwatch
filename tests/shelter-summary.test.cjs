@@ -26,7 +26,7 @@ const { RUN_DECK_SCENARIO, STAMINA_SCENARIO } = load(path.join(root, 'assets/gam
 const { shelterSummary } = load(
     path.join(root, 'assets/game/presentation/ui/ShelterSummaryModel.ts')
 );
-function returned({ supplies, armor = 6, critical = false, storedSupplies, scenario = RUN_DECK_SCENARIO }) {
+function returned({ supplies, health = 6, storedSupplies, scenario = RUN_DECK_SCENARIO }) {
     const session = new GameSession(17, undefined, scenario),
         game = session.game;
     assert.equal(session.execute({ type: 'start', tier: 'emergency' }).ok, true);
@@ -35,8 +35,7 @@ function returned({ supplies, armor = 6, critical = false, storedSupplies, scena
         route: 'A',
         pathIndex: game.scenario.routes.A.length,
         supplies,
-        armor,
-        critical,
+        health,
         storedSupplies,
     });
     session.advanceTime(1);
@@ -46,7 +45,7 @@ function returned({ supplies, armor = 6, critical = false, storedSupplies, scena
     return session;
 }
 test('new shelter summary removes repair and daily payment and starts a fresh run', () => {
-    const session = returned({ supplies: 8, armor: 3 }),
+    const session = returned({ supplies: 8, health: 3 }),
         before = shelterSummary(session.view);
     assert.equal(before.repairVisible, false);
     assert.equal(session.game.day, 2);
@@ -54,12 +53,12 @@ test('new shelter summary removes repair and daily payment and starts a fresh ru
     assert.match(before.values['shelter/repair-hint'], /暂无/);
     assert.match(before.values['shelter/progress-summary'], /已通关 1 次/);
     assert.equal(session.execute({ type: 'repair' }).ok, false);
-    assert.equal(session.game.armor, 3);
+    assert.equal(session.game.health, 3);
     assert.equal(session.execute({ type: 'start', tier: 'emergency' }).ok, true);
     assert.equal(session.game.phase, 'map');
     assert.equal(session.game.day, 2);
     assert.equal(session.game.supplies, 8);
-    assert.equal(session.game.armor, 10);
+    assert.equal(session.game.health, 10);
     assert.equal(
         session.game.cards.length,
         session.game.content.initialDeck.filter(
@@ -84,7 +83,7 @@ test('stored supply cards can be exchanged at any time in the shelter', () => {
     assert.equal(session.game.supplies, 10);
 });
 test('shelter projection shows exploration progress and leaves supplies untouched', () => {
-    const session = returned({ supplies: 8, armor: 10, scenario: STAMINA_SCENARIO }),
+    const session = returned({ supplies: 8, health: 10, scenario: STAMINA_SCENARIO }),
         before = session.game.exportState();
     const summary = shelterSummary(session.view);
     assert.equal(summary.repairVisible, false);
@@ -97,7 +96,7 @@ test('shelter projection shows exploration progress and leaves supplies untouche
     assert.equal(session.game.day, 2);
 });
 test('repair remains actionable with exactly its cost and has no daily-shortfall warning', () => {
-    const session = returned({ supplies: 1, armor: 6, scenario: STAMINA_SCENARIO });
+    const session = returned({ supplies: 1, health: 6, scenario: STAMINA_SCENARIO });
     const before = shelterSummary(session.view);
     assert.equal(before.repairVisible, true);
     assert.equal(before.repairEnabled, true);
@@ -109,7 +108,7 @@ test('repair remains actionable with exactly its cost and has no daily-shortfall
     assert.equal(session.game.day, 2);
 });
 test('repair itself remains unavailable when the returned supplies cannot cover its actual cost', () => {
-    const session = returned({ supplies: 1, armor: 0, critical: true, scenario: STAMINA_SCENARIO });
+    const session = returned({ supplies: 0, health: 1, scenario: STAMINA_SCENARIO });
     const summary = shelterSummary(session.view),
         before = session.game.exportState();
     assert.equal(summary.repairVisible, true);

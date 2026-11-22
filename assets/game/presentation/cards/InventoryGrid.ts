@@ -90,12 +90,12 @@ export class InventoryGrid extends Component {
                 ? `随行牌组 ${game.cards.length} 张 · 本次发现 ${game.cards.filter((card) => card.found).length} 张`
                 : runBattleDeck
                   ? `${game.usableCards.length} 张战斗牌 · 本局使用`
-                  : `携带 ${game.baseWeight}/30    暂存 ${game.overflowWeight}/10    共 ${game.carriedCards.length} 张`;
+                  : `共 ${cards.length} 张`;
         if (this.hint)
             this.hint.string = runBattleDeck
                 ? '滚动浏览 · 在配方表查看材料搭配'
                 : ui.deckEdit
-                  ? '营地编组：点击卡牌加入或移出出战牌组 · 不释放负重'
+                  ? '营地编组：点击卡牌加入或移出出战牌组'
                   : field
                     ? '点击查看牌面 · 本次发现保留至返家'
                     : '滚动浏览 · 点击卡牌查看大图与操作';
@@ -118,7 +118,7 @@ export class InventoryGrid extends Component {
             title.string = field ? '随行牌组' : runBattleDeck ? '本局卡组' : '行囊 / 本次探索';
         this.sortButton?.setText(
             '排序：' +
-                { original: '获得顺序', name: '名称', cost: '费用', weight: '负重' }[ui.bagSort]
+                { original: '获得顺序', name: '名称', cost: '费用' }[ui.bagSort]
         );
         this.filters.forEach((button) => {
             if (button.actionId === 'bag-filter-all')
@@ -158,7 +158,7 @@ export class InventoryGrid extends Component {
         if (this.readerBody)
             this.readerBody.string = field
                 ? `${state.status} · ${game.content.cards[selected.kind].cost} 体力\n\n${state.effect}\n${game.content.cards[selected.kind].text}`
-                : `${state.status}${runBattleDeck ? '' : `\n负重 ${state.weight}`}\n\n${state.effect}\n\n${state.toggleHint}`;
+                : `${state.status}\n\n${state.effect}\n\n${state.toggleHint}`;
         if (this.toggle) {
             this.toggle.actionId = 'toggle-' + selected.id;
             this.toggle.setText(state.toggleLabel);

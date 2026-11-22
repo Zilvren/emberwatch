@@ -199,19 +199,19 @@ test('temporary and persistent calm share the cap, preserve the original intent 
     play(s, 'vent');
     assert.equal(b.calm.deferred, 'scheduled');
     assert.equal(s.game.attackDamage('lab_opening'), 7);
-    const hp = s.view.armor;
+    const hp = s.view.health;
     ok(s.game.endTurn());
     assert.equal(b.calm.deferred, 'extra-turn');
     assert.equal(b.intent, 'attack');
     assert.equal(b.calm.persistent + b.calm.temporary + b.block, 0);
-    assert.equal(s.view.armor, hp);
+    assert.equal(s.view.health, hp);
     play(s, 'return_shield');
     const enemy = b.hp;
     ok(s.game.endTurn());
     assert.equal(b.intent, 'prepare');
     assert.equal(b.calm.deferred, null);
     assert.equal(b.hp, enemy - 3);
-    assert.equal(s.view.armor, hp);
+    assert.equal(s.view.health, hp);
 });
 
 test('capacity raises the threshold and calibration consumes only available layers; battery exhausts for the battle', () => {

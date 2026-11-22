@@ -1,6 +1,9 @@
 // Central paths used by native asset authoring tools.
 const scripts={"GameView":"assets/game/presentation/ui/GameView.ts","PaperDollRig":"assets/game/presentation/actors/PaperDollRig.ts","DeckStackGraphic":"assets/game/presentation/primitives/DeckStackGraphic.ts","SceneShade":"assets/game/presentation/primitives/SceneShade.ts","SceneAtmosphere":"assets/game/presentation/effects/SceneAtmosphere.ts","FieldPanel":"assets/game/presentation/primitives/FieldPanel.ts","WebViewport":"assets/game/presentation/platform/WebViewport.ts","StatusBarDesignReview":"assets/game/presentation/ui/StatusBarDesignReview.ts","StatusBarLayout":"assets/game/presentation/ui/StatusBarLayout.ts","StatusBarModel":"assets/game/presentation/ui/StatusBarModel.ts","StatusBar":"assets/game/presentation/ui/StatusBar.ts","PanelLayout":"assets/game/presentation/ui/PanelLayout.ts","PanelDesignReview":"assets/game/presentation/ui/PanelDesignReview.ts","ModalPanel":"assets/game/presentation/ui/ModalPanel.ts","CommonPanel":"assets/game/presentation/ui/CommonPanel.ts","ButtonPresentation":"assets/game/presentation/ui/ButtonPresentation.ts","ButtonFocusGroup":"assets/game/presentation/ui/ButtonFocusGroup.ts","ButtonDesignReview":"assets/game/presentation/ui/ButtonDesignReview.ts","PaperPanel":"assets/game/presentation/primitives/PaperPanel.ts","CardInteraction":"assets/game/presentation/cards/CardInteraction.ts","CardDesignReview":"assets/game/presentation/cards/CardDesignReview.ts",
   "ContactShadow": "assets/game/presentation/primitives/ContactShadow.ts",
+  "CampEmbers": "assets/game/presentation/effects/CampEmbers.ts",
+  "CampStationPanel": "assets/game/presentation/ui/CampStationPanel.ts",
+  "BattlePilePanel": "assets/game/presentation/cards/BattlePilePanel.ts",
   "EntrySelection": "assets/game/presentation/ui/EntrySelection.ts",
   "SelectableCard": "assets/game/presentation/cards/SelectableCard.ts",
   "InventoryGrid": "assets/game/presentation/cards/InventoryGrid.ts",

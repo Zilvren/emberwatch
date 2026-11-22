@@ -2,6 +2,7 @@
 export type Route = string;
 export type NodeKind = string;
 export type EnemyId = string;
+export const MAX_HEALTH = 10;
 export type MapIcon = 'scavenge' | 'supply' | 'battle' | 'elite' | 'rest';
 export interface EnemyDefinition {
     title: string;
@@ -21,7 +22,7 @@ interface NodeDefinitionBase {
 export type NodeDefinition = NodeDefinitionBase &
     (
         | { type: 'battle'; enemyId: EnemyId }
-        | { type: 'rest'; restoreArmor: number }
+        | { type: 'rest'; restoreHealth: number }
         | {
               type: 'scavenge';
               cost: number;
@@ -34,7 +35,6 @@ export interface GameScenario {
     kind: 'tutorial' | 'expedition';
     ruleset: 'tutorial-v1' | 'stamina-v1';
     battleResource?: 'supplies' | 'stamina';
-    suppliesHaveWeight?: boolean;
     runDeck?: boolean;
     /** Field discoveries belong to the current expedition. Earlier scenario versions retain their inventory. */
     fieldDeck?: boolean;
@@ -45,7 +45,7 @@ export interface GameScenario {
     title: string;
     initialDay: number;
     initialSupplies: number;
-    initialArmor: number;
+    initialHealth: number;
     fixedNodeId: NodeKind;
     nodes: Record<NodeKind, NodeDefinition>;
     routes: Record<Route, NodeKind[]>;
@@ -58,7 +58,6 @@ export const TUTORIAL_SCENARIO: GameScenario = {
     kind: 'tutorial',
     ruleset: 'tutorial-v1',
     battleResource: 'supplies',
-    suppliesHaveWeight: true,
     runDeck: false,
     scavengeFees: { fixed: 2, scavenge: 3 },
     id: 'first-expedition',
@@ -66,7 +65,7 @@ export const TUTORIAL_SCENARIO: GameScenario = {
     title: '第一次探索',
     initialDay: 1,
     initialSupplies: 10,
-    initialArmor: 10,
+    initialHealth: 10,
     fixedNodeId: 'fixed',
     nodes: {
         fixed: {
@@ -86,7 +85,7 @@ export const TUTORIAL_SCENARIO: GameScenario = {
             cardReward: 'random',
         },
         enemy1: { type: 'battle', title: '游荡感染者', icon: 'battle', enemyId: 'enemy1' },
-        rest: { type: 'rest', title: '临时营地', icon: 'rest', restoreArmor: 2 },
+        rest: { type: 'rest', title: '临时营地', icon: 'rest', restoreHealth: 2 },
         enemy2: { type: 'battle', title: '重度感染者', icon: 'elite', enemyId: 'enemy2' },
     },
     routes: {
@@ -124,7 +123,6 @@ export const STAMINA_SCENARIO: GameScenario = {
     id: 'stamina-expedition',
     title: '灰烬街区',
     battleResource: 'stamina',
-    suppliesHaveWeight: false,
     scavengeFees: { fixed: 0, scavenge: 0 },
 };
 export const RUN_DECK_SCENARIO: GameScenario = {
@@ -173,7 +171,6 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
     kind: 'expedition',
     ruleset: 'stamina-v1',
     battleResource: 'stamina',
-    suppliesHaveWeight: false,
     fieldDeck: true,
     labyrinth: true,
     id: 'ashen-labyrinth',
@@ -181,7 +178,7 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
     title: '焦土迷宫',
     initialDay: 1,
     initialSupplies: 10,
-    initialArmor: 10,
+    initialHealth: 10,
     fixedNodeId: 'threshold',
     nodes: {
         threshold: { type: 'scavenge', title: '门槛补给', icon: 'supply', cost: 0, supplies: [2, 2], cardReward: 'random' },
@@ -191,7 +188,7 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
         serviceDuct: { type: 'scavenge', title: '检修暗槽', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random' },
         abandonedStall: { type: 'scavenge', title: '空置货摊', icon: 'supply', cost: 0, supplies: [2, 2], cardReward: 'random', discover: true },
         lightCut: { type: 'battle', title: '折光回廊', icon: 'battle', enemyId: 'ash-moth' },
-        leeAlcove: { type: 'rest', title: '背风壁龛', icon: 'rest', restoreArmor: 2 },
+        leeAlcove: { type: 'rest', title: '背风壁龛', icon: 'rest', restoreHealth: 2 },
         copperChest: { type: 'scavenge', title: '旧铜匣', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random', discover: true },
         lampCourt: { type: 'battle', title: '沉灯庭', icon: 'elite', enemyId: 'veil-idol' },
     },
@@ -245,7 +242,7 @@ export function validateScenario(s: GameScenario): void {
     assertContent(['tutorial-v1', 'stamina-v1'].indexOf(s.ruleset) >= 0, 'ruleset');
     assertContent(number(s.initialDay, 1), 'initial day');
     assertContent(s.kind === 'tutorial' || s.kind === 'expedition', 'scenario kind');
-    assertContent(number(s.initialSupplies) && number(s.initialArmor, 0, 10), 'initial resources');
+    assertContent(number(s.initialSupplies) && number(s.initialHealth, 1, MAX_HEALTH), 'initial resources');
     assertContent(
         !!s.nodes && !!s.routes && !!s.enemies && hasId(s.nodes, s.fixedNodeId),
         'definitions'
@@ -293,7 +290,7 @@ export function validateScenario(s: GameScenario): void {
         if (node.type === 'battle')
             assertContent(hasId(s.enemies, node.enemyId), 'enemy reference ' + key);
         else if (node.type === 'rest')
-            assertContent(number(node.restoreArmor, 0, 10), 'rest ' + key);
+            assertContent(number(node.restoreHealth, 0, 10), 'rest ' + key);
         else if (node.type === 'scavenge') {
             assertContent(
                 number(node.cost) &&

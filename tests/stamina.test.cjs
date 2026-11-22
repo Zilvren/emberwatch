@@ -176,13 +176,13 @@ test('stamina return advances time once and repair can spend the last supply wit
     game.route = 'A';
     game.pathIndex = game.scenario.routes.A.length;
     game.supplies = 1;
-    game.armor = 3;
+    game.health = 3;
     session.advanceTime(1);
     assert.equal(game.phase, 'journal');
     assert.equal(game.day, 2);
     ok(session.execute({ type: 'continue-journal' }));
     ok(session.execute({ type: 'repair' }));
-    assert.equal(game.armor, 10);
+    assert.equal(game.health, 10);
     assert.equal(game.supplies, 0);
     assert.equal('dailySpent' in game.settlement, false);
     const settled = game.exportState();

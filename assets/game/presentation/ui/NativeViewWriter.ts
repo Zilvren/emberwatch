@@ -9,7 +9,7 @@ export class NativeViewWriter {
         for (const binding of root.getComponentsInChildren(UIValue)) {
             if (Object.prototype.hasOwnProperty.call(values, binding.key))
                 binding.setValue(values[binding.key]);
-            if (binding.key === 'battle/text3') binding.setAlert(this.game.critical);
+            if (binding.key === 'battle/text3') binding.setAlert(this.game.lowHealth);
             if (binding.key === 'battle/text0')
                 binding.setAlert(this.game.battle?.intent === 'attack');
         }

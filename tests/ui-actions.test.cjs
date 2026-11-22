@@ -68,32 +68,24 @@ test('fully claimed rewards continue directly without a redundant confirmation',
     assert.equal(c.ui.overlay, null);
     assert.equal(c.game.phase, 'map');
 });
-test('partial supply claims show the loss before any resource or reward flag changes', () => {
+test('supply points are collected in full after taking a weightless card', () => {
     const c = fixedRewards();
     c.session.execute({ type: 'claim-card', index: 0 });
-    assert.equal(c.game.baseWeight, 29);
+    assert.equal(c.game.baseWeight, 0);
     const before = c.game.exportState();
     c.click('claim-supplies');
-    assert.equal(c.ui.overlay, 'supply-overflow');
-    assert.deepEqual(c.game.exportState(), before);
-    c.click('modal-close');
-    assert.deepEqual(c.game.exportState(), before);
-    c.click('claim-supplies');
-    c.click('modal-confirm');
-    assert.equal(c.game.supplies, before.supplies + 1);
+    assert.equal(c.game.supplies, before.supplies + before.rewards.supplies);
     assert.equal(c.game.rewards.supplyTaken, true);
     assert.equal(c.ui.overlay, null);
 });
-test('a full bag cannot accidentally consume a zero-yield supply reward', () => {
+test('supply points can be collected with an already high resource balance', () => {
     const c = fixedRewards();
     c.session.execute({ type: 'claim-card', index: 0 });
-    c.game.supplies++;
-    assert.equal(c.game.baseWeight, 30);
+    c.game.supplies = 40;
     const before = c.game.exportState();
     c.click('claim-supplies');
-    assert.deepEqual(c.game.exportState(), before);
-    assert.match(c.messages[0], /先整理背包/);
-    assert.equal(c.commands.length, 0);
+    assert.equal(c.game.supplies, before.supplies + before.rewards.supplies);
+    assert.deepEqual(c.commands, [{ type: 'claim-supplies' }]);
 });
 test('discard cancel and confirmation return to the originating bag page, including at camp', () => {
     for (const phase of ['rewards', 'rest']) {

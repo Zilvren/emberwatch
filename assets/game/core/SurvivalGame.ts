@@ -18,7 +18,7 @@ import {
     TUTORIAL_SCENARIO,
     getScenario,
 } from './content/GameScenario';
-import { GameState, migrateLegacyGameState, validateGameState } from './state/GameState';
+import { GameState, validateGameState } from './state/GameState';
 import {
     getJournalCatalog,
     JournalCatalog,
@@ -48,15 +48,15 @@ export class SurvivalGame {
     private readonly shelterRules: ShelterRules;
     private readonly journalRules: JournalRules;
     readonly synthesis: SynthesisRules;
-    readonly schemaVersion = 2 as const;
+    readonly schemaVersion = 3 as const;
     phase: Phase = 'journal';
     day = 1;
     milestones: Record<string, number> = {};
     journalEntries: JournalRecord[] = [];
     supplies = 10;
     entryTier: EntryTierId | null = null;
-    armor = 10;
-    critical = false;
+    health = 10;
+    get lowHealth(): boolean { return this.health <= 2; }
     cards: OwnedCard[] = [];
     storedSupplies?: Record<CardKind, number>;
     route: Route | null = null;
@@ -155,7 +155,7 @@ export class SurvivalGame {
     exportState(): GameState {
         return JSON.parse(
             JSON.stringify({
-                schemaVersion: 2,
+                schemaVersion: this.schemaVersion,
                 scenarioId: this.scenario.id,
                 scenarioVersion: this.scenario.version,
                 seed: this.seed,
@@ -167,8 +167,7 @@ export class SurvivalGame {
                 journalEntries: this.journalEntries,
                 supplies: this.supplies,
                 entryTier: this.entryTier,
-                armor: this.armor,
-                critical: this.critical,
+                health: this.health,
                 cards: this.cards,
                 storedSupplies: this.storedSupplies,
                 route: this.route,
@@ -188,7 +187,7 @@ export class SurvivalGame {
         );
     }
     static fromState(raw: unknown, content: CardSet = createCardSet()): SurvivalGame {
-        const state = validateGameState(migrateLegacyGameState(raw), content.cards);
+        const state = validateGameState(raw, content.cards);
         const game = new SurvivalGame(
             state.seed,
             getScenario(state.scenarioId, state.scenarioVersion),
@@ -198,6 +197,13 @@ export class SurvivalGame {
         Object.assign(game, fields);
         game.nextId = nextId;
         game.random.state = randomState;
+        if (game.health === 0 && game.phase !== 'failure') {
+            if (game.phase === 'journal' || game.phase === 'shelter') {
+                // A completed legacy return already advanced the day.
+                game.health = 1;
+                game.revision++;
+            } else game.fail('血量耗尽，本次探索失败。');
+        }
         return game;
     }
     reset(scenario?: GameScenario): void {
@@ -215,8 +221,7 @@ export class SurvivalGame {
         this.supplies = this.scenario.initialSupplies;
         this.storedSupplies = undefined;
         this.entryTier = null;
-        this.armor = this.scenario.initialArmor;
-        this.critical = false;
+        this.health = this.scenario.initialHealth;
         this.route = null;
         this.fixedDone = false;
         this.pathIndex = 0;
@@ -232,7 +237,7 @@ export class SurvivalGame {
         this.synthesis.close();
         this.inventoryRules.restoreStarter();
         this.feedback.log(
-            `第 ${this.day} 天 · 护甲 ${this.armor}，物资 ${this.supplies}，${this.scenario.fieldDeck ? `基础牌组 ${this.cards.length} 张` : `负重 ${this.baseWeight} / 30`}。`
+            `第 ${this.day} 天 · 血量 ${this.health}，物资 ${this.supplies}，基础牌组 ${this.usableCards.length} 张。`
         );
         this.journalRules.record('campaign-started');
         this.revision++;
@@ -267,8 +272,7 @@ export class SurvivalGame {
         if (result.ok) {
             if (prepareFreshRun) {
                 this.inventoryRules.restoreStarter();
-                this.armor = this.scenario.initialArmor;
-                this.critical = false;
+                this.health = this.scenario.initialHealth;
                 if (completedRun) this.run++;
             }
             const departure = this.journalEntries.find((entry) => entry.id === 'departure');
@@ -278,6 +282,9 @@ export class SurvivalGame {
     }
     get currentJournal() {
         return this.journalRules.current;
+    }
+    journalAt(index: number) {
+        return this.journalRules.at(index);
     }
     get pendingJournalCount(): number {
         return this.journalEntries.filter((entry) => !entry.read).length;
@@ -296,6 +303,7 @@ export class SurvivalGame {
     }
     retry(): ActionResult {
         if (this.phase !== 'failure') return this.feedback.result(false, '当前没有失败的探索。');
+        if (this.health === 0) this.health = this.scenario.initialHealth;
         this.phase = 'shelter';
         return this.feedback.result(true, '已恢复出发补给，可以再次出发。');
     }
@@ -356,13 +364,14 @@ export class SurvivalGame {
     advanceTime(seconds: number): void {
         return this.explorationRules.advanceTime(seconds);
     }
-    repairAtShelter(): ActionResult {
-        return this.shelterRules.repairAtShelter();
+    healAtShelter(): ActionResult {
+        return this.shelterRules.healAtShelter();
     }
     redeemAllSupplies(): ActionResult {
         return this.shelterRules.redeemAllSupplies();
     }
     private fail(reason: string): void {
+        const defeated = this.health === 0;
         const day = this.day,
             milestones = this.milestones,
             journalEntries = this.journalEntries,
@@ -375,6 +384,7 @@ export class SurvivalGame {
         this.storedSupplies = storedSupplies;
         this.logs = logs;
         this.phase = 'failure';
+        if (defeated) this.health = 0;
         this.failureReason = reason;
         if (this.scenario.runDeck) this.cards = [];
         this.feedback.log(
@@ -382,7 +392,7 @@ export class SurvivalGame {
                 ? '教学失败：探索已重置，仍为第 1 天。'
                 : this.scenario.runDeck
                   ? `探索失败：时间推进至第 ${this.day} 天，本局卡组和行囊已清空。`
-                  : `探索失败：时间推进至第 ${this.day} 天，初始补给、护甲和牌组已恢复。`
+                  : `探索失败：时间推进至第 ${this.day} 天，已备好返营补给与牌组。`
         );
     }
 }

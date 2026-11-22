@@ -1442,7 +1442,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "进入时已恢复最多 2 点护甲。物资不会恢复。",
+    "_string": "进入时已恢复最多 2 点血量。物资不会恢复。",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -4092,7 +4092,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "下一站：重度感染者\n护甲 10 · 攻击 3 · 准备后攻击 6",
+    "_string": "下一站：重度感染者\n血量 10 · 攻击 3 · 准备后攻击 6",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -5126,7 +5126,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "护甲 10/10  ·  物资 10  ·  负重 27/30",
+    "_string": "血量 10/10  ·  物资 10  ·  负重 27/30",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 0,

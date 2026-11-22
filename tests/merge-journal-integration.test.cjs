@@ -14,7 +14,7 @@ const { GameSession } = source('application/GameSession.ts');
 const { SaveRepository } = source('infrastructure/SaveRepository.ts');
 const ok = (result) => assert.equal(result.ok, true, result.message);
 
-test('journal/schema-v2 sessions retain configured route IDs through commands and saved battle resume', () => {
+test('current saves retain configured route IDs through commands and saved battle resume', () => {
     const scenario = registerScenario({
         ...JSON.parse(JSON.stringify(STAMINA_SCENARIO)),
         id: 'merge-journal-route',
@@ -38,7 +38,7 @@ test('journal/schema-v2 sessions retain configured route IDs through commands an
     const restored = new GameSession(99, new SaveRepository(storage), scenario);
     assert.equal(restored.restored, true);
     assert.equal(restored.view.route, 'C');
-    assert.equal(restored.game.exportState().schemaVersion, 2);
+    assert.equal(restored.game.exportState().schemaVersion, 3);
     assert.deepEqual(restored.game.exportState(), before);
 });
 

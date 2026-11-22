@@ -312,3 +312,7 @@
 [1122/041136.505:ERROR:gpu\command_buffer\service\gl_utils.cc:427] [.WebGL-0x705c00423800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
 [1122/041136.524:ERROR:gpu\command_buffer\service\gl_utils.cc:427] [.WebGL-0x705c00423800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
 [1122/041317.661:WARNING:services\audio\sync_reader.cc:154] ASR: No room in socket buffer.: 管道正在被关闭。 (0xE8)
+[1122/181919.867:ERROR:ui\gl\angle_platform_impl.cc:45] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1122/181920.076:WARNING:ui\gl\angle_platform_impl.cc:50] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1122/182034.349:ERROR:ui\gl\angle_platform_impl.cc:45] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1122/182034.506:WARNING:ui\gl\angle_platform_impl.cc:50] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.

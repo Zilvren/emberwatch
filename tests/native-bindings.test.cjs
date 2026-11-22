@@ -13,8 +13,8 @@ test('the actual scene has exactly one native identity per required screen/popup
  assert.equal(director.screens,undefined);assert.equal(director.popups,undefined);
  const screens=director.screenRoots.map(r=>descriptors(g,r.__id__,'GameView')),popups=director.popupRoots.map(r=>descriptors(g,r.__id__,'GameView'));
  assert.ok([...screens,...popups].every(d=>d.length===1));
- assert.deepEqual(screens.flat().map(d=>d.key).sort(),['battle','day2','failure','journal','map','rest','rewards','shelter']);
- assert.deepEqual(popups.flat().map(d=>d.key).sort(),['confirmation','entry','help','inventory','log','map','recipes']);
+ assert.deepEqual(screens.flat().map(d=>d.key).sort(),['battle','camp','day2','failure','journal','map','rest','rewards','shelter']);
+ assert.deepEqual(popups.flat().map(d=>d.key).sort(),['battle-pile','camp-station','confirmation','entry','help','inventory','log','map','recipes','settings']);
  const battle=director.screenRoots.find(r=>descriptors(g,r.__id__,'GameView')[0].key==='battle');
  assert.deepEqual(descriptors(g,battle.__id__,'ActorPresentation').map(a=>a.actorId).sort(),['ash-moth','brute','player','stone-claw','veil-idol','wanderer']);
 });

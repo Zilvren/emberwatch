@@ -19,12 +19,12 @@ function sample(seed, route, tier, defend) {
         if (g.phase === 'map') {
             if (g.currentNode === 'return') {
                 session.advanceTime(1);
-                return { won: 1, turns, taken, armor: g.armor };
+                return { won: 1, turns, taken, health: g.health };
             }
             if (g.currentNode === 'choice') act({ type: 'choose-route', route });
             else act({ type: 'enter-node' });
         } else if (g.phase === 'rest') act({ type: 'finish-rest' });
-        else if (g.phase === 'failure') return { won: 0, turns, taken, armor: 0 };
+        else if (g.phase === 'failure') return { won: 0, turns, taken, health: 0 };
         else if (g.phase === 'battle') {
             const b = g.battle;
             if (b.discovery) {
@@ -77,7 +77,7 @@ for (const route of ['A', 'B'])
                 runs: 64,
                 wins: winners.length,
                 meanEndTurns: avg(records, 'turns'),
-                meanArmorOnSuccess: avg(winners, 'armor'),
+                meanHealthOnSuccess: avg(winners, 'health'),
             });
         }
 console.log(JSON.stringify({ seeds: '1–64', runs: 512, routes: rows }, null, 2));

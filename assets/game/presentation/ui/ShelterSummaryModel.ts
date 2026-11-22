@@ -4,8 +4,8 @@ import { mapClearMilestone } from '../../core/content/JournalCatalog';
 /** Display projections for the persistent shelter, return loot and optional maintenance. */
 export function shelterSummary(game: GameReadModel) {
     const settlement = game.settlement;
-    const cost = settlement?.repairCost ?? (game.critical ? 2 : 1);
-    const needsRepair = game.armor < 10;
+    const cost = settlement?.treatmentCost ?? 1;
+    const needsRepair = game.health < 10;
     const canRepair = needsRepair && game.supplies >= cost;
     const lost = settlement?.lostOverflow ?? [];
     const clears = game.milestones[mapClearMilestone(game.scenario.id)] ?? 0;
@@ -30,14 +30,14 @@ export function shelterSummary(game: GameReadModel) {
                 'shelter/losses': lost.length
                     ? `暂存损失 ${lost.length} 件：${lost.slice(0, 3).join('、')}${lost.length > 3 ? '等' : ''}`
                     : '暂存无损失',
-                'shelter/armor': `当前物资点 ${game.supplies}`,
+                'shelter/health': `当前物资点 ${game.supplies}`,
                 'shelter/repair-title': '物资卡兑换',
                 'shelter/repair-hint': storedCards
                     ? `仓库 ${storedCards} 张物资卡 · 可兑换 ${exchangeValue} 点物资`
                     : '仓库暂无可兑换的物资卡。',
                 'shelter/progress-title': '探索进度',
                 'shelter/progress-summary': progress,
-                'shelter/progress-hint': '下次出发使用固定初始卡组和初始护甲。',
+                'shelter/progress-hint': '下次出发使用固定初始卡组和初始血量。',
             },
             repairVisible: storedCards > 0,
             repairEnabled: storedCards > 0,
@@ -48,8 +48,8 @@ export function shelterSummary(game: GameReadModel) {
     return {
         values: {
             'banner/text2': game.scenario.fieldDeck
-                ? '物资已经入库，护甲可在这里修复。'
-                : '整理带回的物品，按需修复护甲，然后再次出发。',
+                ? '物资已经入库，可以在这里治疗伤势。'
+                : '整理带回的物品，按需治疗伤势，然后再次出发。',
             'shelter/loot-title': game.scenario.fieldDeck
                 ? '避难所储备'
                 : settlement
@@ -67,21 +67,21 @@ export function shelterSummary(game: GameReadModel) {
                 : lost.length
                   ? `暂存损失 ${lost.length} 件：${lost.slice(0, 3).join('、')}${lost.length > 3 ? '等' : ''}`
                   : '携带物品已清点 · 暂存无损失',
-            'shelter/armor': `${game.armor} / 10`,
-            'shelter/repair-hint': settlement?.repaired
-                ? `已花费 ${settlement.repairSpent} 物资，护甲恢复完整。`
+            'shelter/health': `${game.health} / 10`,
+            'shelter/repair-hint': settlement?.treated
+                ? `已花费 ${settlement.treatmentSpent} 物资，血量恢复完整。`
                 : !needsRepair
-                  ? '护甲完整，无需修复。'
+                  ? '血量已满，无需治疗。'
                   : !canRepair
-                    ? `缺少 ${cost - game.supplies} 物资才能修复护甲。`
-                    : '修复可选；也可以保留物资直接出发。',
+                    ? `缺少 ${cost - game.supplies} 物资才能治疗伤势。`
+                    : '可以先接受治疗，也可以直接出发。',
             'shelter/progress-title': '探索进度',
             'shelter/progress-summary': progress,
             'shelter/progress-hint': '关键事件发生时，会留下新的日志。',
         },
         repairVisible: needsRepair,
         repairEnabled: canRepair,
-        repairCaption: `修复护甲 · ${cost} 物资`,
+        repairCaption: `治疗伤势 · ${cost} 物资`,
         doneCaption: game.scenario.fieldDeck || settlement ? '再次出发' : '整备出发',
     };
 }

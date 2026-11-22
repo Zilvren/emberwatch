@@ -106,7 +106,7 @@
       "staminaCost": 2,
       "weight": 2,
       "afterUse": "弃牌堆",
-      "combatText": "恢复3点护甲，护甲为0时不能使用",
+      "combatText": "恢复3点血量，血量为0时不能使用",
       "utilityText": "无",
       "keywords": [],
       "art": "repair",

@@ -1,4 +1,4 @@
-import { JournalCatalog, JournalDefinition } from '../content/JournalCatalog';
+import { JournalCatalog, JournalDefinition, JournalRecord } from '../content/JournalCatalog';
 import { ActionResult } from '../RulesTypes';
 import { RuleFeedback, JournalState } from './RuleContext';
 
@@ -11,7 +11,12 @@ export class JournalRules {
         private readonly scenario: { fieldDeck?: boolean; labyrinth?: true }
     ) {}
     get current(): (JournalDefinition & { day: number }) | null {
-        const record = this.state.journalEntries.find((entry) => !entry.read);
+        return this.resolve(this.state.journalEntries.find((entry) => !entry.read));
+    }
+    at(index: number): (JournalDefinition & { day: number }) | null {
+        return this.resolve(this.state.journalEntries[index]);
+    }
+    private resolve(record?: JournalRecord): (JournalDefinition & { day: number }) | null {
         if (!record) return null;
         const definition = this.catalog.entries.find((entry) => entry.id === record.id)!;
         return {

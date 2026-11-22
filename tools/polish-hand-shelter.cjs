@@ -108,7 +108,7 @@ function resizeButton(g, n, x, y, width, height) {
         [
             'shelter/text3',
             'shelter/repair-title',
-            '护甲维护 · 可选',
+            '血量维护 · 可选',
             610,
             439,
             720,
@@ -116,7 +116,7 @@ function resizeButton(g, n, x, y, width, height) {
             18,
             'd0cdbf',
         ],
-        ['shelter/text4', 'shelter/armor', '', 610, 485, 300, 42, 30, 'eee7d8'],
+        ['shelter/text4', 'shelter/health', '', 610, 485, 300, 42, 30, 'eee7d8'],
         ['shelter/text8', 'shelter/repair-hint', '', 610, 535, 720, 42, 16, 'd0cdbf'],
         ['shelter/text5', 'shelter/daily-title', '今晚的生存消耗', 610, 628, 720, 26, 18, 'd0cdbf'],
         ['shelter/text6', 'shelter/daily-summary', '', 610, 675, 720, 42, 28, 'eee7d8'],

@@ -40,17 +40,11 @@ export class ShelterRules {
             returnedCards: this.state.cards.length,
             ...(this.scenario.fieldDeck ? { discoveredCards: discoveries } : {}),
             lostOverflow: lost,
-            wasCritical: this.state.critical,
-            repairCost: this.scenario.runDeck || this.state.armor === 10
-                ? 0
-                : this.state.critical
-                  ? 2
-                  : 1,
-            repaired: false,
-            repairSpent: 0,
+            treatmentCost: this.scenario.runDeck || this.state.health === 10 ? 0 : 1,
+            treated: false,
+            treatmentSpent: 0,
         };
         if (this.scenario.runDeck) this.state.cards = [];
-        this.state.critical = false;
         this.state.phase = 'shelter';
         this.state.day++;
         this.journal.record(mapClearMilestone(this.scenario.id));
@@ -58,29 +52,28 @@ export class ShelterRules {
         this.feedback.log(
             this.scenario.fieldDeck
                 ? `返回避难所，本次发现 ${discoveries} 张牌。下次从基础牌组出发。`
-                : '返回避难所，带回物品已入库，感染临界已解除。'
+                : '返回避难所，带回物品已入库。'
         );
         this.state.revision++;
     }
-    repairAtShelter(): ActionResult {
+    healAtShelter(): ActionResult {
         const s = this.state.settlement;
         if (this.state.phase !== 'shelter') return this.feedback.result(false, '当前不在避难所。');
         if (this.scenario.runDeck)
-            return this.feedback.result(false, '下一局出发时会恢复初始护甲。');
-        if (this.state.armor === 10)
-            return this.feedback.result(false, '护甲已满，无需支付修复费用。');
-        const cost = s?.repairCost ?? (this.state.critical ? 2 : 1);
+            return this.feedback.result(false, '下一局出发时会恢复初始血量。');
+        if (this.state.health === 10)
+            return this.feedback.result(false, '血量已满，无需支付治疗费用。');
+        const cost = s?.treatmentCost ?? 1;
         if (this.state.supplies < cost)
-            return this.feedback.result(false, '物资不足以支付修复费用。');
+            return this.feedback.result(false, '物资不足以支付治疗费用。');
         this.state.supplies -= cost;
         if (s) {
-            s.repairSpent = cost;
-            s.repaired = true;
+            s.treatmentSpent = cost;
+            s.treated = true;
         }
-        this.state.armor = 10;
-        this.state.critical = false;
-        this.feedback.log(`支付 ${cost} 点物资，护甲完全修复。`);
-        return this.feedback.result(true, '护甲已恢复至 10。');
+        this.state.health = 10;
+        this.feedback.log(`支付 ${cost} 点物资，血量完全恢复。`);
+        return this.feedback.result(true, '血量已恢复至 10。');
     }
     redeemAllSupplies(): ActionResult {
         if (!this.scenario.runDeck || (this.state.phase !== 'shelter' && this.state.phase !== 'journal'))

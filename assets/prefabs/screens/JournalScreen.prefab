@@ -1645,7 +1645,7 @@
       "b": 216,
       "a": 255
     },
-    "_string": "物资 10 · 护甲 10 · 战斗牌 7 张\n强制携带现金，总负重 27 / 30",
+    "_string": "物资 10 · 血量 10 · 战斗牌 7 张\n强制携带现金，总负重 27 / 30",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 21,

@@ -135,7 +135,7 @@ function renderInspector() {
         <span class="field-label">卡牌插画</span><div class="art-options">${ART_IDS.map(art => `<label class="art-option"><input type="radio" name="illustration" data-field="art" value="${art}" ${card.art === art ? 'checked' : ''} aria-label="插画：${artNames[art]}"><span class="art-crop">${artMarkup(art)}</span><small>${artNames[art]}</small></label>`).join('')}</div>
       </div></fieldset>
       <fieldset class="property-group"><legend>战斗效果</legend><div>
-        <div class="field-grid">${field('体力费用', 'cost', card.cost, { type: 'number', min: 0, max: 99, readonly: card.role === 'basic' || card.role === 'cash' || supply })}${chapter ? '' : field('卡牌重量', 'weight', card.weight, { type: 'number', min: 0, max: 30, readonly: card.role === 'basic' || card.role === 'temporary' })}</div>
+        <div class="field-grid">${field('体力费用', 'cost', card.cost, { type: 'number', min: 0, max: 99, readonly: card.role === 'basic' || card.role === 'cash' || supply })}${supply ? field('物资卡重量', 'weight', card.weight, { type: 'number', min: 0, max: 30 }) : ''}</div>
         ${select('效果类型', 'effect.type', card.effect.type, (chapter ? [card.effect.type] : allowedEffects).map(type => [type, supply && type === 'none' ? '无' : EFFECT_NAMES[type]]), chapter)}
         ${supply ? field('兑换物资点', 'supplyValue', card.supplyValue ?? 1, { type: 'number', min: 1, max: 999, hint: '带回避难所后可兑换' }) : ''}
         ${card.effect.type === 'equip' ? select('每回合生成', 'effect.generatedCard', card.effect.generatedCard, draft.cards.filter(card => card.role === 'temporary').map(card => [card.id, card.name])) : card.effect.type === 'none' ? `<p class="field-note">${supply ? '从搜刮获得，带回避难所后可兑换物资点。' : '现金可以在营地丢弃。'}</p>` : card.effect.amount ? field('效果数值', 'effect.amount', card.effect.amount, { type: 'number', min: 1, max: 999 }) : ''}
@@ -252,7 +252,7 @@ function nextId(base = 'card') {
 function add(copy = false) {
     if (!draft || saving) return;
     const source = current();
-    const card = copy ? clone(source) : { id: nextId(), name: '新卡牌', tag: '技能 · 攻击', cost: 1, weight: 2, text: '', color: '#c29060', art: 'heavy', role: 'normal', initialCount: 0, reward: true, effect: { type: 'damage', amount: 3 } };
+    const card = copy ? clone(source) : { id: nextId(), name: '新卡牌', tag: '技能 · 攻击', cost: 1, weight: 0, text: '', color: '#c29060', art: 'heavy', role: 'normal', initialCount: 0, reward: true, effect: { type: 'damage', amount: 3 } };
     if (copy) {
         card.id = nextId(source.id + '_copy');
         card.name = (source.name + '副本').slice(0, 18);

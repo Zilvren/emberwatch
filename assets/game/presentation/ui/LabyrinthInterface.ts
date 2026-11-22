@@ -4,6 +4,7 @@ import { DeckStackGraphic } from '../primitives/DeckStackGraphic';
 import { FieldPanel } from '../primitives/FieldPanel';
 import { GraphicShape, ShapeGraphic } from '../primitives/ShapeGraphic';
 import { PaperPanel } from '../primitives/PaperPanel';
+import { SceneShade } from '../primitives/SceneShade';
 import { ButtonAction } from './ButtonAction';
 import { ButtonPresentation } from './ButtonPresentation';
 import { CommonPanel } from './CommonPanel';
@@ -57,14 +58,19 @@ export function installLabyrinthInterface(
             if (cardBack) stack.setPaintedBack(cardBack);
     };
     paint(scene.hud);
-    for (const key of Object.keys(scene.screens)) paint(scene.screens[key]);
-    for (const key of Object.keys(scene.popups)) paint(scene.popups[key]);
-    const status = scene.hud.getComponent(StatusBar);
-    if (status) {
-        status.theme = theme;
-        status.presentation = 'strip';
-        status.paper?.redraw();
+    for (const key of Object.keys(scene.screens)) {
+        const screen = scene.screens[key];
+        if (key !== 'camp') paint(screen);
+        for (const shade of screen.getComponentsInChildren(SceneShade)) {
+            shade.top = 0;
+            shade.redraw();
+        }
     }
+    for (const key of Object.keys(scene.popups)) {
+        if (key !== 'camp-station') paint(scene.popups[key]);
+    }
+    const status = scene.hud.getComponent(StatusBar);
+    if (status) status.theme = theme;
     for (const key of Object.keys(scene.screens)) {
         const screen = scene.screens[key];
         if (screen === scene.screens.battle) continue;
