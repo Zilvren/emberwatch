@@ -975,6 +975,32 @@
         "evidence": "浏览器通过 75 次原生操作，覆盖通关、失败恢复、四次重新加载和旧规则重开。",
         "browserReport": "output/playwright/core-loop/browser-tide-expedition/browser-report.json"
       }
-    ]
+    ],
+    "overwriteAudit": {
+      "date": "2026-11-22",
+      "sources": ["dd1c8f4", "719b9f2"],
+      "unmergedFiles": 0,
+      "deletedFilesRelativeToEitherSource": 0,
+      "nativeBindings": {
+        "method": "将合并前两个版本的序列化字段和数组引用，逐项与合并结果对照。",
+        "preservedInBoth": ["assets/TheEnd.scene", "assets/prefabs/screens/RestScreen.prefab"]
+      },
+      "actorFiles": {
+        "native08IdenticalToUpstream": 42,
+        "paperdoll08IdenticalToUpstream": 22,
+        "spine08UsingStashVersion": 10,
+        "detail": "Spine08 同名路径沿用 719b9f2 已有的独立部件版。范围为三个角色的骨骼 JSON、图集及动画约定文件，还有主角源 .spine 文件。原始内容可在 dd1c8f4 查看。"
+      },
+      "catalog": {
+        "cardCount": 35,
+        "discoveryDecks": 3,
+        "detail": "上游牌卡和配方字段完整保留，退潮盐原与焦土迷宫的配置原样合入。与暂存目录相比，唯一变动的卡牌字段是基础攻击的补充说明，保留上游删除「固有能力，永不丢失」后的写法。",
+        "editorRoundTrip": "用独立目录交替保存发现开关和配方，另一套配置与物资卡均保留。同一服务收到过期版本的保存时返回 HTTP 409。"
+      },
+      "historicalSaves": {
+        "method": "用合并前实际提交中的 SaveRepository 各自生成存档。合并版读入后推进一步，再次重载，并核对备份仍是原字节。",
+        "passed": ["合成探索", "带自定义配方的合成探索", "退潮盐原", "焦土迷宫"]
+      }
+    }
   }
 }
