@@ -12,7 +12,7 @@ await screenshot('spine08-initial-all');
 await page.evaluate(()=>{
  const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector'),hero=d.hero,enemy=d.enemy;
  globalThis.__spineSamples=[];globalThis.__spineSampling=true;
- function sample(){if(!globalThis.__spineSampling)return;const g=globalThis.__survivalGame;globalThis.__spineSamples.push({at:performance.now(),hp:g.battle?.hp,armor:g.armor,revision:g.revision,phase:g.phase,busy:d.ui.busy,hero:{motion:hero.motion,rig:hero.inspectRig(),x:hero.node.position.x,y:hero.node.position.y},enemy:{motion:enemy.motion,rig:enemy.inspectRig(),x:enemy.node.position.x,y:enemy.node.position.y}});requestAnimationFrame(sample);}requestAnimationFrame(sample);
+ function sample(){if(!globalThis.__spineSampling)return;const g=globalThis.__survivalGame;globalThis.__spineSamples.push({at:performance.now(),hp:g.battle?.hp,health:g.health,revision:g.revision,phase:g.phase,busy:d.ui.busy,hero:{motion:hero.motion,rig:hero.inspectRig(),x:hero.node.position.x,y:hero.node.position.y},enemy:{motion:enemy.motion,rig:enemy.inspectRig(),x:enemy.node.position.x,y:enemy.node.position.y}});requestAnimationFrame(sample);}requestAnimationFrame(sample);
 });
 const before=await state(),damageCard=before.hand.find(c=>['heavy','attack'].includes(c.kind)&&!c.blocked);
 assert(damageCard,'No legal damage card');

@@ -35,6 +35,7 @@ export class ButtonPresentation extends Component {
     @property variant: ButtonVariant = 'secondary';
     @property previewState = '';
     @property darkSurface = false;
+    @property transparentSurface = false;
     private hovered = false;
     private down = false;
     private inside = false;
@@ -130,6 +131,7 @@ export class ButtonPresentation extends Component {
     setKeyboardFocus(value: boolean): void {
         if (this.keyboardFocus === value && !this.keyDown) return;
         this.keyboardFocus = value;
+        this.node.emit('control-key-focus', value);
         this.keyDown = false;
         this.render(true);
     }
@@ -182,9 +184,10 @@ export class ButtonPresentation extends Component {
             style = this.theme.json.button,
             palette = buttonColors(this.theme.json, this.variant, state, this.darkSurface);
         this.panel.fill = new Color().fromHEX(palette.fill);
-        this.panel.fill.a = palette.fillAlpha;
+        this.panel.fill.a = this.transparentSurface ? 0 : palette.fillAlpha;
         this.panel.line = new Color().fromHEX(palette.line);
-        this.panel.innerLine.a = this.panel.metalTrim && palette.fillAlpha ? 105 : 0;
+        if (this.transparentSurface) this.panel.line.a = 0;
+        this.panel.innerLine.a = this.panel.metalTrim && this.panel.fill.a ? 105 : 0;
         this.panel.redraw();
         if (this.caption) {
             this.caption.color = new Color().fromHEX(palette.text);
@@ -192,6 +195,8 @@ export class ButtonPresentation extends Component {
             this.caption.enableOutline = this.captionOutline && palette.fillAlpha === 0;
         }
         if (this.focusRing) {
+            this.focusRing.fill.a = 0;
+            this.focusRing.innerLine.a = 0;
             this.focusRing.line = new Color().fromHEX(
                 this.darkSurface ? style.darkFocusLine : style.focusLine
             );

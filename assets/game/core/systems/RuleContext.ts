@@ -11,9 +11,8 @@ export type SynthesisState = Pick<
 >;
 export type CombatState = Pick<
     GameState,
-    | 'armor'
+    | 'health'
     | 'battle'
-    | 'critical'
     | 'entryTier'
     | 'phase'
     | 'rewards'
@@ -34,9 +33,8 @@ export type RewardState = Pick<
 >;
 export type ExplorationState = Pick<
     GameState,
-    | 'armor'
+    | 'health'
     | 'battle'
-    | 'critical'
     | 'entryTier'
     | 'fixedDone'
     | 'pathIndex'
@@ -53,10 +51,9 @@ export type ExplorationState = Pick<
 >;
 export type ShelterState = Pick<
     GameState,
-    | 'armor'
+    | 'health'
     | 'battle'
     | 'cards'
-    | 'critical'
     | 'day'
     | 'phase'
     | 'revision'

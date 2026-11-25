@@ -8,8 +8,8 @@ const { ccclass, property } = _decorator;
 function examples(): StatusBarInput[] {
     return [
         { ...defaultStatus, saveStatus: '进度已保存' },
-        { ...defaultStatus, supplies: 1, armor: 2, carried: 30, saveStatus: '已恢复备份' },
-        { ...defaultStatus, supplies: 0, armor: 0, critical: true, carried: 30, overflow: 8 },
+        { ...defaultStatus, supplies: 1, health: 2, deckCount: 20, saveStatus: '已恢复备份' },
+        { ...defaultStatus, supplies: 0, health: 0, deckCount: 12 },
         { ...defaultStatus, day: 123, supplies: 12345678, saveStatus: '原存档已保留' },
     ];
 }
@@ -38,16 +38,10 @@ export class StatusBarDesignReview extends Component {
             live = this.cases[3];
         if (id === 'supplies-state')
             live.supplies = live.supplies > 1 ? 1 : live.supplies === 1 ? 0 : 10;
-        else if (id === 'armor-state') {
-            live.armor = live.armor > 2 ? 2 : live.armor === 2 ? 0 : 10;
-            live.critical = live.armor === 0;
+        else if (id === 'health-state') {
+            live.health = live.health > 2 ? 2 : live.health === 2 ? 0 : 10;
         } else if (id === 'carry-state') {
-            if (live.carried < 30) live.carried = 30;
-            else if (!live.overflow) live.overflow = 4;
-            else {
-                live.carried = 27;
-                live.overflow = 0;
-            }
+            live.deckCount = live.deckCount === 7 ? 12 : 7;
         } else if (id === 'save-state') {
             const states = ['进度已保存', '已恢复备份', '保存失败，请勿关闭', '原存档已保留'];
             live.saveStatus = states[(states.indexOf(live.saveStatus) + 1) % states.length];

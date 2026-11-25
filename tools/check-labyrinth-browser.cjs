@@ -39,13 +39,14 @@ function input(page, view = page) {
         }
     }
     async function depart(route, tier) {
-        await click('journal-start');
+        await click('camp-keeper');
+        await click('camp-depart');
         if (tier) await click('entry-tier-' + tier);
         await click('entry-confirm');
         await click('enter-threshold');
         if (route) await click('route-' + route);
     }
-    return { state, save, idle, click, depart };
+    return { state, save, idle, click, depart, target };
 }
 const image = (page, name) => page.screenshot({ path: path.join(output, name + '.png') });
 function observe(page) {
@@ -56,6 +57,177 @@ function observe(page) {
         report.consoleErrors.push(url ? `${entry.text()} (${url})` : entry.text());
     });
 }
+async function campText(page) {
+    return page.evaluate(() => {
+        const panel = cc.director.getScene().getComponentInChildren('CampStationPanel');
+        return { title: panel.title.string, context: panel.context.string, body: panel.body.string };
+    });
+}
+async function controlGlyph(page, id) {
+    return page.evaluate(id => {
+        const action = cc.director.getScene().getComponentsInChildren('ButtonAction')
+            .find(item => item.node.activeInHierarchy && item.actionId === id);
+        const surface = action?.getComponent('ButtonPresentation')?.surface;
+        return {
+            textShown: action?.caption?.enabled,
+            symbol: (surface ?? action?.node)?.getChildByName('ControlGlyph')?.getComponent(cc.Sprite)?.spriteFrame?.name,
+        };
+    }, id);
+}
+async function visitSettings(page, native) {
+    const before = await native.save(), snapshot = await native.state();
+    for (const name of ['audio', 'restart', 'help'])
+        assert.ok(!snapshot.hits.some(item => item.id === name), name);
+    for (const [id, symbol] of [['settings', 'settings'], ['map', 'map'], ['log', 'journal'], ['bag', 'cards']])
+        assert.deepEqual(await controlGlyph(page, id), { textShown: false, symbol: 'ic-' + symbol });
+    const hud = await page.evaluate(() => {
+        const bar = cc.director.getScene().getComponentInChildren('StatusBar');
+        return {
+            visibleBacking: bar.paper.node.activeInHierarchy,
+            labels: bar.node.getComponentsInChildren(cc.Label)
+                .filter(label => label.enabledInHierarchy && label.string).map(label => label.string),
+        };
+    });
+    assert.equal(hud.visibleBacking, false);
+    assert.deepEqual(hud.labels.sort(), ['1', '10', '10 / 10', '12'].sort());
+    await native.click('settings');
+    assert.equal((await native.state()).overlay, 'settings');
+    assert.deepEqual(await controlGlyph(page, 'audio'), { textShown: false, symbol: 'ic-sound' });
+    await native.click('audio');
+    assert.deepEqual(await controlGlyph(page, 'audio'), { textShown: false, symbol: 'ic-muted' });
+    await image(page, 'controls-settings');
+    await native.click('audio');
+    await native.click('restart');
+    assert.equal((await native.state()).overlay, 'restart');
+    await native.click('modal-cancel');
+    assert.equal((await native.state()).overlay, 'settings');
+    await native.click('help');
+    assert.equal((await native.state()).overlay, 'help');
+    await page.keyboard.press('Escape');
+    assert.equal((await native.state()).overlay, 'settings');
+    await native.click('modal-close');
+    assert.equal((await native.state()).overlay, null);
+    assert.deepEqual(await native.save(), before);
+    report.settings = { iconRow: true, floatingHud: true, soundToggle: true, restartCancellation: true, helpReturnsToSettings: true };
+}
+
+async function visitPile(page, native, id) {
+    const before = await native.save();
+    await page.mouse.move(...await native.target(id));
+    const hoveredSurfaceAlpha = await page.evaluate(id => {
+        const action = cc.director.getScene().getComponentsInChildren('ButtonAction')
+            .find(item => item.node.activeInHierarchy && item.actionId === id);
+        return action.getComponent('ButtonPresentation').panel.fill.a;
+    }, id);
+    assert.equal(hoveredSurfaceAlpha, 0);
+    await native.click(id);
+    assert.equal((await native.state()).overlay, id);
+    const panel = () => page.evaluate(() => {
+        const view = cc.director.getScene().getComponentInChildren('BattlePilePanel');
+        return {
+            title: view.title.string,
+            hint: view.hint.string,
+            cards: view.holders.filter(holder => holder.active).map(holder => {
+                const card = holder.getComponentInChildren('SelectableCard');
+                return { kind: card.card.kind, expanded: card.card.expanded, badge: card.badge?.string };
+            }),
+        };
+    });
+    const expected = id === 'draw-pile' ? before.battle.draw : before.battle.discard;
+    const current = await panel();
+    assert.ok(current.title.endsWith(String(expected.length)));
+    if (expected.length) {
+        if (id === 'discard-pile')
+            assert.deepEqual(current.cards.map(card => card.kind), expected.slice(-3).reverse().map(card => card.kind));
+        else assert.ok(current.cards.every(card => /×\d/.test(card.badge)));
+        await image(page, 'controls-' + id);
+        await native.click('pile-inspect-0');
+        assert.ok((await panel()).cards[0].expanded);
+        if ((await native.state()).hits.some(hit => hit.id === 'pile-next' && hit.enabled)) {
+            await native.click('pile-next');
+            assert.ok((await panel()).cards.every(card => !card.expanded));
+            await native.click('pile-prev');
+        }
+    } else {
+        assert.equal(current.hint, '牌堆为空');
+        assert.deepEqual(current.cards, []);
+        await image(page, 'controls-empty-pile');
+    }
+    await page.keyboard.press('Escape');
+    assert.equal((await native.state()).overlay, null);
+    const focusAlpha = await page.evaluate(id => {
+        const action = cc.director.getScene().getComponentsInChildren('ButtonAction')
+            .find(item => item.node.activeInHierarchy && item.actionId === id);
+        return action.getComponent('ButtonPresentation').focusRing.fill.a;
+    }, id);
+    assert.equal(focusAlpha, 0);
+    assert.deepEqual(await native.save(), before);
+}
+
+async function visitCamp(page, native) {
+    const initial = await native.save();
+    const snapshot = await native.state();
+    const stations = [
+        ['camp-keeper', 'ic-keeper'], ['camp-bench', 'ic-heal'],
+        ['camp-warehouse', 'ic-warehouse'], ['camp-fire', 'ic-fire'],
+    ];
+    for (const [id, icon] of stations) {
+        assert.ok(snapshot.hits.some(hit => hit.enabled && hit.id === id), id);
+        const marker = await page.evaluate(stationId => {
+            const action = cc.director.getScene().getComponentsInChildren('ButtonAction')
+                .find(item => item.node.activeInHierarchy && item.actionId === stationId);
+            const style = action.getComponent('ButtonPresentation');
+            return { fill: style.panel.fill.a, line: style.panel.line.a, icon: style.surface
+                .getChildByName('ControlGlyph').getComponent(cc.Sprite).spriteFrame.name };
+        }, id);
+        assert.deepEqual(marker, { fill: 0, line: 0, icon }, id);
+    }
+    await image(page, 'camp-arrival');
+
+    // At design size click the artwork itself, away from its nameplate.
+    await page.mouse.click(903, 548);
+    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-keeper');
+    await image(page, 'camp-keeper');
+    await native.click('modal-close');
+    await page.mouse.click(1213, 605);
+    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-warehouse');
+    assert.match((await campText(page)).title, new RegExp(String(initial.supplies)));
+    await image(page, 'camp-warehouse');
+    await native.click('camp-find-keeper');
+    assert.equal((await campText(page)).title, '守门人');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => !globalThis.__emberUI.snapshot().overlay);
+    await page.mouse.click(235, 556);
+    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-bench');
+    assert.match((await campText(page)).body, /血量已满/);
+    await native.click('camp-deck');
+    assert.equal((await native.state()).overlay, 'bag');
+    await native.click('modal-close');
+    await page.mouse.click(646, 637);
+    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-fire');
+    assert.equal((await campText(page)).title, '灰里的门槛');
+    await native.click('modal-close');
+    await page.keyboard.press('Tab');
+    const nextFocus = await page.evaluate(() => cc.director.getScene().getChildByName('Canvas')
+        .getChildByName('GameRoot').getComponent('ButtonFocusGroup').inspect().focused);
+    assert.ok(['camp-bench', 'camp-fire', 'camp-keeper', 'camp-warehouse', 'bag', 'map', 'log', 'settings'].includes(nextFocus));
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => !!globalThis.__emberUI.snapshot().overlay);
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => !globalThis.__emberUI.snapshot().overlay);
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await page.waitForTimeout(160);
+    await image(page, 'camp-small');
+    await native.click('camp-keeper');
+    assert.equal((await campText(page)).title, '守门人');
+    await image(page, 'camp-keeper-small');
+    await native.click('camp-depart');
+    assert.equal((await native.state()).overlay, 'entry');
+    await native.click('entry-tier-low');
+    await native.click('modal-close');
+    assert.deepEqual(await native.save(), initial);
+    await page.setViewportSize({ width: 1440, height: 900 });
+}
 async function oneRoute(browser, url, lane) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: lane === 'A' ? 'no-preference' : 'reduce' });
     observe(page);
@@ -65,7 +237,10 @@ async function oneRoute(browser, url, lane) {
         await native.idle();
         assert.equal((await native.state()).scenario, 'ashen-labyrinth');
         assert.equal((await native.save()).cards.length, 12);
-        if (lane === 'A') await image(page, '01-journal');
+        if (lane === 'A') {
+            await visitSettings(page, native);
+            await visitCamp(page, native);
+        }
         await native.depart(undefined, lane === 'B' ? 'emergency' : 'standard');
         let snap = await native.state();
         assert.equal(snap.routeMap.points.filter((p) => p.kind !== 'home').length, 10);
@@ -119,11 +294,19 @@ async function oneRoute(browser, url, lane) {
             assert.equal(snap.enemyRig.actor, 'ashen-' + b.enemy);
             assert.equal(b.discovery, undefined);
             if (enemies.at(-1)?.node !== snap.currentNode) {
-                enemies.push({ node: snap.currentNode, actor: b.enemy, armor: save.armor, hp: b.maxHp });
+                enemies.push({ node: snap.currentNode, actor: b.enemy, health: save.health, hp: b.maxHp });
                 if (chosen && [...b.draw, ...b.hand].some((c) => c.kind === chosen)) nextHand = true;
                 if (lane === 'A' && !enemies.slice(0, -1).some((e) => e.actor === b.enemy)) {
                     await page.waitForTimeout(180);
                     await image(page, '03-' + b.enemy);
+                    if (enemies.length === 1) {
+                        const topShadeVisible = await page.evaluate(() => cc.director.getScene()
+                            .getComponentsInChildren('SceneShade')
+                            .some(shade => shade.node.activeInHierarchy && shade.top > 0));
+                        assert.equal(topShadeVisible, false);
+                        await visitPile(page, native, 'draw-pile');
+                        await visitPile(page, native, 'discard-pile');
+                    }
                     await page.emulateMedia({ reducedMotion: 'no-preference' });
                     await page.waitForFunction(() => !globalThis.__emberUI.snapshot().reducedMotion);
                     await Promise.all([
@@ -131,7 +314,11 @@ async function oneRoute(browser, url, lane) {
                         native.click('end-turn', false),
                     ]);
                     await native.idle();
-                    assert.equal((await native.state()).armor, snap.armor - b.attack);
+                    assert.equal((await native.state()).health, snap.health - b.attack);
+                    if (enemies.length === 1) {
+                        await visitPile(page, native, 'discard-pile');
+                        report.piles = { drawGrouped: true, discardNewestFirst: true, emptyPile: true, checkpointUnchanged: true };
+                    }
                     normalEnemyTurns.push(b.enemy);
                     if (flew) await page.emulateMedia({ reducedMotion: 'reduce' });
                     continue;
@@ -199,7 +386,36 @@ async function oneRoute(browser, url, lane) {
         await page.reload();
         await native.idle();
         assert.deepEqual(await native.save(), returned);
-        return { lane, enemies, options, initialArmor: 10, finalArmor: returned.armor,
+        if (lane === 'A') {
+            await native.click('camp-fire');
+            assert.equal((await campText(page)).title, '沉灯熄灭之后');
+            await native.click('camp-prev');
+            assert.equal((await campText(page)).title, '灰里的门槛');
+            await native.click('camp-next');
+            assert.match((await campText(page)).context, /第 2 天/);
+            await native.click('modal-close');
+            await native.click('camp-bench');
+            const cost = returned.settlement.treatmentCost;
+            assert.ok(cost > 0);
+            await native.click('camp-repair');
+            assert.equal((await native.save()).supplies, returned.supplies - cost);
+            assert.equal((await native.save()).health, 10);
+            assert.ok(!(await native.state()).hits.some(hit => hit.id === 'camp-repair' && hit.enabled));
+            await image(page, 'camp-workbench');
+            await page.reload();
+            await native.idle();
+            await native.click('camp-warehouse');
+            assert.match((await campText(page)).title, new RegExp(String(returned.supplies - cost)));
+            await native.click('modal-close');
+            await native.click('camp-keeper');
+            await native.click('camp-depart');
+            assert.equal((await native.state()).overlay, 'entry');
+            await native.click('modal-close');
+            report.camp = { paintedHotspots: 4, keyboardActivation: true, canceledDeparturePreservedSave: true,
+                journalsReopened: 2, nextDeparture: true, warehouseStock: returned.supplies - cost,
+                repairChargedOnce: cost, persistedHealth: 10, viewports: ['1440x900', '1024x768'] };
+        }
+        return { lane, enemies, options, initialHealth: 10, finalHealth: returned.health,
             visited: returned.visited.length, flew, nextHand, choiceReload, restoredReturn: true, normalEnemyTurns };
     } catch (error) {
         await image(page, 'failure-' + lane).catch(() => {});
@@ -294,6 +510,42 @@ async function legacy(browser, url) {
     }
 }
 
+async function defeat(browser, url) {
+    const page = await browser.newPage({ viewport: { width: 1024, height: 768 }, reducedMotion: 'reduce' });
+    observe(page);
+    const native = input(page);
+    try {
+        await page.goto(url + '/play/?cards=live&seed=19&save=off');
+        await native.idle();
+        await native.depart('A', 'standard');
+        await native.click('enter-lampPassage');
+        let previous;
+        for (let turn = 0; turn < 20; turn++) {
+            const state = await native.save();
+            if (state.phase === 'failure') break;
+            assert.equal(state.phase, 'battle');
+            previous = state;
+            await native.click('end-turn');
+        }
+        const dead = await native.save();
+        assert.equal(dead.phase, 'failure');
+        assert.equal(dead.health, 0);
+        assert.equal(dead.day, 2);
+        assert.ok(previous.health > 0 && previous.battle.intent === 'attack');
+        const effectsCleared = await page.evaluate(() => {
+            const effects = cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getChildByName('Effects');
+            return effects.children.every((child) => !child.activeInHierarchy);
+        });
+        assert.equal(effectsCleared, true);
+        await image(page, 'controls-zero-health');
+        await native.click('journal-start');
+        assert.equal((await native.save()).health, 10);
+        return { immediate: true, finalHealth: 0, nextDay: dead.day, recoveredHealth: 10, effectsCleared };
+    } finally {
+        await page.close();
+    }
+}
+
 async function main() {
     const temporary = fs.mkdtempSync(path.join(root, 'temp/labyrinth-browser-'));
     const working = path.join(temporary, 'cards.json');
@@ -309,6 +561,7 @@ async function main() {
         for (const lane of ['A', 'B']) report.routes.push(await oneRoute(browser, url, lane));
         report.legacy = await legacy(browser, url);
         report.editor = await editor(browser, url);
+        report.defeat = await defeat(browser, url);
         assert.deepEqual(report.runtimeErrors, []);
         assert.deepEqual(report.consoleErrors, []);
         report.passed = true;

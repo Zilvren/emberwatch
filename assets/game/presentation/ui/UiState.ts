@@ -1,4 +1,6 @@
 import { initialRecipeBrowse, RecipeBrowseState } from './RecipePanelModel';
+import type { CampStation } from './CampViewModel';
+import type { BattlePile } from '../cards/BattlePileModel';
 
 export type Overlay =
     | 'bag'
@@ -6,11 +8,13 @@ export type Overlay =
     | 'restart'
     | 'discard'
     | 'reward-leave'
-    | 'supply-overflow'
     | 'log'
     | 'map'
     | 'entry'
     | 'recipes'
+    | 'settings'
+    | BattlePile
+    | CampStation
     | null;
 export interface UiState {
     overlay: Overlay;
@@ -19,7 +23,7 @@ export interface UiState {
     discardFromBag: boolean;
     page: number;
     bagFilter: 'all' | 'deck' | 'overflow' | 'found';
-    bagSort: 'original' | 'name' | 'cost' | 'weight';
+    bagSort: 'original' | 'name' | 'cost';
     deckEdit: boolean;
     inspectedCard: string;
     bagReader: boolean;
@@ -28,6 +32,10 @@ export interface UiState {
     rewardContext: string;
     rewardPage: number;
     entryTier: 'emergency' | 'low' | 'standard' | 'high';
+    campJournalPage: number;
+    settingsReturn: boolean;
+    pilePage: number;
+    pileSelection: number;
     recipes: RecipeBrowseState;
     busy: boolean;
     reduced: boolean;
@@ -49,6 +57,10 @@ export function initialUiState(): UiState {
         rewardContext: '',
         rewardPage: 0,
         entryTier: 'standard',
+        campJournalPage: 0,
+        settingsReturn: false,
+        pilePage: 0,
+        pileSelection: -1,
         recipes: initialRecipeBrowse(),
         busy: false,
         reduced: false,

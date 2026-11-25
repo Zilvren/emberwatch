@@ -1,4 +1,4 @@
-import { ART_IDS, CARD, CardDefinition, effectSummary, generatedCards } from '../../core/content/CardCatalog';
+import { ART_IDS, CARD, CardDefinition, effectSummary, generatedCards, playableCard } from '../../core/content/CardCatalog';
 import type { CardDesignReference } from './CardDesignReference';
 
 export const CARD_ART_IDS = [...ART_IDS, 'rope', 'battery'];
@@ -77,6 +77,7 @@ export function cardViewModel(
     costUnit = '物资',
     options: CardViewOptions = {}
 ): CardDisplayModel {
+    data = playableCard(data);
     const { field, damage, cost } = options;
     const effect = effectSummary(data, definitions),
         detail = data.text === effect ? '' : data.text;
@@ -121,13 +122,7 @@ export function cardViewModel(
                 : detail
                   ? '\n\n' + detail
                   : ''),
-        weight: data.role === 'temporary'
-            ? '本场临时'
-            : field
-              ? ''
-              : options.runDeck && data.role !== 'supply'
-                ? '本局卡组'
-                : `负重 ${data.weight}`,
+        weight: data.role === 'temporary' ? '本场临时' : '',
         art: data.art,
         accent: data.color,
         temporary: data.role === 'temporary',
@@ -143,7 +138,7 @@ export function cardReferenceViewModel(data: CardDesignReference): CardDisplayMo
     let primary = data.combatText
         .replace(/造成(\d+)点伤害/, '造成 $1 点伤害')
         .replace(/获得(\d+)点格挡/, '获得 $1 点格挡')
-        .replace(/恢复(\d+)点护甲.*/, '恢复 $1 点护甲');
+        .replace(/恢复(\d+)点血量.*/, '恢复 $1 点血量');
     if (data.keywords.indexOf('weapon') >= 0 && data.combatText.indexOf('生成') >= 0)
         primary = `生成「${data.combatText.split('生成').pop()}」`;
     if (data.combatEligibility === 'no') primary = data.utilityText || data.combatText;
@@ -174,13 +169,12 @@ export function cardReferenceViewModel(data: CardDesignReference): CardDisplayMo
             data.combatEligibility !== 'no'
                 ? `体力消耗：${data.staminaCost === null ? '待配置' : data.staminaCost}`
                 : '',
-            `探索负重：${data.weight}`,
             `使用后：${data.afterUse}`,
             `用途：${data.utilityText}`,
         ]
             .filter(Boolean)
             .join('\n\n'),
-        weight: data.type === '战斗临时牌' ? '本场临时' : `负重 ${data.weight}`,
+        weight: data.type === '战斗临时牌' ? '本场临时' : '',
         art: data.art,
         accent: '#aa9278',
         temporary: data.type === '战斗临时牌',

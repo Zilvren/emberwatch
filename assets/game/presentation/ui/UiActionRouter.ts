@@ -4,6 +4,8 @@ import type { ButtonActionEvent } from './UIEvents';
 import type { UiState } from './UiState';
 import { entryTier, affordableEntryTier } from '../../core/content/EntryTiers';
 import { initialRecipeBrowse, recipeBrowse } from './RecipePanelModel';
+import { atGateCamp, isCampStation } from './CampViewModel';
+import { battlePileEntries, PILE_PAGE_SIZE } from '../cards/BattlePileModel';
 export type UiSound = 'tap' | 'loot' | 'heal';
 export interface UiActions {
     act(command: GameCommand, sound?: UiSound): void;
@@ -26,6 +28,38 @@ export class UiActionRouter {
         if (this.ui.busy || !this.session.view) return;
         const id = event.id,
             g = this.session.view;
+        if (this.ui.overlay === 'draw-pile' || this.ui.overlay === 'discard-pile' ||
+            id === 'draw-pile' || id === 'discard-pile') {
+            this.pileAction(id);
+            return;
+        }
+        if (id === 'settings' && !this.ui.overlay) {
+            this.ui.settingsReturn = false;
+            this.ui.overlay = 'settings';
+            this.actions.refresh();
+            return;
+        }
+        if (this.ui.overlay === 'settings') {
+            if (id === 'audio') this.actions.toggleAudio();
+            else if (id === 'help' || id === 'restart') {
+                this.ui.settingsReturn = true;
+                this.ui.overlay = id;
+            } else if (id === 'modal-close' || id === 'modal-cancel') this.ui.overlay = null;
+            else return;
+            this.actions.refresh();
+            return;
+        }
+        if (this.ui.settingsReturn && (id === 'modal-close' || id === 'modal-cancel')) {
+            this.ui.settingsReturn = false;
+            this.ui.overlay = 'settings';
+            this.actions.refresh();
+            return;
+        }
+        if (id.startsWith('camp-')) {
+            this.campAction(id);
+            return;
+        }
+        if (isCampStation(this.ui.overlay) && id !== 'modal-close' && id !== 'modal-cancel') return;
         const choice = g.battle?.cardChoice;
         if (this.ui.overlay === 'recipes' || id === 'recipe-open' || id === 'rest-synthesis') {
             if (!choice && !g.battle?.discovery) this.recipeAction(event);
@@ -70,9 +104,7 @@ export class UiActionRouter {
             )
                 this.ui.bagFilter = filter;
         } else if (id === 'bag-sort' && this.ui.overlay === 'bag') {
-            const sorts: UiState['bagSort'][] = g.scenario.fieldDeck
-                ? ['original', 'name', 'cost']
-                : ['original', 'name', 'cost', 'weight'];
+            const sorts: UiState['bagSort'][] = ['original', 'name', 'cost'];
             this.ui.bagSort = sorts[(sorts.indexOf(this.ui.bagSort) + 1) % sorts.length];
         } else if (
             id === 'bag-mode' &&
@@ -156,9 +188,6 @@ export class UiActionRouter {
         } else if (id.startsWith('toggle-')) {
             this.actions.act({ type: 'toggle-card', id: id.slice(7) });
             return;
-        } else if (id === 'discard-supply') {
-            this.actions.act({ type: 'discard-supplies', amount: 1 });
-            return;
         } else if (this.ui.overlay) return;
         else if (g.battle?.discovery || choice || g.rewards?.discovery) return;
         else if (id === 'journal-start') {
@@ -187,20 +216,6 @@ export class UiActionRouter {
         } else if (id === 'claim-supplies') {
             const r = g.rewards;
             if (!r || r.supplyTaken) return;
-            if (g.scenario.suppliesHaveWeight === false) {
-                this.actions.act({ type: 'claim-supplies' }, 'loot');
-                return;
-            }
-            const capacity = Math.max(0, 30 - g.baseWeight);
-            if (capacity === 0) {
-                this.actions.message('背包已满，请先整理背包，再领取物资。');
-                return;
-            }
-            if (capacity < r.supplies) {
-                this.ui.overlay = 'supply-overflow';
-                this.actions.refresh();
-                return;
-            }
             this.actions.act({ type: 'claim-supplies' }, 'loot');
             return;
         } else if (id.startsWith('claim-card-')) {
@@ -227,7 +242,7 @@ export class UiActionRouter {
                 this.actions.act({ type: 'redeem-supplies' }, 'loot');
                 return;
             }
-            const result = this.session.execute({ type: 'repair' });
+            const result = this.session.execute({ type: 'heal-at-shelter' });
             this.actions.message(result.message);
             if (result.ok) {
                 this.actions.sound('heal');
@@ -237,6 +252,58 @@ export class UiActionRouter {
             if (g.phase === 'shelter') this.openEntry();
             return;
         }
+        this.actions.sound('tap');
+        this.actions.refresh();
+    }
+    private pileAction(id: string): void {
+        const g = this.session.view, active = this.ui.overlay;
+        if (!g.battle || g.phase !== 'battle' || g.battle.cardChoice || g.battle.discovery) return;
+        if (id === 'draw-pile' || id === 'discard-pile') {
+            if (active && active !== 'draw-pile' && active !== 'discard-pile') return;
+            this.ui.overlay = id;
+            this.ui.pilePage = 0;
+            this.ui.pileSelection = -1;
+        } else if (active === 'draw-pile' || active === 'discard-pile') {
+            if (id === 'modal-close' || id === 'modal-cancel') this.ui.overlay = null;
+            else {
+                const entries = battlePileEntries(g, active);
+                if (id === 'pile-prev' || id === 'pile-next') {
+                    const last = Math.max(0, Math.ceil(entries.length / PILE_PAGE_SIZE) - 1);
+                    this.ui.pilePage = Math.max(0, Math.min(last, this.ui.pilePage + (id === 'pile-prev' ? -1 : 1)));
+                    this.ui.pileSelection = -1;
+                } else if (id.startsWith('pile-inspect-')) {
+                    const index = Number(id.slice('pile-inspect-'.length));
+                    if (!Number.isInteger(index) || !entries[index] || Math.floor(index / PILE_PAGE_SIZE) !== this.ui.pilePage) return;
+                    this.ui.pileSelection = this.ui.pileSelection === index ? -1 : index;
+                } else return;
+            }
+        } else return;
+        this.actions.sound('tap');
+        this.actions.refresh();
+    }
+    private campAction(id: string): void {
+        const g = this.session.view;
+        if (!atGateCamp(g)) return;
+        if (isCampStation(id) && !this.ui.overlay) {
+            this.ui.overlay = id;
+            if (id === 'camp-fire') this.ui.campJournalPage = Math.max(0, g.journalEntries.length - 1);
+        } else if (id === 'camp-find-keeper' && this.ui.overlay === 'camp-warehouse') {
+            this.ui.overlay = 'camp-keeper';
+        } else if (id === 'camp-depart' && this.ui.overlay === 'camp-keeper') {
+            this.openEntry();
+            return;
+        } else if (id === 'camp-deck' && this.ui.overlay === 'camp-bench') {
+            this.ui.overlay = 'bag';
+            this.ui.page = 0;
+            this.ui.bagFilter = 'all';
+            this.ui.deckEdit = this.ui.bagReader = this.ui.bagDetails = false;
+        } else if (id === 'camp-repair' && this.ui.overlay === 'camp-bench' && g.phase === 'shelter') {
+            this.actions.act({ type: 'heal-at-shelter' }, 'heal');
+            return;
+        } else if (this.ui.overlay === 'camp-fire' && (id === 'camp-prev' || id === 'camp-next')) {
+            const page = this.ui.campJournalPage + (id === 'camp-next' ? 1 : -1);
+            this.ui.campJournalPage = Math.max(0, Math.min(g.journalEntries.length - 1, page));
+        } else return;
         this.actions.sound('tap');
         this.actions.refresh();
     }
@@ -299,6 +366,7 @@ export class UiActionRouter {
         if (this.ui.overlay === 'restart') {
             this.session.execute({ type: 'new-game' });
             this.ui.overlay = null;
+            this.ui.settingsReturn = false;
             this.ui.selectedCard = '';
             this.actions.refresh();
         } else if (this.ui.overlay === 'discard') {
@@ -308,9 +376,6 @@ export class UiActionRouter {
         } else if (this.ui.overlay === 'reward-leave') {
             this.ui.overlay = null;
             this.actions.act({ type: 'finish-rewards' });
-        } else if (this.ui.overlay === 'supply-overflow') {
-            this.ui.overlay = null;
-            this.actions.act({ type: 'claim-supplies' }, 'loot');
         }
     }
     private openEntry(): void {

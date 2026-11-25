@@ -95,6 +95,46 @@ test('restoration makes independent copies of inventory and battle state', () =>
     assert.ok(loaded.battle.hand.length > 0);
     assert.equal(loaded.cards[0].selected, true);
 });
+test('v2 armor saves migrate to health and preserve the existing draw and discard order', () => {
+    const storage = memory();
+    const repo = new SaveRepository(storage);
+    const game = battle();
+    ok(game.endTurn());
+    repo.save(game.exportState());
+    const { checksum: _checksum, ...old } = JSON.parse(storage.getItem(repo.key));
+    old.version = 2;
+    old.state.schemaVersion = 2;
+    old.state.armor = old.state.health;
+    old.state.critical = false;
+    delete old.state.health;
+    old.state.logs.push('永久丢弃菜刀，释放 4 负重。', '领取物资 2 / 5。超出负重的部分已放弃。');
+    const encode = envelope => {
+        const body = JSON.stringify(envelope);
+        let checksum = 2166136261;
+        for (let i = 0; i < body.length; i++) checksum = Math.imul(checksum ^ body.charCodeAt(i), 16777619);
+        return JSON.stringify({ ...envelope, checksum: (checksum >>> 0).toString(16) });
+    };
+    const encoded = encode(old);
+    storage.setItem(repo.key, encoded);
+
+    const resumed = new LegacySession(99, new SaveRepository(storage));
+    assert.equal(resumed.restored, true);
+    const baseline = game.exportState();
+    baseline.logs.push('永久丢弃菜刀。', '领取物资 2 / 5。其余物资已放弃。');
+    assert.deepEqual(resumed.game.exportState(), baseline);
+    ok(resumed.execute({ type: 'end-turn' }));
+    assert.equal(JSON.parse(storage.getItem(repo.key)).version, 3);
+    assert.equal(storage.getItem(repo.key + '.backup'), encoded);
+
+    const depleted = encode({ ...old, state: { ...old.state, armor: 0, critical: true } });
+    storage.setItem(repo.key, depleted);
+    const defeated = new LegacySession(99, new SaveRepository(storage));
+    assert.equal(defeated.restored, true);
+    assert.equal(defeated.game.phase, 'failure');
+    assert.equal(defeated.game.health, 0);
+    assert.equal(storage.getItem(repo.key + '.backup'), depleted);
+    assert.deepEqual(new LegacySession(99, new SaveRepository(storage)).game.exportState(), defeated.game.exportState());
+});
 test('return and optional repair survive reload without a daily payment', () => {
     const g = new SurvivalGame(2);
     ok(g.start());
@@ -103,13 +143,13 @@ test('return and optional repair survive reload without a daily payment', () => 
     g.pathIndex = 4;
     g.phase = 'map';
     g.supplies = 1;
-    g.armor = 5;
+    g.health = 5;
     g.advanceTime(1);
     const loaded = restore(g);
     assert.equal(loaded.currentJournal.id, 'tutorial-cleared');
     ok(loaded.continueJournal());
     assert.equal(loaded.supplies, 1);
-    ok(loaded.repairAtShelter());
+    ok(loaded.healAtShelter());
     assert.equal(loaded.supplies, 0);
     const afterRepair = restore(loaded);
     assert.equal(afterRepair.day, 2);

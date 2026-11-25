@@ -11,32 +11,24 @@ test('status warnings never disable actions or mutate their source state', () =>
     const source = Object.freeze({
         ...defaultStatus,
         supplies: 0,
-        armor: 0,
-        critical: true,
-        carried: 30,
-        overflow: 8,
+        health: 0,
     });
     const view = statusBarView(source);
     assert.equal(view.actionsEnabled, true);
-    assert.equal(view.suppliesHint, '补给用尽');
-    assert.match(view.armorTitle, /感染临界/);
-    assert.equal(view.armorRatio, 0);
-    assert.equal(view.carryHint, '暂存 8 / 10');
+    assert.equal(view.suppliesTone, 'warning');
+    assert.equal(view.healthTone, 'danger');
+    assert.equal(view.healthRatio, 0);
     assert.equal(source.supplies, 0);
 });
-test('zero armor does not invent death or defeat text', () => {
-    const view = statusBarView({ ...defaultStatus, armor: 0, critical: true });
+test('zero health does not invent death or defeat text', () => {
+    const view = statusBarView({ ...defaultStatus, health: 0 });
     assert.doesNotMatch(JSON.stringify(view), /死亡|失败|结束/);
-    assert.equal(view.armor, '0 / 10');
+    assert.equal(view.health, '0 / 10');
 });
-test('full carrying space and overflow are distinct display states', () => {
-    const full = statusBarView({ ...defaultStatus, carried: 30 });
-    assert.equal(full.carryHint, '携带已满');
-    assert.equal(
-        statusBarView({ ...defaultStatus, carried: 30, overflow: 4 }).carryHint,
-        '暂存 4 / 10'
-    );
-    assert.equal(statusBarView({ ...defaultStatus, carried: 27 }).carryHint, '剩余 3 负重');
+test('the top row exposes deck size and has no weight readout', () => {
+    const view = statusBarView({ ...defaultStatus, deckCount: 16 });
+    assert.equal(view.bag, '牌组 · 16 张');
+    assert.doesNotMatch(JSON.stringify(view), /负重|暂存|容量/);
 });
 test('save failure, protected saves and recovered backups remain visible', () => {
     assert.equal(
@@ -44,18 +36,18 @@ test('save failure, protected saves and recovered backups remain visible', () =>
         'danger'
     );
     assert.equal(
-        statusBarView({ ...defaultStatus, saveStatus: '原存档已保留' }).save,
-        '原存档已保留'
+        statusBarView({ ...defaultStatus, saveStatus: '原存档已保留' }).saveSymbol,
+        'warning'
     );
     assert.equal(statusBarView({ ...defaultStatus, saveStatus: '已恢复备份' }).saveTone, 'warning');
     assert.equal(
-        statusBarView({ ...defaultStatus, saveStatus: '调试模式 · 不存档' }).save,
-        '本次测试不保存'
+        statusBarView({ ...defaultStatus, saveStatus: '调试模式 · 不存档' }).saveSymbol,
+        'unsaved'
     );
 });
 test('large resource values remain exact instead of silently rounding', () => {
     assert.equal(statusBarView({ ...defaultStatus, supplies: 12345678 }).supplies, '12345678');
-    assert.equal(statusBarView({ ...defaultStatus, day: 123 }).day, '第 123 天');
+    assert.equal(statusBarView({ ...defaultStatus, day: 123 }).day, '123');
 });
 test('container widths select readable layouts without overlapping actionable controls', () => {
     const intersects = (a, b) =>
@@ -65,16 +57,14 @@ test('container widths select readable layouts without overlapping actionable co
         for (const width of [360, 408, 719, 720, 960, 1179, 1180, 1320, 1440]) {
             const grid = statusBarLayout(width, 'strip', recipesVisible);
             assert.equal(grid.sections.length, 5);
-            assert.equal(grid.utilities.length, recipesVisible ? 5 : 4);
+            assert.equal(grid.utilities.length, recipesVisible ? 4 : 3);
             const bag = {
                 ...grid.sections[4],
-                width: Math.min(224, grid.sections[4].width),
-                height: 40,
-                y: grid.sections[4].y + 5,
+                height: 42,
             };
             const controls = [bag, ...grid.utilities];
             for (const [index, control] of controls.entries()) {
-                assert.equal(control.height, 40);
+                assert.equal(control.height, 42);
                 assert.ok(control.x - control.width / 2 >= -width / 2 + grid.padding - 1e-6);
                 assert.ok(control.x + control.width / 2 <= width / 2 - grid.padding + 1e-6);
                 assert.ok(control.y - control.height / 2 >= -grid.height / 2);
@@ -83,7 +73,7 @@ test('container widths select readable layouts without overlapping actionable co
             }
         }
     }
-    assert.equal(statusBarLayout(1440).height, 80);
+    assert.equal(statusBarLayout(1440).height, 76);
     assert.equal(statusBarLayout(960).mode, 'compact');
     assert.equal(statusBarLayout(408).mode, 'narrow');
 });
@@ -98,7 +88,7 @@ test('native HUD keeps status bindings and exposes both map and recipe entries',
             .filter((o) => o.__type__ === script('ButtonAction'))
             .map((o) => o.actionId)
             .sort(),
-        ['audio', 'bag', 'help', 'log', 'map', 'recipe-open', 'restart', 'rules-help']
+        ['bag', 'log', 'map', 'recipe-open', 'rules-help', 'settings']
     );
     for (const control of a.filter((o) => o.__type__ === 'cc.Button')) {
         const click = a[control.clickEvents[0].__id__];

@@ -31,7 +31,7 @@ test('card fronts keep key effect data and long descriptions remain available in
     assert.ok(vm.description.endsWith('…'));
     assert.ok(vm.fullDescription.includes(def.text));
     assert.equal(vm.cost, String(def.cost));
-    assert.equal(vm.weight, '负重 ' + def.weight);
+    assert.equal(vm.weight, '');
 });
 test('equipment presents generated card separately from its start timing', () => {
     const vm = cardViewModel(catalog.CARD.knife);

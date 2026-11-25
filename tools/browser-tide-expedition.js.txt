@@ -83,7 +83,7 @@ async function battleToMap() {
             const damage=cards.filter(c=>def(c).effect.type==='damage').sort((a,b)=>g.attackDamage(b.kind)-g.attackDamage(a.kind));
             let pick=damage.find(c=>g.attackDamage(c.kind)>=b.hp) || cards.find(c=>def(c).cost===0&&
                 (def(c).effect.type==='damage'||(def(c).effect.type==='block'&&b.block<g.incomingDamage)));
-            if (!pick && b.block<g.incomingDamage && g.armor<7) pick=cards.find(c=>def(c).effect.type==='block');
+            if (!pick && b.block<g.incomingDamage && g.health<7) pick=cards.find(c=>def(c).effect.type==='block');
             pick=pick||damage[0]||cards.find(c=>def(c).effect.type==='draw'||def(c).effect.type==='equip'||
                 (def(c).effect.type==='block'&&b.block<g.incomingDamage));
             return pick ? {id:pick.id,attack:def(pick).effect.type==='damage'} : null;
@@ -118,7 +118,7 @@ for (let n=0;n<16&&(await state()).phase==='battle';n++) await click('end-turn')
 assert((await state()).phase==='failure' && (await state()).day===3,'Formal failure should advance one day.');
 await click('journal-start');
 const retry=await checkpoint();
-assert(retry.cards.length===20&&retry.armor===10&&retry.supplies===10&&retry.journalEntries.some(e=>e.id==='street-cleared'&&e.read),'Retry lost the journal or failed to restore the base loadout.');
+assert(retry.cards.length===20&&retry.health===10&&retry.supplies===10&&retry.journalEntries.some(e=>e.id==='street-cleared'&&e.read),'Retry lost the journal or failed to restore the base loadout.');
 // This Playwright context is disposable. Seed a real v1 save, then enter through today's default.
 await page.evaluate(()=>{localStorage.removeItem('the-end.run.v1');localStorage.removeItem('the-end.run.v1.backup');});
 await page.goto(url+'?seed=18&ruleset=stamina-v1&save=on');await idle();

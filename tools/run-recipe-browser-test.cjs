@@ -208,7 +208,7 @@ async function game(page, origin) {
     const next = await state();
     assert.equal(next.day, returned.day);
     assert.equal(next.supplies, returned.supplies + 3);
-    assert.equal(next.armor, 10);
+    assert.equal(next.health, 10);
     assert.ok(next.cards.some(({ kind }) => kind === 'knife'));
     assert.equal(next.cards.some(({ kind }) => kind === 'long_spear'), false);
 

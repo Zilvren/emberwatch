@@ -18,8 +18,8 @@ export type GameReadModel = ReadonlyValue<
         | 'pendingJournalCount'
         | 'supplies'
         | 'entryTier'
-        | 'armor'
-        | 'critical'
+        | 'health'
+        | 'lowHealth'
         | 'cards'
         | 'carriedCards'
         | 'storedSupplies'
@@ -43,4 +43,4 @@ export type GameReadModel = ReadonlyValue<
         | 'content'
     >
 > &
-    Pick<SurvivalGame, 'cardBlocked' | 'rewardCardBlocked' | 'rewardZone' | 'attackDamage' | 'cardCost'>;
+    Pick<SurvivalGame, 'cardBlocked' | 'rewardCardBlocked' | 'rewardZone' | 'attackDamage' | 'cardCost' | 'journalAt'>;

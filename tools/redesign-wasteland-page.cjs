@@ -52,7 +52,7 @@ function deck(g,key,x,y){const node=find(g,key),value=binding(g,key+'/text0'),la
  put(g,threat,1162,62,492,84);text(g,'battle/text0',1162,48,444,34,23,true,1);text(g,'battle/text1',1162,81,444,24,14,false,1);
  field(g,492,605,322,52,{marked:false});field(g,1102,605,252,52,{marked:false});
  text(g,'battle/text3',435,595,180,24,18,true,0);text(g,'battle/text4',582,595,120,24,18,true,1);text(g,'battle/text5',1102,595,220,24,18,true,1);
- for(const [name,x]of [['armorTrack',492],['armorFill',492],['enemyTrack',1102],['enemyFill',1102]])put(g,find(g,name),x,619,name.startsWith('armor')?288:220,5);
+ for(const [name,x]of [['healthTrack',492],['healthFill',492],['enemyTrack',1102],['enemyFill',1102]])put(g,find(g,name),x,619,name.startsWith('health')?288:220,5);
  text(g,'battle/text6',495,554,420,26,16,true,1);text(g,'battle/text9',811,591,300,44,14,false,1);
  action(g,'end-turn',1320,605,174,50,'primary');text(g,'battle/text10',1317,646,180,22,13,false,1);
  field(g,830,763,1172,254,{name:'HandWorkbench',fill:'#202b23'});caption(g,g.root,'HAND / 战斗手牌',374,625,330,24,13,C.ochre,0);

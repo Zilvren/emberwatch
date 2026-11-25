@@ -3453,7 +3453,7 @@
       "b": 55,
       "a": 255
     },
-    "_string": "当前教学探索将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。",
+    "_string": "当前教学探索将重置。\n初始物资、血量和卡牌恢复，随机内容重新生成。",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
     "_actualFontSize": 0,

@@ -22,7 +22,7 @@ export class InventoryRowPresentation extends Component {
         if (!card) return;
         const definition = game.content.cards[card.kind];
         if (this.nameLabel) this.nameLabel.string = definition.name;
-        if (this.weightLabel) this.weightLabel.string = `负重 ${definition.weight}`;
+        if (this.weightLabel) this.weightLabel.string = '';
         if (this.detailLabel)
             this.detailLabel.string = effectSummary(definition, game.content.cards);
         if (this.statusLabel)

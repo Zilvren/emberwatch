@@ -51,30 +51,14 @@ export class RewardScreenPresenter {
         {
             const r = g.rewards!,
                 battle = g.scenario.nodes[r.source]?.type === 'battle',
-                claimable =
-                    g.scenario.suppliesHaveWeight === false
-                        ? r.supplies
-                        : Math.max(0, Math.min(r.supplies, 30 - g.baseWeight));
+                claimable = r.supplies;
             this.view.text(screen, {
                 'banner/text0': battle ? 'VICTORY / SALVAGE' : 'SCAVENGE / SALVAGE',
                 'banner/text1': battle ? '威胁已清除' : '废墟里，总有东西留下',
-                'banner/text2':
-                    g.scenario.suppliesHaveWeight === false
-                        ? '最多选择一张卡牌；物资点单独领取，不占负重。'
-                        : battle
-                          ? '最多选择一张卡牌。物资需要单独领取。'
-                          : '整理背包后再领取，顺序会影响携带空间。',
-                'rewards/text0': `携带 ${g.baseWeight}/30  ·  暂存 ${g.overflowWeight}/10`,
+                'banner/text2': '可以选一张卡牌，并领取物资。',
+                'rewards/text0': '',
                 'rewards/text2': `物资 +${r.supplies}`,
-                'rewards/text3': r.supplyTaken
-                    ? '已领取'
-                    : g.scenario.suppliesHaveWeight === false
-                      ? `可领取 ${claimable} 物资点 · 不占负重`
-                      : claimable === 0
-                        ? '背包已满 · 先整理背包'
-                        : claimable < r.supplies
-                          ? `可装入 ${claimable} 点 · 其余 ${r.supplies - claimable} 点将放弃`
-                          : `可全部装入 ${claimable} 点`,
+                'rewards/text3': r.supplyTaken ? '已领取' : '',
             });
             const context = r.source + ':' + r.cards.join(',');
             if (this.ui.rewardContext !== context) {

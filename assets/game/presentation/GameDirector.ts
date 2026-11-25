@@ -10,7 +10,10 @@ import {
     ResolutionPolicy,
     resources,
     SpriteFrame,
+    SpriteAtlas,
     sys,
+    Tween,
+    UIOpacity,
     UITransform,
     Vec2,
     Vec3,
@@ -26,6 +29,7 @@ import { ActorPresentation } from './actors/ActorPresentation';
 import { GameAudio } from './audio/GameAudio';
 import { HandPresentation } from './cards/HandPresentation';
 import { GameRenderer } from './GameRenderer';
+import { PlayerControls } from './ui/PlayerControls';
 import { MapPointPresentation } from './map/MapPointPresentation';
 import { ButtonAction } from './ui/ButtonAction';
 import { StatusBar } from './ui/StatusBar';
@@ -53,6 +57,7 @@ export class GameDirector extends Component {
     private readonly ui = initialUiState();
     private renderer!: GameRenderer;
     private router!: UiActionRouter;
+    private controls?: PlayerControls;
     private get hero(): ActorPresentation | null {
         return this.renderer?.hero ?? null;
     }
@@ -60,7 +65,18 @@ export class GameDirector extends Component {
         return this.renderer?.enemy ?? null;
     }
     private refresh(): void {
+        const previousScreen = this.renderer.activeScreen;
         this.renderer.render();
+        if (previousScreen && previousScreen !== this.renderer.activeScreen) {
+            for (const effect of this.effectsRoot?.children ?? []) {
+                Tween.stopAllByTarget(effect);
+                const opacity = effect.getComponent(UIOpacity);
+                if (opacity) Tween.stopAllByTarget(opacity);
+                effect.active = false;
+                effect.destroy();
+            }
+        }
+        this.controls?.refresh();
         this.syncActorMotionPreference();
         // Keep transient feedback clear of overlay headings and the map's paper sheet.
         const toastY = this.ui.overlay ? 388 : this.game.phase === 'map' ? -416 : 345;
@@ -68,6 +84,7 @@ export class GameDirector extends Component {
     }
     private refreshBattle(screen: Node): void {
         this.renderer.renderBattle(screen);
+        this.controls?.refresh();
     }
     private syncActorMotionPreference(): void {
         for (const actor of this.renderer.activeScreen?.getComponentsInChildren(
@@ -102,6 +119,7 @@ export class GameDirector extends Component {
     @property(Prefab) healTemplate: Prefab | null = null;
     @property(SpriteFrame) labyrinthPaper: SpriteFrame | null = null;
     @property(JsonAsset) interfaceTheme: JsonAsset | null = null;
+    @property(SpriteAtlas) controlIcons: SpriteAtlas | null = null;
     @property(SpriteFrame) shelterArtwork: SpriteFrame | null = null;
     private game!: GameReadModel;
     private session!: GameSession;
@@ -182,6 +200,7 @@ export class GameDirector extends Component {
         this.motionQuery?.addEventListener('change', this.motionChanged);
         view.setDesignResolutionSize(1440, 900, ResolutionPolicy.SHOW_ALL);
         this.scene = bindScene(this.hud, this.screenRoots, this.popupRoots, this.game.scenario);
+        if (this.controlIcons) this.controls = new PlayerControls(this.node, this.controlIcons);
         if (this.interfaceTheme)
             installLabyrinthInterface(this.scene, this.interfaceTheme, this.shelterArtwork, this.labyrinthPaper);
         this.hand = this.scene.screens.battle.getComponentInChildren(HandPresentation);
@@ -211,7 +230,7 @@ export class GameDirector extends Component {
             toggleAudio: () => {
                 this.audio.muted = !this.audio.muted;
             },
-            healEffect: () => this.effect('heal', this.hero, '+护甲'),
+            healEffect: () => this.effect('heal', this.hero, '+血量'),
         });
         this.node.on(ACTION_EVENT, this.onActionInput, this);
         this.node.on(CARD_DROP_EVENT, this.onDropInput, this);
@@ -303,7 +322,7 @@ export class GameDirector extends Component {
         this.ui.selectedCard = '';
         this.refreshBattle(this.scene.screens.battle);
         const oldHp = b.hp,
-            oldArmor = g.armor,
+            oldHealth = g.health,
             oldBlock = b.block,
             run = g.run;
         let pending = 1;
@@ -331,7 +350,7 @@ export class GameDirector extends Component {
                 }
                 this.effect('attack', this.enemy, `−${oldHp - (g.battle?.hp ?? 0)}`);
             } else if (this.game.content.cards[card.kind].effect.type === 'heal')
-                this.effect('heal', this.hero, `+${g.armor - oldArmor} 护甲`);
+                this.effect('heal', this.hero, `+${g.health - oldHealth} 血量`);
             else if (this.game.content.cards[card.kind].effect.type === 'draw')
                 this.effect('block', this.hero, '抽牌');
             else if ((g.battle?.block ?? oldBlock) !== oldBlock || this.game.content.cards[card.kind].effect.type === 'equip')
@@ -558,8 +577,8 @@ export class GameDirector extends Component {
             selectedCard: this.ui.selectedCard,
             day: g.day,
             supplies: g.supplies,
-            armor: g.armor,
-            critical: g.critical,
+            health: g.health,
+            lowHealth: g.lowHealth,
             baseWeight: g.baseWeight,
             overflowWeight: g.overflowWeight,
             currentNode: g.currentNode,

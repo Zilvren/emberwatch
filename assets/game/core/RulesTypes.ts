@@ -83,8 +83,7 @@ export interface Settlement {
     returnedCards: number;
     discoveredCards?: number;
     lostOverflow: string[];
-    wasCritical: boolean;
-    repairCost: number;
-    repaired: boolean;
-    repairSpent: number;
+    treatmentCost: number;
+    treated: boolean;
+    treatmentSpent: number;
 }

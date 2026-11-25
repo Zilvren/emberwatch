@@ -1,4 +1,4 @@
-import { CardKind, isBattleCard } from '../content/CardCatalog';
+import { CardKind, carriedWeight, isBattleCard } from '../content/CardCatalog';
 import { CardSet } from '../content/ContentRegistry';
 import { ActionResult, OwnedCard } from '../RulesTypes';
 import { RuleFeedback, InventoryState } from './RuleContext';
@@ -65,19 +65,12 @@ export class InventoryRules {
     }
 
     get baseWeight(): number {
-        if (this.scenario.fieldDeck) return 0;
-        return (
-            (this.scenario.suppliesHaveWeight === false ? 0 : this.state.supplies) +
-            this.carriedCards
-                .filter((c) => c.zone === 'base')
-                .reduce((n, c) => n + this.content.cards[c.kind].weight, 0)
-        );
+        return this.state.cards.filter(c => c.zone === 'base')
+            .reduce((sum, c) => sum + carriedWeight(this.content.cards[c.kind]), 0);
     }
     get overflowWeight(): number {
-        if (this.scenario.fieldDeck) return 0;
-        return this.carriedCards
-            .filter((c) => c.zone === 'overflow')
-            .reduce((n, c) => n + this.content.cards[c.kind].weight, 0);
+        return this.state.cards.filter(c => c.zone === 'overflow')
+            .reduce((sum, c) => sum + carriedWeight(this.content.cards[c.kind]), 0);
     }
     get usableCards(): OwnedCard[] {
         return this.state.cards.filter(
@@ -92,7 +85,7 @@ export class InventoryRules {
     }
     promoteOverflow(): void {
         for (const card of this.state.cards.filter((c) => c.zone === 'overflow')) {
-            if (this.baseWeight + this.content.cards[card.kind].weight > 30) break;
+            if (this.baseWeight + carriedWeight(this.content.cards[card.kind]) > 30) break;
             card.zone = 'base';
             this.feedback.log(
                 `${this.content.cards[card.kind].name}从溢出区转入${this.scenario.runDeck ? '行囊' : '可用卡组'}。`
@@ -107,17 +100,15 @@ export class InventoryRules {
         }
     }
     rewardZone(kind: CardKind): OwnedCard['zone'] {
-        return this.scenario.fieldDeck ||
-            (this.scenario.runDeck && isBattleCard(this.content.cards[kind])) ||
-            this.baseWeight + this.content.cards[kind].weight <= 30
+        return this.baseWeight + carriedWeight(this.content.cards[kind]) <= 30
             ? 'base'
             : 'overflow';
     }
     rewardCardBlocked(kind: CardKind): string {
         if (this.rewardZone(kind) === 'base') return '';
-        return this.overflowWeight + this.content.cards[kind].weight <= 10
+        return this.overflowWeight + carriedWeight(this.content.cards[kind]) <= 10
             ? ''
-            : '基础负重和临时溢出区均不足';
+            : '行囊和暂存区已满';
     }
     discardCard(id: string): ActionResult {
         if (this.scenario.fieldDeck)
@@ -135,21 +126,13 @@ export class InventoryRules {
             return this.feedback.result(false, '现金只能在休整节点删除。');
         this.state.cards.splice(index, 1);
         this.feedback.log(
-            `永久丢弃${this.content.cards[card.kind].name}，释放 ${this.content.cards[card.kind].weight} 负重。`
+            `已丢弃${this.content.cards[card.kind].name}。`
         );
         this.promoteOverflow();
         return this.feedback.result(true, '卡牌已从本次探索中永久移除。');
     }
-    discardSupplies(amount: number): ActionResult {
-        if (this.scenario.suppliesHaveWeight === false)
-            return this.feedback.result(false, '避难所物资不占探索负重，无需丢弃。');
-        if (this.state.phase !== 'rewards' && this.state.phase !== 'rest')
-            return this.feedback.result(false, '只能在奖励或休整时丢弃物资。');
-        if (!Number.isInteger(amount) || amount <= 0 || amount > this.state.supplies)
-            return this.feedback.result(false, '没有足够物资可丢弃。');
-        this.spend(amount);
-        this.feedback.log(`丢弃 ${amount} 点物资。`);
-        return this.feedback.result(true, `已释放 ${amount} 点负重。`);
+    discardSupplies(_amount: number): ActionResult {
+        return this.feedback.result(false, '物资点直接计入营地储备。');
     }
     toggleCard(id: string): ActionResult {
         if (this.scenario.runDeck || this.scenario.fieldDeck)
@@ -157,13 +140,14 @@ export class InventoryRules {
         if (this.state.phase !== 'rest')
             return this.feedback.result(false, '只有休整节点可调整出手卡组。');
         const card = this.state.cards.find((c) => c.id === id);
-        if (!card || card.kind === 'cash') return this.feedback.result(false, '现金不进入战斗。');
+        if (!card || !isBattleCard(this.content.cards[card.kind]))
+            return this.feedback.result(false, '这张卡无法编入战斗牌组。');
         if (!card.selected && card.zone === 'overflow')
             return this.feedback.result(false, '临时溢出卡尚不能用于战斗。');
         card.selected = !card.selected;
         return this.feedback.result(
             true,
-            card.selected ? '已加入出手卡组。' : '本次不抽取此牌，卡牌仍占负重并可带回。'
+            card.selected ? '已加入出手卡组。' : '本次不抽取此牌，可以带回营地。'
         );
     }
 }

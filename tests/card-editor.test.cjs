@@ -21,7 +21,7 @@ test('new IDs enter the initial deck and fixed rewards and use configured cost a
     const catalog = base(), custom = newCard(); catalog.cards.push(custom); catalog.fixedReward = custom.id;
     const { SurvivalGame } = gameWith(catalog), game = new SurvivalGame(17);
     assert.ok(game.cards.some(card => card.kind === custom.id));
-    assert.equal(game.baseWeight, 28);
+    assert.equal(game.baseWeight, 0);
     game.start(); game.enterNode(); assert.deepEqual(game.rewards.cards, [custom.id]);
     const combat = battle(SurvivalGame); combat.battle.hp = 20;
     combat.battle.hand = [{ id: 'new', kind: custom.id, temporary: false }];
@@ -34,16 +34,16 @@ test('editing an existing card changes its actual damage, not only its displayed
     game.play('edited'); assert.equal(game.battle.hp, 2);
     assert.equal(schema.effectSummary(CARD.attack), '造成 4 点伤害');
 });
-test('custom block and healing retain block duration, healing cap and critical restrictions', () => {
+test('custom block and healing retain block duration and the health cap', () => {
     const catalog = base(); const guard = newCard('custom_guard'), heal = newCard('custom_heal');
     guard.initialCount = heal.initialCount = 0; guard.effect = { type: 'block', amount: 7 }; heal.effect = { type: 'heal', amount: 4 };
     catalog.cards.push(guard, heal);
     const { SurvivalGame } = gameWith(catalog), game = battle(SurvivalGame);
-    game.battle.hand = [{ id: 'guard', kind: guard.id }, { id: 'heal', kind: heal.id }]; game.armor = 8;
+    game.battle.hand = [{ id: 'guard', kind: guard.id }, { id: 'heal', kind: heal.id }]; game.health = 8;
     assert.equal(game.play('guard').ok, true); assert.equal(game.battle.block, 7);
-    assert.equal(game.play('heal').ok, true); assert.equal(game.armor, 10);
+    assert.equal(game.play('heal').ok, true); assert.equal(game.health, 10);
     game.endTurn(); assert.equal(game.battle.block, 0);
-    game.armor = 0; assert.match(game.cardBlocked({ kind: heal.id }), /感染临界/);
+    assert.match(game.cardBlocked({ kind: heal.id }), /血量已满/);
 });
 test('weapons generate their configured temporary card next turn and preserve the unique slot', () => {
     const catalog = base(); const temporary = newCard('custom_slash');

@@ -1,5 +1,13 @@
 # The end 当前系统清单
 
+## 2026-11-22 · 当前通用规则
+
+已确认并实装。玩家血量上限为 10，实际伤害扣到 0 即进入失败。失败返营恢复初始补给、牌组与血量。正式探索结束仍推进一天并保留关键日志，教学失败仍在第 1 天。版本 3 存档将旧护甲读为血量，保留既有进度。已经结算、尚未整备的旧返营存档若为 0，转换为 1 点血量以保留返营结果。
+
+普通牌和物资点均计零重量。物资卡计算原有行囊与暂存容量，数值在玩家侧隐藏。战斗牌堆支持只读查看，抽牌堆归组并按牌名排序，弃牌堆最新在前。血量与容量规则见 `assets/game/core/systems/CombatRules.ts`、`InventoryRules.ts` 和 `assets/game/core/state/GameState.ts`。界面见 `designs/ui/wasteland-page-redesign.md`。
+
+## 教学与连续探索的历史记录
+
 - 项目：The end，`C:\Users\Knock\Desktop\The end`
 - 日期：2026-11-16（Asia/Hong_Kong）
 - 状态：下方旧表保留兼容教学记录；2026-11-15 新开局已实现 stamina-v1 进入档位、回合体力和独立物资点。最新实现及验证见 architecture.md、designs/stamina-system.md 与 stamina-verification.json。

@@ -12,6 +12,9 @@ import { RouteMap } from '../map/RouteMap';
 import { EntrySelection } from './EntrySelection';
 import { RecipePanel } from './RecipePanel';
 import { rulesNotice } from './RulesNoticeModel';
+import { campDetail, isCampStation } from './CampViewModel';
+import { CampStationPanel } from './CampStationPanel';
+import { BattlePilePanel } from '../cards/BattlePilePanel';
 /** Overlay projection only; input decisions are owned by UiActionRouter. */
 export class PopupPresenter {
     constructor(
@@ -22,32 +25,29 @@ export class PopupPresenter {
         private readonly newGameRuleset: () => string,
         private readonly synthesisView: () => { blocked: string; canUndo: boolean },
         private readonly fieldUpdateAvailable: () => boolean,
-        private readonly newGameDestination: () => string = () => '退潮盐原'
+        private readonly newGameDestination: () => string = () => '退潮盐原',
+        private readonly isMuted: () => boolean = () => false
     ) {}
     render(): void {
         const g = this.game;
         const key = popupKey(this.ui.overlay);
         for (const id of Object.keys(this.popups)) this.popups[id].active = id === key;
+        if (key === 'settings') this.view.button(this.popups.settings, 'audio', this.isMuted() ? '声音关' : '声音开');
+        if (key === 'battle-pile' && (this.ui.overlay === 'draw-pile' || this.ui.overlay === 'discard-pile') && g.battle)
+            this.popups[key].getComponentInChildren(BattlePilePanel)?.render(g, this.ui.overlay, this.ui.pilePage, this.ui.pileSelection);
+        if (key === 'camp-station' && isCampStation(this.ui.overlay))
+            this.popups[key].getComponentInChildren(CampStationPanel)?.render(
+                campDetail(g, this.ui.overlay, this.ui.campJournalPage)
+            );
         if (key === 'inventory') {
             const popup = this.popups.inventory,
                 max = Math.max(0, Math.ceil(g.cards.length / 6) - 1);
             this.ui.page = Math.max(0, Math.min(this.ui.page, max));
             this.view.text(popup, {
-                'bag/text1': g.scenario.fieldDeck
-                    ? `随行牌组 · ${g.cards.length} 张`
-                    : `基础 ${g.baseWeight}/30  ·  暂存 ${g.overflowWeight}/10  ·  可战斗 ${g.usableCards.length} 张`,
+                'bag/text1': `随行牌组 · ${g.usableCards.length} 张`,
                 'bag/text20': `${this.ui.page + 1} / ${max + 1}`,
-                'bag/text21': g.scenario.runDeck
-                    ? '行囊只装物资卡。战斗卡直接进入本局卡组。'
-                    : g.scenario.fieldDeck
-                    ? '发现的牌在本次探索内使用。'
-                    : g.phase === 'rest'
-                      ? '移出战斗不释放负重。基础能力永久保留；现金可在这里丢弃。'
-                      : g.phase === 'rewards'
-                        ? g.scenario.suppliesHaveWeight === false
-                            ? '物资点不占负重；普通物品可丢弃腾出空间。基础能力保留，现金仅营地可丢弃。'
-                            : '物资不能暂存；可先丢弃普通物品腾出空间。基础能力保留，现金仅营地可丢弃。'
-                        : '当前仅可查看。奖励和休整时可整理背包；调整战斗卡组需在营地进行。',
+                'bag/text21': g.scenario.runDeck ? '物资卡带回仓库，战斗牌进入本局卡组。'
+                    : g.scenario.fieldDeck ? '发现的牌在本次探索内使用。' : '点击卡牌查看详情。',
             });
             const grid = popup.getComponent(InventoryGrid);
             if (grid) grid.refresh(g, this.ui);
@@ -57,15 +57,9 @@ export class PopupPresenter {
                     .forEach((row, i) => row.refresh(g.cards[this.ui.page * 6 + i], g));
             this.view.button(popup, 'bag-prev', undefined, this.ui.page > 0);
             this.view.button(popup, 'bag-next', undefined, this.ui.page < max);
-            this.view.button(
-                popup,
-                'discard-supply',
-                undefined,
-                (g.phase === 'rest' || g.phase === 'rewards') && g.supplies > 0
-            );
             for (const action of popup.getComponentsInChildren(ButtonAction))
                 if (action.actionId === 'discard-supply')
-                    action.node.active = g.scenario.suppliesHaveWeight !== false;
+                    action.node.active = false;
         }
         if (key === 'map') this.popups.map?.getComponentInChildren(RouteMap)?.refresh(g, true);
         if (key === 'recipes') {
@@ -81,16 +75,16 @@ export class PopupPresenter {
         if (key === 'help' && g.scenario.battleResource === 'stamina')
             this.view.text(this.popups.help, {
                 'modal/text1': g.scenario.labyrinth
-                    ? '战斗胜利后和部分搜刮点可发现一张牌，从下一场开始抽取。返家恢复基础牌组。\n\n普通镇静跨回合保留，临时镇静在回合结束时清除。叠至门槛会暂缓敌人动作，你先获得一个额外回合；那次动作仍在额外回合结束时结算。\n\n攻击牌选敌或拖向敌人，其余牌点击使用。体力每回合刷新，格挡清空。'
+                    ? '战斗胜利后和部分搜刮点可发现一张牌，从下一场开始抽取。返家恢复基础牌组。\n\n普通镇静跨回合保留，临时镇静在回合结束时清除。叠至门槛会暂缓敌人动作，你先获得一个额外回合，那次动作会在额外回合结束时结算。\n\n攻击牌选敌或拖向敌人，其余牌点击使用。点牌堆可以查看其中的卡牌。体力每回合刷新，格挡清空。血量归零立即探索失败。'
                     : g.scenario.fieldDeck
-                    ? '每场遭遇可选一张发现牌，也可略过。闸轮生命降至一半时还可发现一次。\n拿取免费，打出才支付体力。满手时新牌放到抽牌堆顶。\n发现牌本次探索有效，返家后恢复基础牌组。\n\n攻击牌点击后选择敌人，或直接拖向敌人。其余牌点击使用。\n体力每回合刷新，格挡在敌方行动后清空。\n护甲降到 0 后，再次受到未格挡的伤害就会失败。'
+                    ? '每场遭遇可选一张发现牌，也可略过。闸轮生命降至一半时还可发现一次。\n拿取免费，打出才支付体力。满手时新牌放到抽牌堆顶。\n发现牌本次探索有效，返家后恢复基础牌组。\n\n攻击牌点击后选择敌人，或直接拖向敌人。其余牌点击使用。\n体力每回合刷新，格挡在敌方行动后清空。\n格挡抵消伤害，血量归零立即探索失败。'
                     : rulesNotice(
                           g.scenario.ruleset,
                           this.newGameRuleset(),
                           this.fieldUpdateAvailable(),
                           this.newGameDestination()
                       ).help +
-                      '攻击牌：点击后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n卡牌消耗战斗体力，不扣避难所物资。\n进入档位决定每回合体力；回合结束余量清零，新回合重置。\n物资点不占探索负重，物品仍占负重，暂存物品不能战斗。\n护甲降至 0 不立即失败，再次受到实际伤害才失败。\n正式探索成功或失败都会过去一天；日志在关键进度达成时出现。',
+                      '攻击牌：点击后选择敌人，或拖向敌人。\n防御、治疗、武器牌：点击即可使用。\n\n卡牌消耗战斗体力，不扣避难所物资。\n进入档位决定每回合体力；回合结束余量清零，新回合重置。\n普通牌直接进入牌组，物资卡放入行囊。\n格挡抵消伤害，血量归零立即探索失败。\n正式探索成功或失败都会过去一天；日志在关键进度达成时出现。',
             });
         if (key === 'help' && g.scenario.battleResource !== 'stamina')
             this.view.text(this.popups.help, {
@@ -107,7 +101,7 @@ export class PopupPresenter {
             if (this.ui.overlay === 'restart') {
                 title = '重新开始第 1 天？';
                 body =
-                    '累计天数、关键日志和当前探索进度将重置。\n初始物资、护甲和卡牌恢复，随机内容重新生成。' +
+                    '累计天数、关键日志和当前探索进度将重置。\n初始物资、血量和卡牌恢复，随机内容重新生成。' +
                     (g.scenario.runDeck ? '\n仓库里的物资卡也会清空。' : '') +
                     rulesNotice(
                         g.scenario.ruleset,
@@ -119,7 +113,7 @@ export class PopupPresenter {
                 variant = 'danger';
             } else if (this.ui.overlay === 'discard') {
                 title = `丢弃${c ? this.game.content.cards[c.kind].name : '卡牌'}？`;
-                body = `这张牌将从本次探索中永久移除。\n${c ? `释放 ${this.game.content.cards[c.kind].weight} 点负重，暂存卡按顺序自动转入。` : ''}`;
+                body = '确认后，这张牌会从本次探索中永久移除。';
                 confirm = '永久丢弃';
                 variant = 'danger';
             } else if (this.ui.overlay === 'reward-leave') {
@@ -133,13 +127,6 @@ export class PopupPresenter {
                 confirm = '放弃并离开';
                 cancel = '返回领取';
                 variant = 'danger';
-            } else if (this.ui.overlay === 'supply-overflow') {
-                const r = g.rewards!,
-                    amount = Math.max(0, Math.min(r.supplies, 30 - g.baseWeight));
-                title = '部分物资装不下';
-                body = `本次只能装入 ${amount} / ${r.supplies} 点物资。\n确认后，其余 ${r.supplies - amount} 点会立即放弃，不能再次领取。\n\n可先取消，整理背包后再领取。物资不能放入暂存区。`;
-                confirm = `领取 ${amount} 点`;
-                cancel = '先不领取';
             }
             this.view.text(this.popups.confirmation, { 'modal/text0': title, 'modal/text1': body });
             this.view.button(

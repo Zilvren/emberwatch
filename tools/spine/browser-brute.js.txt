@@ -6,12 +6,12 @@ await click('rest-cash');await click('modal-confirm');await click('rest-done');a
 await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');d.hero.spineRig.setSpeed(1);d.enemy.spineRig.setSpeed(1);});
 const before=await state(),amount=before.battle.damage;
 const p=await hitPoint('end-turn');await page.mouse.click(p.x,p.y);
-await page.waitForFunction(armor=>__survivalGame.armor<armor,before.armor);
+await page.waitForFunction(health=>__survivalGame.health<health,before.health);
 await page.screenshot({path:'output/playwright/spine08/brute-impact.png'});
 await idle();
 const rig=await page.evaluate(()=>{const d=cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getComponent('GameDirector');return d.enemy.inspectRig();});
 assert(rig.actor==='brute'&&rig.contactError<6,'Brute contact mismatch '+rig.contactError);
-assert((await state()).armor===Math.max(0,before.armor-amount),'Brute damage applied more than once');
+assert((await state()).health===Math.max(0,before.health-amount),'Brute damage applied more than once');
 await fight({preferWeapon:true});
 assert((await state()).phase==='rewards','Brute death did not complete');
 return {passed:true,realInputs:true,normalSpeed:true,bruteRig:rig,oneImpact:true,deathComplete:true,actions:trace.length,runtimeErrors};

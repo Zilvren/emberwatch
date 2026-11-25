@@ -33,7 +33,7 @@ for(const name of ['JournalScreen','DayTwoScreen','FailureScreen','MapScreen','B
   for(const key of ['banner/text0','banner/text2']){const n=bind(g,key);if(n!==undefined)g.graph[n]._active=false;}
   text(g,'banner/text1',1285,117,280,34,22,true);text(g,'battle/text0',1320,264,200,34,22,true);text(g,'battle/text1',1320,297,200,26,14);
   text(g,'battle/text3',180,536,180,28,19,true);text(g,'battle/text4',180,566,180,28,17,true);text(g,'battle/text5',1285,151,250,28,18,true);
-  put(g,find(g,'armorTrack'),180,591,180,6);put(g,find(g,'armorFill'),180,591,180,6);put(g,find(g,'enemyTrack'),1285,177,210,6);put(g,find(g,'enemyFill'),1285,177,210,6);
+  put(g,find(g,'healthTrack'),180,591,180,6);put(g,find(g,'healthFill'),180,591,180,6);put(g,find(g,'enemyTrack'),1285,177,210,6);put(g,find(g,'enemyFill'),1285,177,210,6);
   text(g,'battle/text6',244,505,340,28,14,true);text(g,'battle/text9',720,612,480,42,14);text(g,'battle/text10',1320,889,194,22,12);
   const turn=action(g,'end-turn',1320,816,116,116);if(turn){const p=comp(g,turn.node.__id__,script('ButtonPresentation'));g.graph[p.panel.__id__].corner=24;const label=g.graph[turn.caption.__id__];label._string='结束\n回合';label._enableWrapText=true;label._fontSize=23;label._lineHeight=28;}
   deck(g,'drawPile',72,794);deck(g,'discardPile',1340,650);
@@ -68,7 +68,7 @@ for(const name of ['JournalScreen','DayTwoScreen','FailureScreen','MapScreen','B
  const file='assets/prefabs/ui/HUD.prefab',g=load(file);const bar=g.graph.find(o=>o.__type__===script('StatusBar'));bar.presentation='floating';bar.theme=copy(theme);const paper=g.graph[bar.paper.__id__];paper.fill=color('000000',0);paper.line=color('000000',0);paper.innerLine=color('000000',0);
  for(const l of g.graph.filter(o=>o.__type__==='cc.Label')){l._color=color(ink);l._enableOutline=true;l._outlineColor=color('111b14',200);l._outlineWidth=1.5;}
  for(const o of g.graph.filter(o=>o.__type__===script('ButtonPresentation'))){o.theme=copy(theme);o.darkSurface=false;const owner=o.node.__id__,a=comp(g,owner,script('ButtonAction'));if(a?.actionId==='bag')o.variant='quiet';}
- g.graph[bar.brand.__id__]._fontSize=18;g.graph[bar.save.__id__]._fontSize=10;g.graph[bar.day.__id__]._fontSize=19;g.graph[bar.supplies.__id__]._fontSize=20;g.graph[bar.armor.__id__]._fontSize=20;
+ g.graph[bar.brand.__id__]._fontSize=18;g.graph[bar.save.__id__]._fontSize=10;g.graph[bar.day.__id__]._fontSize=19;g.graph[bar.supplies.__id__]._fontSize=20;g.graph[bar.health.__id__]._fontSize=20;
  g.save();
 }
 // Notifications use the scene's open upper centre with no opaque banner.

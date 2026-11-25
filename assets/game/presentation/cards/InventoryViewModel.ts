@@ -3,7 +3,7 @@ import type { OwnedCard } from '../../core/SurvivalGame';
 import { effectSummary } from '../../core/content/CardCatalog';
 
 export type BagFilter = 'all' | 'deck' | 'overflow' | 'found';
-export type BagSort = 'original' | 'name' | 'cost' | 'weight';
+export type BagSort = 'original' | 'name' | 'cost';
 export function visibleInventory(
     game: GameReadModel,
     filter: BagFilter,
@@ -40,7 +40,6 @@ export function inventoryCardView(card: Readonly<OwnedCard>, game: GameReadModel
             name: definition.name,
             status: carried ? (card.zone === 'overflow' ? '暂存' : '行囊 · 可入库') : '本局战斗牌',
             effect: effectSummary(definition, game.content.cards),
-            weight: definition.weight,
             canToggle: false,
             toggleLabel: '',
             toggleHint: carried
@@ -74,7 +73,6 @@ export function inventoryCardView(card: Readonly<OwnedCard>, game: GameReadModel
         name: definition.name,
         status,
         effect: effectSummary(definition, game.content.cards),
-        weight: definition.weight,
         canToggle,
         toggleLabel: card.selected ? '移出出战牌组' : '加入出战牌组',
         toggleHint:
@@ -84,7 +82,7 @@ export function inventoryCardView(card: Readonly<OwnedCard>, game: GameReadModel
                   ? '暂存中的卡牌不能编入'
                   : card.kind === 'cash'
                     ? '此物品不参与战斗'
-                    : '编组不会释放携带空间',
+                    : '可以在营地调整出战牌组。',
         canDiscard,
         discardLabel:
             card.kind === 'attack' || card.kind === 'dodge'

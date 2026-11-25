@@ -5,7 +5,7 @@ const {STAMINA_SCENARIO,registerScenario,getScenario,validateScenario}=load(file
 const {SurvivalGame}=load(file('core/SurvivalGame.ts'));
 const {routeMapModel}=load(file('presentation/map/RouteMapModel.ts'));
 const ok=r=>assert.equal(r.ok,true,r.message);
-const fixture=()=>({...structuredClone(STAMINA_SCENARIO),id:'extension-fixture',fixedNodeId:'cache',nodes:{cache:{type:'scavenge',title:'测试补给',icon:'supply',cost:0,supplies:[4,4],cardReward:'fixed'},ambush:{type:'battle',title:'测试遭遇',icon:'elite',enemyId:'raider'},camp:{type:'rest',title:'测试营地',icon:'rest',restoreArmor:1}},routes:{C:['ambush','camp']},scavengeFees:{},enemies:{raider:{title:'测试敌人',actorId:'wanderer',hp:2,attack:1,strongAttack:2,rewardSupplies:5,rewardChoices:2}},routeDescriptions:{C:'测试路径'}});
+const fixture=()=>({...structuredClone(STAMINA_SCENARIO),id:'extension-fixture',fixedNodeId:'cache',nodes:{cache:{type:'scavenge',title:'测试补给',icon:'supply',cost:0,supplies:[4,4],cardReward:'fixed'},ambush:{type:'battle',title:'测试遭遇',icon:'elite',enemyId:'raider'},camp:{type:'rest',title:'测试营地',icon:'rest',restoreHealth:1}},routes:{C:['ambush','camp']},scavengeFees:{},enemies:{raider:{title:'测试敌人',actorId:'wanderer',hp:2,attack:1,strongAttack:2,rewardSupplies:5,rewardChoices:2}},routeDescriptions:{C:'测试路径'}});
 test('new route, node and enemy IDs work through rules, map, save/resume and configured rewards',()=>{
  const scenario=registerScenario(fixture()), game=new SurvivalGame(17,scenario);
  ok(game.start('standard'));ok(game.enterNode());assert.equal(game.rewards.source,'cache');ok(game.claimSupplies());ok(game.finishRewards());

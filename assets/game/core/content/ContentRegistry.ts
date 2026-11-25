@@ -1,4 +1,4 @@
-import { CardDefinition, CardKind, Catalog, getCatalog } from './CardCatalog';
+import { CardDefinition, CardKind, Catalog, getCatalog, playableCard } from './CardCatalog';
 export interface CardSet {
     readonly catalog: Catalog;
     readonly cards: Readonly<Record<CardKind, CardDefinition>>;
@@ -12,7 +12,7 @@ export function scenarioCardSet(base: CardSet, scenario: { fieldDeck?: boolean; 
     const fieldCards = { ...base.cards };
     const faces = base.catalog.expedition?.faces ?? {};
     for (const id of Object.keys(faces))
-        fieldCards[id] = Object.freeze({ ...base.cards[id], ...faces[id] });
+        fieldCards[id] = Object.freeze(playableCard({ ...base.cards[id], ...faces[id] }));
     Object.freeze(fieldCards);
     return Object.freeze({
         ...base,
@@ -32,7 +32,7 @@ export function createCardSet(raw: Catalog = getCatalog()): CardSet {
         if (card.effect.labyrinth) Object.freeze(card.effect.labyrinth);
         Object.freeze(card.effect);
         Object.freeze(card);
-        cards[card.id] = card;
+        cards[card.id] = Object.freeze(playableCard(card));
         rewardWeights[card.id] = card.rewardWeight ?? 1;
         if (card.reward) (card.role === 'supply' ? supplyPool : rewardPool).push(card.id);
         for (let n = 0; n < card.initialCount; n++) initialDeck.push(card.id);

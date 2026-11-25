@@ -1,5 +1,5 @@
 await idle();let s=await state();assert(s.phase==='journal','Status regression starts at journal');
-assert(s.statusBar.height===80,'HUD changed main game content height');assert(s.statusBar.values.supplies===String(s.supplies)&&s.statusBar.input.armor===s.armor,'HUD does not reflect game state');
+assert(s.statusBar.height===80,'HUD changed main game content height');assert(s.statusBar.values.supplies===String(s.supplies)&&s.statusBar.input.health===s.health,'HUD does not reflect game state');
 for(const id of ['bag','log','help','audio','restart']){const h=s.hits.find(h=>h.id===id);assert(h.y>=0&&h.y+h.height<=80.1,'Toolbar outside original header: '+id);}
 await click('audio');let muted=(await state()).statusBar.input.muted;await click('audio');assert((await state()).statusBar.input.muted!==muted,'Audio toolbar did not toggle');
 await click('bag');assert((await state()).overlay==='bag','Bag toolbar did not open inventory');await click('modal-close');

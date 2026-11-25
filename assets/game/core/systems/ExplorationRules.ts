@@ -119,15 +119,9 @@ export class ExplorationRules {
             );
         } else if (definition.type === 'rest') {
             this.state.phase = 'rest';
-            const restored = this.state.critical
-                ? 0
-                : Math.min(definition.restoreArmor, 10 - this.state.armor);
-            this.state.armor += restored;
-            this.feedback.log(
-                this.state.critical
-                    ? '护甲临界，无法在这里恢复。'
-                    : `进入营地，恢复 ${restored} 点护甲。`
-            );
+            const restored = Math.min(definition.restoreHealth, 10 - this.state.health);
+            this.state.health += restored;
+            this.feedback.log(`进入营地，恢复 ${restored} 点血量。`);
         } else this.combat.startBattle(definition.enemyId);
         return this.feedback.result(true, `进入${nodeTitle(this.scenario, node)}。`);
     }

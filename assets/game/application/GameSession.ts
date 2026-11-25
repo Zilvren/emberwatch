@@ -33,7 +33,7 @@ export type GameCommand =
     | { type: 'discover'; kind: string | null }
     | { type: 'resolve-combat-choice'; id: string | null }
     | { type: 'discard-supplies'; amount: number }
-    | { type: 'repair' }
+    | { type: 'repair' | 'heal-at-shelter' }
     | { type: 'synthesize'; recipeId: string };
 
 /** Application flow: commands -> pure rules -> persistence. No engine or UI dependencies. */
@@ -68,6 +68,8 @@ export class GameSession {
             ? SurvivalGame.fromState(loaded.state, saves?.content)
             : new SurvivalGame(seed, this.defaultScenario, saves?.content);
         this.restored = !!loaded?.state;
+        if (loaded?.state && this.game.revision !== loaded.state.revision)
+            saves?.save(this.game.exportState());
         this.startupMessage =
             loaded?.warning ||
             (this.restored
@@ -159,7 +161,8 @@ export class GameSession {
                 result = g.finishRest();
                 break;
             case 'repair':
-                result = g.repairAtShelter();
+            case 'heal-at-shelter':
+                result = g.healAtShelter();
                 break;
             case 'continue-journal':
                 result = g.continueJournal();
