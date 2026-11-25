@@ -3,6 +3,7 @@ export interface CardSet {
     readonly catalog: Catalog;
     readonly cards: Readonly<Record<CardKind, CardDefinition>>;
     readonly rewardPool: readonly CardKind[];
+    readonly rewardWeights: Readonly<Record<CardKind, number>>;
     readonly supplyPool: readonly CardKind[];
     readonly initialDeck: readonly CardKind[];
 }
@@ -24,6 +25,7 @@ export function createCardSet(raw: Catalog = getCatalog()): CardSet {
     const catalog: Catalog = JSON.parse(JSON.stringify(raw));
     const cards: Record<CardKind, CardDefinition> = Object.create(null),
         rewardPool: CardKind[] = [],
+        rewardWeights: Record<CardKind, number> = Object.create(null),
         supplyPool: CardKind[] = [],
         initialDeck: CardKind[] = [];
     for (const card of catalog.cards) {
@@ -31,6 +33,7 @@ export function createCardSet(raw: Catalog = getCatalog()): CardSet {
         Object.freeze(card.effect);
         Object.freeze(card);
         cards[card.id] = card;
+        rewardWeights[card.id] = card.rewardWeight ?? 1;
         if (card.reward) (card.role === 'supply' ? supplyPool : rewardPool).push(card.id);
         for (let n = 0; n < card.initialCount; n++) initialDeck.push(card.id);
     }
@@ -63,6 +66,7 @@ export function createCardSet(raw: Catalog = getCatalog()): CardSet {
         catalog,
         cards: Object.freeze(cards),
         rewardPool: Object.freeze(rewardPool),
+        rewardWeights: Object.freeze(rewardWeights),
         supplyPool: Object.freeze(supplyPool),
         initialDeck: Object.freeze(initialDeck),
     });

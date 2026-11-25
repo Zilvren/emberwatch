@@ -1,5 +1,5 @@
 import { CardSet } from '../content/ContentRegistry';
-import { activeDiscoveryCards } from '../content/CardCatalog';
+import { activeDiscoveryCards, generatedCards } from '../content/CardCatalog';
 import { GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
 import { Random } from '../Random';
 import { ActionResult, NodeKind, Route } from '../RulesTypes';
@@ -21,6 +21,14 @@ export class ExplorationRules {
         private readonly fail: (reason: string) => void,
         private readonly collectSupplies: (source: string, amount: number, discoveries?: number) => void
     ) {}
+    private randomReward(pool: readonly string[]): string {
+        const boosts = this.state.synthesisRewardBoosts ?? {};
+        return this.random.weightedSample(
+            pool,
+            (kind) => (this.content.rewardWeights[kind] ?? 1) * (boosts[kind] ?? 1),
+            1
+        )[0] ?? pool[0];
+    }
     get currentNode(): NodeKind | 'choice' | 'return' {
         return currentNodeId(this.state, this.scenario);
     }
@@ -92,17 +100,16 @@ export class ExplorationRules {
                 return this.feedback.result(true, `${definition.title} · 找到 ${supplies} 物资`);
             }
             this.state.phase = 'rewards';
-            const pool =
-                this.scenario.runDeck && this.content.supplyPool.length
-                    ? this.content.supplyPool
-                    : this.content.rewardPool;
+            const pool = this.scenario.runDeck
+                ? [...this.content.supplyPool, ...this.content.rewardPool]
+                : this.content.rewardPool;
             this.state.rewards = {
                 source: node,
                 supplies,
                 cards: [
                     definition.cardReward === 'fixed'
                         ? this.content.catalog.fixedReward
-                        : pool[this.random.int(0, pool.length - 1)],
+                        : this.randomReward(pool),
                 ],
                 supplyTaken: false,
                 cardTaken: false,
@@ -132,8 +139,9 @@ export class ExplorationRules {
                 (c) =>
                     this.content.cards[c.kind].effect.type === 'damage' ||
                     (this.content.cards[c.kind].effect.type === 'equip' &&
-                        this.content.cards[this.content.cards[c.kind].effect.generatedCard!].effect
-                            .type === 'damage')
+                        generatedCards(this.content.cards[c.kind].effect).some(
+                            (kind) => this.content.cards[kind].effect.type === 'damage'
+                        ))
             )
         )
             return this.feedback.result(false, '至少选择一张能够造成伤害的牌再出发。');

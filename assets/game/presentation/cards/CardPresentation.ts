@@ -65,6 +65,7 @@ export class CardPresentation extends Component {
     private blocked = '';
     private hovered = false;
     private selected = false;
+    private rageReady = false;
     private caption = '';
     expanded = false;
     onLoad(): void {
@@ -95,6 +96,7 @@ export class CardPresentation extends Component {
         options: CardViewOptions = {}
     ): void {
         this.fieldFace = !!options.field;
+        this.rageReady = !!options.rageReady;
         this.showModel(
             cardViewModel(definitions[kind], definitions, costUnit, options),
             blocked,
@@ -109,6 +111,7 @@ export class CardPresentation extends Component {
         id = ''
     ): void {
         this.fieldFace = false;
+        this.rageReady = false;
         this.showModel(cardReferenceViewModel(data), blocked, caption, id);
     }
     private showModel(model: CardDisplayModel, blocked: string, caption: string, id: string): void {
@@ -287,7 +290,7 @@ export class CardPresentation extends Component {
         if (this.panel) {
             if (this.labyrinthTheme) {
                 this.panel.fill = new Color().fromHEX(this.selected && !this.blocked ? colors.paperSelected : colors.paper);
-                this.panel.line = new Color().fromHEX(this.selected || this.hovered ? colors.ochre : colors.line);
+                this.panel.line = new Color().fromHEX(this.rageReady ? '#b44f45' : this.selected || this.hovered ? colors.ochre : colors.line);
                 this.panel.fieldStock = false;
                 this.panel.redraw();
             } else {
@@ -301,9 +304,11 @@ export class CardPresentation extends Component {
                       : (colors?.paper ?? '#f2eadb')
             );
             this.panel.line = new Color().fromHEX(
-                this.blocked
-                    ? (colors?.lineSoft ?? '#b3a68e')
-                    : this.hovered
+                this.rageReady
+                    ? '#b44f45'
+                    : this.blocked
+                      ? (colors?.lineSoft ?? '#b3a68e')
+                      : this.hovered
                       ? (colors?.ochre ?? '#bb9b6d')
                       : this.fieldFace
                         ? '#333941'

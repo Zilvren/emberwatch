@@ -1,4 +1,4 @@
-import { ART_IDS, CARD, CardDefinition, effectSummary } from '../../core/content/CardCatalog';
+import { ART_IDS, CARD, CardDefinition, effectSummary, generatedCards } from '../../core/content/CardCatalog';
 import type { CardDesignReference } from './CardDesignReference';
 
 export const CARD_ART_IDS = [...ART_IDS, 'rope', 'battery'];
@@ -67,6 +67,7 @@ export interface CardViewOptions {
     neededForSynthesis?: boolean;
     damage?: number;
     cost?: number;
+    rageReady?: boolean;
 }
 
 /** Compatibility adapter for the existing teaching catalog and web editor. */
@@ -82,9 +83,11 @@ export function cardViewModel(
     const [baseEffect, ...additional] = data.effect.labyrinth ? effect.split('，') : [effect];
     const primary =
         data.effect.type === 'equip'
-            ? `生成「${definitions[data.effect.generatedCard ?? '']?.name ?? data.effect.generatedCard}」`
-            : data.effect.type === 'damage' && damage !== undefined && damage !== data.effect.amount
-              ? `造成 ${damage} 点伤害`
+            ? `生成「${generatedCards(data.effect).map((id) => definitions[id]?.name ?? id).join('」「')}」`
+              : data.effect.type === 'damage' && damage !== undefined && damage !== data.effect.amount
+              ? `造成 ${damage} 点伤害${data.effect.block ? `，获得 ${data.effect.block} 点格挡` : ''}`
+              : data.effect.type === 'damage'
+                ? `造成 ${data.effect.amount} 点伤害${data.effect.block ? `，获得 ${data.effect.block} 点格挡` : ''}`
               : baseEffect.length > 21 && data.effect.labyrinth ? '查看效果说明' : baseEffect;
     const context = [additional.join('，'), primary === '查看效果说明' ? baseEffect : '', detail].filter(Boolean).join('。');
     const keywords =

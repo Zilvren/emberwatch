@@ -50,6 +50,9 @@ export class ShelterRules {
             repairSpent: 0,
         };
         if (this.scenario.runDeck) this.state.cards = [];
+        this.state.synthesisRewardBoosts = {};
+        this.state.synthesisBoostedRecipes = [];
+        this.state.synthesisMaterialBoostedRecipes = [];
         this.state.critical = false;
         this.state.phase = 'shelter';
         this.state.day++;

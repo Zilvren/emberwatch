@@ -17,6 +17,7 @@ import { shelterSummary } from './ui/ShelterSummaryModel';
 import { rulesNotice } from './ui/RulesNoticeModel';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { TideBattleLayout } from './ui/TideBattleLayout';
+import { generatedCards } from '../core/content/CardCatalog';
 /** Native view binding only. No game commands, storage or input subscriptions. */
 export class GameRenderer extends NativeViewWriter {
     private readonly popups: PopupPresenter;
@@ -280,6 +281,8 @@ export class GameRenderer extends NativeViewWriter {
             b = g.battle!,
             attack = b.intent === 'attack',
             world = screen.getChildByName('World')!;
+        const shieldSpearEquipped = (b.weapons ?? (b.weapon ? [b.weapon] : []))
+            .some((weapon) => (g.content.cards[weapon.kind].weaponSlots ?? 1) === 2);
         const gauge = screen.getChildByName('StaminaGauge');
         if (gauge) gauge.active = g.scenario.battleResource === 'stamina';
         const definition = g.scenario.enemies[b.enemy];
@@ -316,13 +319,17 @@ export class GameRenderer extends NativeViewWriter {
                       ? '结束回合将失守'
                       : `结束回合将受伤 ${Math.max(0, g.incomingDamage - b.block)}`
                 : `下次攻击 ${b.strongAttack}`,
+            'battle/text2': shieldSpearEquipped && b.rage !== undefined
+                ? `盾矛蓄势 ${'●'.repeat(b.rage)}${'○'.repeat(5 - b.rage)}`
+                : '',
             'battle/text3': `护甲 ${g.armor}/10`,
             'battle/text4': `格挡 ${b.block}`,
             'battle/text5': `敌人生命 ${b.hp}/${b.maxHp}`,
             'battle/text6': g.scenario.labyrinth ? '护甲临界 · 再次受伤即失守' : g.scenario.fieldDeck
                 ? '压力服临界 · 再次受伤即失守'
                 : '感染临界：再次实际受伤即失败',
-            'battle/text8': b.turn === b.equippedTurn ? '下回合生成挥砍' : '每回合生成挥砍',
+            'battle/text7': '',
+            'battle/text8': '',
             'battle/text9': this.ui.busy
                 ? '正在行动…'
                 : this.ui.selectedCard
@@ -332,7 +339,7 @@ export class GameRenderer extends NativeViewWriter {
                         ? '攻击牌点选敌人 · 长按手牌查看说明'
                         : ''
                     : '攻击牌选敌人，其余牌点击即用\n长按看详情 · 拖出场地可取消',
-            'battle/text10': `回合 ${b.turn} · 手牌 ${b.hand.length} / 6`,
+            'battle/text10': `回合 ${b.turn} · 手牌 ${b.hand.length} / ${g.scenario.runDeck ? 10 : 6}`,
             'drawPile/text0': b.draw.length,
             'discardPile/text0': b.discard.length,
             'battle/stamina-value': `${b.stamina}/${b.maxStamina}`,
@@ -340,11 +347,17 @@ export class GameRenderer extends NativeViewWriter {
         });
         screen.getChildByName('CriticalWarning')!.active = g.critical;
         screen.getChildByName('WeaponSlot')!.active = !!b.weapon;
-        if (b.weapon)
-            this.text(screen, {
-                'battle/text7': `${this.game.content.cards[b.weapon.kind].name}已装备`,
-                'battle/text8': `${b.turn === b.equippedTurn ? '下回合起生成' : '每回合生成'}${this.game.content.cards[this.game.content.cards[b.weapon.kind].effect.generatedCard!].name}`,
+        if (b.weapon) {
+            const equipped = b.weapons ?? [b.weapon];
+            const names = equipped.map((weapon) => {
+                const definition = this.game.content.cards[weapon.kind];
+                return `${definition.name}：${generatedCards(definition.effect).map((id) => this.game.content.cards[id].name).join('、')}`;
             });
+            this.text(screen, {
+                'battle/text7': names.join(' · '),
+                'battle/text8': `${b.turn === b.equippedTurn ? '下回合起生成' : '每回合生成'}${names.map((name) => name.split('：')[1] ?? '').join(' · ')}`,
+            });
+        }
         screen.getChildByName('TargetGuide')!.active = !!this.ui.selectedCard;
         for (const progress of screen.getComponentsInChildren(UIProgress))
             progress.setRatio(progress.key === 'armor' ? g.armor / 10 : b.hp / b.maxHp);

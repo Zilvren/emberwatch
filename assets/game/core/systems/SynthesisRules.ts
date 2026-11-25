@@ -5,7 +5,13 @@ import { ActionResult, CardKind, OwnedCard } from '../RulesTypes';
 import { RuleFeedback, SynthesisState } from './RuleContext';
 
 export class SynthesisRules {
-    private previous?: { cards: OwnedCard[]; revision: number };
+    private previous?: {
+        cards: OwnedCard[];
+        revision: number;
+        boosts: Record<string, number>;
+        boostedRecipes: string[];
+        materialBoostedRecipes: string[];
+    };
 
     constructor(
         private readonly state: SynthesisState,
@@ -32,6 +38,26 @@ export class SynthesisRules {
         this.previous = undefined;
     }
 
+    private boostNextMaterials(recipeId: string): void {
+        const boostedRecipes = this.state.synthesisBoostedRecipes ?? [];
+        if (boostedRecipes.indexOf(recipeId) >= 0) return;
+        const recipe = this.content.catalog.recipes.find(({ id }) => id === recipeId);
+        if (!recipe) return;
+        const products = new Set(recipe.products.map(({ card }) => card));
+        const currentMaterials = new Set(recipe.materials.map(({ card }) => card));
+        const boosts = this.state.synthesisRewardBoosts ?? (this.state.synthesisRewardBoosts = {});
+        for (const next of this.content.catalog.recipes) {
+            if (!next.materials.some(({ card }) => products.has(card))) continue;
+            for (const material of next.materials) {
+                if (products.has(material.card) || currentMaterials.has(material.card)) continue;
+                if (this.content.cards[material.card]?.reward)
+                    boosts[material.card] = Math.max(2, boosts[material.card] ?? 1);
+            }
+        }
+        boostedRecipes.push(recipeId);
+        this.state.synthesisBoostedRecipes = boostedRecipes;
+    }
+
     craft(recipeId: string, mapUnlocked: boolean): ActionResult {
         const blocked = this.blocked(mapUnlocked);
         if (blocked) return this.feedback.result(false, blocked);
@@ -42,6 +68,9 @@ export class SynthesisRules {
 
         const needed = new Map(recipe.materials.map(({ card, count }) => [card, count]));
         const previousCards = this.state.cards;
+        const previousBoosts = { ...(this.state.synthesisRewardBoosts ?? {}) };
+        const previousBoostedRecipes = [...(this.state.synthesisBoostedRecipes ?? [])];
+        const previousMaterialBoostedRecipes = [...(this.state.synthesisMaterialBoostedRecipes ?? [])];
         const cards = previousCards.filter(({ kind }) => {
             const remaining = needed.get(kind) ?? 0;
             if (!remaining) return true;
@@ -52,13 +81,20 @@ export class SynthesisRules {
             for (let index = 0; index < count; index++) cards.push(this.newCard(card));
         }
         this.state.cards = cards;
+        this.boostNextMaterials(recipeId);
         const products = recipe.products.map(
             ({ card, count }) => `${this.content.cards[card].name} ×${count}`
         );
         const message = `已合成 ${products.join('、')}，产物已加入本局卡组。`;
         this.feedback.log(message);
         const result = this.feedback.result(true, message);
-        this.previous = { cards: previousCards, revision: this.state.revision };
+        this.previous = {
+            cards: previousCards,
+            revision: this.state.revision,
+            boosts: previousBoosts,
+            boostedRecipes: previousBoostedRecipes,
+            materialBoostedRecipes: previousMaterialBoostedRecipes,
+        };
         return result;
     }
 
@@ -68,6 +104,9 @@ export class SynthesisRules {
         if (!this.previous || !this.canUndo)
             return this.feedback.result(false, '当前没有可撤销的合成。');
         this.state.cards = this.previous.cards;
+        this.state.synthesisRewardBoosts = this.previous.boosts;
+        this.state.synthesisBoostedRecipes = this.previous.boostedRecipes;
+        this.state.synthesisMaterialBoostedRecipes = this.previous.materialBoostedRecipes;
         this.close();
         const message = '已撤销最近一次合成并归还材料。';
         this.feedback.log(message);
