@@ -39,7 +39,7 @@ import { flyCardBack } from './effects/FlyingCardBack';
 import { enterEncounterPreview } from './dev/EncounterPreview';
 import {
     FIELD_SCENARIO,
-    RUN_DECK_SCENARIO,
+    SYNTHESIS_SCENARIO,
     STAMINA_SCENARIO,
     TUTORIAL_SCENARIO,
 } from '../core/content/GameScenario';
@@ -184,8 +184,8 @@ export class GameDirector extends Component {
                   ? STAMINA_SCENARIO
                   : seed !== null && query?.get('scenario') === 'tide'
                     ? FIELD_SCENARIO
-                    : mapSynthesis || (seed !== null && query?.get('scenario') === 'synthesis')
-                      ? RUN_DECK_SCENARIO
+                    : mapSynthesis || query?.get('scenario') === 'synthesis'
+                      ? SYNTHESIS_SCENARIO
                       : undefined,
             mapSynthesis
         );
@@ -574,6 +574,7 @@ export class GameDirector extends Component {
             entryTier: g.entryTier,
             stamina: g.battle?.stamina,
             maxStamina: g.battle?.maxStamina,
+            strength: g.strength,
             selectedCard: this.ui.selectedCard,
             day: g.day,
             supplies: g.supplies,

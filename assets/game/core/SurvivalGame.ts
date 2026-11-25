@@ -337,6 +337,9 @@ export class SurvivalGame {
     attackDamage(kind: CardKind): number {
         return this.combatRules.attackDamage(kind);
     }
+    get strength(): number {
+        return this.combatRules.strength;
+    }
     play(id: string): ActionResult {
         return this.combatRules.play(id);
     }

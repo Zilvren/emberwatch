@@ -4,6 +4,7 @@ import { Random } from '../Random';
 import { ActionResult, CardKind, CombatCard, OwnedCard } from '../RulesTypes';
 import {
     blockAmount,
+    CardDefinition,
     generatedCards,
     hasBlockEffect,
 } from '../content/CardCatalog';
@@ -27,9 +28,15 @@ export class CombatRules {
         private readonly currentNode: () => string,
         private readonly collectSupplies: (source: string, amount: number, discoveries?: number) => void
     ) {}
-    private readonly expandedCombat = this.scenario.runDeck === true;
-    private readonly handLimit = this.expandedCombat ? 10 : 6;
-    private readonly turnDraw = this.expandedCombat ? 4 : this.scenario.fieldDeck ? 5 : 3;
+    private get expandedCombat(): boolean {
+        return this.scenario.runDeck === true;
+    }
+    private get handLimit(): number {
+        return this.expandedCombat ? 10 : 6;
+    }
+    private get turnDraw(): number {
+        return this.expandedCombat ? 4 : this.scenario.fieldDeck ? 5 : 3;
+    }
     private weapons(b: NonNullable<CombatState['battle']>): CombatCard[] {
         return b.weapons ?? (b.weapon ? [b.weapon] : []);
     }
@@ -41,6 +48,20 @@ export class CombatRules {
     }
     private shieldSpearEquipped(b: NonNullable<CombatState['battle']>): boolean {
         return this.weapons(b).some((card) => this.weaponSlots(card.kind) === 2);
+    }
+    get strength(): number {
+        const battle = this.state.battle;
+        if (!battle) return 0;
+        const equipped = this.weapons(battle).reduce(
+            (highest, weapon) => Math.max(highest, this.content.cards[weapon.kind].effect.equippedStrength ?? 0),
+            0
+        );
+        return equipped + (battle.gainedStrength ?? 0);
+    }
+    private chargedEffect(effect: CardDefinition['effect']) {
+        const battle = this.state.battle, rage = effect.rage;
+        return battle && rage && this.expandedCombat && this.shieldSpearEquipped(battle) &&
+            (battle.rage ?? 0) >= rage.threshold ? rage : undefined;
     }
     private addRage(b: NonNullable<CombatState['battle']>, amount = 1): void {
         if (!this.expandedCombat || !this.shieldSpearEquipped(b) || !amount) return;
@@ -109,7 +130,7 @@ export class CombatRules {
     ): void {
         const definition = this.content.cards[kind];
         const effect = definition.effect;
-        const damage = effect.type === 'damage' ? this.attackDamage(kind) : 0;
+        const damage = effect.type === 'damage' ? this.attackDamage(kind, false) : 0;
         if (damage > 0) this.applyDamage(damage, b, !preserveDamageBuff);
         const block = blockAmount(effect);
         if (block > 0) this.applyBlock(block, b);
@@ -219,26 +240,20 @@ export class CombatRules {
         this.feedback.log(message);
         return this.feedback.result(true, message);
     }
-    attackDamage(kind: string): number {
+    attackDamage(kind: string, enhanced = true): number {
         const card = this.content.cards[kind], effect = card.effect,
             b = this.state.battle;
+        if (effect.type !== 'damage') return 0;
         const triggered =
             effect.bonusWhen === 'after-attack'
                 ? b?.attackedThisTurn
                 : effect.bonusWhen === 'behind-cover' && (b?.block ?? 0) >= 4;
-        let damage = effect.amount + (triggered ? (effect.bonus ?? 0) : 0);
-        if (
-            b &&
-            this.expandedCombat &&
-            this.shieldSpearEquipped(b) &&
-            effect.rage &&
-            (b.rage ?? 0) >= effect.rage.threshold
-        ) {
-            damage = effect.rage.damage ?? damage;
-            if (effect.rage.damagePercentMaxHp)
-                damage += Math.ceil(b.maxHp * effect.rage.damagePercentMaxHp);
-        }
-        return b ? labyrinthDamage(b, card, damage) : damage;
+        const rage = enhanced ? this.chargedEffect(effect) : undefined;
+        const base = rage?.damage ?? (effect.amount + (triggered ? (effect.bonus ?? 0) : 0));
+        const damage = (base + this.strength) * (effect.hits ?? 1);
+        if (!b) return damage;
+        const extra = rage?.damagePercentMaxHp ? Math.ceil(b.maxHp * rage.damagePercentMaxHp) : 0;
+        return labyrinthDamage(b, card, damage) + extra;
     }
     cardCost(kind: string): number {
         return staminaCost(this.content.cards[kind], this.state.battle?.calm);
@@ -356,25 +371,17 @@ export class CombatRules {
                 b.equippedTurn = b.turn;
             }
         } else {
-            const rageReady =
-                this.expandedCombat &&
-                this.shieldSpearEquipped(b) &&
-                (b.rage ?? 0) >= (effect.rage?.threshold ?? Number.MAX_SAFE_INTEGER);
-            if (rageReady) this.consumeRage(b);
             if (effect.type === 'damage') {
-                let damage = this.attackDamage(card.kind);
-                if (rageReady && effect.rage) {
-                    damage = effect.rage.damage ?? damage;
-                    if (effect.rage.damagePercentMaxHp)
-                        damage += Math.ceil(b.maxHp * effect.rage.damagePercentMaxHp);
-                }
-                const preserveDamageBuff = rageReady && !!effect.rage?.copyDefenseTimes && !!b.calm?.calibrated;
+                const rage = this.chargedEffect(effect);
+                const damage = this.attackDamage(card.kind);
+                if (rage) this.consumeRage(b);
+                const preserveDamageBuff = !!rage?.copyDefenseTimes && !!b.calm?.calibrated;
                 this.applyDamage(damage, b, !preserveDamageBuff);
                 if (effect.block) this.applyBlock(effect.block, b);
-                if (rageReady && effect.rage?.copyDefenseTimes) {
+                if (rage?.copyDefenseTimes) {
                     const target = b.lastDefenseCardKind;
                     if (target) {
-                        for (let copy = 0; copy < effect.rage.copyDefenseTimes; copy++)
+                        for (let copy = 0; copy < rage.copyDefenseTimes; copy++)
                             this.copyDefenseEffect(target, b, preserveDamageBuff);
                     }
                     if (preserveDamageBuff) consumeCalibration(b);
@@ -382,12 +389,15 @@ export class CombatRules {
             } else if (effect.type === 'block') this.applyBlock(effect.amount, b);
             if (effect.type === 'heal')
                 this.state.health = Math.min(MAX_HEALTH, this.state.health + effect.amount);
+            if (effect.type === 'strength')
+                b.gainedStrength = (b.gainedStrength ?? 0) + effect.amount;
             if (b.hp > 0 && (effect.type === 'draw' || effect.extraDraw))
                 this.drawCards(effect.type === 'draw' ? effect.amount : effect.extraDraw!);
             if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count),
                 (message) => this.feedback.log(message));
             if (hasBlockEffect(effect)) b.lastDefenseCardKind = card.kind;
-            if ((!card.temporary || !this.scenario.fieldDeck) &&
+            if (!definition.oncePerBattle &&
+                (!card.temporary || (!this.expandedCombat && !this.scenario.fieldDeck)) &&
                 effect.type !== 'power' && effect.labyrinth?.rule !== 'gain-stamina')
                 b.discard.push(card);
         }

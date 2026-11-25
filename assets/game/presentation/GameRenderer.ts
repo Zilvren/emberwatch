@@ -289,14 +289,22 @@ export class GameRenderer extends NativeViewWriter {
         this.enemy = actors.find((actor) => actor.actorId === definition.actorId) ?? null;
         if (!this.enemy) throw new Error('缺少敌人表现绑定：' + definition.actorId);
         const calm = b.calm;
-        const calmLabel = screen.getChildByName('banner-text2');
-        if (calmLabel) {
-            calmLabel.active = !!calm;
-            if (calm) calmLabel.setPosition(-353, 280);
-        }
         const calmText = calm ? `镇静 ${calm.persistent + calm.temporary} / ${calm.limit}` +
             (calm.temporary ? ` · 临时 ${calm.temporary}` : '') +
             (calm.freeSkill ? ' · 下张技能免费' : '') + (calm.calibrated ? ' · 已校准' : '') : '';
+        const strength = g.strength;
+        const status = [
+            calmText,
+            shieldSpearEquipped && b.rage !== undefined
+                ? `盾矛蓄势 ${'●'.repeat(b.rage)}${'○'.repeat(5 - b.rage)}`
+                : '',
+            strength ? `力量 +${strength}` : '',
+        ].filter(Boolean).join(' · ');
+        const statusLabel = screen.getChildByName('banner-text2');
+        if (statusLabel) {
+            statusLabel.active = !!status;
+            if (status) statusLabel.setPosition(-353, 280);
+        }
         const intent = screen.getChildByName('battle-text0');
         const attackIcon = intent?.getChildByName('AttackGlyph');
         const prepIcon = intent?.getChildByName('PrepareGlyph');
@@ -305,7 +313,7 @@ export class GameRenderer extends NativeViewWriter {
         this.text(screen, {
             'banner/text0': `ENCOUNTER / ROUND ${b.turn}`,
             'banner/text1': definition.title,
-            ...(calm ? { 'banner/text2': calmText } : {}),
+            'banner/text2': status,
             'battle/text0': attack ? String(g.incomingDamage) : '',
             'battle/text1': calm?.deferred === 'scheduled' ? '已暂缓 · 即将额外行动'
                 : attack
@@ -315,9 +323,7 @@ export class GameRenderer extends NativeViewWriter {
                       ? '结束回合将失守'
                       : `结束回合将受伤 ${Math.max(0, g.incomingDamage - b.block)}`
                 : `下次攻击 ${b.strongAttack}`,
-            'battle/text2': shieldSpearEquipped && b.rage !== undefined
-                ? `盾矛蓄势 ${'●'.repeat(b.rage)}${'○'.repeat(5 - b.rage)}`
-                : '',
+            'battle/text2': '点击敌人 · 打出攻击',
             'battle/text3': `${g.health}/10`,
             'battle/text4': String(b.block),
             'battle/text5': `${b.hp}/${b.maxHp}`,

@@ -66,6 +66,67 @@
           "count": 1
         }
       ]
+    },
+    {
+      "id": "sharpen_knife",
+      "materials": [
+        {
+          "card": "knife",
+          "count": 1
+        },
+        {
+          "card": "whetstone_1",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "sharpened_knife",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "hone_knife",
+      "materials": [
+        {
+          "card": "sharpened_knife",
+          "count": 1
+        },
+        {
+          "card": "whetstone_2",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "honed_knife",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "forge_dragon_slayer",
+      "materials": [
+        {
+          "card": "honed_knife",
+          "count": 1
+        },
+        {
+          "card": "whetstone_3",
+          "count": 1
+        },
+        {
+          "card": "dragon_blood",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "dragon_slayer",
+          "count": 1
+        }
+      ]
     }
   ],
   "expedition": {
@@ -991,6 +1052,215 @@
           "threshold": 5,
           "copyDefenseTimes": 3
         }
+      }
+    },
+    {
+      "id": "whetstone_1",
+      "name": "磨刀石·一阶",
+      "tag": "技能 · 合成材料",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "synthesisOnly": true,
+      "color": "#96866e",
+      "art": "evade",
+      "rewardWeight": 2.5,
+      "canSynthesize": true,
+      "oncePerBattle": true,
+      "effect": {
+        "type": "strength",
+        "amount": 1
+      }
+    },
+    {
+      "id": "whetstone_2",
+      "name": "磨刀石·二阶",
+      "tag": "技能 · 合成材料",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "synthesisOnly": true,
+      "color": "#94776a",
+      "art": "evade",
+      "rewardWeight": 1.7,
+      "canSynthesize": true,
+      "oncePerBattle": true,
+      "effect": {
+        "type": "strength",
+        "amount": 1
+      }
+    },
+    {
+      "id": "whetstone_3",
+      "name": "磨刀石·三阶",
+      "tag": "技能 · 合成材料",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "synthesisOnly": true,
+      "color": "#ab7064",
+      "art": "evade",
+      "rewardWeight": 0.75,
+      "canSynthesize": true,
+      "oncePerBattle": true,
+      "effect": {
+        "type": "strength",
+        "amount": 2
+      }
+    },
+    {
+      "id": "dragon_blood",
+      "name": "龙血",
+      "tag": "稀有合成材料",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "synthesisOnly": true,
+      "color": "#b45150",
+      "art": "repair",
+      "rewardWeight": 0.35,
+      "canSynthesize": true,
+      "oncePerBattle": true,
+      "effect": {
+        "type": "heal",
+        "amount": 10
+      }
+    },
+    {
+      "id": "sharpened_knife",
+      "name": "打磨菜刀",
+      "tag": "武器 · 合成产物",
+      "cost": 2,
+      "weight": 0,
+      "text": "占用 1 个武器槽。",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "synthesisOnly": true,
+      "color": "#bc925f",
+      "art": "knife",
+      "canSynthesize": true,
+      "weaponSlots": 1,
+      "effect": {
+        "type": "equip",
+        "amount": 0,
+        "equippedStrength": 1,
+        "generatedCards": [
+          "slash_rank_one"
+        ]
+      }
+    },
+    {
+      "id": "honed_knife",
+      "name": "精磨菜刀",
+      "tag": "武器 · 合成产物",
+      "cost": 2,
+      "weight": 0,
+      "text": "占用 1 个武器槽。",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "synthesisOnly": true,
+      "color": "#c49857",
+      "art": "knife",
+      "canSynthesize": true,
+      "weaponSlots": 1,
+      "effect": {
+        "type": "equip",
+        "amount": 0,
+        "equippedStrength": 2,
+        "generatedCards": [
+          "slash_rank_two"
+        ]
+      }
+    },
+    {
+      "id": "dragon_slayer",
+      "name": "屠龙宝刀",
+      "tag": "武器 · 合成产物",
+      "cost": 2,
+      "weight": 0,
+      "text": "占用 1 个武器槽。",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "synthesisOnly": true,
+      "color": "#d39a52",
+      "art": "knife",
+      "weaponSlots": 1,
+      "effect": {
+        "type": "equip",
+        "amount": 0,
+        "equippedStrength": 4,
+        "generatedCards": [
+          "slash_dragon"
+        ]
+      }
+    },
+    {
+      "id": "slash_rank_one",
+      "name": "一阶挥砍",
+      "tag": "攻击 · 战斗临时牌",
+      "cost": 1,
+      "weight": 0,
+      "text": "打出后移出本场，战斗结束时消失。",
+      "role": "temporary",
+      "initialCount": 0,
+      "reward": false,
+      "synthesisOnly": true,
+      "color": "#bc925f",
+      "art": "slash",
+      "effect": {
+        "type": "damage",
+        "amount": 7
+      }
+    },
+    {
+      "id": "slash_rank_two",
+      "name": "二阶挥砍",
+      "tag": "攻击 · 战斗临时牌",
+      "cost": 1,
+      "weight": 0,
+      "text": "打出后移出本场，战斗结束时消失。",
+      "role": "temporary",
+      "initialCount": 0,
+      "reward": false,
+      "synthesisOnly": true,
+      "color": "#c49857",
+      "art": "slash",
+      "effect": {
+        "type": "damage",
+        "amount": 10
+      }
+    },
+    {
+      "id": "slash_dragon",
+      "name": "屠龙挥砍",
+      "tag": "攻击 · 战斗临时牌",
+      "cost": 1,
+      "weight": 0,
+      "text": "打出后移出本场，战斗结束时消失。",
+      "role": "temporary",
+      "initialCount": 0,
+      "reward": false,
+      "synthesisOnly": true,
+      "color": "#d39a52",
+      "art": "slash",
+      "effect": {
+        "type": "damage",
+        "amount": 20
       }
     }
   ]

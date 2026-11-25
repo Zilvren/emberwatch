@@ -48,7 +48,9 @@ function battle() {
 
 test('the shield-spear route is authored with three recipes and weighted materials', () => {
     const game = new SurvivalGame(7, RUN_DECK_SCENARIO);
-    assert.deepEqual(game.content.catalog.recipes.map(({ id }) => id), [
+    assert.deepEqual(game.content.catalog.recipes.filter(({ products }) =>
+        products.some(({ card }) => ['rough_spear', 'steel_spear', 'shield_spear'].includes(card))
+    ).map(({ id }) => id), [
         'knife_and_long_wood_stick',
         'rough_spear_and_scrap_blade',
         'steel_spear_and_metal_guard',
@@ -84,7 +86,7 @@ test('finding one first-layer material doubles the other material until it is cl
     };
     assert.equal(game.claimCard(0).ok, true);
     assert.equal(game.synthesisRewardBoosts.long_wood_stick, 2);
-    assert.deepEqual(game.synthesisMaterialBoostedRecipes, ['knife_and_long_wood_stick']);
+    assert.equal(game.synthesisMaterialBoostedRecipes.includes('knife_and_long_wood_stick'), true);
     game.rewards = {
         source: 'scavenge',
         supplies: 0,

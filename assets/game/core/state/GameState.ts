@@ -317,6 +317,8 @@ export function validateGameState(
                 'weapon slots'
             );
         }
+        if (b.gainedStrength !== undefined)
+            integer(b.gainedStrength, 0, Number.MAX_SAFE_INTEGER, 'gained strength');
         if (b.rage !== undefined) integer(b.rage, 0, 5, 'rage');
         if (b.lastDefenseCardKind !== undefined)
             requireValue(

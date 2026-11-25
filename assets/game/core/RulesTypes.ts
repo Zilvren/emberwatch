@@ -41,6 +41,7 @@ export interface Battle {
     weaponTurns?: Record<string, number>;
     pendingEquip?: string;
     equippedTurn: number;
+    gainedStrength?: number;
     rage?: number;
     lastDefenseCardKind?: CardKind;
     /** Saved candidates for an opening or a surviving elite's first exposed core. */

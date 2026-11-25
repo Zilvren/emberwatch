@@ -11,6 +11,7 @@ const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; cha
 function createEditorServer(options = {}) {
     const catalogFile = options.catalogFile ?? path.join(project, 'assets/resources/data/cards.json');
     const backupDirectory = options.backupDirectory ?? path.join(project, 'temp/card-editor-backups');
+    const build = path.resolve(options.buildDirectory ?? path.join(project, 'build/web-desktop'));
     const revision = data => crypto.createHash('sha256').update(data).digest('hex');
     const read = () => {
         const text = fs.readFileSync(catalogFile, 'utf8');
@@ -57,8 +58,8 @@ function createEditorServer(options = {}) {
                 return json(response, 200, { ...read(), savedAt: new Date().toISOString(), backup });
             }
             if (request.method !== 'GET' && request.method !== 'HEAD') return json(response, 405, { error: '不支持此操作。' });
-            if (address.pathname === '/favicon.ico') return sendFile(response, path.join(project, 'build/web-desktop/favicon.ico'));
-            if (address.pathname === '/api/status') return json(response, 200, { gameBuilt: fs.existsSync(path.join(project, 'build/web-desktop/application.js')) });
+            if (address.pathname === '/favicon.ico') return sendFile(response, path.join(build, 'favicon.ico'));
+            if (address.pathname === '/api/status') return json(response, 200, { gameBuilt: fs.existsSync(path.join(build, 'application.js')) });
             if (address.pathname === '/shared/catalog.js' || address.pathname === '/shared/recipes.js') {
                 const file = address.pathname === '/shared/catalog.js' ? schemaPath : path.join(path.dirname(schemaPath), 'RecipeCatalog.ts');
                 const source = fs.readFileSync(file, 'utf8').replace(/from ['"]\.\/RecipeCatalog['"]/g, "from '/shared/recipes.js'");
@@ -77,7 +78,6 @@ function createEditorServer(options = {}) {
             if (address.pathname === '/art/labyrinth-shelter.jpg') return sendFile(response, path.join(interfaceArt, 'shelter.jpg'));
             if (address.pathname === '/play') { response.writeHead(302, { Location: '/play/?cards=live' }); return response.end(); }
             if (address.pathname.startsWith('/play/')) {
-                const build = path.join(project, 'build/web-desktop');
                 const file = path.resolve(build, '.' + decodeURIComponent(address.pathname.slice(5) || '/index.html'));
                 const resolved = address.pathname === '/play/' ? path.join(build, 'index.html') : file;
                 if (!resolved.startsWith(build + path.sep)) return json(response, 403, { error: '无效路径。' });
@@ -98,7 +98,7 @@ function createEditorServer(options = {}) {
 }
 if (require.main === module) {
     const port = Number(process.env.CARD_EDITOR_PORT ?? 7460);
-    const server = createEditorServer();
+    const server = createEditorServer({ buildDirectory: process.env.CARD_EDITOR_BUILD_DIR });
     server.listen(port, '127.0.0.1', () => console.log(`the end 卡牌编辑器: http://127.0.0.1:${port}/`));
     server.on('error', error => { console.error(error.code === 'EADDRINUSE' ? `端口 ${port} 已被占用。请使用已运行的编辑器，或设置 CARD_EDITOR_PORT。` : error.message); process.exitCode = 1; });
 }

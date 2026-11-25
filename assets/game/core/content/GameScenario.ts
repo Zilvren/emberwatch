@@ -130,6 +130,38 @@ export const RUN_DECK_SCENARIO: GameScenario = {
     version: 2,
     runDeck: true,
 };
+const streetCache = {
+    type: 'scavenge', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random',
+} as const;
+const synthesisRoute = [
+    'marketCache', 'rest', 'roadPatrol', 'marketStorage', 'crossingCache', 'crossingCamp',
+    'enemy2', 'workshopCache', 'roofPatrol', 'roofCache', 'roofCamp', 'roofElite',
+];
+export const SYNTHESIS_SCENARIO: GameScenario = {
+    ...RUN_DECK_SCENARIO,
+    version: 3,
+    nodes: {
+        ...RUN_DECK_SCENARIO.nodes,
+        marketCache: { ...streetCache, title: '集市货箱' },
+        roadPatrol: { type: 'battle', icon: 'battle', title: '街口巡游者', enemyId: 'enemy1' },
+        marketStorage: { ...streetCache, title: '集市储藏间' },
+        crossingCache: { ...streetCache, title: '过街通道' },
+        crossingCamp: { type: 'rest', icon: 'rest', title: '街区营地', restoreHealth: 2 },
+        workshopCache: { ...streetCache, title: '废弃工坊' },
+        roofPatrol: { type: 'battle', icon: 'battle', title: '楼梯间伏击', enemyId: 'enemy1' },
+        roofCache: { ...streetCache, title: '天台储物间' },
+        roofCamp: { type: 'rest', icon: 'rest', title: '天台营地', restoreHealth: 2 },
+        roofElite: { type: 'battle', icon: 'elite', title: '天台守卫', enemyId: 'roofBrute' },
+    },
+    routes: {
+        A: ['enemy1', 'scavenge', ...synthesisRoute],
+        B: ['scavenge', 'enemy1', ...synthesisRoute],
+    },
+    enemies: {
+        ...RUN_DECK_SCENARIO.enemies,
+        roofBrute: { ...RUN_DECK_SCENARIO.enemies.enemy2, title: '天台重度感染者', hp: 28 },
+    },
+};
 export const FIELD_SCENARIO: GameScenario = {
     ...STAMINA_SCENARIO,
     id: 'tide-expedition',
@@ -339,6 +371,7 @@ export function registerScenario(scenario: GameScenario): GameScenario {
 registerScenario(TUTORIAL_SCENARIO);
 registerScenario(STAMINA_SCENARIO);
 registerScenario(RUN_DECK_SCENARIO);
+registerScenario(SYNTHESIS_SCENARIO);
 registerScenario(FIELD_SCENARIO);
 registerScenario(ASHEN_LABYRINTH_SCENARIO);
 export function getScenario(id: string, version: number): GameScenario {

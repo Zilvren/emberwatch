@@ -8,14 +8,18 @@ export interface CardSet {
     readonly initialDeck: readonly CardKind[];
 }
 /** Old expeditions keep the same authored names. Rules use stable IDs in both settings. */
-export function scenarioCardSet(base: CardSet, scenario: { fieldDeck?: boolean; labyrinth?: true }): CardSet {
+export function scenarioCardSet(base: CardSet, scenario: { runDeck?: boolean; fieldDeck?: boolean; labyrinth?: true }): CardSet {
     const fieldCards = { ...base.cards };
+    const legacyRewards = Object.freeze(base.rewardPool.filter((id) => !base.cards[id].synthesisOnly));
     const faces = base.catalog.expedition?.faces ?? {};
     for (const id of Object.keys(faces))
         fieldCards[id] = Object.freeze(playableCard({ ...base.cards[id], ...faces[id] }));
     Object.freeze(fieldCards);
     return Object.freeze({
         ...base,
+        get rewardPool() {
+            return scenario.runDeck ? base.rewardPool : legacyRewards;
+        },
         get cards() {
             return scenario.fieldDeck && !scenario.labyrinth ? fieldCards : base.cards;
         },
