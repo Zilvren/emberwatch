@@ -235,7 +235,7 @@ test('old terminal and unpaid return states migrate into the continuing loop wit
     assert.deepEqual(SurvivalGame.fromState(returned.exportState()).exportState(), returned.exportState());
 });
 
-test('a signed v1 saved game migrates and backs up the original on the first v3 write', () => {
+test('a signed v1 saved game migrates and backs up the original on the first v4 write', () => {
     const store = storage(), repo = new SaveRepository(store), game = firstClearOnAttempt(1);
     repo.save(game.exportState());
     const { checksum, ...old } = JSON.parse(store.getItem(repo.key));
@@ -243,6 +243,7 @@ test('a signed v1 saved game migrates and backs up the original on the first v3 
     old.state.phase = 'day2';
     old.state.supplies = 4;
     delete old.state.schemaVersion;
+    delete old.state.expeditionMap;
     delete old.state.milestones;
     delete old.state.journalEntries;
     old.state.settlement.dailySpent = 1;
@@ -261,7 +262,7 @@ test('a signed v1 saved game migrates and backs up the original on the first v3 
     ok(resumed.execute({ type: 'start', tier: 'emergency' }));
     assert.equal(resumed.view.day, 2);
     assert.equal(resumed.view.supplies, 4);
-    assert.equal(JSON.parse(store.getItem(repo.key)).version, 3);
+    assert.equal(JSON.parse(store.getItem(repo.key)).version, 4);
     assert.equal(store.getItem(repo.key + '.backup'), encoded);
 });
 

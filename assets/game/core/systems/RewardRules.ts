@@ -1,7 +1,7 @@
 import { CardSet } from '../content/ContentRegistry';
 import { ActionResult } from '../RulesTypes';
 import { InventoryRules } from './InventoryRules';
-import { RuleFeedback, RewardState } from './RuleContext';
+import { RuleFeedback, RewardState, completeExplorationNode } from './RuleContext';
 import { GameScenario, TUTORIAL_SCENARIO } from '../content/GameScenario';
 import { Random } from '../Random';
 export class RewardRules {
@@ -24,7 +24,7 @@ export class RewardRules {
                 supplyTaken: true, cardTaken: false, discovery: true,
             };
             this.state.phase = 'rewards';
-        } else this.completeNode(source);
+        } else completeExplorationNode(this.state, source, this.scenario.fixedNodeId);
     }
     discover(kind: string | null): ActionResult {
         const reward = this.state.rewards;
@@ -33,16 +33,10 @@ export class RewardRules {
             return this.feedback.result(false, '这次发现已处理或不包含该牌。');
         if (kind !== null) this.inventory.addDiscovery(kind);
         this.state.rewards = null;
-        this.completeNode(reward.source);
+        completeExplorationNode(this.state, reward.source, this.scenario.fixedNodeId);
         const message = kind === null ? '已略过发现。' : `已收下${this.content.cards[kind].name}，下场战斗可抽取。`;
         this.feedback.log(message);
         return this.feedback.result(true, message);
-    }
-    private completeNode(source: string): void {
-        this.state.visited.push(source);
-        if (source === this.scenario.fixedNodeId) this.state.fixedDone = true;
-        else this.state.pathIndex++;
-        this.state.phase = 'map';
     }
     claimSupplies(): ActionResult {
         const r = this.state.rewards;
@@ -80,7 +74,7 @@ export class RewardRules {
         if (r.discovery) return this.discover(null);
         if (!r.supplyTaken) this.feedback.log(`放弃 ${r.supplies} 点物资奖励。`);
         if (!r.cardTaken) this.feedback.log('放弃未领取的卡牌奖励。');
-        this.completeNode(r.source);
+        completeExplorationNode(this.state, r.source, this.scenario.fixedNodeId);
         this.state.rewards = null;
         const depleted = this.scenario.battleResource !== 'stamina' && this.state.supplies === 0;
         if (depleted) this.fail('节点奖励处理后，物资仍为 0。');

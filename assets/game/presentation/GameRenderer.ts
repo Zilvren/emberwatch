@@ -4,6 +4,7 @@ import { RewardScreenPresenter } from './cards/RewardScreenPresenter';
 import { Node } from 'cc';
 import type { GameReadModel } from '../core/GameReadModel';
 import { nodeTitle } from '../core/content/GameScenario';
+import { nextMapNodes } from '../core/content/ExpeditionMap';
 import type { SceneBindings } from './ui/GameView';
 import { ActorPresentation } from './actors/ActorPresentation';
 import { HandPresentation } from './cards/HandPresentation';
@@ -143,7 +144,9 @@ export class GameRenderer extends NativeViewWriter {
                 'banner/text2':
                     g.currentNode === 'return'
                         ? '路已走完。正在自动返回避难所……'
-                        : '前往亮起的地点。全程无法主动撤离。',
+                        : g.expeditionMap
+                          ? '沿路线向上探索。点击亮起的地点继续。'
+                          : '前往亮起的地点。全程无法主动撤离。',
                 'map/text0': `已走过 ${g.visited.length} 处 · 随行牌组 ${g.usableCards.length} 张`,
                 'map/text1': g.scenario.labyrinth ? '战后与指定搜刮点可以发现卡牌。' : '',
                 'map/fixedReward': `${fee ? `支付 ${fee} 物资 → ` : ''}${salvage}\n完成固定搜刮后，才能选择后续路线。`,
@@ -201,8 +204,11 @@ export class GameRenderer extends NativeViewWriter {
                     action.setText(g.scenario.runDeck ? '查看本局卡组' : '整理出手卡组');
             }
             if (g.scenario.fieldDeck) {
-                const nextId = g.scenario.routes[g.route!][g.pathIndex + 1];
-                const next = g.scenario.nodes[nextId];
+                const exits = g.expeditionMap ? nextMapNodes(g.expeditionMap, g.currentNode) : [];
+                const nextId = g.expeditionMap
+                    ? exits[0]
+                    : g.scenario.routes[g.route!]?.[g.pathIndex + 1];
+                const next = nextId ? g.scenario.nodes[nextId] : undefined;
                 const enemy = next?.type === 'battle' ? g.scenario.enemies[next.enemyId] : null;
                 this.text(screen, {
                     'banner/text1': nodeTitle(g.scenario, g.currentNode),
@@ -212,9 +218,11 @@ export class GameRenderer extends NativeViewWriter {
                     'rest/text1': `休息后血量 ${g.health} / 10`,
                     'rest/text2': '随行牌组',
                     'rest/text3': `${g.cards.length} 张 · 其中 ${g.cards.filter((c) => c.found).length} 张为本次发现\n下一场战斗会重新洗牌。`,
-                    'rest/text4': enemy
-                        ? `下一站 · ${enemy.title}\n生命 ${enemy.hp} · 普攻 ${enemy.attack} · 蓄势后 ${enemy.strongAttack}`
-                        : '下一站 · ' + (next?.title ?? '避难所'),
+                    'rest/text4': exits.length > 1
+                        ? `前方有 ${exits.length} 条路线 · 返回地图选择`
+                        : enemy
+                          ? `下一站 · ${enemy.title}\n生命 ${enemy.hp} · 普攻 ${enemy.attack} · 蓄势后 ${enemy.strongAttack}`
+                          : '下一站 · ' + (next?.title ?? '避难所'),
                     'rest/text5': '',
                 });
                 this.button(screen, 'rest-bag', '查看随行牌组');
@@ -230,6 +238,9 @@ export class GameRenderer extends NativeViewWriter {
             this.button(screen, 'shelter-done', summary.doneCaption);
         }
         if (g.phase === 'failure') {
+            // The failure screen owns a separate actor instance. Carry the battle's final pose across the cut.
+            if (g.scenario.labyrinth && g.health === 0 && this.hero && this.hero.motion !== 'death')
+                this.hero.playAction('death', true);
             this.text(screen, {
                 'journal/text1':
                     g.scenario.kind === 'tutorial'

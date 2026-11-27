@@ -1,3 +1,5 @@
+import { nextMapNodes, type ExpeditionMap } from './ExpeditionMap';
+
 /** Stable authored IDs also appear in saves. Display names and behavior belong to definitions. */
 export type Route = string;
 export type NodeKind = string;
@@ -167,6 +169,17 @@ export const FIELD_SCENARIO: GameScenario = {
         },
     },
 };
+function ashenScavengeSites(titles: Readonly<Record<string, string>>, discover: boolean): Record<NodeKind, NodeDefinition> {
+    const sites: Record<NodeKind, NodeDefinition> = {};
+    for (const id of Object.keys(titles)) {
+        sites[id] = {
+            type: 'scavenge', title: titles[id], icon: discover ? 'scavenge' : 'supply',
+            cost: 0, supplies: discover ? [0, 1] : [1, 2], cardReward: 'random', discover,
+        };
+    }
+    return sites;
+}
+
 export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
     kind: 'expedition',
     ruleset: 'stamina-v1',
@@ -187,10 +200,31 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
         ashGallery: { type: 'battle', title: '灰烬长廊', icon: 'battle', enemyId: 'stone-claw' },
         serviceDuct: { type: 'scavenge', title: '检修暗槽', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random' },
         abandonedStall: { type: 'scavenge', title: '空置货摊', icon: 'supply', cost: 0, supplies: [2, 2], cardReward: 'random', discover: true },
+        edgeCache: { type: 'scavenge', title: '门缝暗格', icon: 'scavenge', cost: 0, supplies: [0, 1], cardReward: 'random', discover: true },
+        tinLocker: { type: 'scavenge', title: '铁皮储柜', icon: 'supply', cost: 0, supplies: [1, 2], cardReward: 'random', discover: true },
+        splitHopper: { type: 'scavenge', title: '裂口料斗', icon: 'scavenge', cost: 0, supplies: [0, 1], cardReward: 'random', discover: true },
+        cinderBench: { type: 'scavenge', title: '积灰工台', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random', discover: true },
+        scatteredCrates: { type: 'scavenge', title: '散落货箱', icon: 'supply', cost: 0, supplies: [1, 2], cardReward: 'random', discover: true },
+        sealedShaft: { type: 'scavenge', title: '封阀井口', icon: 'scavenge', cost: 0, supplies: [1, 1], cardReward: 'random', discover: true },
         lightCut: { type: 'battle', title: '折光回廊', icon: 'battle', enemyId: 'ash-moth' },
+        hoistBridge: { type: 'battle', title: '悬轮桥', icon: 'battle', enemyId: 'stone-claw' },
+        shutterGap: { type: 'battle', title: '碎闸狭口', icon: 'battle', enemyId: 'ash-moth' },
+        returnBridge: { type: 'battle', title: '回风窄桥', icon: 'battle', enemyId: 'stone-claw' },
+        warmAlcove: { type: 'rest', title: '余温壁炉', icon: 'rest', restoreHealth: 2 },
         leeAlcove: { type: 'rest', title: '背风壁龛', icon: 'rest', restoreHealth: 2 },
+        innerAlcove: { type: 'rest', title: '沉灯前室', icon: 'rest', restoreHealth: 2 },
         copperChest: { type: 'scavenge', title: '旧铜匣', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random', discover: true },
         lampCourt: { type: 'battle', title: '沉灯庭', icon: 'elite', enemyId: 'veil-idol' },
+        ...ashenScavengeSites({
+            chartRoom: '旧测绘间', fallenTrestle: '断裂栈台', patchBay: '接线台', coldKiln: '冷却窑',
+            siltedGate: '塞灰闸槽', signalCabinet: '信号柜', stampedDrawer: '编号抽屉',
+        }, true),
+        ...ashenScavengeSites({
+            pipeRack: '弯管货架', dustyPails: '积灰桶列', lowerCache: '矮墙储格', coalChute: '落炭滑槽',
+            freightBench: '货运平台', rivetedStore: '铆接储间', winchShed: '绞盘棚', drainWell: '下沉水槽',
+            pipeBend: '弯管缺口', filterPress: '废旧滤机', waterShelf: '冷凝水架', stackLocker: '叠放货柜',
+            railStop: '断轨端头',
+        }, false),
     },
     routes: {
         A: ['lampPassage', 'fallenShelves', 'ashGallery', 'lightCut', 'leeAlcove', 'copperChest', 'lampCourt'],
@@ -219,11 +253,19 @@ export interface RouteProgress {
     readonly fixedDone: boolean;
     readonly route: Route | null;
     readonly pathIndex: number;
+    readonly visited: readonly NodeKind[];
+    readonly expeditionMap: Readonly<ExpeditionMap> | null;
 }
 export function currentNodeId(
     progress: RouteProgress,
     scenario: Pick<GameScenario, 'fixedNodeId' | 'routes'>
 ): NodeKind {
+    const map = progress.expeditionMap;
+    if (map) {
+        if (map.activeNode !== null) return map.activeNode;
+        const next = nextMapNodes(map, progress.visited[progress.visited.length - 1]);
+        return next.length > 1 ? 'choice' : next[0] ?? 'return';
+    }
     if (!progress.fixedDone) return scenario.fixedNodeId;
     if (!progress.route) return 'choice';
     return scenario.routes[progress.route]?.[progress.pathIndex] ?? 'return';

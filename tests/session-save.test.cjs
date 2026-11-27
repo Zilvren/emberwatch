@@ -123,7 +123,7 @@ test('v2 armor saves migrate to health and preserve the existing draw and discar
     baseline.logs.push('永久丢弃菜刀。', '领取物资 2 / 5。其余物资已放弃。');
     assert.deepEqual(resumed.game.exportState(), baseline);
     ok(resumed.execute({ type: 'end-turn' }));
-    assert.equal(JSON.parse(storage.getItem(repo.key)).version, 3);
+    assert.equal(JSON.parse(storage.getItem(repo.key)).version, 4);
     assert.equal(storage.getItem(repo.key + '.backup'), encoded);
 
     const depleted = encode({ ...old, state: { ...old.state, armor: 0, critical: true } });

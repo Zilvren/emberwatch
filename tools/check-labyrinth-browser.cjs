@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const { once } = require('node:events');
 const { createEditorServer } = require('./card-editor-server.cjs');
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'output/playwright/ashen-labyrinth');
+const output = path.join(root, 'output/playwright/ashen-character-and-map');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || require.resolve('playwright', {
     paths: [root, path.join(process.env.USERPROFILE, '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules')],
 }));
@@ -38,15 +38,98 @@ function input(page, view = page) {
             report.actions.push({ id, source: before.currentNode, from: before.phase, to: next.phase });
         }
     }
-    async function depart(route, tier) {
+    async function depart(tier) {
         await click('camp-keeper');
         await click('camp-depart');
         if (tier) await click('entry-tier-' + tier);
         await click('entry-confirm');
-        await click('enter-threshold');
-        if (route) await click('route-' + route);
     }
     return { state, save, idle, click, depart, target };
+}
+
+function mapPaths({ points }, id = 'threshold') {
+    const { next } = points.find(point => point.id === id);
+    return next.length ? next.flatMap(child => mapPaths({ points }, child).map(rest => [id, ...rest])) : [[id]];
+}
+
+function assertVerticalMap({ points, edges }) {
+    const position = new Map(points.map(point => [point.id, point.y]));
+    assert.ok(edges.length > 0 && edges.every(edge => position.get(edge.to) > position.get(edge.from)));
+}
+
+async function visitScrollableMap(page, native, name) {
+    const before = await native.save();
+    await native.click('map');
+    assert.equal((await native.state()).overlay, 'map');
+    const overview = await page.evaluate(() => {
+        const scene = cc.director.getScene();
+        const map = scene.getComponentsInChildren('RouteMap')
+            .find(view => view.node.activeInHierarchy && view.close?.node.activeInHierarchy);
+        if (!map) return null;
+        const director = scene.getComponentInChildren('GameDirector');
+        const model = map.inspect();
+        const markers = map.node.getComponentsInChildren('RoutePoint');
+        const focused = model.points.find(point => point.state === 'current') ??
+            model.points.find(point => point.state === 'available');
+        const marker = markers.find(point => point.data?.id === focused?.id);
+        return {
+            ...model,
+            verticalScrollRange: Math.abs(map.scroll.getMaxScrollOffset().y),
+            mask: !!map.scroll.node.getComponent('cc.Mask')?.enabledInHierarchy,
+            cancelsDraggedClick: map.scroll.cancelInnerEvents,
+            shownFloors: map.floorLabels.filter(label => label.node.activeInHierarchy).length,
+            progressText: map.depth?.string,
+            legendIcons: map.key?.children.filter(node => node.name.startsWith('Key-')).length,
+            readOnlyTarget: marker?.glyph ? director.bounds(marker.glyph.node) : null,
+            glyphs: markers.map(point => ({
+                id: point.action.actionId.slice(6),
+                slot: point.iconFrames.indexOf(point.glyph?.spriteFrame),
+                frameCount: point.iconFrames.length,
+                width: point.glyph ? director.bounds(point.glyph.node).width : 0,
+            })),
+        };
+    });
+    assert.ok(overview && overview.verticalScrollRange > 1500);
+    assert.equal(overview.points.length, before.expeditionMap.points.length);
+    assert.ok(overview.points.some(point => point.id === 'threshold') &&
+        overview.points.some(point => point.id === 'lampCourt'));
+    assertVerticalMap(overview);
+    assert.equal(new Set(overview.points.map(point => point.layer)).size, 17);
+    assert.ok(overview.mask && overview.cancelsDraggedClick);
+    assert.equal(overview.shownFloors, 17);
+    assert.match(overview.progressText, /\/\s*17/);
+    assert.equal(overview.legendIcons, 4);
+    const iconSlots = { battle: 0, elite: 1, rest: 2, scavenge: 3, supply: 3, home: 4 };
+    const points = new Map(overview.points.map(point => [point.id, point]));
+    assert.equal(overview.glyphs.length, points.size);
+    for (const { id, slot, frameCount, width } of overview.glyphs) {
+        const point = points.get(id);
+        assert.equal(frameCount, 5);
+        assert.equal(slot, iconSlots[point.icon]);
+        if (slot === 3 && point.state !== 'visited' && point.state !== 'current')
+            assert.equal(point.title, '未知地点');
+        assert.ok(Math.abs(width - 62) < 1);
+    }
+    await image(page, name);
+    const rect = await page.locator('#GameCanvas').boundingBox();
+    assert.ok(overview.readOnlyTarget);
+    const hit = overview.readOnlyTarget, scale = Math.min(rect.width / 1440, rect.height / 900);
+    await page.mouse.click(rect.x + (rect.width - 1440 * scale) / 2 + (hit.x + hit.width / 2) * scale,
+        rect.y + (rect.height - 900 * scale) / 2 + (hit.y + hit.height / 2) * scale);
+    await native.idle();
+    assert.equal((await native.state()).overlay, 'map');
+    assert.deepEqual(await native.save(), before);
+    await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height / 2);
+    const offset = overview.scrollOffset.y;
+    await page.mouse.wheel(0, Math.abs(offset) > overview.verticalScrollRange / 2 ? -520 : 520);
+    await page.waitForFunction(initial => {
+        const map = cc.director.getScene().getComponentsInChildren('RouteMap')
+            .find(view => view.node.activeInHierarchy && view.close?.node.activeInHierarchy);
+        return Math.abs(map.inspect().scrollOffset.y - initial) > 5;
+    }, offset, { timeout: 5000 });
+    await page.keyboard.press('Escape');
+    await native.idle();
+    assert.deepEqual(await native.save(), before);
 }
 const image = (page, name) => page.screenshot({ path: path.join(output, name + '.png') });
 function observe(page) {
@@ -241,16 +324,37 @@ async function oneRoute(browser, url, lane) {
             await visitSettings(page, native);
             await visitCamp(page, native);
         }
-        await native.depart(undefined, lane === 'B' ? 'emergency' : 'standard');
+        await native.depart(lane === 'B' ? 'emergency' : 'standard');
         let snap = await native.state();
-        assert.equal(snap.routeMap.points.filter((p) => p.kind !== 'home').length, 10);
-        assert.ok(new Set(snap.routeMap.points.map((p) => p.x)).size > 6);
-        if (lane === 'A') await image(page, '02-ten-node-map');
-        await native.click('route-' + lane);
+        const departure = await native.save(), graph = departure.expeditionMap;
+        const paths = mapPaths(graph);
+        const plan = paths.find(route => lane === 'A'
+            ? route[1] === 'lampPassage' && route.includes('ashGallery') && route.includes('returnBridge')
+            : route[1] === 'serviceDuct' && !route.includes('ashGallery') && !route.includes('returnBridge'));
+        assert.equal(plan?.length, 17);
+        assert.ok(paths.length > 6 && graph.points.length >= 26);
+        assertVerticalMap(snap.routeMap);
+        assert.ok(!snap.hits.some(hit => hit.id === 'map-enter'));
+        assert.deepEqual(snap.routeMap.points.filter(p => p.state === 'available').map(p => p.id), ['threshold']);
+        if (lane === 'A') {
+            await image(page, '01-map-entrance');
+            const rect = await page.locator('#GameCanvas').boundingBox();
+            const offset = snap.routeMap.scrollOffset.y;
+            await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height / 2);
+            await page.mouse.wheel(0, -1400);
+            await page.waitForFunction(initial => globalThis.__emberUI.snapshot().routeMap.scrollOffset.y !== initial, offset);
+            await image(page, '02-map-scrolled');
+            assert.deepEqual(await native.save(), departure);
+            await page.reload();
+            await native.idle();
+            assert.deepEqual(await native.save(), departure);
+            await visitScrollableMap(page, native, '02-scroll-map-1440');
+        }
         const enemies = [], options = [];
-        let flew = false, choiceReload = false, nextHand = false, chosen = null;
+        let flew = false, choiceReload = false, battleReload = false, forkReload = false;
+        let nextHand = false, chosen = null, laterFork = null, nextDeparture = null;
         const normalEnemyTurns = [];
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 300; i++) {
             snap = await native.state();
             const save = await native.save();
             if (snap.phase === 'journal' && save.day === 2) break;
@@ -260,7 +364,31 @@ async function oneRoute(browser, url, lane) {
                 continue;
             }
             if (snap.phase === 'map') {
-                await native.click('enter-' + snap.currentNode);
+                const next = plan[save.visited.length];
+                if (save.visited.length > 1 && snap.currentNode === 'choice') {
+                    const choices = snap.routeMap.points.filter(point => point.state === 'available').map(point => point.id);
+                    assert.ok(choices.length >= 2 && choices.includes(next));
+                    laterFork = { from: save.visited.at(-1), choices, selected: next };
+                    if (lane === 'A' && !forkReload) {
+                        await image(page, '03-map-fork');
+                        await page.setViewportSize({ width: 1024, height: 768 });
+                        await page.reload();
+                        await native.idle();
+                        assert.deepEqual(await native.save(), save);
+                        assertVerticalMap((await native.state()).routeMap);
+                        await image(page, '04-map-fork-restored-1024');
+                        await visitScrollableMap(page, native, '04-scroll-map-1024');
+                        await native.click('enter-' + next);
+                        const moved = await native.save();
+                        assert.equal(moved.expeditionMap.activeNode ?? moved.visited.at(-1), next);
+                        forkReload = true;
+                        await page.setViewportSize({ width: 1440, height: 900 });
+                        continue;
+                    }
+                }
+                await native.click('enter-' + next);
+                const moved = await native.save();
+                assert.equal(moved.expeditionMap.activeNode ?? moved.visited.at(-1), next);
                 continue;
             }
             if (snap.phase === 'rest') {
@@ -290,9 +418,18 @@ async function oneRoute(browser, url, lane) {
             assert.equal(snap.phase, 'battle');
             const b = save.battle;
             assert.ok(snap.heroRig.runtimeReady && snap.enemyRig.runtimeReady);
-            assert.equal(snap.heroRig.actor, 'ashen-survivor');
+            assert.equal(snap.heroRig.actor, 'ashen-lantern-keeper');
             assert.equal(snap.enemyRig.actor, 'ashen-' + b.enemy);
             assert.equal(b.discovery, undefined);
+            if (lane === 'A' && !battleReload) {
+                await page.reload();
+                await native.idle();
+                assert.deepEqual(await native.save(), save);
+                if ((await native.state()).hits.some(hit => hit.id === 'map' && hit.enabled)) {
+                    await visitScrollableMap(page, native, '05-map-during-combat');
+                }
+                battleReload = true;
+            }
             if (enemies.at(-1)?.node !== snap.currentNode) {
                 enemies.push({ node: snap.currentNode, actor: b.enemy, health: save.health, hp: b.maxHp });
                 if (chosen && [...b.draw, ...b.hand].some((c) => c.kind === chosen)) nextHand = true;
@@ -352,13 +489,15 @@ async function oneRoute(browser, url, lane) {
             assert.deepEqual(await native.save(), before, 'Selecting alone settled an attack.');
             assert.equal((await native.state()).flyingCard, false);
             if (lane === 'A' && !flew) {
-                await Promise.all([
-                    page.waitForFunction(() => globalThis.__emberUI.snapshot().flyingCard),
+                const [flight] = await Promise.all([
+                    page.waitForFunction(() => {
+                        const state = globalThis.__emberUI.snapshot();
+                        return state.flyingCard && { motion: state.heroMotion, rig: state.heroRig.motion };
+                    }),
                     native.click('enemy-target', false),
                 ]);
-                const during = await native.state();
-                assert.equal(during.heroMotion, 'idle');
-                assert.equal(during.heroRig.motion, 'idle');
+                assert.deepEqual(await flight.jsonValue(), { motion: 'attack', rig: 'attack' });
+                await flight.dispose();
                 await image(page, '04-flying-back');
                 await native.idle();
                 const after = await native.save();
@@ -374,10 +513,10 @@ async function oneRoute(browser, url, lane) {
         const beforeReturn = await native.save();
         assert.equal(beforeReturn.day, 2);
         assert.equal(beforeReturn.cards.length, 12);
-        assert.equal(beforeReturn.visited.length, lane === 'A' ? 8 : 7);
+        assert.deepEqual(beforeReturn.visited, plan);
         assert.equal(beforeReturn.settlement.discoveredCards, lane === 'A' ? 1 : 0);
         if (lane === 'A') {
-            assert.ok(flew && choiceReload && nextHand);
+            assert.ok(flew && choiceReload && nextHand && battleReload && forkReload);
             assert.deepEqual(normalEnemyTurns, ['ash-moth', 'stone-claw', 'veil-idol']);
         }
         await native.click('journal-start');
@@ -414,9 +553,17 @@ async function oneRoute(browser, url, lane) {
             report.camp = { paintedHotspots: 4, keyboardActivation: true, canceledDeparturePreservedSave: true,
                 journalsReopened: 2, nextDeparture: true, warehouseStock: returned.supplies - cost,
                 repairChargedOnce: cost, persistedHealth: 10, viewports: ['1440x900', '1024x768'] };
+            await native.depart('standard');
+            const fresh = await native.save();
+            assert.equal(fresh.day, 2);
+            assert.notEqual(fresh.expeditionMap.seed, graph.seed);
+            assert.notDeepEqual(fresh.expeditionMap.points, graph.points);
+            assert.deepEqual(fresh.visited, []);
+            nextDeparture = { day: fresh.day, seed: fresh.expeditionMap.seed };
         }
         return { lane, enemies, options, initialHealth: 10, finalHealth: returned.health,
-            visited: returned.visited.length, flew, nextHand, choiceReload, restoredReturn: true, normalEnemyTurns };
+            visited: returned.visited.length, flew, nextHand, choiceReload, restoredReturn: true, normalEnemyTurns,
+            map: { seed: graph.seed, availablePaths: paths.length, laterFork, forkReload, battleReload, nextDeparture } };
     } catch (error) {
         await image(page, 'failure-' + lane).catch(() => {});
         throw error;
@@ -462,9 +609,15 @@ async function editor(browser, url) {
         await page.waitForFunction(() => document.querySelector('#game-frame').contentWindow?.__emberUI?.snapshot().ready);
         const frame = page.frames().find((f) => f.url().includes('/play/'));
         const native = input(page, frame);
-        await native.depart('B');
-        await native.click('enter-serviceDuct');
-        await native.click('enter-abandonedStall');
+        const visitDiscoverySite = async (view) => {
+            await view.depart();
+            await view.click('enter-threshold');
+            await view.click('enter-serviceDuct');
+            const { expeditionMap } = await view.save();
+            const [site] = expeditionMap.points.find(point => point.id === 'serviceDuct').next;
+            await view.click('enter-' + site);
+        };
+        await visitDiscoverySite(native);
         const offered = (await native.save()).rewards.cards;
         assert.deepEqual(offered.slice().sort(), ['lab_bracelet', 'lab_calibration', 'lab_valve']);
         await image(page, '10-filtered-test-run');
@@ -476,9 +629,7 @@ async function editor(browser, url) {
         await page.getByRole('button', { name: /试玩游戏/ }).click();
         await page.waitForFunction(() => document.querySelector('#game-frame').contentWindow?.__emberUI?.snapshot().ready);
         const empty = input(page, page.frames().find((f) => f.url().includes('/play/')));
-        await empty.depart('B');
-        await empty.click('enter-serviceDuct');
-        await empty.click('enter-abandonedStall');
+        await visitDiscoverySite(empty);
         assert.equal((await empty.state()).phase, 'map');
         assert.equal((await empty.save()).rewards, null);
         return { mismatchedAtlasKeptControls: true, correctAtlasRecoveredOnReload: true,
@@ -517,8 +668,11 @@ async function defeat(browser, url) {
     try {
         await page.goto(url + '/play/?cards=live&seed=19&save=off');
         await native.idle();
-        await native.depart('A', 'standard');
-        await native.click('enter-lampPassage');
+        await native.depart('standard');
+        const firstMap = (await native.save()).expeditionMap;
+        await native.click('enter-threshold');
+        const firstBattle = (await native.state()).routeMap.points.find(p => p.state === 'available' && p.icon === 'battle');
+        await native.click('enter-' + firstBattle.id);
         let previous;
         for (let turn = 0; turn < 20; turn++) {
             const state = await native.save();
@@ -532,6 +686,10 @@ async function defeat(browser, url) {
         assert.equal(dead.health, 0);
         assert.equal(dead.day, 2);
         assert.ok(previous.health > 0 && previous.battle.intent === 'attack');
+        const fallen = (await native.state()).heroRig;
+        assert.equal(fallen.actor, 'ashen-lantern-keeper');
+        assert.equal(fallen.motion, 'death');
+        assert.equal(fallen.paused, true);
         const effectsCleared = await page.evaluate(() => {
             const effects = cc.director.getScene().getChildByName('Canvas').getChildByName('GameRoot').getChildByName('Effects');
             return effects.children.every((child) => !child.activeInHierarchy);
@@ -540,7 +698,11 @@ async function defeat(browser, url) {
         await image(page, 'controls-zero-health');
         await native.click('journal-start');
         assert.equal((await native.save()).health, 10);
-        return { immediate: true, finalHealth: 0, nextDay: dead.day, recoveredHealth: 10, effectsCleared };
+        await native.depart('standard');
+        const retry = await native.save();
+        assert.notEqual(retry.expeditionMap.seed, firstMap.seed);
+        assert.deepEqual(retry.visited, []);
+        return { immediate: true, finalHealth: 0, nextDay: dead.day, recoveredHealth: 10, effectsCleared, newMap: true };
     } finally {
         await page.close();
     }
@@ -554,9 +716,10 @@ async function main() {
     server.listen(0, '127.0.0.1');
     await once(server, 'listening');
     const url = 'http://127.0.0.1:' + server.address().port;
-    const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ?? undefined,
-        args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+    let browser;
     try {
+        browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ?? undefined,
+            args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
         report.routes = [];
         for (const lane of ['A', 'B']) report.routes.push(await oneRoute(browser, url, lane));
         report.legacy = await legacy(browser, url);
@@ -566,8 +729,11 @@ async function main() {
         assert.deepEqual(report.consoleErrors, []);
         report.passed = true;
     } finally {
-        await browser.close();
-        await new Promise((done) => server.close(done));
+        try {
+            await browser?.close();
+        } finally {
+            await new Promise((done) => server.close(done));
+        }
     }
 }
 main().catch((error) => {

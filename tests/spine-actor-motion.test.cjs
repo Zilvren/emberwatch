@@ -90,6 +90,90 @@ test('original 08 art and the shared Spine texture are byte-identical',()=>{
  assert.equal(hash('assets/resources/actors/sketch08/master08-thin.png'),expected);
  assert.equal(hash('assets/resources/actors/spine08/master08-thin.png'),expected);
 });
+const keeperFile = 'assets/ashen-labyrinth/lantern-keeper/lantern-keeper';
+test('the Lantern Keeper floats a card above the palm and releases it for attacks and support', () => {
+    const rig = read(keeperFile + '.json');
+    const contract = read(keeperFile + '.contract.json');
+    const prefab = read('assets/prefabs/actors/PlayerActor.prefab');
+    const binding = prefab.find(component => component.labyrinthSkeleton);
+    assert.equal(binding.labyrinthSkeleton.__uuid__, read(keeperFile + '.json.meta').uuid);
+    assert.equal(binding.thrownCard.__uuid__, read('assets/ashen-labyrinth/paper-back.png.meta').subMetas.f9941.uuid);
+
+    const card = rig.slots.find(slot => slot.name === 'card');
+    assert.equal(card.bone, contract.releaseBone);
+    const setup = poseMatrices(rig);
+    const [width, height] = contract.releaseSize;
+    const cardBottom = Math.min(...[-width / 2, width / 2].map(x => point(setup[card.bone], x, -height / 2)[1]));
+    const hand = contract.parts.find(part => part.name === 'cast-hand');
+    const handTop = Math.max(...contract.neutralVertices.slice(hand.vertexStart, hand.vertexStart + hand.vertexCount).map(p => p[1]));
+    assert.ok(cardBottom - handTop > 8, 'The paper should have a visible gap above the fingers');
+    const drift = rig.animations.idle.bones[card.bone].translate.map(key => key.y);
+    assert.ok(Math.max(...drift) - Math.min(...drift) > 2 && drift[0] === drift.at(-1));
+    for (const kind of ['attack', 'prepare']) {
+        const clip = rig.animations[kind];
+        const releases = clip.events.filter(event => event.name === 'release');
+        const effects = clip.events.filter(event => event.name === 'impact');
+        assert.equal(releases.length, 1);
+        assert.equal(effects.length, 1);
+        assert.deepEqual(clip.slots.card.attachment.at(-1), { time: releases[0].time, name: null });
+        assert.equal(effects[0].time, contract.motions[kind].contact);
+    }
+});
+test('only the far-arm area of the three kneeling drawings changes in the live landing atlas', () => {
+    const { PNG, identifyParts, extractPart } = require('../tools/spine/bestiary-assets.cjs');
+    const { applyFarArmCover } = require('../tools/spine/lantern-keeper-landing.cjs');
+    const source = 'art-source/ashen-labyrinth/lantern-keeper/';
+    const approved = fs.readFileSync(path.join(root, source, 'landing-poses.png'));
+    const contract = read(keeperFile + '.contract.json');
+    assert.equal(crypto.createHash('sha256').update(approved).digest('hex'), contract.landingSourceSha256);
+    const sheet = PNG.sync.read(approved), before = Buffer.from(sheet.data);
+    applyFarArmCover(sheet, PNG.sync.read(fs.readFileSync(path.join(root,source,'landing-far-arm-cover.png'))));
+    const windows = [[167,769],[640,773],[1146,771]], changes=[0,0,0];
+    const freeGloves = [[216,877,262,954],[705,893,757,964],[1203,881,1253,956]];
+    const supportingFists = [[303,920,355,996],[763,920,817,996],[1267,920,1333,996]];
+    for (let k=0;k<before.length;k+=4) {
+        if (before[k]===sheet.data[k] && before[k+1]===sheet.data[k+1] && before[k+2]===sheet.data[k+2] && before[k+3]===sheet.data[k+3]) continue;
+        const i=k/4, x=i%sheet.width, y=Math.floor(i/sheet.width);
+        const at=windows.findIndex(([l,t])=>x>=l && x<l+144 && y>=t && y<t+210);
+        assert.ok(at>=0, 'The occlusion changed pixels outside the far-arm area');
+        const inside=([l,t,r,b])=>x>=l && x<r && y>=t && y<b;
+        assert.ok(!inside(supportingFists[at]), 'The supporting right fist changed');
+        if(sheet.data[k+3]!==before[k+3])assert.ok(inside(freeGloves[at]), 'Only the occluded glove may clear silhouette pixels');
+        changes[at]++;
+    }
+    assert.ok(changes.every(n=>n>0));
+    const packed = PNG.sync.read(fs.readFileSync(path.join(root,keeperFile+'.png')));
+    const atlas = fs.readFileSync(path.join(root,keeperFile+'.atlas'),'utf8').replaceAll('\r','');
+    const { cells,ids } = identifyParts(sheet,3,2);
+    for (const [i,name] of ['release','bend','drop','contact','compress','settle'].entries()) {
+        const image = extractPart(sheet,ids,cells[i]).image;
+        const xy = atlas.split('\nlanding-'+name+'\n')[1].match(/xy: (\d+), (\d+)/);
+        const region = new PNG({width:image.width,height:image.height});
+        PNG.bitblt(packed,region,Number(xy[1]),Number(xy[2]),image.width,image.height,0,0);
+        assert.ok(image.data.equals(region.data),name+' differs from the approved retouch');
+    }
+});
+test('the cloak passes over the far arm before the right fist holds the single-knee pose', () => {
+    const rig=read(keeperFile+'.json'), contract=read(keeperFile+'.contract.json');
+    const clip=rig.animations.death, track=clip.slots['landing-body'].attachment;
+    assert.deepEqual([...new Set(track.map(k=>k.name))], ['release','bend','drop','contact','compress','settle']);
+    assert.equal(track.at(-1).time,contract.motions.death.duration);
+    assert.equal(contract.motions.death.loop,false);
+    const m=poseMatrices(rig,poseAtEnd(clip));
+    assert.ok(m.LandCastFist[5]<8 && m.LandRearKnee[5]<12 && m.LandFrontToe[5]<5);
+    assert.ok(m.LandFrontKnee[5]-m.LandRearKnee[5]>65);
+    const artwork=rig.skins[0].attachments['landing-body'];
+    const free=key=>rig.bones[key[0]].name.startsWith('LandFree');
+    assert.ok(decode(rig,artwork.drop).some(weights=>weights.some(free)));
+    for(const drawing of ['contact','compress','settle']){
+        assert.ok(decode(rig,artwork[drawing]).every(weights=>!weights.some(free)),drawing+' must draw only the nearer arm');
+    }
+    const edge=clip.slots['landing-cloak-cover'].attachment;
+    assert.deepEqual(edge.map(k=>k.name), ['sleeve','cuff','hand',null]);
+    assert.ok(edge[0].time>track.find(k=>k.name==='drop').time);
+    assert.equal(edge.at(-1).time,track.find(k=>k.name==='contact').time);
+    assert.equal(rig.slots.find(s=>s.name==='landing-cloak-cover').attachment,undefined);
+});
 test('silhouette contact chooses the visible edge at the requested height',()=>{
  const vertices=[{x:-2,y:0},{x:3,y:0},{x:3,y:4},{x:-2,y:4}],indices=[0,1,2,0,2,3];
  assert.equal(geometry.silhouetteAtHeight(vertices,indices,2,true),-2);

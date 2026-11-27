@@ -1,5 +1,47 @@
 # The end 素材生产与原生接入规格
 
+## 2026-11-27 · 焦土迷宫执灯人战斗角色
+
+本版已接入 Pink/Cocos 主场景。用户确定长布披风的方向，配色、剪裁和动作观感待试玩审阅。内置 ImageGen 以执灯人原有面具与站姿为人物依据，以求生者、灰灯蛾和石廊战斗画面为画风参照。1024×1536 透明原画、1254×1254 九件拆件与两份生成提示词保存在 `art-source/ashen-labyrinth/lantern-keeper/`。各动作共用同一足底坐标。
+
+运行资源位于 `assets/ashen-labyrinth/lantern-keeper/`，采用 Spine 3.8.75、40 根骨骼及姿势控制、13 个绘制插槽与 1536×2016 图集。披风前襟和后片使用独立网格，亚麻领巾的前缘绘制在颈部之前。浅色悬牌复用 `assets/ashen-labyrinth/paper-back.png`。`OpenPalm` 跟随手掌位置，`CastOrigin` 控制悬浮。素材制作命令为 `node tools/spine/build-lantern-keeper.cjs`，游戏导出命令为 `npm run build:web`。
+
+| 动作 | 时长 | 表演与事件 |
+| --- | --- | --- |
+| 待机 | 2.50 秒循环 | 双脚固定，胸口、手腕与披风后摆错开呼吸 |
+| 攻击出牌 | 0.66 秒 | 0.23 秒释放悬牌，0.47 秒动作事件结算攻击 |
+| 格挡准备 | 0.58 秒 | 肩部向前、掌心回收，0.13 秒释牌，0.16 秒动作事件结算牌效 |
+| 受击 | 0.38 秒 | 髋、胸、头依次后撤，再随披肩回稳 |
+| 力竭 | 1.02 秒 | 悬牌收起，披风遮住远侧左臂，近侧右拳、后膝与前脚落稳。失败页定格在第六帧 |
+
+力竭底稿 `landing-poses.png` 保存用户确认的 1536×1024 六帧原图。`landing-far-arm-cover.png` 包含四块 144×210 的配准素材。前三块补齐下排姿势中遮住远侧左臂的披风、长衣和膝褶。第四块是第三帧转入触地时使用的前景布边，在 0.422 到 0.5 秒之间从袖部扫至手部。触地、下沉、收势三帧的可见网格由身体和披风控制点驱动，右拳的位置与原图一致。`tools/spine/lantern-keeper-landing.cjs` 用前脚掌定位六帧，以 17 个控制点衔接姿势。
+
+`SpineActorRig.ts` 从悬牌骨骼求出起飞位置、倾角与大小。`FlyingCardBack.ts` 使用同一个牌背，向前移动约 4.8 张牌宽，向上约 1.6 张牌高。飞行持续 0.38 秒，后半段从纸张下沿收窄并淡出，在角色一侧自行消散。轨迹只依赖悬牌的初始姿态和尺寸。`LabyrinthCardAction.ts` 用角色的动作事件触发实际牌效和回位。角色模块参考 BaseLib 为自定义角色提供独立表现与动作入口的做法，项目内通过 Cocos Prefab 和 Spine 时间线完成绑定。 [BaseLib 自定义角色源码](https://github.com/Alchyr/BaseLib-StS2/blob/master/Abstracts/CustomCharacterModel.cs)
+
+## 2026-11-26 · 焦土迷宫羊皮纸底图
+
+用户确认素羊皮纸样式。`assets/ashen-labyrinth/interface/route-parchment.png` 是 Codex 内置 ImageGen 产出的 768×2048 原始 PNG，纸色参考 `assets/ashen-labyrinth/paper-back.png`。文件和输出原稿逐字节一致，SHA-256 为 `193d2021f23dd424dc9d8c6211b3354ddc0043f588ee672c5ecf90698adbb228`。
+
+`RouteMapPanel.prefab` 与 `RouteMapPopup.prefab` 绑定同一个 SpriteFrame。`RouteMap.ts` 把底图放在滚动内容根节点上，由原生裁切区域裁切，随内容滚动。`RoutePoint.ts` 在纸面上使用深色文字和图标，状态沿用原生选路模型。验收检查两种桌面尺寸的对比、滚动位移和单击节点。
+
+生成提示词
+
+> Edit the supplied game card paper by transforming its parchment material into a full-bleed 3:8 tall vertical map paper strip. Keep its warm light honey-beige paper tone and restrained natural grain. Remove the card frame and the geometric symbol. The result is an entirely blank flat sheet of clean antique parchment with softly aged edges, very fine vellum fibers, and two or three understated horizontal fold creases. Uniform bright warm beige center for dark game route lines and labels. No map drawings, no contour lines, no objects, no ornaments, no logos, no writing, no numbers, no symbols, no wooden frame, no tabletop, no shadows outside the paper. It is only the paper that a map would be printed on. Entire image covered by parchment with subtle edge aging, suitable for a long vertical game UI scroller.
+
+## 2026-11-26 · 焦土迷宫地图节点图标
+
+The end 用户要求使用现成的节点图标。`assets/resources/ui/map-icons/` 收纳 Tabler Icons v3.53.0 官方 PNG。原图为 240×240 透明底，运行副本仅反转 RGB 将黑线换成白线，保留原图形和 Alpha，进入地图后由 Sprite 按节点状态着色。资源目录保留官方 MIT 许可证。 [Tabler Icons PNG](https://github.com/tabler/tabler-icons/tree/v3.53.0/packages/icons-png) · [MIT 许可证](https://github.com/tabler/tabler-icons/blob/v3.53.0/LICENSE)
+
+| 资源 | 地点类型 | Tabler 原名 |
+| --- | --- | --- |
+| `battle.png` | 战斗 | `swords` |
+| `elite.png` | 强敌 | `skull` |
+| `rest.png` | 休整 | `campfire` |
+| `unknown.png` | 补给和搜刮 | `question-mark` |
+| `home.png` | 避难所 | `home-2` |
+
+五张 SpriteFrame 居中注册，由 `assets/prefabs/ui/RoutePoint.prefab` 绑定，用 `assets/game/presentation/map/RoutePoint.ts` 以 62×62 逻辑单位显示。交互与只读视图共用同一图标尺度，主图继续通过原生按钮响应。验收检查 Pink/Cocos 导入、共享问号图标、主图与只读地图滚动、两种窗口尺寸及单次点击结果。
+
 ## 2026-11-21 求生者单件制作 · 脸部精修参考
 
 按部件制作，第一件为青年脸部与颈根。脸模校形以精修侧光稿的眼睑、鼻翼、唇缘、耳廓为直接对照，用对应的 16 位正交深度确定距离。人物造型、绑定与三渲二动作分阶段验收。

@@ -19,6 +19,7 @@ import {
     getScenario,
 } from './content/GameScenario';
 import { GameState, validateGameState } from './state/GameState';
+import type { ExpeditionMap } from './content/ExpeditionMap';
 import {
     getJournalCatalog,
     JournalCatalog,
@@ -48,7 +49,7 @@ export class SurvivalGame {
     private readonly shelterRules: ShelterRules;
     private readonly journalRules: JournalRules;
     readonly synthesis: SynthesisRules;
-    readonly schemaVersion = 3 as const;
+    readonly schemaVersion = 4 as const;
     phase: Phase = 'journal';
     day = 1;
     milestones: Record<string, number> = {};
@@ -60,6 +61,7 @@ export class SurvivalGame {
     cards: OwnedCard[] = [];
     storedSupplies?: Record<CardKind, number>;
     route: Route | null = null;
+    expeditionMap: ExpeditionMap | null = null;
     fixedDone = false;
     pathIndex = 0;
     visited: NodeKind[] = [];
@@ -171,6 +173,7 @@ export class SurvivalGame {
                 cards: this.cards,
                 storedSupplies: this.storedSupplies,
                 route: this.route,
+                expeditionMap: this.expeditionMap,
                 fixedDone: this.fixedDone,
                 pathIndex: this.pathIndex,
                 visited: this.visited,
@@ -223,6 +226,7 @@ export class SurvivalGame {
         this.entryTier = null;
         this.health = this.scenario.initialHealth;
         this.route = null;
+        this.expeditionMap = null;
         this.fixedDone = false;
         this.pathIndex = 0;
         this.visited = [];
@@ -310,8 +314,8 @@ export class SurvivalGame {
     chooseRoute(route: Route): ActionResult {
         return this.explorationRules.chooseRoute(route);
     }
-    enterNode(): ActionResult {
-        return this.explorationRules.enterNode();
+    enterNode(target?: NodeKind): ActionResult {
+        return this.explorationRules.enterNode(target);
     }
     cardBlocked(card: CombatCard): string {
         return this.combatRules.cardBlocked(card);

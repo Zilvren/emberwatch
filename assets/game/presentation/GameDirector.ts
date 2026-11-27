@@ -35,7 +35,7 @@ import { ButtonAction } from './ui/ButtonAction';
 import { StatusBar } from './ui/StatusBar';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { launchPulse, ringImpact } from './effects/TideResonance';
-import { flyCardBack } from './effects/FlyingCardBack';
+import { playLabyrinthCardAction } from './actors/LabyrinthCardAction';
 import { enterEncounterPreview } from './dev/EncounterPreview';
 import {
     FIELD_SCENARIO,
@@ -373,9 +373,12 @@ export class GameDirector extends Component {
                   ? 'heal'
                   : 'block'
         );
-        if (g.scenario.labyrinth) {
+        if (g.scenario.labyrinth && this.hero) {
             presentation?.playAction(() => {}, () => {}, this.ui.reduced);
-            this.flyPlayedCard(this.attackKind(card.kind), () => { impact(); complete(); });
+            playLabyrinthCardAction({
+                hero: this.hero, effects: this.effectsRoot, cardBack: this.labyrinthPaper,
+                attack: this.attackKind(card.kind), reduced: this.ui.reduced, impact, complete,
+            });
         } else if (this.attackKind(card.kind) && this.hero) {
             presentation?.playAction(
                 () => {},
@@ -390,24 +393,6 @@ export class GameDirector extends Component {
             impact();
             complete();
         }
-    }
-    private flyPlayedCard(attack: boolean, done: () => void): void {
-        const rig = this.hero?.spineRig, layer = this.effectsRoot, ink = this.labyrinthPaper;
-        if (this.ui.reduced || !layer || !ink || !rig) {
-            done();
-            return;
-        }
-        const transform = layer.getComponent(UITransform)!;
-        const start = transform.convertToNodeSpaceAR(rig.paperWorld(new Vec3()));
-        const aim = attack && this.enemy?.spineRig ? this.enemy.spineRig : rig;
-        const end = transform.convertToNodeSpaceAR(aim.aimWorld(new Vec3()));
-        if (attack) this.enemy?.impactAnchor?.setWorldPosition(aim.aimWorld(new Vec3()));
-        else end.y += 58;
-        rig.setPaperInFlight(true);
-        flyCardBack(layer, ink, start, end, () => {
-            rig.setPaperInFlight(false);
-            done();
-        });
     }
     private enemyTurn(): void {
         const g = this.game,

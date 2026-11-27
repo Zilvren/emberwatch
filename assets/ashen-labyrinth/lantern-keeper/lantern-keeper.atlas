@@ -1,0 +1,132 @@
+
+lantern-keeper.png
+size: 1536,2016
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+landing-release
+  rotate: false
+  xy: 4, 4
+  size: 385, 548
+  orig: 385, 548
+  offset: 0, 0
+  index: -1
+landing-bend
+  rotate: false
+  xy: 397, 4
+  size: 403, 530
+  orig: 403, 530
+  offset: 0, 0
+  index: -1
+landing-drop
+  rotate: false
+  xy: 808, 4
+  size: 465, 470
+  orig: 465, 470
+  offset: 0, 0
+  index: -1
+rest-arm
+  rotate: false
+  xy: 1281, 4
+  size: 165, 426
+  orig: 165, 426
+  offset: 0, 0
+  index: -1
+coat
+  rotate: false
+  xy: 4, 560
+  size: 259, 425
+  orig: 259, 425
+  offset: 0, 0
+  index: -1
+cloak-back
+  rotate: false
+  xy: 271, 560
+  size: 411, 418
+  orig: 411, 418
+  offset: 0, 0
+  index: -1
+rear-leg
+  rotate: false
+  xy: 690, 560
+  size: 230, 411
+  orig: 230, 411
+  offset: 0, 0
+  index: -1
+cloak-front
+  rotate: false
+  xy: 928, 560
+  size: 378, 411
+  orig: 378, 411
+  offset: 0, 0
+  index: -1
+front-leg
+  rotate: false
+  xy: 4, 993
+  size: 228, 403
+  orig: 228, 403
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 240, 993
+  size: 356, 398
+  orig: 356, 398
+  offset: 0, 0
+  index: -1
+cast-hand
+  rotate: false
+  xy: 604, 993
+  size: 328, 388
+  orig: 328, 388
+  offset: 0, 0
+  index: -1
+landing-contact
+  rotate: false
+  xy: 940, 993
+  size: 458, 388
+  orig: 458, 388
+  offset: 0, 0
+  index: -1
+landing-settle
+  rotate: false
+  xy: 4, 1404
+  size: 482, 377
+  orig: 482, 377
+  offset: 0, 0
+  index: -1
+landing-compress
+  rotate: false
+  xy: 494, 1404
+  size: 489, 351
+  orig: 489, 351
+  offset: 0, 0
+  index: -1
+cast-upper
+  rotate: false
+  xy: 991, 1404
+  size: 286, 346
+  orig: 286, 346
+  offset: 0, 0
+  index: -1
+card
+  rotate: false
+  xy: 1285, 1404
+  size: 170, 256
+  orig: 170, 256
+  offset: 0, 0
+  index: -1
+landing-cloak-cover
+  rotate: false
+  xy: 4, 1789
+  size: 144, 210
+  orig: 144, 210
+  offset: 0, 0
+  index: -1
+neck-wrap
+  rotate: false
+  xy: 156, 1789
+  size: 120, 70
+  orig: 120, 70
+  offset: 0, 0
+  index: -1

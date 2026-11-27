@@ -13,7 +13,6 @@ import type { RunPersistence } from './RunPersistence';
 export type GameCommand =
     | {
           type:
-              | 'enter-node'
               | 'end-turn'
               | 'claim-supplies'
               | 'finish-rewards'
@@ -27,6 +26,7 @@ export type GameCommand =
               | 'new-game';
       }
     | { type: 'start'; tier?: EntryTierId }
+    | { type: 'enter-node'; id?: string }
     | { type: 'choose-route'; route: Route }
     | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
@@ -125,7 +125,7 @@ export class GameSession {
                 result = g.chooseRoute(command.route);
                 break;
             case 'enter-node':
-                result = g.enterNode();
+                result = g.enterNode(command.id);
                 break;
             case 'play-card':
                 result = g.play(command.id);

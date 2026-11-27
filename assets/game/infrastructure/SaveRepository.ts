@@ -82,7 +82,7 @@ export class SaveRepository implements RunPersistence {
     private decode(text: string): GameState {
         const envelope = JSON.parse(text);
         if (envelope?.format !== 'the-end-save') throw new Error('存档格式无效。');
-        if (envelope.version !== 1 && envelope.version !== 2 && envelope.version !== 3)
+        if ([1, 2, 3, 4].indexOf(envelope.version) < 0)
             throw new SaveReadError('存档版本暂不受支持，原存档已保留。', true);
         const { checksum, ...body } = envelope;
         if (checksum !== hash(JSON.stringify(body))) throw new Error('存档完整性校验失败。');
@@ -148,7 +148,7 @@ export class SaveRepository implements RunPersistence {
         try {
             const body = {
                 format: 'the-end-save',
-                version: 3,
+                version: 4,
                 savedAt: new Date().toISOString(),
                 catalogHash: this.catalogHash(getScenario(state.scenarioId, state.scenarioVersion)),
                 state: validateGameState(state, this.content.cards),

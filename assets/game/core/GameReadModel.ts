@@ -24,6 +24,7 @@ export type GameReadModel = ReadonlyValue<
         | 'carriedCards'
         | 'storedSupplies'
         | 'route'
+        | 'expeditionMap'
         | 'fixedDone'
         | 'pathIndex'
         | 'visited'

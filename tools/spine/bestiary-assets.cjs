@@ -28,9 +28,9 @@ function imagePoint(part, uv) {
   return [part.x+d[0], part.y+d[1]];
 }
 
-function identifyParts(sheet) {
+function identifyParts(sheet, columns = 4, rows = 3) {
   const {data,width:w,height:h}=sheet;
-  const ids=new Int32Array(w*h),queue=new Int32Array(w*h),cells=Array(12);
+  const ids=new Int32Array(w*h),queue=new Int32Array(w*h),cells=Array(columns*rows);
   let index=0;
   for(let i=0;i<ids.length;i++){
     if(ids[i] || data[4*i+3]<48) continue;
@@ -48,11 +48,11 @@ function identifyParts(sheet) {
       }
     }
     if(size<500) continue;
-    const col=Math.floor((left+right+1)*2/w),row=Math.floor((top+bottom+1)*1.5/h),cell=row*4+col;
+    const col=Math.floor((left+right+1)*columns/(2*w)),row=Math.floor((top+bottom+1)*rows/(2*h)),cell=row*columns+col;
     if(cells[cell]) throw Error('Two major islands in cell '+cell);
     cells[cell]={id:index,left,top,right,bottom,size};
   }
-  if(cells.filter(Boolean).length!==12) throw Error('Missing separated artwork');
+  if(cells.filter(Boolean).length!==columns*rows) throw Error('Missing separated artwork');
   return {cells,ids};
 }
 

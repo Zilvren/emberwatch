@@ -1,5 +1,6 @@
 import { ActionResult } from '../RulesTypes';
 import { GameState } from '../state/GameState';
+import type { NodeKind, RouteProgress } from '../content/GameScenario';
 export type FeedbackState = Pick<GameState, 'revision' | 'logs'>;
 export type InventoryState = Pick<GameState, 'battle' | 'cards' | 'phase' | 'supplies'>;
 export type SynthesisState = Pick<GameState, 'cards' | 'phase' | 'revision'>;
@@ -7,25 +8,24 @@ export type CombatState = Pick<
     GameState,
     'health' | 'battle' | 'entryTier' | 'phase' | 'rewards' | 'supplies'
 >;
-export type RewardState = Pick<
+type NodeCompletionState = Pick<GameState, 'expeditionMap' | 'fixedDone' | 'pathIndex' | 'phase' | 'visited'>;
+export type RewardState = NodeCompletionState & Pick<
     GameState,
-    'cards' | 'fixedDone' | 'pathIndex' | 'phase' | 'rewards' | 'supplies' | 'visited' | 'discoveryPool'
+    'cards' | 'rewards' | 'supplies' | 'discoveryPool'
 >;
-export type ExplorationState = Pick<
+export type ExplorationState = NodeCompletionState & Pick<
     GameState,
+    | 'day'
+    | 'seed'
     | 'health'
     | 'battle'
     | 'entryTier'
-    | 'fixedDone'
-    | 'pathIndex'
-    | 'phase'
     | 'returnElapsed'
     | 'rewards'
     | 'discoveryPool'
     | 'route'
     | 'settlement'
     | 'supplies'
-    | 'visited'
     | 'failureReason'
 >;
 export type ShelterState = Pick<
@@ -39,9 +39,17 @@ export type ShelterState = Pick<
     | 'settlement'
     | 'storedSupplies'
     | 'supplies'
-> &
-    Readonly<Pick<GameState, 'route' | 'pathIndex'>>;
+> & RouteProgress;
 export type JournalState = Pick<GameState, 'day' | 'journalEntries' | 'milestones' | 'phase'>;
+
+export function completeExplorationNode(state: NodeCompletionState, id: NodeKind, entrance: NodeKind): void {
+    state.visited.push(id);
+    if (state.expeditionMap) state.expeditionMap.activeNode = null;
+    else if (id !== entrance) state.pathIndex++;
+    if (id === entrance) state.fixedDone = true;
+    state.phase = 'map';
+}
+
 export class RuleFeedback {
     constructor(private readonly state: FeedbackState) {}
     result(ok: boolean, message: string, warning = false): ActionResult {

@@ -578,7 +578,29 @@
     "status": {
       "__id__": 11
     },
-    "_id": "10fe3nO/EnD2WSKqZj9k0pp"
+    "_id": "10fe3nO/EnD2WSKqZj9k0pp",
+    "iconFrames": [
+      {
+        "__uuid__": "9408727a-c07a-4a70-874e-617d48e99d00@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "32205a96-1bb5-4745-b3a0-2bfb45e41152@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "e9368380-d46d-475d-b017-ee00c51c00e7@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "a1192a9d-251e-45ec-8ab5-0861743a1936@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "53680c76-9c49-4c72-843f-d77d30f9ef05@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      }
+    ]
   },
   {
     "__type__": "cc.CompPrefabInfo",

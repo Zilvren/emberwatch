@@ -1,5 +1,5 @@
 import { CardSet } from '../content/ContentRegistry';
-import { GameScenario } from '../content/GameScenario';
+import { GameScenario, currentNodeId } from '../content/GameScenario';
 import { ActionResult } from '../RulesTypes';
 import { RuleFeedback, ShelterState } from './RuleContext';
 import { mapClearMilestone } from '../content/JournalCatalog';
@@ -16,8 +16,7 @@ export class ShelterRules {
     returnToShelter(): void {
         if (
             this.state.phase !== 'map' ||
-            !this.state.route ||
-            this.state.pathIndex < this.scenario.routes[this.state.route].length
+            currentNodeId(this.state, this.scenario) !== 'return'
         )
             return;
         const lost = this.state.cards

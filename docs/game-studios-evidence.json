@@ -1,5 +1,280 @@
 {
   "schemaVersion": 1,
+  "ashenLabyrinthHearthFork20261127": {
+    "project": "The end",
+    "date": "2026-11-27",
+    "baseline": "4641d19 加当前工作区",
+    "scope": "第 6 至 11 层选路、连续战斗提示与真实遭遇核对",
+    "status": "已实装，桌面实机核对",
+    "scene": "assets/TheEnd.scene",
+    "build": "build/web-desktop",
+    "buildLog": "temp/builder/log/web-desktop-build-1795785860313.log",
+    "checks": {
+      "typecheck": true,
+      "testsPassed": 183,
+      "testsFailed": 0,
+      "generatedMapsCompared": 512,
+      "legacyMixedBranchVerified": true
+    },
+    "native": {
+      "browser": "Edge 158.0.4370.45",
+      "seed": 17,
+      "day": 1,
+      "entryTier": "standard",
+      "from": "warmAlcove",
+      "to": "leeAlcove",
+      "inputs": [
+        "鼠标",
+        "Escape"
+      ],
+      "mainViewports": [
+        "1440×900",
+        "1024×768"
+      ],
+      "readonlyViewports": [
+        "1440×900",
+        "1024×768"
+      ],
+      "safe": {
+        "entry": "fallenShelves",
+        "label": "第 10 层遇战",
+        "fights": [
+          "10/hoistBridge/stone-claw"
+        ]
+      },
+      "double": {
+        "entry": "stampedDrawer",
+        "label": "第 9、10 层连战",
+        "fights": [
+          "9/ashGallery/stone-claw",
+          "10/hoistBridge/stone-claw"
+        ]
+      },
+      "inspectAndClosePreservedState": true,
+      "runtimeErrors": []
+    },
+    "screenshots": [
+      "output/playwright/hearth-route-20261127/hearth-fork-1440.png",
+      "output/playwright/hearth-route-20261127/hearth-fork-1024.png",
+      "output/playwright/hearth-route-20261127/hearth-readonly-1024.png"
+    ],
+    "screenshotArchive": "viking://~/resources/projects/the-end/docs/hearth-route-20261127/",
+    "visualReview": "制作方已查看两种窗口的主图和小窗只读图，首次玩家辨认速度待试玩。"
+  },
+  "ashenLabyrinthMapDesignReview20261127": {
+    "project": "The end",
+    "screenshotArchive": "viking://~/resources/projects/the-end/docs/map-design-review-20261127/",
+    "date": "2026-11-27",
+    "baseline": "4641d19 加当前工作区",
+    "status": "设计评审草案",
+    "scene": "assets/TheEnd.scene",
+    "build": "build/web-desktop",
+    "review": "docs/designs/ui/ux-review.md",
+    "sample": {
+      "generator": "assets/game/core/content/ExpeditionMap.ts",
+      "campaignSeeds": [
+        1,
+        1024
+      ],
+      "day": 1,
+      "unit": "同一张图里每个至少有两个出口的地点计一次，各地图种子等权纳入，未按游玩频率加权。",
+      "maps": 1024,
+      "forks": 10536,
+      "allDestinationsUnknown": 7981,
+      "allUnknownWithIdenticalSuccessorSets": 2105,
+      "alsoMatchingCostSupplyRangeAndDiscoveryRules": 697
+    },
+    "rulesCheck": {
+      "command": "node --test --test-name-pattern=\"map|route|generated|restore|fork\" tests/ashen-labyrinth.test.cjs",
+      "passed": 5,
+      "failed": 0
+    },
+    "nativeCheck": {
+      "browser": "Edge 158.0.4370.45",
+      "scenario": "ashen-labyrinth",
+      "seed": 17,
+      "day": 1,
+      "tier": "standard",
+      "save": "off",
+      "inputs": [
+        "鼠标单击",
+        "滚轮",
+        "Escape"
+      ],
+      "viewports": [
+        "1440×900 主图",
+        "1024×768 只读图"
+      ],
+      "findings": [
+        "第 3 层裂口料斗之后的两个未知地点均只连向折光回廊。点击当前位置不推进，点选右侧房间后仅余折光回廊可去。",
+        "1024×768 下滚动并关闭只读图，游戏快照一致。",
+        "第 6 层余温壁炉的初始视野最高显示第 8 层。主图滚动后可见灰烬长廊和悬轮桥，游戏快照一致。"
+      ],
+      "screenshots": [
+        "output/playwright/map-design-review-20261127/seed17-fork-1440.png",
+        "output/playwright/map-design-review-20261127/seed17-route-1024.png",
+        "output/playwright/map-design-review-20261127/seed17-rest-fork-1440.png",
+        "output/playwright/map-design-review-20261127/seed17-middle-battles-1440.png"
+      ]
+    },
+    "openQuestions": [
+      "首次见图的玩家能否从岔口读出下一次战斗与连续战斗。",
+      "更换中段可选战的敌人后，选择率和出牌方式是否发生变化。"
+    ]
+  },
+  "ashenLabyrinthLanternKeeper20261127": {
+    "project": "The end",
+    "date": "2026-11-27",
+    "baseline": "4641d19 与本次工作区改动",
+    "scope": "执灯人单膝落地时近侧右拳支撑、远侧左臂被躯干和披风遮挡",
+    "status": "SUPPORTED",
+    "visualAcceptance": "六帧姿势按用户选定的原图，用户指出的远近遮挡已在主游戏复核，最终观感待试玩",
+    "scene": "assets/TheEnd.scene",
+    "actor": "assets/prefabs/actors/PlayerActor.prefab",
+    "skeletonUuid": "0d6fad44-f837-4439-a3ea-45bdc9373a0d",
+    "sourcePartsSha256": "23efe9b4610c50e7c64506c1ca26f7d65a8eff58170d84e1aed8ace9dd3d1537",
+    "approvedLandingSha256": "980943bde7ccee5189ee326ee4a5a2c00c432ef1c246b3a79cb7ace6480c1336",
+    "commands": [
+      {
+        "command": "npm run typecheck",
+        "exit": 0
+      },
+      {
+        "command": "npm test",
+        "exit": 0,
+        "passed": 182
+      },
+      {
+        "command": "npm run build:web",
+        "exit": 0,
+        "log": "temp/builder/log/web-desktop-build-1795785414854.log"
+      }
+    ],
+    "checks": [
+      "逐像素对比用户确认的六帧原图。上排三帧一致。下排只在远侧左臂原先露出的范围内补绘披风、衣摆和后膝，三帧分别改动 17460、15769、16721 个像素。三个撑地右拳区域均为零像素改动。",
+      "观察实机落地段，并在 Cocos 中按时间采样。0.4 秒时远臂仍随原图显示，0.43、0.465、0.49 秒依次出现遮袖、遮腕、遮手的前景布边。0.55 秒起进入已经遮住左臂的触地绘图。触地、下沉、收势三张网格均已排除远侧左手的控制点。",
+      "在 1440×900 及 1024×768 主场景中，经实际鼠标操作打出攻击和格挡，第 11 回合生命耗尽后依次显示六个落地姿势。失败页在 1.02 秒定格，画面只露出近侧的撑地右拳。返回避难所后生命恢复至 10。"
+    ],
+    "evidence": {
+      "report": "output/playwright/lantern-keeper-far-arm/verification.json",
+      "pixelComparison": "output/playwright/lantern-keeper-far-arm/art-check.json",
+      "video": "output/playwright/lantern-keeper-far-arm/landing-live.webm",
+      "videoDecodedFrames": 75,
+      "videoSeconds": 3,
+      "halfSpeed": "output/playwright/lantern-keeper-far-arm/landing-half-speed.gif",
+      "correctedSheet": "output/playwright/lantern-keeper-far-arm/landing-sheet.png",
+      "nativeTerminal": "output/playwright/lantern-keeper-far-arm/landing-detail.png",
+      "screenshots": [
+        "output/playwright/lantern-keeper-far-arm/defeat-1440.png",
+        "output/playwright/lantern-keeper-far-arm/defeat-1024.png"
+      ],
+      "previousCostumeReview": "output/playwright/lantern-keeper-cloak/verification.json"
+    },
+    "runtimeTextureSha256": "6301eac4fb7abcaf8e3b038de6553e8faaf33e10d4d76d1a184c7444ea5c4d25"
+  },
+  "ashenLabyrinthParchment20261127": {
+    "project": "The end",
+    "date": "2026-11-27",
+    "baseline": "4641d19 与本次工作区改动",
+    "scope": "焦土迷宫主图和只读路线图的羊皮纸底材与深色墨线",
+    "status": "SUPPORTED",
+    "commands": [
+      { "command": "npm test", "exit": 0, "passed": 178 },
+      { "command": "npm run build:web", "exit": 0, "log": "temp/builder/log/web-desktop-build-1795708647792.log" },
+      { "command": "node temp/route-parchment-view.cjs", "exit": 0, "recordedAt": "2026-11-26T16:00:42.016Z" }
+    ],
+    "checks": [
+      { "claim": "羊皮纸随地图滚动", "status": "SUPPORTED", "evidence": "主图和只读地图实际显示同一原生 SpriteFrame，父节点为 ScrollView 内容。两处原生滚轮输入都让纸面纵向位移 310 设计单位。" },
+      { "claim": "读取地图与点击节点", "status": "SUPPORTED", "evidence": "原生重载恢复同一张 17 层图，滚动和关闭只读地图的存档快照一致。单击悬灯窄道进入战斗，地图节点数据保持一致。浏览器无运行错误。" },
+      { "claim": "桌面视觉复核", "status": "SUPPORTED", "evidence": "查看了 1440×900 和 1024×768 的最新实机图。暖纸面上的路标、问号和深色文字可读，最终观感以用户反馈为准。" }
+    ],
+    "browserReport": "output/playwright/ashen-labyrinth-parchment/verification.json",
+    "reviewedScreenshots": [
+      "output/playwright/ashen-labyrinth-parchment/map-main-1440.png",
+      "output/playwright/ashen-labyrinth-parchment/map-route-1024.png"
+    ]
+  },
+  "ashenLabyrinth17Floors20261126": {
+    "project": "The end",
+    "date": "2026-11-26",
+    "baseline": "4641d19 与本次工作区改动",
+    "scope": "17 层生成、滚动大节点、单击进入、问号与读档",
+    "status": "SUPPORTED",
+    "sliceVerdict": "PROCEED",
+    "playtestStatus": "本机试玩已更新，用户体验反馈待收集",
+    "commands": [
+      { "command": "npm test", "exit": 0, "passed": 178 },
+      { "command": "npm run check:architecture", "exit": 0 },
+      { "command": "npm run build:web", "exit": 0, "log": "temp/builder/log/web-desktop-build-1795707409063.log" },
+      { "command": "node tools/check-labyrinth-browser.cjs", "exit": 0, "nativeActions": 230 }
+    ],
+    "checks": [
+      { "claim": "17 层地图生成", "status": "SUPPORTED", "evidence": "512 组种子的全部路径逐层走完 17 个地点，三处休整、至少六次发现机会及中途岔路可达。实机走通多战斗及少战斗两条完整路线。" },
+      { "claim": "滚动图、原生图标和一次点击", "status": "SUPPORTED", "evidence": "主图与只读地图可滚动。两种窗口下检查图标 62×62 和 SpriteFrame 对应，补给与搜刮共享问号且进入前隐藏地点名。一次点击进入原生房间，浏览器无运行时及控制台错误。" },
+      { "claim": "同一张图续档", "status": "SUPPORTED", "evidence": "实机在战斗、发现奖励和中途岔口重载。通关或失败后再次出发生成新图。旧八层地图快照由规则测试恢复。" }
+    ],
+    "viewports": ["1440x900", "1024x768"],
+    "browserReport": "output/playwright/ashen-labyrinth-17-floors/verification.json",
+    "reviewedScreenshots": [
+      "output/playwright/ashen-labyrinth-17-floors/03-map-fork.png",
+      "output/playwright/ashen-labyrinth-17-floors/04-scroll-map-1024.png"
+    ]
+  },
+  "ashenLabyrinthGridMap20261126": {
+    "project": "The end",
+    "date": "2026-11-26",
+    "baseline": "4641d19 与本次工作区改动",
+    "scope": "多层网格生成、主图选路、只读整图总览和存档延续",
+    "status": "SUPPORTED",
+    "sliceVerdict": "PROCEED",
+    "playtestStatus": "已提供新版试玩，用户体验反馈待收集",
+    "commands": [
+      { "command": "npm test", "exit": 0, "passed": 178 },
+      { "command": "npm run typecheck", "exit": 0 },
+      { "command": "npm run check:architecture", "exit": 0 },
+      { "command": "npm run build:web", "exit": 0, "log": "temp/builder/log/web-desktop-build-1795704568636.log" },
+      { "command": "node tools/check-labyrinth-browser.cjs", "exit": 0, "nativeActions": 164 }
+    ],
+    "checks": [
+      { "claim": "分层路线生成", "status": "SUPPORTED", "evidence": "512 组种子复现一致，样本有 12–16 个地点和 6–21 条完整走法。检查两处后续岔口、全部路径可达、每条路径 7–8 点、终战前发现机会和休整。" },
+      { "claim": "主图选路与整图总览", "status": "SUPPORTED", "evidence": "两种尺寸的原生总览通过整图可见及退出快照一致检查。主图高亮当前可达节点，并实机选择灰烬长廊和铁皮储柜后的不同地点。浏览器无运行时与控制台错误。" },
+      { "claim": "存档续接", "status": "SUPPORTED", "evidence": "实机在中段岔口、战斗、发现奖励和返营后重载，比较完整快照，并验证通关或失败后的下一趟取得新图。较早生成的九点图在规则层回读时内容一致。" }
+    ],
+    "viewports": ["1440x900", "1024x768"],
+    "browserReport": "output/playwright/ashen-labyrinth-grid-map/verification.json",
+    "reviewedScreenshots": [
+      "output/playwright/ashen-labyrinth-grid-map/03-map-fork.png",
+      "output/playwright/ashen-labyrinth-grid-map/02-map-overview-1440.png",
+      "output/playwright/ashen-labyrinth-grid-map/04-map-overview-1024.png"
+    ]
+  },
+  "ashenLabyrinthRandomMap20261126": {
+    "project": "The end",
+    "date": "2026-11-26",
+    "baseline": "4641d19 与本次工作区改动",
+    "scope": "焦土迷宫出发生成、竖向地图、中途选路、存档与返营",
+    "status": "SUPPORTED",
+    "sliceVerdict": "PROCEED",
+    "playtestStatus": "本地试玩已交付，用户体验反馈待收集",
+    "commands": [
+      { "command": "npm test", "exit": 0, "passed": 177 },
+      { "command": "npm run typecheck", "exit": 0 },
+      { "command": "npm run check:architecture", "exit": 0 },
+      { "command": "npm run build:web", "exit": 0, "log": "temp/builder/log/web-desktop-build-1795703073305.log" },
+      { "command": "node tools/check-labyrinth-browser.cjs", "exit": 0, "nativeActions": 162 }
+    ],
+    "checks": [
+      { "claim": "生成与推进", "status": "SUPPORTED", "evidence": "48 组固定种子验证所有可走路径、可达终点、中途岔路、发现机会和休整点。实际完成长短路线各一次，通关及失败后重新出发取得新图。" },
+      { "claim": "原生竖向地图和输入", "status": "SUPPORTED", "evidence": "Pink/Cocos 4.0.0-beta.1 的 Web Desktop 构建。滚轮查看上方，同一岔口选择两个不同地点，战斗内只读地图。检查两种尺寸的实机截图，浏览器无运行时与控制台错误。" },
+      { "claim": "存档", "status": "SUPPORTED", "evidence": "岔口、战斗、待发现候选与返营后实际重载，核对完整快照。固定焦土迷宫 v3 中途存档在规则层走完旧路线后生成新图，退潮盐原旧档通过实机加载。" }
+    ],
+    "viewports": ["1440x900", "1024x768"],
+    "browserReport": "output/playwright/ashen-labyrinth-random-map/verification.json",
+    "reviewedScreenshots": [
+      "output/playwright/ashen-labyrinth-random-map/03-map-fork.png",
+      "output/playwright/ashen-labyrinth-random-map/04-map-fork-restored-1024.png"
+    ]
+  },
   "campMarkers20261122": {
     "project": "The end",
     "date": "2026-11-22",

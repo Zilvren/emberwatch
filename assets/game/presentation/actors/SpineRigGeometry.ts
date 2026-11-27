@@ -12,6 +12,10 @@ export interface SpineRigContract {
     motions: Record<SpineMotion, { duration: number; loop: boolean; contact?: number }>;
     contactTip: readonly [number, number];
     contactBone: string;
+    /** World-space spawn follows this authored hand marker at the release cue. */
+    releaseBone?: string;
+    /** Dimensions of the illustrated card in the release bone's local axes. */
+    releaseSize?: readonly [number, number];
     approachBone: string;
     /** In a ranged clip, release precedes the single impact event by this travel time. */
     flight?: number;

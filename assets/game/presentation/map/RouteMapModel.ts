@@ -1,7 +1,8 @@
 import type { GameReadModel } from '../../core/GameReadModel';
 import type { NodeKind, MapIcon } from '../../core/content/GameScenario';
+import { nextMapNodes, type ExpeditionMap } from '../../core/content/ExpeditionMap';
 
-export type RoutePointState = 'available' | 'visited' | 'locked' | 'excluded';
+export type RoutePointState = 'available' | 'current' | 'visited' | 'locked' | 'excluded';
 export interface RoutePointModel {
     id: string;
     kind: string;
@@ -20,16 +21,63 @@ export interface RouteEdgeModel {
     to: string;
     excluded: boolean;
     visited: boolean;
+    available?: boolean;
 }
 export interface RouteMapModel {
     points: RoutePointModel[];
     edges: RouteEdgeModel[];
     height: number;
     focusY: number;
-    landscape: boolean;
 }
-/** Adapt authored scenario routes; drawing components do not know the tutorial topology. */
+
+function labyrinthPointTitle(title: string, icon: MapIcon | 'home', state: RoutePointState): string {
+    if ((icon === 'supply' || icon === 'scavenge') && state !== 'visited' && state !== 'current')
+        return '未知地点';
+    return title;
+}
+
+function hearthBattleHints(game: GameReadModel, map: Readonly<ExpeditionMap>, from?: NodeKind): Map<NodeKind, string> {
+    const hints = new Map<NodeKind, string>();
+    if (!from) return hints;
+    const rooms = new Map(map.points.map(point => [point.id, point]));
+    const here = rooms.get(from), hearth = rooms.get('warmAlcove'), nextRest = rooms.get('leeAlcove');
+    if (!here || !hearth || !nextRest || here.layer < hearth.layer || here.layer >= nextRest.layer ||
+        here.next.length < 2) return hints;
+    const stopId = nextRest.id, stopLayer = nextRest.layer;
+
+    // Count only public battle rooms on each actual route up to the next rest, including saved routes.
+    function collectBattles(id: NodeKind, battles: number[], outcomes: number[][]): void {
+        const point = rooms.get(id)!;
+        if (id === stopId) {
+            outcomes.push(battles);
+            return;
+        }
+        if (point.layer >= stopLayer || !point.next.length) {
+            outcomes.push([]); // A route that bypasses the rest cannot promise this forecast.
+            return;
+        }
+        const floors = game.scenario.nodes[id].type === 'battle' ? [...battles, point.layer + 1] : battles;
+        for (const exit of point.next) collectBattles(exit, floors, outcomes);
+    }
+    for (const id of here.next) {
+        const outcomes: number[][] = [];
+        collectBattles(id, [], outcomes);
+        const first = outcomes[0];
+        if (!first?.length) continue;
+        const last = first[first.length - 1];
+        if (!outcomes.every(floors => floors[floors.length - 1] === last &&
+            (floors.length === 1 || (floors.length === 2 && floors[0] === last - 1)))) continue;
+        const pairs = outcomes.filter(floors => floors.length === 2).length;
+        const hint = pairs === 0 ? `第 ${last} 层遇战` :
+            `第 ${last - 1}、${last} 层${pairs === outcomes.length ? '连战' : '可能连战'}`;
+        hints.set(id, hint);
+    }
+    return hints;
+}
+
 export function routeMapModel(game: GameReadModel): RouteMapModel {
+    if (game.expeditionMap) return expeditionMapModel(game, game.expeditionMap);
+
     const routes = (
         Object.keys(game.scenario.routes) as Array<keyof typeof game.scenario.routes>
     ).map((route) => [route, game.scenario.routes[route]] as const);
@@ -49,9 +97,8 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
     }));
     const depth = Math.max(1, ...prefixes.map((p) => p.steps.length));
     const suffix = routes[0][1].slice(routes[0][1].length - common);
-    const layers = depth + suffix.length + 2,
-        landscape = !!game.scenario.labyrinth,
-        height = landscape ? 560 : Math.max(1100, layers * 230 + 160);
+    const layers = depth + suffix.length + 2;
+    const height = Math.max(1100, layers * 230 + 160);
     const points: RoutePointModel[] = [],
         edges: RouteEdgeModel[] = [];
     const add = (
@@ -78,15 +125,16 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
               : available
                 ? 'available'
                 : 'locked';
+        const title = kind === 'home' ? '避难所' : (game.scenario.nodes[kind]?.title ?? kind);
+        const icon = kind === 'home' ? ('home' as const) : game.scenario.nodes[kind].icon;
         const point = {
             id,
             kind,
-            title: kind === 'home' ? '避难所' : (game.scenario.nodes[kind]?.title ?? kind),
-            icon: kind === 'home' ? ('home' as const) : game.scenario.nodes[kind].icon,
+            title: game.scenario.labyrinth ? labyrinthPointTitle(title, icon, state) : title,
+            icon,
             layer,
-            x: landscape ? -475 + layer * (950 / Math.max(1, layers - 1)) : x,
-            y: landscape ? -height * .45 - (branch ? (x > 0 ? 96 : -92) : 0)
-                : -(height - 100 - layer * 230),
+            x,
+            y: -(height - 120 - layer * 230),
             state,
             fieldSymbol: game.scenario.fieldDeck && !game.scenario.labyrinth
                 ? game.scenario.nodes[kind]?.icon === 'battle'
@@ -150,5 +198,55 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
         points.find((point) => point.state === 'available') ??
         [...points].reverse().find((point) => point.state === 'visited') ??
         start;
-    return { points, edges, height, focusY: focus.y, landscape };
+    return { points, edges, height, focusY: focus.y };
+}
+
+function expeditionMapModel(game: GameReadModel, map: Readonly<ExpeditionMap>): RouteMapModel {
+    const last = game.visited[game.visited.length - 1];
+    const available = game.phase === 'map' ? nextMapNodes(map, last) : [];
+    const current = map.activeNode ?? (game.phase === 'map' && available.length ? last : undefined);
+    const hints = hearthBattleHints(game, map, current);
+    const visited = new Set(game.visited);
+    const remaining = new Set(map.activeNode === null ? nextMapNodes(map, last) : [map.activeNode]);
+    const path = map.activeNode === null ? game.visited : [...game.visited, map.activeNode];
+    const ordered = [...map.points].sort((a, b) => a.layer - b.layer || a.lane - b.lane);
+    const top = ordered[ordered.length - 1].layer;
+    const topMargin = 88;
+    const rowHeight = 172;
+    const bottomMargin = 112;
+    const height = topMargin + top * rowHeight + bottomMargin;
+    for (const point of ordered)
+        if (remaining.has(point.id)) for (const next of point.next) remaining.add(next);
+
+    const points: RoutePointModel[] = ordered.map(({ id, layer, lane }) => {
+        const site = game.scenario.nodes[id];
+        let state: RoutePointState = 'excluded';
+        if (id === current) state = 'current';
+        else if (visited.has(id)) state = 'visited';
+        else if (available.indexOf(id) >= 0) state = 'available';
+        else if (remaining.has(id)) state = 'locked';
+        return {
+            id, kind: id, title: labyrinthPointTitle(site.title, site.icon, state), icon: site.icon, layer,
+            x: lane * 196 + (layer > 0 && layer < top ? Math.sin(layer * 5 + lane) * 9 : 0),
+            y: -(topMargin + (top - layer) * rowHeight),
+            state, action: 'enter-' + id, decisionHint: hints.get(id),
+        };
+    });
+    const edges: RouteEdgeModel[] = [];
+    for (const point of map.points) {
+        const step = path.indexOf(point.id);
+        for (const next of point.next) {
+            const visited = step >= 0 && path[step + 1] === next;
+            const availableEdge = point.id === last && available.indexOf(next) >= 0;
+            edges.push({
+                from: point.id, to: next, visited, available: availableEdge,
+                excluded: !visited && !availableEdge && !(remaining.has(point.id) && remaining.has(next)),
+            });
+        }
+    }
+    const focus = points.filter((point) => point.state === 'available' || point.state === 'current');
+    const focusY = focus.length > 0
+        ? (focus[0].y + focus[focus.length - 1].y) * 0.5
+        : points.find((point) => point.id === last)?.y ?? points[0].y;
+    return { points, edges, height, focusY };
 }

@@ -205,7 +205,9 @@ export class UiActionRouter {
             this.actions.act({ type: 'choose-route', route });
             return;
         } else if (id.startsWith('enter-') || id === 'map-enter') {
-            this.actions.act({ type: 'enter-node' });
+            this.actions.act(g.expeditionMap && id.startsWith('enter-')
+                ? { type: 'enter-node', id: id.slice(6) }
+                : { type: 'enter-node' });
             return;
         } else if (id === 'end-turn') {
             this.actions.enemyTurn();

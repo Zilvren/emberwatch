@@ -1,4 +1,4 @@
-import { _decorator, Component, director, Director, JsonAsset, sp, Vec3 } from 'cc';
+import { _decorator, Component, director, Director, JsonAsset, sp, SpriteFrame, UITransform, Vec3 } from 'cc';
 import {
     silhouetteAtHeight,
     skinVertex,
@@ -24,6 +24,7 @@ export class SpineActorRig extends Component {
     @property(JsonAsset) tideContract: JsonAsset | null = null;
     @property(sp.SkeletonData) labyrinthSkeleton: sp.SkeletonData | null = null;
     @property(JsonAsset) labyrinthContract: JsonAsset | null = null;
+    @property(SpriteFrame) thrownCard: SpriteFrame | null = null;
     @property(Vec3) labyrinthOffset = new Vec3();
     @property labyrinthScale = 1;
     private legacySkeleton: sp.SkeletonData | null = null;
@@ -91,15 +92,19 @@ export class SpineActorRig extends Component {
             ? Vec3.transformMat4(out, new Vec3(aim.worldX, aim.worldY, 0), this.node.worldMatrix)
             : out.set(this.node.worldPosition);
     }
-    paperWorld(out: Vec3): Vec3 {
+    cardReleasePose(layer: UITransform) {
         this.syncWorldPose();
-        const bone = this.skeleton?.findBone('float-guard');
-        return bone ? Vec3.transformMat4(out, new Vec3(bone.worldX, bone.worldY, 0), this.node.worldMatrix)
-            : this.aimWorld(out);
-    }
-    setPaperInFlight(value: boolean): void {
-        if (this.look !== 'labyrinth' || !this.ready || this.action !== 'idle') return;
-        this.skeleton?.setAnimation(1, value ? 'paper-out' : 'paper-return', false);
+        const bone = this.skeleton?.findBone(this.data.releaseBone ?? 'float-guard');
+        const toLayer = (x: number, y: number) => layer.convertToNodeSpaceAR(
+            Vec3.transformMat4(new Vec3(), new Vec3(x, y, 0), this.node.worldMatrix)
+        );
+        const position = bone ? toLayer(bone.worldX, bone.worldY) : layer.convertToNodeSpaceAR(this.aimWorld(new Vec3()));
+        const size = this.data.releaseSize;
+        if (!bone || !size) return { position, angle: 0, width: 24, height: 33 };
+        const right = toLayer(bone.worldX + bone.a * size[0], bone.worldY + bone.c * size[0]);
+        const top = toLayer(bone.worldX + bone.b * size[1], bone.worldY + bone.d * size[1]);
+        const angle = Math.atan2(right.y - position.y, right.x - position.x) * 180 / Math.PI;
+        return { position, angle, width: Vec3.distance(position, right), height: Vec3.distance(position, top) };
     }
     get approach(): number {
         return this.skeleton?.findBone(this.data.approachBone)?.x ?? 0;

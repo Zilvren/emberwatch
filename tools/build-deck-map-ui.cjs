@@ -262,10 +262,67 @@ if (mode === '--templates') {
             action: ref(input),
             title: ref(title.label),
             status: ref(status.label),
+            iconFrames: ['battle', 'elite', 'rest', 'unknown', 'home'].map(mapGlyph),
         });
         save(g);
     }
     console.log('SelectableCard and RoutePoint templates ready; import them through Pink.');
+    process.exit(0);
+}
+
+function mapGlyph(kind) {
+    return asset(uuid(`assets/resources/ui/map-icons/${kind}.png`) + '@f9941', 'cc.SpriteFrame');
+}
+
+function configureRoutePage(g) {
+    const node = name => g.graph.findIndex(row => row.__type__ === 'cc.Node' && row._name === name);
+    const setBox = (name, x, y, w, h) => {
+        const index = node(name);
+        g.graph[index]._lpos = vec(x, y);
+        size(g, index, w, h);
+    };
+    setBox('RoutePaper', 0, -13, 1272, 748);
+    setBox('RouteViewport', 0, -15, 1224, 628);
+    setBox('RouteViewportContent', 0, 314, 1224, 628);
+    setBox('RoutePaths', 0, 0, 1224, 1540);
+    setBox('RouteTitle', -365, 326, 452, 51);
+    const heading = comp(g, node('RouteTitle'), 'cc.Label');
+    Object.assign(heading, { _fontSize: 35, _lineHeight: 43, _horizontalAlign: 0 });
+    setBox('RouteHint', 323, -355, 536, 29);
+    comp(g, node('RouteHint'), 'cc.Label')._horizontalAlign = 2;
+    setBox('RouteLegend', -322, -355, 530, 25);
+    comp(g, node('RouteLegend'), 'cc.Label')._horizontalAlign = 0;
+    setBox('modal-close', 585, 325, 54, 44);
+    const controller = comp(g, g.root, script('RouteMap'));
+    controller.parchmentMap = asset(uuid('assets/ashen-labyrinth/interface/route-parchment.png') + '@f9941', 'cc.SpriteFrame');
+    if (node('RouteKey') >= 0) return;
+
+    const depth = label(g, 'RouteDepth', '', 1165, 125, 176, 32, 19, 'dfc49b');
+    g.graph[depth.label]._horizontalAlign = 2;
+    controller.depth = ref(depth.label);
+    const progress = g.node('RouteProgress', g.root, 257, 325, 177, 20);
+    controller.progress = ref(g.component(progress, 'cc.Graphics', cleanComponent(graphicTemplate)));
+    const key = g.node('RouteKey', g.root, -575, -355, 1, 1);
+    controller.key = ref(key);
+    const sprite = read('assets/prefabs/ui/HUD.prefab').find(row => row.__type__ === 'cc.Sprite');
+    const places = [['battle', '战斗'], ['elite', '强敌'], ['rest', '休整'], ['unknown', '未知地点']];
+    places.forEach(([kind, name], i) => {
+        const x = i * 108;
+        const icon = g.node('Key-' + kind, key, x, 0, 23, 23);
+        g.component(icon, 'cc.Sprite', { ...cleanComponent(sprite), _spriteFrame: mapGlyph(kind),
+            _color: color('e6c99c'), _sizeMode: 0, _trim: false });
+        const item = label(g, 'KeyLabel-' + kind, name, 720 + x + 55, 450, 75, 24, 16, 'ddccad', false, key);
+        g.graph[item.label]._horizontalAlign = 0;
+    });
+}
+
+if (mode === '--route-folio') {
+    for (const file of [mapFile, mapPopupFile]) {
+        const g = new Graph(file);
+        g.graph = read(file);
+        configureRoutePage(g);
+        fs.writeFileSync(path.join(root, file), JSON.stringify(g.graph, null, 2) + '\n');
+    }
     process.exit(0);
 }
 
@@ -312,6 +369,7 @@ function makeMap(file, popup) {
         enter: ref(enter.action),
     });
     if (popup) modal(g, shade, [close.node]);
+    configureRoutePage(g);
     save(g);
 }
 if (mode === '--map-panels') {

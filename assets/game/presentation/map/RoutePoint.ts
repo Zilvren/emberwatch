@@ -1,7 +1,17 @@
-import { _decorator, Color, Component, Graphics, Label, Node, UITransform } from 'cc';
+import { _decorator, Color, Component, Graphics, Label, Node, Sprite, SpriteFrame, UITransform } from 'cc';
 import { ButtonAction } from '../ui/ButtonAction';
 import type { RoutePointModel } from './RouteMapModel';
 const { ccclass, property, requireComponent } = _decorator;
+const iconSlots: Record<RoutePointModel['icon'], number> = {
+    battle: 0, elite: 1, rest: 2, scavenge: 3, supply: 3, home: 4,
+};
+const parchmentInk = {
+    available: { fill: '#f6e2ad', border: '#85502b', glyph: '#5b301a' },
+    current: { fill: '#44392f', border: '#a9683b', glyph: '#ffe7b5' },
+    visited: { fill: '#c7c5a1', border: '#787453', glyph: '#464b37' },
+    locked: { fill: '#e9cea0', border: '#aa8c60', glyph: '#705943' },
+    excluded: { fill: '#e1c79d', border: '#bd9f77', glyph: '#a48a67' },
+};
 
 @ccclass('RoutePoint')
 @requireComponent(Graphics)
@@ -9,13 +19,17 @@ export class RoutePoint extends Component {
     @property(ButtonAction) action: ButtonAction | null = null;
     @property(Label) title: Label | null = null;
     @property(Label) status: Label | null = null;
+    /** Native RoutePoint prefab frames follow iconSlots. */
+    @property({ type: [SpriteFrame] }) iconFrames: SpriteFrame[] = [];
     private data: RoutePointModel | null = null;
     private hovering = false;
+    private glyph: Sprite | null = null;
     onEnable(): void {
         this.node.on(Node.EventType.MOUSE_ENTER, this.enter, this);
         this.node.on(Node.EventType.MOUSE_LEAVE, this.leave, this);
     }
     onDisable(): void {
+        this.hovering = false;
         this.node.off(Node.EventType.MOUSE_ENTER, this.enter, this);
         this.node.off(Node.EventType.MOUSE_LEAVE, this.leave, this);
     }
@@ -27,28 +41,51 @@ export class RoutePoint extends Component {
         this.hovering = false;
         this.draw();
     }
-    private landscape = false;
-    show(data: RoutePointModel, readonly = false, landscape = false): void {
+    private labyrinth = false;
+    private onParchment = false;
+    frameFor(icon: RoutePointModel['icon']): SpriteFrame | null {
+        return this.iconFrames[iconSlots[icon]] ?? null;
+    }
+    show(data: RoutePointModel, readonly = false, labyrinth = false, onParchment = false): void {
         this.data = data;
-        this.landscape = landscape;
-        this.node.setScale(landscape ? .75 : 1, landscape ? .75 : 1, 1);
+        this.labyrinth = labyrinth;
+        this.onParchment = onParchment;
+        if (labyrinth && !this.glyph) {
+            const node = new Node('MapGlyph');
+            node.layer = this.node.layer;
+            this.node.addChild(node);
+            node.addComponent(UITransform).setContentSize(62, 62);
+            this.glyph = node.addComponent(Sprite);
+            this.glyph.sizeMode = Sprite.SizeMode.CUSTOM;
+            this.glyph.trim = false;
+        }
+        if (this.glyph) {
+            this.glyph.node.active = labyrinth;
+            const frame = this.frameFor(data.icon);
+            if (frame && this.glyph.spriteFrame !== frame) this.glyph.spriteFrame = frame;
+        }
         if (this.title) {
             this.title.string = data.title;
-            this.title.color = new Color().fromHEX(landscape ? '#eee1d0' : '#e8dbce');
+            this.title.color = new Color().fromHEX(onParchment
+                ? data.state === 'excluded' ? '#796851' : '#382b23'
+                : labyrinth ? '#eee1d0' : '#e8dbce');
         }
         if (this.status) {
-            this.status.color = new Color().fromHEX('#d0b58e');
-            this.status.node.getComponent(UITransform)!.width = data.decisionHint ? 340 : 180;
+            const forecast = onParchment && !!data.decisionHint && data.action.startsWith('enter-');
+            this.status.isBold = forecast;
+            this.status.fontSize = forecast ? 18 : 14;
+            this.status.color = new Color().fromHEX(forecast ? '#50321e' : onParchment ? '#68472d' : '#d0b58e');
+            this.status.node.getComponent(UITransform)!.width = data.decisionHint && !forecast ? 340 : 180;
             this.status.string =
                 data.decisionHint ??
-                (data.state === 'visited'
+                (data.state === 'current' ? '当前位置' : data.state === 'visited'
                     ? '已完成'
                     : data.state === 'available'
                       ? readonly
-                          ? '当前位置'
+                          ? '可前往'
                           : data.action.startsWith('route-')
                             ? '选择此路'
-                            : '点击进入'
+                            : onParchment ? '可前往' : '点击进入'
                       : data.state === 'excluded'
                         ? '另一条路径'
                         : '未到达');
@@ -64,11 +101,47 @@ export class RoutePoint extends Component {
         const d = this.data,
             g = this.getComponent(Graphics);
         if (!d || !g) return;
-        const active = d.state === 'available',
+        const active = d.state === 'available' || d.state === 'current',
             visited = d.state === 'visited';
-        const ink = this.landscape ? active ? '#edcf9f' : d.state === 'excluded' ? '#7f7085' : '#bb9f88'
-            : active ? '#6f5a34' : '#9c8799';
         g.clear();
+        if (this.status) this.status.node.active = active || visited || this.hovering;
+        if (this.title) this.title.enabled = !this.onParchment || active || visited || this.hovering || !!d.decisionHint || d.title !== '未知地点';
+        if (this.labyrinth) {
+            const excluded = d.state === 'excluded';
+            const tone = this.onParchment ? parchmentInk[d.state] : {
+                fill: active ? '#624d3d' : visited ? '#3e4842' : '#383041',
+                border: active ? '#e3bd87' : excluded ? '#74647e' : '#9e8596',
+                glyph: active ? '#ffdfa9' : visited ? '#d7e3c7' : excluded ? '#ac9bad' : '#e8d2c4',
+            };
+            const fill = new Color().fromHEX(tone.fill);
+            if (this.onParchment && !active && !visited) fill.a = excluded ? 90 : 160;
+            g.fillColor = fill;
+            g.strokeColor = new Color().fromHEX(tone.border);
+            g.lineWidth = active ? 2.5 : 1.25;
+            const radius = this.onParchment && !active ? 36 : 42;
+            g.circle(0, 0, radius);
+            g.fill();
+            g.stroke();
+            if (this.onParchment) {
+                if (this.status) this.status.node.active = active || this.hovering || !!d.decisionHint;
+                if (active) {
+                    g.lineWidth = this.hovering ? 2.6 : 1.35;
+                    g.circle(0, 0, 47);
+                    g.stroke();
+                }
+                if (d.state === 'current') {
+                    g.fillColor = new Color().fromHEX(tone.border);
+                    g.moveTo(-5, 54);
+                    g.lineTo(5, 54);
+                    g.lineTo(0, 47);
+                    g.close();
+                    g.fill();
+                }
+            }
+            if (this.glyph) this.glyph.color = new Color().fromHEX(tone.glyph);
+            return;
+        }
+        const ink = active ? '#6f5a34' : '#9c8799';
         g.strokeColor = new Color().fromHEX(ink);
         g.lineWidth = active || this.hovering ? 2.2 : 1.7;
         if (active || visited || this.hovering) {
@@ -98,35 +171,8 @@ export class RoutePoint extends Component {
             g.fill();
             g.stroke();
         };
-        const paper = this.landscape ? active ? '#75583e' : '#3f354b' : active ? '#cfbf98' : '#b9a6ba';
-        if (this.landscape) {
-            shape([-31, -19, -31, 19, -21, 28, 21, 28, 31, 19, 31, -19, 21, -28, -21, -28], paper);
-            g.strokeColor = new Color().fromHEX(active ? '#f3d5a4' : '#c3a3a0');
-            g.lineWidth = 2;
-            switch (d.icon) {
-                case 'battle':
-                    line([-16, -14, 14, 16]);
-                    line([-14, 14, 15, -15]);
-                    line([-8, -11, -17, -2]);
-                    break;
-                case 'elite':
-                    line([-17, -15, -17, 11, 0, 20, 17, 11, 17, -15, 0, -22, -17, -15]);
-                    line([-9, -1, 9, -1]);
-                    break;
-                case 'rest':
-                    line([-17, -14, -12, -7, -1, -9, 16, -15]);
-                    line([-9, -2, -11, 7, -2, 17, 1, 7, 10, 12, 12, 1, 6, -5]);
-                    break;
-                case 'home':
-                    line([-15, -15, -15, 15, 8, 15, 8, -15]);
-                    line([-8, -19, -8, 8, 16, 8, 16, -19]);
-                    break;
-                default:
-                    line([-18, 8, -18, -13, 18, -13, 18, 8, -18, 8]);
-                    line([-18, 8, -12, 15, 13, 15, 18, 8]);
-                    if (d.icon === 'supply') line([-5, -2, 5, -2, 0, -2, 0, -8, 0, 3]);
-            }
-        } else if (d.fieldSymbol === 'buoy') {
+        const paper = active ? '#cfbf98' : '#b9a6ba';
+        if (d.fieldSymbol === 'buoy') {
             shape([-29, 5, -17, 17, 13, 18, 29, 5, 21, -8, -20, -8], '#a4bab0');
             g.fillColor = new Color().fromHEX('#826236');
             g.circle(-17, 5, 4);
@@ -208,6 +254,5 @@ export class RoutePoint extends Component {
             g.lineWidth = 3;
             line([23, 29, 29, 22, 42, 37]);
         }
-        if (this.status) this.status.node.active = active || visited || this.hovering;
     }
 }

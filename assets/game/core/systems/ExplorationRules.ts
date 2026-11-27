@@ -1,11 +1,12 @@
 import { CardSet } from '../content/ContentRegistry';
 import { activeDiscoveryCards } from '../content/CardCatalog';
-import { GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
+import { ASHEN_LABYRINTH_SCENARIO, GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
+import { generateAshenLabyrinthMap, nextMapNodes } from '../content/ExpeditionMap';
 import { Random } from '../Random';
 import { ActionResult, NodeKind, Route } from '../RulesTypes';
 import { CombatRules } from './CombatRules';
 import { InventoryRules } from './InventoryRules';
-import { RuleFeedback, ExplorationState } from './RuleContext';
+import { RuleFeedback, ExplorationState, completeExplorationNode } from './RuleContext';
 import { ShelterRules } from './ShelterRules';
 import { EntryTierId, entryTier, affordableEntryTier } from '../content/EntryTiers';
 export class ExplorationRules {
@@ -27,11 +28,15 @@ export class ExplorationRules {
     start(tierId?: EntryTierId): ActionResult {
         if (this.state.phase !== 'journal' && this.state.phase !== 'shelter')
             return this.feedback.result(false, '当前不能出发。');
-        if (this.scenario.battleResource === 'stamina') {
-            const tier = entryTier(tierId ?? affordableEntryTier(this.state.supplies));
-            if (!tier) return this.feedback.result(false, '进入档位不存在。');
-            if (this.state.supplies < tier.cost)
-                return this.feedback.result(false, '物资不足以支付该档位入场费。');
+        const usesStamina = this.scenario.battleResource === 'stamina';
+        const tier = usesStamina ? entryTier(tierId ?? affordableEntryTier(this.state.supplies)) : null;
+        if (usesStamina && !tier) return this.feedback.result(false, '进入档位不存在。');
+        if (tier && this.state.supplies < tier.cost)
+            return this.feedback.result(false, '物资不足以支付该档位入场费。');
+        const map = this.scenario.id === ASHEN_LABYRINTH_SCENARIO.id
+            ? generateAshenLabyrinthMap(this.state.seed, this.state.day, this.scenario.nodes)
+            : null;
+        if (tier) {
             this.inventory.spend(tier.cost);
             this.state.entryTier = tier.id;
             this.feedback.log(
@@ -39,6 +44,7 @@ export class ExplorationRules {
             );
         }
         this.state.route = null;
+        this.state.expeditionMap = map;
         this.state.fixedDone = false;
         this.state.pathIndex = 0;
         this.state.visited = [];
@@ -59,6 +65,8 @@ export class ExplorationRules {
         );
     }
     chooseRoute(route: Route): ActionResult {
+        if (this.state.expeditionMap)
+            return this.feedback.result(false, '请选择地图上相连的下一个地点。');
         if (this.state.phase !== 'map' || this.currentNode !== 'choice')
             return this.feedback.result(false, '请先完成固定搜刮。');
         if (!hasId(this.scenario.routes, route)) return this.feedback.result(false, '路线不存在。');
@@ -68,11 +76,16 @@ export class ExplorationRules {
         );
         return this.feedback.result(true, `已选择路线 ${route}。`);
     }
-    enterNode(): ActionResult {
+    enterNode(target?: NodeKind): ActionResult {
         if (this.state.phase !== 'map') return this.feedback.result(false, '请先完成当前事件。');
-        const node = this.currentNode;
+        const map = this.state.expeditionMap;
+        const node = target ?? this.currentNode;
         if (node === 'choice') return this.feedback.result(false, '选择一条路线。');
         if (node === 'return') return this.feedback.result(false, '正在返回避难所。');
+        const reachable = map
+            ? nextMapNodes(map, this.state.visited[this.state.visited.length - 1])
+            : [this.currentNode];
+        if (reachable.indexOf(node) < 0) return this.feedback.result(false, '当前位置无法前往该地点。');
         const definition = this.scenario.nodes[node];
         if (!definition) return this.feedback.result(false, '地点配置不存在。');
         if (definition.type === 'scavenge') {
@@ -80,8 +93,10 @@ export class ExplorationRules {
             if (this.state.supplies < fee)
                 return this.feedback.result(
                     false,
-                    `进入需要 ${fee} 点物资，目前只有 ${this.state.supplies} 点。可以重新开始教学。`
+                    `进入需要 ${fee} 点物资，目前只有 ${this.state.supplies} 点。` +
+                        (map ? '' : '可以重新开始教学。')
                 );
+            if (map) map.activeNode = node;
             this.inventory.spend(fee);
             const supplies =
                 definition.supplies[0] === definition.supplies[1]
@@ -110,12 +125,15 @@ export class ExplorationRules {
             this.feedback.log(
                 `${nodeTitle(this.scenario, node)}：支付 ${fee} 点物资。奖励需要主动领取。`
             );
-        } else if (definition.type === 'rest') {
-            this.state.phase = 'rest';
-            const restored = Math.min(definition.restoreHealth, 10 - this.state.health);
-            this.state.health += restored;
-            this.feedback.log(`进入营地，恢复 ${restored} 点血量。`);
-        } else this.combat.startBattle(definition.enemyId);
+        } else {
+            if (map) map.activeNode = node;
+            if (definition.type === 'rest') {
+                this.state.phase = 'rest';
+                const restored = Math.min(definition.restoreHealth, 10 - this.state.health);
+                this.state.health += restored;
+                this.feedback.log(`进入营地，恢复 ${restored} 点血量。`);
+            } else this.combat.startBattle(definition.enemyId);
+        }
         return this.feedback.result(true, `进入${nodeTitle(this.scenario, node)}。`);
     }
     finishRest(): ActionResult {
@@ -131,9 +149,7 @@ export class ExplorationRules {
             )
         )
             return this.feedback.result(false, '至少选择一张能够造成伤害的牌再出发。');
-        this.state.visited.push(this.currentNode);
-        this.state.pathIndex++;
-        this.state.phase = 'map';
+        completeExplorationNode(this.state, this.currentNode, this.scenario.fixedNodeId);
         if (this.scenario.battleResource !== 'stamina' && this.state.supplies === 0)
             this.fail('休整结束时物资为 0。');
         return this.feedback.result(true, '休整结束。');

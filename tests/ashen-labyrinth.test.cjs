@@ -7,7 +7,9 @@ const from = (file) => load(path.join(root, 'assets/game', file + '.ts'));
 const catalog = from('core/content/CardCatalog');
 const { ASHEN_LABYRINTH_SCENARIO, FIELD_SCENARIO, RUN_DECK_SCENARIO } = from('core/content/GameScenario');
 const { GameSession } = from('application/GameSession');
+const { enterEncounterPreview } = from('presentation/dev/EncounterPreview');
 const { SaveRepository } = from('infrastructure/SaveRepository');
+const { generateAshenLabyrinthMap, nextMapNodes } = from('core/content/ExpeditionMap');
 const { routeMapModel } = from('presentation/map/RouteMapModel');
 const source = require('../assets/resources/data/cards.json');
 const ok = (value) => assert.ok(value.ok, value.message);
@@ -20,15 +22,32 @@ function install(enabled) {
 function start(s, tier = 'standard', route = 'A') {
     ok(s.execute({ type: 'start', tier }));
     ok(s.execute({ type: 'enter-node' }));
-    ok(s.execute({ type: 'choose-route', route }));
+    if (!s.view.expeditionMap) ok(s.execute({ type: 'choose-route', route }));
     return s;
+}
+function enter(s, kind) {
+    const target = routeMapModel(s.view).points.find(point =>
+        point.state === 'available' && s.view.scenario.nodes[point.kind]?.type === kind);
+    assert.ok(target, `Expected a reachable ${kind} from ${s.view.currentNode}`);
+    ok(s.execute({ type: 'enter-node', id: target.kind }));
 }
 function encounter(enabled) {
     install(enabled);
     const s = start(new GameSession(17));
-    ok(s.execute({ type: 'enter-node' }));
+    enter(s, 'battle');
     return s;
 }
+
+test('the temporary encounter preview reaches the generated map opening through normal commands', () => {
+    install();
+    for (const seed of [1, 19, 127]) {
+        const session = new GameSession(seed);
+        enterEncounterPreview(session);
+        assert.equal(session.view.phase, 'battle');
+        assert.equal(session.view.expeditionMap.activeNode, 'lampPassage');
+        assert.deepEqual(session.view.visited, ['threshold']);
+    }
+});
 function finishBattle(s) {
     for (let i = 0; i < 30 && s.view.battle; i++) {
         const g = s.game;
@@ -59,30 +78,162 @@ function store() {
     return { getItem: (key) => disk.get(key) ?? null, setItem: (key, value) => disk.set(key, value) };
 }
 
-test('an actual new game has the approved 12 cards and ten reachable locations on two routes', () => {
+function walkablePaths(map, id = map.points[0].id) {
+    const next = nextMapNodes(map, id);
+    return next.length ? next.flatMap(child => walkablePaths(map, child).map(path => [id, ...path])) : [[id]];
+}
+
+function resolveRoom(s) {
+    if (s.view.battle) finishBattle(s);
+    if (s.view.phase === 'rewards') ok(s.execute({ type: 'discover', kind: s.view.rewards.cards[0] }));
+    if (s.view.phase === 'rest') ok(s.execute({ type: 'finish-rest' }));
+}
+
+function hash(data) {
+    const text = JSON.stringify(data);
+    let result = 2166136261;
+    for (let i = 0; i < text.length; i++) result = Math.imul(result ^ text.charCodeAt(i), 16777619);
+    return (result >>> 0).toString(16);
+}
+
+test('both lower-risk and combat-heavy routes clear all seventeen layers and a new day rolls a fresh map', () => {
     install();
-    for (const lane of ['A', 'B']) {
+    for (const opening of ['serviceDuct', 'lampPassage']) {
         const s = new GameSession(17);
         assert.equal(s.view.scenario.id, 'ashen-labyrinth');
         assert.equal(s.view.cards.length, 12);
         assert.equal(s.view.currentJournal.title, '灰里的门槛');
-        const points = routeMapModel(s.view).points.filter((point) => point.kind !== 'home');
-        assert.equal(points.length, 10);
-        assert.equal(new Set(points.map((point) => point.kind)).size, 10);
-        start(s, 'standard', lane);
-        while (s.view.phase === 'map' && s.view.currentNode !== 'return') {
-            ok(s.execute({ type: 'enter-node' }));
-            if (s.view.battle) finishBattle(s);
-            if (s.view.phase === 'rewards') ok(s.execute({ type: 'discover', kind: s.view.rewards.cards[0] }));
-            if (s.view.phase === 'rest') ok(s.execute({ type: 'finish-rest' }));
+        start(s);
+        const graph = s.view.expeditionMap;
+        const path = walkablePaths(graph).find(candidate => candidate[1] === opening &&
+            (opening === 'serviceDuct' ? !candidate.includes('ashGallery') && !candidate.includes('returnBridge')
+                : candidate.includes('ashGallery') && candidate.includes('returnBridge')));
+        assert.equal(path?.length, 17);
+        const model = routeMapModel(s.view);
+        assert.equal(model.points.find(point => point.id === 'threshold').title, '门槛补给');
+        assert.deepEqual(model.points.filter(point => point.state === 'current').map(point => point.id), ['threshold']);
+        assert.ok(model.points.filter(point => point.state !== 'visited' && point.state !== 'current' &&
+            (point.icon === 'supply' || point.icon === 'scavenge')).every(point => point.title === '未知地点'));
+        const positions = new Map(model.points.map(point => [point.id, point.y]));
+        assert.ok(model.edges.every(edge => positions.get(edge.to) > positions.get(edge.from)));
+        assert.equal(s.execute({ type: 'choose-route', route: 'A' }).ok, false);
+        for (const id of path.slice(1)) {
+            assert.equal(s.execute({ type: 'enter-node', id: 'threshold' }).ok, false);
+            ok(s.execute({ type: 'enter-node', id }));
+            resolveRoom(s);
         }
-        assert.equal(s.view.visited.length, lane === 'A' ? 8 : 7);
+        assert.deepEqual(s.view.visited, path);
+        assert.equal(s.view.currentNode, 'return');
         s.advanceTime(1);
         assert.equal(s.view.day, 2);
         assert.equal(s.view.currentJournal.id, 'labyrinth-cleared');
         assert.equal(s.view.cards.length, 12);
         assert.ok(s.view.settlement.discoveredCards > 0);
+        ok(s.execute({ type: 'continue-journal' }));
+        ok(s.execute({ type: 'start', tier: 'standard' }));
+        assert.notEqual(s.view.expeditionMap.seed, graph.seed);
+        assert.notDeepEqual(s.view.expeditionMap.points, graph.points);
+        assert.deepEqual(s.view.visited, []);
     }
+});
+
+test('every generated path traverses seventeen consecutive levels with three rests and discoveries', () => {
+    const { nodes } = ASHEN_LABYRINTH_SCENARIO;
+    const counts = new Set();
+    for (let seed = 0; seed < 512; seed++) {
+        const day = seed % 31 + 1;
+        const map = generateAshenLabyrinthMap(seed, day, nodes);
+        assert.deepEqual(generateAshenLabyrinthMap(seed, day, nodes), map);
+        const paths = walkablePaths(map);
+        counts.add(paths.length);
+        const model = routeMapModel({ scenario: ASHEN_LABYRINTH_SCENARIO, phase: 'map',
+            visited: paths[0].slice(0, 6), expeditionMap: map });
+        const choices = model.points.filter(point => point.state === 'available');
+        const hints = choices.map(point => point.decisionHint);
+        assert.ok(hints.includes('第 10 层遇战') && hints.includes('第 9、10 层连战'));
+        for (const point of choices) {
+            const routes = paths.filter(path => path[6] === point.id);
+            const fights = routes.filter(path => nodes[path[8]].type === 'battle').length;
+            assert.equal(point.decisionHint, fights === 0 ? '第 10 层遇战'
+                : fights === routes.length ? '第 9、10 层连战' : '第 9、10 层可能连战');
+            assert.equal(point.title, '未知地点');
+        }
+        assert.ok(map.points.length >= 26 && map.points.length <= 35);
+        assert.ok(paths.length >= 6);
+        assert.ok(map.points.slice(1).filter(point => point.next.length > 1).length >= 2);
+        assert.ok(paths.some(path => path[1] === 'serviceDuct' && !path.includes('ashGallery') && !path.includes('returnBridge')));
+        assert.ok(paths.some(path => path.includes('ashGallery') && path.includes('returnBridge')));
+        assert.equal(new Set(paths.flat()).size, map.points.length);
+        const byId = new Map(map.points.map(point => [point.id, point]));
+        for (const { layer, next } of map.points)
+            assert.ok(next.every(id => byId.get(id).layer === layer + 1));
+        for (const path of paths) {
+            assert.equal(path.length, 17);
+            assert.equal(path.at(-1), 'lampCourt');
+            assert.deepEqual(path.filter(id => nodes[id].type === 'rest'), ['warmAlcove', 'leeAlcove', 'innerAlcove']);
+            const opportunities = path.slice(0, -1).map(id => nodes[id]).filter(
+                node => node.type === 'battle' || (node.type === 'scavenge' && node.discover));
+            assert.ok(opportunities.length >= 6);
+        }
+    }
+    assert.ok(counts.size > 1);
+});
+
+test('the hearth previews the saved connections in the rest and map screens without changing them', () => {
+    install();
+    const session = start(new GameSession(17));
+    const path = walkablePaths(session.view.expeditionMap).find(route => route[1] === 'serviceDuct');
+    for (const id of path.slice(1, 5)) {
+        ok(session.execute({ type: 'enter-node', id }));
+        resolveRoom(session);
+    }
+    ok(session.execute({ type: 'enter-node', id: 'warmAlcove' }));
+    const saved = session.game.exportState();
+    const rooms = new Map(saved.expeditionMap.points.map(point => [point.id, point]));
+    // An earlier 17-floor layout can still offer an escape from the apparent double fight.
+    rooms.get('stampedDrawer').next.push('edgeCache');
+    const repo = new SaveRepository(store());
+    repo.save(saved);
+    const resumed = new GameSession(42, repo);
+    const labels = () => routeMapModel(resumed.view).points
+        .filter(point => point.decisionHint).map(point => [point.id, point.decisionHint, point.state]);
+    assert.deepEqual(labels(), [
+        ['fallenShelves', '第 10 层遇战', 'locked'], ['stampedDrawer', '第 9、10 层可能连战', 'locked'],
+    ]);
+    assert.deepEqual(resumed.game.exportState(), saved);
+    ok(resumed.execute({ type: 'finish-rest' }));
+    assert.deepEqual(labels(), [
+        ['fallenShelves', '第 10 层遇战', 'available'], ['stampedDrawer', '第 9、10 层可能连战', 'available'],
+    ]);
+    ok(resumed.execute({ type: 'enter-node', id: 'fallenShelves' }));
+    assert.deepEqual(resumed.view.expeditionMap.points, saved.expeditionMap.points);
+});
+
+test('a map saved by the first generator keeps its exact topology with the expanded map catalogue', () => {
+    install();
+    const disk = store(), repo = new SaveRepository(disk);
+    const session = start(new GameSession(17));
+    const snapshot = session.game.exportState();
+    const oldPoints = [
+        ['threshold', 0, 0, 'lightCut', 'serviceDuct'],
+        ['lightCut', 1, -1, 'copperChest'],
+        ['serviceDuct', 1, 1, 'copperChest'],
+        ['copperChest', 2, 0, 'fallenShelves', 'ashGallery'],
+        ['ashGallery', 3, 1, 'fallenShelves'],
+        ['fallenShelves', 4, 0, 'lampPassage'],
+        ['lampPassage', 5, 0, 'leeAlcove'],
+        ['leeAlcove', 6, 0, 'lampCourt'],
+        ['lampCourt', 7, 0],
+    ].map(([id, layer, lane, ...next]) => ({ id, layer, lane, next }));
+    snapshot.expeditionMap.points = oldPoints;
+    repo.save(snapshot);
+    const restored = new GameSession(2, new SaveRepository(disk));
+    assert.ok(restored.restored, restored.startupMessage);
+    assert.deepEqual(restored.view.expeditionMap.points, oldPoints);
+    const route = routeMapModel(restored.view);
+    assert.ok(route.height > 580);
+    assert.deepEqual(route.points.filter(point => point.state === 'available').map(point => point.id),
+        ['lightCut', 'serviceDuct']);
 });
 
 test('only the union of checked decks is offered after victory and an empty selection skips the offer', () => {
@@ -104,10 +255,12 @@ test('only the union of checked decks is offered after victory and an empty sele
         ok(s.execute({ type: 'discover', kind }));
         assert.equal(s.execute({ type: 'discover', kind }).ok, false);
         assert.equal(s.view.cards.length, before + 1);
-        ok(s.execute({ type: 'enter-node' }));
+        enter(s, 'scavenge');
         assert.ok(s.view.rewards.cards.every((id) => pool.includes(id)));
         ok(s.execute({ type: 'discover', kind: null }));
-        ok(s.execute({ type: 'enter-node' }));
+        enter(s, 'scavenge');
+        if (s.view.phase === 'rewards') ok(s.execute({ type: 'discover', kind: null }));
+        enter(s, 'battle');
         assert.ok([...s.view.battle.hand, ...s.view.battle.draw].some((c) => c.kind === kind));
     }
 });
@@ -116,7 +269,11 @@ test('an open offer and the in-progress pool resume when the editor selection ch
     install(['calibration']);
     const disk = store();
     const s = start(new GameSession(22, new SaveRepository(disk)));
-    ok(s.execute({ type: 'enter-node' }));
+    enter(s, 'battle');
+    const battle = s.game.exportState();
+    const restoredBattle = new GameSession(1, new SaveRepository(disk));
+    assert.ok(restoredBattle.restored);
+    assert.deepEqual(restoredBattle.game.exportState(), battle);
     finishBattle(s);
     const pending = s.game.exportState();
     install(['defer']);
@@ -124,12 +281,37 @@ test('an open offer and the in-progress pool resume when the editor selection ch
     assert.ok(resumed.restored);
     assert.deepEqual(resumed.game.exportState(), pending);
     ok(resumed.execute({ type: 'discover', kind: null }));
-    ok(resumed.execute({ type: 'enter-node' }));
+    enter(resumed, 'scavenge');
     assert.deepEqual(resumed.view.rewards.cards.slice().sort(), pending.discoveryPool.slice().sort());
     ok(resumed.execute({ type: 'new-game' }));
     ok(resumed.execute({ type: 'start', tier: 'standard' }));
     assert.ok(resumed.game.discoveryPool.includes('lab_vent'));
     assert.ok(!resumed.game.discoveryPool.includes('lab_valve'));
+});
+
+test('a version-three labyrinth checkpoint follows its saved route, then receives a generated map', () => {
+    install();
+    const disk = store(), repo = new SaveRepository(disk);
+    start(new GameSession(17, repo));
+    const { checksum, ...legacy } = JSON.parse(disk.getItem(repo.key));
+    legacy.version = legacy.state.schemaVersion = 3;
+    delete legacy.state.expeditionMap;
+    legacy.state.route = 'B';
+    disk.setItem(repo.key, JSON.stringify({ ...legacy, checksum: hash(legacy) }));
+
+    const resumed = new GameSession(222, new SaveRepository(disk));
+    assert.ok(resumed.restored, resumed.startupMessage);
+    assert.equal(resumed.view.expeditionMap, null);
+    while (resumed.view.currentNode !== 'return') {
+        ok(resumed.execute({ type: 'enter-node' }));
+        resolveRoom(resumed);
+    }
+    assert.deepEqual(resumed.view.visited, ['threshold', ...resumed.view.scenario.routes.B]);
+    resumed.advanceTime(1);
+    ok(resumed.execute({ type: 'continue-journal' }));
+    assert.equal(resumed.view.day, 2);
+    ok(resumed.execute({ type: 'start', tier: 'standard' }));
+    assert.deepEqual(resumed.view.expeditionMap, generateAshenLabyrinthMap(17, 2, ASHEN_LABYRINTH_SCENARIO.nodes));
 });
 
 test('a packaged salt-field save predating the labyrinth keeps its exact chapter and battle', () => {
@@ -155,12 +337,6 @@ test('both historical stamina-expedition@2 signatures recover their own rules', 
         card.id === 'attack' ? { ...card, text: '固有能力，永不丢失' } : card);
     const tideOnly = new Set(['follow_up', 'shield_push', 'scrap_shiv', 'rummage']);
     const oldSynthesisCards = legacyCards.filter(({ id }) => !tideOnly.has(id));
-    const hash = (data) => {
-        const text = JSON.stringify(data);
-        let result = 2166136261;
-        for (let i = 0; i < text.length; i++) result = Math.imul(result ^ text.charCodeAt(i), 16777619);
-        return (result >>> 0).toString(16);
-    };
     for (const [scenario, oldCatalog] of [
         [FIELD_SCENARIO, { version, fixedReward, cards: oldFieldCards, expedition }],
         [RUN_DECK_SCENARIO, { version, fixedReward, cards: oldSynthesisCards, recipes }],

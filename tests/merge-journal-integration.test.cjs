@@ -38,7 +38,7 @@ test('current saves retain configured route IDs through commands and saved battl
     const restored = new GameSession(99, new SaveRepository(storage), scenario);
     assert.equal(restored.restored, true);
     assert.equal(restored.view.route, 'C');
-    assert.equal(restored.game.exportState().schemaVersion, 3);
+    assert.equal(restored.game.exportState().schemaVersion, 4);
     assert.deepEqual(restored.game.exportState(), before);
 });
 

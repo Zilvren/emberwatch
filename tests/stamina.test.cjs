@@ -58,8 +58,9 @@ test('new sessions use stamina and charge the selected tier once before explorat
         assert.equal(session.execute({ type: 'start', tier: id }).ok, false);
         assert.deepEqual(session.game.exportState(), before);
         ok(session.execute({ type: 'enter-node' }));
-        ok(session.execute({ type: 'choose-route', route: 'A' }));
-        ok(session.execute({ type: 'enter-node' }));
+        const firstBattle = session.view.expeditionMap.points[0].next.find(
+            node => session.view.scenario.nodes[node].type === 'battle');
+        ok(session.execute({ type: 'enter-node', id: firstBattle }));
         assert.equal(session.game.battle.stamina, tier.stamina);
         assert.equal(session.game.battle.maxStamina, tier.stamina);
     }

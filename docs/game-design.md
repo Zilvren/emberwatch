@@ -133,6 +133,22 @@
 
 战斗战利品提案保留三选一普通卡与物资类奖励独立领取。搜刮可给 1–3 件物品，玩家按容量挑选。暂存物品不能抽入战斗，释放基础容量后按确定顺序转入。离图前确认仍在暂存区的物品将失效。
 
+### 2026-11-26 · 焦土迷宫竖向随机地图
+
+The end 已接入正式出发流程，参数待试玩。用户确认做成 17 层竖向随机图，门槛补给和沉灯庭都计入。守门人确认入场时，从战役种子与当天派生本趟地图种子。
+
+生成器在五列网格分三段走线，再安排焦土迷宫的地点与遭遇。路线可以汇合后再次分开。每条路线逐层经过 17 个地点，中途走过余温壁炉、背风壁龛和沉灯前室。每段都有一处能触发发现的搜刮点和一场战斗，开局以及中后段岔路可选额外战斗。新地点使用已实装的搜刮、遭遇和休整规则，发现候选从本趟已选发现池生成。
+
+`assets/game/core/content/ExpeditionMap.ts` 生成节点和出边，验证每段至少有一处途中岔口，连线按列序避免交叉，重试用尽后使用可走通的预设段。`assets/game/core/systems/ExplorationRules.ts` 检查目标是否与当前位置相连。`assets/game/presentation/map/RouteMapModel.ts` 为主图和 HUD 路线图投影同一张可滚动地图。主图点击亮起的地点即进入，补给和搜刮在进入前统一显示问号与「未知地点」，房间按生成的内容结算。
+
+存档 v4 记录完整地图、走过的地点和正在处理的房间。`assets/game/core/state/GameState.ts` 验证连线和保存的走法，`assets/game/infrastructure/SaveRepository.ts` 通过已有读取及备份机制恢复。正在探索的固定路线旧档和较早生成的地图按各自进度续玩，下一次确认出发时使用新生成器。
+
+### 2026-11-27 · 余温壁炉至背风壁龛的连战选择
+
+《The end》已按用户要求实装。第 6 层余温壁炉后的新地图至少保留两种走法。一支可以一路避战，到第 10 层悬轮桥才作战。另一支从入口起就必经第 9 层灰烬长廊，随后在第 10 层连战。两支在第 11 层背风壁龛休整。生成器按种子选定哪支承担额外战斗，若有第三个入口，它可以保留途中变线的机会。每次出发生成新图，已保存的地图按原连线续玩。生成规则见 `assets/game/core/content/ExpeditionMap.ts`。
+
+比较参考来自《杀戮尖塔 2》抢先体验版的公开游戏代码。标准地图按章节安排固定位置和特殊房间，空余节点填普通战斗。进某一场战斗后，遭遇配置生成初始敌人列表。例如普通邪教徒遭遇有两名敌人，普通史莱姆群遭遇有四只。焦土迷宫的连战提示统计连续进入的战斗房间数。[标准地图](https://github.com/JokerXuan/sts2-source-code/blob/main/MegaCrit/sts2/Core/Map/StandardActMap.cs#L239-L293) · [邪教徒遭遇](https://github.com/JokerXuan/sts2-source-code/blob/main/MegaCrit/sts2/Core/Models/Encounters/CultistsNormal.cs#L38-L45) · [史莱姆群遭遇](https://github.com/JokerXuan/sts2-source-code/blob/main/MegaCrit/sts2/Core/Models/Encounters/SlimesNormal.cs#L67-L78)
+
 ## 8. 失败、保护与保底
 
 以下是**正式失败代价提案**，尚未修改当前失败全量重置：

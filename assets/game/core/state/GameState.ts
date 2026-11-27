@@ -1,5 +1,6 @@
 import { CARD, CardDefinition, carriedWeight, isBattleCard } from '../content/CardCatalog';
-import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO } from '../content/GameScenario';
+import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO, type GameScenario } from '../content/GameScenario';
+import { ASHEN_MAP_LAST_LAYER, ASHEN_MAP_OUTER_LANE, nextMapNodes, type ExpeditionMap } from '../content/ExpeditionMap';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
 import { isPhase } from './GamePhase';
 import {
@@ -12,7 +13,7 @@ import {
 import type { Battle, CombatCard, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
 import { CALM_LIMIT, CALM_PER_TURN, MAX_CALM_LIMIT, MAX_BONUS_STAMINA } from '../systems/LabyrinthCombat';
 export interface GameState {
-    schemaVersion: 3;
+    schemaVersion: 4;
     scenarioId: string;
     scenarioVersion: number;
     seed: number;
@@ -28,6 +29,7 @@ export interface GameState {
     cards: OwnedCard[];
     storedSupplies?: Record<string, number>;
     route: Route | null;
+    expeditionMap: ExpeditionMap | null;
     fixedDone: boolean;
     pathIndex: number;
     visited: NodeKind[];
@@ -64,6 +66,65 @@ function list(value: unknown, max: number, name: string): void {
     requireValue(value, Array.isArray(value) && value.length <= max, name);
 }
 
+function validateExpeditionMap(state: GameState, scenario: GameScenario): ExpeditionMap | null {
+    const map = state.expeditionMap;
+    if (map === null) return null;
+    object(map, 'expedition map');
+    requireValue(map, !!scenario.labyrinth && state.route === null && state.pathIndex === 0, 'map scenario');
+    integer(map.seed, 0, 0xffffffff, 'map seed');
+    list(map.points, Object.keys(scenario.nodes).length, 'map points');
+    const ids = new Set<NodeKind>(), positions = new Set<string>();
+    for (const point of map.points) {
+        object(point, 'map point');
+        integer(point.layer, 0, ASHEN_MAP_LAST_LAYER, 'map layer');
+        integer(point.lane, -ASHEN_MAP_OUTER_LANE, ASHEN_MAP_OUTER_LANE, 'map lane');
+        const position = `${point.layer}:${point.lane}`;
+        requireValue(point.id, hasId(scenario.nodes, point.id) && !ids.has(point.id) &&
+            !positions.has(position), 'map point identity');
+        ids.add(point.id);
+        positions.add(position);
+        list(point.next, 3, 'map connections');
+    }
+    const points = new Map(map.points.map((point) => [point.id, point]));
+    const entrance = map.points[0];
+    requireValue(entrance, entrance?.id === scenario.fixedNodeId && entrance.layer === 0, 'map entrance');
+    const lastLayer = points.get('lampCourt')?.layer;
+    requireValue(points, lastLayer === 7 || lastLayer === ASHEN_MAP_LAST_LAYER, 'map destination');
+    for (const point of map.points) {
+        requireValue(point.next, (point.next.length === 0) === (point.id === 'lampCourt') &&
+            new Set(point.next).size === point.next.length && point.next.every((id) => {
+                const next = points.get(id);
+                return !!next && next.layer > point.layer &&
+                    (lastLayer === 7 || next.layer === point.layer + 1);
+            }), 'map connections');
+    }
+    const reachable = new Set<NodeKind>([entrance.id]);
+    for (const point of [...map.points].sort((a, b) => a.layer - b.layer))
+        if (reachable.has(point.id)) for (const next of point.next) reachable.add(next);
+    requireValue(reachable, reachable.size === points.size, 'map reachability');
+
+    let last: NodeKind | undefined;
+    for (const id of state.visited) {
+        requireValue(id, nextMapNodes(map, last).indexOf(id) >= 0, 'visited map path');
+        last = id;
+    }
+    requireValue(state.fixedDone, state.fixedDone === (last !== undefined), 'map entrance progress');
+    const { phase } = state;
+    const inRoom = phase === 'battle' || phase === 'rewards' || phase === 'rest';
+    const next = nextMapNodes(map, last);
+    requireValue(map.activeNode, inRoom ? map.activeNode !== null && next.indexOf(map.activeNode) >= 0 :
+        map.activeNode === null, 'active map point');
+    requireValue(phase, inRoom || phase === 'map' || ((phase === 'shelter' || phase === 'journal') &&
+        last === 'lampCourt'), 'expedition map phase');
+    if (map.activeNode !== null) {
+        const room = scenario.nodes[map.activeNode];
+        if (phase === 'battle') requireValue(room, room.type === 'battle' && room.enemyId === state.battle?.enemy, 'active map battle');
+        if (phase === 'rewards') requireValue(room, map.activeNode === state.rewards?.source && room.type !== 'rest', 'active map reward');
+        if (phase === 'rest') requireValue(room, room.type === 'rest', 'active map rest');
+    }
+    return { seed: map.seed, points: map.points.map(({ id, layer, lane, next }) => ({ id, layer, lane, next })), activeNode: map.activeNode };
+}
+
 /** Validate before touching a live model; never hydrate arbitrary object properties. */
 export function validateGameState(
     raw: unknown,
@@ -72,7 +133,7 @@ export function validateGameState(
 ): GameState {
     object(raw, 'state');
     const s = migrateLegacyGameState(raw, definitions) as GameState;
-    integer(s.schemaVersion, 3, 3, 'schemaVersion');
+    integer(s.schemaVersion, 4, 4, 'schemaVersion');
     text(s.scenarioId, 'scenarioId', 80);
     integer(s.scenarioVersion, 1, 100000, 'scenarioVersion');
     const scenario = getScenario(s.scenarioId, s.scenarioVersion);
@@ -340,9 +401,10 @@ export function validateGameState(
         t.lostOverflow.forEach((v) => text(v, 'lost card'));
     }
     requireValue(s.nextId, s.nextId >= highestId, 'nextId');
+    const expeditionMap = validateExpeditionMap(s, scenario);
     // An explicit field list prevents prototype keys and future fields from entering the model.
     const result: GameState = {
-        schemaVersion: 3,
+        schemaVersion: 4,
         scenarioId: s.scenarioId,
         scenarioVersion: s.scenarioVersion,
         seed: s.seed,
@@ -358,6 +420,7 @@ export function validateGameState(
         cards: s.cards,
         storedSupplies: s.storedSupplies,
         route: s.route,
+        expeditionMap,
         fixedDone: s.fixedDone,
         pathIndex: s.pathIndex,
         visited: s.visited,
@@ -390,10 +453,14 @@ export function validateGameState(
 
 /** Decode earlier armor/weight saves without rerolling any deck or encounter. */
 export function migrateLegacyGameState(raw: unknown, definitions: Readonly<Record<string, CardDefinition>> = CARD): unknown {
-    if (!raw || typeof raw !== 'object' || Array.isArray(raw) || (raw as GameState).schemaVersion === 3) return raw;
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return raw;
+    const { schemaVersion } = raw as { schemaVersion?: number };
+    if (schemaVersion === 4) return raw;
+    if (schemaVersion === 3) return { ...raw, schemaVersion: 4, expeditionMap: null };
     const s = upgradeJournal(raw) as any;
     if (s.schemaVersion !== 2) return s;
-    s.schemaVersion = 3;
+    s.schemaVersion = 4;
+    s.expeditionMap = null;
     s.health = s.health ?? s.armor;
     delete s.armor;
     delete s.critical;

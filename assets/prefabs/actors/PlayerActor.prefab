@@ -1408,12 +1408,16 @@
       "__expectedType__": "cc.JsonAsset"
     },
     "labyrinthSkeleton": {
-      "__uuid__": "753b3bfa-85fa-4718-8289-24c65ff01c58",
+      "__uuid__": "0d6fad44-f837-4439-a3ea-45bdc9373a0d",
       "__expectedType__": "sp.SkeletonData"
     },
     "labyrinthContract": {
-      "__uuid__": "475ab5e7-2e78-4a51-8231-8385df26b25c",
+      "__uuid__": "aedc4e73-e8e5-4a25-8c6a-7bbaf0f690af",
       "__expectedType__": "cc.JsonAsset"
+    },
+    "thrownCard": {
+      "__uuid__": "6f2df90d-7fd1-4bf4-95e0-4ef0ae2e4e95@f9941",
+      "__expectedType__": "cc.SpriteFrame"
     },
     "labyrinthScale": 0.5523809523809524,
     "labyrinthOffset": {

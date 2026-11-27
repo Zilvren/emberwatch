@@ -8,6 +8,11 @@ const { installCatalog } = game('core/content/CardCatalog');
 const { GameSession } = game('application/GameSession');
 installCatalog(require('../assets/resources/data/cards.json'));
 
+function mapPaths(map, id = 'threshold') {
+    const { next } = map.points.find(point => point.id === id);
+    return next.length ? next.flatMap(child => mapPaths(map, child).map(path => [id, ...path])) : [[id]];
+}
+
 function run(seed, route, tier, strategy) {
     const session = new GameSession(seed);
     const g = session.game;
@@ -16,8 +21,9 @@ function run(seed, route, tier, strategy) {
         assert.ok(result.ok, result.message);
     };
     doIt({ type: 'start', tier });
-    doIt({ type: 'enter-node' });
-    doIt({ type: 'choose-route', route });
+    const fights = (path) => path.filter(id => g.scenario.nodes[id].type === 'battle').length;
+    const paths = mapPaths(g.expeditionMap).sort((a, b) => fights(a) - fights(b) || a.length - b.length);
+    const path = route === 'fewer-fights' ? paths[0] : paths.at(-1);
     let turns = 0, encounters = 0;
     for (let step = 0; step < 240 && g.phase !== 'failure'; step++) {
         if (g.phase === 'map' && g.currentNode === 'return') {
@@ -25,7 +31,7 @@ function run(seed, route, tier, strategy) {
             return { success: g.day === 2, health: g.health, turns, encounters };
         }
         if (g.phase === 'map') {
-            doIt({ type: 'enter-node' });
+            doIt({ type: 'enter-node', id: path[g.visited.length] });
             if (g.battle) encounters++;
         } else if (g.phase === 'rest') doIt({ type: 'finish-rest' });
         else if (g.phase === 'rewards') doIt({ type: 'discover', kind: null });
@@ -52,7 +58,7 @@ function run(seed, route, tier, strategy) {
 }
 const samples = [];
 for (const tier of ['emergency', 'low', 'standard']) {
-    for (const route of ['A', 'B']) for (const strategy of ['attack', 'cover']) {
+    for (const route of ['fewer-fights', 'more-fights']) for (const strategy of ['attack', 'cover']) {
         const runs = Array.from({ length: 64 }, (_, seed) => run(seed + 1, route, tier, strategy));
         const victories = runs.filter((result) => result.success);
         samples.push({ tier, route, strategy, runs: runs.length, cleared: victories.length,

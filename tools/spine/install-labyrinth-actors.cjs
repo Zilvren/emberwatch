@@ -101,55 +101,11 @@ function contractFile(target, name, doc, source, contact, tip, flight, parts, su
 }
 
 function protagonist() {
-    const source = playerArt + '/survivor-flick.json', doc = read(source);
-    const idle = doc.animations.think;
-    const rest = JSON.parse(JSON.stringify(idle));
-    for (const channels of Object.values(rest.bones))
-        for (const [type, keys] of Object.entries(channels)) channels[type] = keys.slice(0, 1);
-    function pose(rotation, shift) {
-        const clip = JSON.parse(JSON.stringify(rest));
-        clip.bones.PoseRoot = { rotate: rotation, translate: shift };
-        return clip;
-    }
-    const hold = (t) => pose([{ time: t, angle: 0 }], [{ time: t, x: 0, y: 0 }]);
-    const impact = { time: .26, name: 'impact' };
-    doc.animations = {
-        idle, prepare: hold(.27), attack: { ...hold(.28), events: [impact] },
-        hurt: pose([{ angle: 0 }, { time: .11, angle: 3 }, { time: .31, angle: 0 }],
-            [{ x: 0, y: 0 }, { time: .11, x: -11, y: 2 }, { time: .31, x: 0, y: 0 }]),
-        death: pose([{ angle: 0 }, { time: .17, angle: 12 }, { time: .56, angle: 83 }],
-            [{ x: 0, y: 0 }, { time: .17, x: -12, y: 0 }, { time: .56, x: -42, y: 0 }]),
-        'paper-out': { slots: { 'float-guard': { attachment: [{ name: null }] } } },
-        'paper-return': { slots: { 'float-guard': { attachment: [{ name: 'paper-back' }] } } },
-    };
-    // Death is a single pose transition of the same pieces, including the face.
-    for (const name of ['float-lantern', 'float-guard', 'float-repel'])
-        doc.animations.death.slots[name] = { attachment: [{ name: null }] };
-    const folder = output + '/survivor';
-    fs.mkdirSync(absolute(folder), { recursive: true });
-    const skeleton = importSkeleton(playerArt, 'survivor-flick', folder, doc);
-    const atlas = readAtlas(folder + '/survivor-flick.atlas');
-    const cards = atlas.slice(0, atlas.indexOf('\npaper-back\n'));
-    const page = cards.match(/^.+\.png$/gm).at(-1);
-    const match = atlas.match(/\npaper-back\n\s+rotate: false\n\s+xy: (\d+), (\d+)\n\s+size: (\d+), (\d+)/);
-    assert.ok(page && match, 'The review back must have its registered unrotated atlas region');
-    const [x, y, width, height] = match.slice(1).map(Number);
-    const texture = PNG.sync.read(fs.readFileSync(absolute(folder + '/' + page)));
-    const back = PNG.sync.read(fs.readFileSync(absolute(interfaceFolder + '/card-back.png')));
-    assert.equal(width, back.width);
-    assert.equal(height, back.height);
-    for (let row = 0; row < height; row++) {
-        const pixels = back.data.subarray(row * width * 4, (row + 1) * width * 4);
-        texture.data.set(pixels, ((y + row) * texture.width + x) * 4);
-    }
-    fs.writeFileSync(absolute(folder + '/' + page), PNG.sync.write(texture));
-    const skin = doc.skins[0].attachments;
-    const contract = contractFile(folder, 'survivor-flick', doc, source, 'float-guard', [94, 325], 0,
-        Object.keys(skin).filter((n) => n.startsWith('q-')),
-        ['q-tunic-art', 'q-mantle-art', 'q-near-leg-art', 'q-far-leg-art'].flatMap((id) => Object.values(skin[id])));
+    const model = output + '/lantern-keeper/lantern-keeper';
     const rig = legacy.find((item) => item.__type__ === script('SpineActorRig'));
-    rig.labyrinthSkeleton = asset(skeleton, 'sp.SkeletonData');
-    rig.labyrinthContract = asset(contract, 'cc.JsonAsset');
+    rig.labyrinthSkeleton = asset(uuid(model + '.json'), 'sp.SkeletonData');
+    rig.labyrinthContract = asset(uuid(model + '.contract.json'), 'cc.JsonAsset');
+    rig.thrownCard = asset(uuid(output + '/paper-back.png') + '@f9941', 'cc.SpriteFrame');
     const visual = legacy[legacy[rig.node.__id__]._parent.__id__];
     rig.labyrinthScale = 1 / visual._lscale.y;
     rig.labyrinthOffset = vec(0, -visual._lpos.y / visual._lscale.y, 0);
