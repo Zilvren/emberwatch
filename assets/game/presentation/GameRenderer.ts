@@ -18,6 +18,7 @@ import { shelterSummary } from './ui/ShelterSummaryModel';
 import { rulesNotice } from './ui/RulesNoticeModel';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { TideBattleLayout } from './ui/TideBattleLayout';
+import { generatedCards } from '../core/content/CardCatalog';
 import { atGateCamp } from './ui/CampViewModel';
 /** Native view binding only. No game commands, storage or input subscriptions. */
 export class GameRenderer extends NativeViewWriter {
@@ -284,6 +285,8 @@ export class GameRenderer extends NativeViewWriter {
             b = g.battle!,
             attack = b.intent === 'attack',
             world = screen.getChildByName('World')!;
+        const shieldSpearEquipped = (b.weapons ?? (b.weapon ? [b.weapon] : []))
+            .some((weapon) => (g.content.cards[weapon.kind].weaponSlots ?? 1) === 2);
         const gauge = screen.getChildByName('StaminaGauge');
         if (gauge) gauge.active = g.scenario.battleResource === 'stamina';
         const definition = g.scenario.enemies[b.enemy];
@@ -297,14 +300,22 @@ export class GameRenderer extends NativeViewWriter {
         this.enemy = actors.find((actor) => actor.actorId === definition.actorId) ?? null;
         if (!this.enemy) throw new Error('缺少敌人表现绑定：' + definition.actorId);
         const calm = b.calm;
-        const calmLabel = screen.getChildByName('banner-text2');
-        if (calmLabel) {
-            calmLabel.active = !!calm;
-            if (calm) calmLabel.setPosition(-353, 280);
-        }
         const calmText = calm ? `镇静 ${calm.persistent + calm.temporary} / ${calm.limit}` +
             (calm.temporary ? ` · 临时 ${calm.temporary}` : '') +
             (calm.freeSkill ? ' · 下张技能免费' : '') + (calm.calibrated ? ' · 已校准' : '') : '';
+        const strength = g.strength;
+        const status = [
+            calmText,
+            shieldSpearEquipped && b.rage !== undefined
+                ? `盾矛蓄势 ${'●'.repeat(b.rage)}${'○'.repeat(5 - b.rage)}`
+                : '',
+            strength ? `力量 +${strength}` : '',
+        ].filter(Boolean).join(' · ');
+        const statusLabel = screen.getChildByName('banner-text2');
+        if (statusLabel) {
+            statusLabel.active = !!status;
+            if (status) statusLabel.setPosition(-353, 280);
+        }
         const intent = screen.getChildByName('battle-text0');
         const attackIcon = intent?.getChildByName('AttackGlyph');
         const prepIcon = intent?.getChildByName('PrepareGlyph');
@@ -313,7 +324,7 @@ export class GameRenderer extends NativeViewWriter {
         this.text(screen, {
             'banner/text0': `ENCOUNTER / ROUND ${b.turn}`,
             'banner/text1': definition.title,
-            ...(calm ? { 'banner/text2': calmText } : {}),
+            'banner/text2': status,
             'battle/text0': attack ? String(g.incomingDamage) : '',
             'battle/text1': calm?.deferred === 'scheduled' ? '已暂缓 · 即将额外行动'
                 : attack
@@ -323,6 +334,7 @@ export class GameRenderer extends NativeViewWriter {
                       ? '结束回合将失守'
                       : `结束回合将受伤 ${Math.max(0, g.incomingDamage - b.block)}`
                 : `下次攻击 ${b.strongAttack}`,
+            'battle/text2': '点击敌人 · 打出攻击',
             'battle/text3': `${g.health}/10`,
             'battle/text4': String(b.block),
             'battle/text5': `${b.hp}/${b.maxHp}`,
@@ -337,7 +349,7 @@ export class GameRenderer extends NativeViewWriter {
                         ? '攻击牌点选敌人 · 长按手牌查看说明'
                         : ''
                     : '攻击牌选敌人，其余牌点击即用\n长按看详情 · 拖出场地可取消',
-            'battle/text10': `回合 ${b.turn} · 手牌 ${b.hand.length} / 6`,
+            'battle/text10': `回合 ${b.turn} · 手牌 ${b.hand.length} / ${g.scenario.runDeck ? 10 : 6}`,
             'drawPile/text0': b.draw.length,
             'discardPile/text0': b.discard.length,
             'battle/stamina-value': `${b.stamina}/${b.maxStamina}`,
@@ -345,11 +357,17 @@ export class GameRenderer extends NativeViewWriter {
         });
         screen.getChildByName('CriticalWarning')!.active = g.lowHealth;
         screen.getChildByName('WeaponSlot')!.active = !!b.weapon;
-        if (b.weapon)
-            this.text(screen, {
-                'battle/text7': `${this.game.content.cards[b.weapon.kind].name}已装备`,
-                'battle/text8': `${b.turn === b.equippedTurn ? '下回合起生成' : '每回合生成'}${this.game.content.cards[this.game.content.cards[b.weapon.kind].effect.generatedCard!].name}`,
+        if (b.weapon) {
+            const equipped = b.weapons ?? [b.weapon];
+            const names = equipped.map((weapon) => {
+                const definition = this.game.content.cards[weapon.kind];
+                return `${definition.name}：${generatedCards(definition.effect).map((id) => this.game.content.cards[id].name).join('、')}`;
             });
+            this.text(screen, {
+                'battle/text7': names.join(' · '),
+                'battle/text8': `${b.turn === b.equippedTurn ? '下回合起生成' : '每回合生成'}${names.map((name) => name.split('：')[1] ?? '').join(' · ')}`,
+            });
+        }
         screen.getChildByName('TargetGuide')!.active = !!this.ui.selectedCard;
         for (const progress of screen.getComponentsInChildren(UIProgress))
             progress.setRatio(progress.key === 'health' ? g.health / 10 : b.hp / b.maxHp);

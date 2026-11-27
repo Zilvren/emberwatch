@@ -1,4 +1,4 @@
-import { ART_IDS, CARD, CardDefinition, effectSummary, playableCard } from '../../core/content/CardCatalog';
+import { ART_IDS, CARD, CardDefinition, effectSummary, generatedCards, playableCard } from '../../core/content/CardCatalog';
 import type { CardDesignReference } from './CardDesignReference';
 
 export const CARD_ART_IDS = [...ART_IDS, 'rope', 'battery'];
@@ -67,6 +67,7 @@ export interface CardViewOptions {
     neededForSynthesis?: boolean;
     damage?: number;
     cost?: number;
+    rageReady?: boolean;
 }
 
 /** Compatibility adapter for the existing teaching catalog and web editor. */
@@ -78,16 +79,27 @@ export function cardViewModel(
 ): CardDisplayModel {
     data = playableCard(data);
     const { field, damage, cost } = options;
-    const effect = effectSummary(data, definitions),
-        detail = data.text === effect ? '' : data.text;
+    const effect = effectSummary(data, definitions);
+    const detail = data.text === effect ? '' : data.text;
     const [baseEffect, ...additional] = data.effect.labyrinth ? effect.split('，') : [effect];
+    const generated = generatedCards(data.effect).map((id) => definitions[id]?.name ?? id);
+    const hits = data.effect.hits ?? 1;
+    const currentDamage = damage ?? data.effect.amount * hits;
+    const attack = hits === 1 ? `造成 ${currentDamage} 点伤害`
+        : damage === undefined ? `造成 ${data.effect.amount} 点伤害 ${hits} 次`
+        : `造成 ${currentDamage} 点总伤害（${hits} 段）`;
     const primary =
         data.effect.type === 'equip'
-            ? `生成「${definitions[data.effect.generatedCard ?? '']?.name ?? data.effect.generatedCard}」`
-            : data.effect.type === 'damage' && damage !== undefined && damage !== data.effect.amount
-              ? `造成 ${damage} 点伤害`
+            ? `生成「${generated.join('」「')}」`
+              : data.effect.type === 'damage'
+                ? attack + (data.effect.block ? `，获得 ${data.effect.block} 点格挡` : '')
               : baseEffect.length > 21 && data.effect.labyrinth ? '查看效果说明' : baseEffect;
-    const context = [additional.join('，'), primary === '查看效果说明' ? baseEffect : '', detail].filter(Boolean).join('。');
+    const once = data.oncePerBattle ? '每张每场限用一次' : '';
+    const context = [once, additional.join('，'), primary === '查看效果说明' ? baseEffect : '', detail].filter(Boolean).join('。');
+    const weaponDescription = data.effect.type === 'equip'
+        ? (data.effect.equippedStrength ? `装备时提供 ${data.effect.equippedStrength} 点力量。` : '') +
+            (generated.length === 1 ? '从下回合起，每回合 1 张。' : '从下回合起，每回合各 1 张。')
+        : '';
     const keywords =
         data.role === 'supply'
             ? ['supply']
@@ -111,14 +123,12 @@ export function cardViewModel(
         description:
             field && data.role === 'temporary'
                 ? '打出或回合结束时消失。'
-                : (data.effect.type === 'equip' ? '从下回合起，每回合 1 张。' : '') + context,
+                : weaponDescription + context,
         fullDescription:
             effect +
             (field && data.role === 'temporary'
                 ? '\n\n打出或回合结束时消失。'
-                : detail
-                  ? '\n\n' + detail
-                  : ''),
+                : [once, detail].filter(Boolean).map((line) => '\n\n' + line).join('')),
         weight: data.role === 'temporary' ? '本场临时' : '',
         art: data.art,
         accent: data.color,

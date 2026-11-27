@@ -34,6 +34,9 @@ export class HandPresentation extends Component {
         const hand = game.battle?.hand ?? [];
         const ids = hand.map((c) => c.id),
             key = ids.join('|');
+        const shieldSpearEquipped = !!game.battle &&
+            (game.battle.weapons ?? (game.battle.weapon ? [game.battle.weapon] : []))
+                .some((weapon) => (game.content.cards[weapon.kind].weaponSlots ?? 1) === 2);
         for (const [id, card] of this.cards)
             if (ids.indexOf(id) < 0) {
                 card.node.destroy();
@@ -66,10 +69,17 @@ export class HandPresentation extends Component {
                 {
                     field: game.scenario.fieldDeck,
                     runDeck: game.scenario.runDeck,
-                    damage: game.content.cards[entry.kind].effect.type === 'damage'
+                    damage: game.content.cards[entry.kind].effect.type === 'damage' &&
+                        !(game.battle?.rage !== undefined &&
+                            !!game.content.cards[entry.kind].effect.rage &&
+                            game.battle.rage >= game.content.cards[entry.kind].effect.rage!.threshold)
                         ? game.attackDamage(entry.kind)
                         : undefined,
                     cost: game.cardCost(entry.kind),
+                    rageReady: shieldSpearEquipped &&
+                        !!game.content.cards[entry.kind].effect.rage &&
+                        game.battle.rage !== undefined &&
+                        game.battle.rage >= game.content.cards[entry.kind].effect.rage!.threshold,
                 }
             );
             card.setSelected(selected === entry.id);

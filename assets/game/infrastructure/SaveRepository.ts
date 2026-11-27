@@ -27,7 +27,11 @@ const tideCards = new Set(['follow_up', 'shield_push', 'scrap_shiv', 'rummage'])
 export class SaveRepository implements RunPersistence {
     readonly content = createCardSet();
     private readonly legacyCards = this.content.catalog.cards.filter((card) => !card.chapter);
-    private readonly fieldCards = this.legacyCards
+    private readonly previousCards = this.legacyCards.filter((card) => !card.synthesisOnly);
+    private readonly previousRecipes = this.content.catalog.recipes.filter((recipe) =>
+        [...recipe.materials, ...recipe.products].every(({ card }) => !this.content.cards[card].synthesisOnly)
+    );
+    private readonly fieldCards = this.previousCards
         .filter((card) => card.role !== 'supply')
         .map(({ canSynthesize, supplyValue, ...card }) => card);
     private readonly originalFieldCards = this.fieldCards.map((card) =>
@@ -38,8 +42,9 @@ export class SaveRepository implements RunPersistence {
     private readonly priorTideHashes = this.content.catalog.expedition
         ? [this.fieldHash(), this.fieldHash(this.originalFieldCards)]
         : [];
+    private readonly previousRunDeckHash = this.runDeckHash(this.previousCards, this.previousRecipes);
     private readonly upstreamHash = this.runDeckHash(
-        this.legacyCards.filter((card) => !tideCards.has(card.id))
+        this.previousCards.filter((card) => !tideCards.has(card.id)), this.previousRecipes
     );
     private readonly preFieldHashes = [this.fieldCards, this.originalFieldCards].map((cards) =>
         this.fieldHash(cards.filter((card) => !tideCards.has(card.id)), false)
@@ -49,8 +54,8 @@ export class SaveRepository implements RunPersistence {
         return hash(JSON.stringify({ version, fixedReward, cards,
             ...(includeExpedition && expedition ? { expedition } : {}) }));
     }
-    private runDeckHash(cards = this.legacyCards): string {
-        const { version, fixedReward, recipes } = this.content.catalog;
+    private runDeckHash(cards = this.legacyCards, recipes = this.content.catalog.recipes): string {
+        const { version, fixedReward } = this.content.catalog;
         return hash(JSON.stringify({ version, fixedReward, cards, recipes }));
     }
     private catalogHash(scenario: GameScenario): string {
@@ -74,7 +79,9 @@ export class SaveRepository implements RunPersistence {
     private matchesCatalog(catalogHash: string, scenario: GameScenario): boolean {
         if (catalogHash === this.catalogHash(scenario)) return true;
         if (scenario.labyrinth) return false;
-        if (scenario.runDeck) return catalogHash === this.upstreamHash;
+        if (scenario.runDeck)
+            return scenario.version === RUN_DECK_SCENARIO.version &&
+                (catalogHash === this.previousRunDeckHash || catalogHash === this.upstreamHash);
         if (this.priorTideHashes.indexOf(catalogHash) >= 0) return true;
         return !scenario.fieldDeck &&
             (catalogHash === this.upstreamHash || this.preFieldHashes.indexOf(catalogHash) >= 0);

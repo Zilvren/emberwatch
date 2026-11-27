@@ -40,6 +40,7 @@ export type GameReadModel = ReadonlyValue<
         | 'usableCards'
         | 'currentNode'
         | 'incomingDamage'
+        | 'strength'
         | 'scenario'
         | 'content'
     >

@@ -2,16 +2,28 @@ import { ActionResult } from '../RulesTypes';
 import { GameState } from '../state/GameState';
 import type { NodeKind, RouteProgress } from '../content/GameScenario';
 export type FeedbackState = Pick<GameState, 'revision' | 'logs'>;
-export type InventoryState = Pick<GameState, 'battle' | 'cards' | 'phase' | 'supplies'>;
-export type SynthesisState = Pick<GameState, 'cards' | 'phase' | 'revision'>;
+export type InventoryState = Pick<
+    GameState,
+    'battle' | 'cards' | 'phase' | 'supplies' | 'synthesisRewardBoosts' | 'synthesisMaterialBoostedRecipes'
+>;
+export type SynthesisState = Pick<
+    GameState,
+    'cards' | 'phase' | 'revision' | 'synthesisRewardBoosts' | 'synthesisBoostedRecipes' | 'synthesisMaterialBoostedRecipes'
+>;
 export type CombatState = Pick<
     GameState,
-    'health' | 'battle' | 'entryTier' | 'phase' | 'rewards' | 'supplies'
+    | 'health'
+    | 'battle'
+    | 'entryTier'
+    | 'phase'
+    | 'rewards'
+    | 'supplies'
+    | 'synthesisRewardBoosts'
 >;
 type NodeCompletionState = Pick<GameState, 'expeditionMap' | 'fixedDone' | 'pathIndex' | 'phase' | 'visited'>;
 export type RewardState = NodeCompletionState & Pick<
     GameState,
-    'cards' | 'rewards' | 'supplies' | 'discoveryPool'
+    'cards' | 'rewards' | 'supplies' | 'discoveryPool' | 'synthesisRewardBoosts'
 >;
 export type ExplorationState = NodeCompletionState & Pick<
     GameState,
@@ -26,6 +38,7 @@ export type ExplorationState = NodeCompletionState & Pick<
     | 'route'
     | 'settlement'
     | 'supplies'
+    | 'synthesisRewardBoosts'
     | 'failureReason'
 >;
 export type ShelterState = Pick<
@@ -39,6 +52,9 @@ export type ShelterState = Pick<
     | 'settlement'
     | 'storedSupplies'
     | 'supplies'
+    | 'synthesisRewardBoosts'
+    | 'synthesisBoostedRecipes'
+    | 'synthesisMaterialBoostedRecipes'
 > & RouteProgress;
 export type JournalState = Pick<GameState, 'day' | 'journalEntries' | 'milestones' | 'phase'>;
 

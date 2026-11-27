@@ -39,11 +39,31 @@ export class InventoryRules {
                 .map((kind) => this.owned(kind));
         }
     }
-    addDiscovery(kind: CardKind): OwnedCard {
-        const card = this.owned(kind, true);
+    private boostCompanionMaterial(kind: CardKind): void {
+        const boostedRecipes = this.state.synthesisMaterialBoostedRecipes ??
+            (this.state.synthesisMaterialBoostedRecipes = []);
+        const boosts = this.state.synthesisRewardBoosts ??
+            (this.state.synthesisRewardBoosts = {});
+        for (const recipe of this.content.catalog.recipes) {
+            if (boostedRecipes.indexOf(recipe.id) >= 0 ||
+                !recipe.materials.some((material) => material.card === kind)) continue;
+            const companions = recipe.materials.filter(
+                (material) => material.card !== kind && this.content.cards[material.card]?.reward
+            );
+            if (!companions.length) continue;
+            for (const material of companions)
+                boosts[material.card] = Math.max(2, boosts[material.card] ?? 1);
+            boostedRecipes.push(recipe.id);
+        }
+    }
+    addDiscovery(kind: CardKind, zone: OwnedCard['zone'] = 'base'): OwnedCard {
+        delete this.state.synthesisRewardBoosts?.[kind];
+        this.boostCompanionMaterial(kind);
+        const card = this.owned(kind, true, zone);
         this.state.cards.push(card);
         return card;
     }
+
     get baseWeight(): number {
         return this.state.cards.filter(c => c.zone === 'base')
             .reduce((sum, c) => sum + carriedWeight(this.content.cards[c.kind]), 0);

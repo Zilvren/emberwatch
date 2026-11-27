@@ -275,6 +275,47 @@
       "output/playwright/ashen-labyrinth-random-map/04-map-fork-restored-1024.png"
     ]
   },
+  "dragonSlayerSynthesis20261125": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-25",
+    "timezone": "Asia/Hong_Kong",
+    "engine": "Pink/Cocos 4.0.0-beta.1",
+    "scope": "灰烬街区合成探索、屠龙宝刀配方、装备力量、材料牌与存档",
+    "outcome": "SUPPORTED",
+    "rules": {
+      "status": "SUPPORTED",
+      "focusedTests": 20,
+      "fullSuitePassed": 175,
+      "baselineFailuresStillPresent": 15,
+      "failureNamesIdenticalToBaseline": true,
+      "typecheck": "passed",
+      "architecture": "passed",
+      "test": "tests/dragon-slayer.test.cjs"
+    },
+    "nativeBuild": {
+      "status": "SUPPORTED",
+      "platform": "web-desktop",
+      "output": "build/web-desktop-dragon-slayer",
+      "note": "标准输出中的生成文件被占用。使用同一项目、主场景和构建设置，输出到独立目录并由工坊加载。"
+    },
+    "browser": {
+      "status": "SUPPORTED",
+      "seed": 2,
+      "testedActions": "领取正常奖励，在街区营地完成三次合成，装备屠龙宝刀，在天台战读档后打出 24 伤屠龙挥砍，胜利返回避难所。",
+      "consoleErrors": 0,
+      "viewportsViewed": ["1440×900", "1024×768"],
+      "report": "output/playwright/dragon-slayer/report.json",
+      "screenshots": ["output/playwright/dragon-slayer/final-recipe.png", "output/playwright/dragon-slayer/dragon-slash.png", "output/playwright/dragon-slayer/dragon-slash-small.png"]
+    },
+    "persistence": {
+      "status": "SUPPORTED",
+      "checks": "独立浏览器存储重载战斗后状态一致。专项测试覆盖材料副本耗用、力量恢复和旧版合成存档。"
+    },
+    "balance": {
+      "status": "NEEDS EVIDENCE",
+      "note": "卡名、伤害、力量和奖励权重采用试玩值，整局平衡等人工试玩。"
+    }
+  },
   "campMarkers20261122": {
     "project": "The end",
     "date": "2026-11-22",

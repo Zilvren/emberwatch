@@ -66,6 +66,9 @@ export class SurvivalGame {
     pathIndex = 0;
     visited: NodeKind[] = [];
     discoveryPool?: string[];
+    synthesisRewardBoosts: Record<string, number> = {};
+    synthesisBoostedRecipes: string[] = [];
+    synthesisMaterialBoostedRecipes: string[] = [];
     battle: Battle | null = null;
     rewards: Rewards | null = null;
     settlement: Settlement | null = null;
@@ -178,6 +181,9 @@ export class SurvivalGame {
                 pathIndex: this.pathIndex,
                 visited: this.visited,
                 discoveryPool: this.discoveryPool,
+                synthesisRewardBoosts: this.synthesisRewardBoosts,
+                synthesisBoostedRecipes: this.synthesisBoostedRecipes,
+                synthesisMaterialBoostedRecipes: this.synthesisMaterialBoostedRecipes,
                 battle: this.battle,
                 rewards: this.rewards,
                 settlement: this.settlement,
@@ -231,6 +237,9 @@ export class SurvivalGame {
         this.pathIndex = 0;
         this.visited = [];
         this.discoveryPool = undefined;
+        this.synthesisRewardBoosts = {};
+        this.synthesisBoostedRecipes = [];
+        this.synthesisMaterialBoostedRecipes = [];
         this.battle = null;
         this.rewards = null;
         this.settlement = null;
@@ -331,6 +340,9 @@ export class SurvivalGame {
     }
     attackDamage(kind: CardKind): number {
         return this.combatRules.attackDamage(kind);
+    }
+    get strength(): number {
+        return this.combatRules.strength;
     }
     play(id: string): ActionResult {
         return this.combatRules.play(id);

@@ -18,7 +18,11 @@ export class RewardSelection extends Component {
         const discovery = game.battle?.discovery;
         const battleChoice = game.battle?.cardChoice;
         const fieldDiscovery = !!game.rewards?.discovery;
-        const pile = battleChoice?.mode === 'retain-hand' ? game.battle?.hand : game.battle?.discard;
+        const pile = battleChoice?.mode === 'retain-hand'
+            ? game.battle?.hand
+            : battleChoice?.mode === 'replace-weapon'
+              ? game.battle?.weapons
+              : game.battle?.discard;
         const cards = battleChoice
             ? battleChoice.ids.slice(page * 3, page * 3 + 3).map((id) => pile!.find((card) => card.id === id)!.kind)
             : discovery ?? game.rewards?.cards ?? [];
@@ -28,7 +32,10 @@ export class RewardSelection extends Component {
                 ? game.battle?.coreExposed
                     ? '闸芯暴露 · 再次发现'
                     : '战场发现'
-                : battleChoice ? battleChoice.mode === 'retain-hand' ? '保留到下回合' : '放回抽牌堆顶'
+                : battleChoice
+                  ? battleChoice.mode === 'retain-hand'
+                    ? '保留到下回合'
+                    : battleChoice.mode === 'replace-weapon' ? '选择替换的武器' : '放回抽牌堆顶'
                 : fieldDiscovery ? '发现一张卡牌' : '选择一张卡牌';
         this.cardHolders.forEach((holder, slot) => {
             const index = (cards.length === 1 ? 0 : slot) + page * 3;

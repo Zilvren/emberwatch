@@ -36,14 +36,20 @@ export interface Battle {
     draw: CombatCard[];
     hand: CombatCard[];
     discard: CombatCard[];
+    weapons?: CombatCard[];
     weapon: CombatCard | null;
+    weaponTurns?: Record<string, number>;
+    pendingEquip?: string;
     equippedTurn: number;
+    gainedStrength?: number;
+    rage?: number;
+    lastDefenseCardKind?: CardKind;
     /** Saved candidates for an opening or a surviving elite's first exposed core. */
     discovery?: CardKind[];
     attackedThisTurn?: boolean;
     coreExposed?: boolean;
     calm?: CalmBattle;
-    cardChoice?: { mode: 'discard-to-top' | 'retain-hand'; ids: string[] };
+    cardChoice?: { mode: 'discard-to-top' | 'retain-hand' | 'replace-weapon'; ids: string[] };
 }
 export interface CalmBattle {
     persistent: number;

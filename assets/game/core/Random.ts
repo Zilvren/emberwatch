@@ -21,4 +21,23 @@ export class Random {
         }
         return result;
     }
+
+    weightedSample<T>(source: readonly T[], weight: (value: T) => number, count: number): T[] {
+        const remaining = source.slice(), result: T[] = [];
+        while (remaining.length && result.length < count) {
+            const total = remaining.reduce((sum, value) => sum + Math.max(0, weight(value)), 0);
+            if (total <= 0) break;
+            let cursor = this.next() * total;
+            let index = remaining.length - 1;
+            for (let i = 0; i < remaining.length; i++) {
+                cursor -= Math.max(0, weight(remaining[i]));
+                if (cursor < 0) {
+                    index = i;
+                    break;
+                }
+            }
+            result.push(remaining.splice(index, 1)[0]);
+        }
+        return result;
+    }
 }

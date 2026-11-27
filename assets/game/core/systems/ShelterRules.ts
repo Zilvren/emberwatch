@@ -44,6 +44,9 @@ export class ShelterRules {
             treatmentSpent: 0,
         };
         if (this.scenario.runDeck) this.state.cards = [];
+        this.state.synthesisRewardBoosts = {};
+        this.state.synthesisBoostedRecipes = [];
+        this.state.synthesisMaterialBoostedRecipes = [];
         this.state.phase = 'shelter';
         this.state.day++;
         this.journal.record(mapClearMilestone(this.scenario.id));

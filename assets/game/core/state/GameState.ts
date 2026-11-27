@@ -34,6 +34,9 @@ export interface GameState {
     pathIndex: number;
     visited: NodeKind[];
     discoveryPool?: string[];
+    synthesisRewardBoosts?: Record<string, number>;
+    synthesisBoostedRecipes?: string[];
+    synthesisMaterialBoostedRecipes?: string[];
     battle: Battle | null;
     rewards: Rewards | null;
     settlement: Settlement | null;
@@ -209,6 +212,29 @@ export function validateGameState(
             s.discoveryPool.every((kind) => typeof kind === 'string' && definitions[kind]?.chapter === 'ashen-labyrinth'),
             'discovery pool references');
     }
+    if (s.synthesisRewardBoosts !== undefined) {
+        object(s.synthesisRewardBoosts, 'synthesis reward boosts');
+        for (const kind of Object.keys(s.synthesisRewardBoosts))
+            integer(s.synthesisRewardBoosts[kind], 2, 2, 'synthesis reward boost');
+    }
+    if (s.synthesisBoostedRecipes !== undefined) {
+        list(s.synthesisBoostedRecipes, 500, 'synthesis boosted recipes');
+        requireValue(
+            s.synthesisBoostedRecipes,
+            new Set(s.synthesisBoostedRecipes).size === s.synthesisBoostedRecipes.length &&
+                s.synthesisBoostedRecipes.every((id) => typeof id === 'string'),
+            'synthesis boosted recipe ids'
+        );
+    }
+    if (s.synthesisMaterialBoostedRecipes !== undefined) {
+        list(s.synthesisMaterialBoostedRecipes, 500, 'synthesis material boosted recipes');
+        requireValue(
+            s.synthesisMaterialBoostedRecipes,
+            new Set(s.synthesisMaterialBoostedRecipes).size === s.synthesisMaterialBoostedRecipes.length &&
+                s.synthesisMaterialBoostedRecipes.every((id) => typeof id === 'string'),
+            'synthesis material boosted recipe ids'
+        );
+    }
     list(s.cards, scenario.runDeck ? Number.MAX_SAFE_INTEGER : scenario.fieldDeck ? 10000 : 100, 'cards');
     const owned = new Set<string>(),
         combat = new Set<string>();
@@ -323,12 +349,12 @@ export function validateGameState(
         ] as const) {
             list(
                 cards,
-                name === 'hand' ? 6 : scenario.runDeck ? Number.MAX_SAFE_INTEGER : 10000,
+                name === 'hand' ? (scenario.runDeck ? 10 : 6) : scenario.runDeck ? Number.MAX_SAFE_INTEGER : 10000,
                 name
             );
             cards.forEach((card) => identity(card, combat, true));
         }
-        if (b.weapon !== null) {
+        if (b.weapon !== null && b.weapons === undefined) {
             identity(b.weapon, combat, true);
             requireValue(
                 b.weapon.kind,
@@ -336,6 +362,31 @@ export function validateGameState(
                 'weapon'
             );
         }
+        if (b.weapons !== undefined) {
+            list(b.weapons, 2, 'weapons');
+            b.weapons.forEach((card) => {
+                identity(card, combat, true);
+                requireValue(
+                    card.kind,
+                    definitions[card.kind].effect.type === 'equip',
+                    'weapons entry'
+                );
+            });
+            requireValue(
+                b.weapons,
+                b.weapons.reduce((slots, card) => slots + (definitions[card.kind].weaponSlots ?? 1), 0) <= 2,
+                'weapon slots'
+            );
+        }
+        if (b.gainedStrength !== undefined)
+            integer(b.gainedStrength, 0, Number.MAX_SAFE_INTEGER, 'gained strength');
+        if (b.rage !== undefined) integer(b.rage, 0, 5, 'rage');
+        if (b.lastDefenseCardKind !== undefined)
+            requireValue(
+                b.lastDefenseCardKind,
+                Object.prototype.hasOwnProperty.call(definitions, b.lastDefenseCardKind),
+                'last defense card'
+            );
         if (scenario.labyrinth) {
             const calm = b.calm!;
             object(calm, 'calm');
@@ -351,17 +402,31 @@ export function validateGameState(
             flag(calm.freeSkill, 'free skill');
             requireValue(calm.deferred, [null, 'scheduled', 'extra-turn'].indexOf(calm.deferred) >= 0, 'defer state');
             requireValue(calm.retained, calm.retained === null || b.hand.some((c) => c.id === calm.retained), 'retained hand card');
-            if (b.cardChoice !== undefined) {
-                const choice = b.cardChoice;
-                object(choice, 'combat card choice');
-                list(choice.ids, 10000, 'combat choice ids');
-                const choices = choice.mode === 'discard-to-top' ? b.discard
-                    : choice.mode === 'retain-hand' ? b.hand : null;
-                requireValue(choice.ids, !!choices && choice.ids.length > 0 &&
-                    new Set(choice.ids).size === choice.ids.length &&
-                    choice.ids.every((id) => choices.some((c) => c.id === id)), 'combat card choice');
-            }
-        } else requireValue(b.calm, b.calm === undefined && b.cardChoice === undefined, 'legacy combat effects');
+        } else requireValue(b.calm, b.calm === undefined, 'legacy combat effects');
+        if (b.cardChoice !== undefined) {
+            const choice = b.cardChoice;
+            object(choice, 'combat card choice');
+            list(choice.ids, 10000, 'combat choice ids');
+            requireValue(
+                choice.mode,
+                choice.mode === 'replace-weapon' ? !!scenario.runDeck : scenario.labyrinth &&
+                    (choice.mode === 'discard-to-top' || choice.mode === 'retain-hand'),
+                'combat choice mode'
+            );
+            const choices = choice.mode === 'discard-to-top' ? b.discard
+                : choice.mode === 'retain-hand' ? b.hand
+                : choice.mode === 'replace-weapon' ? (b.weapons ?? []) : null;
+            requireValue(choice.ids, !!choices && choice.ids.length > 0 &&
+                new Set(choice.ids).size === choice.ids.length &&
+                choice.ids.every((id) => choices.some((c) => c.id === id)), 'combat choice');
+            if (choice.mode === 'replace-weapon')
+                requireValue(
+                    b.pendingEquip,
+                    b.hand.some((card) => card.id === b.pendingEquip && definitions[card.kind].effect.type === 'equip'),
+                    'pending equip'
+                );
+            else requireValue(b.pendingEquip, b.pendingEquip === undefined, 'pending equip');
+        } else requireValue(b.pendingEquip, b.pendingEquip === undefined, 'pending equip');
     }
     requireValue(s.rewards, (s.phase === 'rewards') === (s.rewards !== null), 'rewards phase');
     if (s.rewards) {
@@ -425,6 +490,15 @@ export function validateGameState(
         pathIndex: s.pathIndex,
         visited: s.visited,
         ...(s.discoveryPool === undefined ? {} : { discoveryPool: s.discoveryPool }),
+        ...(s.synthesisRewardBoosts === undefined
+            ? {}
+            : { synthesisRewardBoosts: { ...s.synthesisRewardBoosts } }),
+        ...(s.synthesisBoostedRecipes === undefined
+            ? {}
+            : { synthesisBoostedRecipes: [...s.synthesisBoostedRecipes] }),
+        ...(s.synthesisMaterialBoostedRecipes === undefined
+            ? {}
+            : { synthesisMaterialBoostedRecipes: [...s.synthesisMaterialBoostedRecipes] }),
         battle: s.battle
             ? { ...s.battle, stamina: s.battle.stamina ?? 0, maxStamina: s.battle.maxStamina ?? 0 }
             : null,

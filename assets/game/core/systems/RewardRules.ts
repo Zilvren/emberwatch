@@ -56,7 +56,7 @@ export class RewardRules {
         const blocked = this.inventory.rewardCardBlocked(kind);
         if (blocked) return this.feedback.result(false, blocked);
         const zone = this.inventory.rewardZone(kind);
-        this.state.cards.push(this.inventory.owned(kind, true, zone));
+        this.inventory.addDiscovery(kind, zone);
         r.cardTaken = true;
         const destination =
             zone === 'overflow'
