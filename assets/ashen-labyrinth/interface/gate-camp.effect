@@ -38,7 +38,7 @@ CCProgram camp-fs %{
   uniform sampler2D lightMask;
   uniform Camp {
     vec4 fireMotion;    // seconds, motion enabled, reflected firelight, gate focus
-    vec4 stationLight;  // keeper, bench, warehouse, brazier
+    vec4 stationLight;  // keeper, bench, warehouse
   };
   const vec2 plate = vec2(1440.0, 900.0);
   float pool(vec2 p, vec2 center, vec2 radii) {
@@ -71,7 +71,7 @@ CCProgram camp-fs %{
     float bounce = pool(p, vec2(647.0, 765.0), vec2(186.0, 49.0)) +
                    0.65 * pool(p, vec2(649.0, 686.0), vec2(83.0, 63.0));
     paint += vec3(0.026, 0.014, 0.005) * bounce * (1.0 + 0.18 * pulse);
-    float focus = p.x < 455.0 ? stationLight.y : (p.x < 770.0 ? stationLight.w :
+    float focus = p.x < 455.0 ? stationLight.y : (p.x < 770.0 ? 0.0 :
                   (p.x < 1015.0 ? stationLight.x : stationLight.z));
     float mask = texture(lightMask, uv).r;
     // Grazing light follows the original silhouette and the painted highlights.
@@ -83,7 +83,6 @@ CCProgram camp-fs %{
     float lamps = pool(p, vec2(231.0, 557.0), vec2(181.0, 68.0)) * (0.053 + 0.08 * stationLight.y) +
                   pool(p, vec2(844.0, 545.0), vec2(70.0, 64.0)) * (0.095 + 0.11 * stationLight.x) +
                   pool(p, vec2(1216.0, 600.0), vec2(151.0, 91.0)) * (0.064 + 0.084 * stationLight.z);
-    lamps += pool(p, vec2(527.0, 701.0), vec2(64.0, 36.0)) * 0.085 * stationLight.w;
     paint += vec3(1.0, 0.64, 0.26) * lamps;
     float fittings = pool(p, vec2(153.0, 538.0), vec2(60.0, 33.0)) +
                      pool(p, vec2(838.0, 545.0), vec2(16.0, 15.0)) +

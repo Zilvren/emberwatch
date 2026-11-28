@@ -112,6 +112,7 @@
     },
     {
       "id": "follow_up",
+      "rarity": "rare",
       "name": "追击",
       "tag": "攻击 · 连击",
       "cost": 1,
@@ -132,6 +133,7 @@
     },
     {
       "id": "shield_push",
+      "rarity": "rare",
       "name": "借势反击",
       "tag": "攻击 · 掩体",
       "cost": 1,
@@ -219,6 +221,64 @@
       "effect": {
         "type": "damage",
         "amount": 4
+      }
+    },
+    {
+      "id": "lab_throw_stone",
+      "name": "投石",
+      "tag": "攻击",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#b97b58",
+      "art": "attack",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "damage",
+        "amount": 3
+      }
+    },
+    {
+      "id": "lab_guard_vitals",
+      "name": "护住要害",
+      "tag": "技能 · 防御",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#83a594",
+      "art": "dodge",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "block",
+        "amount": 3
+      }
+    },
+    {
+      "id": "lab_blood_erosion",
+      "name": "蚀血",
+      "tag": "攻击",
+      "cost": 2,
+      "weight": 0,
+      "text": "",
+      "color": "#b97b58",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "damage",
+        "amount": 2,
+        "labyrinth": {
+          "rule": "blood-erosion",
+          "amount": 2
+        }
       }
     },
     {
@@ -718,6 +778,7 @@
     },
     {
       "id": "long_wood_stick",
+      "rarity": "rare",
       "name": "长木棍",
       "tag": "武器 · 合成材料",
       "cost": 1,
@@ -758,6 +819,7 @@
     },
     {
       "id": "scrap_blade",
+      "rarity": "rare",
       "name": "废钢短刃",
       "tag": "武器 · 合成材料",
       "cost": 1,
@@ -799,6 +861,7 @@
     },
     {
       "id": "metal_guard",
+      "rarity": "rare",
       "name": "金属护板",
       "tag": "武器 · 合成材料",
       "cost": 1,
@@ -839,6 +902,7 @@
     },
     {
       "id": "rough_spear",
+      "rarity": "rare",
       "name": "粗制长矛",
       "tag": "武器 · 合成产物",
       "cost": 2,
@@ -863,6 +927,7 @@
     },
     {
       "id": "steel_spear",
+      "rarity": "epic",
       "name": "钢头长矛",
       "tag": "武器 · 合成产物",
       "cost": 2,
@@ -888,6 +953,7 @@
     },
     {
       "id": "shield_spear",
+      "rarity": "epic",
       "name": "盾矛",
       "tag": "武器 · 合成产物 · 占用2格",
       "cost": 2,
@@ -914,6 +980,7 @@
     },
     {
       "id": "shield_spear_charge",
+      "rarity": "epic",
       "name": "盾矛冲阵",
       "tag": "盾矛配套 · 攻击",
       "cost": 1,
@@ -937,6 +1004,7 @@
     },
     {
       "id": "shield_spear_guard",
+      "rarity": "epic",
       "name": "盾矛护阵",
       "tag": "盾矛配套 · 攻防",
       "cost": 1,
@@ -981,6 +1049,7 @@
     },
     {
       "id": "whetstone_2",
+      "rarity": "rare",
       "name": "磨刀石·二阶",
       "tag": "技能 · 合成材料",
       "cost": 1,
@@ -1002,6 +1071,7 @@
     },
     {
       "id": "whetstone_3",
+      "rarity": "epic",
       "name": "磨刀石·三阶",
       "tag": "技能 · 合成材料",
       "cost": 1,
@@ -1023,6 +1093,7 @@
     },
     {
       "id": "dragon_blood",
+      "rarity": "legendary",
       "name": "龙血",
       "tag": "稀有合成材料",
       "cost": 1,
@@ -1044,6 +1115,7 @@
     },
     {
       "id": "sharpened_knife",
+      "rarity": "rare",
       "name": "打磨菜刀",
       "tag": "武器 · 合成产物",
       "cost": 2,
@@ -1069,6 +1141,7 @@
     },
     {
       "id": "honed_knife",
+      "rarity": "epic",
       "name": "精磨菜刀",
       "tag": "武器 · 合成产物",
       "cost": 2,
@@ -1094,6 +1167,7 @@
     },
     {
       "id": "dragon_slayer",
+      "rarity": "legendary",
       "name": "屠龙宝刀",
       "tag": "武器 · 合成产物",
       "cost": 2,
@@ -1192,6 +1266,7 @@
     },
     {
       "id": "sealed_battery",
+      "rarity": "rare",
       "name": "封装电池",
       "tag": "物资 · 电料",
       "cost": 0,
@@ -1212,6 +1287,7 @@
     },
     {
       "id": "ration_voucher",
+      "rarity": "legendary",
       "name": "旧城配给券",
       "tag": "物资 · 票据",
       "cost": 0,
@@ -1294,6 +1370,7 @@
     },
     {
       "id": "fist_uppercut",
+      "rarity": "rare",
       "name": "上勾拳",
       "tag": "拳流派 · 攻击 · 连击",
       "cost": 1,
@@ -1357,6 +1434,7 @@
     },
     {
       "id": "fist_one_two",
+      "rarity": "rare",
       "name": "组合拳",
       "tag": "拳流派 · 二连收招",
       "cost": 1,
@@ -1380,6 +1458,7 @@
     },
     {
       "id": "fist_parry_counter",
+      "rarity": "rare",
       "name": "招架反击",
       "tag": "拳流派 · 二连收招",
       "cost": 1,
@@ -1406,6 +1485,7 @@
     },
     {
       "id": "fist_triple",
+      "rarity": "epic",
       "name": "三连拳",
       "tag": "拳流派 · 三连收招",
       "cost": 2,
@@ -1429,6 +1509,7 @@
     },
     {
       "id": "fist_straight_three",
+      "rarity": "epic",
       "name": "直拳三连",
       "tag": "拳流派 · 三连收招",
       "cost": 2,
@@ -1451,6 +1532,7 @@
     },
     {
       "id": "fist_chain_counter",
+      "rarity": "epic",
       "name": "连环反击",
       "tag": "拳流派 · 三连收招",
       "cost": 2,
@@ -1477,6 +1559,7 @@
     },
     {
       "id": "fist_straight_four",
+      "rarity": "epic",
       "name": "直拳四连",
       "tag": "拳流派 · 四连收招",
       "cost": 3,
@@ -1501,6 +1584,7 @@
     },
     {
       "id": "fist_parry_four",
+      "rarity": "epic",
       "name": "招架四连",
       "tag": "拳流派 · 四连收招",
       "cost": 3,
@@ -1570,6 +1654,7 @@
     },
     {
       "id": "fist_follow",
+      "rarity": "rare",
       "name": "乘势",
       "tag": "拳流派 · 辅助",
       "cost": 1,
@@ -1812,12 +1897,9 @@
   },
   "labyrinth": {
     "starter": {
-      "lab_press": 4,
-      "lab_step": 4,
-      "lab_anchor": 1,
-      "lab_screen": 1,
-      "lab_cell": 1,
-      "lab_open": 1
+      "lab_throw_stone": 5,
+      "lab_guard_vitals": 4,
+      "lab_blood_erosion": 1
     },
     "discoveryPool": [
       "knife",

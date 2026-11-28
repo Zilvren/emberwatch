@@ -1,0 +1,155 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "b1ef658c-ca80-4435-a14c-10ced5943813",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "4a579": {
+      "importer": "sprite-frame",
+      "uuid": "b1ef658c-ca80-4435-a14c-10ced5943813@4a579",
+      "displayName": "",
+      "id": "4a579",
+      "name": "survey_map",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 2,
+        "trimY": 2,
+        "width": 252,
+        "height": 252,
+        "rawWidth": 252,
+        "rawHeight": 252,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "94c8b880-3749-4545-bc24-fe30e6713cbc@6c48a",
+        "atlasUuid": "b1ef658c-ca80-4435-a14c-10ced5943813",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "474cc": {
+      "importer": "sprite-frame",
+      "uuid": "b1ef658c-ca80-4435-a14c-10ced5943813@474cc",
+      "displayName": "",
+      "id": "474cc",
+      "name": "salvage_magnet",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 258,
+        "trimY": 2,
+        "width": 252,
+        "height": 252,
+        "rawWidth": 252,
+        "rawHeight": 252,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "94c8b880-3749-4545-bc24-fe30e6713cbc@6c48a",
+        "atlasUuid": "b1ef658c-ca80-4435-a14c-10ced5943813",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "964d7": {
+      "importer": "sprite-frame",
+      "uuid": "b1ef658c-ca80-4435-a14c-10ced5943813@964d7",
+      "displayName": "",
+      "id": "964d7",
+      "name": "keeper_watch",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 514,
+        "trimY": 2,
+        "width": 252,
+        "height": 252,
+        "rawWidth": 252,
+        "rawHeight": 252,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "94c8b880-3749-4545-bc24-fe30e6713cbc@6c48a",
+        "atlasUuid": "b1ef658c-ca80-4435-a14c-10ced5943813",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "relic-objects.png",
+    "format": 2,
+    "uuid": "b1ef658c-ca80-4435-a14c-10ced5943813",
+    "textureUuid": "94c8b880-3749-4545-bc24-fe30e6713cbc@6c48a"
+  }
+}

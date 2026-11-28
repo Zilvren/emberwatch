@@ -22,7 +22,12 @@ export class RewardChoice extends Component {
                 '',
                 game.content.cards,
                 game.scenario.battleResource === 'stamina' ? '体力' : '物资',
-                { runDeck: game.scenario.runDeck }
+                {
+                    field: game.scenario.fieldDeck,
+                    labyrinth: game.scenario.labyrinth,
+                    labyrinthCatalog: game.content.catalog.labyrinth,
+                    runDeck: game.scenario.runDeck,
+                }
             );
         if (this.claim) {
             this.claim.actionId = 'claim-card-' + index;

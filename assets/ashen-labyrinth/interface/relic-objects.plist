@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0"><dict><key>frames</key><dict>
+<key>survey_map</key><dict><key>frame</key><string>{{2,2},{252,252}}</string><key>offset</key><string>{0,0}</string><key>rotated</key><false/><key>sourceSize</key><string>{252,252}</string></dict>
+<key>salvage_magnet</key><dict><key>frame</key><string>{{258,2},{252,252}}</string><key>offset</key><string>{0,0}</string><key>rotated</key><false/><key>sourceSize</key><string>{252,252}</string></dict>
+<key>keeper_watch</key><dict><key>frame</key><string>{{514,2},{252,252}}</string><key>offset</key><string>{0,0}</string><key>rotated</key><false/><key>sourceSize</key><string>{252,252}</string></dict>
+</dict><key>metadata</key><dict><key>format</key><integer>2</integer><key>textureFileName</key><string>relic-objects.png</string><key>size</key><string>{768,256}</string></dict></dict></plist>

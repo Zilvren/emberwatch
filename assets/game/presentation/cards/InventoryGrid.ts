@@ -92,7 +92,7 @@ export class InventoryGrid extends Component {
                 const packed = cards.filter((card) => card.zone === 'base').length;
                 this.summary.string = `行囊 ${packed} 张 · 暂存 ${cards.length - packed} 张`;
             } else this.summary.string = field
-                ? `随行牌组 ${game.usableCards.length} 张 · 本次发现 ${game.usableCards.filter((card) => card.found).length} 张` +
+                ? `本局战斗牌 ${game.usableCards.length} 张 · 本次发现 ${game.usableCards.filter((card) => card.found).length} 张` +
                     (game.scenario.labyrinth ? ` · 物资卡 ${game.carriedCards.length} 张` : '')
                 : runBattleDeck
                   ? `${game.usableCards.length} 张战斗牌 · 本局使用`
@@ -126,7 +126,7 @@ export class InventoryGrid extends Component {
         }
         const title = this.node.getChildByName('InventoryTitle')?.getComponent(Label);
         if (title)
-            title.string = supplyBag ? '物资行囊' : field ? '随行牌组' : runBattleDeck ? '本局卡组' : '行囊 / 本次探索';
+            title.string = supplyBag ? '物资行囊' : field ? '本局战斗牌' : runBattleDeck ? '本局卡组' : '行囊 / 本次探索';
         this.sortButton?.setText(
             '排序：' +
                 { original: '获得顺序', name: '名称', cost: '费用' }[ui.bagSort]

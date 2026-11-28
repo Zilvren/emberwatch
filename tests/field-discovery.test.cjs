@@ -146,7 +146,7 @@ test('an actual pre-field catalog checksum can resume an old in-progress expedit
     delete old.labyrinth;
     old.cards = old.cards
         .filter((c) => !c.chapter && !c.synthesisOnly && !c.fist && !['follow_up', 'shield_push', 'scrap_shiv', 'rummage'].includes(c.id))
-        .map(({ summary, ...card }) => card);
+        .map(({ summary, rarity, ...card }) => card);
     const oldIds = new Set(old.cards.map(({ id }) => id));
     old.recipes = old.recipes.filter(({ materials, products }) =>
         [...materials, ...products].every(({ card }) => oldIds.has(card))
@@ -165,5 +165,7 @@ test('an actual pre-field catalog checksum can resume an old in-progress expedit
     assert.equal(restored.game.content.cards.knife.name, '菜刀');
     ok(restored.execute({ type: 'new-game' }));
     assert.equal(restored.game.scenario.id, 'ashen-labyrinth');
-    assert.equal(restored.game.cards.length, 12);
+    assert.equal(restored.game.cards.length, 0);
+    ok(restored.execute({ type: 'start', tier: 'emergency' }));
+    assert.equal(restored.game.cards.length, 10);
 });

@@ -36,6 +36,8 @@ import { StatusBar } from './ui/StatusBar';
 import { battleWindowLayout } from './ui/BattleWindowLayout';
 import { ModalPanel } from './ui/ModalPanel';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
+import { CAMP_PAGES } from './ui/CampViewModel';
+import { fitCampRoom } from './ui/CampRoomLayout';
 import { launchPulse, ringImpact } from './effects/TideResonance';
 import { enterEncounterPreview } from './dev/EncounterPreview';
 import {
@@ -69,9 +71,9 @@ export class GameDirector extends Component {
     private refresh(): void {
         const previousScreen = this.renderer.activeScreen;
         this.renderer.render();
-        const camp = this.renderer.activeScreen === this.scene.screens.camp;
+        const camp = atGateCamp(this.game);
         this.audio.setCampAmbience(camp);
-        if (camp && !this.ui.overlay) this.message(this.session.saveWarning);
+        if (camp && !this.ui.overlay && !this.ui.campPage) this.message(this.session.saveWarning);
         if (previousScreen && previousScreen !== this.renderer.activeScreen) {
             for (const effect of this.effectsRoot?.children ?? []) {
                 Tween.stopAllByTarget(effect);
@@ -266,6 +268,16 @@ export class GameDirector extends Component {
         const campScale = Math.min(width / camp.getComponent(UITransform)!.width, height / 570);
         camp.setScale(campScale, campScale, 1);
         camp.setPosition(0, 0);
+        const cover = Math.max(width / 1440, height / 900), content = Math.min(width / 1320, height / 790);
+        for (const key of CAMP_PAGES) {
+            const page = this.scene.screens[key];
+            page.getChildByName('Room')!.setScale(cover, cover, 1);
+            const surface = page.getChildByName('PageContent')!;
+            if (key === 'camp-journal') surface.setScale(content, content, 1);
+            else fitCampRoom(surface, width, height);
+        }
+        if (this.ui.campPage && this.ui.campPage !== 'camp-journal' && !this.ui.overlay)
+            this.renderer.render();
         const frame = battleWindowLayout(width, height);
         this.renderer.fitBattleWindow(frame);
         const hud = this.scene.hud.getComponent(UITransform)!;
@@ -592,6 +604,7 @@ export class GameDirector extends Component {
                 ?.inspect(),
             busy: this.ui.busy,
             overlay: this.ui.overlay,
+            campPage: this.ui.campPage,
             synthesisBlocked: this.session.synthesisBlocked,
             canUndoSynthesis: this.session.canUndoSynthesis,
             inventoryMode: this.ui.deckEdit ? 'deck' : 'inspect',

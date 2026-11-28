@@ -1,10 +1,19 @@
 import { CardSet } from '../content/ContentRegistry';
+import type { CardRarity } from '../content/CardCatalog';
+import { ASHEN_MAP_LAST_LAYER } from '../content/ExpeditionMap';
 import { fistFinisherTier } from '../content/FistCards';
 import { ActionResult, CardKind, Rewards } from '../RulesTypes';
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, RewardState, completeExplorationNode } from './RuleContext';
 import { GameScenario, TUTORIAL_SCENARIO } from '../content/GameScenario';
 import { Random } from '../Random';
+
+const STANDARD_GRADES = ['common', 'rare', 'epic'] as const;
+const LABYRINTH_REWARDS = {
+    battle: { legendary: [0.014, 0.053], common: [74, 56], rare: [22, 29], epic: [4, 15] },
+    supply: { legendary: [0.016, 0.070], common: [71, 60], rare: [23, 26], epic: [6, 14] },
+} as const;
+
 export class RewardRules {
     constructor(
         private readonly state: RewardState,
@@ -21,9 +30,9 @@ export class RewardRules {
         const node = this.scenario.nodes[source];
         let cards: string[] = [];
         if (this.scenario.labyrinth && node?.type === 'scavenge' && node.supplyCard) {
-            cards = this.random!.weightedSample(this.content.supplyPool, kind => this.content.rewardWeights[kind], 1);
+            cards = this.labyrinthOffer(source, this.content.supplyPool, 1, 'supply');
         } else if (this.scenario.labyrinth && discoveries && pool.length) {
-            cards = this.random!.shuffle(pool.filter((kind) => !this.content.cards[kind].fist)).slice(0, discoveries);
+            cards = this.labyrinthOffer(source, pool.filter(kind => !this.content.cards[kind].fist), discoveries, 'battle');
         }
         this.offerFieldCards(source, amount, { cards });
     }
@@ -33,7 +42,7 @@ export class RewardRules {
             return;
         }
         const pool = this.scenario.labyrinth ? this.state.discoveryPool ?? [] : this.content.rewardPool;
-        const offer = this.battleOffer(pool, count, unlockedHere);
+        const offer = this.battleOffer(source, pool, count, unlockedHere);
         if (this.scenario.labyrinth) {
             this.state.supplies += amount;
             this.offerFieldCards(source, amount, offer);
@@ -43,6 +52,7 @@ export class RewardRules {
         }
     }
     private battleOffer(
+        source: string,
         pool: readonly CardKind[],
         count: number,
         unlockedHere: readonly CardKind[]
@@ -57,11 +67,46 @@ export class RewardRules {
         const slots = Math.max(0, count - Number(!!guaranteedFinisher));
         const boosts = this.state.synthesisRewardBoosts ?? {};
         const cards = this.scenario.labyrinth
-            ? slots ? this.random!.shuffle(available).slice(0, slots) : []
+            ? this.labyrinthOffer(source, available, slots, 'battle', guaranteedFinisher)
             : this.random!.weightedSample(available,
                 (kind) => (this.content.rewardWeights[kind] ?? 1) * (boosts[kind] ?? 1), slots);
         if (guaranteedFinisher) cards.unshift(guaranteedFinisher);
         return { cards, ...(guaranteedFinisher ? { guaranteedFinisher } : {}) };
+    }
+    private labyrinthOffer(
+        source: string,
+        pool: readonly CardKind[],
+        count: number,
+        type: keyof typeof LABYRINTH_REWARDS,
+        guaranteed?: CardKind
+    ): CardKind[] {
+        if (!count || !pool.length) return [];
+        const random = this.random!;
+        const layer = this.state.expeditionMap?.points.find(point => point.id === source)?.layer ?? this.state.pathIndex;
+        const depth = Math.min(1, layer / ASHEN_MAP_LAST_LAYER);
+        const table = LABYRINTH_REWARDS[type];
+        const weight = (grade: CardRarity) => {
+            const [early, late] = table[grade];
+            return early + (late - early) * depth;
+        };
+        const bands: Record<CardRarity, CardKind[]> = { common: [], rare: [], epic: [], legendary: [] };
+        for (const kind of pool) bands[this.content.cards[kind].rarity ?? 'common'].push(kind);
+        const cardWeight = (kind: CardKind) => this.content.rewardWeights[kind] ?? 1;
+        // Decide once whether this offer contains gold, then draw within the available grades.
+        const gold = bands.legendary.length && (!guaranteed || this.content.cards[guaranteed].rarity !== 'legendary') &&
+            random.next() < weight('legendary')
+            ? random.weightedSample(bands.legendary, cardWeight, 1)[0] : undefined;
+        const cards: CardKind[] = [];
+        while (cards.length < count - Number(!!gold)) {
+            const [grade] = random.weightedSample(STANDARD_GRADES, grade => bands[grade].length ? weight(grade) : 0, 1);
+            if (!grade) break;
+            const band = bands[grade];
+            const [kind] = random.weightedSample(band, cardWeight, 1);
+            band.splice(band.indexOf(kind), 1);
+            cards.push(kind);
+        }
+        if (gold) cards.splice(random.int(0, cards.length), 0, gold);
+        return cards;
     }
     private offerFieldCards(source: string, amount: number, offer: Pick<Rewards, 'cards' | 'guaranteedFinisher'>): void {
         if (offer.cards.length) {

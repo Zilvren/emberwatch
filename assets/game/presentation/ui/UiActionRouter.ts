@@ -4,8 +4,8 @@ import type { ButtonActionEvent } from './UIEvents';
 import type { UiState } from './UiState';
 import { entryTier, affordableEntryTier } from '../../core/content/EntryTiers';
 import { initialRecipeBrowse, recipeBrowse } from './RecipePanelModel';
-import { atGateCamp, isCampStation, keeperLots, nextKeeperTopic } from './CampViewModel';
-import { CAMP_SKILLS } from '../../core/content/GateCamp';
+import { atGateCamp, CAMP_SHELF_PAGE_SIZE, campShelfPage, isCampPage, nextKeeperTopic, warehousePage } from './CampViewModel';
+import { CAMP_RELICS, CAMP_SKILLS } from '../../core/content/GateCamp';
 import { battlePileEntries, isCardPile, PILE_PAGE_SIZE } from '../cards/BattlePileModel';
 export type UiSound = 'tap' | 'loot' | 'heal';
 export interface UiActions {
@@ -29,6 +29,11 @@ export class UiActionRouter {
         if (this.ui.busy || !this.session.view) return;
         const id = event.id,
             g = this.session.view;
+        if (this.ui.campPage) {
+            if (this.ui.campPage === 'camp-keeper' && id !== 'camp-back') this.keeperAction(id, event.payload);
+            else if (id.startsWith('camp-')) this.campPageAction(id, event.payload);
+            return;
+        }
         if (isCardPile(this.ui.overlay) || isCardPile(id)) {
             this.pileAction(id);
             return;
@@ -56,10 +61,9 @@ export class UiActionRouter {
             return;
         }
         if (id.startsWith('camp-')) {
-            this.campAction(id, event.payload);
+            this.campAction(id);
             return;
         }
-        if (isCampStation(this.ui.overlay) && id !== 'modal-close' && id !== 'modal-cancel') return;
         const choice = g.battle?.cardChoice;
         if (this.ui.overlay === 'recipes' || id === 'recipe-open' || id === 'rest-synthesis') {
             if (!choice && !g.battle?.discovery) this.recipeAction(event);
@@ -83,6 +87,7 @@ export class UiActionRouter {
             return;
         }
         if (id === 'bag' || id === 'rest-bag' || id === 'reward-bag') {
+            if (atGateCamp(g)) return;
             this.ui.overlay = 'bag';
             this.ui.page = 0;
             this.ui.deckEdit = id === 'rest-bag' && !g.scenario.runDeck && !g.scenario.fieldDeck;
@@ -285,70 +290,73 @@ export class UiActionRouter {
         this.actions.sound('tap');
         this.actions.refresh();
     }
-    private campAction(id: string, kind: string): void {
-        const g = this.session.view;
-        if (!atGateCamp(g)) return;
-        const active = this.ui.overlay;
-        if (id === 'camp-gate' && !active) {
+    private campAction(id: string): void {
+        if (!atGateCamp(this.session.view) || this.ui.overlay) return;
+        if (id === 'camp-gate') {
             this.openEntry();
             return;
-        } else if (!active && (id === 'camp-keeper' || id === 'camp-warehouse' || id === 'camp-fire' || id === 'camp-skills')) {
-            this.ui.overlay = id;
-            if (id === 'camp-skills') this.ui.campSkill = CAMP_SKILLS[0].id;
-            if (id === 'camp-warehouse') this.ui.warehouseKind = '';
-            if (id === 'camp-fire') this.ui.campJournalPage = Math.max(0, g.journalEntries.length - 1);
-        } else if (active === 'camp-skills' && id === 'camp-select-' + kind && CAMP_SKILLS.some(skill => skill.id === kind)) {
-            this.ui.campSkill = kind;
-        } else if (active === 'camp-skills' && id === 'camp-learn' && kind === this.ui.campSkill) {
-            this.actions.act({ type: 'learn-camp-skill', id: kind });
+        }
+        if (!isCampPage(id)) return;
+        this.ui.campPage = id;
+        this.ui.campSkill = null;
+        this.ui.shopRelic = CAMP_RELICS[0].id;
+        this.ui.stockPage = 0;
+        this.ui.warehouseKind = '';
+        this.actions.refresh();
+    }
+    private keeperAction(id: string, kind: string): void {
+        const g = this.session.view, active = this.ui.overlay;
+        if (!atGateCamp(g)) return;
+        if (!active && id === 'camp-relic-' + kind) {
+            const relic = CAMP_RELICS.find(item => item.id === kind);
+            if (!relic) return;
+            this.ui.shopRelic = relic.id;
+        } else if (!active && (id === 'camp-relic-prev' || id === 'camp-relic-next')) {
+            const index = CAMP_RELICS.findIndex(item => item.id === this.ui.shopRelic);
+            const page = Math.floor(index / CAMP_SHELF_PAGE_SIZE);
+            const next = campShelfPage(CAMP_RELICS, page + (id === 'camp-relic-next' ? 1 : -1));
+            if (page === next.current) return;
+            this.ui.shopRelic = next.items[0].id;
+        } else if (!active && id === 'camp-buy-relic' && kind === this.ui.shopRelic) {
+            this.actions.act({ type: 'buy-camp-relic', id: kind }, 'loot');
             return;
-        } else if (active === 'camp-skills' && id === 'camp-equipment') {
-            this.ui.overlay = 'camp-bench';
-        } else if (active === 'camp-keeper' && id === 'camp-talk') {
+        } else if (!active && id === 'camp-talk') {
             this.ui.overlay = 'camp-talk';
             this.ui.campTopic = 0;
+        } else if (active === 'camp-talk' && (id === 'modal-close' || id === 'modal-cancel')) {
+            this.ui.overlay = null;
         } else if (active === 'camp-talk' && id === 'camp-talk-next') {
             this.ui.campTopic = nextKeeperTopic(this.ui.campTopic);
-        } else if ((id === 'camp-trade' && (active === 'camp-keeper' || active === 'camp-talk')) ||
-            (id === 'camp-find-keeper' && active === 'camp-warehouse')) {
-            this.ui.overlay = 'camp-trade';
-            this.ui.tradeLot = '';
-            this.ui.tradeReceipt = '';
-        } else if (active === 'camp-trade') {
-            const lots = keeperLots(g);
-            const lot = lots.find(item => item.key === this.ui.tradeLot) ?? lots[0];
-            if (id === 'camp-trade-browse') this.ui.tradeReceipt = '';
-            else if (this.ui.tradeReceipt) return;
-            else if (id === 'camp-trade-next' && lots.some(item => item.key === kind)) this.ui.tradeLot = kind;
-            else if (id === 'camp-exchange' && lot && kind === lot.key) {
-                const result = this.session.execute({ type: lot.buying ? 'buy-keeper-card' : 'redeem-supply', kind: lot.kind });
-                if (result.ok) this.ui.tradeReceipt = result.message;
-                else this.actions.message(result.message);
-            } else return;
-        } else if ((id === 'camp-stock' || id === 'camp-stock-next') && this.ui.overlay === 'camp-warehouse' && (g.storedSupplies?.[kind] ?? 0) > 0) {
-            this.ui.warehouseKind = kind;
-        } else if (id === 'camp-stock-back' && this.ui.overlay === 'camp-warehouse') {
-            this.ui.warehouseKind = '';
-        } else if (id === 'camp-redeem' && this.ui.overlay === 'camp-warehouse' && kind && kind === this.ui.warehouseKind) {
-            this.actions.act({ type: 'redeem-supply', kind }, 'loot');
-            return;
-        } else if (id === 'camp-deck' && this.ui.overlay === 'camp-bench') {
-            this.ui.overlay = 'bag';
-            this.ui.page = 0;
-            this.ui.bagFilter = 'all';
-            this.ui.deckEdit = this.ui.bagReader = this.ui.bagDetails = false;
-        } else if (id === 'camp-repair' && this.ui.overlay === 'camp-bench' && g.phase === 'shelter') {
-            this.actions.act({ type: 'heal-at-shelter' }, 'heal');
-            return;
-        } else if (this.ui.overlay === 'camp-fire' && id === 'camp-audio') {
-            this.actions.toggleAudio();
-        } else if (this.ui.overlay === 'camp-fire' && (id === 'camp-prev' || id === 'camp-next')) {
-            const page = this.ui.campJournalPage + (id === 'camp-next' ? 1 : -1);
-            this.ui.campJournalPage = Math.max(0, Math.min(g.journalEntries.length - 1, page));
         } else return;
         this.actions.sound('tap');
         this.actions.refresh();
     }
+    private campPageAction(id: string, kind: string): void {
+        const g = this.session.view, page = this.ui.campPage;
+        if (!atGateCamp(g) || this.ui.overlay) return;
+        if (id === 'camp-back') this.ui.campPage = null;
+        else if (page === 'camp-skills' && id === 'camp-select-' + kind && CAMP_SKILLS.some(skill => skill.id === kind))
+            this.ui.campSkill = this.ui.campSkill === kind ? null : kind;
+        else if (page === 'camp-skills' && id === 'camp-learn' && kind === this.ui.campSkill) {
+            this.actions.act({ type: 'learn-camp-skill', id: kind });
+            return;
+        } else if (page === 'camp-journal' && id === 'camp-audio') this.actions.toggleAudio();
+        else if (page === 'camp-warehouse') {
+            const stock = warehousePage(g, this.ui.stockPage);
+            if (id === 'camp-stock-prev' || id === 'camp-stock-next') {
+                this.ui.stockPage = Math.max(0, Math.min(stock.pages - 1, stock.current + (id === 'camp-stock-next' ? 1 : -1)));
+                this.ui.warehouseKind = '';
+            } else if (stock.items.indexOf(kind) < 0) return;
+            else if (id === 'camp-stock-inspect')
+                this.ui.warehouseKind = kind;
+            else if (id === 'camp-stock-sell' && kind === this.ui.warehouseKind) {
+                this.actions.act({ type: 'redeem-supply', kind }, 'loot');
+                return;
+            } else return;
+        } else return;
+        this.actions.refresh();
+    }
+
     private recipeAction(event: ButtonActionEvent): void {
         const { id, payload = '' } = event;
         if (this.ui.overlay !== 'recipes') {

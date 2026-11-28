@@ -1,5 +1,9 @@
 # The end 关键节点日志与探索时间
 
+## 2026-11-28 · 营地任务手记与新一趟探索
+
+《The end》门前营地的书现已作为当前任务的独立阅读页。用户确认任务尚未制作，右页显示真实空状态，翻书不把关键剧情标成已读。关键剧情仍由 `JournalRules.ts` 按既有节点触发。迷宫营地取消付费治疗和随行牌册，每次成功出发时按设定恢复初始血量并发新起始牌。先前入营时带着起始牌的历史存档也在出发时重建牌组，在途读档继续原有战斗。永久技能、已入库物资和关键节点记录沿用存档。实现见 `assets/game/core/SurvivalGame.ts`、`assets/game/core/systems/ShelterRules.ts`、`assets/game/presentation/ui/CampTaskJournal.ts`。
+
 ## 2026-11-28 · 战斗行动记录下线
 
 《The end》已按用户要求移除「本日行动记录」及写入存档的行动流水。营地剧情继续保存关键节点、固定文案 ID、发生天数和已读标记。旧探索续局时沿用这些字段及原有战斗牌序。兼容读取见 `assets/game/core/state/GameState.ts`，节点触发见 `assets/game/core/systems/JournalRules.ts`，恢复回归见 `tests/session-save.test.cjs`。

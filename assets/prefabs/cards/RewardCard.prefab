@@ -4328,6 +4328,10 @@
       "__uuid__": "2f14c7b3-2284-43f9-bb0b-e77fc9106e93",
       "__expectedType__": "cc.SpriteAtlas"
     },
+    "rarityAtlas": {
+      "__uuid__": "5a4f926e-be3b-4e02-b12c-3f56ec52a077",
+      "__expectedType__": "cc.SpriteAtlas"
+    },
     "labyrinthTheme": {
       "__uuid__": "b212e864-a51b-40a9-8c3b-e4bd22864bac",
       "__expectedType__": "cc.JsonAsset"

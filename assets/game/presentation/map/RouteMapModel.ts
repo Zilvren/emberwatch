@@ -1,5 +1,6 @@
 import type { GameReadModel } from '../../core/GameReadModel';
 import type { NodeKind, MapIcon } from '../../core/content/GameScenario';
+import { ownsRelic } from '../../core/content/GateCamp';
 import { nextMapNodes, type ExpeditionMap } from '../../core/content/ExpeditionMap';
 
 export type RoutePointState = 'available' | 'current' | 'visited' | 'locked' | 'excluded';
@@ -30,8 +31,12 @@ export interface RouteMapModel {
     focusY: number;
 }
 
-function labyrinthPointTitle(title: string, icon: MapIcon | 'home', state: RoutePointState): string {
-    if ((icon === 'supply' || icon === 'scavenge') && state !== 'visited' && state !== 'current')
+function surveyHint(site?: GameReadModel['scenario']['nodes'][string]): string | undefined {
+    if (site?.type === 'scavenge') return site.supplyCard ? '物资卡' : site.discover ? '发现战斗牌' : '物资点';
+}
+
+function labyrinthPointTitle(title: string, icon: MapIcon | 'home', state: RoutePointState, surveyed?: string): string {
+    if (!surveyed && (icon === 'supply' || icon === 'scavenge') && state !== 'visited' && state !== 'current')
         return '未知地点';
     return title;
 }
@@ -127,10 +132,11 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
                 : 'locked';
         const title = kind === 'home' ? '避难所' : (game.scenario.nodes[kind]?.title ?? kind);
         const icon = kind === 'home' ? ('home' as const) : game.scenario.nodes[kind].icon;
+        const surveyed = available && ownsRelic(game, 'survey_map') ? surveyHint(game.scenario.nodes[kind]) : undefined;
         const point = {
             id,
             kind,
-            title: game.scenario.labyrinth ? labyrinthPointTitle(title, icon, state) : title,
+            title: game.scenario.labyrinth ? labyrinthPointTitle(title, icon, state, surveyed) : title,
             icon,
             layer,
             x,
@@ -146,7 +152,7 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
             decisionHint:
                 game.scenario.fieldDeck && choice && game.currentNode === 'choice'
                     ? game.scenario.routeDescriptions?.[branch]
-                    : undefined,
+                    : surveyed,
             action:
                 kind === 'home'
                     ? ''
@@ -205,6 +211,7 @@ function expeditionMapModel(game: GameReadModel, map: Readonly<ExpeditionMap>): 
     const last = game.visited[game.visited.length - 1];
     const available = game.phase === 'map' ? nextMapNodes(map, last) : [];
     const current = map.activeNode ?? (game.phase === 'map' && available.length ? last : undefined);
+    const surveyed = ownsRelic(game, 'survey_map') ? nextMapNodes(map, map.activeNode ?? last) : [];
     const hints = hearthBattleHints(game, map, current);
     const visited = new Set(game.visited);
     const remaining = new Set(map.activeNode === null ? nextMapNodes(map, last) : [map.activeNode]);
@@ -225,11 +232,12 @@ function expeditionMapModel(game: GameReadModel, map: Readonly<ExpeditionMap>): 
         else if (visited.has(id)) state = 'visited';
         else if (available.indexOf(id) >= 0) state = 'available';
         else if (remaining.has(id)) state = 'locked';
+        const survey = surveyed.indexOf(id) >= 0 ? surveyHint(site) : undefined;
         return {
-            id, kind: id, title: labyrinthPointTitle(site.title, site.icon, state), icon: site.icon, layer,
+            id, kind: id, title: labyrinthPointTitle(site.title, site.icon, state, survey), icon: site.icon, layer,
             x: lane * 196 + (layer > 0 && layer < top ? Math.sin(layer * 5 + lane) * 9 : 0),
             y: -(topMargin + (top - layer) * rowHeight),
-            state, action: 'enter-' + id, decisionHint: hints.get(id),
+            state, action: 'enter-' + id, decisionHint: hints.get(id) ?? survey,
         };
     });
     const edges: RouteEdgeModel[] = [];

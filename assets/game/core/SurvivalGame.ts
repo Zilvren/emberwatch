@@ -28,7 +28,7 @@ import {
     validateJournalCatalog,
 } from './content/JournalCatalog';
 import { EntryTierId } from './content/EntryTiers';
-import { atGateCamp, CAMP_SKILLS, keeperOffers, trainingBlocked } from './content/GateCamp';
+import { atGateCamp, CAMP_RELICS, CAMP_SKILLS, relicPurchaseBlocked, trainingBlocked, type CampRelicId } from './content/GateCamp';
 import { CombatRules } from './systems/CombatRules';
 import { ExplorationRules } from './systems/ExplorationRules';
 import { InventoryRules } from './systems/InventoryRules';
@@ -57,6 +57,7 @@ export class SurvivalGame {
     journalEntries: JournalRecord[] = [];
     supplies = 10;
     campSkills?: string[];
+    permanentRelics?: CampRelicId[];
     entryTier: EntryTierId | null = null;
     health = 10;
     get lowHealth(): boolean { return this.health <= 2; }
@@ -174,6 +175,7 @@ export class SurvivalGame {
                 journalEntries: this.journalEntries,
                 supplies: this.supplies,
                 campSkills: this.campSkills,
+                permanentRelics: this.permanentRelics,
                 entryTier: this.entryTier,
                 health: this.health,
                 cards: this.cards,
@@ -232,6 +234,7 @@ export class SurvivalGame {
         this.journalEntries = [];
         this.supplies = this.scenario.initialSupplies;
         this.campSkills = undefined;
+        this.permanentRelics = undefined;
         this.storedSupplies = undefined;
         this.entryTier = null;
         this.health = this.scenario.initialHealth;
@@ -252,7 +255,8 @@ export class SurvivalGame {
         this.returnElapsed = 0;
         this.run++;
         this.synthesis.close();
-        this.inventoryRules.restoreStarter();
+        if (this.scenario.labyrinth) this.cards = [];
+        else this.inventoryRules.restoreStarter();
         this.journalRules.record('campaign-started');
         this.revision++;
     }
@@ -284,8 +288,12 @@ export class SurvivalGame {
         const completedRun = this.settlement !== null;
         const result = this.explorationRules.start(tier);
         if (result.ok) {
-            if (prepareFreshRun) {
+            if (this.scenario.labyrinth || prepareFreshRun) {
+                // Honour the two one-trip cards already paid for in saves from before the relic shop.
+                const provisions = this.scenario.labyrinth ? this.cards.filter(card =>
+                    card.found && (card.kind === 'lab_damper' || card.kind === 'fist_left_hook')) : [];
                 this.inventoryRules.restoreStarter();
+                this.cards.push(...provisions);
                 this.health = this.scenario.initialHealth;
                 if (completedRun) this.run++;
             }
@@ -395,17 +403,16 @@ export class SurvivalGame {
         this.campSkills = [...learned, skill.id];
         return this.feedback.result(true, `已永久学会「${skill.name}」。`);
     }
-    buyKeeperCard(kind: CardKind): ActionResult {
-        if (!atGateCamp(this)) return this.feedback.result(false, '请回营地与守门人交易。');
-        const offer = keeperOffers(this.content.catalog.labyrinth?.discoveryPool).find(item => item.kind === kind);
-        if (!offer) return this.feedback.result(false, '守门人的牌摊上没有这张牌。');
-        if (this.supplies < offer.price) return this.feedback.result(false, '物资不足。');
-        if (this.cards.some(card => card.found && card.kind === kind))
-            return this.feedback.result(false, '这张牌已经备入本趟牌组。');
-        const card = this.inventoryRules.owned(kind, true);
-        this.inventoryRules.spend(offer.price);
-        this.cards.push(card);
-        return this.feedback.result(true, `「${this.content.cards[kind].name}」已加入本趟牌组。`);
+    buyCampRelic(id: string): ActionResult {
+        if (!atGateCamp(this)) return this.feedback.result(false, '请回营地找守门人兑换遗物。');
+        const relic = CAMP_RELICS.find(item => item.id === id);
+        if (!relic) return this.feedback.result(false, '守门人没有这件遗物。');
+        const owned = this.permanentRelics ?? [];
+        const blocked = relicPurchaseBlocked(relic, owned, this.supplies);
+        if (blocked) return this.feedback.result(false, blocked);
+        this.inventoryRules.spend(relic.price);
+        this.permanentRelics = [...owned, relic.id];
+        return this.feedback.result(true, `已获得「${relic.name}」，往后每次探索都会生效。`);
     }
     redeemAllSupplies(): ActionResult {
         return this.shelterRules.redeemSupplies();
@@ -420,16 +427,18 @@ export class SurvivalGame {
             milestones = this.milestones,
             journalEntries = this.journalEntries,
             storedSupplies = this.storedSupplies,
-            campSkills = this.campSkills;
+            campSkills = this.campSkills,
+            permanentRelics = this.permanentRelics;
         this.reset();
         this.day = this.scenario.kind === 'tutorial' ? this.scenario.initialDay : day + 1;
         this.milestones = milestones;
         this.journalEntries = journalEntries;
         this.storedSupplies = storedSupplies;
         this.campSkills = campSkills;
+        this.permanentRelics = permanentRelics;
         this.phase = 'failure';
         if (defeated) this.health = 0;
         this.failureReason = reason;
-        if (this.scenario.runDeck) this.cards = [];
+        if (this.scenario.runDeck || this.scenario.labyrinth) this.cards = [];
     }
 }

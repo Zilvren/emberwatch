@@ -6,6 +6,7 @@ const { ccclass, property, requireComponent, executeInEditMode } = _decorator;
 @requireComponent(Graphics)
 export class SceneShade extends Component {
     @property top = 110;
+    @property topDepth = 160;
     @property bottom = 190;
     @property right = 0;
     @property(Color) tint = new Color(35, 37, 31, 255);
@@ -32,7 +33,7 @@ export class SceneShade extends Component {
                 this.tint.b,
                 Math.round(this.top * ratio * ratio)
             );
-            g.rect(-w / 2, h / 2 - (i + 1) * (160 / steps), w, 160 / steps);
+            g.rect(-w / 2, h / 2 - (i + 1) * (this.topDepth / steps), w, this.topDepth / steps);
             g.fill();
             g.fillColor = new Color(
                 this.tint.r,

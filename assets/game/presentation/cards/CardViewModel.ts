@@ -1,8 +1,9 @@
-import { ART_IDS, CARD, CardDefinition, effectSummary, generatedCards, playableCard } from '../../core/content/CardCatalog';
+import { ART_IDS, BLOOD_EROSION_PERCENT, CARD, CardDefinition, effectSummary, generatedCards, labyrinthCardRarity, playableCard, type CardRarity, type LabyrinthCatalog } from '../../core/content/CardCatalog';
 import type { CardDesignReference } from './CardDesignReference';
 
 export const CARD_ART_IDS = ART_IDS;
 const keywordLabels: Record<string, string> = {
+    'blood-erosion': '蚀血',
     basic: '基础牌',
     weapon: '武器',
     instrument: '仪器',
@@ -15,6 +16,7 @@ const keywordLabels: Record<string, string> = {
     'synthesis-needed': '已有搭配 · 缺此材料',
 };
 const keywordDescriptions: Record<string, string> = {
+    'blood-erosion': `每张对目标造成伤害的牌附加其受击前生命值 ${BLOOD_EROSION_PERCENT}% 的真实伤害，向上取整。重复施加延长回合。`,
     basic: '可在初始卡组中获得。',
     weapon: '打出后进入武器槽，并按武器规则生成攻击牌。',
     instrument: '装入仪器槽，下回合起生成发振。',
@@ -40,6 +42,7 @@ interface DisplayInput {
     supplyWeight?: number;
     art: string;
     artKey?: string;
+    rarity?: CardRarity;
     accent: string;
     temporary: boolean;
     keywords: string[];
@@ -77,10 +80,12 @@ export function supplyPictureLayout(description: string, artRatio: number, block
 export interface CardViewOptions {
     field?: boolean;
     labyrinth?: boolean;
+    labyrinthCatalog?: Pick<LabyrinthCatalog, 'starter' | 'discoveryPool'>;
     runDeck?: boolean;
     neededForSynthesis?: boolean;
     packedWeight?: number;
     damage?: number;
+    bloodErosionDamage?: number;
     cost?: number;
     rageReady?: boolean;
 }
@@ -103,7 +108,8 @@ export function cardViewModel(
     const [baseEffect, ...additional] = data.effect.labyrinth ? effect.split('，') : [effect];
     const generated = generatedCards(data.effect).map((id) => definitions[id]?.name ?? id);
     const hits = data.effect.hits ?? 1;
-    const currentDamage = damage ?? data.effect.amount * hits;
+    const erosion = damage === undefined ? 0 : options.bloodErosionDamage ?? 0;
+    const currentDamage = (damage ?? data.effect.amount * hits) - erosion;
     const attack = hits === 1 ? `造成 ${currentDamage} 点伤害`
         : damage === undefined || data.fist ? `造成 ${currentDamage / hits} 点伤害 ${hits} 次`
         : `造成 ${currentDamage} 点总伤害（${hits} 段）`;
@@ -117,7 +123,7 @@ export function cardViewModel(
         data.effect.type === 'equip'
             ? `生成「${generated.join('」「')}」`
               : data.effect.type === 'damage'
-                ? attack + (data.effect.block ? `，获得 ${data.effect.block} 点格挡` : '') +
+                ? attack + (erosion ? ` + ${erosion} 真伤` : '') + (data.effect.block ? `，获得 ${data.effect.block} 点格挡` : '') +
                     (data.effect.extraDraw ? `，抽 ${data.effect.extraDraw} 张` : '')
               : supportHeadline || (baseEffect.length > 21 && data.effect.labyrinth ? '查看效果说明' : baseEffect);
     const once = data.oncePerBattle ? '每张每场限用一次' : '';
@@ -135,6 +141,7 @@ export function cardViewModel(
               : data.effect.type === 'equip'
                 ? [instrument ? 'instrument' : 'weapon']
                 : [];
+    if (data.effect.labyrinth?.rule === 'blood-erosion') keywords.push('blood-erosion');
     if (data.canSynthesize && !labyrinth) {
         keywords.push('synthesis');
         if (options.neededForSynthesis) keywords.push('synthesis-needed');
@@ -169,6 +176,7 @@ export function cardViewModel(
         weight: data.role === 'temporary' ? '本场临时' : '',
         ...(data.role === 'supply' ? { supplyWeight: options.packedWeight ?? data.weight } : {}),
         art: data.art,
+        rarity: labyrinth ? labyrinthCardRarity(data, options.labyrinthCatalog) : undefined,
         ...(data.fist && data.role === 'temporary' ? { artKey: data.id.replace(/_temp$/, '') } : {}),
         accent: data.color,
         temporary: data.role === 'temporary',

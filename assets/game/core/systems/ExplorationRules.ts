@@ -3,7 +3,8 @@ import { generatedCards } from '../content/CardCatalog';
 import { ASHEN_LABYRINTH_SCENARIO, GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
 import { generateAshenLabyrinthMap, nextMapNodes } from '../content/ExpeditionMap';
 import { Random } from '../Random';
-import { ActionResult, NodeKind, Route } from '../RulesTypes';
+import { ActionResult, MAX_SUPPLY_POINTS, NodeKind, Route } from '../RulesTypes';
+import { ownsRelic } from '../content/GateCamp';
 import { CombatRules } from './CombatRules';
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, ExplorationState, completeExplorationNode } from './RuleContext';
@@ -101,10 +102,12 @@ export class ExplorationRules {
                 );
             if (map) map.activeNode = node;
             this.inventory.spend(fee);
-            const supplies =
+            const rolled =
                 definition.supplies[0] === definition.supplies[1]
                     ? definition.supplies[0]
                     : this.random.int(definition.supplies[0], definition.supplies[1]);
+            const supplies = Math.min(rolled + (ownsRelic(this.state, 'salvage_magnet') ? 1 : 0),
+                MAX_SUPPLY_POINTS - this.state.supplies);
             if (this.scenario.fieldDeck) {
                 this.collectSupplies(node, supplies, definition.discover ? 3 : 0);
                 return this.feedback.result(true, `${definition.title} · 找到 ${supplies} 物资`);

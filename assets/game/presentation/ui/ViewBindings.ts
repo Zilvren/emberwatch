@@ -1,9 +1,9 @@
 import { GAME_PHASES, type Phase } from '../../core/state/GamePhase';
 import type { UiState } from './UiState';
-import { isCampStation } from './CampViewModel';
+import { CAMP_PAGES } from './CampViewModel';
 import { isCardPile } from '../cards/BattlePileModel';
 /** day2 is the retained native follow-up journal view, not a gameplay phase. */
-export const SCREEN_KEYS = [...GAME_PHASES, 'day2', 'camp'] as const;
+export const SCREEN_KEYS = [...GAME_PHASES, 'day2', 'camp', ...CAMP_PAGES] as const;
 export type ScreenKey = (typeof SCREEN_KEYS)[number];
 export const POPUP_KEYS = ['inventory', 'help', 'confirmation', 'map', 'entry', 'recipes', 'camp-station', 'settings', 'battle-pile'] as const;
 export type PopupKey = (typeof POPUP_KEYS)[number];
@@ -11,7 +11,7 @@ export function popupKey(overlay: UiState['overlay']): PopupKey | null {
     if (!overlay) return null;
     if (isCardPile(overlay)) return 'battle-pile';
     if (overlay === 'settings') return 'settings';
-    if (isCampStation(overlay)) return 'camp-station';
+    if (overlay === 'camp-talk') return 'camp-station';
     if (overlay === 'bag') return 'inventory';
     if (overlay === 'help' || overlay === 'map' || overlay === 'entry' || overlay === 'recipes')
         return overlay;

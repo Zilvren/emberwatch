@@ -8,7 +8,11 @@ import { isLabyrinthEnemy, validEnemyActions, type EnemyActionPlan, type Labyrin
 export type CardKind = string;
 export type EffectType = 'damage' | 'block' | 'heal' | 'equip' | 'draw' | 'strength' | 'skill' | 'power' | 'none';
 export type CardRole = 'basic' | 'normal' | 'temporary' | 'cash' | 'supply';
+export const CARD_RARITIES = ['common', 'rare', 'epic', 'legendary'] as const;
+export type CardRarity = (typeof CARD_RARITIES)[number];
+export const BLOOD_EROSION_PERCENT = 10;
 const LABYRINTH_RULES = {
+    'blood-erosion': ['damage'],
     calm: ['damage', 'block', 'skill'],
     'temporary-calm': ['block', 'skill'],
     'gain-stamina': ['skill'],
@@ -32,8 +36,8 @@ export interface LabyrinthEffect {
     threshold?: number;
 }
 export interface LabyrinthCatalog {
-    starter: Record<string, number>;
-    discoveryPool: string[];
+    starter: Readonly<Record<string, number>>;
+    discoveryPool: readonly string[];
     enemyActions?: Partial<Record<LabyrinthEnemyId, EnemyActionPlan>>;
 }
 export interface RageEffect {
@@ -56,6 +60,7 @@ export interface CardDefinition {
     initialCount: number;
     reward: boolean;
     rewardWeight?: number;
+    rarity?: CardRarity;
     weaponSlots?: number;
     supplyValue?: number;
     canSynthesize?: boolean;
@@ -95,6 +100,16 @@ export function isBattleCard(card: Pick<CardDefinition, 'role'>): boolean {
 }
 export function isLabyrinthRewardCard(card?: CardDefinition): boolean {
     return card?.role === 'normal' && (!card.fist || isFistBattleReward(card));
+}
+export function labyrinthCardRarity(
+    card: CardDefinition,
+    profile?: Pick<LabyrinthCatalog, 'starter' | 'discoveryPool'>
+): CardRarity | undefined {
+    if (card.role === 'supply') return card.rarity ?? 'common';
+    if (card.role !== 'normal') return undefined;
+    if ((profile?.discoveryPool.indexOf(card.id) ?? -1) >= 0 || card.fist?.type === 'finisher')
+        return card.rarity ?? 'common';
+    return profile?.starter[card.id] ? undefined : card.rarity;
 }
 export function carriedWeight(card: Pick<CardDefinition, 'role' | 'weight'>, packedWeight?: number): number {
     return card.role === 'supply' ? packedWeight ?? card.weight : 0;
@@ -226,6 +241,9 @@ export function validateCatalog(raw: unknown): Catalog {
         if (!integer(card.weight, 0, 30)) issues.push(`${label}：重量需为 0～30 的整数。`);
         if (!integer(card.initialCount, 0, 8)) issues.push(`${label}：初始数量需为 0～8 的整数。`);
         if (typeof card.reward !== 'boolean') issues.push(`${label}：奖励池设置无效。`);
+        if (card.rarity !== undefined &&
+            (CARD_RARITIES.indexOf(card.rarity) < 0 || (card.role !== 'normal' && card.role !== 'supply')))
+            issues.push(`${label}：战斗卡与物资卡的稀有度须为普通、稀有、史诗或传说。`);
         if (card.rewardWeight !== undefined &&
             (typeof card.rewardWeight !== 'number' || !Number.isFinite(card.rewardWeight) ||
                 card.rewardWeight < 0.01 || card.rewardWeight > 100))
@@ -381,6 +399,7 @@ export function validateCatalog(raw: unknown): Catalog {
             role: card.role,
             initialCount: card.initialCount,
             reward: card.reward,
+            ...(card.rarity !== undefined ? { rarity: card.rarity } : {}),
             ...(card.rewardWeight !== undefined ? { rewardWeight: card.rewardWeight } : {}),
             ...(card.synthesisOnly ? { synthesisOnly: true } : {}),
             ...(card.oncePerBattle ? { oncePerBattle: true } : {}),
@@ -575,6 +594,7 @@ export function effectSummary(
     if (effect.labyrinth) {
         const { rule, amount, threshold } = effect.labyrinth;
         const effects: Record<LabyrinthRule, string> = {
+            'blood-erosion': `施加 ${amount} 蚀血`,
             calm: `施加 ${amount} 层镇静`,
             'temporary-calm': `施加 ${amount} 层临时镇静`,
             'gain-stamina': `获得 ${amount} 体力，本场消耗`,

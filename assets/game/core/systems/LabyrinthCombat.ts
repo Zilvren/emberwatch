@@ -1,10 +1,14 @@
-import type { CardDefinition } from '../content/CardCatalog';
+import { BLOOD_EROSION_PERCENT, type CardDefinition } from '../content/CardCatalog';
 import type { Battle, CalmBattle } from '../RulesTypes';
 
 export const CALM_LIMIT = 4;
 export const CALM_PER_TURN = 3;
 export const MAX_CALM_LIMIT = 12;
 export const MAX_BONUS_STAMINA = 99;
+
+export function bloodErosionDamage(battle: Pick<Battle, 'hp' | 'bloodErosionTurns'>, hp = battle.hp): number {
+    return battle.bloodErosionTurns && hp > 0 ? Math.ceil(hp * BLOOD_EROSION_PERCENT / 100) : 0;
+}
 
 export function initialCalm(): CalmBattle {
     return {
@@ -60,6 +64,9 @@ export function applyLabyrinthEffect(
     if (!calm || !effect) return;
     const { rule, amount } = effect;
     switch (rule) {
+        case 'blood-erosion':
+            battle.bloodErosionTurns = (battle.bloodErosionTurns ?? 0) + amount;
+            break;
         case 'calm':
         case 'temporary-calm': {
             if (calm.deferred) break;

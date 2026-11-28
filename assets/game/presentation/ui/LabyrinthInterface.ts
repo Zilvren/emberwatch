@@ -7,6 +7,7 @@ import { SceneShade } from '../primitives/SceneShade';
 import { ButtonPresentation } from './ButtonPresentation';
 import { CommonPanel } from './CommonPanel';
 import type { SceneBindings } from './GameView';
+import { isCampPage } from './CampViewModel';
 import { StatusBar } from './StatusBar';
 
 export function installLabyrinthInterface(
@@ -56,7 +57,8 @@ export function installLabyrinthInterface(
     paint(scene.hud);
     for (const key of Object.keys(scene.screens)) {
         const screen = scene.screens[key];
-        if (key !== 'camp') paint(screen);
+        if (key !== 'camp' && !isCampPage(key)) paint(screen);
+        if (isCampPage(key)) continue;
         for (const shade of screen.getComponentsInChildren(SceneShade)) {
             shade.top = 0;
             shade.redraw();

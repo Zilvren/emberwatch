@@ -1,5 +1,205 @@
 {
   "schemaVersion": 1,
+  "campStudyAndSales20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "branch": "cyb/202611",
+    "base": "b695e1d",
+    "status": "玩家指定交互已实装并验证，画面观感待玩家试玩",
+    "paths": [
+      "assets/game/presentation/ui/CampSkillTree.ts",
+      "assets/game/presentation/ui/CampWarehouse.ts",
+      "assets/game/presentation/ui/CampRelicShop.ts",
+      "assets/game/presentation/ui/UiActionRouter.ts",
+      "assets/game/core/systems/ShelterRules.ts",
+      "tools/author-gate-camp.cjs"
+    ],
+    "nativeBuild": "web-desktop-build-1795877144481.log",
+    "typecheck": true,
+    "architecture": true,
+    "baseline": {
+      "tests": 246,
+      "pass": 230,
+      "fail": 16
+    },
+    "unitTests": {
+      "tests": 247,
+      "pass": 231,
+      "fail": 16
+    },
+    "newFailures": [],
+    "viewports": [
+      {
+        "width": 687,
+        "height": 772,
+        "touch": false
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "touch": true
+      },
+      {
+        "width": 1021,
+        "height": 452,
+        "touch": true
+      },
+      {
+        "width": 1024,
+        "height": 768,
+        "touch": false
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "touch": false
+      }
+    ],
+    "skillDetails": "点选或键盘激活后在右侧显示，重新进入时收起",
+    "seller": "仓库按张出售",
+    "lastUnit": true,
+    "lastPageClamps": true,
+    "maximumBalanceChecked": true,
+    "saleAfterExpedition": {
+      "kind": "salvage_rope",
+      "price": 2,
+      "balance": 31,
+      "reloadPreserved": true
+    },
+    "routeLengths": [
+      17,
+      17
+    ],
+    "browserActions": 335,
+    "nativeErrors": [],
+    "localEvidence": "output/playwright/camp-study-and-sales-20261128/",
+    "archive": "viking://~/resources/projects/the-end/docs/camp-study-and-sales-20261128"
+  },
+  "campExhibits20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "branch": "cyb/202611",
+    "status": "确认的展示调整已实现，玩家最终画面反馈待试玩",
+    "code": [
+      "assets/game/presentation/ui/CampRoomLayout.ts",
+      "assets/game/presentation/ui/CampRelicShop.ts",
+      "assets/game/presentation/ui/CampWarehouse.ts",
+      "assets/game/presentation/ui/CampSkillTree.ts"
+    ],
+    "viewports": [
+      {
+        "width": 702,
+        "height": 782,
+        "touch": false
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "touch": false
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "touch": true
+      },
+      {
+        "width": 1021,
+        "height": 452,
+        "touch": true
+      },
+      {
+        "width": 1024,
+        "height": 768,
+        "touch": false
+      },
+      {
+        "width": 685,
+        "height": 585,
+        "touch": false
+      }
+    ],
+    "checks": {
+      "architecture": true,
+      "typecheck": true,
+      "targetedTests": 11,
+      "allPassed": 230,
+      "existingFailures": 16,
+      "nativeCampActions": 62,
+      "roomRuntimeErrors": 0,
+      "ruleRuntimeErrors": 0,
+      "ruleConsoleErrors": 0,
+      "relicFixturePages": [
+        6,
+        6,
+        3
+      ],
+      "stockFixturePages": [
+        6,
+        6,
+        6,
+        1
+      ],
+      "selectionSurvivesResize": true,
+      "browsePreservesSave": true,
+      "finalBuild": "web-desktop-build-1795876108925.log"
+    },
+    "evidence": "output/playwright/camp-exhibits-20261128/",
+    "archive": "viking://~/resources/projects/the-end/docs/camp-exhibits-20261128"
+  },
+  "keeperRelics20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "branch": "cyb/202611",
+    "status": "直接进店、物资点兑换局外遗物为已确认规则。首批效果、价格和新柜台画面待玩家试玩。",
+    "screen": "assets/prefabs/screens/CampRelicShopScreen.prefab",
+    "catalog": "assets/game/core/content/GateCamp.ts",
+    "save": "assets/game/core/state/GameState.ts / permanentRelics",
+    "build": "temp/builder/log/web-desktop-build-1795873769157.log",
+    "viewports": [{"width": 1440, "height": 900, "touch": false, "paintedItems": ["salvage_magnet", "keeper_watch", "survey_map"], "fullPage": true, "duplicateDisabled": true, "balance": 4, "campAmbience": true}, {"width": 1024, "height": 768, "touch": false, "paintedItems": ["salvage_magnet", "keeper_watch", "survey_map"], "fullPage": true, "duplicateDisabled": true, "balance": 4, "campAmbience": true}, {"width": 1021, "height": 452, "touch": true, "paintedItems": ["salvage_magnet", "keeper_watch", "survey_map"], "fullPage": true, "duplicateDisabled": true, "balance": 4, "campAmbience": true}],
+    "exchange": {"survey": {"bought": "survey_map", "balanceAfterShop": 4, "balanceAfterTraining": 2, "learned": ["footing"], "reloadPreserved": true, "openingBlock": 1, "surveyed": "门槛补给"}, "watch": {"boughtAfterReturn": true, "balance": 15, "firstSkillCost": 0}, "magnetOnScavenge": 1, "sale": {"kind": "salvage_rope", "price": 2, "balance": 31, "reloadPreserved": true}},
+    "persistence": {"repeatPurchase": "blocked without spending", "reload": "ownership and balance retained", "return": "owned relic and fresh starter deck", "failureRetry": "ownership retained", "newCampaign": "clears ownership", "olderSaves": "already-paid one-expedition cards delivered"},
+    "checks": {"typecheck": true, "architecture": true, "nativeBuild": true, "shopAndNativeBindingTests": 10, "unitPassed": 225, "unitFailures": 16, "addedFailures": 0, "browserActions": 335, "routeLayers": [17, 17], "consoleErrors": 0, "runtimeErrors": 0},
+    "evidence": "output/playwright/keeper-relics-20261128/",
+    "archive": "viking://~/resources/projects/the-end/docs/keeper-relics-20261128"
+  },
+  "cardRarity20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "branch": "cyb/202611",
+    "baseCommit": "b695e1d",
+    "status": "四档卡框已获准实装，初始档位与掉落频率待玩家试玩。",
+    "nativeBuild": "temp/builder/log/web-desktop-build-1795873075036.log",
+    "implementation": ["assets/game/core/systems/RewardRules.ts", "assets/game/infrastructure/SaveRepository.ts", "assets/game/presentation/cards/CardPresentation.ts", "assets/ashen-labyrinth/interface/card-rarity.plist", "tools/card-editor/"],
+    "checks": [
+      {"claim": "同档权重、深层出金与每组最多一张传说", "status": "SUPPORTED", "evidence": "tests/card-rarity.test.cjs"},
+      {"claim": "原生手牌、奖励、仓库与工坊显示同一图集", "status": "SUPPORTED", "evidence": "Pink/Cocos Web 的 1440×900 和 1024×768 截图已复核。已修正尖顶碰来源说明及底框碰库存数量。"},
+      {"claim": "物资拿取、入库和兑换实际价值", "status": "SUPPORTED", "evidence": "种子 193 实际拿取旧城配给券，未兑换即带回仓库，之后从守门人处换得 6 点。原始负重为 1。"},
+      {"claim": "已展示候选和已持有牌可恢复", "status": "SUPPORTED", "evidence": "种子 71 发现屠龙宝刀后抽入手牌，刷新后状态一致。另用更新前代码生成待领奖存档，新构建加载并领取了原有物资。"},
+      {"claim": "全项目自动化", "status": "NEEDS EVIDENCE", "evidence": "类型检查、架构检查及 Web 构建通过。全量测试 224 通过、16 失败，失败项与本次开始时的基线相同。"}
+    ],
+    "browserReports": ["output/playwright/card-rarity/verification.json", "output/playwright/card-rarity/editor-verification.json"],
+    "nativeActions": 94,
+    "runtimeErrors": 0,
+    "consoleErrors": 0,
+    "gallery": "viking://~/resources/projects/the-end/designs/card-rarity-frames/in-game"
+  },
+  "standaloneCampPages20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "branch": "cyb/202611",
+    "status": "营地入口、独立页面、只读物资仓库和每趟重新出发为玩家已确认要求。当前任务使用空状态，真实任务尚待制作。新绘景与动效待玩家试玩。",
+    "scene": "assets/TheEnd.scene",
+    "build": "temp/builder/log/web-desktop-build-1795870954122.log",
+    "screens": ["CampSkillsScreen.prefab", "CampWarehouseScreen.prefab", "CampTaskJournalScreen.prefab"],
+    "rules": ["assets/game/core/SurvivalGame.ts", "assets/game/core/systems/ShelterRules.ts"],
+    "nativePages": {"viewports": ["1440×900", "1024×768", "1021×452"], "separateScreenAndContinuousAudio": true, "touchPages": 3, "reducedMotionOpenImmediately": true},
+    "warehouse": {"realReturnedCards": ["salvage_rope", "sealed_battery", "salvage_rope", "salvage_rope"], "pagedFixtureKinds": 4, "browsingPreservedSave": true, "keeperSale": {"kind": "salvage_rope", "price": 2, "balance": 32, "reloadPreserved": true}},
+    "journal": {"bookOnlyHoverChangedPixels": 2962, "maxFirePixelDifference": 0, "recordedFrames": 20, "recordedSeconds": 2.248, "realTasks": 0},
+    "freshExpedition": {"startingHealth": 10, "previousFightCardsInCamp": 0, "skillsPreserved": true, "normalReturnAndRetry": true, "legacyCampSaveCovered": true},
+    "checks": {"typecheck": true, "architecture": true, "webBuild": true, "browserActions": 275, "routeLayers": [17, 17], "runtimeErrors": 0, "consoleErrors": 0, "unitPassed": 218, "unitFailed": 16, "additionalFailures": 0},
+    "visuals": "output/playwright/camp-pages-20261128/",
+    "gallery": "viking://~/resources/projects/the-end/docs/camp-pages-20261128"
+  },
   "gateCampStashIntegration20261128": {
     "project": "The end / emberwatch",
     "date": "2026-11-28",

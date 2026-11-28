@@ -89,6 +89,7 @@ function createEditorServer(options = {}) {
             if (address.pathname === '/shared/item-art.json') return sendFile(response, path.join(itemArt, 'items-manifest.json'));
             if (address.pathname === '/art/materials.png') return sendFile(response, path.join(itemArt, 'materials.png'));
             if (address.pathname === '/art/weight-mark.png') return sendFile(response, path.join(interfaceArt, 'weight-mark.png'));
+            if (address.pathname === '/art/card-rarity.png') return sendFile(response, path.join(interfaceArt, 'card-rarity.png'));
             if (address.pathname === '/art/labyrinth-shelter.jpg') return sendFile(response, path.join(interfaceArt, 'shelter.jpg'));
             if (address.pathname === '/play') { response.writeHead(302, { Location: '/play/?cards=live' }); return response.end(); }
             if (address.pathname.startsWith('/play/')) {

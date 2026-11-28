@@ -4140,7 +4140,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -184,
+      "y": -206,
       "z": 0
     },
     "_lrot": {
@@ -4493,6 +4493,10 @@
     "_id": "f4b17bLkC/WPclCp7r6gvoJ",
     "labyrinthArt": {
       "__uuid__": "2f14c7b3-2284-43f9-bb0b-e77fc9106e93",
+      "__expectedType__": "cc.SpriteAtlas"
+    },
+    "rarityAtlas": {
+      "__uuid__": "5a4f926e-be3b-4e02-b12c-3f56ec52a077",
       "__expectedType__": "cc.SpriteAtlas"
     },
     "labyrinthTheme": {

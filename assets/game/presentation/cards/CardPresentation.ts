@@ -16,7 +16,7 @@ import {
     SpriteFrame,
     UITransform,
 } from 'cc';
-import { CARD, CardDefinition, CardKind, titleColor } from '../../core/content/CardCatalog';
+import { CARD, CardDefinition, CardKind, titleColor, type CardRarity } from '../../core/content/CardCatalog';
 import { PaperPanel } from '../primitives/PaperPanel';
 import { SupplyCardFace } from './SupplyCardFace';
 import { CardDisplayModel, type CardViewOptions, cardReferenceViewModel, cardViewModel } from './CardViewModel';
@@ -37,6 +37,7 @@ export class CardPresentation extends Component {
     @property(Label) weightLabel: Label | null = null;
     @property(Sprite) artwork: Sprite | null = null;
     @property(SpriteAtlas) labyrinthArt: SpriteAtlas | null = null;
+    @property(SpriteAtlas) rarityAtlas: SpriteAtlas | null = null;
     @property(JsonAsset) labyrinthTheme: JsonAsset | null = null;
     private fieldFace = false;
     @property(Node) disabledOverlay: Node | null = null;
@@ -47,6 +48,8 @@ export class CardPresentation extends Component {
     @property(Node) frontContent: Node | null = null;
     @property(Prefab) supplyFacePrefab: Prefab | null = null;
     private supplyFace: SupplyCardFace | null = null;
+    private rarity?: CardRarity;
+    private raritySurface?: { node: Node; paper: Sprite; trim: Sprite };
     @property(Node) detailsViewport: Node | null = null;
     @property(Label) detailsLabel: Label | null = null;
     @property({
@@ -120,6 +123,7 @@ export class CardPresentation extends Component {
     }
     private showModel(model: CardDisplayModel, blocked: string, caption: string, id: string): void {
         const material = this.labyrinthTheme?.json ?? this.theme?.json;
+        this.showRarity(model.rarity);
         const supply = model.supplyWeight !== undefined;
         if (supply && !this.supplyFace && this.supplyFacePrefab && this.visualRoot) {
             const node = instantiate(this.supplyFacePrefab);
@@ -188,6 +192,40 @@ export class CardPresentation extends Component {
         if (this.weightLabel) this.weightLabel.node.active = !this.compact && !!model.weight;
         if (this.disabledOverlay) this.disabledOverlay.active = !!blocked;
         this.applyAppearance();
+    }
+    private showRarity(rarity?: CardRarity): void {
+        const panel = this.panel;
+        if (!panel || !this.rarityAtlas || this.rarity === rarity) return;
+        const trim = rarity ? this.rarityAtlas.getSpriteFrame(rarity) : null;
+        const paper = rarity ? this.rarityAtlas.getSpriteFrame(`${rarity}-paper`) : null;
+        this.rarity = trim && paper ? rarity : undefined;
+        if (trim && paper && !this.raritySurface) {
+            const node = new Node('RarityFrame');
+            node.layer = panel.node.layer;
+            panel.node.parent!.addChild(node);
+            node.setSiblingIndex(panel.node.getSiblingIndex());
+            const size = panel.getComponent(UITransform)!;
+            const { x, y, z } = panel.node.position;
+            node.setPosition(x, y + size.height * 14 / 340, z);
+            // The frame is registered around a 224 × 340 face without resizing its content.
+            const addLayer = (name: string) => {
+                const layer = new Node(name);
+                layer.layer = node.layer;
+                node.addChild(layer);
+                const bounds = layer.addComponent(UITransform);
+                const sprite = layer.addComponent(Sprite);
+                sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+                bounds.setContentSize(size.width * 256 / 224, size.height * 400 / 340);
+                return sprite;
+            };
+            this.raritySurface = { node, paper: addLayer('Paper'), trim: addLayer('Trim') };
+        }
+        if (this.raritySurface) {
+            this.raritySurface.paper.spriteFrame = paper;
+            this.raritySurface.trim.spriteFrame = trim;
+            this.raritySurface.node.active = !!this.rarity;
+        }
+        panel.node.active = !this.rarity;
     }
     private layoutPaintedFace(): void {
         const panel = this.panel, size = panel?.getComponent(UITransform);
@@ -277,6 +315,8 @@ export class CardPresentation extends Component {
     inspect(): object {
         return {
             kind: this.kind,
+            rarity: this.rarity,
+            rarityFrame: this.raritySurface?.trim.spriteFrame?.name,
             hovered: this.hovered,
             selected: this.selected,
             blocked: this.blocked,
@@ -307,7 +347,11 @@ export class CardPresentation extends Component {
     }
     private applyAppearance(): void {
         const colors = (this.labyrinthTheme ?? this.theme)?.json.colors;
-        if (this.panel) {
+        if (this.rarity && this.raritySurface && colors) {
+            const paper = this.blocked ? colors.paper
+                : this.selected ? colors.paperSelected : this.hovered ? colors.paperShade : colors.paper;
+            this.raritySurface.paper.color = new Color().fromHEX(paper);
+        } else if (this.panel) {
             if (this.labyrinthTheme) {
                 this.panel.fill = new Color().fromHEX(this.selected && !this.blocked ? colors.paperSelected : colors.paper);
                 this.panel.line = new Color().fromHEX(this.rageReady ? '#b44f45' : this.selected || this.hovered ? colors.ochre : colors.line);
@@ -340,7 +384,7 @@ export class CardPresentation extends Component {
         }
         if (this.costLabel)
             this.costLabel.color = new Color().fromHEX(
-                this.blocked ? (colors?.danger ?? '#9a6455') : (colors?.ink ?? '#454238')
+                this.blocked || (this.rarity && this.rageReady) ? (colors?.danger ?? '#9a6455') : (colors?.ink ?? '#454238')
             );
         if (this.selectionOutline) this.selectionOutline.active = !this.labyrinthTheme && this.selected && !this.blocked;
     }

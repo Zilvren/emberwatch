@@ -28,11 +28,19 @@ export function trainingBlocked(skill: CampSkill, learned: readonly string[], su
     return supplies < skill.cost ? `还差 ${skill.cost - supplies} 物资` : '';
 }
 
-const KEEPER_OFFERS = [
-    { kind: 'lab_damper', price: 2 },
-    { kind: 'fist_left_hook', price: 3 },
-];
+export const CAMP_RELICS = [
+    { id: 'survey_map', name: '勘测底图', price: 6, effect: '提前辨认下一步的未知地点，看清那里能找到哪类物资或牌。' },
+    { id: 'salvage_magnet', name: '拾荒磁石', price: 10, effect: '每次搜刮地点，额外获得 1 物资点。' },
+    { id: 'keeper_watch', name: '止动怀表', price: 16, effect: '每场战斗的首回合，打出的第一张技能牌消耗 0 体力。' },
+] as const;
+export type CampRelic = typeof CAMP_RELICS[number];
+export type CampRelicId = CampRelic['id'];
 
-export function keeperOffers(discoveryPool: readonly string[] = []) {
-    return KEEPER_OFFERS.filter(offer => discoveryPool.indexOf(offer.kind) >= 0);
+export function ownsRelic(holder: { readonly permanentRelics?: readonly CampRelicId[] }, id: CampRelicId): boolean {
+    return holder.permanentRelics?.some(owned => owned === id) ?? false;
+}
+
+export function relicPurchaseBlocked(relic: CampRelic, owned: readonly CampRelicId[], points: number): string {
+    if (owned.indexOf(relic.id) >= 0) return '已持有';
+    return points < relic.price ? `还差 ${relic.price - points} 物资点` : '';
 }

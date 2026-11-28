@@ -1,5 +1,6 @@
 import { _decorator, Component, instantiate, Node, Prefab, UITransform } from 'cc';
 import type { GameReadModel } from '../../core/GameReadModel';
+import { bloodErosionDamage } from '../../core/systems/LabyrinthCombat';
 import { CardInteraction } from './CardInteraction';
 import { CardPresentation } from './CardPresentation';
 const { ccclass, property } = _decorator;
@@ -70,6 +71,8 @@ export class HandPresentation extends Component {
                     field: game.scenario.fieldDeck,
                     runDeck: game.scenario.runDeck,
                     labyrinth: game.scenario.labyrinth,
+                    labyrinthCatalog: game.content.catalog.labyrinth,
+                    bloodErosionDamage: game.battle ? bloodErosionDamage(game.battle) : 0,
                     damage: game.content.cards[entry.kind].effect.type === 'damage' &&
                         !(game.battle?.rage !== undefined &&
                             !!game.content.cards[entry.kind].effect.rage &&

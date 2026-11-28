@@ -1,5 +1,6 @@
 import { initialRecipeBrowse, RecipeBrowseState } from './RecipePanelModel';
-import type { CampStation } from './CampViewModel';
+import type { CampPage } from './CampViewModel';
+import { CAMP_RELICS, type CampRelicId } from '../../core/content/GateCamp';
 import type { BattlePile } from '../cards/BattlePileModel';
 import type { BagFilter } from '../cards/InventoryViewModel';
 
@@ -14,7 +15,7 @@ export type Overlay =
     | 'recipes'
     | 'settings'
     | BattlePile
-    | CampStation
+    | 'camp-talk'
     | null;
 export interface UiState {
     overlay: Overlay;
@@ -32,12 +33,12 @@ export interface UiState {
     rewardContext: string;
     rewardPage: number;
     entryTier: 'emergency' | 'low' | 'standard' | 'high';
-    campJournalPage: number;
+    campPage: CampPage | null;
+    stockPage: number;
     warehouseKind: string;
-    campSkill: string;
+    campSkill: string | null;
+    shopRelic: CampRelicId;
     campTopic: number;
-    tradeLot: string;
-    tradeReceipt: string;
     settingsReturn: boolean;
     pilePage: number;
     pileSelection: number;
@@ -62,12 +63,12 @@ export function initialUiState(): UiState {
         rewardContext: '',
         rewardPage: 0,
         entryTier: 'standard',
-        campJournalPage: 0,
+        campPage: null,
+        stockPage: 0,
         warehouseKind: '',
-        campSkill: 'footing',
+        campSkill: null,
+        shopRelic: CAMP_RELICS[0].id,
         campTopic: 0,
-        tradeLot: '',
-        tradeReceipt: '',
         settingsReturn: false,
         pilePage: 0,
         pileSelection: -1,

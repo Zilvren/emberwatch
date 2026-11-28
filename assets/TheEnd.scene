@@ -315,6 +315,18 @@
       },
       {
         "__id__": 171
+      },
+      {
+        "__id__": 199
+      },
+      {
+        "__id__": 206
+      },
+      {
+        "__id__": 213
+      },
+      {
+        "__id__": 220
       }
     ],
     "_active": true,
@@ -2537,6 +2549,18 @@
       },
       {
         "__id__": 171
+      },
+      {
+        "__id__": 199
+      },
+      {
+        "__id__": 206
+      },
+      {
+        "__id__": 213
+      },
+      {
+        "__id__": 220
       }
     ],
     "popupRoots": [
@@ -2738,6 +2762,18 @@
       },
       {
         "__id__": 192
+      },
+      {
+        "__id__": 199
+      },
+      {
+        "__id__": 206
+      },
+      {
+        "__id__": 213
+      },
+      {
+        "__id__": 220
       }
     ]
   },
@@ -3418,6 +3454,342 @@
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
       "__id__": 195
+    },
+    "propertyPath": [
+      "_active"
+    ],
+    "value": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 6
+    },
+    "_prefab": {
+      "__id__": 200
+    },
+    "__editorExtras__": {}
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 199
+    },
+    "asset": {
+      "__uuid__": "aaa46fe2-ae8d-4221-89e6-665a67bb9f2e",
+      "__expectedType__": "cc.Prefab"
+    },
+    "fileId": "aa575pH3w3G1u/iUNQv/Fqb",
+    "instance": {
+      "__id__": 201
+    }
+  },
+  {
+    "__type__": "cc.PrefabInstance",
+    "fileId": "876a9mdq72NCvwY7bl1nZbq",
+    "mountedChildren": [],
+    "mountedComponents": [],
+    "propertyOverrides": [
+      {
+        "__id__": 203
+      },
+      {
+        "__id__": 204
+      },
+      {
+        "__id__": 205
+      }
+    ],
+    "removedComponents": []
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "aa575pH3w3G1u/iUNQv/Fqb"
+    ]
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 202
+    },
+    "propertyPath": [
+      "_name"
+    ],
+    "value": "CampSkillsScreen"
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 202
+    },
+    "propertyPath": [
+      "_lpos"
+    ],
+    "value": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 202
+    },
+    "propertyPath": [
+      "_active"
+    ],
+    "value": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 6
+    },
+    "_prefab": {
+      "__id__": 207
+    },
+    "__editorExtras__": {}
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 206
+    },
+    "asset": {
+      "__uuid__": "868602f5-2831-409d-b3e2-a477c150eaaf",
+      "__expectedType__": "cc.Prefab"
+    },
+    "fileId": "9039eflJDGoBmNlqJtsfsJF",
+    "instance": {
+      "__id__": 208
+    }
+  },
+  {
+    "__type__": "cc.PrefabInstance",
+    "fileId": "aa99fZN6nzuAriXrIszuHL7",
+    "mountedChildren": [],
+    "mountedComponents": [],
+    "propertyOverrides": [
+      {
+        "__id__": 210
+      },
+      {
+        "__id__": 211
+      },
+      {
+        "__id__": 212
+      }
+    ],
+    "removedComponents": []
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "9039eflJDGoBmNlqJtsfsJF"
+    ]
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 209
+    },
+    "propertyPath": [
+      "_name"
+    ],
+    "value": "CampWarehouseScreen"
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 209
+    },
+    "propertyPath": [
+      "_lpos"
+    ],
+    "value": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 209
+    },
+    "propertyPath": [
+      "_active"
+    ],
+    "value": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 6
+    },
+    "_prefab": {
+      "__id__": 214
+    },
+    "__editorExtras__": {}
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 213
+    },
+    "asset": {
+      "__uuid__": "5aff809b-34e2-4c25-9c22-488e93a7f1e2",
+      "__expectedType__": "cc.Prefab"
+    },
+    "fileId": "37777eo31Cd4AoBIckcUZn1",
+    "instance": {
+      "__id__": 215
+    }
+  },
+  {
+    "__type__": "cc.PrefabInstance",
+    "fileId": "47132IeZrsZlK7naWdQv+k0",
+    "mountedChildren": [],
+    "mountedComponents": [],
+    "propertyOverrides": [
+      {
+        "__id__": 217
+      },
+      {
+        "__id__": 218
+      },
+      {
+        "__id__": 219
+      }
+    ],
+    "removedComponents": []
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "37777eo31Cd4AoBIckcUZn1"
+    ]
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 216
+    },
+    "propertyPath": [
+      "_name"
+    ],
+    "value": "CampTaskJournalScreen"
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 216
+    },
+    "propertyPath": [
+      "_lpos"
+    ],
+    "value": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 216
+    },
+    "propertyPath": [
+      "_active"
+    ],
+    "value": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 6
+    },
+    "_prefab": {
+      "__id__": 221
+    },
+    "__editorExtras__": {}
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 220
+    },
+    "asset": {
+      "__uuid__": "a9a10645-f190-4cf7-88fd-ef1f62905bbc",
+      "__expectedType__": "cc.Prefab"
+    },
+    "fileId": "4195bRyBjj4ZJDvKf7aERoB",
+    "instance": {
+      "__id__": 222
+    }
+  },
+  {
+    "__type__": "cc.PrefabInstance",
+    "fileId": "d16f6ZbCM8IgoZJnFZM56fu",
+    "mountedChildren": [],
+    "mountedComponents": [],
+    "propertyOverrides": [
+      {
+        "__id__": 224
+      },
+      {
+        "__id__": 225
+      },
+      {
+        "__id__": 226
+      }
+    ],
+    "removedComponents": []
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "4195bRyBjj4ZJDvKf7aERoB"
+    ]
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 223
+    },
+    "propertyPath": [
+      "_name"
+    ],
+    "value": "CampRelicShopScreen"
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 223
+    },
+    "propertyPath": [
+      "_lpos"
+    ],
+    "value": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 223
     },
     "propertyPath": [
       "_active"

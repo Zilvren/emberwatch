@@ -22,6 +22,8 @@ class SaveReadError extends Error {
 }
 
 const tideCards = new Set(['follow_up', 'shield_push', 'scrap_shiv', 'rummage']);
+const previousLabyrinthStarter = { lab_press: 4, lab_step: 4, lab_anchor: 1, lab_screen: 1, lab_cell: 1, lab_open: 1 };
+const newLabyrinthCards = new Set(['lab_throw_stone', 'lab_guard_vitals', 'lab_blood_erosion']);
 // These existing IDs gained the legacy reward flag alongside the editable
 // labyrinth pool. Recreate that one earlier signature with all other fields intact.
 const promotedRewardIds = new Set([
@@ -45,8 +47,8 @@ const fistArtChanges: Record<string, { from: string; to: string }> = {
 /** Platform adapter. Storage writes are atomic per key; the previous valid save is retained. */
 export class SaveRepository implements RunPersistence {
     readonly content = createCardSet();
-    // Face summaries are presentation text. Keep old catalog signatures stable.
-    private readonly signedCards = this.content.catalog.cards.map(({ summary, ...card }) => card);
+    // Face text and rarity may be edited while a campaign is saved.
+    private readonly signedCards = this.content.catalog.cards.map(({ summary, rarity, ...card }) => card);
     private readonly signedCardVersions = [this.signedCards, this.signedCards.map(card => {
         const change = fistArtChanges[card.id];
         return change?.to === card.art ? { ...card, art: change.from } : card;
@@ -88,11 +90,18 @@ export class SaveRepository implements RunPersistence {
         const { version, fixedReward } = this.content.catalog;
         return hash(JSON.stringify({ version, fixedReward, cards, recipes }));
     }
-    private catalogHash(scenario: GameScenario, state: GameState, cards = this.signedCards, chapterOnly = false): string {
+    private catalogHash(
+        scenario: GameScenario,
+        state: GameState,
+        cards = this.signedCards,
+        chapterOnly = false,
+        legacyWeights = false,
+        starter = this.content.catalog.labyrinth?.starter
+    ): string {
         if (scenario.runDeck) return this.runDeckHash(cards.filter(card => !card.chapter));
         if (!scenario.labyrinth) return this.fieldHash();
         // The save already carries the active discovery pool and the candidates on screen.
-        const { version, labyrinth } = this.content.catalog;
+        const { version } = this.content.catalog;
         // Unrelated loot, prices and drop rates can be edited while a campaign is saved.
         // Protect the identities in this save and the weights that its bag was packed with.
         const carried = new Map(state.cards.map(card => [card.kind, card.packedWeight ?? this.content.cards[card.kind]?.weight]));
@@ -101,14 +110,15 @@ export class SaveRepository implements RunPersistence {
             .map(id => carried.has(id) ? [id, carried.get(id)] : [id]);
         const usesFistCards = [...referenced, ...(state.discoveryPool ?? []), ...(state.fistUnlocks ?? [])]
             .some((kind) => !!this.content.cards[kind]?.fist);
+        const identities = legacyWeights ? cards : cards.map(({ rewardWeight, ...card }) => card);
         return hash(JSON.stringify({
             version,
-            starter: labyrinth?.starter,
-            cards: cards.filter(card => chapterOnly
+            starter,
+            cards: identities.filter(card => chapterOnly
                 ? card.chapter === 'ashen-labyrinth' && card.role !== 'supply'
                 : !card.fist && (card.role === 'normal' || card.role === 'temporary')),
             ...(supplies.length ? { supplies } : {}),
-            ...(usesFistCards ? { fistCards: cards.filter((card) => !!card.fist) } : {}),
+            ...(usesFistCards ? { fistCards: identities.filter((card) => !!card.fist) } : {}),
         }));
     }
     private blocked = false;
@@ -119,8 +129,15 @@ export class SaveRepository implements RunPersistence {
         readonly key = 'the-end.run.v1'
     ) {}
     private matchesCatalog(catalogHash: string, scenario: GameScenario, state: GameState): boolean {
-        const matches = (chapterOnly = false) => this.signedCardVersions.some(cards =>
-            catalogHash === this.catalogHash(scenario, state, cards, chapterOnly));
+        const versions = this.signedCardVersions.map(cards => ({ cards, starter: this.content.catalog.labyrinth?.starter }));
+        if (scenario.labyrinth) {
+            // Earlier saves signed the full card list and the twelve-card starter. Resume their actual deck.
+            for (const cards of this.signedCardVersions)
+                versions.push({ cards: cards.filter(card => !newLabyrinthCards.has(card.id)), starter: previousLabyrinthStarter });
+        }
+        const matches = (chapterOnly = false) => versions.some(({ cards, starter }) =>
+            catalogHash === this.catalogHash(scenario, state, cards, chapterOnly, false, starter) ||
+            (!!scenario.labyrinth && catalogHash === this.catalogHash(scenario, state, cards, chapterOnly, true, starter)));
         if (matches()) return true;
         if (scenario.labyrinth) {
             // The prior upstream signature covered chapter cards and the same

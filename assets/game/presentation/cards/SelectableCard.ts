@@ -62,7 +62,14 @@ export class SelectableCard extends Component {
             id,
             game.content.cards,
             game.scenario.battleResource === 'stamina' ? '体力' : '物资',
-            { field: game.scenario.fieldDeck, labyrinth: game.scenario.labyrinth, runDeck: game.scenario.runDeck, neededForSynthesis, packedWeight }
+            {
+                field: game.scenario.fieldDeck,
+                labyrinth: game.scenario.labyrinth,
+                labyrinthCatalog: game.content.catalog.labyrinth,
+                runDeck: game.scenario.runDeck,
+                neededForSynthesis,
+                packedWeight,
+            }
         );
         this.card?.setSelected(selected);
         this.refreshPreview();

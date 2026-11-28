@@ -13,10 +13,10 @@ import {
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, CombatState } from './RuleContext';
 import { entryTier } from '../content/EntryTiers';
-import { CAMP_SKILLS } from '../content/GateCamp';
+import { CAMP_SKILLS, ownsRelic } from '../content/GateCamp';
 import { FistCombat } from './FistCombat';
 import {
-    advanceCalmRound, applyLabyrinthEffect, consumeCalibration, consumeDiscount,
+    advanceCalmRound, applyLabyrinthEffect, bloodErosionDamage, consumeCalibration, consumeDiscount,
     initialCalm, labyrinthDamage, staminaCost,
 } from './LabyrinthCombat';
 export class CombatRules {
@@ -155,7 +155,7 @@ export class CombatRules {
         if (b.hp > 0 && (effect.type === 'draw' || effect.extraDraw))
             this.drawCards(effect.type === 'draw' ? effect.amount : effect.extraDraw!);
         if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count));
-        if (this.fistEnabled) this.fist.applyFinisher(b, definition);
+        if (this.fistEnabled) this.fist.applyFinisher(b, definition, true);
     }
     get incomingDamage(): number {
         const b = this.state.battle;
@@ -200,6 +200,8 @@ export class CombatRules {
             this.drawCards(4);
             this.beginPlayerTurn(false);
         } else this.beginPlayerTurn();
+        if (this.state.battle.calm && ownsRelic(this.state, 'keeper_watch'))
+            this.state.battle.calm.freeSkill = true;
         if (this.scenario.labyrinth && this.state.campSkills?.length) {
             for (const skill of CAMP_SKILLS) {
                 if (this.state.campSkills.indexOf(skill.id) < 0) continue;
@@ -257,7 +259,7 @@ export class CombatRules {
         const message = `${this.content.cards[kind].name}已${inHand ? '入手' : '放到抽牌堆顶'}，本次探索可用。`;
         return this.feedback.result(true, message);
     }
-    attackDamage(kind: string, enhanced = true): number {
+    attackDamage(kind: string, playedCard = true): number {
         const card = this.content.cards[kind], effect = card.effect,
             b = this.state.battle;
         if (effect.type !== 'damage') return 0;
@@ -265,13 +267,13 @@ export class CombatRules {
             effect.bonusWhen === 'after-attack'
                 ? b?.attackedThisTurn
                 : effect.bonusWhen === 'behind-cover' && (b?.block ?? 0) >= 4;
-        const rage = enhanced ? this.chargedEffect(effect) : undefined;
+        const rage = playedCard ? this.chargedEffect(effect) : undefined;
         const base = rage?.damage ?? (effect.amount + (triggered ? (effect.bonus ?? 0) : 0));
         const factionBonus = card.fist ? (b?.fist?.damageBonus ?? 0) : 0;
         const damage = (base + this.strength + factionBonus) * (effect.hits ?? 1);
         if (!b) return damage;
         const extra = rage?.damagePercentMaxHp ? Math.ceil(b.maxHp * rage.damagePercentMaxHp) : 0;
-        return labyrinthDamage(b, card, damage) + extra;
+        return labyrinthDamage(b, card, damage) + extra + (playedCard ? bloodErosionDamage(b) : 0);
     }
     cardCost(kind: string): number {
         return staminaCost(this.content.cards[kind], this.state.battle?.calm);
@@ -518,7 +520,8 @@ export class CombatRules {
             }
             const fistCounter = this.fist.counterDamage(b, incoming, damage === 0);
             const calmCounter = damage === 0 && b.calm?.deferred === 'extra-turn' ? b.calm.counter : 0;
-            counterDamage = fistCounter + calmCounter;
+            counterDamage = fistCounter + calmCounter +
+                (calmCounter ? bloodErosionDamage(b, b.hp - fistCounter) : 0);
             if (counterDamage) {
                 b.hp = Math.max(0, b.hp - counterDamage);
                 if (b.hp === 0) {
@@ -535,6 +538,7 @@ export class CombatRules {
         return this.feedback.result(true, `${counterDamage ? `反击 ${counterDamage} 点 · ` : ''}第 ${b.turn} 回合，你先行动。`);
     }
     private nextTurn(battle: NonNullable<CombatState['battle']>): void {
+        if (battle.bloodErosionTurns) battle.bloodErosionTurns--;
         if (battle.calm) advanceCalmRound(battle.calm);
         battle.block = 0;
         battle.turn++;

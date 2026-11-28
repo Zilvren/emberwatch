@@ -168,7 +168,7 @@ test('a real labyrinth run banks loot once, keeps it through defeat, and redeems
     assert.deepEqual(s.view.storedSupplies, brought);
     assert.equal(s.view.supplies, balance);
     assert.equal(s.view.carriedCards.length, 0);
-    assert.equal(s.view.cards.length, 12);
+    assert.equal(s.view.cards.length, 0);
     ok(s.execute({ type: 'continue-journal' }));
     const kind = Object.keys(brought)[0];
     const after = { ...brought };
@@ -288,15 +288,109 @@ function hash(data) {
     return (result >>> 0).toString(16);
 }
 
+test('blood erosion applies after the hit, survives reload and expires after two player turns', () => {
+    install();
+    const disk = store();
+    const session = start(new GameSession(22, new SaveRepository(disk)));
+    enter(session, 'battle');
+    session.game.battle.hp = session.game.battle.maxHp = 14;
+    const blood = session.view.battle.hand.find(card => card.kind === 'lab_blood_erosion');
+    ok(session.execute({ type: 'play-card', id: blood.id }));
+    assert.equal(session.view.battle.hp, 12);
+    assert.equal(session.view.battle.stamina, 1);
+    assert.equal(session.view.battle.bloodErosionTurns, 2);
+
+    const resumed = new GameSession(1, new SaveRepository(disk));
+    assert.ok(resumed.restored, resumed.startupMessage);
+    assert.equal(resumed.view.battle.bloodErosionTurns, 2);
+    const stone = resumed.view.battle.hand.find(card => card.kind === 'lab_throw_stone');
+    assert.equal(resumed.game.attackDamage(stone.kind), 5);
+    ok(resumed.execute({ type: 'play-card', id: stone.id }));
+    assert.equal(resumed.view.battle.hp, 7);
+    ok(resumed.execute({ type: 'end-turn' }));
+    assert.equal(resumed.view.battle.bloodErosionTurns, 1);
+    assert.equal(resumed.game.attackDamage(stone.kind), 4);
+    ok(resumed.execute({ type: 'end-turn' }));
+    assert.equal(resumed.view.battle.bloodErosionTurns, 0);
+    assert.equal(resumed.game.attackDamage(stone.kind), 3);
+});
+
+test('reapplying blood erosion adds turns and a multi-hit card gets one current-HP bonus', () => {
+    const session = encounter();
+    const battle = session.game.battle;
+    battle.hp = battle.maxHp = 40;
+    battle.hand = [];
+    battle.stamina = 10;
+    play(session, 'blood_erosion');
+    play(session, 'blood_erosion');
+    assert.equal(battle.hp, 32);
+    assert.equal(battle.bloodErosionTurns, 4);
+    const triple = { id: 'slash-' + ++fixtureId, kind: 'fist_triple', temporary: false };
+    battle.hand.push(triple);
+    assert.equal(session.game.attackDamage(triple.kind), 10);
+    ok(session.execute({ type: 'play-card', id: triple.id }));
+    assert.equal(battle.hp, 22);
+    assert.equal(battle.bloodErosionTurns, 4);
+});
+
+test('an expedition with the former twelve-card starter resumes and draws its own saved cards', () => {
+    const old = structuredClone(source);
+    const newIds = new Set(Object.keys(old.labyrinth.starter));
+    old.cards = old.cards.filter(card => !newIds.has(card.id));
+    old.labyrinth.starter = { lab_press: 4, lab_step: 4, lab_anchor: 1, lab_screen: 1, lab_cell: 1, lab_open: 1 };
+    catalog.installCatalog(old);
+    const disk = store();
+    const former = start(new GameSession(22, new SaveRepository(disk)));
+    enter(former, 'battle');
+    const snapshot = former.game.exportState();
+    assert.equal(snapshot.cards.length, 12);
+    install();
+    const resumed = new GameSession(1, new SaveRepository(disk));
+    assert.ok(resumed.restored, resumed.startupMessage);
+    assert.deepEqual(resumed.game.exportState(), snapshot);
+    ok(resumed.execute({ type: 'end-turn' }));
+    assert.ok(resumed.view.battle.hand.every(card => old.labyrinth.starter[card.kind]));
+});
+
+test('counter cards trigger blood erosion on damage and a copied counter does not count as another play', () => {
+    const session = encounter();
+    const battle = session.game.battle;
+    battle.hp = battle.maxHp = 80;
+    battle.stamina = 30;
+    battle.hand = [];
+    const use = kind => {
+        const entry = { id: 'slash-' + ++fixtureId, kind, temporary: false };
+        battle.hand.push(entry);
+        ok(session.execute({ type: 'play-card', id: entry.id }));
+    };
+    use('shield_spear');
+    use('lab_blood_erosion');
+    use('fist_chain_counter');
+    battle.rage = 5;
+    use('shield_spear_guard');
+    assert.equal(battle.fist.counters.length, 4);
+    const hp = battle.hp, incoming = session.game.incomingDamage;
+    assert.ok(incoming > 0 && battle.block >= incoming);
+    const counter = session.view.content.cards.fist_chain_counter.fist.counter;
+    const counterDamage = (incoming + counter.extra) * 4;
+    ok(session.execute({ type: 'end-turn' }));
+    assert.equal(battle.hp, hp - counterDamage - Math.ceil(hp / 10));
+});
+
 test('both lower-risk and combat-heavy routes clear all seventeen layers and a new day rolls a fresh map', () => {
     install(['lab_probe', 'lab_bypass', 'lab_bracelet']);
     for (const opening of ['serviceDuct', 'lampPassage']) {
         const s = new GameSession(17);
         assert.equal(s.view.scenario.id, 'ashen-labyrinth');
-        assert.equal(s.view.cards.length, 12);
+        assert.equal(s.view.cards.length, 0);
         assert.equal(s.view.currentJournal.title, '灰里的门槛');
         start(s);
         const graph = s.view.expeditionMap;
+        const starter = s.view.cards.map(card => card.kind);
+        assert.deepEqual(starter.filter(kind => kind === 'lab_throw_stone'), Array(5).fill('lab_throw_stone'));
+        assert.deepEqual(starter.filter(kind => kind === 'lab_guard_vitals'), Array(4).fill('lab_guard_vitals'));
+        assert.deepEqual(starter.filter(kind => kind === 'lab_blood_erosion'), ['lab_blood_erosion']);
+        assert.equal(starter.length, 10);
         const path = walkablePaths(graph).find(candidate => candidate[1] === opening &&
             (opening === 'serviceDuct' ? !candidate.includes('ashGallery') && !candidate.includes('returnBridge')
                 : candidate.includes('ashGallery') && candidate.includes('returnBridge')));
@@ -319,10 +413,14 @@ test('both lower-risk and combat-heavy routes clear all seventeen layers and a n
         s.advanceTime(1);
         assert.equal(s.view.day, 2);
         assert.equal(s.view.currentJournal.id, 'labyrinth-cleared');
-        assert.equal(s.view.cards.length, 12);
+        assert.equal(s.view.cards.length, 0);
         assert.ok(s.view.settlement.discoveredCards > 0);
         ok(s.execute({ type: 'continue-journal' }));
+        assert.equal(s.execute({ type: 'heal-at-shelter' }).ok, false);
         ok(s.execute({ type: 'start', tier: 'standard' }));
+        assert.equal(s.view.health, 10);
+        assert.deepEqual(s.view.cards.map(card => card.kind), starter);
+        assert.ok(s.view.cards.every(card => !card.found));
         assert.notEqual(s.view.expeditionMap.seed, graph.seed);
         assert.notDeepEqual(s.view.expeditionMap.points, graph.points);
         assert.deepEqual(s.view.visited, []);
@@ -489,7 +587,7 @@ test('migrated weapons can be discovered and resume from the Maze autosave', () 
     const pool = ['knife', 'shield_spear', 'dragon_slayer'];
     install(pool);
     const disk = store();
-    const s = start(new GameSession(17, new SaveRepository(disk)));
+    const s = start(new GameSession(44, new SaveRepository(disk)));
     ok(s.execute({ type: 'enter-node', id: 'serviceDuct' }));
     if (s.view.rewards) {
         assert.ok(s.view.rewards.cards.every(id => s.view.content.cards[id].role === 'supply'));

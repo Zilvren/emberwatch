@@ -4,7 +4,7 @@ import { FIST_MOVES, fistFinisherFor, fistMove, fistSupport, fistTargetMatches, 
 import { ASHEN_MAP_LAST_LAYER, ASHEN_MAP_OUTER_LANE, nextMapNodes, type ExpeditionMap } from '../content/ExpeditionMap';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
 import { validEnemyActions } from '../content/LabyrinthEnemies';
-import { CAMP_SKILLS } from '../content/GateCamp';
+import { CAMP_RELICS, CAMP_SKILLS, type CampRelicId } from '../content/GateCamp';
 import { isPhase } from './GamePhase';
 import {
     getJournalCatalog,
@@ -29,6 +29,7 @@ export interface GameState {
     journalEntries: JournalRecord[];
     supplies: number;
     campSkills?: string[];
+    permanentRelics?: CampRelicId[];
     entryTier: EntryTierId | null;
     health: number;
     cards: OwnedCard[];
@@ -109,7 +110,9 @@ function validateFistBattle(
     integer(fist.blockBonus, 0, Number.MAX_SAFE_INTEGER, 'fist block bonus');
     flag(fist.recoveredStamina, 'fist recovered stamina');
     list(fist.counters, 10000, 'fist counters');
-    requireValue(fist.counters, fist.counters.every((kind) => {
+    requireValue(fist.counters, fist.counters.every((source) => {
+        const kind = typeof source === 'string' ? source : source?.copied;
+        if (typeof kind !== 'string') return false;
         const card = definitions[kind]?.fist;
         return card?.type === 'finisher' && !!card.counter;
     }), 'fist counter kinds');
@@ -214,6 +217,11 @@ export function validateGameState(
         requireValue(s.campSkills, !!scenario.labyrinth && learned.size === s.campSkills.length &&
             s.campSkills.every(id => CAMP_SKILLS.some(skill => skill.id === id &&
                 (!skill.requires || learned.has(skill.requires)))), 'camp skill prerequisites');
+    }
+    if (s.permanentRelics !== undefined) {
+        list(s.permanentRelics, CAMP_RELICS.length, 'permanent relics');
+        requireValue(s.permanentRelics, !!scenario.labyrinth && new Set(s.permanentRelics).size === s.permanentRelics.length &&
+            s.permanentRelics.every(id => CAMP_RELICS.some(relic => relic.id === id)), 'permanent relic ownership');
     }
     integer(s.seed, 0, 0xffffffff, 'seed');
     integer(s.randomState, 1, 0xffffffff, 'randomState');
@@ -400,6 +408,10 @@ export function validateGameState(
         requireValue(b.enemy, hasId(scenario.enemies, b.enemy), 'enemy');
         integer(b.hp, 1, 100000, 'hp');
         integer(b.maxHp, b.hp, 100000, 'maxHp');
+        if (b.bloodErosionTurns !== undefined) {
+            requireValue(b.bloodErosionTurns, !!scenario.labyrinth, 'blood erosion scenario');
+            integer(b.bloodErosionTurns, 0, Number.MAX_SAFE_INTEGER, 'blood erosion turns');
+        }
         integer(b.attack, 0, 100000, 'attack');
         integer(b.strongAttack, 0, 100000, 'strongAttack');
         integer(b.turn, 1, 1000000, 'turn');
@@ -599,6 +611,7 @@ export function validateGameState(
         journalEntries: s.journalEntries.map(({ id, day, read }) => ({ id, day, read })),
         supplies: s.supplies,
         ...(s.campSkills === undefined ? {} : { campSkills: [...s.campSkills] }),
+        ...(s.permanentRelics === undefined ? {} : { permanentRelics: [...s.permanentRelics] }),
         entryTier: savedTier,
         health: s.health,
         cards: s.cards,

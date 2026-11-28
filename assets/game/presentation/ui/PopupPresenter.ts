@@ -12,9 +12,7 @@ import { RouteMap } from '../map/RouteMap';
 import { EntrySelection } from './EntrySelection';
 import { RecipePanel } from './RecipePanel';
 import { rulesNotice } from './RulesNoticeModel';
-import { campDetail, isCampStation } from './CampViewModel';
 import { CampStationPanel } from './CampStationPanel';
-import { CampSkillTree } from './CampSkillTree';
 import { BattlePilePanel } from '../cards/BattlePilePanel';
 import { isCardPile } from '../cards/BattlePileModel';
 /** Overlay projection only; input decisions are owned by UiActionRouter. */
@@ -37,21 +35,16 @@ export class PopupPresenter {
         if (key === 'settings') this.view.button(this.popups.settings, 'audio', this.isMuted() ? '声音关' : '声音开');
         if (key === 'battle-pile' && isCardPile(this.ui.overlay))
             this.popups[key].getComponentInChildren(BattlePilePanel)?.render(g, this.ui.overlay, this.ui.pilePage, this.ui.pileSelection);
-        if (key === 'camp-station' && isCampStation(this.ui.overlay)) {
+        if (key === 'camp-station' && this.ui.overlay === 'camp-talk') {
             const sheet = this.popups[key].getComponentInChildren(CampStationPanel)!;
-            const tree = this.popups[key].getComponentInChildren(CampSkillTree)!;
-            tree.node.active = this.ui.overlay === 'camp-skills';
-            sheet.node.active = !tree.node.active;
-            if (this.ui.overlay === 'camp-skills') tree.render(g, this.ui.campSkill);
-            else sheet.render(campDetail(g, this.ui.overlay, this.ui),
-                this.ui.overlay === 'camp-fire' ? this.isMuted() : undefined);
+            sheet.render(this.ui.campTopic);
         }
         if (key === 'inventory') {
             const popup = this.popups.inventory,
                 max = Math.max(0, Math.ceil(g.cards.length / 6) - 1);
             this.ui.page = Math.max(0, Math.min(this.ui.page, max));
             this.view.text(popup, {
-                'bag/text1': `随行牌组 · ${g.usableCards.length} 张`,
+                'bag/text1': `本次探索 · ${g.usableCards.length} 张战斗牌`,
                 'bag/text20': `${this.ui.page + 1} / ${max + 1}`,
                 'bag/text21': g.scenario.runDeck || g.scenario.labyrinth ? '物资卡带回仓库，战斗牌进入本局卡组。'
                     : g.scenario.fieldDeck ? '发现的牌在本次探索内使用。' : '点击卡牌查看详情。',

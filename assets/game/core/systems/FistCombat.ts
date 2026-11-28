@@ -6,7 +6,7 @@ import {
 } from '../content/FistCards';
 import type { Random } from '../Random';
 import type { Battle, CombatCard, CombatCardChoice, FistBattle } from '../RulesTypes';
-import { MAX_BONUS_STAMINA } from './LabyrinthCombat';
+import { bloodErosionDamage, MAX_BONUS_STAMINA } from './LabyrinthCombat';
 import type { CombatState } from './RuleContext';
 
 export class FistCombat {
@@ -99,20 +99,24 @@ export class FistCombat {
         return `换气 · 获得 ${battle.stamina - previous} 点体力。`;
     }
 
-    applyFinisher(battle: Battle, definition: CardDefinition): void {
+    applyFinisher(battle: Battle, definition: CardDefinition, copied = false): void {
         const finisher = definition.fist;
         if (finisher?.type !== 'finisher') return;
         const progress = this.progress(battle);
-        if (finisher.counter) progress.counters.push(definition.id);
+        if (finisher.counter) progress.counters.push(copied && battle.calm ? { copied: definition.id } : definition.id);
         progress.damageBonus += finisher.damagePerHit ?? 0;
         progress.blockBonus += finisher.blockPerCard ?? 0;
     }
 
     counterDamage(battle: Battle, incoming: number, fullyBlocked: boolean): number {
-        return (battle.fist?.counters ?? []).reduce((total, kind) => {
+        return (battle.fist?.counters ?? []).reduce((total, source) => {
+            const kind = typeof source === 'string' ? source : source.copied;
             const finisher = this.content.cards[kind].fist;
             const counter = finisher?.type === 'finisher' ? finisher.counter : undefined;
-            return counter ? total + (fullyBlocked ? incoming : counter.partial) + counter.extra : total;
+            if (!counter) return total;
+            const damage = (fullyBlocked ? incoming : counter.partial) + counter.extra;
+            const erosion = damage > 0 && typeof source === 'string' ? bloodErosionDamage(battle, battle.hp - total) : 0;
+            return total + damage + erosion;
         }, 0);
     }
 

@@ -18,6 +18,7 @@ export type GameReadModel = ReadonlyValue<
         | 'pendingJournalCount'
         | 'supplies'
         | 'campSkills'
+        | 'permanentRelics'
         | 'entryTier'
         | 'health'
         | 'lowHealth'

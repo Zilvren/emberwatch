@@ -37,7 +37,7 @@ export interface FistBattle {
     unlockedHere: CardKind[];
     damageBonus: number;
     blockBonus: number;
-    counters: CardKind[];
+    counters: (CardKind | { copied: CardKind })[];
     recoveredStamina: boolean;
 }
 
@@ -53,6 +53,7 @@ export interface Battle {
     intent: 'attack' | 'prepare';
     boosted: boolean;
     enemySequence?: EnemySequence;
+    bloodErosionTurns?: number;
     block: number;
     draw: CombatCard[];
     hand: CombatCard[];

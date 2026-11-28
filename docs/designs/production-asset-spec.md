@@ -1,5 +1,45 @@
 # The end 素材生产与原生接入规格
 
+## 2026-11-28 · 营地陈列与迷宫技能图
+
+《The end》在 `cyb/202611` 已接入原生资源。ImageGen 原稿在 `art-source/ashen-labyrinth/interface/`。空柜台 `keeper-stall.png` 输出为 1440×900 JPEG，绒布裁出 800×190 的托盘内衬。木架边缘从现有仓库绘景裁出，保存在 `camp-shelf-lip.png`。迷宫铜版原稿 `skill-labyrinth.png` 输出为 1350×900 JPEG，以 810×540 的原生图板坐标布置印记与路径。
+
+三种遗物由一张 1774×887 透明原稿 `relic-objects.png` 分件打包。运行图集为 768×256，每格 256×256，物体留有透明护边。SpriteAtlas 帧名直接使用遗物 ID，选择部件与独立详情图复用同一帧。柜台货位的插画上限为 117×117 个布局单位。界面文字、状态与价格由原生 Label 绘制。Pink 导入 SpriteFrame 和 SpriteAtlas 后，使用 `node tools/author-gate-camp.cjs camp-skills camp-warehouse camp-keeper` 单独装配三个场景预制体。
+
+## 2026-11-28 · 守门人商店柜台初版
+
+《The end》在 `cyb/202611` 实装。ImageGen 原稿 `art-source/ashen-labyrinth/interface/keeper-relic-counter.png` 为 1586 × 992 的不透明绘景，工作贴图 `assets/ashen-labyrinth/interface/keeper-relic-counter.jpg` 为 1440 × 900。构图采用安静的暖灯、暗紫摊布与木柜，地图与罗盘、绕铜线的马蹄磁石和半开的黄铜怀表从左至右平放。画面没有烘焙字价，名称、余额和持有状态均取自运行数据。
+
+在 Pink 导入 JPEG 为 SpriteFrame 后，用 `node tools/author-gate-camp.cjs` 装配 `CampRelicShopScreen.prefab`。按绘景上的实物位置绘制点击区域，价签复用 `turn-plaque.png`，物件、热区与价签在宽屏裁切时使用同一坐标系。说明和操作使用独立的安全布局。观察以全屏商店、物资点不足及已持有三种状态为准，画面验收记录在 `docs/designs/ui/ux-review.md`。
+
+## 2026-11-28 · 卡牌稀有度边框
+
+《The end》焦土迷宫已实装。普通暖石平顶、稀有冷蓝单拱、史诗暗紫阴刻、传说明亮的黄金尖拱。运行图集 `assets/ashen-labyrinth/interface/card-rarity.png` 为 2048×1600。上排是四档边框，下排是对应的纯白纸底遮罩，每格 512×800。单格保留透明护边，中心的 448×680 像素为卡面净空。图集原点在左上，卡面净空从 (32, 88) 起。原生显示以 224×340 为排版参照，边框与纸底为 256×400，中心向上偏 14 个设计单位。
+
+`HandCard.prefab`、`SelectableCard.prefab` 和 `RewardCard.prefab` 通过 Pink 导入的 `card-rarity.plist` 绑定同一 SpriteAtlas。卡面内容、纸底状态和边框分层，悬停和选择只染纸底。工坊直接读取同一 PNG。暖石和冷蓝沿用石拱样稿的外圈笔触，史诗使用获选的宽阴刻，传说使用获准的尖角金框。项目构建直接读取已导入的图集。[样稿和规则](card-rarity.md)
+
+## 2026-11-28 · 营地独立页面的近景
+
+《The end》在 `cyb/202611` 使用三个 ImageGen 原稿。原稿位于 `art-source/ashen-labyrinth/interface/`。工作台 `skill-workbench.png` 与仓库 `camp-storehouse.png` 各导出为 1440 × 900 的同名 JPEG，位于 `assets/ashen-labyrinth/interface/`。原生页面按可见视口铺满场景，界面内容单独适配。技能、库存、任务文字均由原生组件绘制。
+
+任务手记 `task-journal.png` 保留透明边缘。裁切外侧空白并缩到 1400 × 845 后沿中央书脊分成 `journal-left.png` 和 `journal-right.png`。另从右页纸张轮廓提取 `journal-leaf.png`，保留与书脊相同的注册位置。翻页时，原生节点依据书脊旋转投影改变纸张宽度、抬起角度和明暗。打开动效约 0.78 秒。减少动态效果时直接显示摊开并写好字的书。主场景使用 `CampSkillsScreen.prefab`、`CampWarehouseScreen.prefab` 和 `CampTaskJournalScreen.prefab`，原生装配见 `tools/author-gate-camp.cjs`。
+
+<details><summary>三件场景素材的生成提示</summary>
+
+工作台原稿
+
+> A 16:10 landscape game environment background, zoomed into the craftsman's training workbench at a quiet dusk medieval gate camp. Warm charcoal plum and muted umber, a soft amber lantern glows only in the upper far left corner, leather wrist guards, punch tools and chalk dust partly visible near outside edges. Camera almost directly over the workbench with a slight rake. A large weathered slate artist's work surface with subtle mottling fills the center of the image edge to edge; uniformly dark and clear throughout the middle 80%, for live skill paths to be drawn by the game. A few faint studies of a clenched hand or footwork only at the far bottom-left border, barely discernible. At the far right edge wooden grain, leather shop apron, folded coarse linen with worn threads. Refined hand-painted gouache environmental illustration, broad angular shapes, warm dusty shadows, still, physical, inviting. Single believable full-bleed scene. No rendered writing, no letters, no cards, no icons, no game HUD, no diagrams or frames.
+
+仓库原稿
+
+> A 16:10 landscape hand-painted medieval supply storehouse interior at dusk for a fantasy camp game, seen straight on standing at a timber counter. Large dark empty space through the center to display collected objects as game cards. A weathered dark wood counter with a sun-worn front edge appears low at 78 percent image height, near eye-level horizontal line. Dim timber shelves in the back receding into purple-brown shadow, rolled canvas and a crate barely visible at the outer edges. A small lantern at far right casts a soft amber pool onto the counter. Quiet matte gouache paint, broad architectural brushwork with softened edges, restrained amber and dusty violet atmosphere, inviting and grounded. No bright central objects, no figures, no labels, no words, no bottles lined up across the middle, no frames or user interface, no books, no cards. Landscape composition emphasizes the long surface and empty middle; leave middle and upper left calm for live game objects and type.
+
+手记原稿
+
+> Game environment prop for a hand-painted dusky amber / dusty plum fantasy camp. Isolated full open field notebook viewed directly from above, spine perfectly vertical at the exact middle, two broad nearly rectangular leaves, wide spread 1.65:1. The thick foxed ochre paper has calm luminous pale oat writing surfaces, dark umber leather binding with frayed corners, short faded russet linen bookmark hanging from the bottom edge. Sparse delicate pencil sketch of a medieval stone gate and a camp lantern only in the lower far left corner of the LEFT leaf and a couple of tiny graphite marks on its outer edge. The upper half of the left leaf and the entire right leaf are clean blank writing space. Soft hand-painted angular gouache edges, fine broken brown linework, gentle lamplit shading at the gutter, mild perspective. A personal traveler's notebook, intimate, tactile, clean at reading scale. No words, letters, symbols, panel frames or type; no table, ground, cast shadow outside its silhouette. All leather edges in view, authentic transparent alpha around whole open spread.
+
+</details>
+
 ## 2026-11-28 · 营地火光和燃木声
 
 《The end》已接入主场景。玩家确认当前营地混音，新增场景字迹和构图待试玩。`GateCampScreen.prefab` 的绘景沿用 1440 × 900 的原始 SpriteFrame 和 `gate-camp.mtl`。门缝在原画中的中心取样点为 (777, 450)。宽 1326 设计单位的原生遮罩将这个点、门上字迹和交互区中心一并对准视口的几何中心。绘景、火星、暗角和点击区域共同向左平移 57 单位。窗口缩放保持字迹、受光、火盆和实物的相对位置。火焰取样固定在盆沿上方，火尖的横向与纵向偏移随高度增大。使用独立纹理坐标，原画禁止动态合图。实物受光范围按同一画板描在 `art-source/ashen-labyrinth/interface/gate-camp-light.svg`，以半尺寸导出为 `gate-camp-light.png`。原生组件 `CampAtmosphere.ts` 把五个交互区与局部灯光联系起来。减少动态效果时保留静态受光与选中反馈。

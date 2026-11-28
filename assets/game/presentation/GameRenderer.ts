@@ -23,7 +23,12 @@ import type { battleWindowLayout } from './ui/BattleWindowLayout';
 import { DeckStackGraphic } from './primitives/DeckStackGraphic';
 import { EnemyIntent } from './ui/EnemyIntent';
 import { generatedCards } from '../core/content/CardCatalog';
-import { atGateCamp } from './ui/CampViewModel';
+import { atGateCamp, warehousePage } from './ui/CampViewModel';
+import { CampSkillTree } from './ui/CampSkillTree';
+import { CampRelicShop } from './ui/CampRelicShop';
+import { CampWarehouse } from './ui/CampWarehouse';
+import { CampTaskJournal } from './ui/CampTaskJournal';
+import { CampAtmosphere } from './effects/CampAtmosphere';
 /** Native view binding only. No game commands, storage or input subscriptions. */
 export class GameRenderer extends NativeViewWriter {
     private readonly popups: PopupPresenter;
@@ -85,7 +90,8 @@ export class GameRenderer extends NativeViewWriter {
             this.hiddenCombatUi = [];
         }
         const camp = atGateCamp(g);
-        const screenKey = camp ? 'camp' : discovery
+        if (!camp) this.ui.campPage = null;
+        const screenKey = camp ? this.ui.campPage ?? 'camp' : discovery
             ? 'rewards'
             : g.phase === 'journal' && g.currentJournal?.id !== 'departure'
               ? 'day2'
@@ -95,6 +101,7 @@ export class GameRenderer extends NativeViewWriter {
             this.ui.rewardContext = '';
             this.ui.rewardPage = 0;
         }
+        const previous = this.activeScreen;
         for (const phase of Object.keys(this.scene.screens))
             this.scene.screens[phase].active =
                 phase === screenKey || (discovery && phase === 'battle');
@@ -105,7 +112,27 @@ export class GameRenderer extends NativeViewWriter {
         this.hero = actors.find((actor) => actor.actorId === 'player') ?? null;
         this.hero?.setArmed(g.phase === 'battle' && !!g.battle?.weapon);
         if (camp) {
-            screen.getChildByName('CampControls')!.active = !this.ui.overlay;
+            if (screenKey === 'camp') screen.getChildByName('CampControls')!.active = !this.ui.overlay;
+            else if (screenKey === 'camp-keeper') {
+                const counter = screen.getChildByName('PageContent')!;
+                counter.active = !this.ui.overlay;
+                if (counter.active) counter.getComponent(CampRelicShop)!.render(g, this.ui.shopRelic);
+            } else if (screenKey === 'camp-skills') screen.getComponentInChildren(CampSkillTree)!.render(g, this.ui.campSkill);
+            else if (screenKey === 'camp-warehouse') {
+                const page = warehousePage(g, this.ui.stockPage);
+                this.ui.stockPage = page.current;
+                if (page.items.indexOf(this.ui.warehouseKind) < 0) this.ui.warehouseKind = '';
+                screen.getComponentInChildren(CampWarehouse)!.render(g, page, this.ui.warehouseKind);
+            }
+            else if (screenKey === 'camp-journal') {
+                const journal = screen.getComponentInChildren(CampTaskJournal)!;
+                if (previous !== screen) {
+                    const book = this.scene.screens.camp.getComponentInChildren(CampAtmosphere)!.journalArt!;
+                    journal.openFrom(book.node.worldPosition, this.ui.reduced);
+                } else if (this.ui.reduced) journal.finishOpening();
+                this.text(screen, { 'camp-journal/day': `第 ${g.day} 天` });
+                this.button(screen, 'camp-audio', this.isMuted() ? '声音关闭' : '声音开启');
+            }
             this.popups.render();
             this.hand?.setLocked(true);
             this.revision = g.revision;
@@ -156,7 +183,7 @@ export class GameRenderer extends NativeViewWriter {
                         : g.expeditionMap
                           ? '沿路线向上探索。点击亮起的地点继续。'
                           : '前往亮起的地点。全程无法主动撤离。',
-                'map/text0': `已走过 ${g.visited.length} 处 · 随行牌组 ${g.usableCards.length} 张`,
+                'map/text0': `已走过 ${g.visited.length} 处 · 本局战斗牌 ${g.usableCards.length} 张`,
                 'map/text1': g.scenario.labyrinth ? '战后与指定搜刮点可以发现卡牌。' : '',
                 'map/fixedReward': `${fee ? `支付 ${fee} 物资 → ` : ''}${salvage}\n完成固定搜刮后，才能选择后续路线。`,
             });
@@ -228,7 +255,7 @@ export class GameRenderer extends NativeViewWriter {
                         : '舱壳隔开了盐风。通往潮闸的最后一段路就在窗外。',
                     'rest/text0': '血量状况',
                     'rest/text1': `休息后血量 ${g.health} / 10`,
-                    'rest/text2': '随行牌组',
+                    'rest/text2': '本局战斗牌',
                     'rest/text3': `${g.usableCards.length} 张战斗牌 · 其中 ${g.usableCards.filter((c) => c.found).length} 张为本次发现\n` +
                         (g.scenario.labyrinth ? `随身物资卡 ${g.carriedCards.length} 张` : '下一场战斗会重新洗牌。'),
                     'rest/text4': exits.length > 1
@@ -238,7 +265,7 @@ export class GameRenderer extends NativeViewWriter {
                           : '下一站 · ' + (next?.title ?? '避难所'),
                     'rest/text5': '',
                 });
-                this.button(screen, 'rest-bag', '查看随行牌组');
+                this.button(screen, 'rest-bag', '查看本局战斗牌');
             }
         }
         if (g.phase === 'shelter') {
@@ -317,6 +344,7 @@ export class GameRenderer extends NativeViewWriter {
         const strength = g.strength;
         const fists = b.fist;
         const status = [
+            b.bloodErosionTurns ? `敌方蚀血 ${b.bloodErosionTurns} 回合` : '',
             calm?.freeSkill ? '下张技能免费' : '',
             calm?.calibrated ? '已校准' : '',
             shieldSpearEquipped && b.rage !== undefined

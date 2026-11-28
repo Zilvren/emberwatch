@@ -319,6 +319,7 @@
       "__uuid__": "577393c2-0220-4268-83c4-1ab1452f6b68",
       "__expectedType__": "cc.JsonAsset"
     },
+    "_trim": false,
     "_id": "0c16aE6BPj8T36uKw5jUjlL"
   },
   {
@@ -456,6 +457,7 @@
       "__uuid__": "577393c2-0220-4268-83c4-1ab1452f6b68",
       "__expectedType__": "cc.JsonAsset"
     },
+    "_trim": false,
     "_id": "f22012tbZNmT8lYGbJB/Tkp"
   },
   {
@@ -1113,7 +1115,7 @@
       "b": 178,
       "a": 255
     },
-    "_string": "交谈 · 交易",
+    "_string": "遗物商店",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -1454,7 +1456,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "camp-fire-sign",
+    "_name": "camp-journal-sign",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1501,11 +1503,11 @@
       "y": 0,
       "z": 2
     },
-    "_id": "c74f9oO/Qks7E+RCfmRz56p"
+    "_id": "1a3ffaMptEEdYejeMZ6Ez63"
   },
   {
     "__type__": "cc.Node",
-    "_name": "camp-fire-caption",
+    "_name": "camp-journal-caption",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1551,7 +1553,7 @@
       "y": 0,
       "z": 0
     },
-    "_id": "95967Va/iSHiu0XYrYHIykQ"
+    "_id": "872c9JeioakvpBuMsaFbLWf"
   },
   {
     "__type__": "cc.UITransform",
@@ -1579,7 +1581,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "685c5DzL4Ec+pCJP65jKa/L"
+    "fileId": "94459YNpO1/A0o2WKqtbIwo"
   },
   {
     "__type__": "cc.Label",
@@ -1647,7 +1649,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "a5e0e9WWlPD3Mg0MhPP5jjf"
+    "fileId": "b4d92GYbI6yhFP/Dkham2gA"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -1657,7 +1659,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "77173GF7AUS+KaWDqYBka2B"
+    "fileId": "67801lKvOpkpCMinjt2Y6mI"
   },
   {
     "__type__": "cc.UITransform",
@@ -1685,7 +1687,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "8d761scIgl9iWezNfOgEtgg"
+    "fileId": "a4a4ewIUvKijVDCBpPOnAGp"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -1695,7 +1697,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "5bd4asCIjU26Ei6/3ceDhrK"
+    "fileId": "8fc4fswDH6psG5QwrhVyI40"
   },
   {
     "__type__": "cc.UITransform",
@@ -1967,6 +1969,9 @@
     "painting": {
       "__id__": 71
     },
+    "journalArt": {
+      "__id__": 7
+    },
     "_id": "267a9bKoaCGPrAnVubwe+ho",
     "gate": {
       "__id__": 81
@@ -1980,7 +1985,7 @@
     "warehouse": {
       "__id__": 114
     },
-    "brazier": {
+    "journal": {
       "__id__": 125
     }
   },
@@ -2741,7 +2746,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "camp-fire",
+    "_name": "camp-journal",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2768,8 +2773,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -129,
-      "y": -210,
+      "x": -193,
+      "y": -231,
       "z": 0
     },
     "_lrot": {
@@ -2793,7 +2798,7 @@
       "y": 0,
       "z": 0
     },
-    "_id": "b23d7CrTzunAmkZTmwdi1W9"
+    "_id": "7ab54hUtj6nwN6t0PegJNIt"
   },
   {
     "__type__": "cc.UITransform",
@@ -2809,8 +2814,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 233,
-      "height": 266
+      "width": 122,
+      "height": 72
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2821,7 +2826,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "ff6adEjmJROYHPq2rt7xMhc"
+    "fileId": "b7c85/VxBEnQxZigbsYDKZ9"
   },
   {
     "__type__": "cc.Button",
@@ -2883,7 +2888,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "4c77aHOg9pHQDVRcWzvW+bg"
+    "fileId": "4de939ytM27NiS09fUV750/"
   },
   {
     "__type__": "cc.ClickEvent",
@@ -2907,7 +2912,7 @@
     "__prefab": {
       "__id__": 124
     },
-    "actionId": "camp-fire",
+    "actionId": "camp-journal",
     "_id": "6b1cc9GiDY0UkOs5x2jD1vV",
     "caption": {
       "__id__": 60
@@ -2915,7 +2920,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "499bdz1N5UbejtEwgslJCaP"
+    "fileId": "46cc8QXzSAnxaVvmZf4vrS9"
   },
   {
     "__type__": "4450aD0g11HFbGgTjB1tkY4",
@@ -2933,7 +2938,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "90872TgESIQ1YRMF84e5Vu+"
+    "fileId": "c51a06CTW3zqs3SHYDA+VdL"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -2943,7 +2948,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "c78333KZHk90WCtTUwyoeMj"
+    "fileId": "3be93nyd2P/BRkyHjekhrpv"
   },
   {
     "__type__": "cc.UITransform",

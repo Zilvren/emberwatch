@@ -12,10 +12,12 @@ export class CampAtmosphere extends Component {
     @property(ButtonPresentation) keeper: ButtonPresentation | null = null;
     @property(ButtonPresentation) bench: ButtonPresentation | null = null;
     @property(ButtonPresentation) warehouse: ButtonPresentation | null = null;
-    @property(ButtonPresentation) brazier: ButtonPresentation | null = null;
+    @property(ButtonPresentation) journal: ButtonPresentation | null = null;
+    @property(Sprite) journalArt: Sprite | null = null;
     private material: Material | null = null;
     private sparks!: Graphics;
     private readonly light = new Vec4();
+    private readonly paperTint = new Color();
     private readonly motion = new Vec4();
     private elapsed = 0;
     private frameTime = 0;
@@ -62,10 +64,15 @@ export class CampAtmosphere extends Component {
 
     private draw = (): void => {
         const keeper = this.keeper?.state ?? 'disabled', bench = this.bench?.state ?? 'disabled';
-        const warehouse = this.warehouse?.state ?? 'disabled', brazier = this.brazier?.state ?? 'disabled';
+        const warehouse = this.warehouse?.state ?? 'disabled', journal = this.journal?.state ?? 'disabled';
         const gate = this.gate?.state ?? 'disabled';
-        this.point(gate === 'hover' || keeper === 'hover' || bench === 'hover' || warehouse === 'hover' || brazier === 'hover');
-        this.light.set(illumination[keeper], illumination[bench], illumination[warehouse], illumination[brazier]);
+        this.point(gate === 'hover' || keeper === 'hover' || bench === 'hover' || warehouse === 'hover' || journal === 'hover');
+        this.light.set(illumination[keeper], illumination[bench], illumination[warehouse], 0);
+        if (this.journalArt) {
+            const amount = Math.min(1, illumination[journal]);
+            this.paperTint.set(223 + 32 * amount, 197 + 58 * amount, 174 + 71 * amount, 255);
+            this.journalArt.color = this.paperTint;
+        }
         const reduced = this.media?.matches;
         const t = reduced ? 0 : this.elapsed;
         this.motion.set(t, reduced ? 0 : 1, 0.7 * Math.sin(t * 1.45) + 0.3 * Math.sin(t * 2.35), illumination[gate]);

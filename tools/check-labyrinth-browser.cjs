@@ -155,7 +155,7 @@ function observe(page) {
 async function campText(page) {
     return page.evaluate(() => {
         const panel = cc.director.getScene().getComponentInChildren('CampStationPanel');
-        return { title: panel.title.string, context: panel.context.string, body: panel.body.string };
+        return panel.body.string;
     });
 }
 async function controlGlyph(page, id) {
@@ -284,10 +284,22 @@ async function clickCampArt(page, x, y) {
     }, [x,y]);
     await page.mouse.click(...point);
 }
+async function assertCampPage(page, key) {
+    await page.waitForFunction(key => {
+        const d = cc.director.getScene().getComponentInChildren('GameDirector');
+        return __emberUI.snapshot().campPage === key && !__emberUI.snapshot().overlay &&
+            !d.scene.screens.camp.activeInHierarchy && d.scene.screens[key].activeInHierarchy &&
+            Object.values(d.scene.popups).every(n => !n.activeInHierarchy);
+    }, key);
+}
+async function pageLabels(page, key) {
+    return page.evaluate(key => cc.director.getScene().getComponentInChildren('GameDirector').scene.screens[key]
+        .getComponentsInChildren('cc.Label').filter(l => l.enabledInHierarchy).map(l => l.string).join(' '), key);
+}
 async function visitCamp(page, native) {
     const initial = await native.save();
     const snapshot = await native.state();
-    const stations = ['camp-gate', 'camp-keeper', 'camp-skills', 'camp-warehouse', 'camp-fire'];
+    const stations = ['camp-gate', 'camp-keeper', 'camp-skills', 'camp-warehouse', 'camp-journal'];
     assert.deepEqual(snapshot.hits.filter(hit => hit.enabled).map(hit => hit.id).sort(), [...stations].sort());
     await page.waitForFunction(() => !!cc.director.getScene().getComponentInChildren('GameDirector').audio.fire?.loop);
     const scene = await page.evaluate(() => {
@@ -299,43 +311,52 @@ async function visitCamp(page, native) {
             labels: painting.getComponentsInChildren('cc.Label').filter(l => l.enabledInHierarchy)
                 .map(l => l.string.replace(/　/g, '')).sort() };
     });
-    assert.deepEqual(scene, { hud: false, plates: 0, backgroundLoop: true, labels: ['进入迷宫','技能树','仓库','日志','交谈 · 交易'].sort() });
+    assert.deepEqual(scene, { hud: false, plates: 0, backgroundLoop: true, labels: ['进入迷宫','技能树','仓库','日志','遗物商店'].sort() });
     await image(page, 'camp-arrival');
 
     // At design size click the artwork itself, away from its nameplate.
     await clickCampArt(page, 903, 548);
-    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-keeper');
+    await assertCampPage(page, 'camp-keeper');
+    assert.match(await pageLabels(page, 'camp-keeper'), /守门人商店/);
+    assert.doesNotMatch(await pageLabels(page, 'camp-keeper'), /持有后永久生效|出售物资卡/);
+    assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-trade'));
     const ambience = await page.waitForFunction(() => cc.director.getScene().getComponentInChildren('GameDirector').audio.fire);
     await image(page, 'camp-keeper');
     await native.click('camp-talk');
-    const firstLine = (await campText(page)).body;
+    const firstLine = await campText(page);
     await native.click('camp-talk-next');
-    assert.notEqual((await campText(page)).body, firstLine);
-    await native.click('camp-trade');
-    assert.match((await campText(page)).context, /牌摊/);
-    await image(page, 'camp-trade');
+    assert.notEqual(await campText(page), firstLine);
+    await native.click('camp-talk-next');
+    assert.match(await campText(page), /在仓库里就能卖/);
+    await image(page, 'keeper-dialogue');
     await native.click('modal-close');
+    await assertCampPage(page, 'camp-keeper');
+    await native.click('camp-back');
     await clickCampArt(page, 1213, 605);
-    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-warehouse');
-    assert.match((await campText(page)).title, new RegExp(String(initial.supplies)));
+    await assertCampPage(page, 'camp-warehouse');
+    assert.match(await pageLabels(page, 'camp-warehouse'), /尚未存入物资卡/);
+    assert.doesNotMatch(await pageLabels(page, 'camp-warehouse'), /已入库|守门人收购/);
     await image(page, 'camp-warehouse');
-    await native.click('camp-find-keeper');
-    assert.match((await campText(page)).context, /牌摊/);
     await page.keyboard.press('Escape');
-    await page.waitForFunction(() => !globalThis.__emberUI.snapshot().overlay);
+    await page.waitForFunction(() => !globalThis.__emberUI.snapshot().campPage);
     await clickCampArt(page, 235, 556);
-    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-skills');
-    await native.click('camp-select-initiative');
-    assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-learn' && h.enabled));
+    await assertCampPage(page, 'camp-skills');
+    assert.doesNotMatch(await pageLabels(page, 'camp-skills'), /耗费|每场战斗|已学会|循着刻痕/);
+    assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-learn'));
     await image(page, 'camp-skills');
-    await native.click('camp-equipment');
-    assert.match((await campText(page)).body, /血量已满/);
-    await native.click('camp-deck');
-    assert.equal((await native.state()).overlay, 'bag');
-    await native.click('modal-close');
+    await native.click('camp-select-initiative');
+    assert.match(await pageLabels(page, 'camp-skills'), /耗费 8 物资/);
+    assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-learn' && h.enabled));
+    await image(page, 'camp-skill-inspected');
+    assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-equipment' || h.id === 'camp-repair'));
+    await native.click('camp-back');
     await clickCampArt(page, 646, 637);
-    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-fire');
-    assert.equal((await campText(page)).title, '灰里的门槛');
+    assert.equal((await native.state()).campPage, null);
+    await clickCampArt(page, 527, 681);
+    await assertCampPage(page, 'camp-journal');
+    assert.match(await pageLabels(page, 'camp-journal'), /暂无进行中的任务/);
+    await page.waitForTimeout(850);
+    await image(page, 'camp-task-journal');
     const continuous = await page.evaluate(source => source.loop &&
         source === cc.director.getScene().getComponentInChildren('GameDirector').audio.fire, ambience);
     await ambience.dispose();
@@ -345,22 +366,22 @@ async function visitCamp(page, native) {
     assert.equal(await page.evaluate(() => cc.director.getScene().getComponentInChildren('GameDirector').audio.fire), null);
     await native.click('camp-audio');
     await page.waitForFunction(() => !!cc.director.getScene().getComponentInChildren('GameDirector').audio.fire);
-    await native.click('modal-close');
+    await native.click('camp-back');
     await page.keyboard.press('Tab');
     const nextFocus = await page.evaluate(() => cc.director.getScene().getChildByName('Canvas')
         .getChildByName('GameRoot').getComponent('ButtonFocusGroup').inspect().focused);
     assert.ok(stations.includes(nextFocus));
     await page.keyboard.press('Enter');
-    await page.waitForFunction(() => !!globalThis.__emberUI.snapshot().overlay);
+    await page.waitForFunction(() => { const s=globalThis.__emberUI.snapshot(); return s.overlay || s.campPage; });
     await page.keyboard.press('Escape');
-    await page.waitForFunction(() => !globalThis.__emberUI.snapshot().overlay);
+    await page.waitForFunction(() => { const s=globalThis.__emberUI.snapshot(); return !s.overlay && !s.campPage; });
     await page.setViewportSize({ width: 1024, height: 768 });
     await page.waitForTimeout(160);
     await image(page, 'camp-small');
     await native.click('camp-keeper');
-    assert.equal((await campText(page)).title, '守门人');
+    await assertCampPage(page, 'camp-keeper');
     await image(page, 'camp-keeper-small');
-    await native.click('modal-close');
+    await native.click('camp-back');
     await native.click('camp-gate');
     assert.equal((await native.state()).overlay, 'entry');
     await native.click('entry-tier-low');
@@ -398,41 +419,45 @@ async function campPurchases(browser, url) {
     try {
         await page.goto(url + '/play/?cards=live&seed=17&save=on');
         await native.click('camp-keeper');
-        await native.click('camp-trade');
-        assert.equal((await campText(page)).title, '阻尼片');
-        await native.click('camp-exchange');
+        await assertCampPage(page, 'camp-keeper');
+        await native.click('camp-relic-keeper_watch');
+        assert.match(await pageLabels(page, 'camp-keeper'), /还差 6 物资点/);
+        assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-buy-relic' && h.enabled));
+        await native.click('camp-relic-survey_map');
+        await native.click('camp-buy-relic');
         let save = await native.save();
-        const card = save.cards.find(c => c.kind === 'lab_damper' && c.found);
-        assert.ok(card && save.supplies === 8);
-        assert.equal((await campText(page)).title, '交易完成');
-        await image(page, 'trade-receipt');
-        await native.click('camp-trade-browse');
-        assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-exchange' && h.enabled));
-        await native.click('modal-close');
+        assert.deepEqual(save.permanentRelics, ['survey_map']);
+        assert.deepEqual(save.cards, []);
+        assert.equal(save.supplies, 4);
+        assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-buy-relic' && h.enabled));
+        await image(page, 'relic-owned');
+        await native.click('camp-back');
         await native.click('camp-skills');
         await native.click('camp-select-guard');
         assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-learn' && h.enabled));
         await native.click('camp-select-footing');
         await native.click('camp-learn');
-        assert.equal((await native.save()).supplies, 6);
+        assert.equal((await native.save()).supplies, 2);
         await native.click('camp-select-guard');
-        await native.click('camp-learn');
-        assert.equal((await native.state()).overlay, 'camp-skills');
+        assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-learn' && h.enabled));
+        await assertCampPage(page, 'camp-skills');
         save = await native.save();
-        assert.deepEqual(save.campSkills, ['footing', 'guard']);
-        assert.equal(save.supplies, 0);
+        assert.deepEqual(save.campSkills, ['footing']);
+        assert.equal(save.supplies, 2);
         await image(page, 'skill-learned');
         await page.reload();
         await native.idle();
         assert.deepEqual(await native.save(), save);
         await native.depart('emergency');
+        const threshold = (await native.state()).routeMap.points.find(p => p.id === 'threshold');
+        assert.equal(threshold.title, '门槛补给');
+        assert.equal(threshold.decisionHint, '物资点');
         await native.click('enter-threshold');
         await native.click('enter-lampPassage');
         const fight = (await native.save()).battle;
-        assert.ok([...fight.hand, ...fight.draw].some(c => c.origin === card.id));
-        assert.equal(fight.block, 3);
-        return { bought: card.kind, balanceAfterShop: 8, balanceAfterTraining: save.supplies,
-            learned: save.campSkills, reloadPreserved: true, openingBlock: fight.block, cardInCombat: true };
+        assert.equal(fight.block, 1);
+        return { bought: 'survey_map', balanceAfterShop: 4, balanceAfterTraining: save.supplies,
+            learned: save.campSkills, reloadPreserved: true, openingBlock: fight.block, surveyed:threshold.title };
     } finally {
         await page.close();
     }
@@ -445,13 +470,14 @@ async function oneRoute(browser, url, lane) {
         await page.goto(url + '/play/?cards=live&seed=17&save=on');
         await native.idle();
         assert.equal((await native.state()).scenario, 'ashen-labyrinth');
-        assert.equal((await native.save()).cards.length, 12);
+        assert.equal((await native.save()).cards.length, 0);
         if (lane === 'A') {
             await visitCamp(page, native);
         }
         await native.depart(lane === 'B' ? 'emergency' : 'standard');
         let snap = await native.state();
         const departure = await native.save(), graph = departure.expeditionMap;
+        assert.equal(departure.cards.length, 10);
         const paths = mapPaths(graph);
         const plan = paths.find(route => lane === 'A'
             ? route[1] === 'lampPassage' && route.includes('ashGallery') && route.includes('returnBridge')
@@ -691,7 +717,7 @@ async function oneRoute(browser, url, lane) {
         }
         const beforeReturn = await native.save();
         assert.equal(beforeReturn.day, 2);
-        assert.equal(beforeReturn.cards.length, 12);
+        assert.equal(beforeReturn.cards.length, 0);
         assert.deepEqual(beforeReturn.visited, plan);
         assert.equal(beforeReturn.settlement.discoveredCards, lane === 'A' ? 1 : 0);
         if (lane === 'A') {
@@ -711,79 +737,72 @@ async function oneRoute(browser, url, lane) {
             assert.deepEqual(returned.storedSupplies, stock);
             assert.equal(returned.settlement.returnedCards, collected.length);
             await native.click('camp-warehouse');
-            await native.click('camp-stock');
-            await native.click('modal-close');
-            assert.deepEqual(await native.save(), returned);
-            await native.click('camp-warehouse');
-            await native.click('camp-stock');
+            await assertCampPage(page, 'camp-warehouse');
             const kinds = Object.keys(stock);
-            if (kinds.length > 1) await native.click('camp-stock-next');
-            const kind = kinds[1] ?? kinds[0], item = supplies.get(kind);
-            assert.match((await campText(page)).title, new RegExp(item.name));
+            assert.ok(!(await native.state()).hits.some(hit => hit.id === 'camp-stock-sell'));
+            await native.click('camp-stock-inspect');
+            assert.ok((await native.state()).hits.some(hit => hit.id === 'camp-stock-inspect' && hit.payload === kinds[0]));
             await image(page, 'supply-warehouse');
             await page.setViewportSize({ width: 1024, height: 768 });
             await page.waitForTimeout(180);
             await image(page, 'supply-warehouse-small');
-            await native.click('camp-redeem');
-            if (--stock[kind] === 0) delete stock[kind];
+            await native.click('camp-back');
             const paid = await native.save();
-            assert.equal(paid.supplies, returned.supplies + item.supplyValue);
-            assert.deepEqual(paid.storedSupplies, stock);
-            await page.reload();
-            await native.idle();
-            assert.deepEqual(await native.save(), paid);
-            report.supplyCards = { collected, exchanged: kind, balance: paid.supplies, remaining: stock };
+            assert.deepEqual(paid, returned);
+            report.supplyCards = { collected, shown: kinds, balance: paid.supplies, remaining: stock };
             const saleKind = Object.keys(stock)[0];
             if (saleKind) {
                 const sale = supplies.get(saleKind);
-                await native.click('camp-keeper');
-                await native.click('camp-trade');
-                for (let i = 0; i < kinds.length + 2 && (await campText(page)).title !== sale.name; i++)
-                    await native.click('camp-trade-next');
-                assert.equal((await campText(page)).title, sale.name);
-                await native.click('camp-exchange');
+                await native.click('camp-warehouse');
+                await native.click('camp-stock-inspect');
+                assert.ok((await native.state()).hits.some(h => h.enabled && h.id === 'camp-stock-sell' && h.payload === saleKind));
+                await native.click('camp-stock-sell');
                 const sold = await native.save();
                 assert.equal(sold.supplies, paid.supplies + sale.supplyValue);
                 assert.equal(sold.storedSupplies[saleKind] ?? 0, stock[saleKind] - 1);
-                assert.equal((await campText(page)).title, '交易完成');
-                await image(page, 'keeper-sale');
+                await assertCampPage(page, 'camp-warehouse');
+                if (stock[saleKind] === 1) assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-stock-sell'));
+                await image(page, 'warehouse-sale');
                 await page.reload();
                 await native.idle();
                 assert.deepEqual(await native.save(), sold);
-                report.keeperSale = { kind: saleKind, price: sale.supplyValue, balance: sold.supplies, reloadPreserved: true };
+                report.warehouseSale = { kind: saleKind, price: sale.supplyValue, balance: sold.supplies, reloadPreserved: true };
+                await native.click('camp-keeper');
+                await native.click('camp-relic-keeper_watch');
+                await native.click('camp-buy-relic');
+                const equipped = await native.save();
+                assert.deepEqual(equipped.permanentRelics, ['keeper_watch']);
+                assert.equal(equipped.supplies, sold.supplies - 16);
+                await native.click('camp-back');
+                await native.depart('emergency');
+                await native.click('enter-threshold');
+                const fight = (await native.state()).routeMap.points.find(p => p.state === 'available' && p.icon === 'battle');
+                await native.click('enter-' + fight.id);
+                assert.equal((await native.save()).battle.calm.freeSkill, true);
+                assert.equal(await page.evaluate(() => __survivalGame.cardCost('lab_screen')), 0);
+                report.watch = { boughtAfterReturn:true, balance:equipped.supplies, firstSkillCost:0 };
             }
         }
         if (lane === 'A') {
-            await native.click('camp-fire');
-            assert.equal((await campText(page)).title, '沉灯熄灭之后');
-            await native.click('camp-prev');
-            assert.equal((await campText(page)).title, '灰里的门槛');
-            await native.click('camp-next');
-            assert.match((await campText(page)).context, /第 2 天/);
-            await native.click('modal-close');
+            await native.click('camp-journal');
+            await assertCampPage(page, 'camp-journal');
+            assert.match(await pageLabels(page, 'camp-journal'), /第 2 天/);
+            await native.click('camp-back');
             await native.click('camp-skills');
-            await native.click('camp-equipment');
-            const cost = returned.settlement.treatmentCost;
-            assert.ok(cost > 0);
-            await native.click('camp-repair');
-            assert.equal((await native.save()).supplies, returned.supplies - cost);
-            assert.equal((await native.save()).health, 10);
-            assert.ok(!(await native.state()).hits.some(hit => hit.id === 'camp-repair' && hit.enabled));
-            await image(page, 'camp-workbench');
-            await page.reload();
-            await native.idle();
-            await native.click('camp-warehouse');
-            assert.match((await campText(page)).title, new RegExp(String(returned.supplies - cost)));
-            await native.click('modal-close');
+            assert.ok(!(await native.state()).hits.some(hit => ['camp-deck','camp-equipment','camp-repair'].includes(hit.id)));
+            await native.click('camp-back');
+            assert.equal(returned.settlement.treatmentCost, 0);
+            assert.deepEqual(returned.cards, []);
             await native.click('camp-gate');
             assert.equal((await native.state()).overlay, 'entry');
             await native.click('modal-close');
-            report.camp = { paintedHotspots: 5, keyboardActivation: true, canceledDeparturePreservedSave: true,
-                journalsReopened: 2, nextDeparture: true, warehouseStock: returned.supplies - cost,
-                repairChargedOnce: cost, persistedHealth: 10, viewports: ['1440x900', '1024x768'] };
+            assert.deepEqual(await native.save(), returned);
+            report.camp = { locations:5, separatePages:4, returnedWithEmptyDeck:true, automaticFreshStart:true };
             await native.depart('standard');
             const fresh = await native.save();
             assert.equal(fresh.day, 2);
+            assert.equal(fresh.health, 10);
+            assert.ok(fresh.cards.length && !fresh.cards.some(card => card.found));
             assert.notEqual(fresh.expeditionMap.seed, graph.seed);
             assert.notDeepEqual(fresh.expeditionMap.points, graph.points);
             assert.deepEqual(fresh.visited, []);
@@ -912,7 +931,8 @@ async function editor(browser, url) {
         await page.getByRole('spinbutton', { name: '物资卡重量' }).fill('0');
         assert.equal(await page.locator('#save').isDisabled(), true);
         await page.getByRole('spinbutton', { name: '物资卡重量' }).fill('3');
-        await page.getByRole('spinbutton', { name: '奖励权重' }).fill('0.5');
+        const rewardWeight = page.getByRole('spinbutton', { name: '同档权重' });
+        await rewardWeight.fill('0.5');
         await page.getByRole('checkbox', { name: '加入随机奖励池' }).uncheck();
         await page.getByRole('link', { name: '配方编辑' }).click();
         await page.goBack();
@@ -926,7 +946,7 @@ async function editor(browser, url) {
         await page.getByRole('button', { name: '选择卡牌：备用线圈' }).click();
         assert.equal(await page.getByRole('spinbutton', { name: '物资卡重量' }).inputValue(), '3');
         assert.equal(await page.getByRole('spinbutton', { name: '兑换物资点' }).inputValue(), '8');
-        assert.equal(await page.getByRole('spinbutton', { name: '奖励权重' }).inputValue(), '0.5');
+        assert.equal(await rewardWeight.inputValue(), '0.5');
         assert.equal(await page.getByRole('checkbox', { name: '加入随机奖励池' }).isChecked(), false);
         const search = page.getByRole('searchbox', { name: '搜索卡牌' });
         const drop = page.getByRole('checkbox', { name: '加入随机奖励池' });
@@ -1037,11 +1057,17 @@ async function defeat(browser, url, reviewCamp = false) {
         await page.goto(url + '/play/?cards=live&seed=19&save=off');
         await native.idle();
         if (reviewCamp) await visitCamp(page, native);
-        await native.depart('standard');
+        await native.click('camp-keeper');
+        await native.click('camp-relic-salvage_magnet');
+        await native.click('camp-buy-relic');
+        assert.equal((await native.save()).supplies, 0);
+        await native.click('camp-back');
+        await native.depart('emergency');
         assert.equal(await page.evaluate(() => cc.director.getScene().getComponentInChildren('GameDirector').audio.fire), null);
         assert.ok(!(await native.state()).hits.some(hit => hit.id === 'settings'));
         const firstMap = (await native.save()).expeditionMap;
         await native.click('enter-threshold');
+        assert.equal((await native.save()).supplies, 3);
         const firstBattle = (await native.state()).routeMap.points.find(p => p.state === 'available' && p.icon === 'battle');
         await native.click('enter-' + firstBattle.id);
         if (reviewCamp) {
@@ -1058,6 +1084,7 @@ async function defeat(browser, url, reviewCamp = false) {
         }
         const dead = await native.save();
         assert.equal(dead.phase, 'failure');
+        assert.deepEqual(dead.permanentRelics, ['salvage_magnet']);
         assert.equal(dead.health, 0);
         assert.equal(dead.day, 2);
         assert.ok(previous.health > 0 && previous.battle.intent === 'attack');
@@ -1077,6 +1104,7 @@ async function defeat(browser, url, reviewCamp = false) {
         await page.waitForFunction(() => !!cc.director.getScene().getComponentInChildren('GameDirector').audio.fire);
         await native.depart('standard');
         const retry = await native.save();
+        assert.deepEqual(retry.permanentRelics, ['salvage_magnet']);
         assert.notEqual(retry.expeditionMap.seed, firstMap.seed);
         assert.deepEqual(retry.visited, []);
         return { immediate: true, finalHealth: 0, nextDay: dead.day, recoveredHealth: 10, effectsCleared, newMap: true };

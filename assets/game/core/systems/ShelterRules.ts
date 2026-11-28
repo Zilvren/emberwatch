@@ -35,9 +35,9 @@ export class ShelterRules {
             }
             returnedCards = supplies.length;
         }
-        if (this.scenario.fieldDeck) {
+        if (this.scenario.fieldDeck && !this.scenario.labyrinth) {
             this.restoreStarter();
-            if (!this.scenario.labyrinth) returnedCards = this.state.cards.length;
+            returnedCards = this.state.cards.length;
         }
         this.state.battle = null;
         this.state.fistUnlocks = undefined;
@@ -46,11 +46,11 @@ export class ShelterRules {
             returnedCards,
             ...(this.scenario.fieldDeck ? { discoveredCards: discoveries } : {}),
             lostOverflow: lost,
-            treatmentCost: this.scenario.runDeck || this.state.health === 10 ? 0 : 1,
+            treatmentCost: this.scenario.runDeck || this.scenario.labyrinth || this.state.health === 10 ? 0 : 1,
             treated: false,
             treatmentSpent: 0,
         };
-        if (this.scenario.runDeck) this.state.cards = [];
+        if (this.scenario.runDeck || this.scenario.labyrinth) this.state.cards = [];
         this.state.synthesisRewardBoosts = {};
         this.state.synthesisBoostedRecipes = [];
         this.state.synthesisMaterialBoostedRecipes = [];
@@ -63,7 +63,7 @@ export class ShelterRules {
     healAtShelter(): ActionResult {
         const s = this.state.settlement;
         if (this.state.phase !== 'shelter') return this.feedback.result(false, '当前不在避难所。');
-        if (this.scenario.runDeck)
+        if (this.scenario.runDeck || this.scenario.labyrinth)
             return this.feedback.result(false, '下一局出发时会恢复初始血量。');
         if (this.state.health === 10)
             return this.feedback.result(false, '血量已满，无需支付治疗费用。');
@@ -100,7 +100,9 @@ export class ShelterRules {
         if (kind === undefined) this.state.storedSupplies = {};
         else if (--stored[kind] === 0) delete stored[kind];
         const item = kind === undefined ? `${cards} 张物资卡` : this.content.cards[kind].name;
-        const message = `已兑换${item}，获得 ${value} 点物资。`;
+        const message = this.scenario.labyrinth && kind !== undefined
+            ? `已售出「${item}」，获得 ${value} 物资点。`
+            : `已兑换${item}，获得 ${value} 点物资。`;
         return this.feedback.result(true, message);
     }
 }

@@ -20,6 +20,7 @@ export type CombatState = Pick<
     | 'supplies'
     | 'fistUnlocks'
     | 'campSkills'
+    | 'permanentRelics'
 >;
 type NodeCompletionState = Pick<GameState, 'expeditionMap' | 'fixedDone' | 'pathIndex' | 'phase' | 'visited'>;
 export type RewardState = NodeCompletionState & Pick<
@@ -30,6 +31,7 @@ export type ExplorationState = NodeCompletionState & Pick<
     GameState,
     | 'day'
     | 'seed'
+    | 'permanentRelics'
     | 'health'
     | 'battle'
     | 'entryTier'

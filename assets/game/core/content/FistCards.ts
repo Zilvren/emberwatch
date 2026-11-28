@@ -67,8 +67,9 @@ export function withFistVariants(cards: readonly CardDefinition[]): CardDefiniti
     for (const card of cards) {
         const fist = card.fist;
         if (card.role !== 'normal' || !fist || fist.type === 'support') continue;
+        const { rarity, ...base } = card;
         variants.push({
-            ...card,
+            ...base,
             id: fistTemporaryKind(card.id),
             tag: card.tag.replace(' · 连击', ''),
             role: 'temporary',

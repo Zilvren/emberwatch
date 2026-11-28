@@ -1,4 +1,4 @@
-import { validateCatalog, cardReferences, SYSTEM_ROLES, EFFECT_NAMES, ART_IDS, isBattleCard, isLabyrinthRewardCard } from '/shared/catalog.js';
+import { validateCatalog, cardReferences, SYSTEM_ROLES, EFFECT_NAMES, ART_IDS, CARD_RARITIES, isBattleCard, isLabyrinthRewardCard } from '/shared/catalog.js';
 import { cardViewModel, supplyPictureLayout } from '/shared/card-view.js';
 import { bindRecipeEditor } from '/recipes.js';
 import { LABYRINTH_ENEMIES, DEFAULT_ENEMY_ACTIONS, DEFAULT_ENEMY_LOOP_START, ENEMY_ACTION_LABELS } from '/shared/labyrinth-enemies.js';
@@ -203,6 +203,14 @@ function rewardSettings(card) {
         <strong>加入随机奖励池</strong>
         <span class="reward-status" aria-hidden="true"><span class="reward-joined">已加入</span><span class="reward-unjoined">未加入</span></span>
       </label>
+      ${inRewardPool(card) ? rarityFields(card) : ''}
+    </div>`;
+}
+function rarityFields(card) {
+    const names = ['普通', '稀有', '史诗', '传说'];
+    return `<div class="field-grid">
+      ${select('稀有度', 'rarity', card.rarity ?? 'common', CARD_RARITIES.map((grade, i) => [grade, names[i]]))}
+      ${field('同档权重', 'rewardWeight', card.rewardWeight ?? 1, { type: 'number', min: 0.01, max: 100, step: 'any' })}
     </div>`;
 }
 function rewardCards() {
@@ -343,7 +351,8 @@ function renderInspector() {
         <label class="field"><span>详细描述<small>悬停时阅读，基础数值自动生成</small></span><textarea aria-label="详细描述" data-field="text" maxlength="80" rows="3">${escape(card.text)}</textarea></label>
       </div></fieldset>
       ${supply ? `<fieldset class="property-group"><legend>搜刮投放</legend><div><label class="check-field"><input type="checkbox" aria-label="加入随机奖励池" data-field="reward" ${card.reward ? 'checked' : ''}>加入搜刮物资池</label>
-            ${field('奖励权重', 'rewardWeight', card.rewardWeight ?? 1, { type: 'number', min: 0.01, max: 100, step: 'any', hint: '数值越大，越容易搜到' })}</div></fieldset>` : fistFinisher ? '<p class="field-note">首次在战斗中生成临时版后，解锁本局的奖励版。</p>' : chapter || fist ? '' : `<fieldset class="property-group"><legend>旧版配置</legend><div>
+            ${rarityFields(card)}</div></fieldset>` : fistFinisher ? `<fieldset class="property-group"><legend>解锁奖励</legend><div>
+            <p class="field-note">首次在战斗中生成临时版后，解锁本局的奖励版。</p>${rarityFields(card)}</div></fieldset>` : chapter || fist ? '' : `<fieldset class="property-group"><legend>旧版配置</legend><div>
         ${field('初始携带数量', 'initialCount', card.initialCount, { type: 'number', min: card.role === 'basic' ? 1 : 0, max: 8, readonly: !isBattleCard(card) || card.synthesisOnly })}
         ${select('固定搜刮奖励', 'fixedReward', draft.fixedReward, draft.cards.filter(fixedRewardCard).map(card => [card.id, card.name]))}
         <p class="field-note">供兼容存档使用。焦土迷宫的掉落在「奖励池」页管理。</p>
@@ -357,10 +366,14 @@ function renderInspector() {
 function renderVisual() {
     const card = current();
     if (!card) return;
-    const mazeCard = !!card.chapter || !!card.fist || canJoinRewardPool(card);
-    const model = cardViewModel(card, definitions(), '体力', { field: mazeCard, labyrinth: mazeCard, runDeck: !mazeCard });
+    const mazeCard = card.role === 'supply' || !!card.chapter || !!card.fist || canJoinRewardPool(card);
+    const model = cardViewModel(card, definitions(), '体力', { field: mazeCard, labyrinth: mazeCard, labyrinthCatalog: draft.labyrinth, runDeck: !mazeCard });
     const supply = model.supplyWeight !== undefined;
     const face = $('#preview-card');
+    if (model.rarity) {
+        face.dataset.rarity = model.rarity;
+        face.style.setProperty('--rarity-column', `${CARD_RARITIES.indexOf(model.rarity) * 100 / 3}%`);
+    } else delete face.dataset.rarity;
     if (previewedCard !== card) { previewedCard = card; previewExpanded = false; }
     setPreviewExpanded(!supply && previewExpanded);
     face.dataset.face = supply ? 'supply' : 'standard';
@@ -682,6 +695,7 @@ $('#inspector-content').addEventListener('input', event => {
         delete card.weaponSlots;
         delete card.oncePerBattle;
         delete card.canSynthesize;
+        delete card.rarity;
     }
     if (field === 'role' && value === 'supply') {
         card.initialCount = 0;
@@ -699,7 +713,9 @@ $('#inspector-content').addEventListener('input', event => {
     if (field === 'role' && !isLabyrinthRewardCard(card) && draft.labyrinth)
         draft.labyrinth.discoveryPool = draft.labyrinth.discoveryPool.filter(id => id !== card.id);
     renderList();
-    if (field === 'effect.type' || field === 'role') renderInspector(); else renderVisual();
+    if (field === 'effect.type' || field === 'role' || (field === 'reward' && card.role !== 'supply'))
+        renderInspector();
+    else renderVisual();
 });
 $('#search').addEventListener('input', renderList);
 typeSearch.addEventListener('input', () => {

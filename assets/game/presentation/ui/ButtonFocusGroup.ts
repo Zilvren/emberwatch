@@ -13,6 +13,7 @@ import {
     Vec2,
 } from 'cc';
 import { BUTTON_FOCUS_REQUEST, ButtonFocusRequest, ButtonPresentation } from './ButtonPresentation';
+import { dispatchAction } from './UIEvents';
 const { ccclass, property } = _decorator;
 const activeGroups = new WeakMap<Node, ButtonFocusGroup>();
 
@@ -21,6 +22,7 @@ const activeGroups = new WeakMap<Node, ButtonFocusGroup>();
 export class ButtonFocusGroup extends Component {
     @property({ type: [Node] }) buttons: Node[] = [];
     @property modal = false;
+    @property backAction = '';
     @property(Node) initialButton: Node | null = null;
     private focused: ButtonPresentation | null = null;
     private keyboardFocus = false;
@@ -29,7 +31,7 @@ export class ButtonFocusGroup extends Component {
     private shift = false;
     onEnable(): void {
         this.node.on(BUTTON_FOCUS_REQUEST, this.pointerFocus, this);
-        if (this.modal && this.node.scene) {
+        if ((this.modal || this.backAction) && this.node.scene) {
             this.previous = activeGroups.get(this.node.scene) ?? this.parentGroup();
             this.previous?.focused?.setKeyboardFocus(false);
             this.previous?.clearHeld();
@@ -153,6 +155,10 @@ export class ButtonFocusGroup extends Component {
     }
     private keyDown(code: number, shift: boolean): void {
         if (!this.ownsKeys() || this.held.has(code)) return;
+        if (code === KeyCode.ESCAPE && this.backAction) {
+            dispatchAction(this.node, { id: this.backAction, payload: '' });
+            return;
+        }
         if (code === KeyCode.TAB) {
             const buttons = this.list();
             if (!buttons.length) return;
@@ -192,26 +198,22 @@ export class ButtonFocusGroup extends Component {
             !event.metaKey &&
             !event.altKey &&
             !target?.matches('input,textarea,select,[contenteditable="true"]') &&
-            (event.key === 'Tab' || event.key === 'Enter' || event.key === ' ')
+            (event.key === 'Tab' || event.key === 'Enter' || event.key === ' ' || (!!this.backAction && event.key === 'Escape'))
         );
     }
     private domDown = (event: KeyboardEvent) => {
         if (!this.acceptsDom(event) || !this.ownsKeys()) return;
         event.preventDefault();
         event.stopPropagation();
-        this.keyDown(
-            event.key === 'Tab'
-                ? KeyCode.TAB
-                : event.key === 'Enter'
-                  ? KeyCode.ENTER
-                  : KeyCode.SPACE,
-            event.shiftKey
-        );
+        const code = event.key === 'Escape' ? KeyCode.ESCAPE : event.key === 'Tab' ? KeyCode.TAB :
+            event.key === 'Enter' ? KeyCode.ENTER : KeyCode.SPACE;
+        this.keyDown(code, event.shiftKey);
     };
     private domUp = (event: KeyboardEvent) => {
         if (!this.acceptsDom(event) || !this.ownsKeys()) return;
         event.preventDefault();
         event.stopPropagation();
+        if (event.key === 'Escape') return;
         this.keyUp(
             event.key === 'Tab'
                 ? KeyCode.TAB

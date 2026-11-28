@@ -31,7 +31,7 @@ export type GameCommand =
     | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
     | { type: 'redeem-supply'; kind: string }
-    | { type: 'buy-keeper-card'; kind: string }
+    | { type: 'buy-camp-relic'; id: string }
     | { type: 'learn-camp-skill'; id: string }
     | { type: 'discover'; kind: string | null }
     | { type: 'resolve-combat-choice'; id: string | null }
@@ -179,8 +179,8 @@ export class GameSession {
             case 'redeem-supply':
                 result = g.redeemSupply(command.kind);
                 break;
-            case 'buy-keeper-card':
-                result = g.buyKeeperCard(command.kind);
+            case 'buy-camp-relic':
+                result = g.buyCampRelic(command.id);
                 break;
             case 'learn-camp-skill':
                 result = g.learnCampSkill(command.id);
