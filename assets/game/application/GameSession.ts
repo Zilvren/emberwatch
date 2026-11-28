@@ -16,6 +16,7 @@ export type GameCommand =
               | 'end-turn'
               | 'claim-supplies'
               | 'finish-rewards'
+              | 'switch-room-reward'
               | 'finish-rest'
               | 'continue-journal'
               | 'retry'
@@ -28,7 +29,9 @@ export type GameCommand =
     | { type: 'start'; tier?: EntryTierId }
     | { type: 'enter-node'; id?: string }
     | { type: 'choose-route'; route: Route }
-    | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
+    | { type: 'play-card'; id: string; target?: number }
+    | { type: 'enemy-action'; slot: number; turn: number }
+    | { type: 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
     | { type: 'redeem-supply'; kind: string }
     | { type: 'discover'; kind: string | null }
@@ -129,7 +132,10 @@ export class GameSession {
                 result = g.enterNode(command.id);
                 break;
             case 'play-card':
-                result = g.play(command.id);
+                result = g.play(command.id, command.target);
+                break;
+            case 'enemy-action':
+                result = g.endTurn(command.slot, command.turn);
                 break;
             case 'end-turn':
                 result = g.endTurn();
@@ -142,6 +148,9 @@ export class GameSession {
                 break;
             case 'discover':
                 result = g.discover(command.kind);
+                break;
+            case 'switch-room-reward':
+                result = g.switchRoomReward();
                 break;
             case 'resolve-combat-choice':
                 result = g.resolveCombatChoice(command.id);

@@ -1,4 +1,5 @@
 import type { CardDefinition } from '../content/CardCatalog';
+import { hasLivingEnemy } from '../content/LabyrinthEnemies';
 import type { CardSet } from '../content/ContentRegistry';
 import {
     FIST_HOOKS, FIST_MOVES, fistFinisherFor, fistMove, fistSupport, fistTargetMatches,
@@ -122,7 +123,7 @@ export class FistCombat {
         this.applyFinisher(battle, definition);
         const move = fistMove(definition);
         const combo = this.advanceCombo(battle, move, handLimit);
-        if (move && !card.temporary && progress.lastPlayed && battle.hp > 0) {
+        if (move && !card.temporary && progress.lastPlayed && hasLivingEnemy(battle)) {
             if (this.content.cards[progress.lastPlayed.kind].fist) {
                 const options = this.random.shuffle(FIST_MOVES).slice(0, 3)
                     .map((item) => fistTemporaryKind(this.content.fist!.moves[item]));

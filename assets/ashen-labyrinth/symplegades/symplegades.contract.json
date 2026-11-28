@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-symplegades",
+  "sourceSha256": "7059b97d6379d68070fde70ca415165576c0fc6b53d70109de6e1b6620738943",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "stance",
+    "left-rock",
+    "right-rock",
+    "left-facet",
+    "right-facet",
+    "west-foot",
+    "east-foot",
+    "splinter-heavy",
+    "splinter-light",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 2.85,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.91,
+      "loop": false
+    },
+    "attack": {
+      "duration": 1.22,
+      "loop": false,
+      "contact": 0.62
+    },
+    "hurt": {
+      "duration": 0.46,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.32,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    25.991886197006053,
+    207.5222346156433
+  ],
+  "approachBone": "Approach",
+  "flight": 0.13,
+  "parts": [
+    {
+      "name": "right-facet"
+    },
+    {
+      "name": "splinter-heavy"
+    },
+    {
+      "name": "west-foot"
+    },
+    {
+      "name": "splinter-light"
+    },
+    {
+      "name": "left-rock"
+    },
+    {
+      "name": "left-facet"
+    },
+    {
+      "name": "right-rock"
+    },
+    {
+      "name": "east-foot"
+    }
+  ]
+}

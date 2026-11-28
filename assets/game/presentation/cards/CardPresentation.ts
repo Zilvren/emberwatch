@@ -97,7 +97,7 @@ export class CardPresentation extends Component {
         id = '',
         definitions: Readonly<Record<string, CardDefinition>> = CARD,
         costUnit = '物资',
-        options: CardViewOptions = {}
+        options: CardViewOptions & { expandedHint?: string } = {}
     ): void {
         this.fieldFace = !!options.field;
         this.rageReady = !!options.rageReady;
@@ -105,7 +105,8 @@ export class CardPresentation extends Component {
             cardViewModel(definitions[kind], definitions, costUnit, options),
             blocked,
             caption,
-            id
+            id,
+            options.expandedHint
         );
     }
     configureReference(
@@ -118,9 +119,17 @@ export class CardPresentation extends Component {
         this.rageReady = false;
         this.showModel(cardReferenceViewModel(data), blocked, caption, id);
     }
-    private showModel(model: CardDisplayModel, blocked: string, caption: string, id: string): void {
+    private showModel(
+        model: CardDisplayModel,
+        blocked: string,
+        caption: string,
+        id: string,
+        expandedHint?: string
+    ): void {
         const material = this.labyrinthTheme?.json ?? this.theme?.json;
         const supply = model.supplyWeight !== undefined;
+        const expanded =
+            expandedHint !== undefined && this.expanded && this.cardId === id && this.kind === model.id && !supply;
         if (supply && !this.supplyFace && this.supplyFacePrefab && this.visualRoot) {
             const node = instantiate(this.supplyFacePrefab);
             node.parent = this.visualRoot;
@@ -140,7 +149,7 @@ export class CardPresentation extends Component {
         this.blocked = blocked;
         this.caption =
             model.longDescription && caption === '点击 / 拖动' ? '长按查看说明' : caption;
-        this.setExpanded(false);
+        this.setExpanded(expanded, expandedHint);
         if (this.detailsLabel) this.detailsLabel.string = model.fullDescription;
         if (this.costLabel) this.costLabel.string = model.cost;
         if (this.costUnitLabel) this.costUnitLabel.string = model.costUnit;
@@ -165,10 +174,7 @@ export class CardPresentation extends Component {
                 : model.effect + (model.description ? '\n' + model.description : '');
             this.descriptionLabel.overflow = Label.Overflow.SHRINK;
         }
-        if (this.statusLabel) {
-            this.statusLabel.string = blocked || this.caption;
-            this.statusLabel.color = blocked ? this.blockedText : this.normalText;
-        }
+        if (this.statusLabel) this.statusLabel.color = blocked ? this.blockedText : this.normalText;
         if (this.weightLabel) this.weightLabel.string = model.weight;
         if (this.artwork)
             this.artwork.spriteFrame =

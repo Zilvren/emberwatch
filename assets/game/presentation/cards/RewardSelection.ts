@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, EventMouse, game as engine, Label, Node, screen, UITransform, Vec2 } from 'cc';
 import type { GameReadModel } from '../../core/GameReadModel';
 import { ButtonAction } from '../ui/ButtonAction';
 import { missingSynthesisMaterials } from '../../core/content/RecipeCatalog';
@@ -11,7 +11,57 @@ export class RewardSelection extends Component {
     @property({ type: [Node] }) cardHolders: Node[] = [];
     @property(ButtonAction) confirm: ButtonAction | null = null;
     @property(Label) hint: Label | null = null;
-    refresh(game: GameReadModel, selection: number, page = 0): void {
+    private canReadDetails = false;
+    private canvas: HTMLCanvasElement | null = null;
+    private detailCards: SelectableCard[] = [];
+    private pressedCard: SelectableCard | null = null;
+
+    onEnable(): void {
+        if (typeof window === 'undefined') return;
+        this.canvas = engine.canvas;
+        this.canvas?.addEventListener('mousedown', this.rightDown, true);
+        window.addEventListener('mouseup', this.rightUp, true);
+    }
+    onDisable(): void {
+        this.canvas?.removeEventListener('mousedown', this.rightDown, true);
+        if (typeof window !== 'undefined') window.removeEventListener('mouseup', this.rightUp, true);
+        this.canvas = null;
+        this.detailCards = [];
+        this.pressedCard = null;
+        this.canReadDetails = false;
+    }
+    private cardAt(event: MouseEvent): SelectableCard | null {
+        const rect = this.canvas?.getBoundingClientRect();
+        if (!rect) return null;
+        const dpr = screen.devicePixelRatio;
+        const point = new Vec2((event.clientX - rect.left) * dpr, (rect.bottom - event.clientY) * dpr);
+        return this.detailCards.find(view =>
+            view.node.activeInHierarchy && view.getComponent(UITransform)?.hitTest(point)
+        ) ?? null;
+    }
+    // Cocos turns desktop mouse clicks into touch events for its buttons.
+    // Capture the secondary button before it can act as a left click.
+    private rightDown = (event: MouseEvent): void => {
+        if (!this.canReadDetails || event.button !== EventMouse.BUTTON_RIGHT) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        this.pressedCard = this.cardAt(event);
+    };
+    private rightUp = (event: MouseEvent): void => {
+        if (event.button !== EventMouse.BUTTON_RIGHT) return;
+        const pressed = this.pressedCard;
+        this.pressedCard = null;
+        if (!this.canReadDetails || (!pressed && event.target !== this.canvas)) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (!pressed || pressed !== this.cardAt(event)) return;
+        const opening = !pressed.card?.expanded;
+        for (const view of this.detailCards) view.setDetailsExpanded(opening && view === pressed);
+    };
+    refresh(game: GameReadModel, selection: number, page = 0, canReadDetails = true): void {
+        this.canReadDetails = canReadDetails;
+        this.detailCards = [];
+        this.pressedCard = null;
         const missing = game.scenario.runDeck
             ? missingSynthesisMaterials(game.content.catalog.recipes, game.usableCards)
             : new Set<string>();
@@ -44,7 +94,8 @@ export class RewardSelection extends Component {
                     ? '闸芯暴露 · 再次发现'
                     : '战场发现'
                 : mode ? choiceTitle[mode]
-                : supplyOffer ? '搜到一张物资卡' : fieldDiscovery ? '发现一张卡牌' : '选择一张卡牌';
+                : supplyOffer ? '物资卡奖励' : fieldDiscovery && game.expeditionMap?.version === 2
+                    ? '战斗牌奖励' : fieldDiscovery ? '发现一张卡牌' : '选择一张卡牌';
         this.cardHolders.forEach((holder, slot) => {
             const index = (cards.length === 1 ? 0 : slot) + page * 3;
             const kind = cards.length === 1 ? (slot === 1 ? cards[0] : undefined) : cards[slot];
@@ -52,7 +103,8 @@ export class RewardSelection extends Component {
             if (!kind) return;
             const view = holder.getComponentInChildren(SelectableCard);
             if (!view) throw new Error('Reward candidate holder has no SelectableCard instance.');
-            view.revealDetailsOnHover = true;
+            view.detailsPreviewEnabled = canReadDetails && game.content.cards[kind].role !== 'supply';
+            if (view.detailsPreviewEnabled) this.detailCards.push(view);
             view.show(
                 kind,
                 game,
@@ -66,6 +118,7 @@ export class RewardSelection extends Component {
         });
         const kind = cards[selection - page * 3],
             reason = kind && !battleChoice ? game.rewardCardBlocked(kind) : '';
+        const stock = supplyOffer ? cards[0] : undefined;
         const pages = battleChoice ? Math.ceil(battleChoice.ids.length / 3) : 1;
         const choiceHint = mode === 'switch-stance' ? '弃掉这张牌，获得另一种招式的临时牌。'
             : mode === 'recover-stamina' ? '从本场移出这张牌。正式招式回 1 体力，临时招式回 2 体力。'
@@ -73,7 +126,8 @@ export class RewardSelection extends Component {
             : mode === 'fist-discovery' ? '选一张临时招式继续连段。手牌满时放到抽牌堆顶。'
             : '可以略过。';
         const unlocked = game.rewards?.guaranteedFinisher;
-        const unlockHint = unlocked && !taken && !kind ? `本场解锁「${game.content.cards[unlocked].name}」的奖励版。` : '';
+        const unlockHint = unlocked && cards.indexOf(unlocked) >= 0 && !taken && !kind
+            ? `本场解锁「${game.content.cards[unlocked].name}」的奖励版。` : '';
         if (this.confirm) {
             this.confirm.actionId = battleChoice ? 'resolve-choice-confirm' : discovery || fieldDiscovery
                 ? 'discover-confirm'
@@ -94,11 +148,12 @@ export class RewardSelection extends Component {
         if (this.hint)
             this.hint.string = battleChoice
                 ? (pages > 1 ? `第 ${page + 1} / ${pages} 页 · ` : '') + choiceHint
-                : supplyOffer ? game.rewardCardBlocked(cards[0]) ? '行囊和暂存区都放不下这张卡，可以先整理行囊。'
-                    : (game.rewardZone(cards[0]) === 'overflow'
+                : stock ? game.rewardCardBlocked(stock) ? '行囊和暂存区都放不下这张卡，可以先整理行囊。'
+                    : (game.rewardZone(stock) === 'overflow'
                     ? '行囊空间不足，可先放入暂存区。返营前需腾出行囊空间。'
                     : '可放入行囊。成功返营后存入仓库，兑换时才获得物资点。')
-                : unlockHint || (fieldDiscovery ? (kind ? '收下后加入本趟牌组，从下一场战斗开始可抽到。' : '悬停查看详细描述，选中后确认领取。')
+                : unlockHint || (fieldDiscovery ? (kind ? '收下后加入本趟牌组，从下一场战斗开始可抽到。'
+                    : '右键查看详细描述。左键选中后确认领取。')
                 : discovery
                 ? kind
                     ? `拿取后${game.battle!.hand.length < 6 ? '立即入手' : '置于牌堆顶'} · 使用消耗 ${game.content.cards[kind].cost} 体力`

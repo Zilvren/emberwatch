@@ -1,5 +1,5 @@
-import { CardDefinition, CardKind, Catalog, getCatalog, playableCard } from './CardCatalog';
-import { withFistVariants, type FistFinisher, type FistMove } from './FistCards';
+import { CardDefinition, CardKind, Catalog, getCatalog, playableCard, runtimeCardDefinitions } from './CardCatalog';
+import type { FistFinisher, FistMove } from './FistCards';
 
 interface FistCardSet {
     readonly moves: Readonly<Record<FistMove, CardKind>>;
@@ -46,7 +46,7 @@ export function createCardSet(raw: Catalog = getCatalog()): CardSet {
         initialDeck: CardKind[] = [];
     const moves = Object.create(null) as Record<FistMove, CardKind>;
     const finishers = Object.create(null) as Record<FistFinisher, CardKind>;
-    for (const card of withFistVariants(catalog.cards)) {
+    for (const card of runtimeCardDefinitions(catalog)) {
         if (card.effect.labyrinth) Object.freeze(card.effect.labyrinth);
         const fist = card.fist;
         if (fist) {

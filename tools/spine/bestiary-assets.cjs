@@ -1,8 +1,10 @@
-// Opt-in asset authoring for the three ashen labyrinth enemies.
+// Opt-in asset authoring for the ashen labyrinth bestiary.
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const layouts = require('./bestiary-layout.cjs');
+const originals = require('./bestiary-layout.cjs');
+const mythic = require('./mythic-bestiary.cjs');
+const layouts = { ...originals, ...Object.fromEntries(Object.entries(mythic).map(([id, spec]) => [id, spec.layout])) };
 const cutlines = require('./bestiary-cutlines.cjs');
 const {backdrop, partition, cutSourcePart, makeSupport} = require('./bestiary-source-art.cjs');
 const underpaint = require('./bestiary-underpaint.cjs');
@@ -78,6 +80,8 @@ function extractPart(sheet, labels, cell) {
 }
 
 function buildSetup(id) {
+  if (mythic[id]) return buildSourceRig({id,dir:path.join(base,id),layout:mythic[id].layout,zones:mythic[id].zones,
+    under:{boxes:{},supports:[]},underpainting:null,master:path.join(base,mythic[id].master??'mythic-creatures.png'),sourceSize:[1536,1024]});
   return buildSourceRig({id,dir:path.join(base,id),layout:layouts[id],under:underpaint[id],zones:cutlines[id],
     master:path.join(base,'monster-concepts.png'),sourceSize:[1585,992]});
 }
@@ -86,10 +90,11 @@ function buildSourceRig({id,dir,layout,under,zones,master,sourceSize,underpainti
   const def={...layout,draw:[...under.supports.map(s=>s.name),...layout.draw]};
   const partFolder=path.join(dir,'parts');
   fs.mkdirSync(partFolder,{recursive:true});
-  const sheet=PNG.sync.read(fs.readFileSync(path.join(dir,underpainting))),{cells,ids}=identifyParts(sheet);
+  const sheet=underpainting ? PNG.sync.read(fs.readFileSync(path.join(dir,underpainting))) : null;
+  const packed=sheet ? identifyParts(sheet) : null;
   const original=fs.readFileSync(master),approved=PNG.sync.read(original);
   if(approved.width!==sourceSize[0]||approved.height!==sourceSize[1])throw Error('The selected master has different registration');
-  const cut=partition(approved,zones,backdrop(approved,backgroundZones,shadowBands));
+  const cut=partition(approved,zones,sheet ? backdrop(approved,backgroundZones,shadowBands) : null);
   const before=fs.existsSync(path.join(dir,'parts-register.json'))?JSON.parse(fs.readFileSync(path.join(dir,'parts-register.json'))).parts:[];
   const world=p=>[(p[0]-zones.origin[0])*zones.scale,(zones.origin[1]-p[1])*zones.scale];
   const bones=[],frames=new Map(),byName=new Map(),images=new Map(),partList=[];
@@ -100,7 +105,7 @@ function buildSourceRig({id,dir,layout,under,zones,master,sourceSize,underpainti
   }
   bone('root',null,[0,0]);bone(def.root,'root',[0,0]);
   for(const part of def.parts) {
-    const surface=extractPart(sheet,ids,cells[part.cell]).image;
+    const surface=sheet ? extractPart(sheet,packed.ids,packed.cells[part.cell]).image : null;
     const {image,sourceXYWH,visible,hidden}=cutSourcePart(PNG,cut,zones,part,def.draw,surface,under.boxes[part.name]);
     const bytes=PNG.sync.write(image);
     fs.writeFileSync(path.join(partFolder,part.name+'.png'),bytes);
@@ -118,7 +123,7 @@ function buildSourceRig({id,dir,layout,under,zones,master,sourceSize,underpainti
       pivotUV:p.pin.map(round),setupPivot:pivot.map(round),size:[round(p.w),round(p.h)],angle:0,visiblePixels:visible,hiddenPixels:hidden,reconstructionCell:part.cell});
   }
   for(const supp of under.supports){
-    const surface=extractPart(sheet,ids,cells[supp.cell]).image;
+    const surface=extractPart(sheet,packed.ids,packed.cells[supp.cell]).image;
     const {image,sourceXYWH,hidden}=makeSupport(PNG,cut,supp,surface);
     const origin=zones.parts[supp.bone].pivot,pivot=world(origin),pin=[(origin[0]-sourceXYWH[0])/image.width,(origin[1]-sourceXYWH[1])/image.height];
     const bytes=PNG.sync.write(image);

@@ -1,7 +1,7 @@
 import { CardSet } from '../content/ContentRegistry';
 import { GameScenario, MAX_HEALTH, supportsFistCombos, supportsWeaponSlots } from '../content/GameScenario';
 import { fistTargetMatches } from '../content/FistCards';
-import { DEFAULT_ENEMY_ACTIONS, isLabyrinthEnemy, nextEnemyAction, nextEnemyStep } from '../content/LabyrinthEnemies';
+import { battleEnemies, defaultEnemyPlan, hasLivingEnemy, intentDamage, isLabyrinthEnemy, nextEnemyAction, nextEnemyStep, type BattleEnemy } from '../content/LabyrinthEnemies';
 import { Random } from '../Random';
 import { ActionResult, CardKind, CombatCard, OwnedCard } from '../RulesTypes';
 import {
@@ -128,9 +128,10 @@ export class CombatRules {
     private applyDamage(
         amount: number,
         b: NonNullable<CombatState['battle']>,
+        target: BattleEnemy,
         consumeDamageBuff = true
     ): void {
-        b.hp = Math.max(0, b.hp - amount);
+        target.hp = Math.max(0, target.hp - amount);
         this.addRage(b);
         if (consumeDamageBuff) consumeCalibration(b);
         if (this.scenario.fieldDeck) b.attackedThisTurn = true;
@@ -141,51 +142,57 @@ export class CombatRules {
     private copyDefenseEffect(
         kind: CardKind,
         b: NonNullable<CombatState['battle']>,
+        target: BattleEnemy,
         preserveDamageBuff = false
     ): void {
         const definition = this.content.cards[kind];
         const effect = definition.effect;
         const damage = effect.type === 'damage' ? this.attackDamage(kind, false) : 0;
-        if (damage > 0) this.applyDamage(damage, b, !preserveDamageBuff);
+        if (damage > 0) this.applyDamage(damage, b, target, !preserveDamageBuff);
         const block = blockAmount(effect);
         if (block > 0) this.applyBlock(block, b);
         if (effect.type === 'heal')
             this.state.health = Math.min(MAX_HEALTH, this.state.health + effect.amount);
-        if (b.hp > 0 && (effect.type === 'draw' || effect.extraDraw))
+        if (hasLivingEnemy(b) && (effect.type === 'draw' || effect.extraDraw))
             this.drawCards(effect.type === 'draw' ? effect.amount : effect.extraDraw!);
-        if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count));
+        if (hasLivingEnemy(b)) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count));
         if (this.fistEnabled) this.fist.applyFinisher(b, definition);
     }
     get incomingDamage(): number {
         const b = this.state.battle;
-        return !b || b.intent === 'prepare' ? 0 : b.boosted ? b.strongAttack : b.attack;
+        return b ? battleEnemies(b).slice(b.pendingEnemy ?? 0).reduce((sum, member) => sum + intentDamage(member), 0) : 0;
     }
     combatCard(card: OwnedCard): CombatCard {
         return { id: card.id, kind: card.kind, origin: card.id, temporary: false };
     }
-    startBattle(enemy: string): void {
+    private spawnEnemy(enemy: string, offset = 0): BattleEnemy {
         const definition = this.scenario.enemies[enemy];
         if (!definition) throw new Error('缺少敌人定义：' + enemy);
         const plan = this.scenario.labyrinth && isLabyrinthEnemy(enemy)
-            ? this.content.catalog.labyrinth?.enemyActions?.[enemy]
+            ? this.content.catalog.labyrinth?.enemyActions?.[enemy] ?? defaultEnemyPlan(enemy)
             : undefined;
-        const firstAction = plan?.actions[0] ?? DEFAULT_ENEMY_ACTIONS[0];
+        const index = plan ? offset % plan.actions.length : 0;
+        const firstAction = plan?.actions[index] ?? 'attack';
+        return {
+            enemy, hp: definition.hp, maxHp: definition.hp,
+            attack: plan?.attack ?? definition.attack,
+            strongAttack: plan?.strongAttack ?? definition.strongAttack,
+            intent: firstAction === 'prepare' ? 'prepare' : 'attack', boosted: firstAction === 'heavy',
+            ...(plan ? { enemySequence: { actions: plan.actions.slice(), index, loopStart: plan.loopStart } } : {}),
+        };
+    }
+    startBattle(enemy: string, companions?: readonly string[]): void {
+        const definition = this.scenario.enemies[enemy];
         this.state.phase = 'battle';
         this.state.battle = {
+            ...this.spawnEnemy(enemy),
+            ...(companions?.length ? { companions: companions.map((id, i) => this.spawnEnemy(id, i + 1)) } : {}),
             stamina: 0,
             maxStamina:
                 this.scenario.battleResource === 'stamina'
                     ? (entryTier(this.state.entryTier)?.stamina ?? 1)
                     : 0,
-            enemy,
-            hp: definition.hp,
-            maxHp: definition.hp,
-            attack: plan?.attack ?? definition.attack,
-            strongAttack: plan?.strongAttack ?? definition.strongAttack,
             turn: 1,
-            intent: firstAction === 'prepare' ? 'prepare' : 'attack',
-            boosted: firstAction === 'heavy',
-            ...(plan ? { enemySequence: { actions: plan.actions.slice(), index: 0, loopStart: plan.loopStart } } : {}),
             block: 0,
             draw: this.random.shuffle(this.inventory.usableCards.map((c) => this.combatCard(c))),
             hand: [],
@@ -351,6 +358,7 @@ export class CombatRules {
     }
     cardBlocked(card: CombatCard): string {
         const battle = this.state.battle;
+        if (battle?.pendingEnemy !== undefined) return '敌人正在行动';
         if (battle?.discovery) return '先处理本场发现';
         if (battle?.cardChoice) return '先完成选牌';
         const definition = this.content.cards[card.kind], effect = definition.effect;
@@ -374,7 +382,7 @@ export class CombatRules {
         }
         return '';
     }
-    play(id: string): ActionResult {
+    play(id: string, targetSlot?: number): ActionResult {
         if (this.state.phase !== 'battle' || !this.state.battle)
             return this.feedback.result(false, '当前不在战斗中。');
         const b = this.state.battle;
@@ -384,6 +392,10 @@ export class CombatRules {
         const definition = this.content.cards[card.kind], effect = definition.effect, cost = this.cardCost(card.kind);
         const reason = this.cardBlocked(card);
         if (reason) return this.feedback.result(false, reason);
+        const members = battleEnemies(b);
+        const target = targetSlot === undefined ? members.find(member => member.hp > 0) : members[targetSlot];
+        if (!target || target.hp <= 0 || (targetSlot !== undefined && !Number.isInteger(targetSlot)))
+            return this.feedback.result(false, '该敌人已不可选。');
         if (
             effect.type === 'equip' &&
             this.weaponSlotsEnabled &&
@@ -401,16 +413,17 @@ export class CombatRules {
                 return this.feedback.result(true, '请选择要使用的基础招式。');
             }
         }
-        return this.commitPlay(b, card, cost);
+        return this.commitPlay(b, card, cost, { enemy: target });
     }
 
     private commitPlay(
         b: NonNullable<CombatState['battle']>,
         card: CombatCard,
         cost: number,
-        options: { targetId?: string; replaceWeapon?: string } = {}
+        options: { targetId?: string; replaceWeapon?: string; enemy?: BattleEnemy } = {}
     ): ActionResult {
         const definition = this.content.cards[card.kind], effect = definition.effect;
+        const enemy = options.enemy ?? battleEnemies(b).find(member => member.hp > 0)!;
         const index = b.hand.indexOf(card);
         b.hand.splice(index, 1);
         if (b.calm?.retained === card.id) b.calm.retained = null;
@@ -431,13 +444,13 @@ export class CombatRules {
                 const damage = this.attackDamage(card.kind);
                 if (rage) this.consumeRage(b);
                 const preserveDamageBuff = !!rage?.copyDefenseTimes && !!b.calm?.calibrated;
-                this.applyDamage(damage, b, !preserveDamageBuff);
+                this.applyDamage(damage, b, enemy, !preserveDamageBuff);
                 if (effect.block) this.applyBlock(effect.block, b);
                 if (rage?.copyDefenseTimes) {
                     const target = b.lastDefenseCardKind;
                     if (target) {
                         for (let copy = 0; copy < rage.copyDefenseTimes; copy++)
-                            this.copyDefenseEffect(target, b, preserveDamageBuff);
+                            this.copyDefenseEffect(target, b, enemy, preserveDamageBuff);
                     }
                     if (preserveDamageBuff) consumeCalibration(b);
                 }
@@ -446,9 +459,9 @@ export class CombatRules {
                 this.state.health = Math.min(MAX_HEALTH, this.state.health + effect.amount);
             if (effect.type === 'strength')
                 b.gainedStrength = (b.gainedStrength ?? 0) + effect.amount;
-            if (b.hp > 0 && (effect.type === 'draw' || effect.extraDraw))
+            if (hasLivingEnemy(b) && (effect.type === 'draw' || effect.extraDraw))
                 this.drawCards(effect.type === 'draw' ? effect.amount : effect.extraDraw!);
-            if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count));
+            if (hasLivingEnemy(b)) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count));
             if (hasBlockEffect(effect)) b.lastDefenseCardKind = card.kind;
             if (definition.fist?.type === 'support')
                 message = this.fist.applySupport(b, definition, this.handLimit, options.targetId) || message;
@@ -461,7 +474,7 @@ export class CombatRules {
             (!card.temporary || (!this.expandedCombat && !this.scenario.fieldDeck)) &&
             effect.type !== 'power' && effect.labyrinth?.rule !== 'gain-stamina')
             b.discard.push(card);
-        if (b.hp === 0) {
+        if (!hasLivingEnemy(b)) {
             const enemy = this.scenario.enemies[b.enemy];
             this.winBattle();
             if (this.scenario.fieldDeck)
@@ -469,6 +482,8 @@ export class CombatRules {
                     true,
                     `击败${enemy.title} · 物资 +${enemy.rewardSupplies}`
                 );
+        } else if (enemy.hp === 0) {
+            return this.feedback.result(true, `击败${this.scenario.enemies[enemy.enemy].title}。`);
         } else if (
             this.scenario.fieldDeck &&
             this.scenario.enemies[b.enemy].discoverAtHalf &&
@@ -481,48 +496,60 @@ export class CombatRules {
         }
         return this.feedback.result(true, message);
     }
-    endTurn(): ActionResult {
+    endTurn(slot?: number, turn?: number): ActionResult {
         if (this.state.phase !== 'battle' || !this.state.battle)
             return this.feedback.result(false, '当前不在战斗中。');
         const b = this.state.battle;
         if (b.discovery || b.cardChoice) return this.feedback.result(false, '先完成选择。');
-        b.stamina = 0;
-        const retained = b.calm?.retained;
-        b.discard.push(...b.hand.filter((card) => card.id !== retained &&
-            (!this.scenario.fieldDeck || !card.temporary || !!this.content.cards[card.kind].fist)));
-        b.hand = b.hand.filter((card) => card.id === retained);
+        const members = battleEnemies(b);
+        const next = b.pendingEnemy ?? members.findIndex(member => member.hp > 0);
+        if (slot !== undefined && (slot !== next || turn !== b.turn)) return this.feedback.result(false, '该敌人当前不能行动。');
+        if (b.pendingEnemy === undefined) {
+            b.stamina = 0;
+            const retained = b.calm?.retained;
+            b.discard.push(...b.hand.filter((card) => card.id !== retained &&
+                (!this.scenario.fieldDeck || !card.temporary || !!this.content.cards[card.kind].fist)));
+            b.hand = b.hand.filter((card) => card.id === retained);
+        }
         if (b.calm?.deferred === 'scheduled') {
             this.nextTurn(b);
             return this.feedback.result(true, '敌人原定动作暂缓，进入额外回合。');
         }
         let counterDamage = 0;
-        if (b.intent === 'attack') {
-            const incoming = this.incomingDamage, damage = Math.max(0, incoming - b.block);
-            this.state.health = Math.max(0, this.state.health - damage);
-            if (this.state.health === 0) {
-                this.fail('血量耗尽，本次探索失败。');
-                return this.feedback.result(
-                    true,
-                    this.scenario.kind === 'tutorial'
-                        ? '教学探索失败。'
-                        : '探索失败，已撤回避难所。'
-                );
+        for (let index = next; index < members.length; index++) {
+            const member = members[index];
+            if (!member.hp) continue;
+            if (slot !== undefined && index !== slot) {
+                b.pendingEnemy = index;
+                return this.feedback.result(true, `${this.scenario.enemies[member.enemy].title}即将行动。`);
             }
-            const fistCounter = this.fist.counterDamage(b, incoming, damage === 0);
-            const calmCounter = damage === 0 && b.calm?.deferred === 'extra-turn' ? b.calm.counter : 0;
-            counterDamage = fistCounter + calmCounter;
-            if (counterDamage) {
-                b.hp = Math.max(0, b.hp - counterDamage);
-                if (b.hp === 0) {
-                    this.winBattle();
-                    return this.feedback.result(true, fistCounter ? `反击 ${counterDamage} 点，击败敌人。` : '回流盾反击击败敌人。');
+            if (member.intent === 'attack') {
+                const incoming = intentDamage(member), damage = Math.max(0, incoming - b.block);
+                b.block = Math.max(0, b.block - incoming);
+                this.state.health = Math.max(0, this.state.health - damage);
+                if (this.state.health === 0) {
+                    this.fail('血量耗尽，本次探索失败。');
+                    return this.feedback.result(true, this.scenario.kind === 'tutorial'
+                        ? '教学探索失败。' : '探索失败，已撤回避难所。');
+                }
+                const fistCounter = this.fist.counterDamage(b, incoming, damage === 0);
+                const calmCounter = damage === 0 && b.calm?.deferred === 'extra-turn' ? b.calm.counter : 0;
+                const counter = fistCounter + calmCounter;
+                counterDamage += counter;
+                if (counter) {
+                    member.hp = Math.max(0, member.hp - counter);
+                    if (!hasLivingEnemy(b)) {
+                        this.winBattle();
+                        return this.feedback.result(true, fistCounter ? `反击 ${counterDamage} 点，击败敌人。` : '回流盾反击击败敌人。');
+                    }
                 }
             }
+            const nextAction = nextEnemyAction(member);
+            if (member.enemySequence) member.enemySequence.index = nextEnemyStep(member.enemySequence);
+            member.intent = nextAction === 'prepare' ? 'prepare' : 'attack';
+            member.boosted = nextAction === 'heavy';
         }
-        const nextAction = nextEnemyAction(b);
-        if (b.enemySequence) b.enemySequence.index = nextEnemyStep(b.enemySequence);
-        b.intent = nextAction === 'prepare' ? 'prepare' : 'attack';
-        b.boosted = nextAction === 'heavy';
+        delete b.pendingEnemy;
         this.nextTurn(b);
         return this.feedback.result(true, `${counterDamage ? `反击 ${counterDamage} 点 · ` : ''}第 ${b.turn} 回合，你先行动。`);
     }

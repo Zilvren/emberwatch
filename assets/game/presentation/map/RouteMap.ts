@@ -86,10 +86,13 @@ export class RouteMap extends Component {
         const legend = this.node.getChildByName('RouteLegend')?.getComponent(Label);
         if (legend) legend.enabled = !folio;
         const next = this.model.points.find((point) => point.state === 'available');
+        const canResume = !!game.expeditionMap?.deferredRewards;
+        const canReturn = canResume && game.currentNode === 'return';
         if (this.hint) {
-            this.hint.node.active = readonly || !!game.scenario.labyrinth;
+            this.hint.node.active = readonly || (!!game.scenario.labyrinth && !canReturn);
             this.hint.string = readonly
                 ? '滚动查看路线 · 关闭后继续探索'
+                : canResume ? '点击当前地点继续选奖励'
                 : game.expeditionMap && next
                   ? '点击双圈地点前往 · 滚动查看路线'
                   : game.currentNode === 'choice'
@@ -100,14 +103,14 @@ export class RouteMap extends Component {
         }
         if (this.close) this.close.node.active = readonly;
         if (this.enter) {
-            this.enter.node.active = !readonly && !game.scenario.labyrinth;
+            this.enter.node.active = !readonly && (!game.scenario.labyrinth || canReturn);
             this.enter.setText(
-                game.currentNode === 'choice'
+                canReturn ? '返回营地' : game.currentNode === 'choice'
                     ? '先选择一条路径'
                     : '前往 · ' + (next?.title ?? '避难所')
             );
             this.enter.setEnabled(
-                !!next && game.currentNode !== 'choice' && game.currentNode !== 'return'
+                canReturn || (!!next && game.currentNode !== 'choice' && game.currentNode !== 'return')
             );
         }
         const key = game.expeditionMap
@@ -250,7 +253,6 @@ export class RouteMap extends Component {
         const bow = Math.sin((a.x + b.x) * .013) * 7;
         const afterChoice = !!a.decisionHint && !edge.excluded;
         const stroke = edge.visited ? '#76502c' : edge.available ? '#9b5629' : edge.excluded ? '#ac926f' : afterChoice ? '#795436' : '#806849';
-        const hasTitle = !!b.decisionHint || b.title !== '未知地点' || b.state === 'available' || b.state === 'current' || b.state === 'visited';
         g.strokeColor = new Color().fromHEX(stroke);
         g.lineWidth = edge.visited ? 3.7 : edge.available ? 3 : edge.excluded ? 1.1 : afterChoice ? 2.4 : 1.8;
         const dashSpacing = edge.available ? 19 : afterChoice ? 15 : 12;
@@ -259,7 +261,7 @@ export class RouteMap extends Component {
         for (let distance = 47; distance < length - 42; distance += 2) {
             const t = distance / length;
             const x = a.x + dx * t + Math.sin(Math.PI * t) * bow, y = a.y + dy * t;
-            const inCaption = hasTitle && Math.abs(x - b.x) < 58 && Math.abs(y - b.y + 60) < 13;
+            const inCaption = Math.abs(x - b.x) < 58 && Math.abs(y - b.y + 60) < 13;
             const inStatus = (b.state === 'available' || b.state === 'current' || !!b.decisionHint) &&
                 Math.abs(x - b.x) < (b.decisionHint ? 86 : 44) && Math.abs(y - b.y + 85) < 11;
             const mark = edge.visited || distance % dashSpacing < dashLength;

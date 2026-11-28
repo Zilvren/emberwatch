@@ -149,6 +149,14 @@ The end 已接入正式出发流程，参数待试玩。用户确认做成 17 �
 
 比较参考来自《杀戮尖塔 2》抢先体验版的公开游戏代码。标准地图按章节安排固定位置和特殊房间，空余节点填普通战斗。进某一场战斗后，遭遇配置生成初始敌人列表。例如普通邪教徒遭遇有两名敌人，普通史莱姆群遭遇有四只。焦土迷宫的连战提示统计连续进入的战斗房间数。[标准地图](https://github.com/JokerXuan/sts2-source-code/blob/main/MegaCrit/sts2/Core/Map/StandardActMap.cs#L239-L293) · [邪教徒遭遇](https://github.com/JokerXuan/sts2-source-code/blob/main/MegaCrit/sts2/Core/Models/Encounters/CultistsNormal.cs#L38-L45) · [史莱姆群遭遇](https://github.com/JokerXuan/sts2-source-code/blob/main/MegaCrit/sts2/Core/Models/Encounters/SlimesNormal.cs#L67-L78)
 
+### 2026-11-28 · 焦土迷宫房型与奖励
+
+《The end》已实装用户确认的房型和奖励规则。每次出发先生成 17 层、可再次分岔的路线，再布置房型。入口为搜刮房，第 2 层为普通战斗，第 11、16 层为休息处，第 17 层为沉灯庭。其余节点以整张图为单位布置房型，试玩目标为 3 个精英怪、3 个额外休息处、10 个额外搜刮房，空余位置填普通怪。精英从第 6 层起出现。同一条路上避免连续安排精英或连续安排休息处，单个岔口避免出现多个同类特殊房。规则见 `assets/game/core/content/ExpeditionMap.ts`。
+
+普通战斗、精英和首领胜利后，必定提供战斗牌奖励，额外提供一张物资卡的概率为 30%。搜刮必定提供一张物资卡，额外提供战斗牌奖励的概率同为 30%。战斗牌通常从本趟发现池提供至多三张，选一张加入本趟牌组。物资卡放入行囊，返营后可入库兑换。两类奖励同时出现时可以切换查看，各领一次。额外概率和房型数量为首轮试玩参数。规则见 `assets/game/core/systems/RewardRules.ts`。
+
+点「略过」回到地图，未领的奖励暂留在当前节点。点击当前节点恢复原候选和当前查看的奖励组。读档同样能继续，已领的卡牌和物资点只结算一次。进入相连的下一个节点后，上一间未领取的奖励过期。在沉灯庭略过后，玩家可以点当前节点领取，也可以主动返回营地。旧档沿原路线和已生成的奖励续玩，下次出发应用新版布置和奖励规则。存档恢复见 `assets/game/core/state/GameState.ts`。
+
 ## 8. 失败、保护与保底
 
 以下是**正式失败代价提案**，尚未修改当前失败全量重置：

@@ -1,0 +1,456 @@
+{
+  "actor": "minotaur",
+  "source": "../mythic-creatures.png",
+  "sourceSha256": "035eff358a3cc6a3b0f523e670220ff6e27a63a87c6ddc38257b98a3193375ba",
+  "jointUnderpaint": null,
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    264,
+    988
+  ],
+  "scale": 0.79,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "chest",
+      "bone": "chest",
+      "sourceXYWH": [
+        135,
+        527,
+        264,
+        244
+      ],
+      "png": [
+        264,
+        244
+      ],
+      "sha256": "246b0fde1f13c7ee1c31327bc663a41319a7eeabf27fd0b30d57d5fad6bfdf7c",
+      "pivotUV": [
+        0.568182,
+        0.688525
+      ],
+      "setupPivot": [
+        16.59,
+        231.47
+      ],
+      "size": [
+        208.56,
+        192.76
+      ],
+      "angle": 0,
+      "visiblePixels": 7676,
+      "hiddenPixels": 13296
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "sourceXYWH": [
+        80,
+        547,
+        185,
+        174
+      ],
+      "png": [
+        185,
+        174
+      ],
+      "sha256": "6a445ac4d13ee48ef93055e3ea0354724a8eb574cb3299329df085e9842f9c9f",
+      "pivotUV": [
+        0.691892,
+        0.609195
+      ],
+      "setupPivot": [
+        -44.24,
+        264.65
+      ],
+      "size": [
+        146.15,
+        137.46
+      ],
+      "angle": 0,
+      "visiblePixels": 8814,
+      "hiddenPixels": 1405
+    },
+    {
+      "name": "far-horn",
+      "bone": "far-horn",
+      "sourceXYWH": [
+        42,
+        541,
+        128,
+        121
+      ],
+      "png": [
+        128,
+        121
+      ],
+      "sha256": "c51a2519d67123c2c55244312662642c894f340378dff938520632c926f5d262",
+      "pivotUV": [
+        0.75,
+        0.595041
+      ],
+      "setupPivot": [
+        -99.54,
+        296.25
+      ],
+      "size": [
+        101.12,
+        95.59
+      ],
+      "angle": 0,
+      "visiblePixels": 3076,
+      "hiddenPixels": 359
+    },
+    {
+      "name": "near-horn",
+      "bone": "near-horn",
+      "sourceXYWH": [
+        106,
+        522,
+        131,
+        129
+      ],
+      "png": [
+        131,
+        129
+      ],
+      "sha256": "39d38a170bb3acffb37fbfaf610336afac33494bbb51f15e7360fb999396d3a7",
+      "pivotUV": [
+        0.40458,
+        0.713178
+      ],
+      "setupPivot": [
+        -82.95,
+        295.46
+      ],
+      "size": [
+        103.49,
+        101.91
+      ],
+      "angle": 0,
+      "visiblePixels": 3835,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "near-shoulder",
+      "bone": "near-shoulder",
+      "sourceXYWH": [
+        193,
+        542,
+        185,
+        177
+      ],
+      "png": [
+        185,
+        177
+      ],
+      "sha256": "f396f6bb2ffc23a91c7c0cc162b7d034d708d232e32e16ef01508f77dd2b0c0f",
+      "pivotUV": [
+        0.567568,
+        0.372881
+      ],
+      "setupPivot": [
+        26.86,
+        300.2
+      ],
+      "size": [
+        146.15,
+        139.83
+      ],
+      "angle": 0,
+      "visiblePixels": 11508,
+      "hiddenPixels": 1095
+    },
+    {
+      "name": "near-arm",
+      "bone": "near-arm",
+      "sourceXYWH": [
+        104,
+        646,
+        161,
+        150
+      ],
+      "png": [
+        161,
+        150
+      ],
+      "sha256": "77adb0472c27dcbf63fc1233aeaeeacb334be2f983a2af79d9b68cdbf62c5bf1",
+      "pivotUV": [
+        0.813665,
+        0.166667
+      ],
+      "setupPivot": [
+        -22.91,
+        250.43
+      ],
+      "size": [
+        127.19,
+        118.5
+      ],
+      "angle": 0,
+      "visiblePixels": 6518,
+      "hiddenPixels": 1442
+    },
+    {
+      "name": "near-fist",
+      "bone": "near-fist",
+      "sourceXYWH": [
+        42,
+        711,
+        141,
+        132
+      ],
+      "png": [
+        141,
+        132
+      ],
+      "sha256": "6f63883632cba6d928aaea7df4d786c2e6235421b98483fc3375fb79a5895f18",
+      "pivotUV": [
+        0.609929,
+        0.325758
+      ],
+      "setupPivot": [
+        -107.44,
+        184.86
+      ],
+      "size": [
+        111.39,
+        104.28
+      ],
+      "angle": 0,
+      "visiblePixels": 5829,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "far-arm",
+      "bone": "far-arm",
+      "sourceXYWH": [
+        321,
+        582,
+        156,
+        190
+      ],
+      "png": [
+        156,
+        190
+      ],
+      "sha256": "aed9e95e39ffc53daeb81a7b4f49eea7c2fb8d27a1455b744e71c5d8ad24865e",
+      "pivotUV": [
+        0.288462,
+        0.305263
+      ],
+      "setupPivot": [
+        80.58,
+        274.92
+      ],
+      "size": [
+        123.24,
+        150.1
+      ],
+      "angle": 0,
+      "visiblePixels": 10463,
+      "hiddenPixels": 2143
+    },
+    {
+      "name": "far-fist",
+      "bone": "far-fist",
+      "sourceXYWH": [
+        344,
+        724,
+        122,
+        109
+      ],
+      "png": [
+        122,
+        109
+      ],
+      "sha256": "4fabf3401fb0ea590fdda9a65d76fb42ed93053eb3e60e240a7e949b82f763c2",
+      "pivotUV": [
+        0.598361,
+        0.266055
+      ],
+      "setupPivot": [
+        120.87,
+        185.65
+      ],
+      "size": [
+        96.38,
+        86.11
+      ],
+      "angle": 0,
+      "visiblePixels": 4297,
+      "hiddenPixels": 255
+    },
+    {
+      "name": "far-leg",
+      "bone": "far-leg",
+      "sourceXYWH": [
+        310,
+        768,
+        154,
+        189
+      ],
+      "png": [
+        154,
+        189
+      ],
+      "sha256": "5c81565efb6434188c04af14086f9c32ee0e47c6916746bd7e8e9bda73fbd40b",
+      "pivotUV": [
+        0.188312,
+        0.10582
+      ],
+      "setupPivot": [
+        59.25,
+        158
+      ],
+      "size": [
+        121.66,
+        149.31
+      ],
+      "angle": 0,
+      "visiblePixels": 4821,
+      "hiddenPixels": 1738
+    },
+    {
+      "name": "far-hoof",
+      "bone": "far-hoof",
+      "sourceXYWH": [
+        378,
+        911,
+        102,
+        90
+      ],
+      "png": [
+        102,
+        90
+      ],
+      "sha256": "8eb44ceedc8cc4b1f8a18c91eb2b7ed355b6162b63fe048287317954d0f2436f",
+      "pivotUV": [
+        0.519608,
+        0.377778
+      ],
+      "setupPivot": [
+        131.93,
+        33.97
+      ],
+      "size": [
+        80.58,
+        71.1
+      ],
+      "angle": 0,
+      "visiblePixels": 3124,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "near-leg",
+      "bone": "near-leg",
+      "sourceXYWH": [
+        77,
+        747,
+        179,
+        223
+      ],
+      "png": [
+        179,
+        223
+      ],
+      "sha256": "e241fa54fe336519db200fadb5eb03c4cbf4f7458de3f24b2c14788f57c956ac",
+      "pivotUV": [
+        0.832402,
+        0.170404
+      ],
+      "setupPivot": [
+        -30.02,
+        160.37
+      ],
+      "size": [
+        141.41,
+        176.17
+      ],
+      "angle": 0,
+      "visiblePixels": 10679,
+      "hiddenPixels": 2044
+    },
+    {
+      "name": "near-hoof",
+      "bone": "near-hoof",
+      "sourceXYWH": [
+        49,
+        916,
+        124,
+        85
+      ],
+      "png": [
+        124,
+        85
+      ],
+      "sha256": "16f7b4d1acf905dedb278fe97ac79c3d08e64beb49e1d74f6d1cab579ab2901e",
+      "pivotUV": [
+        0.548387,
+        0.376471
+      ],
+      "setupPivot": [
+        -116.13,
+        31.6
+      ],
+      "size": [
+        97.96,
+        67.15
+      ],
+      "angle": 0,
+      "visiblePixels": 3181,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "kilt",
+      "bone": "kilt",
+      "sourceXYWH": [
+        158,
+        690,
+        236,
+        272
+      ],
+      "png": [
+        236,
+        272
+      ],
+      "sha256": "134e97ba84220a23ababce9887019a142725ef8a374cedc3d607c4b9069c4a9c",
+      "pivotUV": [
+        0.542373,
+        0.180147
+      ],
+      "setupPivot": [
+        17.38,
+        196.71
+      ],
+      "size": [
+        186.44,
+        214.88
+      ],
+      "angle": 0,
+      "visiblePixels": 23313,
+      "hiddenPixels": 38
+    }
+  ],
+  "drawOrder": [
+    "far-leg",
+    "far-hoof",
+    "near-leg",
+    "near-hoof",
+    "far-arm",
+    "far-fist",
+    "chest",
+    "kilt",
+    "near-shoulder",
+    "near-arm",
+    "near-fist",
+    "head",
+    "far-horn",
+    "near-horn"
+  ],
+  "setupAudit": {
+    "visiblePixels": 107134,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

@@ -1,9 +1,9 @@
-import { CARD, CardDefinition, carriedWeight, isBattleCard, isLabyrinthRewardCard } from '../content/CardCatalog';
-import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO, supportsFistCombos, supportsWeaponSlots, type GameScenario } from '../content/GameScenario';
+import { CARD, CardDefinition, carriedWeight, isBattleCard, isLabyrinthRewardCard, type CardKind } from '../content/CardCatalog';
+import { getScenario, hasId, nodeDefinition, NodeKind, Route, STAMINA_SCENARIO, supportsFistCombos, supportsWeaponSlots, type GameScenario } from '../content/GameScenario';
 import { FIST_MOVES, fistFinisherFor, fistMove, fistSupport, fistTargetMatches, isFistBattleReward } from '../content/FistCards';
-import { ASHEN_MAP_LAST_LAYER, ASHEN_MAP_OUTER_LANE, nextMapNodes, type ExpeditionMap } from '../content/ExpeditionMap';
+import { ASHEN_MAP_LAST_LAYER, ASHEN_MAP_OUTER_LANE, nextMapNodes, pointRoomId, type ExpeditionMap } from '../content/ExpeditionMap';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
-import { validEnemyActions } from '../content/LabyrinthEnemies';
+import { battleEnemies, hasLivingEnemy, validEnemyActions, type BattleEnemy } from '../content/LabyrinthEnemies';
 import { isPhase } from './GamePhase';
 import {
     getJournalCatalog,
@@ -140,24 +140,32 @@ function validateExpeditionMap(state: GameState, scenario: GameScenario): Expedi
     object(map, 'expedition map');
     requireValue(map, !!scenario.labyrinth && state.route === null && state.pathIndex === 0, 'map scenario');
     integer(map.seed, 0, 0xffffffff, 'map seed');
-    list(map.points, Object.keys(scenario.nodes).length, 'map points');
+    list(map.points, (ASHEN_MAP_LAST_LAYER + 1) * (ASHEN_MAP_OUTER_LANE * 2 + 1), 'map points');
     const ids = new Set<NodeKind>(), positions = new Set<string>();
+    requireValue(map.version, map.version === undefined || map.version === 2, 'map version');
     for (const point of map.points) {
         object(point, 'map point');
         integer(point.layer, 0, ASHEN_MAP_LAST_LAYER, 'map layer');
         integer(point.lane, -ASHEN_MAP_OUTER_LANE, ASHEN_MAP_OUTER_LANE, 'map lane');
         const position = `${point.layer}:${point.lane}`;
-        requireValue(point.id, hasId(scenario.nodes, point.id) && !ids.has(point.id) &&
-            !positions.has(position), 'map point identity');
+        const coordinateId = `room-${point.layer + 1}-${point.lane + ASHEN_MAP_OUTER_LANE + 1}`;
+        requireValue(point.id, (point.id === coordinateId || hasId(scenario.nodes, point.id)) &&
+            !ids.has(point.id) && !positions.has(position), 'map point identity');
+        requireValue(point, hasId(scenario.nodes, pointRoomId(point)) &&
+            (map.version === 2 || point.room === undefined), 'map room');
         ids.add(point.id);
         positions.add(position);
         list(point.next, 3, 'map connections');
     }
     const points = new Map(map.points.map((point) => [point.id, point]));
     const entrance = map.points[0];
-    requireValue(entrance, entrance?.id === scenario.fixedNodeId && entrance.layer === 0, 'map entrance');
-    const lastLayer = points.get('lampCourt')?.layer;
-    requireValue(points, lastLayer === 7 || lastLayer === ASHEN_MAP_LAST_LAYER, 'map destination');
+    requireValue(entrance, entrance?.id === scenario.fixedNodeId && entrance.layer === 0 &&
+        pointRoomId(entrance) === scenario.fixedNodeId, 'map entrance');
+    const boss = points.get('lampCourt');
+    const lastLayer = boss?.layer;
+    requireValue(points, !!boss && pointRoomId(boss) === 'lampCourt' &&
+        (lastLayer === ASHEN_MAP_LAST_LAYER || (lastLayer === 7 && map.version === undefined)),
+        'map destination');
     for (const point of map.points) {
         requireValue(point.next, (point.next.length === 0) === (point.id === 'lampCourt') &&
             new Set(point.next).size === point.next.length && point.next.every((id) => {
@@ -184,13 +192,32 @@ function validateExpeditionMap(state: GameState, scenario: GameScenario): Expedi
         map.activeNode === null, 'active map point');
     requireValue(phase, inRoom || phase === 'map' || ((phase === 'shelter' || phase === 'journal') &&
         last === 'lampCourt'), 'expedition map phase');
-    if (map.activeNode !== null) {
-        const room = scenario.nodes[map.activeNode];
-        if (phase === 'battle') requireValue(room, room.type === 'battle' && room.enemyId === state.battle?.enemy, 'active map battle');
-        if (phase === 'rewards') requireValue(room, map.activeNode === state.rewards?.source && room.type !== 'rest', 'active map reward');
-        if (phase === 'rest') requireValue(room, room.type === 'rest', 'active map rest');
+    if (map.deferredRewards !== undefined) {
+        object(map.deferredRewards, 'deferred room rewards');
+        requireValue(map.deferredRewards, phase === 'map' && map.deferredRewards.source === last &&
+            map.deferredRewards.discovery === true, 'deferred room reward location');
     }
-    return { seed: map.seed, points: map.points.map(({ id, layer, lane, next }) => ({ id, layer, lane, next })), activeNode: map.activeNode };
+    if (map.activeNode !== null) {
+        const room = nodeDefinition(scenario, map.activeNode, map);
+        if (phase === 'battle') {
+            const battle = state.battle;
+            requireValue(room, room?.type === 'battle' && room.enemyId === battle?.enemy &&
+                (room.companions?.length ?? 0) === (battle.companions?.length ?? 0) &&
+                (room.companions ?? []).every((id, slot) => battle.companions?.[slot]?.enemy === id), 'active map battle');
+        }
+        if (phase === 'rewards') requireValue(room, !!room && map.activeNode === state.rewards?.source && room.type !== 'rest', 'active map reward');
+        if (phase === 'rest') requireValue(room, room?.type === 'rest', 'active map rest');
+    }
+    return {
+        seed: map.seed,
+        points: map.points.map(({ id, layer, lane, next, room }) => ({
+            id, layer, lane, next,
+            ...(room === undefined ? {} : { room }),
+        })),
+        activeNode: map.activeNode,
+        ...(map.version === undefined ? {} : { version: map.version }),
+        ...(map.deferredRewards === undefined ? {} : { deferredRewards: map.deferredRewards }),
+    };
 }
 
 /** Validate before touching a live model; never hydrate arbitrary object properties. */
@@ -259,7 +286,9 @@ export function validateGameState(
     );
     text(s.failureReason, 'failureReason');
     list(s.visited, 100, 'visited');
-    s.visited.forEach((v) => requireValue(v, hasId(scenario.nodes, v), 'visited node'));
+    const expeditionMap = validateExpeditionMap(s, scenario);
+    if (!expeditionMap)
+        s.visited.forEach((v) => requireValue(v, hasId(scenario.nodes, v), 'visited node'));
     if (s.storedSupplies !== undefined) {
         object(s.storedSupplies, 'stored supplies');
         for (const kind of Object.keys(s.storedSupplies)) {
@@ -275,6 +304,8 @@ export function validateGameState(
             new Set(s.discoveryPool).size === s.discoveryPool.length &&
             s.discoveryPool.every((kind) => typeof kind === 'string' && isLabyrinthRewardCard(definitions[kind])),
             'discovery pool references');
+        if (expeditionMap?.version === 2)
+            requireValue(s.discoveryPool, s.discoveryPool.some((id) => !definitions[id].fist), 'room combat reward pool');
     }
     if (s.fistUnlocks !== undefined) {
         list(s.fistUnlocks, 7, 'run finisher unlocks');
@@ -388,11 +419,17 @@ export function validateGameState(
     if (s.battle) {
         const b = s.battle;
         object(b, 'battle');
-        requireValue(b.enemy, hasId(scenario.enemies, b.enemy), 'enemy');
-        integer(b.hp, 1, 100000, 'hp');
-        integer(b.maxHp, b.hp, 100000, 'maxHp');
-        integer(b.attack, 0, 100000, 'attack');
-        integer(b.strongAttack, 0, 100000, 'strongAttack');
+        if (b.companions !== undefined) {
+            list(b.companions, 1, 'companions');
+            requireValue(b.companions, !!scenario.labyrinth && !!expeditionMap && b.companions.length === 1, 'encounter formation');
+        }
+        for (const member of battleEnemies(b as Battle)) validateBattleEnemy(member, scenario, !!b.companions);
+        requireValue(b, hasLivingEnemy(b), 'living enemy');
+        if (b.pendingEnemy !== undefined) {
+            integer(b.pendingEnemy, 1, b.companions?.length ?? 0, 'pending enemy');
+            requireValue(b.pendingEnemy, b.companions[b.pendingEnemy - 1].hp > 0 && b.stamina === 0 &&
+                !b.discovery && !b.cardChoice && b.calm?.deferred !== 'scheduled', 'pending enemy action');
+        }
         integer(b.turn, 1, 1000000, 'turn');
         integer(b.block, 0, 100000, 'block');
         integer(b.equippedTurn, 0, b.turn, 'equippedTurn');
@@ -404,7 +441,6 @@ export function validateGameState(
             integer(b.maxStamina ?? 0, 0, 0, 'legacy maxStamina');
             integer(b.stamina ?? 0, 0, 0, 'legacy stamina');
         }
-        flag(b.boosted, 'boosted');
         if (scenario.fieldDeck) flag(b.attackedThisTurn, 'attack history');
         if (b.coreExposed !== undefined) {
             flag(b.coreExposed, 'core exposed');
@@ -429,17 +465,6 @@ export function validateGameState(
                     ),
                 'discovery options'
             );
-        }
-        requireValue(b.intent, b.intent === 'attack' || b.intent === 'prepare', 'intent');
-        if (b.enemySequence !== undefined) {
-            const sequence = b.enemySequence;
-            object(sequence, 'enemy action sequence');
-            requireValue(sequence, !!scenario.labyrinth && validEnemyActions(sequence.actions), 'enemy actions');
-            integer(sequence.index, 0, sequence.actions.length - 1, 'enemy action index');
-            integer(sequence.loopStart ?? 0, 0, sequence.actions.length - 1, 'enemy loop start');
-            const action = sequence.actions[sequence.index];
-            requireValue(b.intent, b.intent === (action === 'prepare' ? 'prepare' : 'attack') &&
-                b.boosted === (action === 'heavy'), 'enemy action intent');
         }
         for (const [name, cards] of [
             ['draw', b.draw],
@@ -524,35 +549,51 @@ export function validateGameState(
         } else requireValue(b.pendingEquip, b.pendingEquip === undefined, 'pending equip');
     }
     requireValue(s.rewards, (s.phase === 'rewards') === (s.rewards !== null), 'rewards phase');
-    if (s.rewards) {
-        const r = s.rewards;
+    for (const r of [s.rewards, expeditionMap?.deferredRewards]) {
+        if (r === null || r === undefined) continue;
         object(r, 'rewards');
-        requireValue(r.source, hasId(scenario.nodes, r.source), 'reward source');
+        const room = nodeDefinition(scenario, r.source, expeditionMap);
+        requireValue(r.source, !!room, 'reward source');
         integer(r.supplies, 0, 100000, 'reward supplies');
         flag(r.supplyTaken, 'supplyTaken');
         flag(r.cardTaken, 'cardTaken');
         list(r.cards, 3, 'reward cards');
+        requireValue(r.nextCards, r.nextCards === undefined || expeditionMap?.version === 2, 'next room reward');
         if (scenario.labyrinth) {
-            const room = scenario.nodes[r.source];
             const pool = s.discoveryPool ?? [];
-            const allowed = room.type === 'scavenge' && room.supplyCard
-                ? r.cards.length === 1 && definitions[r.cards[0]]?.role === 'supply'
-                : r.cards.every((kind) => room.type === 'battle'
-                    ? pool.indexOf(kind) >= 0 || fistUnlocks.indexOf(kind) >= 0
-                    : pool.indexOf(kind) >= 0 && !definitions[kind]?.fist);
+            const stock = (cards: readonly CardKind[]) =>
+                cards.length === 1 && definitions[cards[0]]?.role === 'supply';
+            const combat = (cards: readonly CardKind[]) => cards.length > 0 &&
+                new Set(cards).size === cards.length && cards.every((kind) =>
+                    !!definitions[kind] && definitions[kind].role !== 'supply' &&
+                    (pool.indexOf(kind) >= 0 ||
+                        (room?.type === 'battle' && fistUnlocks.indexOf(kind) >= 0)) &&
+                    (!definitions[kind].fist || room?.type === 'battle'));
+            let allowed: boolean;
+            if (expeditionMap?.version === 2) {
+                const isBattle = room?.type === 'battle';
+                if (r.nextCards !== undefined) {
+                    list(r.nextCards, 3, 'next reward cards');
+                    allowed = (isBattle || room?.type === 'scavenge') &&
+                        ((combat(r.cards) && stock(r.nextCards)) || (stock(r.cards) && combat(r.nextCards)));
+                } else allowed = (isBattle || room?.type === 'scavenge') && (stock(r.cards) || combat(r.cards));
+            } else {
+                allowed = room?.type === 'scavenge' && room.supplyCard ? stock(r.cards) : combat(r.cards);
+            }
             requireValue(r.discovery, r.discovery === true && !r.cardTaken && r.supplyTaken && r.cards.length > 0 &&
                 new Set(r.cards).size === r.cards.length && allowed,
                 'labyrinth reward candidates');
         }
         if (r.guaranteedFinisher !== undefined)
-            requireValue(r.guaranteedFinisher, fistEnabled && r.cards[0] === r.guaranteedFinisher &&
-                fistUnlocks.indexOf(r.guaranteedFinisher) >= 0 && scenario.nodes[r.source].type === 'battle',
+            requireValue(r.guaranteedFinisher, fistEnabled &&
+                (r.cards[0] === r.guaranteedFinisher || r.nextCards?.[0] === r.guaranteedFinisher) &&
+                fistUnlocks.indexOf(r.guaranteedFinisher) >= 0 && room?.type === 'battle',
                 'guaranteed finisher');
         r.cards.forEach((kind) =>
             requireValue(
                 kind,
                 Object.prototype.hasOwnProperty.call(definitions, kind) &&
-                    (!definitions[kind].fist || (fistEnabled && scenario.nodes[r.source].type === 'battle' &&
+                    (!definitions[kind].fist || (fistEnabled && room?.type === 'battle' &&
                         (isFistBattleReward(definitions[kind]) || fistUnlocks.indexOf(kind) >= 0))),
                 'reward kind'
             )
@@ -575,7 +616,6 @@ export function validateGameState(
         t.lostOverflow.forEach((v) => text(v, 'lost card'));
     }
     requireValue(s.nextId, s.nextId >= highestId, 'nextId');
-    const expeditionMap = validateExpeditionMap(s, scenario);
     // An explicit field list prevents prototype keys and future fields from entering the model.
     const result: GameState = {
         schemaVersion: 4,
@@ -641,6 +681,26 @@ export function validateGameState(
         returnElapsed: s.returnElapsed,
     };
     return JSON.parse(JSON.stringify(result));
+}
+
+function validateBattleEnemy(member: BattleEnemy, scenario: GameScenario, group: boolean): void {
+    object(member, 'battle enemy');
+    requireValue(member.enemy, hasId(scenario.enemies, member.enemy), 'enemy');
+    integer(member.hp, group ? 0 : 1, 100000, 'hp');
+    integer(member.maxHp, Math.max(1, member.hp), 100000, 'maxHp');
+    integer(member.attack, 0, 100000, 'attack');
+    integer(member.strongAttack, 0, 100000, 'strongAttack');
+    flag(member.boosted, 'boosted');
+    requireValue(member.intent, member.intent === 'attack' || member.intent === 'prepare', 'intent');
+    const sequence = member.enemySequence;
+    if (sequence === undefined) return;
+    object(sequence, 'enemy action sequence');
+    requireValue(sequence, !!scenario.labyrinth && validEnemyActions(sequence.actions), 'enemy actions');
+    integer(sequence.index, 0, sequence.actions.length - 1, 'enemy action index');
+    integer(sequence.loopStart ?? 0, 0, sequence.actions.length - 1, 'enemy loop start');
+    const action = sequence.actions[sequence.index];
+    requireValue(member.intent, member.intent === (action === 'prepare' ? 'prepare' : 'attack') &&
+        member.boosted === (action === 'heavy'), 'enemy action intent');
 }
 
 /** Decode earlier armor/weight saves without rerolling any deck or encounter. */

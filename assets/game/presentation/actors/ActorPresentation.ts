@@ -239,7 +239,8 @@ export class ActorPresentation extends Component {
                     const done = this.complete;
                     this.complete = null;
                     this.resetApproach();
-                    if (kind !== 'death') this.playIdle();
+                    if (kind === 'death') this.spineRig!.pause();
+                    else this.playIdle();
                     done?.();
                 },
                 kind === 'attack'

@@ -1,0 +1,23 @@
+{
+  "actor": "minotaur",
+  "editor": "3.8.75",
+  "bones": 16,
+  "slots": 14,
+  "images": 14,
+  "meshes": [],
+  "ik": 0,
+  "impact": 0.52,
+  "clips": {
+    "idle": 2.15,
+    "prepare": 0.89,
+    "attack": 0.99,
+    "hurt": 0.4,
+    "death": 1.27
+  },
+  "auxiliary": {},
+  "atlasPages": [
+    "minotaur-parts.png"
+  ],
+  "projectSha256": "aea46adc8e83fe6bfb3970c1be5a38d8f96343484455500b70ce84cc49192e4e",
+  "runtimeSha256": "5464c54cfd6920c3cf862c0cd1e5a5243444dda36a663122f393e779749ad4b5"
+}

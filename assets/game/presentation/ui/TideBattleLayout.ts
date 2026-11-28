@@ -1,8 +1,16 @@
-import { Color, Graphics, Node, UITransform, Vec3 } from 'cc';
+import { Color, Graphics, instantiate, Node, UITransform, Vec2, Vec3 } from 'cc';
+import type { GameReadModel } from '../../core/GameReadModel';
+import { battleEnemies, intentDamage } from '../../core/content/LabyrinthEnemies';
 import { ActorPresentation } from '../actors/ActorPresentation';
 import { HandPresentation } from '../cards/HandPresentation';
 import { SceneAtmosphere } from '../effects/SceneAtmosphere';
 import { battleWindowLayout } from './BattleWindowLayout';
+import { ButtonAction } from './ButtonAction';
+import { UIProgress } from './UIProgress';
+import { UIValue } from './UIValue';
+import { EnemyIntent } from './EnemyIntent';
+
+interface EnemyControls { vitals: Node; intent: EnemyIntent; target: Node }
 
 /** Position the encounter HUD against the active actor's resting pose. */
 export class TideBattleLayout {
@@ -11,20 +19,63 @@ export class TideBattleLayout {
     private mode = '';
     private frame = battleWindowLayout(1440, 900);
     private enemy: ActorPresentation | null = null;
+    private partner: ActorPresentation | null = null;
+    private readonly enemyControls: EnemyControls[];
     private field = false;
     private labyrinth = false;
-    constructor(private readonly screen: Node) {}
+    constructor(private readonly screen: Node) {
+        this.enemyControls = [{ vitals: screen.getChildByName('EnemyVitals')!,
+            intent: screen.getChildByName('EnemyIntent')!.getComponent(EnemyIntent)!,
+            target: screen.getChildByName('enemy-target')! }];
+    }
+    private addPartnerControls(): void {
+        const copy = (original: Node) => {
+            const node = instantiate(original);
+            node.name = original.name + '-1';
+            node.parent = this.screen;
+            node.setSiblingIndex(original.getSiblingIndex() + 1);
+            return node;
+        };
+        const first = this.enemyControls[0];
+        const target = copy(first.target);
+        target.getComponent(ButtonAction)!.actionId = target.name;
+        this.enemyControls.push({ vitals: copy(first.vitals), intent: copy(first.intent.node).getComponent(EnemyIntent)!, target });
+    }
+    targetAt(point: Vec2): number {
+        return this.enemyControls.findIndex(({ target }) => target.activeInHierarchy &&
+            target.getComponent(UITransform)!.getBoundingBoxToWorld().contains(point));
+    }
+    renderOpponents(game: GameReadModel, canInspect: boolean): void {
+        const battle = game.battle!, members = battleEnemies(battle);
+        let block = battle.block;
+        this.enemyControls.forEach(({vitals, intent, target}, slot) => {
+            const member = members[slot], alive = !!member?.hp;
+            target.active = vitals.active = intent.node.active = alive;
+            if (!alive) return;
+            for (const value of vitals.getComponentsInChildren(UIValue)) {
+                if (value.key === 'banner/text1') value.setValue(game.scenario.enemies[member.enemy].title +
+                    (members.length > 1 ? (slot === 0 ? ' · 前列' : ' · 后列') : ''));
+                if (value.key === 'battle/text5') value.setValue(`${member.hp}/${member.maxHp}`);
+            }
+            vitals.getComponentInChildren(UIProgress)!.setRatio(member.hp / member.maxHp);
+            intent.render(game, canInspect, member, block);
+            if (slot >= (battle.pendingEnemy ?? 0)) block = Math.max(0, block - intentDamage(member));
+        });
+    }
     fitWindow(frame: ReturnType<typeof battleWindowLayout>): void {
         if (frame.width === this.frame.width && frame.height === this.frame.height && frame.scale === this.frame.scale) return;
         this.screen.getChildByName('Hand')!.getComponent(HandPresentation)!.cancelGestures();
         this.frame = frame;
         this.placeInWindow();
     }
-    show(enemy: ActorPresentation, field: boolean, labyrinth: boolean): void {
-        const mode = (labyrinth ? 'labyrinth/' : field ? 'tide/' : 'legacy/') + enemy.actorId;
+    show(enemy: ActorPresentation, field: boolean, labyrinth: boolean, partner: ActorPresentation | null = null): void {
+        const mode = (labyrinth ? 'labyrinth/' : field ? 'tide/' : 'legacy/') + enemy.actorId + '/' + (partner?.actorId ?? '');
         if (mode === this.mode) return;
         this.mode = mode;
         this.enemy = enemy;
+        this.partner = partner;
+        if (partner && this.enemyControls.length === 1) this.addPartnerControls();
+        this.enemyControls[0].vitals.setScale(partner ? .86 : 1, partner ? .86 : 1, 1);
         this.field = field;
         this.labyrinth = labyrinth;
         for (const [node, before] of this.originalActors) {
@@ -69,6 +120,13 @@ export class TideBattleLayout {
             } else if (['player', 'wanderer', 'brute'].indexOf(actor.actorId) >= 0)
                 actor.node.setPosition(original.x, original.y + (actor.actorId === 'brute' ? 39 : 28), original.z);
         }
+        if (partner) {
+            enemy.node.setPosition(112, -174);
+            partner.node.setPosition(407, -146);
+            enemy.node.setScale(.86, .86, 1);
+            partner.node.setScale(.82, .82, 1);
+            this.enemyControls[1].vitals.setScale(.86, .86, 1);
+        }
         this.placeInWindow();
     }
     private placeInWindow(): void {
@@ -99,6 +157,24 @@ export class TideBattleLayout {
             : [350, 45, 380, 520];
         target.setPosition(box[0] * a, box[1] * a + f.worldY);
         target.getComponent(UITransform)!.setContentSize(box[2] * a, box[3] * a);
+        if (this.partner) {
+            child('PlayerVitals').setPosition(-f.healthX, f.healthY);
+            [enemy, this.partner].forEach((actor, slot) => {
+                const controls = this.enemyControls[slot];
+                const top = root.convertToNodeSpaceAR(actor.node.getChildByName('IntentAnchor')!.worldPosition);
+                const x = actor.node.position.x * a;
+                controls.vitals.setPosition(x + 23, top.y + 3);
+                controls.intent.node.setPosition(x - 91, top.y + 3);
+            });
+        }
+        [enemy, this.partner].forEach((actor, slot) => {
+            const bounds = actor?.node.getChildByName('TargetBounds')?.getComponent(UITransform);
+            if (!bounds) return;
+            const hit = this.enemyControls[slot].target;
+            hit.setWorldPosition(bounds.node.worldPosition);
+            const scale = bounds.node.worldScale.x / this.screen.worldScale.x;
+            hit.getComponent(UITransform)!.setContentSize(bounds.width * scale, bounds.height * scale);
+        });
 
         child('drawPile').setPosition(-f.pileX, f.pileY);
         child('discardPile').setPosition(f.pileX, f.pileY);

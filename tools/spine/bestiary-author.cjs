@@ -66,7 +66,14 @@ function publish(id,exe,scratch,replace,folder=path.join(base,id)){
     if(id==='veil-idol')assert.deepEqual(exportedMeshNames.sort(),['pennant-left','pennant-right']);
     if(id==='stone-claw')assert.equal(exported.ik.length,2);
     const runtime=path.join(folder,'runtime');fs.mkdirSync(runtime,{recursive:true});
+    const previousAtlas=path.join(runtime,id+'.atlas');
+    const previousPages=fs.existsSync(previousAtlas)?fs.readFileSync(previousAtlas,'utf8').split(/\r?\n/).filter(line=>line.endsWith('.png')):[];
     for(const file of fs.readdirSync(out))fs.copyFileSync(path.join(out,file),path.join(runtime,file));
+    for(const page of previousPages){
+      if(path.basename(page)!==page || !page.startsWith(id+'-parts') || packed.pages.includes(page))continue;
+      const stale=path.join(runtime,page);
+      if(fs.existsSync(stale))fs.renameSync(stale,path.join(work,'previous-'+page));
+    }
     fs.copyFileSync(candidate,approvedProject);
     const result={actor:id,editor:exported.skeleton.spine,bones:exported.bones.length,slots:exported.slots.length,
       images:registration.parts.length,meshes:exportedMeshNames,ik:exported.ik?.length||0,impact:landmarks[0].time,

@@ -1,0 +1,76 @@
+
+hydra-parts.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+coils
+  rotate: false
+  xy: 2, 2
+  size: 495, 236
+  orig: 495, 236
+  offset: 0, 0
+  index: -1
+front-coil
+  rotate: false
+  xy: 2, 273
+  size: 410, 189
+  orig: 410, 189
+  offset: 0, 0
+  index: -1
+high-head
+  rotate: false
+  xy: 2, 468
+  size: 218, 111
+  orig: 218, 111
+  offset: 0, 0
+  index: -1
+high-neck
+  rotate: false
+  xy: 757, 103
+  size: 232, 281
+  orig: 232, 281
+  offset: 0, 0
+  index: -1
+high-throat
+  rotate: false
+  xy: 797, 388
+  size: 170, 191
+  orig: 170, 191
+  offset: 0, 0
+  index: -1
+low-head
+  rotate: false
+  xy: 224, 466
+  size: 198, 113
+  orig: 198, 113
+  offset: 0, 0
+  index: -1
+low-neck
+  rotate: false
+  xy: 416, 242
+  size: 192, 215
+  orig: 192, 215
+  offset: 0, 0
+  index: -1
+mid-head
+  rotate: false
+  xy: 426, 461
+  size: 205, 118
+  orig: 205, 118
+  offset: 0, 0
+  index: -1
+mid-neck
+  rotate: false
+  xy: 612, 164
+  size: 141, 267
+  orig: 141, 267
+  offset: 0, 0
+  index: -1
+mid-throat
+  rotate: false
+  xy: 635, 435
+  size: 158, 144
+  orig: 158, 144
+  offset: 0, 0
+  index: -1

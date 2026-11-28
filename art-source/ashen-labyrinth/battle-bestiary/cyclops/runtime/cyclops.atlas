@@ -1,0 +1,90 @@
+
+cyclops-parts.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+apron
+  rotate: false
+  xy: 355, 263
+  size: 242, 245
+  orig: 242, 245
+  offset: 0, 0
+  index: -1
+far-arm
+  rotate: false
+  xy: 694, 69
+  size: 138, 153
+  orig: 138, 153
+  offset: 0, 0
+  index: -1
+far-fist
+  rotate: false
+  xy: 836, 90
+  size: 134, 132
+  orig: 134, 132
+  offset: 0, 0
+  index: -1
+far-leg
+  rotate: false
+  xy: 2, 35
+  size: 163, 208
+  orig: 163, 208
+  offset: 0, 0
+  index: -1
+far-shoulder
+  rotate: false
+  xy: 753, 226
+  size: 146, 155
+  orig: 146, 155
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 323, 73
+  size: 202, 170
+  orig: 202, 170
+  offset: 0, 0
+  index: -1
+near-arm
+  rotate: false
+  xy: 169, 72
+  size: 150, 171
+  orig: 150, 171
+  offset: 0, 0
+  index: -1
+near-foot
+  rotate: false
+  xy: 529, 2
+  size: 153, 90
+  orig: 153, 90
+  offset: 0, 0
+  index: -1
+near-leg
+  rotate: false
+  xy: 529, 96
+  size: 161, 163
+  orig: 161, 163
+  offset: 0, 0
+  index: -1
+near-shoulder
+  rotate: false
+  xy: 601, 348
+  size: 148, 160
+  orig: 148, 160
+  offset: 0, 0
+  index: -1
+pounding-fist
+  rotate: false
+  xy: 753, 385
+  size: 147, 123
+  orig: 147, 123
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 2, 247
+  size: 349, 261
+  orig: 349, 261
+  offset: 0, 0
+  index: -1

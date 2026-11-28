@@ -1,0 +1,23 @@
+{
+  "actor": "cyclops",
+  "editor": "3.8.75",
+  "bones": 14,
+  "slots": 12,
+  "images": 12,
+  "meshes": [],
+  "ik": 0,
+  "impact": 0.6,
+  "clips": {
+    "idle": 2.58,
+    "prepare": 0.88,
+    "attack": 1.03,
+    "hurt": 0.41,
+    "death": 1.24
+  },
+  "auxiliary": {},
+  "atlasPages": [
+    "cyclops-parts.png"
+  ],
+  "projectSha256": "89f19de472dea246b2d6291cd5bce1d90bf4bd9f5a080aded70025aad58d2f95",
+  "runtimeSha256": "cddf0c2f9e86881c646ba8b286af1d3d0a73f9b2efc8ab86353059198f4b4c7b"
+}

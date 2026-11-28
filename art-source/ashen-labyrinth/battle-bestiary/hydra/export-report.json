@@ -1,0 +1,23 @@
+{
+  "actor": "hydra",
+  "editor": "3.8.75",
+  "bones": 12,
+  "slots": 10,
+  "images": 10,
+  "meshes": [],
+  "ik": 0,
+  "impact": 0.64,
+  "clips": {
+    "idle": 2.65,
+    "prepare": 0.76,
+    "attack": 1.14,
+    "hurt": 0.4,
+    "death": 1.38
+  },
+  "auxiliary": {},
+  "atlasPages": [
+    "hydra-parts.png"
+  ],
+  "projectSha256": "0456c778f4083e5d37bfebf795b9aa43949baf50b55d166b667a434a8d20eacf",
+  "runtimeSha256": "1ab3d43c6e7b09b85ed2477571e373fbebd6bf49748f28c8c4b781246bea9999"
+}

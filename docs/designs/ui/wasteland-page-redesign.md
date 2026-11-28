@@ -1,5 +1,11 @@
 # The end 整体页面与废土 UI 改版
 
+## 2026-11-28 · 四种房型与回到当前节点领奖
+
+《The end》已实装。羊皮纸主图和只读地图统一显示普通怪、精英怪、休息处和搜刮房，图例使用已有图标素材。普通地点直接显示房名和房型，沉灯庭仍在终点。玩家滚动查看路线，点击双圈可达节点进入。
+
+结算页区分「战斗牌奖励」和「物资卡奖励」。同一房间有两类奖励时，「查看战斗牌」或「查看物资卡」切换候选，领取其中一类后接着显示另一类。点「略过」回到地图，当前节点显示「奖励待领」。主图点击该节点可打开原来的奖励，读档后同样可继续。终战略过后会在主图显示「返回营地」。相关实现见 `assets/game/presentation/map/RouteMap.ts`、`RoutePoint.ts` 和 `assets/game/presentation/cards/RewardScreenPresenter.ts`。
+
 ## 2026-11-27 · 物资卡搜刮、仓库与工坊
 
 《The end》焦土迷宫已接入。进入检修暗槽等补给点后，玩家能读到物品名称、插画和单张兑换值，点牌后确认拿取，也可略过。奖励提示区说明本张卡会放入行囊还是暂存。行囊空间不足时可直接点「整理物资行囊」。物资行囊分别列出行囊和暂存的张数，单卡详情标出哪些物品能带回。奖励与休整时可丢弃物资卡，确认后腾出的空间会按现有顺序接纳暂存物品。
@@ -28,11 +34,11 @@
 
 布局与数据绑定见 `assets/prefabs/screens/BattleScreen.prefab`、`assets/prefabs/ui/HUD.prefab`、`assets/prefabs/ui/BattlePilePopup.prefab`、`assets/game/presentation/GameRenderer.ts` 和 `assets/game/presentation/cards/BattlePileModel.ts`。设置关闭与敌人锚点分别在 `assets/prefabs/ui/SettingsPopup.prefab` 和 `assets/prefabs/actors/`。
 
-## 2026-11-28 · 领取前悬停查看完整牌效
+## 2026-11-28 · 右键查看完整牌效
 
-候选卡默认显示插画、基础数值和简述。鼠标停在卡上时，在这张卡内显示详细描述与规则数值，卡名和费用继续可见。长说明可以用滚轮在卡内阅读。移出卡面后恢复简述。玩家可以直接悬停比较候选，点选并确认后领取。
+候选战斗卡默认显示插画、基础数值和简述。右键点击卡牌，在同一张牌内展开详细描述与规则数值，卡名和费用继续可见。再次右键同一张牌会收起，右键另一张牌会切换详情。鼠标移出牌面时保持详情，长说明可用滚轮阅读。左键选中卡牌，点击确认后才领取。
 
-卡牌工坊的「简述」写入 `summary`，「详细描述」写入 `text`。简述留空时使用已有牌面文案，详情基于基础效果与原说明。显示模型保留输入的文字长度。奖励入口见 `RewardSelection.ts` 和 `SelectableCard.ts`，说明区域沿用 `CardPresentation.ts` 的原生滚动视图。设计已按用户确认的悬停交互实装。
+卡牌工坊的「简述」写入 `summary`，「详细描述」写入 `text`。简述留空时使用已有牌面文案，详情基于基础效果与原说明。显示模型保留输入的文字长度。奖励入口见 `RewardSelection.ts` 和 `SelectableCard.ts`，说明区域沿用 `CardPresentation.ts` 的原生滚动视图。设计已按用户确认的右键交互实装。
 
 ## 2026-11-27 · 余温壁炉岔口的战斗提示
 

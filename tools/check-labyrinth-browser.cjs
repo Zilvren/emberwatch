@@ -324,6 +324,53 @@ async function visitCamp(page, native) {
     assert.deepEqual(await native.save(), initial);
     await page.setViewportSize({ width: 1440, height: 900 });
 }
+async function verifyRewardDetails(page, native) {
+    const viewport = page.viewportSize();
+    const outside = [24, viewport.height / 2];
+    const first = await native.target('reward-select-0');
+    const second = await native.target('reward-select-1');
+    const rightClick = ([x, y]) => page.mouse.click(x, y, { button: 'right' });
+    const save = await native.save();
+    const selection = (await native.state()).rewardSelection;
+    const expanded = () => page.evaluate(() => cc.director.getScene().getComponentsInChildren('SelectableCard')
+        .filter(view => view.node.activeInHierarchy && view.action?.actionId.startsWith('reward-select-') && view.card.expanded)
+        .map(view => view.action.actionId));
+    const contextMenuSuppressed = await page.evaluate(() => {
+        const canvas = document.getElementById('GameCanvas');
+        return !canvas.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, button: 2 }));
+    });
+    assert.equal(contextMenuSuppressed, true);
+    await page.mouse.move(...first);
+    await page.waitForTimeout(2100);
+    assert.deepEqual(await expanded(), []);
+    await rightClick(first);
+    assert.deepEqual(await expanded(), ['reward-select-0']);
+    for (let i = 1; i <= 8; i++) {
+        await page.mouse.move(first[0] + i * 3, first[1]);
+        assert.deepEqual(await expanded(), ['reward-select-0']);
+    }
+    await page.mouse.move(...outside);
+    await page.mouse.move(...second);
+    assert.deepEqual(await expanded(), ['reward-select-0']);
+    await image(page, 'reward-right-click-' + viewport.width);
+    await rightClick(second);
+    assert.deepEqual(await expanded(), ['reward-select-1']);
+    await rightClick(second);
+    assert.deepEqual(await expanded(), []);
+    assert.equal((await native.state()).rewardSelection, selection);
+    assert.deepEqual(await native.save(), save);
+
+    await rightClick(first);
+    await native.click('reward-select-0');
+    assert.deepEqual(await expanded(), ['reward-select-0']);
+    assert.equal((await native.state()).rewardSelection, 0);
+    await rightClick(await native.target('discover-confirm'));
+    assert.deepEqual(await native.save(), save);
+    assert.deepEqual(await expanded(), ['reward-select-0']);
+    return { viewport, contextMenuSuppressed, hoverKeptSummary: true, stableAcrossMouseMoves: true,
+        switchedWithRightClick: true, sameCardClosed: true, selectedWithLeftClick: true, rightClickPreservedSave: true };
+}
+
 async function oneRoute(browser, url, lane) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: lane === 'A' ? 'no-preference' : 'reduce' });
     observe(page);
@@ -451,6 +498,12 @@ async function oneRoute(browser, url, lane) {
                     assert.deepEqual(await native.save(), save);
                     choiceReload = true;
                     await image(page, '06-discovery');
+                }
+                if (options.length === 1) {
+                    if (lane === 'B') await page.setViewportSize({ width: 1024, height: 768 });
+                    await page.waitForTimeout(100);
+                    (report.rewardDetails ??= []).push(await verifyRewardDetails(page, native));
+                    if (lane === 'B') await page.setViewportSize({ width: 1440, height: 900 });
                 }
                 if (lane === 'A' && chosen === null) {
                     chosen = save.rewards.cards[0];

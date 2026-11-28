@@ -1,4 +1,5 @@
 import type { GameCommand, GameSession } from '../../application/GameSession';
+import { nodeDefinition } from '../../core/content/GameScenario';
 
 /** Reproduce the first encounter using ordinary commands in an explicitly temporary preview. */
 export function enterEncounterPreview(session: GameSession): void {
@@ -20,7 +21,9 @@ export function enterEncounterPreview(session: GameSession): void {
     for (const command of commands) execute(command);
     const map = session.view.expeditionMap;
     if (map) {
-        const id = map.points[0].next.find(node => session.view.scenario.nodes[node].type === 'battle');
+        while (session.view.rewards?.discovery) execute({ type: 'discover', kind: null });
+        const id = map.points[0].next.find((node) =>
+            nodeDefinition(session.view.scenario, node, map)?.type === 'battle');
         if (!id) throw new Error('当前地图缺少入口战斗。');
         execute({ type: 'enter-node', id });
     } else {

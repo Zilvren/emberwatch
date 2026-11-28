@@ -262,7 +262,7 @@ if (mode === '--templates') {
             action: ref(input),
             title: ref(title.label),
             status: ref(status.label),
-            iconFrames: ['battle', 'elite', 'rest', 'unknown', 'home'].map(mapGlyph),
+            iconFrames: ['battle', 'elite', 'rest', 'salvage', 'home'].map(mapGlyph),
         });
         save(g);
     }
@@ -271,6 +271,10 @@ if (mode === '--templates') {
 }
 
 function mapGlyph(kind) {
+    if (kind === 'salvage') {
+        const atlas = read('assets/ashen-labyrinth/interface/control-icons.plist.meta');
+        return asset(Object.values(atlas.subMetas).find((frame) => frame.name === 'ic-supplies').uuid, 'cc.SpriteFrame');
+    }
     return asset(uuid(`assets/resources/ui/map-icons/${kind}.png`) + '@f9941', 'cc.SpriteFrame');
 }
 
@@ -305,7 +309,7 @@ function configureRoutePage(g) {
     const key = g.node('RouteKey', g.root, -575, -355, 1, 1);
     controller.key = ref(key);
     const sprite = read('assets/prefabs/ui/HUD.prefab').find(row => row.__type__ === 'cc.Sprite');
-    const places = [['battle', '战斗'], ['elite', '强敌'], ['rest', '休整'], ['unknown', '未知地点']];
+    const places = [['battle', '普通怪'], ['elite', '精英怪'], ['rest', '休息处'], ['salvage', '搜刮房']];
     places.forEach(([kind, name], i) => {
         const x = i * 108;
         const icon = g.node('Key-' + kind, key, x, 0, 23, 23);

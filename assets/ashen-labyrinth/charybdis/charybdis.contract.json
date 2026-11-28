@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-charybdis",
+  "sourceSha256": "4b4735ea8b9f1c066f88e578cab396aeeecdfeeba00dedad85c9523371e247a8",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "stance",
+    "spring",
+    "vortex",
+    "hollow",
+    "far-lip",
+    "crest",
+    "near-lip",
+    "foam-ribbon",
+    "basin",
+    "shard-high",
+    "shard-mid",
+    "shard-low",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 2.6,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.92,
+      "loop": false
+    },
+    "attack": {
+      "duration": 1.18,
+      "loop": false,
+      "contact": 0.68
+    },
+    "hurt": {
+      "duration": 0.42,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.28,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    -115.22968047515293,
+    167.72557925808968
+  ],
+  "approachBone": "Approach",
+  "flight": 0.18,
+  "parts": [
+    {
+      "name": "near-lip"
+    },
+    {
+      "name": "spring"
+    },
+    {
+      "name": "foam-ribbon"
+    },
+    {
+      "name": "shard-mid"
+    },
+    {
+      "name": "far-lip"
+    },
+    {
+      "name": "shard-low"
+    },
+    {
+      "name": "vortex"
+    },
+    {
+      "name": "hollow"
+    },
+    {
+      "name": "shard-high"
+    },
+    {
+      "name": "crest"
+    },
+    {
+      "name": "basin"
+    }
+  ]
+}

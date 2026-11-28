@@ -1,0 +1,76 @@
+
+stymphalian-bird-parts.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beak
+  rotate: false
+  xy: 608, 172
+  size: 96, 86
+  orig: 96, 86
+  offset: 0, 0
+  index: -1
+breast
+  rotate: false
+  xy: 267, 48
+  size: 147, 195
+  orig: 147, 195
+  offset: 0, 0
+  index: -1
+far-talon
+  rotate: false
+  xy: 522, 119
+  size: 82, 124
+  orig: 82, 124
+  offset: 0, 0
+  index: -1
+far-wing
+  rotate: false
+  xy: 551, 262
+  size: 188, 247
+  orig: 188, 247
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 418, 3
+  size: 185, 107
+  orig: 185, 107
+  offset: 0, 0
+  index: -1
+near-talon
+  rotate: false
+  xy: 418, 114
+  size: 100, 129
+  orig: 100, 129
+  offset: 0, 0
+  index: -1
+near-wing
+  rotate: false
+  xy: 246, 247
+  size: 301, 262
+  orig: 301, 262
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 607, 2
+  size: 130, 113
+  orig: 130, 113
+  offset: 0, 0
+  index: -1
+primaries
+  rotate: false
+  xy: 2, 244
+  size: 240, 265
+  orig: 240, 265
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 2, 31
+  size: 261, 209
+  orig: 261, 209
+  offset: 0, 0
+  index: -1

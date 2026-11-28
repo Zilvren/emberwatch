@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-hydra",
+  "sourceSha256": "1ab3d43c6e7b09b85ed2477571e373fbebd6bf49748f28c8c4b781246bea9999",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "stance",
+    "coils",
+    "low-neck",
+    "low-head",
+    "mid-neck",
+    "mid-throat",
+    "mid-head",
+    "high-neck",
+    "high-throat",
+    "high-head",
+    "front-coil",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 2.65,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.76,
+      "loop": false
+    },
+    "attack": {
+      "duration": 1.14,
+      "loop": false,
+      "contact": 0.64
+    },
+    "hurt": {
+      "duration": 0.4,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.38,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    -174.89591528165647,
+    235.50460629162717
+  ],
+  "approachBone": "Approach",
+  "parts": [
+    {
+      "name": "coils"
+    },
+    {
+      "name": "mid-head"
+    },
+    {
+      "name": "mid-throat"
+    },
+    {
+      "name": "high-neck"
+    },
+    {
+      "name": "high-head"
+    },
+    {
+      "name": "high-throat"
+    },
+    {
+      "name": "mid-neck"
+    },
+    {
+      "name": "front-coil"
+    },
+    {
+      "name": "low-neck"
+    },
+    {
+      "name": "low-head"
+    }
+  ]
+}

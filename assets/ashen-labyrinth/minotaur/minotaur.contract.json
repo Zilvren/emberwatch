@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-minotaur",
+  "sourceSha256": "5464c54cfd6920c3cf862c0cd1e5a5243444dda36a663122f393e779749ad4b5",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "stance",
+    "chest",
+    "head",
+    "far-horn",
+    "near-horn",
+    "near-shoulder",
+    "near-arm",
+    "near-fist",
+    "far-arm",
+    "far-fist",
+    "far-leg",
+    "far-hoof",
+    "near-leg",
+    "near-hoof",
+    "kilt",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 2.15,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.89,
+      "loop": false
+    },
+    "attack": {
+      "duration": 0.99,
+      "loop": false,
+      "contact": 0.52
+    },
+    "hurt": {
+      "duration": 0.4,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.27,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    -170.2249221919418,
+    321.55770854187364
+  ],
+  "approachBone": "Approach",
+  "parts": [
+    {
+      "name": "near-fist"
+    },
+    {
+      "name": "chest"
+    },
+    {
+      "name": "near-horn"
+    },
+    {
+      "name": "kilt"
+    },
+    {
+      "name": "far-hoof"
+    },
+    {
+      "name": "far-leg"
+    },
+    {
+      "name": "far-fist"
+    },
+    {
+      "name": "head"
+    },
+    {
+      "name": "near-hoof"
+    },
+    {
+      "name": "near-shoulder"
+    },
+    {
+      "name": "far-arm"
+    },
+    {
+      "name": "near-leg"
+    },
+    {
+      "name": "near-arm"
+    },
+    {
+      "name": "far-horn"
+    }
+  ]
+}

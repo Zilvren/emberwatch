@@ -46,6 +46,8 @@ function tracksFor(rig) {
   return {movement,idle,gesture};
 }
 function clips(rig){
+  if(Object.hasOwn(require('./mythic-bestiary.cjs'),rig.id))
+    return require('./mythic-bestiary-motion.cjs').mythicClips(rig,tracksFor(rig));
   const {movement,idle,gesture}=tracksFor(rig);
   const readyT=[0,.28,.62,.79,1],ready=[0,.58,1,.94,0],hitT=[0,.14,.37,.69,1],hit=[0,1,.58,-.12,0];
   const animations={};let contact;

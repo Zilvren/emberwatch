@@ -90,6 +90,19 @@ export interface Catalog {
     };
     labyrinth?: LabyrinthCatalog;
 }
+
+export const LABYRINTH_SPARE_PARTS = 'lab_spare_parts';
+
+export function runtimeCardDefinitions(catalog: Catalog): CardDefinition[] {
+    const cards = withFistVariants(catalog.cards);
+    if (catalog.labyrinth) cards.push({
+        id: LABYRINTH_SPARE_PARTS, name: '零件包', tag: '物资', cost: 0,
+        weight: 1, text: '带回营地后可兑换 1 点物资。', color: '#9aaf8c', art: 'cash',
+        role: 'supply', initialCount: 0, reward: false, supplyValue: 1, chapter: 'ashen-labyrinth',
+        effect: { type: 'none', amount: 0 },
+    });
+    return cards;
+}
 export function isBattleCard(card: Pick<CardDefinition, 'role'>): boolean {
     return card.role === 'basic' || card.role === 'normal';
 }
@@ -213,6 +226,7 @@ export function validateCatalog(raw: unknown): Catalog {
         )
             issues.push(`${label}：ID 需为 2～48 位小写字母、数字、下划线或短横线，首位为字母。`);
         if (seen.has(card.id)) issues.push(`${label}：ID「${card.id}」重复。`);
+        if (card.id === LABYRINTH_SPARE_PARTS) issues.push(`${label}：该 ID 由系统备用物资使用。`);
         seen.add(card.id);
         if (typeof card.name !== 'string' || !card.name.trim() || card.name.length > 18)
             issues.push(`${label}：名称需为 1～18 个字符。`);
@@ -545,7 +559,7 @@ export function installCatalog(raw: unknown): Catalog {
     for (const id of Object.keys(CARD)) delete CARD[id];
     REWARD_POOL.length = 0;
     INITIAL_DECK.length = 0;
-    for (const card of withFistVariants(next.cards)) {
+    for (const card of runtimeCardDefinitions(next)) {
         CARD[card.id] = playableCard(card);
         if (card.reward && card.role !== 'supply' && !card.fist) REWARD_POOL.push(card.id);
         for (let count = 0; count < card.initialCount; count++) INITIAL_DECK.push(card.id);

@@ -1,5 +1,274 @@
 {
   "schemaVersion": 1,
+  "mythicRoomBackgrounds20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "scope": "七处神话遭遇的空场原画、原生房间绑定、战斗与选牌窗口取景",
+    "rooms": [
+      "岔角庭",
+      "断柱石场",
+      "沉水窟",
+      "风蚀栖台",
+      "双翼风廊",
+      "沉潮井",
+      "合岩隘口"
+    ],
+    "revision": "a3f3fe6 加当前工作区",
+    "engine": "Pink/Cocos 4.0.0-beta.1 Web Desktop",
+    "scene": "assets/TheEnd.scene",
+    "buildLog": "temp/builder/log/web-desktop-build-1795867406165.log",
+    "bundleSHA256": "6d4efefc9ed1c59b9e1e0a744611fe47779c315da3ddafb0b85d907f30501cd6",
+    "art": {
+      "source": "ImageGen，参考项目原有折光回廊与沉灯庭，交付纯环境画面",
+      "sourcePNGs": 7,
+      "spriteFrames": 7,
+      "sourceBytes": 12126653,
+      "runtimeJPEGBytes": 1549514,
+      "format": "原尺寸 1585 或 1586 × 992，JPEG 质量 92、4:4:4"
+    },
+    "implementation": [
+      "assets/game/presentation/effects/SceneAtmosphere.ts",
+      "assets/game/presentation/GameRenderer.ts",
+      "assets/game/presentation/cards/RewardScreenPresenter.ts",
+      "assets/game/presentation/GameDirector.ts",
+      "tools/author-battle-room-backgrounds.py"
+    ],
+    "checks": {
+      "windowSizes": [
+        "1440×900",
+        "1024×768"
+      ],
+      "battleViewportChecks": 14,
+      "rewardViewportChecks": 14,
+      "battleRestores": 7,
+      "rewardRestores": [
+        "双翼风廊",
+        "沉潮井"
+      ],
+      "returnedToMapAndReleased": 7,
+      "fallbacks": [
+        "悬灯窄道→折光回廊",
+        "沉灯庭→原有井庭图"
+      ],
+      "routeSelection": "在各自生成的地图上实际点击可达节点。相同坐标对应不同房间、同一鸟种的单鸟与双鸟遭遇均读取了各自的 SpriteFrame UUID。各场胜利后核对奖励界面并返回地图。",
+      "framing": "人物脚底在源图约 71.55% 高度。两种窗口的战斗底图及奖励底图均覆盖可见画幅，奖励遮罩适配后小窗口上下黑边已消除。",
+      "resourceOwnership": "进入房间前资源缓存中尚无这七张 SpriteFrame，离场后当前图的独立引用释放。专项单测覆盖切房后旧回调晚到、同房重复请求、禁用组件、缓存命中和读取失败后的重试。",
+      "typecheck": true,
+      "architecture": true,
+      "unitTests": 236,
+      "unitPassed": 220,
+      "unitFailed": 16,
+      "newUnitFailureNames": [],
+      "pageErrors": 0,
+      "consoleErrors": 0,
+      "httpErrors": 0
+    },
+    "files": {
+      "source": "art-source/ashen-labyrinth/battle-bestiary/backgrounds/rooms/",
+      "artOverview": "art-source/ashen-labyrinth/battle-bestiary/preview/mythic-rooms/empty-rooms.jpg",
+      "gameOverview": "art-source/ashen-labyrinth/battle-bestiary/preview/mythic-rooms/in-battle.jpg",
+      "smallGame": "output/playwright/mythic-room-backgrounds/rooms-in-game-1024.jpg",
+      "originals": "output/playwright/mythic-room-backgrounds/seven-room-masters.zip",
+      "report": "output/playwright/mythic-room-backgrounds/verification.json",
+      "textures": "output/playwright/mythic-room-backgrounds/paintings.json"
+    },
+    "sourceArchive": "viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-bestiary/backgrounds/rooms/",
+    "verificationArchive": "viking://~/resources/projects/the-end/docs/mythic-room-backgrounds-20261128/"
+  },
+  "mythicBestiary20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "scope": "六种神话怪物、双翼风廊的两只独立敌人、原生动画与存档",
+    "selectedForms": [
+      "牛头怪（弥诺陶洛斯）",
+      "独眼石巨人",
+      "三头蛇（许德拉）",
+      "斯廷法洛斯鸟"
+    ],
+    "additionalDesigns": [
+      "卡律布狄斯取吞吐潮水的轮廓",
+      "相撞双岩取两壁开合的轮廓"
+    ],
+    "artReview": "四种保留造型由玩家选定。两种环境怪用神话中的动作设计。制作时复看了实机画面和连续动作，另外两种造型、全部动作观感及战斗数值供试玩评审。",
+    "revision": "a3f3fe6 加当前工作区",
+    "scene": "assets/TheEnd.scene",
+    "buildLog": "temp/builder/log/web-desktop-build-1795861624895.log",
+    "assets": {
+      "species": 6,
+      "spineVersion": "3.8.75",
+      "authorBones": 77,
+      "parts": 65,
+      "texturePages": 8,
+      "clips": 30,
+      "setupVisiblePixels": 1145325,
+      "setupDifferentPixels": 0,
+      "comparison": "同一注册画布上的标准化透明源图与中立姿势合成"
+    },
+    "group": {
+      "room": "双翼风廊",
+      "hp": [
+        5,
+        5
+      ],
+      "opening": [
+        "普攻 1",
+        "蓄势，随后重击 2"
+      ],
+      "checks": [
+        "1440×900 在前鸟飞羽末端点选，1024×768 把攻击牌拖到后鸟飞羽；两个击杀顺序均通过。",
+        "半场读档保留另一只的血量及独立意图，击败最后一只结算一次房间奖励。",
+        "在前鸟行动后捕获正式存档，重启主场景自动完成后鸟的动作。最终状态与连续结束回合完全一致。",
+        "专项规则测试覆盖共享格挡、镇静暂缓整组、无效或已倒下的目标、重复的敌方行动与存档。"
+      ]
+    },
+    "native": {
+      "cameFromGeneratedRooms": true,
+      "attacksWithSingleImpact": 6,
+      "nonLoopingDeathPosesHeld": 6,
+      "editorPlans": 6,
+      "environmentalHealthTraces": {
+        "charybdis": [
+          10,
+          10,
+          7
+        ],
+        "symplegades": [
+          10,
+          10,
+          10,
+          6
+        ]
+      },
+      "runtimeErrors": 0,
+      "capture": "六套骨架在正式战斗演员上实播并录屏；批量录屏读取本机原样构建文件，工坊与环境怪回合复核走 HTTP。"
+    },
+    "checks": {
+      "typecheck": true,
+      "architecture": true,
+      "unitTests": 234,
+      "unitPassed": 218,
+      "unitFailed": 16,
+      "newUnitFailureNames": []
+    },
+    "files": {
+      "lineup": "art-source/ashen-labyrinth/battle-bestiary/preview/mythic-lineup.png",
+      "projects": "output/playwright/mythic-bestiary/mythic-spine-projects.zip",
+      "native": "output/playwright/mythic-bestiary/verification.json",
+      "source": "output/playwright/mythic-bestiary/source-verification.json",
+      "editor": "output/playwright/mythic-bestiary/play-and-editor.json",
+      "group": "output/playwright/mythic-bestiary/flock-1024.png",
+      "motion": "output/playwright/mythic-bestiary/mythic-motion-review.gif"
+    },
+    "archive": "viking://~/resources/projects/the-end/docs/mythic-bestiary-20261128/"
+  },
+  "ashenRoomRewards20261128": {
+    "project": "The end",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "revision": "a3f3fe6 加当前工作区",
+    "scope": "焦土迷宫房型布置、房间双奖励和略过恢复",
+    "scene": "assets/TheEnd.scene",
+    "nativeBuild": "build/web-desktop",
+    "implementation": [
+      "assets/game/core/content/ExpeditionMap.ts",
+      "assets/game/core/systems/RewardRules.ts",
+      "assets/game/core/systems/ExplorationRules.ts",
+      "assets/game/core/state/GameState.ts",
+      "assets/game/presentation/map/RouteMap.ts"
+    ],
+    "rules": {
+      "seeds": 512,
+      "additionalCases": 3,
+      "tests": 231,
+      "passed": 215,
+      "baselineFailures": 16
+    },
+    "native": {
+      "seed": 17,
+      "floorsVisited": 17,
+      "fights": 6,
+      "clicks": 110,
+      "viewports": [
+        [
+          1440,
+          900
+        ],
+        [
+          1024,
+          768
+        ]
+      ],
+      "reloadedAt": [
+        "地图滚动后",
+        "途中岔路",
+        "入口奖励略过后",
+        "首战奖励略过后",
+        "终战奖励略过后"
+      ],
+      "checked": [
+        "双奖励原生切换",
+        "恢复原候选和物资余额",
+        "终战主动返营",
+        "下次出发新地图"
+      ],
+      "browserErrors": 0,
+      "report": "output/playwright/ashen-room-pools-20261128/report.json"
+    }
+  },
+  "rewardCardRightClick20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "revision": "a3f3fe6 加当前工作区",
+    "scene": "assets/TheEnd.scene",
+    "engine": "Pink/Cocos 4.0.0-beta.1 Web Desktop",
+    "scope": "奖励、探索发现与战中选牌的候选战斗卡右键读详情",
+    "implementation": [
+      "assets/game/presentation/cards/RewardSelection.ts",
+      "assets/game/presentation/cards/RewardScreenPresenter.ts",
+      "assets/game/presentation/cards/SelectableCard.ts",
+      "assets/game/presentation/cards/CardPresentation.ts"
+    ],
+    "before": {
+      "mouseMoves": 8,
+      "pixelsPerMove": 3,
+      "cardFaceSwitches": 8,
+      "fullScreenRenders": 0,
+      "cause": "旧版翻开详情时，原生 ScrollView 接管鼠标命中。卡牌收到离开事件就收起详情，下次移动重新展开。"
+    },
+    "nativeLog": "temp/builder/log/web-desktop-build-1795854850612.log",
+    "bundleSha256": "1550bc62371eae287fe5264d5ef3b0f348212422df34873d4a3698fb609d7a1d",
+    "checks": {
+      "typecheck": true,
+      "architecture": true,
+      "webBuild": true,
+      "viewports": [
+        [
+          1440,
+          900
+        ],
+        [
+          1024,
+          768
+        ]
+      ],
+      "input": "在两种尺寸从首战进入奖励页。右键打开、切换和收起，移动鼠标保持当前详情。右键保持选牌与存档，左键选中后通过确认按钮领取。游戏画布阻止浏览器右键菜单。",
+      "scroll": "1024×768 下滚到长说明末行，移动鼠标及左键选中均保持 164.10 个原生单位的滚动偏移。阅读期间整页重绘计数为 0。",
+    "unitTests": { "passed": 212, "failed": 16, "newFailures": 0 },
+      "runtimeErrors": 0,
+      "consoleErrors": 0
+    },
+    "evidence": {
+      "before": "output/playwright/reward-hover-delay-20261128/before.json",
+      "report": "output/playwright/reward-right-click-20261128/focused/verification.json",
+      "screenshot": "output/playwright/reward-right-click-20261128/focused/reward-right-click-1024.png",
+      "longReport": "output/playwright/reward-right-click-20261128/long-details.json",
+      "longScreenshot": "output/playwright/reward-right-click-20261128/long-details-bottom-1024.png",
+      "browserRegression": "tools/check-labyrinth-browser.cjs"
+    }
+  },
   "stashResolution20261128": {
     "project": "The end / emberwatch",
     "date": "2026-11-28",

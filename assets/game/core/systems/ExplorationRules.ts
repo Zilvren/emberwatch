@@ -1,7 +1,7 @@
 import { CardSet } from '../content/ContentRegistry';
 import { generatedCards } from '../content/CardCatalog';
 import { ASHEN_LABYRINTH_SCENARIO, GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
-import { generateAshenLabyrinthMap, nextMapNodes } from '../content/ExpeditionMap';
+import { expeditionRoomId, generateAshenLabyrinthMap, nextMapNodes } from '../content/ExpeditionMap';
 import { Random } from '../Random';
 import { ActionResult, NodeKind, Route } from '../RulesTypes';
 import { CombatRules } from './CombatRules';
@@ -56,9 +56,12 @@ export class ExplorationRules {
         this.state.battle = null;
         this.state.rewards = null;
         this.state.fistUnlocks = undefined;
-        this.state.discoveryPool = this.scenario.labyrinth
-            ? this.content.catalog.labyrinth!.discoveryPool.slice()
-            : undefined;
+        this.state.discoveryPool = undefined;
+        if (this.scenario.labyrinth) {
+            const pool = this.content.catalog.labyrinth!.discoveryPool.slice();
+            if (!pool.some((kind) => !this.content.cards[kind].fist)) pool.push(this.content.catalog.fixedReward);
+            this.state.discoveryPool = pool;
+        }
         this.state.settlement = null;
         this.state.failureReason = '';
         this.state.returnElapsed = 0;
@@ -83,23 +86,45 @@ export class ExplorationRules {
         if (this.state.phase !== 'map') return this.feedback.result(false, '请先完成当前事件。');
         const map = this.state.expeditionMap;
         const node = target ?? this.currentNode;
+        const last = this.state.visited[this.state.visited.length - 1];
+        if (map?.deferredRewards && node === last && node === map.deferredRewards.source) {
+            this.state.rewards = map.deferredRewards;
+            delete map.deferredRewards;
+            this.state.visited.pop();
+            this.state.fixedDone = this.state.visited.length > 0;
+            this.state.phase = 'rewards';
+            map.activeNode = node;
+            return this.feedback.result(true, '继续选择这间房的奖励。');
+        }
         if (node === 'choice') return this.feedback.result(false, '选择一条路线。');
-        if (node === 'return') return this.feedback.result(false, '正在返回避难所。');
+        if (node === 'return') {
+            if (map?.deferredRewards && this.currentNode === 'return') {
+                delete map.deferredRewards;
+                return this.feedback.result(true, '正在返回避难所。');
+            }
+            return this.feedback.result(false, '正在返回避难所。');
+        }
         const reachable = map
-            ? nextMapNodes(map, this.state.visited[this.state.visited.length - 1])
+            ? nextMapNodes(map, last)
             : [this.currentNode];
         if (reachable.indexOf(node) < 0) return this.feedback.result(false, '当前位置无法前往该地点。');
-        const definition = this.scenario.nodes[node];
-        if (!definition) return this.feedback.result(false, '地点配置不存在。');
+        const room = expeditionRoomId(map, node);
+        if (!room || !hasId(this.scenario.nodes, room))
+            return this.feedback.result(false, '地点配置不存在。');
+        const definition = this.scenario.nodes[room];
+        const fee = definition.type === 'scavenge'
+            ? this.scenario.scavengeFees?.[room] ?? definition.cost : 0;
+        if (this.state.supplies < fee)
+            return this.feedback.result(
+                false,
+                `进入需要 ${fee} 点物资，目前只有 ${this.state.supplies} 点。` +
+                    (map ? '' : '可以重新开始教学。')
+            );
+        if (map) {
+            delete map.deferredRewards;
+            map.activeNode = node;
+        }
         if (definition.type === 'scavenge') {
-            const fee = this.scenario.scavengeFees?.[node] ?? definition.cost;
-            if (this.state.supplies < fee)
-                return this.feedback.result(
-                    false,
-                    `进入需要 ${fee} 点物资，目前只有 ${this.state.supplies} 点。` +
-                        (map ? '' : '可以重新开始教学。')
-                );
-            if (map) map.activeNode = node;
             this.inventory.spend(fee);
             const supplies =
                 definition.supplies[0] === definition.supplies[1]
@@ -125,14 +150,13 @@ export class ExplorationRules {
                 cardTaken: false,
             };
         } else {
-            if (map) map.activeNode = node;
             if (definition.type === 'rest') {
                 this.state.phase = 'rest';
                 const restored = Math.min(definition.restoreHealth, 10 - this.state.health);
                 this.state.health += restored;
-            } else this.combat.startBattle(definition.enemyId);
+            } else this.combat.startBattle(definition.enemyId, definition.companions);
         }
-        return this.feedback.result(true, `进入${nodeTitle(this.scenario, node)}。`);
+        return this.feedback.result(true, `进入${definition.title}。`);
     }
     finishRest(): ActionResult {
         if (this.state.phase !== 'rest') return this.feedback.result(false, '当前不在营地。');
@@ -154,7 +178,8 @@ export class ExplorationRules {
         return this.feedback.result(true, '休整结束。');
     }
     advanceTime(seconds: number): void {
-        if (this.state.phase !== 'map' || this.currentNode !== 'return') return;
+        if (this.state.phase !== 'map' || this.currentNode !== 'return' ||
+            this.state.expeditionMap?.deferredRewards) return;
         this.state.returnElapsed += seconds;
         if (this.state.returnElapsed >= 0.8) this.shelter.returnToShelter();
     }

@@ -1,0 +1,394 @@
+{
+  "actor": "cyclops",
+  "source": "../mythic-creatures.png",
+  "sourceSha256": "035eff358a3cc6a3b0f523e670220ff6e27a63a87c6ddc38257b98a3193375ba",
+  "jointUnderpaint": null,
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    766,
+    469
+  ],
+  "scale": 0.76,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "torso",
+      "bone": "torso",
+      "sourceXYWH": [
+        603,
+        73,
+        349,
+        261
+      ],
+      "png": [
+        349,
+        261
+      ],
+      "sha256": "da8d0b92bdaa215524070f7c0f4226f313863ea86501096d6eab992f7fca9bbd",
+      "pivotUV": [
+        0.43553,
+        0.712644
+      ],
+      "setupPivot": [
+        -8.36,
+        159.6
+      ],
+      "size": [
+        265.24,
+        198.36
+      ],
+      "angle": 0,
+      "visiblePixels": 26791,
+      "hiddenPixels": 12896
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "sourceXYWH": [
+        597,
+        73,
+        202,
+        170
+      ],
+      "png": [
+        202,
+        170
+      ],
+      "sha256": "b6e83377a0cb89cceec08dfb6d6a26595cf04ad2b94932539e1eced58bc14707",
+      "pivotUV": [
+        0.579208,
+        0.705882
+      ],
+      "setupPivot": [
+        -39.52,
+        209.76
+      ],
+      "size": [
+        153.52,
+        129.2
+      ],
+      "angle": 0,
+      "visiblePixels": 14023,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "near-shoulder",
+      "bone": "near-shoulder",
+      "sourceXYWH": [
+        541,
+        158,
+        148,
+        160
+      ],
+      "png": [
+        148,
+        160
+      ],
+      "sha256": "f15cedde8d95b7294afce93258ee73e9cb8267b11eb4ee9c318280445694bf2a",
+      "pivotUV": [
+        0.648649,
+        0.425
+      ],
+      "setupPivot": [
+        -98.04,
+        184.68
+      ],
+      "size": [
+        112.48,
+        121.6
+      ],
+      "angle": 0,
+      "visiblePixels": 8477,
+      "hiddenPixels": 1673
+    },
+    {
+      "name": "near-arm",
+      "bone": "near-arm",
+      "sourceXYWH": [
+        511,
+        242,
+        150,
+        171
+      ],
+      "png": [
+        150,
+        171
+      ],
+      "sha256": "80c4d806cbe6642189f4152d7428b4091e60035d4d82b7f96c2e4ebe1f8ee44b",
+      "pivotUV": [
+        0.573333,
+        0.25731
+      ],
+      "setupPivot": [
+        -128.44,
+        139.08
+      ],
+      "size": [
+        114,
+        129.96
+      ],
+      "angle": 0,
+      "visiblePixels": 10371,
+      "hiddenPixels": 1417
+    },
+    {
+      "name": "pounding-fist",
+      "bone": "pounding-fist",
+      "sourceXYWH": [
+        511,
+        362,
+        147,
+        123
+      ],
+      "png": [
+        147,
+        123
+      ],
+      "sha256": "81cc3d9b5c321905d4ee791eef56adb9a08fbe12fddc519fee74b0a9647a8c3d",
+      "pivotUV": [
+        0.380952,
+        0.325203
+      ],
+      "setupPivot": [
+        -151.24,
+        50.92
+      ],
+      "size": [
+        111.72,
+        93.48
+      ],
+      "angle": 0,
+      "visiblePixels": 10257,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "far-shoulder",
+      "bone": "far-shoulder",
+      "sourceXYWH": [
+        830,
+        132,
+        146,
+        155
+      ],
+      "png": [
+        146,
+        155
+      ],
+      "sha256": "4791d3261e95be9182bde429e5dc86a369449e6fe72580d61060dc860f072901",
+      "pivotUV": [
+        0.315068,
+        0.445161
+      ],
+      "setupPivot": [
+        83.6,
+        203.68
+      ],
+      "size": [
+        110.96,
+        117.8
+      ],
+      "angle": 0,
+      "visiblePixels": 6301,
+      "hiddenPixels": 2774
+    },
+    {
+      "name": "far-arm",
+      "bone": "far-arm",
+      "sourceXYWH": [
+        872,
+        173,
+        138,
+        153
+      ],
+      "png": [
+        138,
+        153
+      ],
+      "sha256": "39a9b53038a816aaa303bc3e6783a77256a0e2efd44b47b04b6f78db1d6ce4a6",
+      "pivotUV": [
+        0.521739,
+        0.405229
+      ],
+      "setupPivot": [
+        135.28,
+        177.84
+      ],
+      "size": [
+        104.88,
+        116.28
+      ],
+      "angle": 0,
+      "visiblePixels": 8032,
+      "hiddenPixels": 1324
+    },
+    {
+      "name": "far-fist",
+      "bone": "far-fist",
+      "sourceXYWH": [
+        876,
+        278,
+        134,
+        132
+      ],
+      "png": [
+        134,
+        132
+      ],
+      "sha256": "ba179f9d76828fbc801dc1d30c97de004a2fbc21179b4229e1385d1a5b596669",
+      "pivotUV": [
+        0.634328,
+        0.287879
+      ],
+      "setupPivot": [
+        148.2,
+        116.28
+      ],
+      "size": [
+        101.84,
+        100.32
+      ],
+      "angle": 0,
+      "visiblePixels": 7649,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "far-leg",
+      "bone": "far-leg",
+      "sourceXYWH": [
+        810,
+        277,
+        163,
+        208
+      ],
+      "png": [
+        163,
+        208
+      ],
+      "sha256": "2c6634e637629a7278f37f428e73cb18472206d99cfb2a862d9d6e48f454eb3d",
+      "pivotUV": [
+        0.349693,
+        0.091346
+      ],
+      "setupPivot": [
+        76.76,
+        131.48
+      ],
+      "size": [
+        123.88,
+        158.08
+      ],
+      "angle": 0,
+      "visiblePixels": 10834,
+      "hiddenPixels": 1688
+    },
+    {
+      "name": "near-leg",
+      "bone": "near-leg",
+      "sourceXYWH": [
+        609,
+        281,
+        161,
+        163
+      ],
+      "png": [
+        161,
+        163
+      ],
+      "sha256": "f9d01e2b5b6524b8c30fde02ed26acb9293bf19d11a3783c66eaf00a215fc8b2",
+      "pivotUV": [
+        0.552795,
+        0.251534
+      ],
+      "setupPivot": [
+        -51.68,
+        111.72
+      ],
+      "size": [
+        122.36,
+        123.88
+      ],
+      "angle": 0,
+      "visiblePixels": 9181,
+      "hiddenPixels": 2433
+    },
+    {
+      "name": "near-foot",
+      "bone": "near-foot",
+      "sourceXYWH": [
+        611,
+        395,
+        153,
+        90
+      ],
+      "png": [
+        153,
+        90
+      ],
+      "sha256": "0c8595b6685478b0c5bbc7727687eb54863c4408e7debe728960dc8b80f66bf2",
+      "pivotUV": [
+        0.542484,
+        0.388889
+      ],
+      "setupPivot": [
+        -54.72,
+        29.64
+      ],
+      "size": [
+        116.28,
+        68.4
+      ],
+      "angle": 0,
+      "visiblePixels": 4862,
+      "hiddenPixels": 520
+    },
+    {
+      "name": "apron",
+      "bone": "apron",
+      "sourceXYWH": [
+        673,
+        233,
+        242,
+        245
+      ],
+      "png": [
+        242,
+        245
+      ],
+      "sha256": "6a77c2255c864c189c8563d188a5c235fa4ebbd311df2cc9e00ec31e7674b19d",
+      "pivotUV": [
+        0.400826,
+        0.24898
+      ],
+      "setupPivot": [
+        3.04,
+        133
+      ],
+      "size": [
+        183.92,
+        186.2
+      ],
+      "angle": 0,
+      "visiblePixels": 16130,
+      "hiddenPixels": 0
+    }
+  ],
+  "drawOrder": [
+    "far-leg",
+    "near-leg",
+    "near-foot",
+    "far-shoulder",
+    "far-arm",
+    "far-fist",
+    "torso",
+    "apron",
+    "near-shoulder",
+    "near-arm",
+    "pounding-fist",
+    "head"
+  ],
+  "setupAudit": {
+    "visiblePixels": 132908,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

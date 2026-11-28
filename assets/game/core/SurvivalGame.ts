@@ -329,6 +329,9 @@ export class SurvivalGame {
     discover(kind: CardKind | null): ActionResult {
         return this.rewards?.discovery ? this.rewardRules.discover(kind) : this.combatRules.discover(kind);
     }
+    switchRoomReward(): ActionResult {
+        return this.rewardRules.switchRoomReward();
+    }
     resolveCombatChoice(id: string | null): ActionResult {
         return this.combatRules.resolveChoice(id);
     }
@@ -341,11 +344,11 @@ export class SurvivalGame {
     get strength(): number {
         return this.combatRules.strength;
     }
-    play(id: string): ActionResult {
-        return this.combatRules.play(id);
+    play(id: string, target?: number): ActionResult {
+        return this.combatRules.play(id, target);
     }
-    endTurn(): ActionResult {
-        return this.combatRules.endTurn();
+    endTurn(slot?: number, turn?: number): ActionResult {
+        return this.combatRules.endTurn(slot, turn);
     }
     claimSupplies(): ActionResult {
         return this.rewardRules.claimSupplies();

@@ -24,10 +24,11 @@ const symbols: Record<string, string> = {
 
 function symbolFor(action: ButtonAction, caption: string): string | undefined {
     const id = action.actionId;
+    if (id === 'map-enter' && caption === '返回营地') return undefined;
     if (id === 'audio') return /关闭|声音关|已静音/.test(caption) ? 'muted' : 'sound';
     if (id === 'shelter-repair') return caption.indexOf('兑换') >= 0 ? 'coins' : 'heal';
     if (id === 'rewards-done') return caption === '取消出牌' ? 'back' : /略过|放弃/.test(caption) ? 'skip' : 'next';
-    if (id === 'claim-supplies') return caption === '上一页' ? 'prev' : 'supplies';
+    if (id === 'claim-supplies') return caption.startsWith('查看') ? undefined : caption === '上一页' ? 'prev' : 'supplies';
     if (id === 'reward-bag') return caption === '下一页' ? 'next' : 'bag';
     if (id === 'recipe-filter') return action.payload === 'ready' ? 'check' : action.payload === 'partial' ? 'clock' : 'filter';
     if (id.startsWith('claim-card-')) return 'check';

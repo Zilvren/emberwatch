@@ -1,0 +1,270 @@
+{
+  "actor": "symplegades",
+  "source": "../mythic-passages.png",
+  "sourceSha256": "c7317496d73119edf53670514719fc15a16241b4144aa5022d9e5391d1680090",
+  "jointUnderpaint": null,
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    1091,
+    881
+  ],
+  "scale": 0.46,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "left-rock",
+      "bone": "left-rock",
+      "sourceXYWH": [
+        675,
+        286,
+        461,
+        620
+      ],
+      "png": [
+        461,
+        620
+      ],
+      "sha256": "bf390d0d5ad4b94f31c44594359d6bc5a1362d36a76937e8834ef1bede0c014f",
+      "pivotUV": [
+        0.388286,
+        0.896774
+      ],
+      "setupPivot": [
+        -109.02,
+        17.94
+      ],
+      "size": [
+        212.06,
+        285.2
+      ],
+      "angle": 0,
+      "visiblePixels": 66303,
+      "hiddenPixels": 20460
+    },
+    {
+      "name": "right-rock",
+      "bone": "right-rock",
+      "sourceXYWH": [
+        1114,
+        99,
+        401,
+        790
+      ],
+      "png": [
+        401,
+        790
+      ],
+      "sha256": "dc7bbe62f517370a0e2cca34e464b7ad43ce8501852210f99dfc24281868a43f",
+      "pivotUV": [
+        0.468828,
+        0.946835
+      ],
+      "setupPivot": [
+        97.06,
+        15.64
+      ],
+      "size": [
+        184.46,
+        363.4
+      ],
+      "angle": 0,
+      "visiblePixels": 118533,
+      "hiddenPixels": 4907
+    },
+    {
+      "name": "left-facet",
+      "bone": "left-facet",
+      "sourceXYWH": [
+        747,
+        242,
+        379,
+        331
+      ],
+      "png": [
+        379,
+        331
+      ],
+      "sha256": "93d879f7f215a2d500fff5174e4453d78fa6433c963924a9a7d061626f1ed430",
+      "pivotUV": [
+        0.530343,
+        0.879154
+      ],
+      "setupPivot": [
+        -65.78,
+        160.08
+      ],
+      "size": [
+        174.34,
+        152.26
+      ],
+      "angle": 0,
+      "visiblePixels": 54688,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "right-facet",
+      "bone": "right-facet",
+      "sourceXYWH": [
+        1127,
+        98,
+        224,
+        461
+      ],
+      "png": [
+        224,
+        461
+      ],
+      "sha256": "bdd6975837fe411a6c6bd0d81f78305a7a9ab24431328499c18c481bcb1f26a0",
+      "pivotUV": [
+        0.53125,
+        0.73102
+      ],
+      "setupPivot": [
+        71.3,
+        205.16
+      ],
+      "size": [
+        103.04,
+        212.06
+      ],
+      "angle": 0,
+      "visiblePixels": 35391,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "west-foot",
+      "bone": "west-foot",
+      "sourceXYWH": [
+        652,
+        645,
+        332,
+        265
+      ],
+      "png": [
+        332,
+        265
+      ],
+      "sha256": "152e12442596b20509a78ad4e6f6602beeae018d4b8b41f6e2f959c89c4833c3",
+      "pivotUV": [
+        0.539157,
+        0.788679
+      ],
+      "setupPivot": [
+        -119.6,
+        12.42
+      ],
+      "size": [
+        152.72,
+        121.9
+      ],
+      "angle": 0,
+      "visiblePixels": 37298,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "east-foot",
+      "bone": "east-foot",
+      "sourceXYWH": [
+        1115,
+        569,
+        400,
+        341
+      ],
+      "png": [
+        400,
+        341
+      ],
+      "sha256": "a884add784b5e0ce50b6be0cad89a1a5828bedea883cfd7f0efd6b098491595b",
+      "pivotUV": [
+        0.51,
+        0.85044
+      ],
+      "setupPivot": [
+        104.88,
+        10.12
+      ],
+      "size": [
+        184,
+        156.86
+      ],
+      "angle": 0,
+      "visiblePixels": 62997,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "splinter-heavy",
+      "bone": "splinter-heavy",
+      "sourceXYWH": [
+        1003,
+        715,
+        87,
+        80
+      ],
+      "png": [
+        87,
+        80
+      ],
+      "sha256": "a020b060670248133cef6f90a9a2b0ae045eda095878be28a985c9feff04eed3",
+      "pivotUV": [
+        0.517241,
+        0.5
+      ],
+      "setupPivot": [
+        -19.78,
+        57.96
+      ],
+      "size": [
+        40.02,
+        36.8
+      ],
+      "angle": 0,
+      "visiblePixels": 1121,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "splinter-light",
+      "bone": "splinter-light",
+      "sourceXYWH": [
+        1038,
+        765,
+        71,
+        70
+      ],
+      "png": [
+        71,
+        70
+      ],
+      "sha256": "6c401a5bc86605d4374cd7927ad4f967dc150585c5bc07de075a8d78470acd0f",
+      "pivotUV": [
+        0.478873,
+        0.485714
+      ],
+      "setupPivot": [
+        -8.74,
+        37.72
+      ],
+      "size": [
+        32.66,
+        32.2
+      ],
+      "angle": 0,
+      "visiblePixels": 438,
+      "hiddenPixels": 0
+    }
+  ],
+  "drawOrder": [
+    "right-rock",
+    "right-facet",
+    "left-rock",
+    "left-facet",
+    "east-foot",
+    "west-foot",
+    "splinter-heavy",
+    "splinter-light"
+  ],
+  "setupAudit": {
+    "visiblePixels": 376769,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

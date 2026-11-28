@@ -1,6 +1,8 @@
 import type { GameReadModel } from '../../core/GameReadModel';
 import type { NodeKind, MapIcon } from '../../core/content/GameScenario';
-import { nextMapNodes, type ExpeditionMap } from '../../core/content/ExpeditionMap';
+import { nextMapNodes, pointRoomId } from '../../core/content/ExpeditionMap';
+
+type ExpeditionMapView = NonNullable<GameReadModel['expeditionMap']>;
 
 export type RoutePointState = 'available' | 'current' | 'visited' | 'locked' | 'excluded';
 export interface RoutePointModel {
@@ -14,6 +16,7 @@ export interface RoutePointModel {
     state: RoutePointState;
     action: string;
     decisionHint?: string;
+    resumeRewards?: boolean;
     fieldSymbol?: 'buoy' | 'rotor';
 }
 export interface RouteEdgeModel {
@@ -30,15 +33,9 @@ export interface RouteMapModel {
     focusY: number;
 }
 
-function labyrinthPointTitle(title: string, icon: MapIcon | 'home', state: RoutePointState): string {
-    if ((icon === 'supply' || icon === 'scavenge') && state !== 'visited' && state !== 'current')
-        return '未知地点';
-    return title;
-}
-
-function hearthBattleHints(game: GameReadModel, map: Readonly<ExpeditionMap>, from?: NodeKind): Map<NodeKind, string> {
+function hearthBattleHints(game: GameReadModel, map: ExpeditionMapView, from?: NodeKind): Map<NodeKind, string> {
     const hints = new Map<NodeKind, string>();
-    if (!from) return hints;
+    if (!from || map.version === 2) return hints;
     const rooms = new Map(map.points.map(point => [point.id, point]));
     const here = rooms.get(from), hearth = rooms.get('warmAlcove'), nextRest = rooms.get('leeAlcove');
     if (!here || !hearth || !nextRest || here.layer < hearth.layer || here.layer >= nextRest.layer ||
@@ -56,7 +53,8 @@ function hearthBattleHints(game: GameReadModel, map: Readonly<ExpeditionMap>, fr
             outcomes.push([]); // A route that bypasses the rest cannot promise this forecast.
             return;
         }
-        const floors = game.scenario.nodes[id].type === 'battle' ? [...battles, point.layer + 1] : battles;
+        const floors = game.scenario.nodes[pointRoomId(point)].type === 'battle'
+            ? [...battles, point.layer + 1] : battles;
         for (const exit of point.next) collectBattles(exit, floors, outcomes);
     }
     for (const id of here.next) {
@@ -130,7 +128,7 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
         const point = {
             id,
             kind,
-            title: game.scenario.labyrinth ? labyrinthPointTitle(title, icon, state) : title,
+            title,
             icon,
             layer,
             x,
@@ -201,10 +199,11 @@ export function routeMapModel(game: GameReadModel): RouteMapModel {
     return { points, edges, height, focusY: focus.y };
 }
 
-function expeditionMapModel(game: GameReadModel, map: Readonly<ExpeditionMap>): RouteMapModel {
+function expeditionMapModel(game: GameReadModel, map: ExpeditionMapView): RouteMapModel {
     const last = game.visited[game.visited.length - 1];
     const available = game.phase === 'map' ? nextMapNodes(map, last) : [];
-    const current = map.activeNode ?? (game.phase === 'map' && available.length ? last : undefined);
+    const resumeRewards = map.deferredRewards?.source;
+    const current = map.activeNode ?? (game.phase === 'map' && (available.length || resumeRewards) ? last : undefined);
     const hints = hearthBattleHints(game, map, current);
     const visited = new Set(game.visited);
     const remaining = new Set(map.activeNode === null ? nextMapNodes(map, last) : [map.activeNode]);
@@ -218,18 +217,21 @@ function expeditionMapModel(game: GameReadModel, map: Readonly<ExpeditionMap>): 
     for (const point of ordered)
         if (remaining.has(point.id)) for (const next of point.next) remaining.add(next);
 
-    const points: RoutePointModel[] = ordered.map(({ id, layer, lane }) => {
-        const site = game.scenario.nodes[id];
+    const points: RoutePointModel[] = ordered.map((point) => {
+        const { id, layer, lane } = point;
+        const room = pointRoomId(point);
+        const site = game.scenario.nodes[room];
         let state: RoutePointState = 'excluded';
         if (id === current) state = 'current';
         else if (visited.has(id)) state = 'visited';
         else if (available.indexOf(id) >= 0) state = 'available';
         else if (remaining.has(id)) state = 'locked';
         return {
-            id, kind: id, title: labyrinthPointTitle(site.title, site.icon, state), icon: site.icon, layer,
+            id, kind: room, title: site.title, icon: site.icon, layer,
             x: lane * 196 + (layer > 0 && layer < top ? Math.sin(layer * 5 + lane) * 9 : 0),
             y: -(topMargin + (top - layer) * rowHeight),
             state, action: 'enter-' + id, decisionHint: hints.get(id),
+            ...(id === resumeRewards ? { resumeRewards: true } : {}),
         };
     });
     const edges: RouteEdgeModel[] = [];

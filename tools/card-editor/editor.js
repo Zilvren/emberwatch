@@ -1,7 +1,7 @@
 import { validateCatalog, cardReferences, SYSTEM_ROLES, EFFECT_NAMES, ART_IDS, isBattleCard, isLabyrinthRewardCard } from '/shared/catalog.js';
 import { cardViewModel, supplyPictureLayout } from '/shared/card-view.js';
 import { bindRecipeEditor } from '/recipes.js';
-import { LABYRINTH_ENEMIES, DEFAULT_ENEMY_ACTIONS, DEFAULT_ENEMY_LOOP_START, ENEMY_ACTION_LABELS } from '/shared/labyrinth-enemies.js';
+import { LABYRINTH_ENEMIES, defaultEnemyPlan, ENEMY_ACTION_LABELS } from '/shared/labyrinth-enemies.js';
 
 const $ = selector => document.querySelector(selector);
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -252,10 +252,8 @@ function renderRewardGrid(resetScroll = false) {
     if (resetScroll) $('#reward-scroll').scrollTop = 0;
 }
 function currentEnemyPlan() {
-    const enemy = LABYRINTH_ENEMIES[enemySelector.value];
     const plan = draft.labyrinth.enemyActions?.[enemySelector.value];
-    return plan ? { ...plan, actions: [...plan.actions] } :
-        { attack: enemy.attack, strongAttack: enemy.strongAttack, actions: [...DEFAULT_ENEMY_ACTIONS], loopStart: DEFAULT_ENEMY_LOOP_START };
+    return plan ? { ...plan, actions: [...plan.actions] } : defaultEnemyPlan(enemySelector.value);
 }
 function renderEnemyEditor() {
     if (!draft) return;

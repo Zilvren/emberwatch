@@ -23,6 +23,7 @@ import { GameCommand, GameSession } from '../application/GameSession';
 import { installCatalog } from '../core/content/CardCatalog';
 import { installJournalCatalog } from '../core/content/JournalCatalog';
 import type { GameReadModel } from '../core/GameReadModel';
+import { battleEnemies, intentDamage } from '../core/content/LabyrinthEnemies';
 import { CardKind } from '../core/SurvivalGame';
 import { SaveRepository } from '../infrastructure/SaveRepository';
 import { ActorPresentation } from './actors/ActorPresentation';
@@ -222,7 +223,7 @@ export class GameDirector extends Component {
         this.router = new UiActionRouter(this.session, this.ui, {
             act: (command, sound) => this.act(command, sound),
             refresh: () => this.refresh(),
-            playCard: (id) => this.playCard(id),
+            playCard: (id, target) => this.playCard(id, target),
             enemyTurn: () => this.enemyTurn(),
             message: (text) => this.message(text),
             sound: (name) => this.audio.play(name),
@@ -235,6 +236,7 @@ export class GameDirector extends Component {
         this.node.on(CARD_DROP_EVENT, this.onDropInput, this);
         this.refresh();
         this.fitHudToWindow();
+        if (this.game.battle?.pendingEnemy !== undefined) this.enemyTurn();
         view.on('canvas-resize', this.fitHudToWindow, this);
         this.message(this.session.startupMessage);
         Object.assign(globalThis, {
@@ -257,7 +259,7 @@ export class GameDirector extends Component {
         const height = design.height + 2 * bounds.y / scaleY;
         if (width <= 0 || height <= 0) return;
         const frame = battleWindowLayout(width, height);
-        this.renderer.fitBattleWindow(frame);
+        this.renderer.fitEncounterWindow(frame);
         const hud = this.scene.hud.getComponent(UITransform)!;
         hud.node.setScale(frame.scale, frame.scale, 1);
         hud.width = frame.width;
@@ -321,25 +323,27 @@ export class GameDirector extends Component {
         const card = this.game.battle?.hand.find((c) => c.id === event.id),
             screen = this.scene.screens.battle;
         if (!card) return;
-        const target = this.attackKind(card.kind)
-            ? screen.getChildByName('enemy-target')
-            : screen.getChildByName('PlayArea');
-        if (
-            target?.getComponent(UITransform)?.getBoundingBoxToWorld().contains(event.point) &&
-            !this.game.cardBlocked(card)
-        ) {
+        const attack = this.attackKind(card.kind);
+        const slot = attack ? this.renderer.enemyTargetAt(event.point) : undefined;
+        const inside = slot !== undefined ? slot >= 0 :
+            screen.getChildByName('PlayArea')?.getComponent(UITransform)?.getBoundingBoxToWorld().contains(event.point);
+        if (inside && !this.game.cardBlocked(card)) {
             event.accept();
-            this.playCard(event.id);
+            this.playCard(event.id, slot);
         } else {
             this.ui.selectedCard = '';
             this.refresh();
         }
     }
-    private playCard(id: string): void {
+    private playCard(id: string, targetSlot?: number): void {
         const g = this.game,
             b = g.battle,
             card = b?.hand.find((c) => c.id === id);
         if (this.ui.busy || !b || !card) return;
+        const members = battleEnemies(b);
+        const slot = targetSlot ?? members.findIndex(member => member.hp > 0);
+        const victim = members[slot], actor = this.renderer.opponents[slot];
+        if (!victim?.hp || !actor) return;
         const reason = g.cardBlocked(card);
         if (reason) {
             this.message(reason);
@@ -348,7 +352,7 @@ export class GameDirector extends Component {
         this.ui.busy = true;
         this.ui.selectedCard = '';
         this.refreshBattle(this.scene.screens.battle);
-        const oldHp = b.hp,
+        const oldHp = victim.hp,
             oldHealth = g.health,
             oldBlock = b.block,
             run = g.run;
@@ -360,7 +364,7 @@ export class GameDirector extends Component {
         };
         const impact = () => {
             if (g.run !== run || !this.isValid) return;
-            const result = this.session.execute({ type: 'play-card', id });
+            const result = this.session.execute({ type: 'play-card', id, target: slot });
             if (!result.ok) {
                 this.message(result.message);
                 return;
@@ -370,16 +374,9 @@ export class GameDirector extends Component {
                 return;
             }
             if (this.attackKind(card.kind)) {
-                if (this.enemy) {
-                    pending++;
-                    this.enemy.playAction(
-                        !g.battle ? 'death' : 'hurt',
-                        this.ui.reduced,
-                        undefined,
-                        complete
-                    );
-                }
-                this.effect('attack', this.enemy, `−${oldHp - (g.battle?.hp ?? 0)}`);
+                pending++;
+                actor.playAction(victim.hp === 0 ? 'death' : 'hurt', this.ui.reduced, undefined, complete);
+                this.effect('attack', actor, `−${oldHp - victim.hp}`);
             } else if (this.game.content.cards[card.kind].effect.type === 'heal')
                 this.effect('heal', this.hero, `+${g.health - oldHealth} 血量`);
             else if (this.game.content.cards[card.kind].effect.type === 'draw')
@@ -418,8 +415,8 @@ export class GameDirector extends Component {
                 () => {},
                 this.ui.reduced
             );
-            this.hero.playAction('attack', this.ui.reduced, impact, complete, this.enemy, () =>
-                this.pulse(this.hero, this.enemy)
+            this.hero.playAction('attack', this.ui.reduced, impact, complete, actor, () =>
+                this.pulse(this.hero, actor)
             );
         } else if (presentation) presentation.playAction(impact, complete, this.ui.reduced);
         else {
@@ -438,26 +435,30 @@ export class GameDirector extends Component {
         this.ui.busy = true;
         this.ui.selectedCard = '';
         this.refreshBattle(this.scene.screens.battle);
+        const members = battleEnemies(b), slot = b.pendingEnemy ?? members.findIndex(member => member.hp > 0);
+        const member = members[slot], actor = this.renderer.opponents[slot], turn = b.turn;
         const run = g.run,
-            attacking = b.intent === 'attack',
-            damage = Math.max(0, g.incomingDamage - b.block), oldHp = b.hp;
+            attacking = member.intent === 'attack',
+            damage = Math.max(0, intentDamage(member) - b.block), oldHp = member.hp;
         this.audio.play(attacking ? 'enemy' : 'block');
         let pending = 1;
         let counterKill = false;
         const complete = () => {
             if (--pending || !this.isValid) return;
-            if (counterKill && this.enemy) {
+            if (counterKill && actor) {
                 counterKill = false;
                 pending = 1;
-                this.enemy.playAction('death', this.ui.reduced, undefined, complete);
+                actor.playAction('death', this.ui.reduced, undefined, complete);
                 return;
             }
             this.ui.busy = false;
-            this.refresh();
+            if (g.battle?.pendingEnemy !== undefined) this.enemyTurn();
+            else this.refresh();
         };
         const impact = () => {
             if (run !== g.run || !this.isValid) return;
-            const result = this.session.execute({ type: 'end-turn' });
+            const result = this.session.execute({ type: 'enemy-action', slot, turn });
+            if (!result.ok) return;
             if (attacking) {
                 if (damage && this.hero) {
                     pending++;
@@ -473,21 +474,21 @@ export class GameDirector extends Component {
                     this.hero,
                     damage ? `−${damage}` : '完全格挡'
                 );
-            } else this.effect('block', this.enemy, '正在蓄势');
-            const counterDamage = oldHp - b.hp;
-            counterKill = counterDamage > 0 && !g.battle && g.phase !== 'failure';
+            } else this.effect('block', actor, '正在蓄势');
+            const counterDamage = oldHp - member.hp;
+            counterKill = counterDamage > 0 && member.hp === 0 && g.phase !== 'failure';
             if (counterDamage > 0)
-                this.effect('attack', this.enemy, `−${counterDamage}`);
+                this.effect('attack', actor, `−${counterDamage}`);
             this.message(result.message);
         };
-        if (this.enemy)
-            this.enemy.playAction(
+        if (actor)
+            actor.playAction(
                 attacking ? 'attack' : 'prepare',
                 this.ui.reduced,
                 impact,
                 complete,
                 this.hero,
-                () => this.pulse(this.enemy, this.hero)
+                () => this.pulse(actor, this.hero)
             );
         else {
             impact();

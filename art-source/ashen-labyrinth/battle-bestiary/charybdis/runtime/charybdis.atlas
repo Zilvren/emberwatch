@@ -1,0 +1,89 @@
+
+charybdis-parts.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+basin
+  rotate: false
+  xy: 288, 637
+  size: 415, 166
+  orig: 415, 166
+  offset: 0, 0
+  index: -1
+crest
+  rotate: false
+  xy: 2, 419
+  size: 271, 282
+  orig: 271, 282
+  offset: 0, 0
+  index: -1
+far-lip
+  rotate: false
+  xy: 277, 361
+  size: 391, 272
+  orig: 391, 272
+  offset: 0, 0
+  index: -1
+foam-ribbon
+  rotate: false
+  xy: 467, 2
+  size: 428, 355
+  orig: 428, 355
+  offset: 0, 0
+  index: -1
+hollow
+  rotate: false
+  xy: 2, 70
+  size: 461, 287
+  orig: 461, 287
+  offset: 0, 0
+  index: -1
+shard-high
+  rotate: false
+  xy: 82, 711
+  size: 84, 92
+  orig: 84, 92
+  offset: 0, 0
+  index: -1
+shard-low
+  rotate: false
+  xy: 2, 731
+  size: 76, 72
+  orig: 76, 72
+  offset: 0, 0
+  index: -1
+shard-mid
+  rotate: false
+  xy: 170, 705
+  size: 114, 98
+  orig: 114, 98
+  offset: 0, 0
+  index: -1
+spring
+  rotate: false
+  xy: 707, 524
+  size: 294, 279
+  orig: 294, 279
+  offset: 0, 0
+  index: -1
+
+charybdis-parts2.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+near-lip
+  rotate: false
+  xy: 2, 2
+  size: 682, 312
+  orig: 682, 312
+  offset: 0, 0
+  index: -1
+vortex
+  rotate: false
+  xy: 2, 318
+  size: 606, 524
+  orig: 606, 524
+  offset: 0, 0
+  index: -1

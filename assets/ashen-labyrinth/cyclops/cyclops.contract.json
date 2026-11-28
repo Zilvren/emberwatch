@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-cyclops",
+  "sourceSha256": "cddf0c2f9e86881c646ba8b286af1d3d0a73f9b2efc8ab86353059198f4b4c7b",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "stance",
+    "torso",
+    "head",
+    "near-shoulder",
+    "near-arm",
+    "pounding-fist",
+    "far-shoulder",
+    "far-arm",
+    "far-fist",
+    "far-leg",
+    "near-leg",
+    "near-foot",
+    "apron",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 2.58,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.88,
+      "loop": false
+    },
+    "attack": {
+      "duration": 1.03,
+      "loop": false,
+      "contact": 0.6
+    },
+    "hurt": {
+      "duration": 0.41,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.24,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    -132.08002589181424,
+    -14.16403669558726
+  ],
+  "approachBone": "Approach",
+  "parts": [
+    {
+      "name": "torso"
+    },
+    {
+      "name": "apron"
+    },
+    {
+      "name": "far-shoulder"
+    },
+    {
+      "name": "far-leg"
+    },
+    {
+      "name": "far-fist"
+    },
+    {
+      "name": "head"
+    },
+    {
+      "name": "near-shoulder"
+    },
+    {
+      "name": "far-arm"
+    },
+    {
+      "name": "near-leg"
+    },
+    {
+      "name": "near-foot"
+    },
+    {
+      "name": "near-arm"
+    },
+    {
+      "name": "pounding-fist"
+    }
+  ]
+}

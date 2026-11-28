@@ -1,17 +1,23 @@
 import { Random } from '../Random';
 import type { NodeDefinition, NodeKind } from './GameScenario';
+import type { Rewards } from '../RulesTypes';
 
 export interface ExpeditionMapPoint {
     readonly id: NodeKind;
     readonly layer: number;
     readonly lane: number;
     readonly next: readonly NodeKind[];
+    /** A map coordinate may use the same authored room as another coordinate. */
+    readonly room?: NodeKind;
 }
 
 export interface ExpeditionMap {
     readonly seed: number;
     readonly points: readonly ExpeditionMapPoint[];
+    /** Existing maps keep the room rewards they were generated with. */
+    readonly version?: 2;
     activeNode: NodeKind | null;
+    deferredRewards?: Rewards;
 }
 
 export function nextMapNodes(map: Pick<ExpeditionMap, 'points'>, from?: NodeKind): readonly NodeKind[] {
@@ -20,6 +26,17 @@ export function nextMapNodes(map: Pick<ExpeditionMap, 'points'>, from?: NodeKind
 
 export const ASHEN_MAP_LAST_LAYER = 16;
 export const ASHEN_MAP_OUTER_LANE = 2;
+export const ASHEN_SALVAGE_ROOM = 'labyrinthSalvage';
+export const ASHEN_ROOM_TARGETS = { rest: 3, elite: 3, salvage: 10 } as const;
+
+export function pointRoomId(point: ExpeditionMapPoint): NodeKind {
+    return point.room ?? point.id;
+}
+
+export function expeditionRoomId(map: Pick<ExpeditionMap, 'points'> | null, id: NodeKind): NodeKind {
+    const point = map?.points.find((value) => value.id === id);
+    return point ? pointRoomId(point) : id;
+}
 
 interface MapCell {
     layer: number;
@@ -27,23 +44,14 @@ interface MapCell {
     next: MapCell[];
 }
 
-interface SectionSites {
-    battle: NodeKind;
-    rest: NodeKind;
-    optionalBattle?: NodeKind;
-    separateBattleRoutes?: boolean;
-}
-const SECTIONS: readonly SectionSites[] = [
-    { battle: 'lightCut', rest: 'warmAlcove' },
-    { battle: 'hoistBridge', rest: 'leeAlcove', optionalBattle: 'ashGallery', separateBattleRoutes: true },
-    { battle: 'shutterGap', rest: 'innerAlcove', optionalBattle: 'returnBridge' },
-];
+type SpecialRoom = keyof typeof ASHEN_ROOM_TARGETS;
+type RoomPlacement = { room: NodeKind; type: SpecialRoom | 'battle' };
 
 function cell(layer: number, lane: number, ...next: MapCell[]): MapCell {
     return { layer, lane, next };
 }
 
-function drawWalks(random: Random, start: number, battle: MapCell): MapCell[][] | null {
+function drawWalks(random: Random, start: number, exit: MapCell): MapCell[][] | null {
     const entrances = random
         .shuffle([-1, 0, 1])
         .slice(0, random.int(2, 3))
@@ -69,38 +77,59 @@ function drawWalks(random: Random, start: number, battle: MapCell): MapCell[][] 
             if (current.next.indexOf(next) < 0) current.next.push(next);
             current = next;
         }
-        if (!current.next.length) current.next.push(battle);
+        if (!current.next.length) current.next.push(exit);
     }
     return rows;
 }
 
-interface SectionLayout {
-    rows: MapCell[][];
-    battleCandidates: MapCell[];
+function branchingSection(random: Random, start: number, exit: MapCell): MapCell[][] {
+    for (let attempt = 0; attempt < 32; attempt++) {
+        const rows = drawWalks(random, start, exit);
+        if (rows && rows.every((row) => row.length >= 2) &&
+            rows.some((row) => row.some((point) => point.next.length > 1))) return rows;
+    }
+    const left = cell(start + 3, -1, exit), right = cell(start + 3, 1, exit);
+    const middle = cell(start + 2, 0, left, right), side = cell(start + 2, 1, right);
+    return [[cell(start + 1, -1, middle), cell(start + 1, 1, side)], [middle, side], [left, right]];
 }
 
-function branchingSection(random: Random, start: number, battle: MapCell, separateBattleRoutes = false): SectionLayout {
+function placeSpecialRooms(
+    cells: readonly MapCell[],
+    fixed: ReadonlyMap<MapCell, RoomPlacement>,
+    random: Random
+): Map<MapCell, RoomPlacement> {
+    const parents = new Map<MapCell, MapCell[]>(cells.map((point) => [point, []]));
+    for (const point of cells) for (const next of point.next) parents.get(next)!.push(point);
+    const options = cells.filter((point) => !fixed.has(point));
+    const special: Record<SpecialRoom, RoomPlacement> = {
+        rest: { type: 'rest', room: 'warmAlcove' },
+        elite: { type: 'elite', room: 'sealedGuard' },
+        salvage: { type: 'salvage', room: ASHEN_SALVAGE_ROOM },
+    };
+    const types = Object.keys(ASHEN_ROOM_TARGETS) as SpecialRoom[];
+    const target = types.reduce((sum, type) => sum + ASHEN_ROOM_TARGETS[type], fixed.size);
+    let best = new Map(fixed);
+    // Restart the placement pass when earlier choices make a target impossible.
     for (let attempt = 0; attempt < 32; attempt++) {
-        const rows = drawWalks(random, start, battle);
-        if (!rows || rows.some(row => row.length < 2) ||
-            !rows.some(row => row.some(point => point.next.length > 1))) continue;
-        const [entries, , exits] = rows;
-        // One hearth exit must commit to the extra battle and another must bypass it entirely.
-        const battleCandidates = separateBattleRoutes ? exits.filter(room =>
-            entries.some(entry => entry.next.every(point => point.next.every(exit => exit === room))) &&
-            entries.some(entry => entry.next.every(point => point.next.indexOf(room) < 0))
-        ) : exits;
-        if (battleCandidates.length) return { rows, battleCandidates };
+        const rooms = new Map(fixed);
+        for (const type of types) {
+            let remaining = ASHEN_ROOM_TARGETS[type];
+            for (const point of random.shuffle(options)) {
+                if (!remaining) break;
+                if (rooms.has(point) || (type === 'rest' && (point.layer < 3 || point.layer > 13)) ||
+                    (type === 'elite' && point.layer < 5)) continue;
+                const incoming = parents.get(point)!;
+                if (incoming.some((parent) => parent.next.some((sibling) => rooms.get(sibling)?.type === type))) continue;
+                if (type !== 'salvage' &&
+                    [...incoming, ...point.next].some((neighbor) => rooms.get(neighbor)?.type === type)) continue;
+                rooms.set(point, special[type]);
+                remaining--;
+            }
+        }
+        if (rooms.size === target) return rooms;
+        if (rooms.size > best.size) best = rooms;
     }
-    const left = cell(start + 3, -1, battle), right = cell(start + 3, 1, battle);
-    const middle = cell(start + 2, 0, left, right), side = cell(start + 2, 1, right);
-    const rows = [[cell(start + 1, separateBattleRoutes ? 0 : -1, middle), cell(start + 1, 1, side)], [middle, side], [left, right]];
-    if (separateBattleRoutes) {
-        const farSide = cell(start + 2, -1, left);
-        rows[0].unshift(cell(start + 1, -1, farSide));
-        rows[1].unshift(farSide);
-    }
-    return { rows, battleCandidates: [left, right] };
+    return best;
 }
 
 /** Formal explorations advance exactly one day, so each departure has its own map seed. */
@@ -112,56 +141,47 @@ export function generateAshenLabyrinthMap(
     const seed = (campaignSeed ^ Math.imul(day, 0x9e3779b9)) >>> 0;
     const random = new Random(seed);
     const entrance = cell(0, 0);
-    const sites = new Map<MapCell, NodeKind>([[entrance, 'threshold']]);
     const cells = [entrance];
-    const discoveryCells: MapCell[] = [];
+    const fixed = new Map<MapCell, RoomPlacement>([[entrance, { type: 'salvage', room: 'threshold' }]]);
+    const ids = new Map<MapCell, NodeKind>([[entrance, 'threshold']]);
     let start = entrance;
-    for (const section of SECTIONS) {
-        const rest = cell(start.layer + 5, 0);
-        const battle = cell(start.layer + 4, 0, rest);
-        const { rows, battleCandidates } = branchingSection(random, start.layer, battle, section.separateBattleRoutes);
-        const [entries, discoveries, outerRooms] = rows;
-        start.next = entries;
-        cells.push(...entries, ...discoveries, ...outerRooms, battle, rest);
-        discoveryCells.push(...discoveries);
-        sites.set(battle, section.battle);
-        sites.set(rest, section.rest);
+    for (const endLayer of [5, 10, 15]) {
+        const end = cell(endLayer, 0);
+        const exit = cell(endLayer - 1, 0, end);
+        const rows = branchingSection(random, start.layer, exit);
+        start.next = rows[0];
+        for (const row of rows) cells.push(...row);
+        cells.push(exit, end);
         if (start === entrance) {
-            const [combat, supplies, cache] = random.shuffle(entries);
-            sites.set(combat, 'lampPassage');
-            sites.set(supplies, 'serviceDuct');
-            if (cache) sites.set(cache, 'edgeCache');
+            for (const point of rows[0]) fixed.set(point, { type: 'battle', room: 'lampPassage' });
+            ids.set(rows[0][0], 'lampPassage');
         }
-        if (section.optionalBattle)
-            sites.set(battleCandidates[random.int(0, battleCandidates.length - 1)], section.optionalBattle);
-        start = rest;
+        if (endLayer >= 10) {
+            const room = endLayer === 10 ? 'leeAlcove' : 'innerAlcove';
+            fixed.set(end, { type: 'rest', room });
+            ids.set(end, room);
+        }
+        start = end;
     }
     const boss = cell(ASHEN_MAP_LAST_LAYER, 0);
     start.next.push(boss);
     cells.push(boss);
-    sites.set(boss, 'lampCourt');
+    fixed.set(boss, { type: 'elite', room: 'lampCourt' });
+    ids.set(boss, 'lampCourt');
+    for (const point of cells)
+        if (!ids.has(point)) ids.set(point, `room-${point.layer + 1}-${point.lane + ASHEN_MAP_OUTER_LANE + 1}`);
 
-    const used = new Set(sites.values());
-    const discoverySites: NodeKind[] = [];
-    const supplySites: NodeKind[] = [];
-    for (const id of random.shuffle(Object.keys(definitions))) {
-        const site = definitions[id];
-        if (site.type !== 'scavenge' || used.has(id)) continue;
-        (site.discover ? discoverySites : supplySites).push(id);
-    }
-    // Every route has a discovery room and a battle in each section.
-    for (const point of discoveryCells) sites.set(point, discoverySites.pop()!);
-    for (const point of cells) {
-        if (sites.has(point)) continue;
-        const pool = supplySites.length && (!discoverySites.length || random.int(0, 1) === 0)
-            ? supplySites
-            : discoverySites;
-        sites.set(point, pool.pop()!);
-    }
-
-    const points = cells.map((point) => ({
-        id: sites.get(point)!, layer: point.layer, lane: point.lane,
-        next: point.next.map((next) => sites.get(next)!),
-    }));
-    return { seed, points, activeNode: null };
+    const rooms = placeSpecialRooms(cells, fixed, random);
+    const earlyFights = ['lightCut', 'shutterGap', 'windPerch'].filter(id => definitions[id]?.type === 'battle');
+    const fights = [...earlyFights, 'hoistBridge', 'returnBridge', 'quarryHall', 'hornCourt', 'floodedVault', 'galeRoost', 'ebbWell', 'clashingPass']
+        .filter(id => definitions[id]?.type === 'battle');
+    const points: ExpeditionMapPoint[] = cells.map((point) => {
+        const id = ids.get(point)!;
+        const position = { id, layer: point.layer, lane: point.lane, next: point.next.map((next) => ids.get(next)!) };
+        const placement = rooms.get(point);
+        const candidates = point.layer < 5 ? earlyFights : fights;
+        const room = placement?.room ?? candidates[random.int(0, candidates.length - 1)];
+        return room === id ? position : { ...position, room };
+    });
+    return { seed, points, activeNode: null, version: 2 };
 }

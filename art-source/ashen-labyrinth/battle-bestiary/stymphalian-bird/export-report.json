@@ -1,0 +1,23 @@
+{
+  "actor": "stymphalian-bird",
+  "editor": "3.8.75",
+  "bones": 12,
+  "slots": 10,
+  "images": 10,
+  "meshes": [],
+  "ik": 0,
+  "impact": 0.36,
+  "clips": {
+    "idle": 1.72,
+    "prepare": 0.55,
+    "attack": 0.76,
+    "hurt": 0.32,
+    "death": 1.12
+  },
+  "auxiliary": {},
+  "atlasPages": [
+    "stymphalian-bird-parts.png"
+  ],
+  "projectSha256": "1dd32579ccc2b8132512831fa86d6db29bd70b7965f7fca8c739971d34ac531c",
+  "runtimeSha256": "c8fd71c705089c070d8cd82b47c866e7be83adacaf0919a9de090d3abc4cdd6f"
+}

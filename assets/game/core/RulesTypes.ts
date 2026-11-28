@@ -1,6 +1,6 @@
 import { CardKind } from './content/CardCatalog';
 import type { FistMove } from './content/FistCards';
-import type { EnemySequence } from './content/LabyrinthEnemies';
+import type { BattleEnemy } from './content/LabyrinthEnemies';
 import { NodeKind, TUTORIAL_SCENARIO } from './content/GameScenario';
 export type { CardDefinition, CardKind } from './content/CardCatalog';
 export type { NodeKind, Route } from './content/GameScenario';
@@ -41,18 +41,13 @@ export interface FistBattle {
     recoveredStamina: boolean;
 }
 
-export interface Battle {
+export interface Battle extends BattleEnemy {
     stamina: number;
     maxStamina: number;
-    enemy: string;
-    hp: number;
-    maxHp: number;
-    attack: number;
-    strongAttack: number;
+    companions?: BattleEnemy[];
+    /** Next living slot when a group turn has been saved between two actions. */
+    pendingEnemy?: number;
     turn: number;
-    intent: 'attack' | 'prepare';
-    boosted: boolean;
-    enemySequence?: EnemySequence;
     block: number;
     draw: CombatCard[];
     hand: CombatCard[];
@@ -95,6 +90,7 @@ export interface Rewards {
     cardTaken: boolean;
     discovery?: true;
     guaranteedFinisher?: CardKind;
+    nextCards?: CardKind[];
 }
 export interface ActionResult {
     ok: boolean;

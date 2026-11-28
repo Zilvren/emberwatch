@@ -1,0 +1,332 @@
+{
+  "actor": "stymphalian-bird",
+  "source": "../mythic-creatures.png",
+  "sourceSha256": "035eff358a3cc6a3b0f523e670220ff6e27a63a87c6ddc38257b98a3193375ba",
+  "jointUnderpaint": null,
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    225,
+    494
+  ],
+  "scale": 0.72,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "breast",
+      "bone": "breast",
+      "sourceXYWH": [
+        130,
+        185,
+        147,
+        195
+      ],
+      "png": [
+        147,
+        195
+      ],
+      "sha256": "70fa3f410e0ecfa2349c25bacb900413d04d4172cc200653561a34459d26efa8",
+      "pivotUV": [
+        0.44898,
+        0.4
+      ],
+      "setupPivot": [
+        -20.88,
+        166.32
+      ],
+      "size": [
+        105.84,
+        140.4
+      ],
+      "angle": 0,
+      "visiblePixels": 3937,
+      "hiddenPixels": 6467
+    },
+    {
+      "name": "tail",
+      "bone": "tail",
+      "sourceXYWH": [
+        204,
+        260,
+        261,
+        209
+      ],
+      "png": [
+        261,
+        209
+      ],
+      "sha256": "9193ad918e2e18c14a35745f736f2a504355dcf6265c261bb9fced7a142850c2",
+      "pivotUV": [
+        0.157088,
+        0.229665
+      ],
+      "setupPivot": [
+        14.4,
+        133.92
+      ],
+      "size": [
+        187.92,
+        150.48
+      ],
+      "angle": 0,
+      "visiblePixels": 12491,
+      "hiddenPixels": 2451
+    },
+    {
+      "name": "far-wing",
+      "bone": "far-wing",
+      "sourceXYWH": [
+        4,
+        222,
+        188,
+        247
+      ],
+      "png": [
+        188,
+        247
+      ],
+      "sha256": "0133945a8133382de8bc78be5b1d476d3ae5b82d050318d12b26f78e93e8a9da",
+      "pivotUV": [
+        0.68617,
+        0.153846
+      ],
+      "setupPivot": [
+        -66.24,
+        168.48
+      ],
+      "size": [
+        135.36,
+        177.84
+      ],
+      "angle": 0,
+      "visiblePixels": 17105,
+      "hiddenPixels": 1579
+    },
+    {
+      "name": "near-wing",
+      "bone": "near-wing",
+      "sourceXYWH": [
+        157,
+        58,
+        301,
+        262
+      ],
+      "png": [
+        301,
+        262
+      ],
+      "sha256": "9f8660a030f83170502f39870b5c9f459125c60f4b16336232f3df7096b09da5",
+      "pivotUV": [
+        0.093023,
+        0.664122
+      ],
+      "setupPivot": [
+        -28.8,
+        188.64
+      ],
+      "size": [
+        216.72,
+        188.64
+      ],
+      "angle": 0,
+      "visiblePixels": 17709,
+      "hiddenPixels": 3375
+    },
+    {
+      "name": "primaries",
+      "bone": "primaries",
+      "sourceXYWH": [
+        252,
+        9,
+        240,
+        265
+      ],
+      "png": [
+        240,
+        265
+      ],
+      "sha256": "422908e926121ea5fff980ca56e2c603881537c668ae87bc1c92a673ef2ff12b",
+      "pivotUV": [
+        0.2625,
+        0.607547
+      ],
+      "setupPivot": [
+        64.8,
+        233.28
+      ],
+      "size": [
+        172.8,
+        190.8
+      ],
+      "angle": 0,
+      "visiblePixels": 25288,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "neck",
+      "bone": "neck",
+      "sourceXYWH": [
+        82,
+        197,
+        130,
+        113
+      ],
+      "png": [
+        130,
+        113
+      ],
+      "sha256": "0d4c1390d34a701394910ff1ae14951d4f07a034eef6052c383b789957594dfe",
+      "pivotUV": [
+        0.584615,
+        0.557522
+      ],
+      "setupPivot": [
+        -48.24,
+        168.48
+      ],
+      "size": [
+        93.6,
+        81.36
+      ],
+      "angle": 0,
+      "visiblePixels": 3911,
+      "hiddenPixels": 1753
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "sourceXYWH": [
+        42,
+        142,
+        185,
+        107
+      ],
+      "png": [
+        185,
+        107
+      ],
+      "sha256": "7c9e6ca8d500844546e854974ded1d06ce2a0623e661dbeb6c31ca6010411872",
+      "pivotUV": [
+        0.502703,
+        0.579439
+      ],
+      "setupPivot": [
+        -64.8,
+        208.8
+      ],
+      "size": [
+        133.2,
+        77.04
+      ],
+      "angle": 0,
+      "visiblePixels": 5854,
+      "hiddenPixels": 914
+    },
+    {
+      "name": "beak",
+      "bone": "beak",
+      "sourceXYWH": [
+        22,
+        160,
+        96,
+        86
+      ],
+      "png": [
+        96,
+        86
+      ],
+      "sha256": "f690c3dd236938005e6a0fa4ddcdadffe928ea41d8296a00f78bc9a345861f9c",
+      "pivotUV": [
+        0.677083,
+        0.406977
+      ],
+      "setupPivot": [
+        -99.36,
+        215.28
+      ],
+      "size": [
+        69.12,
+        61.92
+      ],
+      "angle": 0,
+      "visiblePixels": 1201,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "far-talon",
+      "bone": "far-talon",
+      "sourceXYWH": [
+        179,
+        292,
+        82,
+        124
+      ],
+      "png": [
+        82,
+        124
+      ],
+      "sha256": "f5503c81544217ca1bf45aa1dd652bff3ed8594279687cd40c2645e34d73cfb9",
+      "pivotUV": [
+        0.439024,
+        0.25
+      ],
+      "setupPivot": [
+        -7.2,
+        123.12
+      ],
+      "size": [
+        59.04,
+        89.28
+      ],
+      "angle": 0,
+      "visiblePixels": 1548,
+      "hiddenPixels": 1737
+    },
+    {
+      "name": "near-talon",
+      "bone": "near-talon",
+      "sourceXYWH": [
+        198,
+        293,
+        100,
+        129
+      ],
+      "png": [
+        100,
+        129
+      ],
+      "sha256": "cf32e71fd97aeeda491681f54c7858d890e5b3f7d3f3491b171911164a62e1c8",
+      "pivotUV": [
+        0.47,
+        0.255814
+      ],
+      "setupPivot": [
+        14.4,
+        120.96
+      ],
+      "size": [
+        72,
+        92.88
+      ],
+      "angle": 0,
+      "visiblePixels": 2755,
+      "hiddenPixels": 0
+    }
+  ],
+  "drawOrder": [
+    "far-wing",
+    "far-talon",
+    "tail",
+    "breast",
+    "near-talon",
+    "neck",
+    "near-wing",
+    "primaries",
+    "head",
+    "beak"
+  ],
+  "setupAudit": {
+    "visiblePixels": 91799,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

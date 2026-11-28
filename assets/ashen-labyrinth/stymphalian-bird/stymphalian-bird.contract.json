@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "actor": "ashen-stymphalian-bird",
+  "sourceSha256": "c8fd71c705089c070d8cd82b47c866e7be83adacaf0919a9de090d3abc4cdd6f",
+  "baseline": 0,
+  "boneNames": [
+    "root",
+    "stance",
+    "breast",
+    "tail",
+    "far-wing",
+    "near-wing",
+    "primaries",
+    "neck",
+    "head",
+    "beak",
+    "far-talon",
+    "near-talon",
+    "PoseRoot",
+    "Aim",
+    "ContactTip",
+    "Approach"
+  ],
+  "influences": [],
+  "triangles": [],
+  "neutralVertices": [],
+  "motions": {
+    "idle": {
+      "duration": 1.72,
+      "loop": true
+    },
+    "prepare": {
+      "duration": 0.55,
+      "loop": false
+    },
+    "attack": {
+      "duration": 0.76,
+      "loop": false,
+      "contact": 0.36
+    },
+    "hurt": {
+      "duration": 0.32,
+      "loop": false
+    },
+    "death": {
+      "duration": 1.12,
+      "loop": false
+    }
+  },
+  "contactBone": "ContactTip",
+  "contactTip": [
+    -29.455668686670858,
+    76.6445900039794
+  ],
+  "approachBone": "Approach",
+  "parts": [
+    {
+      "name": "far-wing"
+    },
+    {
+      "name": "head"
+    },
+    {
+      "name": "far-talon"
+    },
+    {
+      "name": "breast"
+    },
+    {
+      "name": "tail"
+    },
+    {
+      "name": "near-wing"
+    },
+    {
+      "name": "near-talon"
+    },
+    {
+      "name": "neck"
+    },
+    {
+      "name": "primaries"
+    },
+    {
+      "name": "beak"
+    }
+  ]
+}

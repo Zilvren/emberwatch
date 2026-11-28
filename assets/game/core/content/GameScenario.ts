@@ -1,4 +1,4 @@
-import { nextMapNodes, type ExpeditionMap } from './ExpeditionMap';
+import { ASHEN_SALVAGE_ROOM, expeditionRoomId, nextMapNodes, type ExpeditionMap } from './ExpeditionMap';
 import { LABYRINTH_ENEMIES } from './LabyrinthEnemies';
 
 /** Stable authored IDs also appear in saves. Display names and behavior belong to definitions. */
@@ -24,7 +24,7 @@ interface NodeDefinitionBase {
 }
 export type NodeDefinition = NodeDefinitionBase &
     (
-        | { type: 'battle'; enemyId: EnemyId }
+        | { type: 'battle'; enemyId: EnemyId; companions?: readonly EnemyId[] }
         | { type: 'rest'; restoreHealth: number }
         | {
               type: 'scavenge';
@@ -237,7 +237,7 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
     initialHealth: 10,
     fixedNodeId: 'threshold',
     nodes: {
-        threshold: { type: 'scavenge', title: '门槛补给', icon: 'supply', cost: 0, supplies: [2, 2], cardReward: 'random' },
+        threshold: { type: 'scavenge', title: '门槛补给', icon: 'scavenge', cost: 0, supplies: [2, 2], cardReward: 'random' },
         lampPassage: { type: 'battle', title: '悬灯窄道', icon: 'battle', enemyId: 'ash-moth' },
         fallenShelves: { type: 'scavenge', title: '倒架储室', icon: 'scavenge', cost: 0, supplies: [2, 3], cardReward: 'random', discover: true },
         ashGallery: { type: 'battle', title: '灰烬长廊', icon: 'battle', enemyId: 'stone-claw' },
@@ -253,10 +253,22 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
         hoistBridge: { type: 'battle', title: '悬轮桥', icon: 'battle', enemyId: 'stone-claw' },
         shutterGap: { type: 'battle', title: '碎闸狭口', icon: 'battle', enemyId: 'ash-moth' },
         returnBridge: { type: 'battle', title: '回风窄桥', icon: 'battle', enemyId: 'stone-claw' },
+        sealedGuard: { type: 'battle', title: '封闸守卫', icon: 'elite', enemyId: 'gate-warden' },
+        windPerch: { type: 'battle', title: '风蚀栖台', icon: 'battle', enemyId: 'stymphalian-bird' },
+        quarryHall: { type: 'battle', title: '断柱石场', icon: 'battle', enemyId: 'cyclops' },
+        hornCourt: { type: 'battle', title: '岔角庭', icon: 'battle', enemyId: 'minotaur' },
+        floodedVault: { type: 'battle', title: '沉水窟', icon: 'battle', enemyId: 'hydra' },
+        galeRoost: { type: 'battle', title: '双翼风廊', icon: 'battle', enemyId: 'stymphalian-bird', companions: ['stymphalian-bird'] },
+        ebbWell: { type: 'battle', title: '沉潮井', icon: 'battle', enemyId: 'charybdis' },
+        clashingPass: { type: 'battle', title: '合岩隘口', icon: 'battle', enemyId: 'symplegades' },
         warmAlcove: { type: 'rest', title: '余温壁炉', icon: 'rest', restoreHealth: 2 },
         leeAlcove: { type: 'rest', title: '背风壁龛', icon: 'rest', restoreHealth: 2 },
         innerAlcove: { type: 'rest', title: '沉灯前室', icon: 'rest', restoreHealth: 2 },
         copperChest: { type: 'scavenge', title: '旧铜匣', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random', discover: true },
+        [ASHEN_SALVAGE_ROOM]: {
+            type: 'scavenge', title: '迷宫搜刮', icon: 'scavenge',
+            cost: 0, supplies: [1, 2], cardReward: 'random', discover: true, supplyCard: true,
+        },
         lampCourt: { type: 'battle', title: '沉灯庭', icon: 'elite', enemyId: 'veil-idol' },
         ...ashenScavengeSites({
             chartRoom: '旧测绘间', fallenTrestle: '断裂栈台', patchBay: '接线台', coldKiln: '冷却窑',
@@ -282,11 +294,21 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
 export function hasId(definitions: Readonly<Record<string, unknown>>, id: unknown): id is string {
     return typeof id === 'string' && Object.prototype.hasOwnProperty.call(definitions, id);
 }
+export function nodeDefinition<T extends { readonly title: string }>(
+    scenario: { readonly nodes: Readonly<Record<NodeKind, T>> },
+    id: NodeKind,
+    map: Pick<ExpeditionMap, 'points'> | null = null
+): T | undefined {
+    const room = expeditionRoomId(map, id);
+    return hasId(scenario.nodes, room) ? scenario.nodes[room] : undefined;
+}
+
 export function nodeTitle(
-    scenario: { readonly nodes: Readonly<Record<string, { readonly title: string }>> },
-    id: string
+    scenario: { readonly nodes: Readonly<Record<NodeKind, { readonly title: string }>> },
+    id: NodeKind,
+    map: Pick<ExpeditionMap, 'points'> | null = null
 ): string {
-    return scenario.nodes[id]?.title ?? id;
+    return nodeDefinition(scenario, id, map)?.title ?? id;
 }
 export interface RouteProgress {
     readonly fixedDone: boolean;
@@ -368,8 +390,14 @@ export function validateScenario(s: GameScenario): void {
                 ['scavenge', 'supply', 'battle', 'elite', 'rest'].indexOf(node.icon) >= 0,
             'node ' + key
         );
-        if (node.type === 'battle')
+        if (node.type === 'battle') {
             assertContent(hasId(s.enemies, node.enemyId), 'enemy reference ' + key);
+            if (node.companions) {
+                const ids = [node.enemyId, ...node.companions];
+                assertContent(s.labyrinth === true && node.companions.length === 1 &&
+                    ids.every(id => hasId(s.enemies, id)), 'enemy pair ' + key);
+            }
+        }
         else if (node.type === 'rest')
             assertContent(number(node.restoreHealth, 0, 10), 'rest ' + key);
         else if (node.type === 'scavenge') {

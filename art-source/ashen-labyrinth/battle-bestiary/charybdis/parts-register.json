@@ -1,0 +1,363 @@
+{
+  "actor": "charybdis",
+  "source": "../mythic-passages.png",
+  "sourceSha256": "c7317496d73119edf53670514719fc15a16241b4144aa5022d9e5391d1680090",
+  "jointUnderpaint": null,
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    360,
+    896
+  ],
+  "scale": 0.43,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "spring",
+      "bone": "spring",
+      "sourceXYWH": [
+        245,
+        605,
+        294,
+        279
+      ],
+      "png": [
+        294,
+        279
+      ],
+      "sha256": "f7b8f521f6ffb5899b60cac5a641fcce0d53fa0668f069d3aece716d220c555a",
+      "pivotUV": [
+        0.391156,
+        0.88172
+      ],
+      "setupPivot": [
+        0,
+        19.35
+      ],
+      "size": [
+        126.42,
+        119.97
+      ],
+      "angle": 0,
+      "visiblePixels": 16075,
+      "hiddenPixels": 16290
+    },
+    {
+      "name": "vortex",
+      "bone": "vortex",
+      "sourceXYWH": [
+        51,
+        214,
+        606,
+        524
+      ],
+      "png": [
+        606,
+        524
+      ],
+      "sha256": "922796d13be8b7e45f5275ec59dd866aa3d58feca76ee26a0b9164ddded8c977",
+      "pivotUV": [
+        0.559406,
+        0.860687
+      ],
+      "setupPivot": [
+        12.9,
+        99.33
+      ],
+      "size": [
+        260.58,
+        225.32
+      ],
+      "angle": 0,
+      "visiblePixels": 49332,
+      "hiddenPixels": 9864
+    },
+    {
+      "name": "hollow",
+      "bone": "hollow",
+      "sourceXYWH": [
+        120,
+        259,
+        461,
+        287
+      ],
+      "png": [
+        461,
+        287
+      ],
+      "sha256": "2ec1c88452e9fa86866bb9046964bf9b585c62b59ca0a40a7c91ab103b3e91f7",
+      "pivotUV": [
+        0.494577,
+        0.526132
+      ],
+      "setupPivot": [
+        -5.16,
+        208.98
+      ],
+      "size": [
+        198.23,
+        123.41
+      ],
+      "angle": 0,
+      "visiblePixels": 63844,
+      "hiddenPixels": 4632
+    },
+    {
+      "name": "far-lip",
+      "bone": "far-lip",
+      "sourceXYWH": [
+        219,
+        90,
+        391,
+        272
+      ],
+      "png": [
+        391,
+        272
+      ],
+      "sha256": "f39f174e49d1fc5c4ac88826a65040431a9f35eca859ef52ee03d3f0c93025cb",
+      "pivotUV": [
+        0.69821,
+        0.761029
+      ],
+      "setupPivot": [
+        56.76,
+        257.57
+      ],
+      "size": [
+        168.13,
+        116.96
+      ],
+      "angle": 0,
+      "visiblePixels": 32378,
+      "hiddenPixels": 912
+    },
+    {
+      "name": "crest",
+      "bone": "crest",
+      "sourceXYWH": [
+        470,
+        130,
+        271,
+        282
+      ],
+      "png": [
+        271,
+        282
+      ],
+      "sha256": "27350ff986ffc1710174d1f2393fb0cc197e300745806cbffe44da646354d8f0",
+      "pivotUV": [
+        0.487085,
+        0.677305
+      ],
+      "setupPivot": [
+        104.06,
+        247.25
+      ],
+      "size": [
+        116.53,
+        121.26
+      ],
+      "angle": 0,
+      "visiblePixels": 23970,
+      "hiddenPixels": 506
+    },
+    {
+      "name": "near-lip",
+      "bone": "near-lip",
+      "sourceXYWH": [
+        23,
+        338,
+        682,
+        312
+      ],
+      "png": [
+        682,
+        312
+      ],
+      "sha256": "b8b734b9181f60e5a784eb82a757a46e2e3436e9857fd02fa1f3b9163840f027",
+      "pivotUV": [
+        0.517595,
+        0.673077
+      ],
+      "setupPivot": [
+        6.88,
+        149.64
+      ],
+      "size": [
+        293.26,
+        134.16
+      ],
+      "angle": 0,
+      "visiblePixels": 62442,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "foam-ribbon",
+      "bone": "foam-ribbon",
+      "sourceXYWH": [
+        229,
+        503,
+        428,
+        355
+      ],
+      "png": [
+        428,
+        355
+      ],
+      "sha256": "1f2c9c19fae341f73b087accfffe266910b0b031f6e3abad02a89f27df19632e",
+      "pivotUV": [
+        0.252336,
+        0.740845
+      ],
+      "setupPivot": [
+        -9.89,
+        55.9
+      ],
+      "size": [
+        184.04,
+        152.65
+      ],
+      "angle": 0,
+      "visiblePixels": 24677,
+      "hiddenPixels": 316
+    },
+    {
+      "name": "basin",
+      "bone": "basin",
+      "sourceXYWH": [
+        149,
+        748,
+        415,
+        166
+      ],
+      "png": [
+        415,
+        166
+      ],
+      "sha256": "a9f263eab7502f0a7744bd8efcbfeffd985db840f1dd7ea2bc88a75e8b3ba9da",
+      "pivotUV": [
+        0.491566,
+        0.680723
+      ],
+      "setupPivot": [
+        -3.01,
+        15.05
+      ],
+      "size": [
+        178.45,
+        71.38
+      ],
+      "angle": 0,
+      "visiblePixels": 26445,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "shard-high",
+      "bone": "shard-high",
+      "sourceXYWH": [
+        112,
+        623,
+        84,
+        92
+      ],
+      "png": [
+        84,
+        92
+      ],
+      "sha256": "f7ce32a714a072fc00d600ab1d4697585c06f84583ccd7767a2cf4176a7e776e",
+      "pivotUV": [
+        0.47619,
+        0.467391
+      ],
+      "setupPivot": [
+        -89.44,
+        98.9
+      ],
+      "size": [
+        36.12,
+        39.56
+      ],
+      "angle": 0,
+      "visiblePixels": 1319,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "shard-mid",
+      "bone": "shard-mid",
+      "sourceXYWH": [
+        142,
+        675,
+        114,
+        98
+      ],
+      "png": [
+        114,
+        98
+      ],
+      "sha256": "2ac9f207c9a43491572d4d63564126605a8d4f6b605b38554e962bbd1bb5bb6f",
+      "pivotUV": [
+        0.508772,
+        0.438776
+      ],
+      "setupPivot": [
+        -68.8,
+        76.54
+      ],
+      "size": [
+        49.02,
+        42.14
+      ],
+      "angle": 0,
+      "visiblePixels": 2416,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "shard-low",
+      "bone": "shard-low",
+      "sourceXYWH": [
+        190,
+        735,
+        76,
+        72
+      ],
+      "png": [
+        76,
+        72
+      ],
+      "sha256": "3cba3c3d0859c32320843d3408ae09fc0c035fc9185fc32a4eb6d9bd0bcc3c08",
+      "pivotUV": [
+        0.526316,
+        0.513889
+      ],
+      "setupPivot": [
+        -55.9,
+        53.32
+      ],
+      "size": [
+        32.68,
+        30.96
+      ],
+      "angle": 0,
+      "visiblePixels": 557,
+      "hiddenPixels": 0
+    }
+  ],
+  "drawOrder": [
+    "spring",
+    "vortex",
+    "hollow",
+    "far-lip",
+    "crest",
+    "foam-ribbon",
+    "near-lip",
+    "basin",
+    "shard-high",
+    "shard-mid",
+    "shard-low"
+  ],
+  "setupAudit": {
+    "visiblePixels": 303455,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

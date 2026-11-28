@@ -1,6 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 import type { GameReadModel } from '../../core/GameReadModel';
-import { nextEnemyAction } from '../../core/content/LabyrinthEnemies';
+import { intentDamage, nextEnemyAction, type EnemyView } from '../../core/content/LabyrinthEnemies';
 import { UIValue } from './UIValue';
 const { ccclass, property } = _decorator;
 
@@ -27,18 +27,18 @@ export class EnemyIntent extends Component {
     private showHint(): void { this.hint.active = true; }
     private hideHint(): void { this.hint.active = false; }
 
-    render(game: GameReadModel, canInspect: boolean): void {
-        const battle = game.battle!;
-        const delayed = battle.calm?.deferred === 'scheduled';
+    render(game: GameReadModel, canInspect: boolean, battle: EnemyView, availableBlock: number): void {
+        const delayed = game.battle?.calm?.deferred === 'scheduled';
         const attacking = !delayed && battle.intent === 'attack';
         this.attackGlyph.active = attacking;
         this.prepareGlyph.active = !delayed && !attacking;
         this.delayGlyph.active = delayed;
         const following = nextEnemyAction(battle);
         const nextDamage = following === 'heavy' ? battle.strongAttack : battle.attack;
-        this.amount.setValue(delayed ? 1 : attacking ? game.incomingDamage : following === 'prepare' ? '' : nextDamage);
+        const incoming = intentDamage(battle);
+        this.amount.setValue(delayed ? 1 : attacking ? incoming : following === 'prepare' ? '' : nextDamage);
         this.amount.setAlert(attacking);
-        const damage = Math.max(0, game.incomingDamage - battle.block);
+        const damage = Math.max(0, incoming - availableBlock);
         let detail: string;
         if (delayed) detail = '行动暂缓 · 你将获得一个额外回合';
         else if (!attacking) detail = following === 'prepare' ? '下次继续蓄势' : `蓄势 · 下次攻击 ${nextDamage}`;

@@ -10,7 +10,7 @@ export type UiSound = 'tap' | 'loot' | 'heal';
 export interface UiActions {
     act(command: GameCommand, sound?: UiSound): void;
     refresh(): void;
-    playCard(id: string): void;
+    playCard(id: string, target?: number): void;
     enemyTurn(): void;
     message(text: string): void;
     sound(name: UiSound): void;
@@ -142,6 +142,10 @@ export class UiActionRouter {
             if (!Number.isInteger(index) || !(choice?.ids ?? g.battle?.discovery ?? g.rewards?.cards)?.[index])
                 return;
             this.ui.rewardSelection = index;
+        } else if (!this.ui.overlay && id === 'claim-supplies' && g.rewards?.nextCards?.length) {
+            this.ui.rewardSelection = -1;
+            this.actions.act({ type: 'switch-room-reward' });
+            return;
         } else if (
             (g.battle?.discovery || g.rewards?.discovery) &&
             !this.ui.overlay &&
@@ -213,8 +217,8 @@ export class UiActionRouter {
         } else if (id === 'end-turn') {
             this.actions.enemyTurn();
             return;
-        } else if (id === 'enemy-target') {
-            if (this.ui.selectedCard) this.actions.playCard(this.ui.selectedCard);
+        } else if (id === 'enemy-target' || id === 'enemy-target-1') {
+            if (this.ui.selectedCard) this.actions.playCard(this.ui.selectedCard, id === 'enemy-target' ? 0 : 1);
             return;
         } else if (id === 'claim-supplies') {
             const r = g.rewards;

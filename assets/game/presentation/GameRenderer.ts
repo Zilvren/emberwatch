@@ -1,11 +1,11 @@
 import { NativeViewWriter } from './ui/NativeViewWriter';
 import { PopupPresenter } from './ui/PopupPresenter';
 import { RewardScreenPresenter } from './cards/RewardScreenPresenter';
-import { Node } from 'cc';
+import { instantiate, Node, Vec2 } from 'cc';
 import type { GameReadModel } from '../core/GameReadModel';
-import { nodeTitle } from '../core/content/GameScenario';
-import { nextMapNodes } from '../core/content/ExpeditionMap';
-import { isLabyrinthEnemy } from '../core/content/LabyrinthEnemies';
+import { nodeDefinition, nodeTitle } from '../core/content/GameScenario';
+import { expeditionRoomId, nextMapNodes } from '../core/content/ExpeditionMap';
+import { battleEnemies, isLabyrinthEnemy } from '../core/content/LabyrinthEnemies';
 import type { SceneBindings } from './ui/GameView';
 import { ActorPresentation } from './actors/ActorPresentation';
 import { HandPresentation } from './cards/HandPresentation';
@@ -21,7 +21,6 @@ import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { TideBattleLayout } from './ui/TideBattleLayout';
 import type { battleWindowLayout } from './ui/BattleWindowLayout';
 import { DeckStackGraphic } from './primitives/DeckStackGraphic';
-import { EnemyIntent } from './ui/EnemyIntent';
 import { generatedCards } from '../core/content/CardCatalog';
 import { atGateCamp } from './ui/CampViewModel';
 /** Native view binding only. No game commands, storage or input subscriptions. */
@@ -30,13 +29,16 @@ export class GameRenderer extends NativeViewWriter {
     private readonly rewards: RewardScreenPresenter;
     hero: ActorPresentation | null = null;
     enemy: ActorPresentation | null = null;
+    opponents: ActorPresentation[] = [];
+    enemyTargetAt(point: Vec2): number { return this.battleLayout.targetAt(point); }
     activeScreen: Node | null = null;
     revision = -1;
     private look: 'legacy' | 'labyrinth' | null = null;
     private hiddenCombatUi: Node[] = [];
     private readonly battleLayout: TideBattleLayout;
-    fitBattleWindow(frame: ReturnType<typeof battleWindowLayout>): void {
+    fitEncounterWindow(frame: ReturnType<typeof battleWindowLayout>): void {
         this.battleLayout.fitWindow(frame);
+        this.rewards.fitWindow(this.scene.screens.rewards, frame.width * frame.scale, frame.height * frame.scale);
     }
     constructor(
         game: GameReadModel,
@@ -151,12 +153,14 @@ export class GameRenderer extends NativeViewWriter {
             this.text(screen, {
                 'banner/text2':
                     g.currentNode === 'return'
-                        ? '路已走完。正在自动返回避难所……'
+                        ? g.expeditionMap?.deferredRewards
+                            ? '可以回到当前地点领取奖励，也可以返回营地。'
+                            : '路已走完。正在自动返回避难所……'
                         : g.expeditionMap
                           ? '沿路线向上探索。点击亮起的地点继续。'
                           : '前往亮起的地点。全程无法主动撤离。',
                 'map/text0': `已走过 ${g.visited.length} 处 · 随行牌组 ${g.usableCards.length} 张`,
-                'map/text1': g.scenario.labyrinth ? '战后与指定搜刮点可以发现卡牌。' : '',
+                'map/text1': g.scenario.labyrinth ? '战后或搜刮时可以发现卡牌。' : '',
                 'map/fixedReward': `${fee ? `支付 ${fee} 物资 → ` : ''}${salvage}\n完成固定搜刮后，才能选择后续路线。`,
             });
             const map = screen.getComponentInChildren(RouteMap);
@@ -216,13 +220,13 @@ export class GameRenderer extends NativeViewWriter {
                 const nextId = g.expeditionMap
                     ? exits[0]
                     : g.scenario.routes[g.route!]?.[g.pathIndex + 1];
-                const next = nextId ? g.scenario.nodes[nextId] : undefined;
+                const next = nextId ? nodeDefinition(g.scenario, nextId, g.expeditionMap) : undefined;
                 const enemy = next?.type === 'battle' ? g.scenario.enemies[next.enemyId] : null;
                 const enemyPlan = g.scenario.labyrinth && next?.type === 'battle' && isLabyrinthEnemy(next.enemyId)
                     ? g.content.catalog.labyrinth?.enemyActions?.[next.enemyId]
                     : undefined;
                 this.text(screen, {
-                    'banner/text1': nodeTitle(g.scenario, g.currentNode),
+                    'banner/text1': nodeTitle(g.scenario, g.currentNode, g.expeditionMap),
                     'banner/text2': g.scenario.labyrinth ? '岩壁挡住了风。可以在这里恢复血量。'
                         : '舱壳隔开了盐风。通往潮闸的最后一段路就在窗外。',
                     'rest/text0': '血量状况',
@@ -234,7 +238,7 @@ export class GameRenderer extends NativeViewWriter {
                         ? `前方有 ${exits.length} 条路线 · 返回地图选择`
                         : enemy
                           ? `下一站 · ${enemy.title}\n生命 ${enemy.hp} · 普攻 ${enemyPlan?.attack ?? enemy.attack} · 重击 ${enemyPlan?.strongAttack ?? enemy.strongAttack}`
-                          : '下一站 · ' + (next?.title ?? '避难所'),
+                          : '下一站 · ' + (nextId ? nodeTitle(g.scenario, nextId, g.expeditionMap) : '避难所'),
                     'rest/text5': '',
                 });
                 this.button(screen, 'rest-bag', '查看随行牌组');
@@ -304,14 +308,31 @@ export class GameRenderer extends NativeViewWriter {
         if (gauge) gauge.active = g.scenario.battleResource === 'stamina';
         const definition = g.scenario.enemies[b.enemy];
         if (g.scenario.labyrinth)
-            world.getComponent(SceneAtmosphere)?.setLook(definition.actorId === 'veil-idol' ? 'court' : 'labyrinth');
+            world.getComponent(SceneAtmosphere)?.setRoom(expeditionRoomId(g.expeditionMap, g.currentNode),
+                definition.actorId === 'veil-idol' ? 'court' : 'labyrinth');
         const actors = world.getComponentsInChildren(ActorPresentation);
+        const members = battleEnemies(b);
+        const formation: ActorPresentation[] = [];
+        for (const member of members) {
+            const id = g.scenario.enemies[member.enemy].actorId;
+            const template = actors.find(candidate => candidate.actorId === id);
+            if (!template) throw new Error('缺少敌人表现绑定：' + id);
+            let actor = actors.find(candidate => candidate.actorId === id && formation.indexOf(candidate) < 0);
+            if (!actor) {
+                const node = instantiate(template.node);
+                node.name = id + '-companion';
+                node.parent = world;
+                actor = node.getComponent(ActorPresentation)!;
+                actors.push(actor);
+            }
+            formation.push(actor);
+        }
+        this.opponents = formation;
         for (const actor of actors)
             if (actor.actorId !== 'player')
-                actor.node.active = actor.actorId === definition.actorId;
-        this.enemy = actors.find((actor) => actor.actorId === definition.actorId) ?? null;
-        if (!this.enemy) throw new Error('缺少敌人表现绑定：' + definition.actorId);
-        this.battleLayout.show(this.enemy, !!g.scenario.fieldDeck, !!g.scenario.labyrinth);
+                actor.node.active = (members[this.opponents.indexOf(actor)]?.hp ?? 0) > 0;
+        this.enemy = this.opponents[members.findIndex(member => member.hp > 0)];
+        this.battleLayout.show(this.opponents[0], !!g.scenario.fieldDeck, !!g.scenario.labyrinth, this.opponents[1]);
         const calm = b.calm;
         const calmText = calm ? `镇静 ${calm.persistent + calm.temporary} / ${calm.limit}` +
             (calm.temporary ? ` · 临时 ${calm.temporary}` : '') +
@@ -332,16 +353,14 @@ export class GameRenderer extends NativeViewWriter {
         if (statusLabel) {
             statusLabel.active = !!status;
         }
-        screen.getComponentInChildren(EnemyIntent)!.render(g,
+        this.battleLayout.renderOpponents(g,
             !this.ui.busy && !this.ui.overlay && !this.ui.selectedCard && !b.discovery && !b.cardChoice);
         this.text(screen, {
             'banner/text0': `ENCOUNTER / ROUND ${b.turn}`,
-            'banner/text1': definition.title,
             'banner/text2': status,
             'battle/text2': '点击敌人 · 打出攻击',
             'battle/text3': `${g.health}/10`,
             'battle/text4': String(b.block),
-            'battle/text5': `${b.hp}/${b.maxHp}`,
             'battle/text6': '血量偏低',
             'battle/text8': b.turn === b.equippedTurn ? '下回合生成挥砍' : '每回合生成挥砍',
             'drawPile/text0': b.draw.length,
@@ -365,7 +384,7 @@ export class GameRenderer extends NativeViewWriter {
         }
         screen.getChildByName('TargetGuide')!.active = !!this.ui.selectedCard;
         for (const progress of screen.getComponentsInChildren(UIProgress))
-            progress.setRatio(progress.key === 'health' ? g.health / 10 : b.hp / b.maxHp);
+            if (progress.key === 'health') progress.setRatio(g.health / 10);
         this.hand?.refresh(
             g,
             this.ui.selectedCard,

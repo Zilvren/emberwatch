@@ -77,7 +77,7 @@ export class RoutePoint extends Component {
             this.status.color = new Color().fromHEX(forecast ? '#50321e' : onParchment ? '#68472d' : '#d0b58e');
             this.status.node.getComponent(UITransform)!.width = data.decisionHint && !forecast ? 340 : 180;
             this.status.string =
-                data.decisionHint ??
+                (data.resumeRewards ? (readonly ? '奖励待领' : '奖励待领 · 点击查看') : data.decisionHint) ??
                 (data.state === 'current' ? '当前位置' : data.state === 'visited'
                     ? '已完成'
                     : data.state === 'available'
@@ -93,7 +93,7 @@ export class RoutePoint extends Component {
         if (this.action) {
             this.action.actionId = data.action || 'map-home';
             this.action.disabledOpacity = 255;
-            this.action.setEnabled(data.state === 'available' && !readonly && !!data.action);
+            this.action.setEnabled((data.state === 'available' || !!data.resumeRewards) && !readonly && !!data.action);
         }
         this.draw();
     }
@@ -105,7 +105,6 @@ export class RoutePoint extends Component {
             visited = d.state === 'visited';
         g.clear();
         if (this.status) this.status.node.active = active || visited || this.hovering;
-        if (this.title) this.title.enabled = !this.onParchment || active || visited || this.hovering || !!d.decisionHint || d.title !== '未知地点';
         if (this.labyrinth) {
             const excluded = d.state === 'excluded';
             const tone = this.onParchment ? parchmentInk[d.state] : {

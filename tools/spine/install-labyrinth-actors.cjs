@@ -14,6 +14,14 @@ const interfaceFolder = output + '/interface';
 const legacy = read('assets/prefabs/actors/PlayerActor.prefab');
 const sharedSkeleton = cleanComponent(legacy.find((item) => item.__type__ === 'sp.Skeleton'));
 const motionNames = ['idle', 'prepare', 'attack', 'hurt', 'death'];
+const gallery = {
+    'stymphalian-bird': { aim:'breast', contact:'near-talon', x:302, y:-169, scale:1, intentAnchor:[5,369], vitalsAnchor:[218,65], shadowWidth:142 },
+    cyclops: { aim:'torso', contact:'pounding-fist', x:318, y:-178, scale:1, intentAnchor:[-5,328], vitalsAnchor:[222,75], shadowWidth:238 },
+    minotaur: { aim:'chest', contact:'near-horn', x:324, y:-182, scale:1, intentAnchor:[-13,394], vitalsAnchor:[230,82], shadowWidth:252 },
+    hydra: { aim:'mid-neck', contact:'mid-head', x:327, y:-180, scale:1, intentAnchor:[-12,387], vitalsAnchor:[236,76], shadowWidth:269 },
+    charybdis: { aim:'hollow', contact:'near-lip', flight:.18, x:325, y:-178, scale:1, intentAnchor:[33,373], vitalsAnchor:[211,74], shadowWidth:180 },
+    symplegades: { aim:'left-facet', contact:'left-rock', flight:.13, x:325, y:-180, scale:1, intentAnchor:[20,381], vitalsAnchor:[228,76], shadowWidth:287 },
+};
 const enemies = {
     'ash-moth': { aim: 'thorax', contact: 'head', localTip: 23, x: 310, y: -119, scale: 1.02,
         intentAnchor: [-18, 341], vitalsAnchor: [312, 32] },
@@ -114,14 +122,33 @@ function protagonist() {
     save('assets/prefabs/actors/PlayerActor.prefab', legacy);
 }
 
+function mythicHitArea(graph, actor, id, scale) {
+    const base = art + '/' + id;
+    const registration = read(base + '/parts-register.json');
+    let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+    for (const part of registration.parts) {
+        const image = PNG.sync.read(fs.readFileSync(absolute(base + '/parts/' + part.name + '.png')));
+        const [x, y] = part.sourceXYWH;
+        for (let row=0; row<image.height; row++) for (let col=0; col<image.width; col++) {
+            if (image.data[4*(row*image.width+col)+3] < 64) continue;
+            left = Math.min(left, x+col); right = Math.max(right, x+col+1);
+            top = Math.min(top, y+row); bottom = Math.max(bottom, y+row+1);
+        }
+    }
+    const unit = registration.scale * scale;
+    graph.node('TargetBounds', actor, ((left+right)/2-registration.origin[0])*unit,
+        (registration.origin[1]-(top+bottom)/2)*unit, (right-left)*unit+8, (bottom-top)*unit+8);
+}
+
 function enemy(id, spec) {
     const sourceFolder = art + '/' + id + '/runtime';
     const source = sourceFolder + '/' + id + '.json', doc = read(source);
     const attack = doc.animations.attack, hit = attack.events.find((event) => event.name === 'impact').time;
-    const tip = markersAtImpact(doc, spec.contact, spec.localTip, hit);
+    const localTip = spec.localTip ?? doc.bones.find(bone => bone.name === spec.contact).length;
+    const tip = markersAtImpact(doc, spec.contact, localTip, hit);
     doc.bones.push({ name: 'PoseRoot', parent: 'root' },
         { name: 'Aim', parent: spec.aim, x: spec.aimShift ?? 0 },
-        { name: 'ContactTip', parent: spec.contact, x: spec.localTip },
+        { name: 'ContactTip', parent: spec.contact, x: localTip },
         { name: 'Approach', parent: 'root' });
     if (spec.flight) {
         doc.events.release ??= {};
@@ -141,7 +168,7 @@ function enemy(id, spec) {
     const file = 'assets/prefabs/actors/' + id + '.prefab';
     const graph = new Graph(file, id);
     const actor = graph.node(id, null, 0, 0, 440, 440);
-    const shadow = graph.shape('ContactShadow', 0, id === 'ash-moth' ? -51 : 3, id === 'stone-claw' ? 240 : 163, 16, '302635', 108, true);
+    const shadow = graph.shape('ContactShadow', 0, id === 'ash-moth' ? -51 : 3, spec.shadowWidth ?? (id === 'stone-claw' ? 240 : 163), 16, '302635', 108, true);
     assert.ok(shadow);
     const ink = graph.node('Spine', actor, 0, 0, 450, 450);
     graph.graph[ink]._lscale = vec(spec.scale, spec.scale, 1);
@@ -152,6 +179,7 @@ function enemy(id, spec) {
     graph.component(actor, script('ActorPresentation'), { actorId: id, spineRig: ref(rig), impactAnchor: ref(anchor) });
     graph.node('IntentAnchor', actor, ...spec.intentAnchor, 1, 1);
     graph.node('VitalsAnchor', actor, ...spec.vitalsAnchor, 1, 1);
+    if (Object.hasOwn(gallery,id)) mythicHitArea(graph,actor,id,spec.scale);
     graph.save();
     ensureMeta(file, 'prefab');
     return file;
@@ -165,7 +193,7 @@ function image(source, filename) {
     return asset(frame + '@f9941', 'cc.SpriteFrame');
 }
 
-function battle(prefabs, backgrounds) {
+function battle(prefabs, backgrounds, placements = enemies) {
     const file = 'assets/prefabs/screens/BattleScreen.prefab';
     const graph = new Graph(file, 'BattleScreen');
     graph.graph = read(file);
@@ -179,20 +207,33 @@ function battle(prefabs, backgrounds) {
             const node = graph.graph[link.__id__];
             return graph.graph[node._prefab.__id__].asset?.__uuid__ === prefabId;
         })) continue;
-        const spec = enemies[id];
+        const spec = placements[id];
         const index = graph.linked(prefab, id, spec.x, spec.y);
         const linked = graph.graph[graph.graph[index]._prefab.__id__];
         const overrides = graph.graph[linked.instance.__id__].propertyOverrides;
         graph.graph[overrides.at(-1).__id__].value = false;
         info.nestedPrefabInstanceRoots.push(ref(index));
     }
-    const atmosphere = world._components.map((link) => graph.graph[link.__id__]).find((c) => c.__type__ === script('SceneAtmosphere'));
-    atmosphere.labyrinthBackdrop = backgrounds.passage;
-    atmosphere.labyrinthCourt = backgrounds.court;
+    if (backgrounds) {
+        const atmosphere = world._components.map((link) => graph.graph[link.__id__]).find((c) => c.__type__ === script('SceneAtmosphere'));
+        atmosphere.labyrinthBackdrop = backgrounds.passage;
+        atmosphere.labyrinthCourt = backgrounds.court;
+    }
     save(file, graph.graph);
 }
 
 fs.mkdirSync(absolute(output), { recursive: true });
+if (process.argv.includes('--mythic-bestiary')) {
+    const index = process.argv.indexOf('--actor');
+    const ids = index < 0 ? Object.keys(gallery) : [process.argv[index + 1]];
+    const prefabs = Object.fromEntries(ids.map(id => {
+        if (!Object.hasOwn(gallery, id)) throw Error('Unknown mythic actor ' + id);
+        return [id, enemy(id, gallery[id])];
+    }));
+    battle(prefabs, null, gallery);
+    console.log('Installed mythic skeletons and BattleScreen prefab instances:', Object.keys(prefabs));
+    return;
+}
 protagonist();
 const prefabs = Object.fromEntries(Object.entries(enemies).map(([id, spec]) => [id, enemy(id, spec)]));
 const paper = image(interfaceFolder + '/card-back.png');

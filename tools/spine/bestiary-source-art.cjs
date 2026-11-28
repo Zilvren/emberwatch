@@ -143,8 +143,23 @@ function measureMatte(sheet,actor,background){
   return {w,h,left,top,alpha,matteRGB};
 }
 
+function transparentMatte(sheet,actor){
+  const [left,top,right,bottom]=actor.rect,w=right-left,h=bottom-top;
+  const matteRGB=Buffer.alloc(w*h*4),alpha=new Uint8Array(w*h);
+  for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+    const i=y*w+x,source=((y+top)*sheet.width+x+left)*4;
+    if(actor.envelope&&!inside(x+left+.5,y+top+.5,actor.envelope))continue;
+    const coverage=sheet.data[source+3];
+    // Normalize the transparent plate's faint matte noise and nearly opaque interiors.
+    alpha[i]=coverage<8?0:coverage>245?255:coverage;
+    if(alpha[i]) sheet.data.copy(matteRGB,i*4,source,source+3);
+    matteRGB[i*4+3]=alpha[i];
+  }
+  return {w,h,left,top,alpha,matteRGB};
+}
 function partition(sheet,actor,background){
-  const out=measureMatte(sheet,actor,background),{w,h,left,top,alpha,matteRGB}=out,n=w*h;
+  const out=background?measureMatte(sheet,actor,background):transparentMatte(sheet,actor);
+  const {w,h,left,top,alpha,matteRGB}=out,n=w*h;
   const owner=new Int16Array(n);owner.fill(-1);
   const regions=Object.entries(actor.parts).map(([name,s])=>{
     const p=s.border||s.stroke,margin=s.stroke?Math.max(...p.map(v=>v[2]))+2:2;
@@ -278,8 +293,10 @@ function cutSourcePart(PNG,cut,actor,definition,drawOrder,reconstruction,underBo
     const near=nearest[j]*4,at=j*4;
     const rect=underBox||[extent[0]+left,extent[1]+top,extent[2]+left+1,extent[3]+top+1];
     const u=(px-rect[0])/(rect[2]-rect[0]),v=(py-rect[1])/(rect[3]-rect[1]);
-    if((u<0||u>1||v<0||v>1)&&d>2)continue;
-    let fill=sampleUnderpainting(reconstruction,u,v,definition.opaqueUnderpaint);
+    if(reconstruction && (u<0||u>1||v<0||v>1)&&d>2)continue;
+    const reflected=nearest[j]*2-origin;
+    const sample=owner[reflected]===k&&alpha[reflected]===255 ? reflected*4 : near;
+    let fill=reconstruction ? sampleUnderpainting(reconstruction,u,v,definition.opaqueUnderpaint) : matteRGB.subarray(sample,sample+4);
     if(definition.noHiddenEye&&fill[0]>127&&fill[0]-fill[2]>36){
       fill=sampleUnderpainting(reconstruction,.50+.2*clamp(u,0,1),.48+.19*clamp(v,0,1),true);
     }

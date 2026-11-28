@@ -1,0 +1,24 @@
+{
+  "actor": "symplegades",
+  "editor": "3.8.75",
+  "bones": 10,
+  "slots": 8,
+  "images": 8,
+  "meshes": [],
+  "ik": 0,
+  "impact": 0.62,
+  "clips": {
+    "idle": 2.85,
+    "prepare": 0.91,
+    "attack": 1.22,
+    "hurt": 0.46,
+    "death": 1.32
+  },
+  "auxiliary": {},
+  "atlasPages": [
+    "symplegades-parts.png",
+    "symplegades-parts2.png"
+  ],
+  "projectSha256": "1f81829193854a5ec710141ed193fa39896afd8cec2955d9f433cb4c609cd84f",
+  "runtimeSha256": "7059b97d6379d68070fde70ca415165576c0fc6b53d70109de6e1b6620738943"
+}

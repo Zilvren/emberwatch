@@ -3529,7 +3529,7 @@
       "b": 173,
       "a": 255
     },
-    "_string": "战斗",
+    "_string": "普通怪",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -3823,7 +3823,7 @@
       "b": 173,
       "a": 255
     },
-    "_string": "强敌",
+    "_string": "精英怪",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -4117,7 +4117,7 @@
       "b": 173,
       "a": 255
     },
-    "_string": "休整",
+    "_string": "休息处",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,
@@ -4165,7 +4165,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Key-unknown",
+    "_name": "Key-salvage",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -4274,7 +4274,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "a1192a9d-251e-45ec-8ab5-0861743a1936@f9941",
+      "__uuid__": "025b26cf-06e6-4da2-9448-5bfd903244ba@285f2",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -4303,7 +4303,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "KeyLabel-unknown",
+    "_name": "KeyLabel-salvage",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -4411,7 +4411,7 @@
       "b": 173,
       "a": 255
     },
-    "_string": "未知地点",
+    "_string": "搜刮房",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 0,

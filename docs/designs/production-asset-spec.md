@@ -1,5 +1,28 @@
 # The end 素材生产与原生接入规格
 
+## 2026-11-28 · 神话房间背景的导入与取景
+
+《The end》七张房间原画使用 ImageGen 参照已有的 `light-cut-passage.png` 和 `sunken-lamp-court.png` 绘制。源文件在 `art-source/ashen-labyrinth/battle-bestiary/backgrounds/rooms/`，尺寸为 1585 或 1586 × 992。显式运行 `python tools/author-battle-room-backgrounds.py` 以质量 92、4:4:4 色度采样输出等尺寸 JPEG。Pink 将 `assets/resources/art/battle-rooms/` 的七张运行图导入为 SpriteFrame，图像文件共 1,549,514 字节。
+
+`GameRenderer.ts` 按当前战斗所在地图点解析房间，`RewardScreenPresenter.ts` 按奖励来源解析房间。`SceneAtmosphere.ts` 按需载入对应画作，离开时释放资源引用。读档复用存档里该坐标的房间身份。战斗地面登记在源图高度约 71.55% 处，窗口变化时按实际图像比例覆盖画面。奖励底图、边缘遮罩和选牌遮罩跟随可见窗口尺寸。
+
+原画与实机取景见工作区 `art-source/ashen-labyrinth/battle-bestiary/preview/mythic-rooms/`。原始 PNG 的 OpenViking 目录为 `viking://~/resources/projects/the-end/designs/ashen-labyrinth-battle-bestiary/backgrounds/rooms/`。
+
+## 2026-11-28 · 六种神话战斗演员
+
+《The end》使用 1536 × 1024 的透明原画 `mythic-creatures.png` 和 `mythic-passages.png`。前一张按玩家选定的两次出图逐格保留牛头、独眼、三头蛇和鸟的原始绘画，后一张提供吞潮与合岩两种环境形体。ImageGen 使用项目现有三怪原画作参考。注册脚本从原图分取可见像素，以本部件的邻近颜色补足旋转时会露出的关节。源 PNG 的轻微透明噪声在取样时统一处理。六套部件在注册坐标合成后，与对应的标准化透明原画逐像素相符。
+
+| 原生演员 | 透明拆件 | 作者骨骼 | 攻击接触 | 主要分层 |
+| --- | ---: | ---: | ---: | --- |
+| 斯廷法洛斯鸟 | 10 | 12 | 0.36 秒 | 两翼、初级飞羽、鸟喙和前后足爪 |
+| 独眼石巨人 | 12 | 14 | 0.60 秒 | 单眼头石、肩臂、拳面与腰间垂布 |
+| 弥诺陶洛斯 | 14 | 16 | 0.52 秒 | 牛首、两角、双臂、蹄腿与裙幅 |
+| 许德拉 | 10 | 12 | 0.64 秒 | 共享盘躯、三条颈链和三个蛇首 |
+| 卡律布狄斯 | 11 | 13 | 0.68 秒 | 涡喉、前后潮唇、泡沫带、基座与悬石 |
+| 相撞双岩 | 8 | 10 | 0.62 秒 | 两块主岩、磨亮的撞击面、岩足与碎片 |
+
+每种都有可编辑 `.spine`、独立 PNG、轴点登记、Spine 3.8.75 导出数据及 Cocos Prefab。五段动作沿用 `idle / prepare / attack / hurt / death`，待机循环，攻击按唯一的 `impact` 事件结算。涡潮与撞岩还在冲击到达前发出 `release`。地面基线为 Spine 的 0，原生点击区域来自中立姿势的可见像素边界。战斗与作者入口分别为 `assets/prefabs/screens/BattleScreen.prefab`、`tools/spine/bestiary-author.cjs` 和 `tools/spine/install-labyrinth-actors.cjs --mythic-bestiary`。
+
 ## 2026-11-28 · 战斗 HUD 石材插画
 
 《The end》本轮已接入十五张分离的手绘风格 SpriteFrame。ImageGen 参照石廊与沉灯庭背景生成插画，独立原图保存在 `art-source/ashen-labyrinth/combat-ui/`。运行图位于 `assets/ashen-labyrinth/interface/`，按透明边界居中，采用线性采样。

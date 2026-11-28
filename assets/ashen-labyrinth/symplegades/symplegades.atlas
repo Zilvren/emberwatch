@@ -1,0 +1,68 @@
+
+symplegades-parts.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+east-foot
+  rotate: false
+  xy: 2, 188
+  size: 400, 341
+  orig: 400, 341
+  offset: 0, 0
+  index: -1
+left-facet
+  rotate: false
+  xy: 504, 467
+  size: 379, 331
+  orig: 379, 331
+  offset: 0, 0
+  index: -1
+right-facet
+  rotate: false
+  xy: 406, 2
+  size: 224, 461
+  orig: 224, 461
+  offset: 0, 0
+  index: -1
+splinter-heavy
+  rotate: false
+  xy: 77, 718
+  size: 87, 80
+  orig: 87, 80
+  offset: 0, 0
+  index: -1
+splinter-light
+  rotate: false
+  xy: 2, 728
+  size: 71, 70
+  orig: 71, 70
+  offset: 0, 0
+  index: -1
+west-foot
+  rotate: false
+  xy: 168, 533
+  size: 332, 265
+  orig: 332, 265
+  offset: 0, 0
+  index: -1
+
+symplegades-parts2.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+left-rock
+  rotate: false
+  xy: 407, 172
+  size: 461, 620
+  orig: 461, 620
+  offset: 0, 0
+  index: -1
+right-rock
+  rotate: false
+  xy: 2, 2
+  size: 401, 790
+  orig: 401, 790
+  offset: 0, 0
+  index: -1

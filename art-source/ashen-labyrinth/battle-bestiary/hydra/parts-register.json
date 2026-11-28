@@ -1,0 +1,332 @@
+{
+  "actor": "hydra",
+  "source": "../mythic-creatures.png",
+  "sourceSha256": "035eff358a3cc6a3b0f523e670220ff6e27a63a87c6ddc38257b98a3193375ba",
+  "jointUnderpaint": null,
+  "coordinateSystem": "UV from top left, Spine world +Y up",
+  "origin": [
+    791,
+    991
+  ],
+  "scale": 0.76,
+  "ground": 0,
+  "parts": [
+    {
+      "name": "coils",
+      "bone": "coils",
+      "sourceXYWH": [
+        531,
+        766,
+        495,
+        236
+      ],
+      "png": [
+        495,
+        236
+      ],
+      "sha256": "1fdc48cbc3c60743335c00b1dfac5a2e0b399658ede13375a70b29f0c6d72938",
+      "pivotUV": [
+        0.573737,
+        0.580508
+      ],
+      "setupPivot": [
+        18.24,
+        66.88
+      ],
+      "size": [
+        376.2,
+        179.36
+      ],
+      "angle": 0,
+      "visiblePixels": 21876,
+      "hiddenPixels": 17317
+    },
+    {
+      "name": "low-neck",
+      "bone": "low-neck",
+      "sourceXYWH": [
+        578,
+        719,
+        192,
+        215
+      ],
+      "png": [
+        192,
+        215
+      ],
+      "sha256": "be6d9cf65ad109548ac237403cd0b6e384d7df8fde8b703fe5e77e0295bc71cf",
+      "pivotUV": [
+        0.776042,
+        0.860465
+      ],
+      "setupPivot": [
+        -48.64,
+        66.12
+      ],
+      "size": [
+        145.92,
+        163.4
+      ],
+      "angle": 0,
+      "visiblePixels": 10980,
+      "hiddenPixels": 1723
+    },
+    {
+      "name": "low-head",
+      "bone": "low-head",
+      "sourceXYWH": [
+        492,
+        708,
+        198,
+        113
+      ],
+      "png": [
+        198,
+        113
+      ],
+      "sha256": "af95581960f492db79e544d4a8a40d399cce5675261e625ee196869c565c4a5c",
+      "pivotUV": [
+        0.616162,
+        0.504425
+      ],
+      "setupPivot": [
+        -134.52,
+        171.76
+      ],
+      "size": [
+        150.48,
+        85.88
+      ],
+      "angle": 0,
+      "visiblePixels": 6466,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "mid-neck",
+      "bone": "mid-neck",
+      "sourceXYWH": [
+        701,
+        659,
+        141,
+        267
+      ],
+      "png": [
+        141,
+        267
+      ],
+      "sha256": "460eb83b1ee22fdf5872b9dd4a5b6ca409f9552e4752aab4ab22f878cd5499da",
+      "pivotUV": [
+        0.304965,
+        0.865169
+      ],
+      "setupPivot": [
+        -35.72,
+        76.76
+      ],
+      "size": [
+        107.16,
+        202.92
+      ],
+      "angle": 0,
+      "visiblePixels": 9825,
+      "hiddenPixels": 4038
+    },
+    {
+      "name": "mid-throat",
+      "bone": "mid-throat",
+      "sourceXYWH": [
+        680,
+        623,
+        158,
+        144
+      ],
+      "png": [
+        158,
+        144
+      ],
+      "sha256": "c6bb2cc83ba6fdc94999f1cff6d5c2ed9eb3d2ee1725acab1208d23ee615052a",
+      "pivotUV": [
+        0.582278,
+        0.645833
+      ],
+      "setupPivot": [
+        -14.44,
+        209
+      ],
+      "size": [
+        120.08,
+        109.44
+      ],
+      "angle": 0,
+      "visiblePixels": 5947,
+      "hiddenPixels": 1349
+    },
+    {
+      "name": "mid-head",
+      "bone": "mid-head",
+      "sourceXYWH": [
+        594,
+        596,
+        205,
+        118
+      ],
+      "png": [
+        205,
+        118
+      ],
+      "sha256": "097b60984cc59f72a8bada4be8d1ca47dc8a71beec23de8e5c663568e03204f2",
+      "pivotUV": [
+        0.585366,
+        0.466102
+      ],
+      "setupPivot": [
+        -58.52,
+        258.4
+      ],
+      "size": [
+        155.8,
+        89.68
+      ],
+      "angle": 0,
+      "visiblePixels": 6566,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "high-neck",
+      "bone": "high-neck",
+      "sourceXYWH": [
+        739,
+        639,
+        232,
+        281
+      ],
+      "png": [
+        232,
+        281
+      ],
+      "sha256": "5d5eac855b3d8c183e30274b8c82d714a81880bae17ff79a0ef0b347416f0e11",
+      "pivotUV": [
+        0.150862,
+        0.882562
+      ],
+      "setupPivot": [
+        -12.92,
+        79.04
+      ],
+      "size": [
+        176.32,
+        213.56
+      ],
+      "angle": 0,
+      "visiblePixels": 16382,
+      "hiddenPixels": 4467
+    },
+    {
+      "name": "high-throat",
+      "bone": "high-throat",
+      "sourceXYWH": [
+        800,
+        534,
+        170,
+        191
+      ],
+      "png": [
+        170,
+        191
+      ],
+      "sha256": "46faca5e9a54498ad164e245388ba54d2b9dffeda1fd8dd8e49f78405c045db5",
+      "pivotUV": [
+        0.617647,
+        0.73822
+      ],
+      "setupPivot": [
+        86.64,
+        240.16
+      ],
+      "size": [
+        129.2,
+        145.16
+      ],
+      "angle": 0,
+      "visiblePixels": 10678,
+      "hiddenPixels": 1272
+    },
+    {
+      "name": "high-head",
+      "bone": "high-head",
+      "sourceXYWH": [
+        709,
+        510,
+        218,
+        111
+      ],
+      "png": [
+        218,
+        111
+      ],
+      "sha256": "02f62a9399590b1242c892756b871c45ffbb95174f5fc3087e6ec5c172919fc6",
+      "pivotUV": [
+        0.56422,
+        0.459459
+      ],
+      "setupPivot": [
+        31.16,
+        326.8
+      ],
+      "size": [
+        165.68,
+        84.36
+      ],
+      "angle": 0,
+      "visiblePixels": 7621,
+      "hiddenPixels": 0
+    },
+    {
+      "name": "front-coil",
+      "bone": "front-coil",
+      "sourceXYWH": [
+        616,
+        813,
+        410,
+        189
+      ],
+      "png": [
+        410,
+        189
+      ],
+      "sha256": "fb6e0099b11c0c79e31b510dac692e54f7224500f1459d4dc6aceb29e9456860",
+      "pivotUV": [
+        0.663415,
+        0.470899
+      ],
+      "setupPivot": [
+        73.72,
+        67.64
+      ],
+      "size": [
+        311.6,
+        143.64
+      ],
+      "angle": 0,
+      "visiblePixels": 36919,
+      "hiddenPixels": 0
+    }
+  ],
+  "drawOrder": [
+    "coils",
+    "high-neck",
+    "high-throat",
+    "high-head",
+    "mid-neck",
+    "mid-throat",
+    "mid-head",
+    "low-neck",
+    "low-head",
+    "front-coil"
+  ],
+  "setupAudit": {
+    "visiblePixels": 133260,
+    "differentPixels": 0,
+    "missingPixels": 0
+  }
+}

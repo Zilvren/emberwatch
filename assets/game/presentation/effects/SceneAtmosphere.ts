@@ -4,14 +4,32 @@ import {
     Component,
     Graphics,
     Node,
+    resources,
     Sprite,
     SpriteFrame,
     Tween,
     tween,
     UITransform,
     Vec3,
+    warn,
 } from 'cc';
 const { ccclass, property } = _decorator;
+
+const roomPaintings = new Map([
+    ['hornCourt', 'horn-court'],
+    ['quarryHall', 'broken-column-quarry'],
+    ['floodedVault', 'flooded-vault'],
+    ['windPerch', 'windworn-perch'],
+    ['galeRoost', 'twin-wind-gallery'],
+    ['ebbWell', 'ebb-well'],
+    ['clashingPass', 'clashing-pass'],
+]);
+type MazeLook = 'labyrinth' | 'court';
+interface RoomPainting {
+    name: string;
+    fallback: MazeLook;
+    frame: SpriteFrame | null;
+}
 
 /** Scene depth and short impact feedback; no game rules or character scaling. */
 @ccclass('SceneAtmosphere')
@@ -21,12 +39,55 @@ export class SceneAtmosphere extends Component {
     @property(SpriteFrame) labyrinthBackdrop: SpriteFrame | null = null;
     @property(SpriteFrame) labyrinthCourt: SpriteFrame | null = null;
     private previousBackdrop: SpriteFrame | null = null;
-    setLook(look: 'labyrinth' | 'court' | 'legacy'): void {
+    private roomPainting: RoomPainting | null = null;
+
+    setLook(look: MazeLook | 'legacy'): void {
         const sprite = this.backdrop?.getComponent(Sprite);
-        if (!sprite) return;
-        if (!this.previousBackdrop) this.previousBackdrop = sprite.spriteFrame;
-        sprite.spriteFrame = (look === 'court' ? this.labyrinthCourt
-            : look === 'labyrinth' ? this.labyrinthBackdrop : null) ?? this.previousBackdrop;
+        if (sprite) {
+            this.previousBackdrop ??= sprite.spriteFrame;
+            const frame = (look === 'court' ? this.labyrinthCourt
+                : look === 'labyrinth' ? this.labyrinthBackdrop : null) ?? this.previousBackdrop;
+            this.showFrame(sprite, frame);
+        }
+        this.roomPainting?.frame?.decRef();
+        this.roomPainting = null;
+    }
+
+    setRoom(room: string, fallback: MazeLook = 'labyrinth'): void {
+        const name = roomPaintings.get(room);
+        if (name && name === this.roomPainting?.name) return;
+        this.setLook(fallback);
+        const sprite = this.backdrop?.getComponent(Sprite);
+        if (!name || !sprite) return;
+        const request: RoomPainting = { name, fallback, frame: null };
+        this.roomPainting = request;
+        const path = `art/battle-rooms/${name}/spriteFrame`;
+        const accept = (frame: SpriteFrame) => {
+            frame.addRef();
+            // A late download can complete after leaving this room or returning to it.
+            if (this.roomPainting !== request || !sprite.isValid) {
+                frame.decRef();
+                return;
+            }
+            request.frame = frame;
+            this.showFrame(sprite, frame);
+        };
+        const cached = resources.get(path, SpriteFrame);
+        if (cached) accept(cached);
+        else resources.load(path, SpriteFrame, (error, frame) => {
+            if (!error && frame) accept(frame);
+            else if (this.roomPainting === request) {
+                this.roomPainting = null;
+                warn(`无法载入房间背景 ${path}`, error);
+            }
+        });
+    }
+
+    private showFrame(sprite: Sprite, frame: SpriteFrame | null): void {
+        if (sprite.spriteFrame === frame) return;
+        sprite.spriteFrame = frame;
+        const fit = this.lastFit;
+        if (fit) this.fitBackdrop(fit.width, fit.height, fit.centerY, fit.floorY);
     }
     private elapsed = 0;
     private reduced = false;
@@ -34,8 +95,10 @@ export class SceneAtmosphere extends Component {
     private home = new Vec3();
     private backdropHome = new Vec3();
     private authoredBackdrop: { height: number; y: number; x: number } | null = null;
+    private lastFit: { width: number; height: number; centerY: number; floorY: number } | null = null;
     /** Preserve the painted floor under the actors while covering the whole visible window. */
     fitBackdrop(width: number, height: number, centerY = 0, floorY = 0): void {
+        this.lastFit = { width, height, centerY, floorY };
         const node = this.backdrop, frame = node?.getComponent(Sprite)?.spriteFrame;
         const ui = node?.getComponent(UITransform);
         if (!node || !frame || !ui) return;
@@ -71,6 +134,7 @@ export class SceneAtmosphere extends Component {
         this.drawDust();
     }
     onDisable(): void {
+        if (this.roomPainting) this.setLook(this.roomPainting.fallback);
         this.query?.removeEventListener('change', this.motionChanged);
         Tween.stopAllByTarget(this.node);
         this.node.setPosition(this.home);

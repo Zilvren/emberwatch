@@ -1,0 +1,24 @@
+{
+  "actor": "charybdis",
+  "editor": "3.8.75",
+  "bones": 13,
+  "slots": 11,
+  "images": 11,
+  "meshes": [],
+  "ik": 0,
+  "impact": 0.68,
+  "clips": {
+    "idle": 2.6,
+    "prepare": 0.92,
+    "attack": 1.18,
+    "hurt": 0.42,
+    "death": 1.28
+  },
+  "auxiliary": {},
+  "atlasPages": [
+    "charybdis-parts.png",
+    "charybdis-parts2.png"
+  ],
+  "projectSha256": "1c9e80afc9c75a892612358608a5259f35152e7459f24519bf41ad6aa0bf4188",
+  "runtimeSha256": "4b4735ea8b9f1c066f88e578cab396aeeecdfeeba00dedad85c9523371e247a8"
+}
