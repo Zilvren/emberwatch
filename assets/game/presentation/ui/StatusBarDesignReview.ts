@@ -91,7 +91,7 @@ export class StatusBarDesignReview extends Component {
             ?.getComponent(ButtonAction)
             ?.setText(this.cases[3].actionsEnabled ? '切换锁定' : '恢复操作');
         if (this.status)
-            this.status.string = `背包 ${this.counters.bag ?? 0} 次  ·  记录 ${this.counters.log ?? 0} 次  ·  帮助 ${this.counters.help ?? 0} 次  ·  声音 ${this.counters.audio ?? 0} 次  ·  重开 ${this.counters.restart ?? 0} 次`;
+            this.status.string = `背包 ${this.counters.bag ?? 0} 次  ·  帮助 ${this.counters.help ?? 0} 次  ·  声音 ${this.counters.audio ?? 0} 次  ·  重开 ${this.counters.restart ?? 0} 次`;
     }
     private bounds(node: Node): object {
         const local = this.node

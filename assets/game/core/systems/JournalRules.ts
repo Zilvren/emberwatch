@@ -50,9 +50,6 @@ export class JournalRules {
                 });
                 triggered.add(definition.id);
                 added = true;
-                this.feedback.log(
-                    `关键日志已解锁：${this.localText(definition)?.title ?? definition.title}。`
-                );
             }
         } while (added);
     }

@@ -61,6 +61,16 @@ test('battle roundtrip preserves random generator, piles, equipment and future d
         assert.deepEqual(loaded.exportState(), g.exportState());
     }
 });
+test('older battle checkpoints discard action history while retaining the deck and key journals', () => {
+    const game = battle(17);
+    const original = game.exportState();
+    const resumed = SurvivalGame.fromState({ ...original, logs: ['先出闪避，再出攻击。'] });
+    assert.deepEqual(resumed.exportState(), original);
+    assert.ok(!Object.hasOwn(resumed, 'logs'));
+    ok(game.endTurn());
+    ok(resumed.endTurn());
+    assert.deepEqual(resumed.exportState(), game.exportState());
+});
 test('equipped weapons and generated temporary card ids survive restore without duplicates', () => {
     let g;
     for (let seed = 1; seed < 200; seed++) {
@@ -107,7 +117,7 @@ test('v2 armor saves migrate to health and preserve the existing draw and discar
     old.state.armor = old.state.health;
     old.state.critical = false;
     delete old.state.health;
-    old.state.logs.push('永久丢弃菜刀，释放 4 负重。', '领取物资 2 / 5。超出负重的部分已放弃。');
+    old.state.logs = ['永久丢弃菜刀，释放 4 负重。', '领取物资 2 / 5。超出负重的部分已放弃。'];
     const encode = envelope => {
         const body = JSON.stringify(envelope);
         let checksum = 2166136261;
@@ -120,10 +130,12 @@ test('v2 armor saves migrate to health and preserve the existing draw and discar
     const resumed = new LegacySession(99, new SaveRepository(storage));
     assert.equal(resumed.restored, true);
     const baseline = game.exportState();
-    baseline.logs.push('永久丢弃菜刀。', '领取物资 2 / 5。其余物资已放弃。');
+    assert.ok(!Object.hasOwn(resumed.game.exportState(), 'logs'));
     assert.deepEqual(resumed.game.exportState(), baseline);
     ok(resumed.execute({ type: 'end-turn' }));
-    assert.equal(JSON.parse(storage.getItem(repo.key)).version, 4);
+    const current = JSON.parse(storage.getItem(repo.key));
+    assert.equal(current.version, 4);
+    assert.ok(!Object.hasOwn(current.state, 'logs'));
     assert.equal(storage.getItem(repo.key + '.backup'), encoded);
 
     const depleted = encode({ ...old, state: { ...old.state, armor: 0, critical: true } });

@@ -52,7 +52,7 @@ export function validateRecipes(
                 }
                 if (definition.role !== 'basic' && definition.role !== 'normal')
                     issues.push(`${label}的${side}「${definition.name}」须为战斗卡。`);
-                else if (definition.chapter)
+                else if (definition.chapter || definition.fist?.type === 'finisher')
                     issues.push(`${label}的${side}「${definition.name}」仅用于焦土迷宫。`);
                 else if (material && !definition.canSynthesize)
                     issues.push(`${label}的材料「${definition.name}」未勾选“可作为合成材料”。`);

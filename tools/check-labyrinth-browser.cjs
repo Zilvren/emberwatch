@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const { once } = require('node:events');
 const { createEditorServer } = require('./card-editor-server.cjs');
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'output/playwright/ashen-character-and-map');
+const output = process.env.LABYRINTH_QA_OUTPUT || path.join(root, 'output/playwright/ashen-character-and-map');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || require.resolve('playwright', {
     paths: [root, path.join(process.env.USERPROFILE, '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules')],
 }));
@@ -153,26 +153,34 @@ async function controlGlyph(page, id) {
         const surface = action?.getComponent('ButtonPresentation')?.surface;
         return {
             textShown: action?.caption?.enabled,
-            symbol: (surface ?? action?.node)?.getChildByName('ControlGlyph')?.getComponent(cc.Sprite)?.spriteFrame?.name,
+            symbol: (surface ?? action?.node)?.getChildByName('ControlGlyph')?.getComponent('cc.Sprite')?.spriteFrame?.name,
         };
     }, id);
 }
 async function visitSettings(page, native) {
     const before = await native.save(), snapshot = await native.state();
-    for (const name of ['audio', 'restart', 'help'])
+    for (const name of ['audio', 'restart', 'help', 'log'])
         assert.ok(!snapshot.hits.some(item => item.id === name), name);
-    for (const [id, symbol] of [['settings', 'settings'], ['map', 'map'], ['log', 'journal'], ['bag', 'cards']])
-        assert.deepEqual(await controlGlyph(page, id), { textShown: false, symbol: 'ic-' + symbol });
+    for (const [id, symbol] of [['settings', 'nav-settings'], ['map', 'nav-map'], ['bag', 'nav-deck'], ['supply-bag','nav-satchel']])
+        assert.deepEqual(await controlGlyph(page, id), { textShown: false, symbol });
     const hud = await page.evaluate(() => {
         const bar = cc.director.getScene().getComponentInChildren('StatusBar');
         return {
             visibleBacking: bar.paper.node.activeInHierarchy,
-            labels: bar.node.getComponentsInChildren(cc.Label)
+            labels: bar.node.getComponentsInChildren('cc.Label')
                 .filter(label => label.enabledInHierarchy && label.string).map(label => label.string),
         };
     });
-    assert.equal(hud.visibleBacking, false);
-    assert.deepEqual(hud.labels.sort(), ['1', '10', '10 / 10', '12'].sort());
+    assert.equal(hud.visibleBacking, true);
+    assert.deepEqual(hud.labels.sort(), ['第 1 天', '10', '10 / 10', '12'].sort());
+    await native.click('supply-bag');
+    assert.equal((await native.state()).overlay, 'supply-bag');
+    const bag = await page.evaluate(() => {
+        const panel = cc.director.getScene().getComponentInChildren('BattlePilePanel');
+        return [panel.title.string,panel.hint.string,panel.emptyBag.activeInHierarchy];
+    });
+    assert.deepEqual(bag, ['物资背包','暂无物资卡',true]);
+    await native.click('modal-close');
     await native.click('settings');
     assert.equal((await native.state()).overlay, 'settings');
     assert.deepEqual(await controlGlyph(page, 'audio'), { textShown: false, symbol: 'ic-sound' });
@@ -188,10 +196,15 @@ async function visitSettings(page, native) {
     assert.equal((await native.state()).overlay, 'help');
     await page.keyboard.press('Escape');
     assert.equal((await native.state()).overlay, 'settings');
-    await native.click('modal-close');
+    const [x, y] = await native.target('modal-close');
+    const canvas = await page.locator('#GameCanvas').boundingBox();
+    const scale = Math.min(canvas.width / 1440, canvas.height / 900);
+    // The visible focus border used to extend past the close button's hit area.
+    await page.mouse.click(x + 24 * scale, y + 18 * scale);
+    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === null);
     assert.equal((await native.state()).overlay, null);
     assert.deepEqual(await native.save(), before);
-    report.settings = { iconRow: true, floatingHud: true, soundToggle: true, restartCancellation: true, helpReturnsToSettings: true };
+    report.settings = { iconRow: true, backedHud: true, supplyBag: true, soundToggle: true, restartCancellation: true, helpReturnsToSettings: true };
 }
 
 async function visitPile(page, native, id) {
@@ -261,7 +274,7 @@ async function visitCamp(page, native) {
                 .find(item => item.node.activeInHierarchy && item.actionId === stationId);
             const style = action.getComponent('ButtonPresentation');
             return { fill: style.panel.fill.a, line: style.panel.line.a, icon: style.surface
-                .getChildByName('ControlGlyph').getComponent(cc.Sprite).spriteFrame.name };
+                .getChildByName('ControlGlyph').getComponent('cc.Sprite').spriteFrame.name };
         }, id);
         assert.deepEqual(marker, { fill: 0, line: 0, icon }, id);
     }
@@ -293,7 +306,7 @@ async function visitCamp(page, native) {
     await page.keyboard.press('Tab');
     const nextFocus = await page.evaluate(() => cc.director.getScene().getChildByName('Canvas')
         .getChildByName('GameRoot').getComponent('ButtonFocusGroup').inspect().focused);
-    assert.ok(['camp-bench', 'camp-fire', 'camp-keeper', 'camp-warehouse', 'bag', 'map', 'log', 'settings'].includes(nextFocus));
+    assert.ok(['camp-bench', 'camp-fire', 'camp-keeper', 'camp-warehouse', 'bag', 'supply-bag', 'map', 'settings'].includes(nextFocus));
     await page.keyboard.press('Enter');
     await page.waitForFunction(() => !!globalThis.__emberUI.snapshot().overlay);
     await page.keyboard.press('Escape');
@@ -350,7 +363,9 @@ async function oneRoute(browser, url, lane) {
             assert.deepEqual(await native.save(), departure);
             await visitScrollableMap(page, native, '02-scroll-map-1440');
         }
-        const enemies = [], options = [];
+        const enemies = [], options = [], collected = [];
+        const supplies = new Map(JSON.parse(fs.readFileSync(source, 'utf8')).cards
+            .filter(card => card.role === 'supply').map(card => [card.id, card]));
         let flew = false, choiceReload = false, battleReload = false, forkReload = false;
         let nextHand = false, chosen = null, laterFork = null, nextDeparture = null;
         const normalEnemyTurns = [];
@@ -398,6 +413,35 @@ async function oneRoute(browser, url, lane) {
             }
             if (snap.phase === 'rewards') {
                 assert.equal(save.rewards.discovery, true);
+                const loot = supplies.get(save.rewards.cards[0]);
+                if (loot) {
+                    assert.deepEqual(save.rewards.cards, [loot.id]);
+                    if (lane === 'A') { await native.click('rewards-done'); continue; }
+                    if (!collected.length) {
+                        await page.reload();
+                        await native.idle();
+                        assert.deepEqual(await native.save(), save);
+                    }
+                    await native.click('reward-select-0');
+                    if (!(await native.state()).hits.some(hit => hit.id === 'discover-confirm' && hit.enabled)) {
+                        await native.click('rewards-done');
+                        continue;
+                    }
+                    if (!collected.length) await image(page, 'supply-pickup');
+                    await native.click('discover-confirm');
+                    const packed = await native.save();
+                    assert.equal(packed.supplies, save.supplies);
+                    assert.equal(packed.cards.at(-1).kind, loot.id);
+                    if (packed.cards.at(-1).zone === 'base') collected.push(loot.id);
+                    if (collected.length === 1) {
+                        await native.click('bag');
+                        await native.click('bag-filter-supplies');
+                        assert.equal((await native.state()).inventoryFilter, 'supplies');
+                        await image(page, 'supply-bag');
+                        await native.click('modal-close');
+                    }
+                    continue;
+                }
                 assert.equal(save.rewards.cards.length, 3);
                 assert.ok(save.rewards.cards.every((id) => save.discoveryPool.includes(id)));
                 options.push({ source: save.rewards.source, offers: save.rewards.cards });
@@ -435,6 +479,24 @@ async function oneRoute(browser, url, lane) {
                 if (chosen && [...b.draw, ...b.hand].some((c) => c.kind === chosen)) nextHand = true;
                 if (lane === 'A' && !enemies.slice(0, -1).some((e) => e.actor === b.enemy)) {
                     await page.waitForTimeout(180);
+                    const hud = await page.evaluate(() => {
+                        const d = cc.director.getScene().getComponentInChildren('GameDirector');
+                        const battle = d.scene.screens.battle;
+                        const intent = battle.getComponentInChildren('EnemyIntent');
+                        const side = battle.getChildByName('EnemyVitals');
+                        return {
+                            health: d.hud.getComponent('StatusBar').health.node.activeInHierarchy,
+                            hp: side.getChildByName('battle-text5').getComponent('cc.Label').string,
+                            toRight: side.worldPosition.x > d.enemy.node.worldPosition.x,
+                            attack: intent.attackGlyph.activeInHierarchy,
+                            amount: intent.amount.node.getComponent('cc.Label').string,
+                            detail: intent.hint.activeInHierarchy,
+                        };
+                    });
+                    assert.deepEqual(hud, {
+                        health: false, hp: `${b.hp}/${b.maxHp}`, toRight: true,
+                        attack: true, amount: String(b.attack), detail: false,
+                    });
                     await image(page, '03-' + b.enemy);
                     if (enemies.length === 1) {
                         const topShadeVisible = await page.evaluate(() => cc.director.getScene()
@@ -525,6 +587,36 @@ async function oneRoute(browser, url, lane) {
         await page.reload();
         await native.idle();
         assert.deepEqual(await native.save(), returned);
+        if (lane === 'B' && [...supplies.values()].some(card => card.reward)) {
+            const stock = {};
+            for (const kind of collected) stock[kind] = (stock[kind] ?? 0) + 1;
+            assert.ok(collected.length, 'The service duct should yield a supply card.');
+            assert.deepEqual(returned.storedSupplies, stock);
+            assert.equal(returned.settlement.returnedCards, collected.length);
+            await native.click('camp-warehouse');
+            await native.click('camp-stock');
+            await native.click('modal-close');
+            assert.deepEqual(await native.save(), returned);
+            await native.click('camp-warehouse');
+            await native.click('camp-stock');
+            const kinds = Object.keys(stock);
+            if (kinds.length > 1) await native.click('camp-stock-next');
+            const kind = kinds[1] ?? kinds[0], item = supplies.get(kind);
+            assert.match((await campText(page)).title, new RegExp(item.name));
+            await image(page, 'supply-warehouse');
+            await page.setViewportSize({ width: 1024, height: 768 });
+            await page.waitForTimeout(180);
+            await image(page, 'supply-warehouse-small');
+            await native.click('camp-redeem');
+            if (--stock[kind] === 0) delete stock[kind];
+            const paid = await native.save();
+            assert.equal(paid.supplies, returned.supplies + item.supplyValue);
+            assert.deepEqual(paid.storedSupplies, stock);
+            await page.reload();
+            await native.idle();
+            assert.deepEqual(await native.save(), paid);
+            report.supplyCards = { collected, exchanged: kind, balance: paid.supplies, remaining: stock };
+        }
         if (lane === 'A') {
             await native.click('camp-fire');
             assert.equal((await campText(page)).title, '沉灯熄灭之后');
@@ -572,6 +664,62 @@ async function oneRoute(browser, url, lane) {
     }
 }
 
+async function fullSupplyBag(browser, url) {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    observe(page);
+    const native = input(page);
+    try {
+        await page.goto(url + '/play/?cards=live&seed=17&save=on');
+        await native.idle();
+        await native.depart();
+        await native.click('enter-threshold');
+        await native.click('enter-serviceDuct');
+        const checkpoint = await native.save(), kind = checkpoint.rewards?.cards[0];
+        if (!kind) return { dropsEnabled: false };
+        const { catalog } = await (await page.request.get(url + '/api/cards')).json();
+        const item = catalog.cards.find(card => card.id === kind);
+        const base = Math.floor(30 / item.weight), overflow = Math.floor(10 / item.weight);
+        const packed = [];
+        for (let i = 0; i < base + overflow; i++) {
+            const card = { id: 'card-' + ++checkpoint.nextId, kind, selected: false, found: true,
+                packedWeight: item.weight, zone: i < base ? 'base' : 'overflow' };
+            checkpoint.cards.push(card);
+            packed.push(card);
+        }
+        const from = require('./load-ts.cjs').createLoader();
+        from(path.join(root, 'assets/game/core/content/CardCatalog.ts')).installCatalog(catalog);
+        const { SaveRepository } = from(path.join(root, 'assets/game/infrastructure/SaveRepository.ts'));
+        const disk = new Map();
+        const repository = new SaveRepository({ getItem: id => disk.get(id) ?? null, setItem: (id, value) => disk.set(id, value) });
+        repository.save(checkpoint);
+        assert.ok(disk.get(repository.key));
+        await page.evaluate(([id, value]) => localStorage.setItem(id, value), [repository.key, disk.get(repository.key)]);
+        await page.reload();
+        await native.idle();
+        assert.deepEqual(await native.save(), checkpoint);
+        await native.click('reward-select-0');
+        assert.ok(!(await native.state()).hits.some(hit => hit.id === 'discover-confirm' && hit.enabled));
+        await image(page, 'supply-full-bag');
+        await native.click('reward-bag');
+        assert.equal((await native.state()).inventoryFilter, 'supplies');
+        await native.click('inspect-' + packed[0].id);
+        await native.click('discard-' + packed[0].id);
+        await native.click('modal-confirm');
+        const freed = await native.save();
+        assert.ok(!freed.cards.some(card => card.id === packed[0].id));
+        if (overflow) assert.equal(freed.cards.find(card => card.id === packed[base].id).zone, 'base');
+        await native.click('modal-close');
+        await native.click('reward-select-0');
+        await native.click('discover-confirm');
+        const picked = (await native.save()).cards.at(-1);
+        assert.equal(picked.kind, kind);
+        assert.equal(picked.zone, overflow ? 'overflow' : 'base');
+        return { kind, weight: item.weight, base, overflow, discarded: 1, pickedZone: picked.zone };
+    } finally {
+        await page.close();
+    }
+}
+
 async function editor(browser, url) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     observe(page);
@@ -593,6 +741,78 @@ async function editor(browser, url) {
         await page.locator('#preview-art .painted-tile').waitFor();
         assert.equal(await page.locator('#preview-asset-note').isVisible(), false);
 
+        await page.getByRole('link', { name: '物资卡', exact: true }).click();
+        assert.match(page.url(), /\/supplies$/);
+        const live = await (await page.request.get(url + '/api/cards')).json();
+        const goods = live.catalog.cards.filter(card => card.role === 'supply');
+        assert.equal(await page.locator('#card-list [data-select]').count(), goods.length);
+        const example = goods.find(card => card.art === 'rope' || card.art === 'battery') ?? goods[0];
+        if (example) {
+            await page.locator(`#card-list [data-select="${live.catalog.cards.indexOf(example)}"]`).click();
+            assert.equal(await page.getByRole('spinbutton', { name: '物资卡重量' }).inputValue(), String(example.weight));
+            assert.equal(await page.getByRole('spinbutton', { name: '兑换物资点' }).inputValue(), String(example.supplyValue));
+            assert.equal(await page.locator('#preview-keywords').isVisible(), false);
+            assert.equal(await page.locator('#preview-name').textContent(), example.name);
+            assert.equal(await page.locator('#preview-supply-value').textContent(), `价值 ${example.supplyValue} 物资点`);
+            assert.equal(await page.locator('#preview-weight-mark').getAttribute('aria-label'), `负重 ${example.weight}`);
+            assert.equal(await page.locator('#preview-detail-toggle').isVisible(), false);
+            if (example.art === 'rope' || example.art === 'battery')
+                assert.match(await page.locator('#preview-art .painted-tile').getAttribute('style'), /materials\.png/);
+        }
+        await image(page, 'supply-editor');
+        await page.getByRole('button', { name: '新增物资卡' }).click();
+        await page.getByRole('textbox', { name: '卡牌名称' }).fill('备用线圈');
+        const probeId = await page.getByRole('textbox', { name: '卡牌 ID' }).inputValue();
+        await page.getByRole('spinbutton', { name: '兑换物资点' }).fill('8');
+        await page.getByRole('spinbutton', { name: '物资卡重量' }).fill('0');
+        assert.equal(await page.locator('#save').isDisabled(), true);
+        await page.getByRole('spinbutton', { name: '物资卡重量' }).fill('3');
+        await page.getByRole('spinbutton', { name: '奖励权重' }).fill('0.5');
+        await page.getByRole('checkbox', { name: '加入随机奖励池' }).uncheck();
+        await page.getByRole('link', { name: '配方编辑' }).click();
+        await page.goBack();
+        assert.equal(await page.getByRole('textbox', { name: '卡牌名称' }).inputValue(), '备用线圈');
+        const written = page.waitForResponse(response => response.url().endsWith('/api/cards') && response.request().method() === 'PUT');
+        await page.locator('#save').click();
+        assert.equal((await written).status(), 200);
+        await page.locator('#save-state').filter({ hasText: '已保存' }).waitFor();
+        await page.reload();
+        await page.getByRole('searchbox', { name: '搜索卡牌' }).fill(probeId);
+        await page.getByRole('button', { name: '选择卡牌：备用线圈' }).click();
+        assert.equal(await page.getByRole('spinbutton', { name: '物资卡重量' }).inputValue(), '3');
+        assert.equal(await page.getByRole('spinbutton', { name: '兑换物资点' }).inputValue(), '8');
+        assert.equal(await page.getByRole('spinbutton', { name: '奖励权重' }).inputValue(), '0.5');
+        assert.equal(await page.getByRole('checkbox', { name: '加入随机奖励池' }).isChecked(), false);
+        const search = page.getByRole('searchbox', { name: '搜索卡牌' });
+        const drop = page.getByRole('checkbox', { name: '加入随机奖励池' });
+        await search.fill('');
+        for (const item of goods.filter(card => card.reward)) {
+            await page.locator(`#card-list [data-select="${live.catalog.cards.indexOf(item)}"]`).click();
+            await drop.uncheck();
+        }
+        await search.fill(probeId);
+        await page.getByRole('button', { name: '选择卡牌：备用线圈' }).click();
+        await drop.check();
+        const updated = page.waitForResponse(r => r.url().endsWith('/api/cards') && r.request().method() === 'PUT');
+        await page.locator('#save').click();
+        assert.equal((await updated).status(), 200);
+        await page.getByRole('button', { name: /试玩游戏/ }).click();
+        await page.waitForFunction(() => document.querySelector('#game-frame').contentWindow?.__emberUI?.snapshot().ready);
+        const supplyTrial = input(page, page.frames().find(frame => frame.url().includes('/play/')));
+        await supplyTrial.depart();
+        await supplyTrial.click('enter-threshold');
+        await supplyTrial.click('enter-serviceDuct');
+        assert.deepEqual((await supplyTrial.save()).rewards.cards, [probeId]);
+        await supplyTrial.click('reward-select-0');
+        await supplyTrial.click('discover-confirm');
+        const picked = (await supplyTrial.save()).cards.at(-1);
+        assert.equal(picked.kind, probeId);
+        assert.equal(picked.packedWeight, 3);
+        await page.locator('#close-game').click();
+        report.supplyEditor = { category: '/supplies', persisted: probeId, weight: 3, value: 8, dropWeight: 0.5,
+            savedDisabled: true, enabledTrialPickup: picked.kind };
+        await page.getByRole('link', { name: '卡牌编辑', exact: true }).click();
+
         await deckButton.click();
         await image(page, '09-deck-editor');
         await decks.getByRole('checkbox', { name: /共用配合/ }).uncheck();
@@ -613,6 +833,7 @@ async function editor(browser, url) {
             await view.depart();
             await view.click('enter-threshold');
             await view.click('enter-serviceDuct');
+            if ((await view.state()).phase === 'rewards') await view.click('rewards-done');
             const { expeditionMap } = await view.save();
             const [site] = expeditionMap.points.find(point => point.id === 'serviceDuct').next;
             await view.click('enter-' + site);
@@ -712,7 +933,8 @@ async function main() {
     const temporary = fs.mkdtempSync(path.join(root, 'temp/labyrinth-browser-'));
     const working = path.join(temporary, 'cards.json');
     fs.copyFileSync(source, working);
-    const server = createEditorServer({ catalogFile: working, backupDirectory: path.join(temporary, 'backups') });
+    const server = createEditorServer({ catalogFile: working, backupDirectory: path.join(temporary, 'backups'),
+        buildDirectory: process.env.CARD_EDITOR_BUILD_DIR });
     server.listen(0, '127.0.0.1');
     await once(server, 'listening');
     const url = 'http://127.0.0.1:' + server.address().port;
@@ -723,6 +945,7 @@ async function main() {
         report.routes = [];
         for (const lane of ['A', 'B']) report.routes.push(await oneRoute(browser, url, lane));
         report.legacy = await legacy(browser, url);
+        report.supplyBagCapacity = await fullSupplyBag(browser, url);
         report.editor = await editor(browser, url);
         report.defeat = await defeat(browser, url);
         assert.deepEqual(report.runtimeErrors, []);

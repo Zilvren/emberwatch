@@ -16,7 +16,7 @@ if(!hud.some(c=>c.__type__===script('StatusBar'))){
  const oldLabel=key=>{const v=hud.find(c=>c.__type__===script('UIValue')&&c.key===key);return hud[v.node.__id__]._components.find(r=>hud[r.__id__].__type__==='cc.Label').__id__;};
  const labels=Array.from({length:7},(_,i)=>oldLabel('header/text'+i));
  const action=id=>hud.find(c=>c.__type__===script('ButtonAction')&&c.actionId===id).node.__id__;
- const actions=['bag','log','help','audio','restart'].map(action),meter=hud.find(c=>c.__type__===script('UIProgress'));
+ const actions=['bag','help','audio','restart'].map(action),meter=hud.find(c=>c.__type__===script('UIProgress'));
  hud[g.root]._children=[];size(g,g.root,1440,80);
  hud[g.root]._components=hud[g.root]._components.filter(r=>hud[r.__id__].__type__!==script('UIProgress'));
  const paper=g.node('StatusPaper',g.root,0,0,1440,80);g.component(paper,'cc.Graphics',cleanComponent(graphicTemplate));const panel=g.component(paper,script('PaperPanel'),{fill:color(hex(C.paper)),line:color(hex(C.line)),innerLine:color(hex(C.lineSoft),60),lineWidth:1.1,corner:5});
@@ -35,7 +35,7 @@ if(!hud.some(c=>c.__type__===script('StatusBar'))){
  move(g,actions[0],sections[4]);
  const carryHint=label(g,sections[4],'CarryHint','剩余 3 负重',-24,H.hintSize,16,false,labels[6]);
  const utilities=actions.slice(1);utilities.forEach(node=>move(g,node,g.root));
- actions.forEach((node,index)=>{const p=component(g,node,script('ButtonPresentation'));p.darkSurface=false;p.variant=index===4?'danger':index===0?'secondary':'quiet';const a=component(g,node,script('ButtonAction'));const caption=g.graph[a.caption.__id__];caption._string=['背包 27 / 30','记录','帮助','声音开','重开'][index];caption._fontSize=16;caption._lineHeight=22;caption._isBold=false;});
+ actions.forEach((node,index)=>{const p=component(g,node,script('ButtonPresentation'));p.darkSurface=false;p.variant=index===actions.length-1?'danger':index===0?'secondary':'quiet';const a=component(g,node,script('ButtonAction'));const caption=g.graph[a.caption.__id__];caption._string=['背包 27 / 30','帮助','声音开','重开'][index];caption._fontSize=16;caption._lineHeight=22;caption._isBold=false;});
  g.component(g.root,'cc.BlockInputEvents');
  g.component(g.root,script('StatusBar'),{theme:asset(uuid('assets/resources/ui/theme.json'),'cc.JsonAsset'),paper:ref(panel),sections:sections.map(ref),utilities:utilities.map(ref),brand:ref(brand),save:ref(save),day:ref(day),supplies:ref(supplies),suppliesHint:ref(suppliesHint),healthTitle:ref(healthTitle),health:ref(health),carryHint:ref(carryHint),bag:ref(actions[0]),healthMeter:ref(hud.indexOf(meter))});
  g.save();adopted=true;

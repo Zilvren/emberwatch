@@ -4413,6 +4413,10 @@
       "__uuid__": "c6bb5355-4888-43ce-894d-ae4763daab69",
       "__expectedType__": "cc.JsonAsset"
     },
+    "supplyFacePrefab": {
+      "__uuid__": "b6260c35-03aa-4009-83cb-1d6d9d6726a3",
+      "__expectedType__": "cc.Prefab"
+    },
     "frontContent": {
       "__id__": 52
     },

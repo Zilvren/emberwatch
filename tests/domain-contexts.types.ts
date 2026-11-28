@@ -22,7 +22,7 @@ inventory.pathIndex = 2;
 reward.health = 10;
 // @ts-expect-error Settlement cannot change route selection.
 settlement.route = 'B';
-// @ts-expect-error Feedback can only change logs and revision.
+// @ts-expect-error Feedback can only change revision.
 feedback.supplies = 10;
 // @ts-expect-error UI state is deeply readonly.
 view.battle!.hp = 0;

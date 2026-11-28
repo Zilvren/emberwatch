@@ -1,5 +1,6 @@
 import { CardSet } from '../content/ContentRegistry';
-import { ActionResult } from '../RulesTypes';
+import { fistFinisherTier } from '../content/FistCards';
+import { ActionResult, CardKind, Rewards } from '../RulesTypes';
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, RewardState, completeExplorationNode } from './RuleContext';
 import { GameScenario, TUTORIAL_SCENARIO } from '../content/GameScenario';
@@ -16,11 +17,56 @@ export class RewardRules {
     ) {}
     collectFieldSupplies(source: string, amount: number, discoveries = 0): void {
         this.state.supplies += amount;
-        this.feedback.log(`收下 ${amount} 物资，现有 ${this.state.supplies}。`);
         const pool = this.state.discoveryPool ?? [];
-        if (this.scenario.labyrinth && discoveries && pool.length) {
+        const node = this.scenario.nodes[source];
+        let cards: string[] = [];
+        if (this.scenario.labyrinth && node?.type === 'scavenge' && node.supplyCard) {
+            cards = this.random!.weightedSample(this.content.supplyPool, kind => this.content.rewardWeights[kind], 1);
+        } else if (this.scenario.labyrinth && discoveries && pool.length) {
+            cards = this.random!.shuffle(pool.filter((kind) => !this.content.cards[kind].fist)).slice(0, discoveries);
+        }
+        this.offerFieldCards(source, amount, { cards });
+    }
+    collectBattleRewards(source: string, amount: number, count: number, unlockedHere: readonly CardKind[]): void {
+        if (this.scenario.fieldDeck && !this.scenario.labyrinth) {
+            this.collectFieldSupplies(source, amount);
+            return;
+        }
+        const pool = this.scenario.labyrinth ? this.state.discoveryPool ?? [] : this.content.rewardPool;
+        const offer = this.battleOffer(pool, count, unlockedHere);
+        if (this.scenario.labyrinth) {
+            this.state.supplies += amount;
+            this.offerFieldCards(source, amount, offer);
+        } else {
+            this.state.phase = 'rewards';
+            this.state.rewards = { source, supplies: amount, supplyTaken: false, cardTaken: false, ...offer };
+        }
+    }
+    private battleOffer(
+        pool: readonly CardKind[],
+        count: number,
+        unlockedHere: readonly CardKind[]
+    ): Pick<Rewards, 'cards' | 'guaranteedFinisher'> {
+        const tier = (kind: CardKind) => fistFinisherTier(this.content.cards[kind]);
+        const highest = Math.max(0, ...unlockedHere.map(tier));
+        const tied = unlockedHere.filter((kind) => tier(kind) === highest);
+        const guaranteedFinisher = tied.length === 1 ? tied[0]
+            : tied.length ? tied[this.random!.int(0, tied.length - 1)] : undefined;
+        const available = [...new Set([...pool, ...(this.state.fistUnlocks ?? [])])]
+            .filter((kind) => unlockedHere.indexOf(kind) < 0);
+        const slots = Math.max(0, count - Number(!!guaranteedFinisher));
+        const boosts = this.state.synthesisRewardBoosts ?? {};
+        const cards = this.scenario.labyrinth
+            ? slots ? this.random!.shuffle(available).slice(0, slots) : []
+            : this.random!.weightedSample(available,
+                (kind) => (this.content.rewardWeights[kind] ?? 1) * (boosts[kind] ?? 1), slots);
+        if (guaranteedFinisher) cards.unshift(guaranteedFinisher);
+        return { cards, ...(guaranteedFinisher ? { guaranteedFinisher } : {}) };
+    }
+    private offerFieldCards(source: string, amount: number, offer: Pick<Rewards, 'cards' | 'guaranteedFinisher'>): void {
+        if (offer.cards.length) {
             this.state.rewards = {
-                source, supplies: amount, cards: this.random!.shuffle(pool).slice(0, discoveries),
+                source, supplies: amount, ...offer,
                 supplyTaken: true, cardTaken: false, discovery: true,
             };
             this.state.phase = 'rewards';
@@ -31,11 +77,19 @@ export class RewardRules {
         if (this.state.phase !== 'rewards' || !reward?.discovery ||
             (kind !== null && reward.cards.indexOf(kind) < 0))
             return this.feedback.result(false, '这次发现已处理或不包含该牌。');
-        if (kind !== null) this.inventory.addDiscovery(kind);
+        let message = '已略过发现。';
+        if (kind !== null) {
+            const card = this.content.cards[kind];
+            const blocked = this.inventory.rewardCardBlocked(kind);
+            if (blocked) return this.feedback.result(false, blocked);
+            const zone = this.inventory.rewardZone(kind);
+            this.inventory.addDiscovery(kind, zone);
+            message = card.role !== 'supply' ? `已收下${card.name}，下场战斗可抽取。` :
+                zone === 'base' ? `${card.name}已放入行囊，成功返营后入库。` :
+                    `${card.name}已暂存，返营前需腾出行囊空间。`;
+        }
         this.state.rewards = null;
         completeExplorationNode(this.state, reward.source, this.scenario.fixedNodeId);
-        const message = kind === null ? '已略过发现。' : `已收下${this.content.cards[kind].name}，下场战斗可抽取。`;
-        this.feedback.log(message);
         return this.feedback.result(true, message);
     }
     claimSupplies(): ActionResult {
@@ -45,7 +99,6 @@ export class RewardRules {
         const amount = r.supplies;
         this.state.supplies += amount;
         r.supplyTaken = true;
-        this.feedback.log(`领取物资 ${amount}。`);
         return this.feedback.result(true, `领取 ${amount} 点物资。`);
     }
     claimCard(index: number): ActionResult {
@@ -64,7 +117,6 @@ export class RewardRules {
                 : this.content.cards[kind].role === 'supply'
                   ? '行囊'
                   : '本局卡组';
-        this.feedback.log(`获得${this.content.cards[kind].name}，进入${destination}。`);
         return this.feedback.result(true, `卡牌已放入${destination}。`);
     }
     finishRewards(): ActionResult {
@@ -72,8 +124,6 @@ export class RewardRules {
         if (this.state.phase !== 'rewards' || !r)
             return this.feedback.result(false, '当前没有待处理奖励。');
         if (r.discovery) return this.discover(null);
-        if (!r.supplyTaken) this.feedback.log(`放弃 ${r.supplies} 点物资奖励。`);
-        if (!r.cardTaken) this.feedback.log('放弃未领取的卡牌奖励。');
         completeExplorationNode(this.state, r.source, this.scenario.fixedNodeId);
         this.state.rewards = null;
         const depleted = this.scenario.battleResource !== 'stamina' && this.state.supplies === 0;

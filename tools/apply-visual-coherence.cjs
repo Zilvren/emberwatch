@@ -83,7 +83,7 @@ const replacements = new Map(
 );
 const affected = [
     ...screens.map((name) => 'assets/prefabs/screens/' + name + '.prefab'),
-    ...['HUD', 'HelpPopup', 'LogPopup', 'ConfirmPopup', 'InventoryPopup'].map(
+    ...['HUD', 'HelpPopup', 'ConfirmPopup', 'InventoryPopup'].map(
         (name) => 'assets/prefabs/ui/' + name + '.prefab'
     ),
     'assets/prefabs/cards/HandCard.prefab',

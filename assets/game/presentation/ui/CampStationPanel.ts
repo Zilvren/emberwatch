@@ -24,6 +24,7 @@ export class CampStationPanel extends Component {
         button.node.active = !!action;
         if (!action) return;
         button.actionId = action.id;
+        button.payload = action.payload ?? '';
         button.setText(action.caption);
         button.setEnabled(action.enabled !== false);
     }

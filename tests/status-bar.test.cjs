@@ -47,7 +47,7 @@ test('save failure, protected saves and recovered backups remain visible', () =>
 });
 test('large resource values remain exact instead of silently rounding', () => {
     assert.equal(statusBarView({ ...defaultStatus, supplies: 12345678 }).supplies, '12345678');
-    assert.equal(statusBarView({ ...defaultStatus, day: 123 }).day, '123');
+    assert.equal(statusBarView({ ...defaultStatus, day: 123 }).day, '第 123 天');
 });
 test('container widths select readable layouts without overlapping actionable controls', () => {
     const intersects = (a, b) =>
@@ -77,10 +77,37 @@ test('container widths select readable layouts without overlapping actionable co
     assert.equal(statusBarLayout(960).mode, 'compact');
     assert.equal(statusBarLayout(408).mode, 'narrow');
 });
+test('combat hides the health slot and keeps deck and navigation aligned when health returns', () => {
+    for (const width of [360, 720, 1024, 1440]) {
+        for (const recipes of [false, true]) {
+            const battle = statusBarLayout(width, 'floating', recipes, false);
+            const camp = statusBarLayout(width, 'floating', recipes, true);
+            assert.equal(battle.sections[3].width, 0);
+            assert.ok(camp.sections[3].width > 0);
+            const bag = battle.sections[4], first = battle.utilities[0];
+            assert.deepEqual(bag, camp.sections[4]);
+            assert.deepEqual(battle.utilities, camp.utilities);
+            assert.equal(bag.y, first.y);
+            assert.ok(bag.x + bag.width / 2 < first.x - first.width / 2);
+            for (const slot of [...battle.sections, ...battle.utilities].filter(slot => slot.width && slot.y === battle.round.y))
+                assert.ok(Math.abs(slot.x - battle.round.x) >= (slot.width + battle.round.width) / 2 - 1e-6);
+        }
+    }
+});
 test('native HUD keeps status bindings and exposes both map and recipe entries', () => {
-    const { read, script } = require('../tools/native-assets.cjs'),
+    const { read, script, uuid } = require('../tools/native-assets.cjs'),
         a = read('assets/prefabs/ui/HUD.prefab');
     const statusBar = a.find((o) => o.__type__ === script('StatusBar'));
+    const frame = name => uuid('assets/ashen-labyrinth/interface/' + name + '.png') + '@f9941';
+    assert.equal(a[statusBar.lintel.__id__]._spriteFrame.__uuid__, frame('nav-lintel'));
+    assert.equal(a[statusBar.lintel.__id__]._type, 1);
+    for (const [id, expected] of [['bag','nav-deck'], ['supply-bag','nav-satchel'],
+        ['map','nav-map'], ['settings','nav-settings'], ['recipe-open','nav-recipes']]) {
+        const button = a.find(o => o.__type__ === script('ButtonAction') && o.actionId === id);
+        const style = a[button.node.__id__]._components.map(ref => a[ref.__id__])
+            .find(o => o.__type__ === script('ButtonPresentation'));
+        assert.equal(a[style.paintedIcon.__id__]._spriteFrame.__uuid__, frame(expected));
+    }
     assert.equal(a[statusBar.recipeButton.__id__]._name, 'recipe-open');
     assert.ok(!a.some((o) => o.__type__ === script('UIValue') && o.key.startsWith('header/')));
     assert.deepEqual(
@@ -88,7 +115,7 @@ test('native HUD keeps status bindings and exposes both map and recipe entries',
             .filter((o) => o.__type__ === script('ButtonAction'))
             .map((o) => o.actionId)
             .sort(),
-        ['bag', 'log', 'map', 'recipe-open', 'rules-help', 'settings']
+        ['bag', 'map', 'recipe-open', 'rules-help', 'settings', 'supply-bag']
     );
     for (const control of a.filter((o) => o.__type__ === 'cc.Button')) {
         const click = a[control.clickEvents[0].__id__];

@@ -1,11 +1,9 @@
 import { Color, JsonAsset, Label, Node, SpriteFrame } from 'cc';
 import { SceneAtmosphere } from '../effects/SceneAtmosphere';
-import { DeckStackGraphic } from '../primitives/DeckStackGraphic';
 import { FieldPanel } from '../primitives/FieldPanel';
 import { GraphicShape, ShapeGraphic } from '../primitives/ShapeGraphic';
 import { PaperPanel } from '../primitives/PaperPanel';
 import { SceneShade } from '../primitives/SceneShade';
-import { ButtonAction } from './ButtonAction';
 import { ButtonPresentation } from './ButtonPresentation';
 import { CommonPanel } from './CommonPanel';
 import type { SceneBindings } from './GameView';
@@ -14,8 +12,7 @@ import { StatusBar } from './StatusBar';
 export function installLabyrinthInterface(
     scene: SceneBindings,
     theme: JsonAsset,
-    shelter: SpriteFrame | null,
-    cardBack: SpriteFrame | null
+    shelter: SpriteFrame | null
 ): void {
     const palette = theme.json.colors;
     const color = (hex: string) => new Color().fromHEX(hex);
@@ -25,6 +22,7 @@ export function installLabyrinthInterface(
             label.outlineColor = new Color(27, 20, 31, 225);
         }
         for (const panel of root.getComponentsInChildren(PaperPanel)) {
+            if (!panel.enabled) continue;
             panel.fill = color(palette.paper);
             panel.line = color(palette.line);
             panel.innerLine = color(palette.lineSoft);
@@ -54,8 +52,6 @@ export function installLabyrinthInterface(
             graph.fill.a = opacity;
             if (graph.shape !== GraphicShape.Tiles) graph.redraw();
         }
-        for (const stack of root.getComponentsInChildren(DeckStackGraphic))
-            if (cardBack) stack.setPaintedBack(cardBack);
     };
     paint(scene.hud);
     for (const key of Object.keys(scene.screens)) {
@@ -77,7 +73,4 @@ export function installLabyrinthInterface(
         const atmosphere = screen.getComponentInChildren(SceneAtmosphere);
         if (atmosphere) atmosphere.labyrinthBackdrop = shelter;
     }
-    for (const button of scene.screens.battle.getComponentsInChildren(ButtonAction))
-        if (button.actionId === 'end-turn')
-            button.node.getComponent(ButtonPresentation)?.resize(150, 60);
 }

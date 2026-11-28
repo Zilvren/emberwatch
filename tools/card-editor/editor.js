@@ -1,16 +1,19 @@
 import { validateCatalog, activeDiscoveryCards, cardReferences, SYSTEM_ROLES, EFFECT_NAMES, ART_IDS, isBattleCard } from '/shared/catalog.js';
-import { cardViewModel } from '/shared/card-view.js';
+import { isFistBattleReward } from '/shared/fist-cards.js';
+import { cardViewModel, supplyPictureLayout } from '/shared/card-view.js';
 import { bindRecipeEditor } from '/recipes.js';
 
 const $ = selector => document.querySelector(selector);
 const clone = value => JSON.parse(JSON.stringify(value));
+const fixedRewardCard = card => card.role === 'normal' && !card.chapter && !card.synthesisOnly && !card.fist;
 const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
-const artNames = { attack: '基础攻击', dodge: '基础躲避', knife: '刀具', evade: '强化躲避', repair: '修复', heavy: '重击', slash: '挥砍', cash: '现金' };
+const artNames = { attack: '基础攻击', dodge: '基础躲避', knife: '刀具', evade: '强化躲避', repair: '修复', heavy: '重击', slash: '挥砍', cash: '现金', rope: '绳子', battery: '电池' };
 const roleNames = { basic: '基础牌', normal: '普通牌', temporary: '战斗临时牌', cash: '旧版现金', supply: '物资牌' };
 let draft, baseline, revision, selectedId, selectedIndex = 0, saving = false, lastSaved = '', noticeTimer;
 let newCards = new WeakSet();
 let previewedCard, previewExpanded = false;
-let uiArt;
+let uiArt, itemArt;
+const supplyPage = () => location.pathname === '/supplies';
 const current = () => draft?.cards[selectedIndex];
 const dirty = () => !!draft && JSON.stringify(draft) !== JSON.stringify(baseline);
 const definitions = () => Object.fromEntries(draft.cards.map(card => [card.id, card]));
@@ -34,13 +37,15 @@ function isCardAtlas(atlas) {
 }
 
 async function loadVisualAssets() {
-    const [themeResponse, artResponse] = await Promise.allSettled([
+    const [themeResponse, artResponse, itemResponse] = await Promise.allSettled([
         fetchJson('/shared/ui-theme.json'),
         fetchJson('/shared/ui-art.json'),
+        fetchJson('/shared/item-art.json'),
     ]);
     const theme = themeResponse.value;
     const hasTheme = theme?.name === 'ashen-labyrinth' && theme.colors?.ink && theme.card?.typeText;
     uiArt = isCardAtlas(artResponse.value) ? artResponse.value : null;
+    itemArt = itemResponse.value;
     if (hasTheme) {
         const { style } = $('#preview-card');
         for (const [name, value] of Object.entries(theme.colors)) {
@@ -53,7 +58,7 @@ async function loadVisualAssets() {
 
 function renderDecks() {
     const profile = draft?.labyrinth;
-    $('#discovery-decks').hidden = !profile;
+    $('#discovery-decks').hidden = !profile || supplyPage();
     if (!profile) return;
     const names = definitions();
     $('#deck-options').innerHTML = profile.decks.map(deck => `
@@ -63,16 +68,20 @@ function renderDecks() {
           <span class="deck-size">${deck.cards.length} 张</span>
         </label>`).join('');
     const count = activeDiscoveryCards(profile).length;
-    $('#discovery-count').textContent = count ? `发现池 ${count} 种 · 每次最多出现 ${Math.min(3, count)} 张` : '发现池为空。探索时直接结算地点奖励。';
+    $('#discovery-count').textContent = count ? `发现池 ${count} 种 · 每次最多出现 ${Math.min(3, count)} 张` : '战斗发现池为空。补给点仍可搜到物资卡。';
     $('#save-decks').disabled = saving || !dirty();
 }
 
 function artMarkup(art, cardId) {
-    if (!uiArt) return '';
-    const [x, y, w, h] = uiArt.cards[cardId] ?? uiArt.cards[art] ?? uiArt.cards.knife;
-    const position = `${100 * x / (uiArt.width - w)}% ${100 * y / (uiArt.height - h)}%`;
-    const size = `${100 * uiArt.width / w}% ${100 * uiArt.height / h}%`;
-    return `<span class="painted-tile" role="img" aria-label="${escape(artNames[art] ?? '卡牌插画')}" style="background-position:${position};background-size:${size}"></span>`;
+    const material = itemArt?.frames?.[art];
+    const useMaterial = !uiArt?.cards[cardId] && !uiArt?.cards[art] && material?.image === 'materials.png';
+    const atlas = useMaterial ? itemArt.images['materials.png'] : uiArt;
+    if (!atlas) return '';
+    const [x, y, w, h] = useMaterial ? material.rect : atlas.cards[cardId] ?? atlas.cards[art] ?? atlas.cards.knife;
+    const position = `${100 * x / (atlas.width - w)}% ${100 * y / (atlas.height - h)}%`;
+    const size = `${100 * atlas.width / w}% ${100 * atlas.height / h}%`;
+    const image = useMaterial ? "background-image:url('/art/materials.png');" : '';
+    return `<span class="painted-tile" role="img" aria-label="${escape(artNames[art] ?? '卡牌插画')}" style="${image}--art-ratio:${w / h};background-position:${position};background-size:${size}"></span>`;
 }
 function setPreviewExpanded(value) {
     previewExpanded = value;
@@ -108,14 +117,24 @@ function select(label, key, value, items, disabled = false) {
 }
 function renderList() {
     if (!draft) return;
-    const query = $('#search').value.trim().toLowerCase(), filter = $('#filter').value;
-    const cards = draft.cards.filter(card => {
+    const query = $('#search').value.trim().toLowerCase(), filter = supplyPage() ? 'all' : $('#filter').value;
+    const library = supplyPage() ? draft.cards.filter(card => card.role === 'supply') : draft.cards;
+    const cards = library.filter(card => {
         const matchesFilter = filter === 'all' ||
-            (filter === 'supply' ? card.role === 'supply' : filter === 'labyrinth' ? !!card.chapter : card.effect.type === filter);
+            (filter === 'supply' ? card.role === 'supply' : filter === 'labyrinth' ? !!card.chapter || !!card.fist : card.effect.type === filter);
         return (!query || `${card.id} ${card.name}`.toLowerCase().includes(query)) && matchesFilter;
     });
-    $('#card-count').textContent = draft.cards.length;
-    $('#card-list').innerHTML = cards.length ? cards.map(card => `<div role="listitem"><button class="card-row ${card === current() ? 'selected' : ''}" data-select="${draft.cards.indexOf(card)}" aria-label="选择卡牌：${escape(card.name)}" aria-current="${card === current()}"><span class="row-art art-crop">${artMarkup(card.art, card.id)}</span><span class="row-info"><strong>${escape(card.name)}</strong><small>${escape(card.id)} · ${card.role === 'supply' ? '物资卡' : escape(EFFECT_NAMES[card.effect.type])}</small>${card.initialCount || card.reward || card.role === 'supply' ? `<span class="row-indicator">${card.role === 'supply' ? `兑换 ${card.supplyValue ?? 1} 物资点` : ''}${card.role !== 'supply' && card.initialCount ? `初始 ×${card.initialCount}` : ''}${card.role !== 'supply' && card.initialCount && card.reward ? '　' : ''}${card.role !== 'supply' && card.reward ? '奖励池' : ''}</span>` : ''}</span><span class="row-cost">${card.role === 'supply' ? '物资' : card.cost}</span></button></div>`).join('') : '<p class="empty-list">没有找到匹配的卡牌</p>';
+    $('#card-count').textContent = library.length;
+    $('#card-list').innerHTML = cards.length ? cards.map(card => {
+        const supply = card.role === 'supply';
+        const detail = supply ? `负重 ${card.weight} · 兑换 ${card.supplyValue ?? 1} 点` :
+            [card.initialCount ? `初始 ×${card.initialCount}` : '', card.reward ? '奖励池' : ''].filter(Boolean).join('　');
+        return `<div role="listitem"><button class="card-row ${card === current() ? 'selected' : ''}" data-select="${draft.cards.indexOf(card)}" aria-label="选择卡牌：${escape(card.name)}" aria-current="${card === current()}">
+            <span class="row-art art-crop">${artMarkup(card.art, card.id)}</span>
+            <span class="row-info"><strong>${escape(card.name)}</strong><small>${escape(card.id)} · ${supply ? '物资卡' : escape(EFFECT_NAMES[card.effect.type])}</small>
+            ${detail ? `<span class="row-indicator">${detail}</span>` : ''}</span>
+            <span class="row-cost">${supply ? (card.reward ? '投放中' : '未投放') : card.cost}</span></button></div>`;
+    }).join('') : '<p class="empty-list">没有找到匹配的卡牌</p>';
 }
 function renderInspector() {
     const card = current();
@@ -123,41 +142,48 @@ function renderInspector() {
     const saved = !newCards.has(card);
     const system = saved && Object.prototype.hasOwnProperty.call(SYSTEM_ROLES, card.id);
     const chapter = card.chapter === 'ashen-labyrinth';
+    const fist = card.fist;
+    const fistFinisher = fist?.type === 'finisher';
+    const fixedType = chapter || !!fist;
     const supply = card.role === 'supply';
     const allowedEffects = card.id === 'attack' || card.id === 'slash' ? ['damage'] : card.id === 'dodge' ? ['block'] : card.role === 'cash' || supply ? ['none'] : card.role === 'temporary' ? ['damage', 'block', 'heal'] : ['damage', 'block', 'heal', 'equip', 'draw', 'strength'];
     $('#inspector-content').innerHTML = `
-      <fieldset class="property-group"><legend>基本资料</legend><div>
+      <fieldset class="property-group"><legend>${supply ? '物资属性' : '基本资料'}</legend><div>
         ${field('卡牌名称', 'name', card.name, { maxlength: 18 })}
+        ${supply ? `<div class="field-grid">${field('物资卡重量', 'weight', card.weight, { type: 'number', min: 1, max: 30 })}${field('兑换物资点', 'supplyValue', card.supplyValue ?? 1, { type: 'number', min: 1, max: 999 })}</div>` : ''}
         ${field('卡牌 ID', 'id', card.id, { readonly: saved || system, maxlength: 48, hint: saved || system ? '已保存后保持稳定' : '小写字母、数字、下划线' })}
         ${field('分类说明', 'tag', card.tag, { maxlength: 32 })}
-        <div class="field-grid">${select('卡牌身份', 'role', card.role, system || chapter ? [[card.role, roleNames[card.role]]] : [['normal', '普通牌'], ['temporary', '战斗临时牌'], ['supply', '物资牌']], system || chapter)}${field('标识色', 'color', card.color, { type: 'color' })}</div>
-        ${chapter ? '' : `<label class="check-field"><input type="checkbox" data-field="canSynthesize" ${card.canSynthesize ? 'checked' : ''} ${isBattleCard(card) ? '' : 'disabled'}>可作为合成材料</label>`}
+        <div class="field-grid">${select('卡牌身份', 'role', card.role, system || fixedType || supplyPage() ? [[card.role, roleNames[card.role]]] : [['normal', '普通牌'], ['temporary', '战斗临时牌'], ['supply', '物资牌']], system || fixedType || supplyPage())}${field('标识色', 'color', card.color, { type: 'color' })}</div>
+        ${chapter || supply || fistFinisher ? '' : `<label class="check-field"><input type="checkbox" data-field="canSynthesize" ${card.canSynthesize ? 'checked' : ''} ${isBattleCard(card) ? '' : 'disabled'}>可作为合成材料</label>`}
         <span class="field-label">卡牌插画</span><div class="art-options">${ART_IDS.map(art => `<label class="art-option"><input type="radio" name="illustration" data-field="art" value="${art}" ${card.art === art ? 'checked' : ''} aria-label="插画：${artNames[art]}"><span class="art-crop">${artMarkup(art)}</span><small>${artNames[art]}</small></label>`).join('')}</div>
       </div></fieldset>
-      <fieldset class="property-group"><legend>战斗效果</legend><div>
-        <div class="field-grid">${field('体力费用', 'cost', card.cost, { type: 'number', min: 0, max: 99, readonly: card.role === 'basic' || card.role === 'cash' || supply })}${supply ? field('物资卡重量', 'weight', card.weight, { type: 'number', min: 0, max: 30 }) : ''}</div>
-        ${select('效果类型', 'effect.type', card.effect.type, (chapter ? [card.effect.type] : allowedEffects).map(type => [type, supply && type === 'none' ? '无' : EFFECT_NAMES[type]]), chapter)}
-        ${supply ? field('兑换物资点', 'supplyValue', card.supplyValue ?? 1, { type: 'number', min: 1, max: 999, hint: '带回避难所后可兑换' }) : ''}
-        ${card.effect.type === 'equip' ? `${field('每回合生成牌', 'effect.generatedCardsText', (card.effect.generatedCards ?? (card.effect.generatedCard ? [card.effect.generatedCard] : [])).join(', '), { hint: '填写临时牌 ID，用逗号分隔' })}${field('占用武器槽', 'weaponSlots', card.weaponSlots ?? 1, { type: 'number', min: 1, max: 2 })}` : card.effect.type === 'none' ? `<p class="field-note">${supply ? '从搜刮获得，带回避难所后可兑换物资点。' : '现金可以在营地丢弃。'}</p>` : card.effect.amount ? field('效果数值', 'effect.amount', card.effect.amount, { type: 'number', min: 1, max: 999 }) : ''}
+      <fieldset class="property-group"><legend>${supply ? '物品说明' : '战斗效果'}</legend><div>
+        ${supply ? '' : `
+        ${field('体力费用', 'cost', card.cost, { type: 'number', min: 0, max: 99, readonly: card.role === 'basic' || card.role === 'cash' })}
+        ${fistFinisher ? field('临时版体力费用', 'fist.temporaryCost', fist.temporaryCost, { type: 'number', min: 0, max: 98, hint: '低于奖励版费用' }) : ''}
+        ${select('效果类型', 'effect.type', card.effect.type, (fixedType ? [card.effect.type] : allowedEffects).map(type => [type, EFFECT_NAMES[type]]), fixedType)}
+        ${card.effect.type === 'equip' ? `${field('每回合生成牌', 'effect.generatedCardsText', (card.effect.generatedCards ?? (card.effect.generatedCard ? [card.effect.generatedCard] : [])).join(', '), { hint: '填写临时牌 ID，用逗号分隔' })}${field('占用武器槽', 'weaponSlots', card.weaponSlots ?? 1, { type: 'number', min: 1, max: 2 })}` : card.effect.type === 'none' ? '<p class="field-note">现金可以在营地丢弃。</p>' : card.effect.amount ? field('效果数值', 'effect.amount', card.effect.amount, { type: 'number', min: 1, max: 999 }) : ''}`}
         ${card.effect.type === 'damage' ? field('同时获得格挡', 'effect.block', card.effect.block ?? 0, { type: 'number', min: 0, max: 999, hint: '0 表示没有额外格挡' }) : ''}
         ${card.effect.type === 'damage' ? field('攻击段数', 'effect.hits', card.effect.hits ?? 1, { type: 'number', min: 1, max: 20 }) : ''}
         ${card.effect.type === 'equip' ? field('装备力量', 'effect.equippedStrength', card.effect.equippedStrength ?? 0, { type: 'number', min: 0, max: 999 }) : ''}
         ${isBattleCard(card) && ['heal', 'strength'].includes(card.effect.type) ? `<label class="check-field"><input type="checkbox" data-field="oncePerBattle" ${card.oncePerBattle ? 'checked' : ''}>每张每场限用一次</label>` : ''}
         <label class="field"><span>补充说明<small>效果数值会自动生成</small></span><textarea aria-label="补充说明" data-field="text" maxlength="80" rows="2">${escape(card.text)}</textarea></label>
       </div></fieldset>
-      <fieldset class="property-group"><legend>卡牌投放</legend><div>
-        ${chapter ?
+      <fieldset class="property-group"><legend>${supply ? '搜刮投放' : '卡牌投放'}</legend><div>
+        ${supply ? `<label class="check-field"><input type="checkbox" aria-label="加入随机奖励池" data-field="reward" ${card.reward ? 'checked' : ''}>加入搜刮物资池</label>
+            ${field('奖励权重', 'rewardWeight', card.rewardWeight ?? 1, { type: 'number', min: 0.01, max: 100, step: 'any', hint: '数值越大，越容易搜到' })}` : fistFinisher ? '<p class="field-note">首次在战斗中生成临时版后，解锁本局的奖励版。</p>' : chapter || isFistBattleReward(card) ?
             `<p class="field-note">${draft.labyrinth?.starter[card.id] ? `焦土迷宫基础牌组 ×${draft.labyrinth.starter[card.id]}` : '选择此牌归属的发现牌组。'} </p>
             ${draft.labyrinth?.decks.map(deck => `<label class="check-field"><input type="checkbox" data-membership="${escape(deck.id)}" ${deck.cards.includes(card.id) ? 'checked' : ''}>${escape(deck.name)}${draft.labyrinth.enabledDecks.includes(deck.id) ? '' : '（未启用）'}</label>`).join('') ?? ''}`
             : `
         ${field('初始携带数量', 'initialCount', card.initialCount, { type: 'number', min: card.role === 'basic' ? 1 : 0, max: 8, readonly: !isBattleCard(card) || card.synthesisOnly })}
         <label class="check-field"><input type="checkbox" aria-label="加入随机奖励池" data-field="reward" ${card.reward ? 'checked' : ''} ${card.role === 'normal' || supply ? '' : 'disabled'}>加入随机奖励池</label>
         ${card.role === 'normal' && card.reward ? field('奖励权重', 'rewardWeight', card.rewardWeight ?? 1, { type: 'number', min: 0.01, max: 100, step: 'any', hint: '合成路线会临时提高材料权重' }) : ''}
-        ${select('固定搜刮奖励', 'fixedReward', draft.fixedReward, draft.cards.filter(card => card.role === 'normal' && !card.chapter && !card.synthesisOnly).map(card => [card.id, card.name]))}
-        <p class="field-note">${supply ? '奖励池中的物资牌可在合成探索的旧街搜刮获得。' : card.synthesisOnly ? '本牌仅在合成探索中获得。' : '这些投放设置用于焦土迷宫以外的章节。'}</p>`}
+        ${select('固定搜刮奖励', 'fixedReward', draft.fixedReward, draft.cards.filter(fixedRewardCard).map(card => [card.id, card.name]))}
+        <p class="field-note">${card.synthesisOnly ? '本牌仅在合成探索中获得。' : '这些投放设置用于焦土迷宫以外的章节。'}</p>`}
       </div></fieldset>
       <div id="references" class="references"></div><div id="validation" class="validation" role="status"></div>`;
-    $('#delete').disabled = system || !!draft.labyrinth?.starter[card.id];
+    $('#duplicate').disabled = !!fist;
+    $('#delete').disabled = system || !!draft.labyrinth?.starter[card.id] || (!!fist && fist.type !== 'support');
     $('#delete').title = system ? '基础能力、现金和系统挥砍需要保留' : '删除卡牌';
     renderVisual();
 }
@@ -165,28 +191,50 @@ function renderVisual() {
     const card = current();
     if (!card) return;
     const model = cardViewModel(card, definitions(), '体力', { field: !!card.chapter, runDeck: !card.chapter });
+    const supply = model.supplyWeight !== undefined;
+    const face = $('#preview-card');
     if (previewedCard !== card) { previewedCard = card; previewExpanded = false; }
-    setPreviewExpanded(previewExpanded);
+    setPreviewExpanded(!supply && previewExpanded);
+    face.dataset.face = supply ? 'supply' : 'standard';
+    face.dataset.longName = String(model.title.length > 8);
+    face.dataset.copy = model.description.length > 42 ? 'long' : model.description ? 'short' : 'empty';
+    $('#preview-detail-toggle').hidden = supply;
+    $('#preview-supply-value').hidden = !supply;
+    $('#preview-supply-value').textContent = supply ? model.effect : '';
+    const mark = $('#preview-weight-mark');
+    mark.hidden = !supply;
+    if (supply) {
+        mark.firstElementChild.textContent = model.supplyWeight;
+        mark.setAttribute('aria-label', `负重 ${model.supplyWeight}`);
+        mark.title = `负重 ${model.supplyWeight}`;
+    }
     $('#preview-name').textContent = model.displayTitle || '未命名卡牌';
     $('#preview-card').setAttribute('aria-label', model.title || '未命名卡牌');
     $('#preview-cost').textContent = model.cost;
     $('#preview-unit').textContent = model.costUnit;
     $('#preview-card').dataset.hasCost = String(model.showCost);
     $('#preview-keywords').textContent = model.keywords.join(' · ');
+    $('#preview-keywords').hidden = supply;
     $('#preview-tag').textContent = model.tag;
     $('#preview-effect').textContent = model.effect;
     $('#preview-description').textContent = model.description;
     $('#preview-full-description').textContent = model.fullDescription;
-    $('#preview-type').textContent = EFFECT_NAMES[card.effect.type];
+    $('#preview-type').textContent = card.role === 'supply' ? '物资卡' : EFFECT_NAMES[card.effect.type];
     $('#preview-weight').textContent = model.weight;
     $('#preview-role').textContent = roleNames[card.role];
     $('#preview-id').textContent = card.id;
     $('#preview-art').innerHTML = artMarkup(card.art, card.id);
+    if (supply) {
+        const artRatio = Number($('#preview-art .painted-tile')?.style.getPropertyValue('--art-ratio')) || 1;
+        const { height, headingShift } = supplyPictureLayout(model.description, artRatio);
+        face.style.setProperty('--art-height', `${height / 340 * 100}%`);
+        face.style.setProperty('--heading-shift', `${headingShift / 340 * 100}%`);
+    }
     $('#preview-card').style.setProperty('--card-accent', card.color);
     const fixedReward = $('[data-field="fixedReward"]');
-    if (fixedReward) fixedReward.innerHTML = draft.cards.filter(entry => entry.role === 'normal' && !entry.chapter && !entry.synthesisOnly).map(entry => `<option value="${escape(entry.id)}" ${entry.id === draft.fixedReward ? 'selected' : ''}>${escape(entry.name)}</option>`).join('');
+    if (fixedReward) fixedReward.innerHTML = draft.cards.filter(fixedRewardCard).map(entry => `<option value="${escape(entry.id)}" ${entry.id === draft.fixedReward ? 'selected' : ''}>${escape(entry.name)}</option>`).join('');
     const count = draft.cards.filter(isBattleCard).reduce((count, card) => count + card.initialCount, 0);
-    const profile = card.chapter ? draft.labyrinth : null;
+    const profile = card.chapter || card.fist ? draft.labyrinth : null;
     $('#starter-label').textContent = profile ? '焦土迷宫起手' : '合成探索起手';
     $('#middle-label').textContent = profile ? '启用牌组' : '配方';
     $('#pool-label').textContent = profile ? '发现池' : '旧章节奖励池';
@@ -197,9 +245,13 @@ function renderVisual() {
     if (profile) $('#weight-fill').style.width = `${profile.enabledDecks.length / profile.decks.length * 100}%`;
     const refs = cardReferences(draft, card.id);
     $('#references').innerHTML = `<b>此卡牌用于</b><br>${refs.length ? refs.map(escape).join(' · ') : '尚未加入卡组或奖励池'}`;
+    renderSaveState();
+}
+function renderSaveState() {
     let issues = [];
     try { validateCatalog(draft); } catch (error) { issues = error.issues ?? [error.message]; }
-    $('#validation').textContent = issues.slice(0, 5).join('\n');
+    const validation = $('#validation');
+    if (validation) validation.textContent = issues.slice(0, 5).join('\n');
     $('#recipe-validation').textContent = issues.slice(0, 5).join('\n');
     $('#save').disabled = saving || !dirty() || issues.length > 0;
     $('#play').disabled = saving || issues.length > 0;
@@ -207,7 +259,26 @@ function renderVisual() {
     $('#save-state').textContent = saving ? '正在保存…' : dirty() ? '有未保存的更改' : lastSaved ? `已保存 ${lastSaved}` : '所有更改已保存';
     $('#save-state').className = 'save-state' + (dirty() ? ' dirty' : '');
 }
-function render() { renderList(); renderInspector(); renderDecks(); recipes.render(); }
+function render() {
+    if (!draft) return;
+    if (supplyPage() && current()?.role !== 'supply')
+        selectedIndex = draft.cards.findIndex(card => card.role === 'supply');
+    else if (!supplyPage() && !current()) selectedIndex = 0;
+    selectedId = current()?.id;
+    const empty = !current();
+    $('.preview-stage').hidden = empty;
+    $('.deck-summary').hidden = empty || supplyPage();
+    $('.preview-hint').hidden = empty;
+    $('#duplicate').disabled = empty;
+    $('#delete').disabled = empty;
+    renderList();
+    if (empty) {
+        $('#inspector-content').innerHTML = '<p class="empty-list">点击「＋物资卡」创建第一张物资卡。</p>';
+        renderSaveState();
+    } else renderInspector();
+    renderDecks();
+    recipes.render();
+}
 
 async function load() {
     try {
@@ -233,7 +304,7 @@ async function save() {
     $('#workspace').inert = true;
     $('#recipe-workspace').inert = true;
     $('#reload').disabled = true;
-    renderVisual();
+    renderSaveState();
     try {
         const response = await fetch('/api/cards', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ catalog: draft, revision }) });
         const data = await response.json();
@@ -288,6 +359,7 @@ function addSupply() {
         color: '#9aaf8c',
         art: 'cash',
         role: 'supply',
+        ...(supplyPage() && draft.labyrinth ? { chapter: 'ashen-labyrinth' } : {}),
         initialCount: 0,
         reward: true,
         supplyValue: 1,
@@ -337,7 +409,7 @@ $('#card-list').addEventListener('click', event => {
 });
 $('#inspector-content').addEventListener('input', event => {
     const input = event.target, field = input.dataset.field, card = current();
-    if (input.dataset.membership && card?.chapter && !saving) {
+    if (input.dataset.membership && card && (card.chapter || isFistBattleReward(card)) && !saving) {
         const deck = draft.labyrinth.decks.find(group => group.id === input.dataset.membership);
         deck.cards = input.checked ? [...new Set([...deck.cards, card.id])] : deck.cards.filter(id => id !== card.id);
         renderVisual();
@@ -347,6 +419,7 @@ $('#inspector-content').addEventListener('input', event => {
     if (!field || !card || saving || input.disabled || input.readOnly) return;
     const value = input.type === 'checkbox' ? input.checked : input.type === 'number' ? Number(input.value) : input.value;
     if (field === 'fixedReward') draft.fixedReward = value;
+    else if (field === 'fist.temporaryCost') card.fist.temporaryCost = value;
     else if (field === 'effect.generatedCardsText') {
         card.effect.generatedCards = String(value).split(',').map(id => id.trim()).filter(Boolean);
         delete card.effect.generatedCard;
@@ -418,6 +491,7 @@ $('#inspector-content').addEventListener('input', event => {
         card.initialCount = 0;
         card.cost = 0;
         card.effect = { type: 'none', amount: 0 };
+        card.weight = Math.max(1, card.weight);
         card.supplyValue = card.supplyValue ?? 1;
         delete card.canSynthesize;
         delete card.weaponSlots;
@@ -458,7 +532,7 @@ $('#reload').addEventListener('click', async () => {
 });
 function gameURL() {
     const query = new URLSearchParams({ cards: 'live', save: 'off', seed: '17', revision, t: Date.now() });
-    const mapCraft = $('#map-craft-test').checked;
+    const mapCraft = !supplyPage() && $('#map-craft-test').checked;
     if (location.pathname === '/recipes' || mapCraft) {
         query.set('scenario', 'synthesis');
         query.delete('seed');
@@ -479,10 +553,16 @@ window.addEventListener('beforeunload', event => { if (dirty()) { event.preventD
 window.addEventListener('keydown', event => { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') { event.preventDefault(); if (!$('#save').disabled) void save(); } });
 function showPage() {
     const inRecipes = location.pathname === '/recipes';
+    const supplies = supplyPage();
     $('#workspace').hidden = inRecipes;
     $('#recipe-workspace').hidden = !inRecipes;
+    $('#library-title').textContent = supplies ? '物资卡库' : '卡牌库';
+    $('#add').hidden = supplies;
+    $('#filter').hidden = supplies;
+    $('.map-craft-test').hidden = supplies;
+    $('#search').value = '';
     for (const link of document.querySelectorAll('[data-page]')) {
-        if ((link.dataset.page === 'recipes') === inRecipes) link.setAttribute('aria-current', 'page');
+        if (link.pathname === location.pathname) link.setAttribute('aria-current', 'page');
         else link.removeAttribute('aria-current');
         link.onclick = event => {
             if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
@@ -492,7 +572,7 @@ function showPage() {
             showPage();
         };
     }
-    if (inRecipes) recipes.render();
+    render();
 }
 window.addEventListener('popstate', showPage);
 showPage();

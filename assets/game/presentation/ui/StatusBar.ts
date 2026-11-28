@@ -14,9 +14,11 @@ export class StatusBar extends Component {
     @property(JsonAsset) theme: JsonAsset | null = null;
     @property(SpriteAtlas) icons: SpriteAtlas | null = null;
     @property(PaperPanel) paper: PaperPanel | null = null;
+    @property(Sprite) lintel: Sprite | null = null;
     @property({ type: [Node] }) sections: Node[] = [];
     @property({ type: [Node] }) utilities: Node[] = [];
     @property(Label) day: Label | null = null;
+    @property(Label) round: Label | null = null;
     @property(Label) supplies: Label | null = null;
     @property(Label) health: Label | null = null;
     @property(Node) bag: Node | null = null;
@@ -47,8 +49,17 @@ export class StatusBar extends Component {
             this.recipeButton.active = !!input.recipesVisible;
             this.width = -1;
         }
+        const healthSection = this.sections[3];
+        if (healthSection && healthSection.active !== (input.healthVisible !== false)) {
+            healthSection.active = input.healthVisible !== false;
+            this.width = -1;
+        }
         this.layout();
         if (this.day) this.day.string = data.day;
+        if (this.round) {
+            this.round.string = data.round;
+            this.round.node.active = !!data.round;
+        }
         if (this.supplies) this.supplies.string = data.supplies;
         if (this.health) {
             this.health.string = data.health;
@@ -78,24 +89,44 @@ export class StatusBar extends Component {
         const ui = this.node.getComponent(UITransform);
         if (!ui || ui.width === this.width) return;
         this.width = ui.width;
-        const grid = this.geometry = statusBarLayout(this.width, this.presentation, !!this.recipeButton?.active);
+        const grid = this.geometry = statusBarLayout(this.width, this.presentation, !!this.recipeButton?.active, this.input.healthVisible !== false);
         ui.height = grid.height;
         this.paper?.getComponent(UITransform)?.setContentSize(grid.width, grid.height);
-        this.paper?.redraw();
+        if (this.lintel) this.lintel.getComponent(UITransform)?.setContentSize(grid.width - 10, grid.height - 6);
+        else this.paper?.redraw();
         const numbers = [null, this.day, this.supplies, this.health];
         this.sections.forEach((section, i) => {
             const slot = grid.sections[i];
+            if (!slot.width) return;
             section.setPosition(slot.x, slot.y);
             section.getComponent(UITransform)?.setContentSize(slot.width, slot.height);
             const left = -slot.width / 2;
             const glyph = section.getChildByName('StatusGlyph');
-            glyph?.setPosition(i === 0 ? -3 : left + 15, i === 3 ? 3 : 0);
+            glyph?.setPosition(i === 0 ? 0 : left + 15, i === 3 ? 3 : 0);
+            if (i === 0 && glyph) {
+                const side = Math.min(62, slot.width);
+                glyph.getComponent(UITransform)?.setContentSize(side, side);
+                section.getChildByName('SaveGlyph')?.setPosition(side / 2 - 1, -17);
+            }
+            const shadow = section.getChildByName('GlyphShadow');
+            if (glyph && shadow) {
+                const side = glyph.getComponent(UITransform)!.width;
+                shadow.setPosition(glyph.position.x, glyph.position.y - 2);
+                shadow.getComponent(UITransform)?.setContentSize(side + 2, side + 2);
+            }
             const label = numbers[i];
             if (label) {
-                label.node.setPosition(left + 32, i === 3 ? 4 : 0);
-                label.getComponent(UITransform)?.setContentSize(Math.max(24, slot.width - 32), 36);
+                const inset = i === 1 ? 0 : 32;
+                label.node.setPosition(left + inset, i === 3 ? 4 : 0);
+                label.getComponent(UITransform)?.setContentSize(Math.max(24, slot.width - inset), 36);
             }
         });
+        if (this.round) {
+            const slot = grid.round;
+            this.round.node.setPosition(slot.x, slot.y);
+            this.round.getComponent(UITransform)?.setContentSize(Math.min(132, slot.width), slot.height);
+            for (const rule of this.round.node.children) rule.active = slot.width >= 160;
+        }
         const healthWidth = Math.max(34, grid.sections[3].width - 40);
         const meter = this.healthMeter;
         if (meter) {
@@ -109,7 +140,7 @@ export class StatusBar extends Component {
             });
         }
         this.bag?.setPosition(0, 0);
-        this.bag?.getComponent(ButtonPresentation)?.resize(grid.sections[4].width, 42);
+        this.bag?.getComponent(ButtonPresentation)?.resize(grid.sections[4].width, grid.sections[4].height);
         const controls = this.utilities.slice();
         if (this.recipeButton?.active) controls.splice(controls.length - 1, 0, this.recipeButton);
         controls.forEach((node, i) => {

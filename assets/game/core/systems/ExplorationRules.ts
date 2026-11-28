@@ -47,9 +47,6 @@ export class ExplorationRules {
         if (tier) {
             this.inventory.spend(tier.cost);
             this.state.entryTier = tier.id;
-            this.feedback.log(
-                `${tier.name}档出发：支付 ${tier.cost} 物资，每回合体力 ${tier.stamina}。`
-            );
         }
         this.state.route = null;
         this.state.expeditionMap = map;
@@ -58,6 +55,7 @@ export class ExplorationRules {
         this.state.visited = [];
         this.state.battle = null;
         this.state.rewards = null;
+        this.state.fistUnlocks = undefined;
         this.state.discoveryPool = this.scenario.labyrinth
             ? activeDiscoveryCards(this.content.catalog.labyrinth!)
             : undefined;
@@ -79,9 +77,6 @@ export class ExplorationRules {
             return this.feedback.result(false, '请先完成固定搜刮。');
         if (!hasId(this.scenario.routes, route)) return this.feedback.result(false, '路线不存在。');
         this.state.route = route;
-        this.feedback.log(
-            `选择路线 ${route}：${this.scenario.routeDescriptions?.[route] ?? this.scenario.routes[route].map((id) => nodeTitle(this.scenario, id)).join(' → ')}。`
-        );
         return this.feedback.result(true, `已选择路线 ${route}。`);
     }
     enterNode(target?: NodeKind): ActionResult {
@@ -116,7 +111,7 @@ export class ExplorationRules {
             }
             this.state.phase = 'rewards';
             const pool = this.scenario.runDeck
-                ? [...this.content.supplyPool, ...this.content.rewardPool]
+                ? [...this.content.supplyPool, ...this.content.rewardPool.filter((kind) => !this.content.cards[kind].fist)]
                 : this.content.rewardPool;
             this.state.rewards = {
                 source: node,
@@ -129,16 +124,12 @@ export class ExplorationRules {
                 supplyTaken: false,
                 cardTaken: false,
             };
-            this.feedback.log(
-                `${nodeTitle(this.scenario, node)}：支付 ${fee} 点物资。奖励需要主动领取。`
-            );
         } else {
             if (map) map.activeNode = node;
             if (definition.type === 'rest') {
                 this.state.phase = 'rest';
                 const restored = Math.min(definition.restoreHealth, 10 - this.state.health);
                 this.state.health += restored;
-                this.feedback.log(`进入营地，恢复 ${restored} 点血量。`);
             } else this.combat.startBattle(definition.enemyId);
         }
         return this.feedback.result(true, `进入${nodeTitle(this.scenario, node)}。`);

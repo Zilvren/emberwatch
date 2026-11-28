@@ -18,6 +18,9 @@ import { shelterSummary } from './ui/ShelterSummaryModel';
 import { rulesNotice } from './ui/RulesNoticeModel';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { TideBattleLayout } from './ui/TideBattleLayout';
+import type { battleWindowLayout } from './ui/BattleWindowLayout';
+import { DeckStackGraphic } from './primitives/DeckStackGraphic';
+import { EnemyIntent } from './ui/EnemyIntent';
 import { generatedCards } from '../core/content/CardCatalog';
 import { atGateCamp } from './ui/CampViewModel';
 /** Native view binding only. No game commands, storage or input subscriptions. */
@@ -31,6 +34,9 @@ export class GameRenderer extends NativeViewWriter {
     private look: 'legacy' | 'tide' | 'labyrinth' | null = null;
     private hiddenCombatUi: Node[] = [];
     private readonly battleLayout: TideBattleLayout;
+    fitBattleWindow(frame: ReturnType<typeof battleWindowLayout>): void {
+        this.battleLayout.fitWindow(frame);
+    }
     constructor(
         game: GameReadModel,
         private readonly ui: UiState,
@@ -218,7 +224,8 @@ export class GameRenderer extends NativeViewWriter {
                     'rest/text0': '血量状况',
                     'rest/text1': `休息后血量 ${g.health} / 10`,
                     'rest/text2': '随行牌组',
-                    'rest/text3': `${g.cards.length} 张 · 其中 ${g.cards.filter((c) => c.found).length} 张为本次发现\n下一场战斗会重新洗牌。`,
+                    'rest/text3': `${g.usableCards.length} 张战斗牌 · 其中 ${g.usableCards.filter((c) => c.found).length} 张为本次发现\n` +
+                        (g.scenario.labyrinth ? `随身物资卡 ${g.carriedCards.length} 张` : '下一场战斗会重新洗牌。'),
                     'rest/text4': exits.length > 1
                         ? `前方有 ${exits.length} 条路线 · 返回地图选择`
                         : enemy
@@ -249,7 +256,8 @@ export class GameRenderer extends NativeViewWriter {
                         : `第 ${g.day} 天 · 还不是终点`,
                 'journal/text2': g.scenario.runDeck
                     ? `${g.failureReason}\n\n本局卡组和行囊已清空。下次出发使用固定初始卡组。`
-                    : `${g.failureReason}\n\n返回营地后恢复初始血量，重新出发。\n${g.scenario.kind === 'tutorial' ? '教学仍停留在第 1 天。' : '一天过去了，关键记录仍然保留。'}`,
+                    : `${g.failureReason}\n\n返回营地后恢复初始血量，重新出发。\n${g.scenario.kind === 'tutorial' ? '教学仍停留在第 1 天。' : '一天过去了，关键记录仍然保留。'}` +
+                        (g.scenario.labyrinth ? '\n随身物资卡已遗失，已入库的物资卡仍在仓库。' : ''),
                 'journal/text3': `物资 ${g.supplies} · 血量 ${g.health} · 战斗牌 ${g.usableCards.length} 张`,
                 'journal/text5': '',
             });
@@ -266,6 +274,8 @@ export class GameRenderer extends NativeViewWriter {
             supplies: g.supplies,
             health: g.health,
             healthMax: 10,
+            healthVisible: g.phase !== 'battle',
+            round: g.phase === 'battle' && !g.battle?.discovery && !g.battle?.cardChoice ? g.battle?.turn : undefined,
             deckCount: g.usableCards.length,
             saveStatus: this.saveStatus(),
             muted: this.isMuted(),
@@ -283,14 +293,12 @@ export class GameRenderer extends NativeViewWriter {
         this.renderStatusBar();
         const g = this.game,
             b = g.battle!,
-            attack = b.intent === 'attack',
             world = screen.getChildByName('World')!;
         const shieldSpearEquipped = (b.weapons ?? (b.weapon ? [b.weapon] : []))
             .some((weapon) => (g.content.cards[weapon.kind].weaponSlots ?? 1) === 2);
         const gauge = screen.getChildByName('StaminaGauge');
         if (gauge) gauge.active = g.scenario.battleResource === 'stamina';
         const definition = g.scenario.enemies[b.enemy];
-        this.battleLayout.show(!!g.scenario.fieldDeck, definition.actorId === 'brute', !!g.scenario.labyrinth);
         if (g.scenario.labyrinth)
             world.getComponent(SceneAtmosphere)?.setLook(definition.actorId === 'veil-idol' ? 'court' : 'labyrinth');
         const actors = world.getComponentsInChildren(ActorPresentation);
@@ -299,63 +307,46 @@ export class GameRenderer extends NativeViewWriter {
                 actor.node.active = actor.actorId === definition.actorId;
         this.enemy = actors.find((actor) => actor.actorId === definition.actorId) ?? null;
         if (!this.enemy) throw new Error('缺少敌人表现绑定：' + definition.actorId);
+        this.battleLayout.show(this.enemy, !!g.scenario.fieldDeck, !!g.scenario.labyrinth);
         const calm = b.calm;
         const calmText = calm ? `镇静 ${calm.persistent + calm.temporary} / ${calm.limit}` +
             (calm.temporary ? ` · 临时 ${calm.temporary}` : '') +
             (calm.freeSkill ? ' · 下张技能免费' : '') + (calm.calibrated ? ' · 已校准' : '') : '';
         const strength = g.strength;
+        const fists = b.fist;
         const status = [
             calmText,
             shieldSpearEquipped && b.rage !== undefined
                 ? `盾矛蓄势 ${'●'.repeat(b.rage)}${'○'.repeat(5 - b.rage)}`
                 : '',
             strength ? `力量 +${strength}` : '',
+            fists?.damageBonus ? `拳伤 +${fists.damageBonus}/段` : '',
+            fists?.blockBonus ? `拳牌格挡 +${fists.blockBonus}/张` : '',
+            fists?.counters.length ? `待反击 ${fists.counters.length} 次` : '',
         ].filter(Boolean).join(' · ');
         const statusLabel = screen.getChildByName('banner-text2');
         if (statusLabel) {
             statusLabel.active = !!status;
-            if (status) statusLabel.setPosition(-353, 280);
         }
-        const intent = screen.getChildByName('battle-text0');
-        const attackIcon = intent?.getChildByName('AttackGlyph');
-        const prepIcon = intent?.getChildByName('PrepareGlyph');
-        if (attackIcon) attackIcon.active = attack;
-        if (prepIcon) prepIcon.active = !attack;
+        screen.getComponentInChildren(EnemyIntent)!.render(g,
+            !this.ui.busy && !this.ui.overlay && !this.ui.selectedCard && !b.discovery && !b.cardChoice);
         this.text(screen, {
             'banner/text0': `ENCOUNTER / ROUND ${b.turn}`,
             'banner/text1': definition.title,
             'banner/text2': status,
-            'battle/text0': attack ? String(g.incomingDamage) : '',
-            'battle/text1': calm?.deferred === 'scheduled' ? '已暂缓 · 即将额外行动'
-                : attack
-                ? Math.max(0, g.incomingDamage - b.block) === 0
-                    ? '已完全格挡'
-                    : Math.max(0, g.incomingDamage - b.block) >= g.health
-                      ? '结束回合将失守'
-                      : `结束回合将受伤 ${Math.max(0, g.incomingDamage - b.block)}`
-                : `下次攻击 ${b.strongAttack}`,
             'battle/text2': '点击敌人 · 打出攻击',
             'battle/text3': `${g.health}/10`,
             'battle/text4': String(b.block),
             'battle/text5': `${b.hp}/${b.maxHp}`,
             'battle/text6': '血量偏低',
             'battle/text8': b.turn === b.equippedTurn ? '下回合生成挥砍' : '每回合生成挥砍',
-            'battle/text9': this.ui.busy
-                ? '正在行动…'
-                : this.ui.selectedCard
-                  ? '已选攻击牌 · 再次点击可取消\n点击敌人或拖向敌人'
-                  : g.scenario.fieldDeck
-                    ? b.turn === 1
-                        ? '攻击牌点选敌人 · 长按手牌查看说明'
-                        : ''
-                    : '攻击牌选敌人，其余牌点击即用\n长按看详情 · 拖出场地可取消',
-            'battle/text10': `回合 ${b.turn} · 手牌 ${b.hand.length} / ${g.scenario.runDeck ? 10 : 6}`,
             'drawPile/text0': b.draw.length,
             'discardPile/text0': b.discard.length,
             'battle/stamina-value': `${b.stamina}/${b.maxStamina}`,
-            'battle/stamina-hint': `每回合 ${b.maxStamina}`,
         });
-        screen.getChildByName('CriticalWarning')!.active = g.lowHealth;
+        screen.getChildByName('PlayerVitals')!.getChildByName('CriticalWarning')!.active = g.lowHealth;
+        screen.getChildByName('drawPile')!.getComponentInChildren(DeckStackGraphic)!.setCount(b.draw.length);
+        screen.getChildByName('discardPile')!.getComponentInChildren(DeckStackGraphic)!.setCount(b.discard.length);
         screen.getChildByName('WeaponSlot')!.active = !!b.weapon;
         if (b.weapon) {
             const equipped = b.weapons ?? [b.weapon];

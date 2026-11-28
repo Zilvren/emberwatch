@@ -8,6 +8,8 @@ export interface StatusBarInput {
     saveStatus: string;
     muted: boolean;
     actionsEnabled: boolean;
+    healthVisible?: boolean;
+    round?: number;
     rulesNotice?: string;
     recipesVisible?: boolean;
 }
@@ -20,7 +22,8 @@ export function statusBarView(input: Readonly<StatusBarInput>) {
     const saveTone: StatusTone = /失败|原存档/.test(save) ? 'danger' : /备份/.test(save) ? 'warning' : 'normal';
     const healthTone: StatusTone = input.health <= 2 ? 'danger' : 'normal';
     return {
-        day: String(input.day), supplies: String(input.supplies),
+        day: `第 ${input.day} 天`, round: input.round ? `第 ${input.round} 回合` : '',
+        supplies: String(input.supplies),
         suppliesTone: (input.supplies <= 1 ? 'warning' : 'normal') as StatusTone,
         health: `${input.health} / ${input.healthMax}`, healthTone,
         healthRatio: input.healthMax ? Math.max(0, Math.min(1, input.health / input.healthMax)) : 0,

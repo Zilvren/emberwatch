@@ -1,7 +1,7 @@
 import { ActionResult } from '../RulesTypes';
 import { GameState } from '../state/GameState';
 import type { NodeKind, RouteProgress } from '../content/GameScenario';
-export type FeedbackState = Pick<GameState, 'revision' | 'logs'>;
+export type FeedbackState = Pick<GameState, 'revision'>;
 export type InventoryState = Pick<
     GameState,
     'battle' | 'cards' | 'phase' | 'supplies' | 'synthesisRewardBoosts' | 'synthesisMaterialBoostedRecipes'
@@ -18,12 +18,12 @@ export type CombatState = Pick<
     | 'phase'
     | 'rewards'
     | 'supplies'
-    | 'synthesisRewardBoosts'
+    | 'fistUnlocks'
 >;
 type NodeCompletionState = Pick<GameState, 'expeditionMap' | 'fixedDone' | 'pathIndex' | 'phase' | 'visited'>;
 export type RewardState = NodeCompletionState & Pick<
     GameState,
-    'cards' | 'rewards' | 'supplies' | 'discoveryPool' | 'synthesisRewardBoosts'
+    'cards' | 'rewards' | 'supplies' | 'discoveryPool' | 'synthesisRewardBoosts' | 'fistUnlocks'
 >;
 export type ExplorationState = NodeCompletionState & Pick<
     GameState,
@@ -35,6 +35,7 @@ export type ExplorationState = NodeCompletionState & Pick<
     | 'returnElapsed'
     | 'rewards'
     | 'discoveryPool'
+    | 'fistUnlocks'
     | 'route'
     | 'settlement'
     | 'supplies'
@@ -55,6 +56,7 @@ export type ShelterState = Pick<
     | 'synthesisRewardBoosts'
     | 'synthesisBoostedRecipes'
     | 'synthesisMaterialBoostedRecipes'
+    | 'fistUnlocks'
 > & RouteProgress;
 export type JournalState = Pick<GameState, 'day' | 'journalEntries' | 'milestones' | 'phase'>;
 
@@ -71,9 +73,5 @@ export class RuleFeedback {
     result(ok: boolean, message: string, warning = false): ActionResult {
         if (ok) this.state.revision++;
         return { ok, message, warning };
-    }
-    log(message: string): void {
-        this.state.logs.unshift(message);
-        this.state.logs = this.state.logs.slice(0, 36);
     }
 }

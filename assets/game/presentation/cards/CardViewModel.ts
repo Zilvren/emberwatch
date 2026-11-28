@@ -1,12 +1,15 @@
 import { ART_IDS, CARD, CardDefinition, effectSummary, generatedCards, playableCard } from '../../core/content/CardCatalog';
 import type { CardDesignReference } from './CardDesignReference';
 
-export const CARD_ART_IDS = [...ART_IDS, 'rope', 'battery'];
+export const CARD_ART_IDS = ART_IDS;
 const keywordLabels: Record<string, string> = {
     basic: '基础牌',
     weapon: '武器',
     instrument: '仪器',
     consumable: '消耗品',
+    fist: '拳流派',
+    combo: '连击',
+    temporary: '本场临时',
     supply: '物资卡',
     synthesis: '可作为合成材料',
     'synthesis-needed': '已有搭配 · 缺此材料',
@@ -16,6 +19,9 @@ const keywordDescriptions: Record<string, string> = {
     weapon: '打出后进入武器槽，并按武器规则生成攻击牌。',
     instrument: '装入仪器槽，下回合起生成发振。',
     consumable: '使用并结算效果后永久消失。',
+    fist: '基础招式可连续打出组成连段，拳流派牌享受本场叠加效果。',
+    combo: '本回合已出牌时触发发现。上一张也是拳流派牌时，发现临时基础招式。',
+    temporary: '打出后移出本场。未打出的牌随手牌进入弃牌堆，可再次抽到。',
     supply: '带回避难所后，可以兑换成物资点。',
     synthesis: '可以按配方使用本局卡组中的卡牌进行合成。',
     'synthesis-needed': '本局卡组中已有这条配方的一部分材料，仍需要这张卡。',
@@ -31,7 +37,9 @@ interface DisplayInput {
     description: string;
     fullDescription: string;
     weight: string;
+    supplyWeight?: number;
     art: string;
+    artKey?: string;
     accent: string;
     temporary: boolean;
     keywords: string[];
@@ -45,9 +53,9 @@ function displayModel(input: DisplayInput) {
     return {
         ...input,
         cost: input.cost === null ? '—' : String(input.cost),
-        displayTitle: input.title.length > 7 ? input.title.slice(0, 6) + '…' : input.title,
+        displayTitle: input.supplyWeight === undefined && input.title.length > 7 ? input.title.slice(0, 6) + '…' : input.title,
         description:
-            input.description.length > 24
+            input.supplyWeight === undefined && input.description.length > 24
                 ? input.description.slice(0, 23) + '…'
                 : input.description,
         fullDescription:
@@ -61,10 +69,20 @@ function displayModel(input: DisplayInput) {
     };
 }
 export type CardDisplayModel = ReturnType<typeof displayModel>;
+
+/** Measurements on the 224 × 340 supply face, shared with the editor preview. */
+export function supplyPictureLayout(description: string, artRatio: number, blocked = false) {
+    if (description) return { height: description.length > 42 ? 133 : 158, headingShift: 0 };
+    const available = blocked ? 205 : 225;
+    const height = Math.min(available, 200 / artRatio);
+    return { height, headingShift: (available - height) / 2 };
+}
+
 export interface CardViewOptions {
     field?: boolean;
     runDeck?: boolean;
     neededForSynthesis?: boolean;
+    packedWeight?: number;
     damage?: number;
     cost?: number;
     rageReady?: boolean;
@@ -86,16 +104,24 @@ export function cardViewModel(
     const hits = data.effect.hits ?? 1;
     const currentDamage = damage ?? data.effect.amount * hits;
     const attack = hits === 1 ? `造成 ${currentDamage} 点伤害`
-        : damage === undefined ? `造成 ${data.effect.amount} 点伤害 ${hits} 次`
+        : damage === undefined || data.fist ? `造成 ${currentDamage / hits} 点伤害 ${hits} 次`
         : `造成 ${currentDamage} 点总伤害（${hits} 段）`;
+    const supportHeadline = data.fist?.type === 'support' && data.effect.type === 'skill' ? {
+        'fetch-hook': '补一张缺少的勾拳',
+        'switch-stance': '互换直拳和招架',
+        'recover-stamina': '移出招式以回复体力',
+        'after-finisher': '',
+    }[data.fist.action] : '';
     const primary =
         data.effect.type === 'equip'
             ? `生成「${generated.join('」「')}」`
               : data.effect.type === 'damage'
-                ? attack + (data.effect.block ? `，获得 ${data.effect.block} 点格挡` : '')
-              : baseEffect.length > 21 && data.effect.labyrinth ? '查看效果说明' : baseEffect;
+                ? attack + (data.effect.block ? `，获得 ${data.effect.block} 点格挡` : '') +
+                    (data.effect.extraDraw ? `，抽 ${data.effect.extraDraw} 张` : '')
+              : supportHeadline || (baseEffect.length > 21 && data.effect.labyrinth ? '查看效果说明' : baseEffect);
     const once = data.oncePerBattle ? '每张每场限用一次' : '';
-    const context = [once, additional.join('，'), primary === '查看效果说明' ? baseEffect : '', detail].filter(Boolean).join('。');
+    const context = [once, additional.join('，'), supportHeadline || primary === '查看效果说明' ? baseEffect : '', detail]
+        .filter(Boolean).join('。');
     const weaponDescription = data.effect.type === 'equip'
         ? (data.effect.equippedStrength ? `装备时提供 ${data.effect.equippedStrength} 点力量。` : '') +
             (generated.length === 1 ? '从下回合起，每回合 1 张。' : '从下回合起，每回合各 1 张。')
@@ -112,6 +138,12 @@ export function cardViewModel(
         keywords.push('synthesis');
         if (options.neededForSynthesis) keywords.push('synthesis-needed');
     }
+    if (data.fist) {
+        keywords.push('fist');
+        if (data.role === 'temporary') keywords.push('temporary');
+        else if (data.fist.type === 'move') keywords.push('combo');
+    }
+    const fieldTemporary = field && data.role === 'temporary' && !data.fist;
     return displayModel({
         id: data.id,
         title: data.name,
@@ -119,18 +151,20 @@ export function cardViewModel(
         cost: cost ?? data.cost,
         costUnit,
         showCost: data.role !== 'cash' && data.role !== 'supply',
-        effect: primary,
+        effect: data.role === 'supply' ? `价值 ${data.supplyValue ?? 1} 物资点` : primary,
         description:
-            field && data.role === 'temporary'
+            fieldTemporary
                 ? '打出或回合结束时消失。'
                 : weaponDescription + context,
         fullDescription:
             effect +
-            (field && data.role === 'temporary'
+            (fieldTemporary
                 ? '\n\n打出或回合结束时消失。'
                 : [once, detail].filter(Boolean).map((line) => '\n\n' + line).join('')),
         weight: data.role === 'temporary' ? '本场临时' : '',
+        ...(data.role === 'supply' ? { supplyWeight: options.packedWeight ?? data.weight } : {}),
         art: data.art,
+        ...(data.fist && data.role === 'temporary' ? { artKey: data.id.replace(/_temp$/, '') } : {}),
         accent: data.color,
         temporary: data.role === 'temporary',
         keywords,

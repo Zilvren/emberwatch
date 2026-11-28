@@ -117,7 +117,7 @@ for(const file of ['assets/prefabs/cards/HandCard.prefab','assets/prefabs/cards/
  g.save();
 }
 // Generic dialogs use the same field material and align with the main page.
-for(const file of ['assets/prefabs/ui/HelpPopup.prefab','assets/prefabs/ui/LogPopup.prefab','assets/prefabs/ui/ConfirmPopup.prefab']){
+for(const file of ['assets/prefabs/ui/HelpPopup.prefab','assets/prefabs/ui/ConfirmPopup.prefab']){
  const g=load(file);skin(g);const panel=g.graph.find(o=>o.__type__===script('CommonPanel'));raw(g,panel.sheet.__id__,110,0);panel.preferredWidth=file.includes('Confirm')?720:820;panel.preferredHeight=file.includes('Confirm')?420:650;g.save();
 }
 // Inventory is now six canvas-lined equipment bins rather than an old spreadsheet row.

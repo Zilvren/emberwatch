@@ -12,16 +12,18 @@ export class InventoryRules {
         private readonly scenario: GameScenario = TUTORIAL_SCENARIO
     ) {}
     owned(kind: CardKind, found = false, zone: 'base' | 'overflow' = 'base'): OwnedCard {
+        const definition = this.content.cards[kind];
         return {
             id: this.newId('card'),
             kind,
             found,
             zone,
-            selected: isBattleCard(this.content.cards[kind]),
+            selected: isBattleCard(definition),
+            ...(definition.role === 'supply' ? { packedWeight: definition.weight } : {}),
         };
     }
     get carriedCards(): OwnedCard[] {
-        return this.scenario.runDeck
+        return this.scenario.runDeck || this.scenario.labyrinth
             ? this.state.cards.filter((card) => this.content.cards[card.kind].role === 'supply')
             : this.state.cards;
     }
@@ -66,11 +68,11 @@ export class InventoryRules {
 
     get baseWeight(): number {
         return this.state.cards.filter(c => c.zone === 'base')
-            .reduce((sum, c) => sum + carriedWeight(this.content.cards[c.kind]), 0);
+            .reduce((sum, c) => sum + carriedWeight(this.content.cards[c.kind], c.packedWeight), 0);
     }
     get overflowWeight(): number {
         return this.state.cards.filter(c => c.zone === 'overflow')
-            .reduce((sum, c) => sum + carriedWeight(this.content.cards[c.kind]), 0);
+            .reduce((sum, c) => sum + carriedWeight(this.content.cards[c.kind], c.packedWeight), 0);
     }
     get usableCards(): OwnedCard[] {
         return this.state.cards.filter(
@@ -85,11 +87,8 @@ export class InventoryRules {
     }
     promoteOverflow(): void {
         for (const card of this.state.cards.filter((c) => c.zone === 'overflow')) {
-            if (this.baseWeight + carriedWeight(this.content.cards[card.kind]) > 30) break;
+            if (this.baseWeight + carriedWeight(this.content.cards[card.kind], card.packedWeight) > 30) break;
             card.zone = 'base';
-            this.feedback.log(
-                `${this.content.cards[card.kind].name}从溢出区转入${this.scenario.runDeck ? '行囊' : '可用卡组'}。`
-            );
             if (this.state.battle && card.selected)
                 this.state.battle.discard.push({
                     id: card.id,
@@ -111,13 +110,13 @@ export class InventoryRules {
             : '行囊和暂存区已满';
     }
     discardCard(id: string): ActionResult {
-        if (this.scenario.fieldDeck)
-            return this.feedback.result(false, '探索中已持有的牌会随牌组一起使用。');
-        if (this.state.phase !== 'rewards' && this.state.phase !== 'rest')
-            return this.feedback.result(false, '只能在奖励或休整时整理背包。');
         const index = this.state.cards.findIndex((c) => c.id === id);
         if (index < 0) return this.feedback.result(false, '卡牌不存在。');
         const card = this.state.cards[index];
+        if (this.scenario.fieldDeck && !(this.scenario.labyrinth && this.content.cards[card.kind].role === 'supply'))
+            return this.feedback.result(false, '探索中已持有的牌会随牌组一起使用。');
+        if (this.state.phase !== 'rewards' && this.state.phase !== 'rest')
+            return this.feedback.result(false, '只能在奖励或休整时整理背包。');
         if (this.scenario.runDeck && this.content.cards[card.kind].role !== 'supply')
             return this.feedback.result(false, '行囊只整理物资卡。');
         if (card.kind === 'attack' || card.kind === 'dodge')
@@ -125,9 +124,6 @@ export class InventoryRules {
         if (card.kind === 'cash' && this.state.phase !== 'rest')
             return this.feedback.result(false, '现金只能在休整节点删除。');
         this.state.cards.splice(index, 1);
-        this.feedback.log(
-            `已丢弃${this.content.cards[card.kind].name}。`
-        );
         this.promoteOverflow();
         return this.feedback.result(true, '卡牌已从本次探索中永久移除。');
     }

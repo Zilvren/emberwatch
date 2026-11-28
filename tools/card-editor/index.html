@@ -16,12 +16,13 @@
   </header>
   <nav class="workshop-nav" aria-label="工坊页面">
     <a href="/" data-page="cards">卡牌编辑</a>
+    <a href="/supplies" data-page="supplies">物资卡</a>
     <a href="/recipes" data-page="recipes">配方编辑</a>
     <label class="map-craft-test"><input id="map-craft-test" type="checkbox"> 试玩时解锁地图合成</label>
   </nav>
   <main id="workspace" class="workspace" aria-busy="true">
     <aside class="library" aria-label="卡牌库">
-      <div class="library-header"><span class="eyebrow">COLLECTION</span><div class="section-line"><h1>卡牌库 <span id="card-count" class="count">0</span></h1><div class="library-actions"><button id="add" class="icon-button" aria-label="新增卡牌" title="新增普通卡牌">＋</button><button id="add-supply" class="button quiet supply-add" aria-label="新增物资卡" title="新增物资卡">＋物资卡</button></div></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="搜索卡牌" placeholder="搜索名称或 ID" autocomplete="off"></label><label class="sr-only" for="filter">筛选卡牌</label><select id="filter"><option value="all">全部卡牌</option><option value="supply">物资卡</option><option value="damage">伤害</option><option value="block">格挡</option><option value="heal">修复</option><option value="equip">装备</option><option value="none">遗物</option></select></div>
+      <div class="library-header"><span class="eyebrow">COLLECTION</span><div class="section-line"><h1><span id="library-title">卡牌库</span> <span id="card-count" class="count">0</span></h1><div class="library-actions"><button id="add" class="icon-button" aria-label="新增卡牌" title="新增普通卡牌">＋</button><button id="add-supply" class="button quiet supply-add" aria-label="新增物资卡" title="新增物资卡">＋物资卡</button></div></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="搜索卡牌" placeholder="搜索名称或 ID" autocomplete="off"></label><label class="sr-only" for="filter">筛选卡牌</label><select id="filter"><option value="all">全部卡牌</option><option value="supply">物资卡</option><option value="damage">伤害</option><option value="block">格挡</option><option value="heal">修复</option><option value="equip">装备</option><option value="none">遗物</option></select></div>
       <div id="card-list" class="card-list" role="list" aria-label="卡牌列表"></div>
       <div class="library-footer"><span class="connection-dot"></span> 本地项目已连接<span id="library-note">项目配置</span></div>
     </aside>
@@ -30,12 +31,13 @@
       <div class="preview-stage">
         <div class="card-shadow"></div>
         <article class="game-card" id="preview-card" aria-label="当前卡牌预览">
-          <div class="card-top"><div class="card-cost"><span id="preview-cost">0</span><small id="preview-unit">体力</small></div><div class="card-title"><span id="preview-tag">生存卡牌</span><h3 id="preview-name">正在载入</h3></div></div>
+          <div class="card-top"><div class="card-cost"><span id="preview-cost">0</span><small id="preview-unit">体力</small></div><div class="card-title"><span id="preview-tag">生存卡牌</span><h3 id="preview-name">正在载入</h3><span id="preview-supply-value" hidden></span></div></div>
           <div class="card-illustration art-crop" id="preview-art"></div>
+          <div id="preview-weight-mark" role="img" hidden><span aria-hidden="true"></span></div>
           <div id="preview-keywords" class="card-keywords"></div>
           <div class="card-body"><span id="preview-type" class="card-type">攻击</span><p id="preview-effect" class="card-effect">正在读取卡牌数据</p><p id="preview-description" class="card-description"></p></div>
           <div id="preview-details" class="card-details" hidden><p id="preview-full-description"></p></div>
-          <div class="card-bottom"><button id="preview-detail-toggle" type="button" aria-expanded="false">查看说明</button><span id="preview-weight">负重 0</span><span id="preview-role" class="card-sr-only">普通牌</span></div>
+          <div class="card-bottom"><button id="preview-detail-toggle" type="button" aria-expanded="false">查看说明</button><span id="preview-weight"></span><span id="preview-role" class="card-sr-only">普通牌</span></div>
         </article>
         <div class="preview-caption"><span id="preview-id">—</span><span>编辑器预览 · 效果与游戏共用</span></div>
         <p id="preview-asset-note" class="preview-asset-note" role="status" hidden>部分卡面资源暂不可用。可继续配置牌组，或点击「重新载入」恢复预览。</p>

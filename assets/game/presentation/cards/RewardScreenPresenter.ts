@@ -42,12 +42,20 @@ export class RewardScreenPresenter {
                 previous.active = next.active = true;
                 this.view.button(screen, 'claim-supplies', '上一页', this.ui.rewardPage > 0);
                 this.view.button(screen, 'reward-bag', '下一页', (this.ui.rewardPage + 1) * 3 < choice.ids.length);
+            } else if (nodeDiscovery && reward?.cards.length && g.content.cards[reward.cards[0]].role === 'supply' &&
+                g.rewardZone(reward.cards[0]) === 'overflow') {
+                screen.getChildByName('reward-bag')!.active = true;
+                this.view.button(screen, 'reward-bag', '整理物资行囊', true);
             }
             screen.getComponent(RewardSelection)!.refresh(g, this.ui.rewardSelection, choice ? this.ui.rewardPage : 0);
-            this.view.button(screen, 'rewards-done', choice ? '略过选择' : '略过发现', true, 'secondary');
+            const cancelsPlay = choice?.mode === 'switch-stance' || choice?.mode === 'recover-stamina';
+            const discoveryChoice = choice?.mode === 'deck-discovery' || choice?.mode === 'fist-discovery';
+            this.view.button(screen, 'rewards-done',
+                cancelsPlay ? '取消出牌' : !choice || discoveryChoice ? '略过发现' : '略过选择', true, 'secondary');
             return;
         }
         this.view.button(screen, 'rewards-done', undefined, undefined, 'secondary');
+        this.view.button(screen, 'reward-bag', '查看行囊', true);
         {
             const r = g.rewards!,
                 battle = g.scenario.nodes[r.source]?.type === 'battle',

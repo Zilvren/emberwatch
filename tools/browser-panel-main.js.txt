@@ -2,9 +2,8 @@ await idle();let s=await state();assert(s.phase==='journal','Panel regression st
 await click('help');assert((await state()).overlay==='help','Help panel did not open');await screenshot('panel-in-game-help');
 await page.keyboard.press('Escape');await page.waitForTimeout(120);assert(!(await state()).overlay,'Escape did not close help');
 await page.keyboard.press('Enter');await page.waitForTimeout(120);assert((await state()).overlay==='help','Opener focus was not restored after closing help');await page.keyboard.press('Escape');await page.waitForTimeout(120);
-await click('log');assert((await state()).overlay==='log','Log panel did not open');await screenshot('panel-in-game-log');await page.keyboard.press('Escape');await page.waitForTimeout(120);
 await click('restart');s=await state();assert(s.overlay==='restart','Restart confirmation did not open');const revision=s.revision;
 const helpHit=(await state()).hits.find(h=>h.id==='help'),help=await point(helpHit.x+helpHit.width/2,helpHit.y+helpHit.height/2);await page.mouse.click(help.x,help.y);await page.waitForTimeout(120);assert((await state()).overlay==='restart','Backdrop did not block underlying HUD');
 await page.keyboard.press('Enter');await page.waitForTimeout(120);s=await state();assert(!s.overlay&&s.revision===revision,'Default confirmation focus must cancel without changing game state');
 await click('restart');await screenshot('panel-in-game-confirm');await page.keyboard.press('Escape');await page.waitForTimeout(120);assert(!(await state()).overlay,'Escape did not cancel restart');
-assert(runtimeErrors.length===0,'Panel runtime errors');return{passed:true,help:true,log:true,confirm:true,defaultCancel:true,hudBlocked:true,focusRestore:true,runtimeErrors};
+assert(runtimeErrors.length===0,'Panel runtime errors');return{passed:true,help:true,confirm:true,defaultCancel:true,hudBlocked:true,focusRestore:true,runtimeErrors};

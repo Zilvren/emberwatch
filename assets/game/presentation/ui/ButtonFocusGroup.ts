@@ -23,6 +23,7 @@ export class ButtonFocusGroup extends Component {
     @property modal = false;
     @property(Node) initialButton: Node | null = null;
     private focused: ButtonPresentation | null = null;
+    private keyboardFocus = false;
     private previous: ButtonFocusGroup | null = null;
     private held = new Set<number>();
     private shift = false;
@@ -64,7 +65,7 @@ export class ButtonFocusGroup extends Component {
             while (previous && !previous.enabledInHierarchy) previous = previous.previous;
             if (previous) {
                 activeGroups.set(scene, previous);
-                if (previous.focused?.node.activeInHierarchy && previous.focused.interactable)
+                if (previous.keyboardFocus && previous.focused?.node.activeInHierarchy && previous.focused.interactable)
                     previous.focused.setKeyboardFocus(true);
             } else activeGroups.delete(scene);
         }
@@ -115,10 +116,12 @@ export class ButtonFocusGroup extends Component {
         event.propagationStopped = true;
         if (this.node.scene) activeGroups.set(this.node.scene, this);
         this.focused?.setKeyboardFocus(false);
+        this.keyboardFocus = false;
         this.focused = event.button;
         this.clearHeld();
     }
     private setFocus(button: ButtonPresentation): void {
+        this.keyboardFocus = true;
         this.focused?.setKeyboardFocus(false);
         this.focused = button;
         button.setKeyboardFocus(true);

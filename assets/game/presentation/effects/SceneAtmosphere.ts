@@ -38,6 +38,30 @@ export class SceneAtmosphere extends Component {
     private query: MediaQueryList | null = null;
     private home = new Vec3();
     private backdropHome = new Vec3();
+    private authoredBackdrop: { height: number; y: number; x: number } | null = null;
+    /** Preserve the painted floor under the actors while covering the whole visible window. */
+    fitBackdrop(width: number, height: number, centerY = 0, floorY = 0): void {
+        const node = this.backdrop, frame = node?.getComponent(Sprite)?.spriteFrame;
+        const ui = node?.getComponent(UITransform);
+        if (!node || !frame || !ui) return;
+        if (!this.authoredBackdrop)
+            this.authoredBackdrop = { height: ui.height * node.scale.y, y: node.position.y, x: node.position.x };
+        const base = this.authoredBackdrop;
+        const aspect = frame.originalSize.width / frame.originalSize.height;
+        const floorFraction = Math.max(.1, Math.min(.9, .5 + (floorY - base.y) / base.height));
+        const coverHeight = Math.max(base.height, (width + 16 + 2 * Math.abs(base.x)) / aspect,
+            (height / 2 + floorY - centerY + 4) / floorFraction,
+            (height / 2 + centerY - floorY + 4) / (1 - floorFraction));
+        ui.setContentSize(coverHeight * aspect / node.scale.x, coverHeight / node.scale.y);
+        this.backdropHome.set(base.x, floorY + (.5 - floorFraction) * coverHeight, node.position.z);
+        node.setPosition(this.backdropHome);
+    }
+    setRestingHeight(y: number): void {
+        if (y === this.home.y) return;
+        Tween.stopAllByTarget(this.node);
+        this.home.y = y;
+        this.node.setPosition(this.home);
+    }
     onLoad(): void {
         this.home = this.node.position.clone();
         this.backdropHome = this.backdrop?.position.clone() ?? new Vec3();

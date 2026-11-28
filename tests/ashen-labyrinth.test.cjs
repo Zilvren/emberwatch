@@ -89,6 +89,198 @@ function resolveRoom(s) {
     if (s.view.phase === 'rest') ok(s.execute({ type: 'finish-rest' }));
 }
 
+function supplyFixture() {
+    const data = structuredClone(source);
+    const battery = { id: 'qa_battery', name: '测试电池', tag: '物资', role: 'supply',
+        chapter: 'ashen-labyrinth', cost: 0, initialCount: 0, reward: true, weight: 6, supplyValue: 4,
+        color: '#87a895', art: 'battery', text: '', effect: { type: 'none', amount: 0 } };
+    data.cards = data.cards.filter(card => card.role !== 'supply').concat(battery,
+        { ...battery, id: 'qa_voucher', name: '测试票券', art: 'cash', weight: 1, supplyValue: 6 });
+    return data;
+}
+
+test('labyrinth stock has positive carry weight and stays outside the combat discovery decks', () => {
+    const data = catalog.installCatalog(supplyFixture());
+    const goods = data.cards.filter(card => card.role === 'supply');
+    assert.ok(goods.every(card => card.weight > 0 && !catalog.REWARD_POOL.includes(card.id)));
+    for (const invalid of [
+        raw => { raw.cards.find(card => card.role === 'supply').weight = 0; },
+        raw => { raw.labyrinth.decks[0].cards.push(goods[0].id); },
+    ]) {
+        const raw = structuredClone(data);
+        invalid(raw);
+        assert.throws(() => catalog.validateCatalog(raw));
+    }
+    const legacy = new GameSession(17, undefined, RUN_DECK_SCENARIO);
+    assert.deepEqual(legacy.game.content.supplyPool, []);
+    const beforeLoot = structuredClone(source);
+    beforeLoot.cards = beforeLoot.cards.filter(card => card.role !== 'supply');
+    catalog.installCatalog(beforeLoot);
+    const disk = store();
+    const old = start(new GameSession(17, new SaveRepository(disk)));
+    const checkpoint = old.game.exportState();
+    catalog.installCatalog(data);
+    const upgraded = new GameSession(1, new SaveRepository(disk));
+    assert.ok(upgraded.restored);
+    assert.deepEqual(upgraded.game.exportState(), checkpoint);
+    ok(upgraded.execute({ type: 'enter-node', id: 'serviceDuct' }));
+    assert.equal(upgraded.game.content.cards[upgraded.view.rewards.cards[0]].role, 'supply');
+});
+
+test('a real labyrinth run banks loot once, keeps it through defeat, and redeems only the chosen copy', () => {
+    catalog.installCatalog(supplyFixture());
+    const disk = store();
+    const resume = () => new GameSession(42, new SaveRepository(disk));
+    let s = start(new GameSession(17, new SaveRepository(disk)));
+    const sites = s.view.scenario.nodes;
+    const lootRooms = path => path.filter(id => sites[id].supplyCard).length;
+    const plan = walkablePaths(s.view.expeditionMap).filter(path => path[1] === 'serviceDuct')
+        .sort((a, b) => lootRooms(b) - lootRooms(a))[0];
+    const brought = {};
+    for (const id of plan.slice(1)) {
+        ok(s.execute({ type: 'enter-node', id }));
+        if (!sites[id].supplyCard) {
+            resolveRoom(s);
+            continue;
+        }
+        const offer = s.game.exportState();
+        const kind = s.view.rewards.cards[0];
+        const weight = s.game.content.cards[kind].weight;
+        const beforeWeight = s.game.baseWeight;
+        const deck = s.view.usableCards;
+        s = resume();
+        assert.deepEqual(s.game.exportState(), offer);
+        ok(s.execute({ type: 'discover', kind }));
+        assert.equal(s.execute({ type: 'discover', kind }).ok, false);
+        assert.equal(s.execute({ type: 'redeem-supply', kind }).ok, false);
+        assert.equal(s.view.supplies, offer.supplies);
+        assert.deepEqual(s.view.usableCards, deck);
+        assert.deepEqual(resume().game.exportState(), s.game.exportState());
+        if (s.view.carriedCards.at(-1).zone === 'base') {
+            assert.equal(s.game.baseWeight, beforeWeight + weight);
+            brought[kind] = (brought[kind] ?? 0) + 1;
+        }
+    }
+    const balance = s.view.supplies;
+    assert.ok(Object.values(brought).reduce((sum, n) => sum + n, 0) >= 2);
+    s.advanceTime(1);
+    s.advanceTime(1);
+    assert.deepEqual(s.view.storedSupplies, brought);
+    assert.equal(s.view.supplies, balance);
+    assert.equal(s.view.carriedCards.length, 0);
+    assert.equal(s.view.cards.length, 12);
+    ok(s.execute({ type: 'continue-journal' }));
+    const kind = Object.keys(brought)[0];
+    const after = { ...brought };
+    if (--after[kind] === 0) delete after[kind];
+    s = resume();
+    ok(s.execute({ type: 'redeem-supply', kind }));
+    assert.equal(s.view.supplies, balance + s.game.content.cards[kind].supplyValue);
+    assert.deepEqual(s.view.storedSupplies, after);
+    assert.deepEqual(resume().game.exportState(), s.game.exportState());
+    ok(s.execute({ type: 'start', tier: 'emergency' }));
+    ok(s.execute({ type: 'enter-node' }));
+    ok(s.execute({ type: 'enter-node', id: 'serviceDuct' }));
+    ok(s.execute({ type: 'discover', kind: s.view.rewards.cards[0] }));
+    const path = walkablePaths(s.view.expeditionMap).find(path => path[1] === 'serviceDuct');
+    for (const id of path.slice(2)) {
+        ok(s.execute({ type: 'enter-node', id }));
+        if (s.view.phase === 'battle') break;
+        resolveRoom(s);
+    }
+    const battle = s.view.battle;
+    assert.ok(battle);
+    assert.ok([...battle.hand, ...battle.draw].every(card => s.game.content.cards[card.kind].role !== 'supply'));
+    while (s.view.battle) ok(s.execute({ type: 'end-turn' }));
+    assert.equal(s.view.phase, 'failure');
+    assert.equal(s.view.carriedCards.length, 0);
+    assert.deepEqual(resume().view.storedSupplies, after);
+});
+
+test('a full bag blocks pickup without consuming it and discarding can promote a stored-overflow card', () => {
+    const data = supplyFixture();
+    const kind = 'qa_battery';
+    for (const card of data.cards.filter(card => card.role === 'supply')) card.reward = card.id === kind;
+    catalog.installCatalog(data);
+    const disk = store(), repo = new SaveRepository(disk);
+    const s = start(new GameSession(17, repo));
+    ok(s.execute({ type: 'enter-node', id: 'serviceDuct' }));
+    const state = s.game.exportState();
+    for (let n = 0; n < 6; n++) {
+        state.cards.push({ id: 'card-' + ++state.nextId, kind, found: true, selected: false, zone: n === 5 ? 'overflow' : 'base' });
+    }
+    repo.save(state);
+    const loaded = new GameSession(1, new SaveRepository(disk));
+    assert.deepEqual(loaded.game.exportState(), state);
+    assert.equal(loaded.execute({ type: 'discover', kind }).ok, false);
+    assert.deepEqual(loaded.game.exportState(), state);
+    const carried = loaded.view.carriedCards;
+    ok(loaded.execute({ type: 'discard-card', id: carried[0].id }));
+    assert.equal(loaded.view.carriedCards.find(card => card.id === carried[5].id).zone, 'base');
+    ok(loaded.execute({ type: 'discover', kind }));
+    assert.equal(loaded.view.carriedCards.at(-1).zone, 'overflow');
+    assert.equal(loaded.view.overflowWeight, 6);
+    assert.equal(loaded.view.baseWeight, 30);
+    assert.deepEqual(new GameSession(1, new SaveRepository(disk)).game.exportState(), loaded.game.exportState());
+    // Resume just before the automatic return to verify the boundary with a full bag.
+    const returning = loaded.game.exportState();
+    returning.visited = walkablePaths(returning.expeditionMap).find(path => path[1] === 'serviceDuct');
+    repo.save(returning);
+    const home = new GameSession(1, new SaveRepository(disk));
+    home.advanceTime(1);
+    assert.deepEqual(home.view.storedSupplies, { [kind]: 5 });
+    assert.deepEqual(home.view.settlement.lostOverflow, ['测试电池']);
+    assert.equal(home.view.settlement.discoveredCards, 0);
+    const retuned = structuredClone(data);
+    retuned.cards.find(card => card.id === kind).supplyValue = 7;
+    catalog.installCatalog(retuned);
+    const retunedHome = new GameSession(1, new SaveRepository(disk));
+    assert.deepEqual(retunedHome.view.storedSupplies, { [kind]: 5 });
+    const balance = retunedHome.view.supplies;
+    ok(retunedHome.execute({ type: 'continue-journal' }));
+    ok(retunedHome.execute({ type: 'redeem-supply', kind }));
+    assert.equal(retunedHome.view.supplies, balance + 7);
+    const fullWallet = retunedHome.game.exportState();
+    fullWallet.supplies = 1000000000;
+    const treasuryStore = new SaveRepository(store());
+    treasuryStore.save(fullWallet);
+    const full = new GameSession(1, treasuryStore);
+    assert.equal(full.execute({ type: 'redeem-supply', kind }).ok, false);
+    assert.deepEqual(full.game.exportState(), fullWallet);
+});
+
+test('retuning or retiring loot preserves packed copies and pending offers across reloads', () => {
+    const data = supplyFixture(), kind = 'qa_battery';
+    data.cards.find(card => card.id === 'qa_voucher').reward = false;
+    catalog.installCatalog(data);
+    const disk = store(), s = start(new GameSession(17, new SaveRepository(disk)));
+    ok(s.execute({ type: 'enter-node', id: 'serviceDuct' }));
+    const retired = structuredClone(data);
+    retired.cards.find(card => card.id === kind).reward = false;
+    catalog.installCatalog(retired);
+    const offered = new GameSession(9, new SaveRepository(disk));
+    assert.ok(offered.restored);
+    ok(offered.execute({ type: 'discover', kind }));
+    assert.equal(offered.view.baseWeight, 6);
+    const tuned = structuredClone(retired);
+    tuned.cards.find(card => card.id === kind).weight = 25;
+    catalog.installCatalog(tuned);
+    const carried = new GameSession(1, new SaveRepository(disk));
+    assert.ok(carried.restored);
+    assert.equal(carried.view.baseWeight, 6);
+    assert.equal(carried.view.rewardZone(kind), 'overflow');
+    const empty = start(new GameSession(17));
+    ok(empty.execute({ type: 'enter-node', id: 'serviceDuct' }));
+    assert.equal(empty.view.rewards, null);
+    const removed = structuredClone(tuned);
+    removed.cards = removed.cards.filter(card => card.id !== kind);
+    catalog.installCatalog(removed);
+    const saved = disk.getItem('the-end.run.v1');
+    const blocked = new GameSession(1, new SaveRepository(disk));
+    assert.equal(blocked.restored, false);
+    assert.equal(disk.getItem('the-end.run.v1'), saved);
+});
+
 function hash(data) {
     const text = JSON.stringify(data);
     let result = 2166136261;

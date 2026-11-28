@@ -28,7 +28,7 @@ export class UIAuthoringBridge extends Component {
         if(!this.source.ready)throw new Error('Source presentation did not load its native atlas frames.');
         this.library=this.container('Library',this.node);UIAuthoringScope.enabled=true;this.instrument();
         for(const phase of ['journal','map','battle','rewards','rest','shelter','day2','failure'])this.capture(phase);
-        this.capturePopup('bag');this.capturePopup('help');this.capturePopup('log');this.capturePopup('restart');
+        this.capturePopup('bag');this.capturePopup('help');this.capturePopup('restart');
         this.templates();this.makeAnimationAssets();
         const manifest:any={pages:{},templates:[],clips:Object.keys(this.clips)};
         for(const root of this.library.children){

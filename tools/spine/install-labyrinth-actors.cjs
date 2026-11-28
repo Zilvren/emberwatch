@@ -15,9 +15,12 @@ const legacy = read('assets/prefabs/actors/PlayerActor.prefab');
 const sharedSkeleton = cleanComponent(legacy.find((item) => item.__type__ === 'sp.Skeleton'));
 const motionNames = ['idle', 'prepare', 'attack', 'hurt', 'death'];
 const enemies = {
-    'ash-moth': { aim: 'thorax', contact: 'head', localTip: 23, x: 310, y: -119, scale: 1.02 },
-    'stone-claw': { aim: 'hull', contact: 'palm', localTip: 95, x: 324, y: -182, scale: .91 },
-    'veil-idol': { aim: 'robe', aimShift: 92, contact: 'left-hand', localTip: 49, x: 336, y: -189, scale: 1.05, flight: .17 },
+    'ash-moth': { aim: 'thorax', contact: 'head', localTip: 23, x: 310, y: -119, scale: 1.02,
+        intentAnchor: [-18, 341], vitalsAnchor: [312, 32] },
+    'stone-claw': { aim: 'hull', contact: 'palm', localTip: 95, x: 324, y: -182, scale: .91,
+        intentAnchor: [20, 255], vitalsAnchor: [292, 95] },
+    'veil-idol': { aim: 'robe', aimShift: 92, contact: 'left-hand', localTip: 49, x: 336, y: -189, scale: 1.05, flight: .17,
+        intentAnchor: [-12, 400], vitalsAnchor: [196, 102] },
 };
 const absolute = (file) => path.join(root, file);
 const save = (file, value) => fs.writeFileSync(absolute(file), JSON.stringify(value, null, 2) + '\n');
@@ -148,6 +151,8 @@ function enemy(id, spec) {
     const anchor = graph.node('ImpactPoint', actor, 0, 150, 1, 1);
     graph.component(actor, 'cc.Animation', { _clips: [], _defaultClip: null, playOnLoad: false });
     graph.component(actor, script('ActorPresentation'), { actorId: id, spineRig: ref(rig), impactAnchor: ref(anchor) });
+    graph.node('IntentAnchor', actor, ...spec.intentAnchor, 1, 1);
+    graph.node('VitalsAnchor', actor, ...spec.vitalsAnchor, 1, 1);
     graph.save();
     ensureMeta(file, 'prefab');
     return file;

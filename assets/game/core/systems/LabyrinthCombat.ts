@@ -54,8 +54,7 @@ export function consumeCalibration(battle: Battle): void {
 export function applyLabyrinthEffect(
     battle: Battle,
     card: CardDefinition,
-    draw: (count: number) => void,
-    log: (message: string) => void
+    draw: (count: number) => void
 ): void {
     const calm = battle.calm, effect = card.effect.labyrinth;
     if (!calm || !effect) return;
@@ -71,7 +70,6 @@ export function applyLabyrinthEffect(
             if (calm.persistent + calm.temporary === calm.limit) {
                 calm.deferred = 'scheduled';
                 draw(calm.drawOnDefer);
-                log('敌人原定行动已暂缓。结束回合后，你先再行动一次。');
             }
             break;
         }

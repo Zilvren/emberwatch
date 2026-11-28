@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Graphics, Node, UITransform } from 'cc';
+import { _decorator, Color, Component, Graphics, Node, Sprite, UITransform } from 'cc';
 const { ccclass, property, requireComponent, executeInEditMode } = _decorator;
 
 /** Quiet paper geometry. Edge variation is fixed, so it never jitters between frames. */
@@ -11,6 +11,7 @@ export class PaperPanel extends Component {
     @property(Color) innerLine = new Color(179, 166, 142, 110);
     @property lineWidth = 1.2;
     @property corner = 5;
+    @property(Sprite) artwork: Sprite | null = null;
     fieldStock = false;
     metalTrim = false;
     onEnable(): void {
@@ -24,10 +25,14 @@ export class PaperPanel extends Component {
         const g = this.getComponent(Graphics),
             size = this.getComponent(UITransform)?.contentSize;
         if (!g || !size) return;
+        g.clear();
+        if (this.artwork) {
+            this.artwork.getComponent(UITransform)?.setContentSize(size);
+            return;
+        }
         const w = size.width / 2,
             h = size.height / 2,
             r = this.corner;
-        g.clear();
         g.fillColor = this.fill;
         g.strokeColor = this.line;
         g.lineWidth = this.lineWidth;

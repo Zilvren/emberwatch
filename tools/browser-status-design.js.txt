@@ -5,8 +5,8 @@ const point=async h=>{const b=await page.locator('#GameCanvas').boundingBox(),s=
 const click=async(id,bar=-1)=>{const h=(await state()).hits.find(h=>h.id===id&&h.bar===bar);assert(h,'Missing '+id+' bar '+bar);const p=await point(h);await page.mouse.click(p.x,p.y);await page.waitForTimeout(120);};
 const live=async()=>(await state()).bars[3];const capture=async name=>{await page.mouse.move(24,26);await page.waitForTimeout(140);await page.screenshot({path:'output/playwright/'+name+'.png'});};
 let s=await state();assert(s.bars.length===4&&s.bars.every(b=>b.active),'Four native prefab examples required');assert(s.bars[1].values.healthTone==='warning'&&s.bars[2].values.healthTone==='danger','Warning examples missing');assert(s.bars[3].values.supplies==='12345678','Large value was rounded');await capture('status-gallery');
-for(const id of ['bag','log','help','audio','restart'])await click(id,3);
-s=await state();for(const id of ['bag','log','help','audio','restart'])assert(s.counters[id]===1,'Native action did not dispatch once: '+id);assert((await live()).values.audio==='声音关','Audio label did not update');
+for(const id of ['bag','help','audio','restart'])await click(id,3);
+s=await state();for(const id of ['bag','help','audio','restart'])assert(s.counters[id]===1,'Native action did not dispatch once: '+id);assert((await live()).values.audio==='声音关','Audio label did not update');
 await click('supplies-state');assert((await live()).values.suppliesTone==='warning','Low supply state missing');await click('supplies-state');assert((await live()).values.suppliesTone==='danger'&&(await live()).values.actionsEnabled,'Empty supplies disabled unrelated actions');
 await click('health-state');assert((await live()).values.healthRatio===.2,'Health segments did not follow value');await click('health-state');assert((await live()).values.healthRatio===0&&(await live()).values.healthTitle.includes('感染临界'),'Critical health text missing');
 await click('carry-state');assert((await live()).values.carryHint==='携带已满','Full carrying label missing');await click('carry-state');assert((await live()).values.carryHint==='暂存 4 / 10','Overflow label missing');

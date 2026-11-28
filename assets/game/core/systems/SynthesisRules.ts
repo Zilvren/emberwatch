@@ -86,7 +86,6 @@ export class SynthesisRules {
             ({ card, count }) => `${this.content.cards[card].name} ×${count}`
         );
         const message = `已合成 ${products.join('、')}，产物已加入本局卡组。`;
-        this.feedback.log(message);
         const result = this.feedback.result(true, message);
         this.previous = {
             cards: previousCards,
@@ -109,7 +108,6 @@ export class SynthesisRules {
         this.state.synthesisMaterialBoostedRecipes = this.previous.materialBoostedRecipes;
         this.close();
         const message = '已撤销最近一次合成并归还材料。';
-        this.feedback.log(message);
         return this.feedback.result(true, message);
     }
 }

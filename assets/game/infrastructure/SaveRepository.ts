@@ -26,7 +26,8 @@ const tideCards = new Set(['follow_up', 'shield_push', 'scrap_shiv', 'rummage'])
 /** Platform adapter. Storage writes are atomic per key; the previous valid save is retained. */
 export class SaveRepository implements RunPersistence {
     readonly content = createCardSet();
-    private readonly legacyCards = this.content.catalog.cards.filter((card) => !card.chapter);
+    private readonly runDeckCards = this.content.catalog.cards.filter((card) => !card.chapter);
+    private readonly legacyCards = this.runDeckCards.filter((card) => !card.fist);
     private readonly previousCards = this.legacyCards.filter((card) => !card.synthesisOnly);
     private readonly previousRecipes = this.content.catalog.recipes.filter((recipe) =>
         [...recipe.materials, ...recipe.products].every(({ card }) => !this.content.cards[card].synthesisOnly)
@@ -43,6 +44,7 @@ export class SaveRepository implements RunPersistence {
         ? [this.fieldHash(), this.fieldHash(this.originalFieldCards)]
         : [];
     private readonly previousRunDeckHash = this.runDeckHash(this.previousCards, this.previousRecipes);
+    private readonly preFistRunDeckHash = this.runDeckHash(this.legacyCards);
     private readonly upstreamHash = this.runDeckHash(
         this.previousCards.filter((card) => !tideCards.has(card.id)), this.previousRecipes
     );
@@ -54,19 +56,29 @@ export class SaveRepository implements RunPersistence {
         return hash(JSON.stringify({ version, fixedReward, cards,
             ...(includeExpedition && expedition ? { expedition } : {}) }));
     }
-    private runDeckHash(cards = this.legacyCards, recipes = this.content.catalog.recipes): string {
+    private runDeckHash(cards = this.runDeckCards, recipes = this.content.catalog.recipes): string {
         const { version, fixedReward } = this.content.catalog;
         return hash(JSON.stringify({ version, fixedReward, cards, recipes }));
     }
-    private catalogHash(scenario: GameScenario): string {
+    private catalogHash(scenario: GameScenario, state: GameState): string {
         if (scenario.runDeck) return this.runDeckHash();
         if (!scenario.labyrinth) return this.fieldHash();
         // The save already carries the active discovery pool and the candidates on screen.
         const { version, labyrinth, cards } = this.content.catalog;
+        // Unrelated loot, prices and drop rates can be edited while a campaign is saved.
+        // Protect the identities in this save and the weights that its bag was packed with.
+        const carried = new Map(state.cards.map(card => [card.kind, card.packedWeight ?? this.content.cards[card.kind]?.weight]));
+        const referenced = new Set([...carried.keys(), ...Object.keys(state.storedSupplies ?? {}), ...(state.rewards?.cards ?? [])]);
+        const supplies = [...referenced].filter(id => this.content.cards[id]?.role === 'supply').sort()
+            .map(id => carried.has(id) ? [id, carried.get(id)] : [id]);
+        const usesFistCards = [...referenced, ...(state.discoveryPool ?? []), ...(state.fistUnlocks ?? [])]
+            .some((kind) => !!this.content.cards[kind]?.fist);
         return hash(JSON.stringify({
             version,
             starter: labyrinth?.starter,
-            cards: cards.filter((card) => card.chapter === 'ashen-labyrinth'),
+            cards: cards.filter((card) => card.chapter === 'ashen-labyrinth' && card.role !== 'supply'),
+            ...(supplies.length ? { supplies } : {}),
+            ...(usesFistCards ? { fistCards: cards.filter((card) => !!card.fist) } : {}),
         }));
     }
     private blocked = false;
@@ -76,12 +88,17 @@ export class SaveRepository implements RunPersistence {
         private readonly storage: SaveStorage,
         readonly key = 'the-end.run.v1'
     ) {}
-    private matchesCatalog(catalogHash: string, scenario: GameScenario): boolean {
-        if (catalogHash === this.catalogHash(scenario)) return true;
+    private matchesCatalog(catalogHash: string, scenario: GameScenario, state: GameState): boolean {
+        if (catalogHash === this.catalogHash(scenario, state)) return true;
         if (scenario.labyrinth) return false;
-        if (scenario.runDeck)
+        if (scenario.runDeck) {
+            if (catalogHash === this.preFistRunDeckHash && !state.fistUnlocks &&
+                !state.cards?.some((card) => this.content.cards[card.kind]?.fist) &&
+                !state.rewards?.cards?.some((kind) => this.content.cards[kind]?.fist))
+                return true;
             return scenario.version === RUN_DECK_SCENARIO.version &&
                 (catalogHash === this.previousRunDeckHash || catalogHash === this.upstreamHash);
+        }
         if (this.priorTideHashes.indexOf(catalogHash) >= 0) return true;
         return !scenario.fieldDeck &&
             (catalogHash === this.upstreamHash || this.preFieldHashes.indexOf(catalogHash) >= 0);
@@ -107,7 +124,7 @@ export class SaveRepository implements RunPersistence {
         } catch {
             throw new SaveReadError('存档的章节版本暂不受支持，原存档已保留。', true);
         }
-        if (!this.matchesCatalog(body.catalogHash, scenario))
+        if (!this.matchesCatalog(body.catalogHash, scenario, state))
             throw new SaveReadError(
                 '卡牌配置已改变，未加载或覆盖原存档。可恢复原配置，或通过“重开”开始新进度。',
                 true
@@ -157,7 +174,7 @@ export class SaveRepository implements RunPersistence {
                 format: 'the-end-save',
                 version: 4,
                 savedAt: new Date().toISOString(),
-                catalogHash: this.catalogHash(getScenario(state.scenarioId, state.scenarioVersion)),
+                catalogHash: this.catalogHash(getScenario(state.scenarioId, state.scenarioVersion), state),
                 state: validateGameState(state, this.content.cards),
             };
             const encoded = JSON.stringify({ ...body, checksum: hash(JSON.stringify(body)) });

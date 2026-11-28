@@ -31,6 +31,7 @@ export type NodeDefinition = NodeDefinitionBase &
               supplies: readonly [number, number];
               cardReward: 'fixed' | 'random';
               discover?: boolean;
+              supplyCard?: true;
           }
     );
 export interface GameScenario {
@@ -53,6 +54,10 @@ export interface GameScenario {
     routes: Record<Route, NodeKind[]>;
     routeDescriptions?: Record<Route, string>;
     enemies: Record<EnemyId, EnemyDefinition>;
+}
+
+export function supportsFistCombos(scenario: GameScenario): boolean {
+    return scenario.battleResource === 'stamina' && (!!scenario.runDeck || !!scenario.labyrinth);
 }
 
 // Existing teaching content is the first authored scenario, not a global game limit.
@@ -207,6 +212,7 @@ function ashenScavengeSites(titles: Readonly<Record<string, string>>, discover: 
         sites[id] = {
             type: 'scavenge', title: titles[id], icon: discover ? 'scavenge' : 'supply',
             cost: 0, supplies: discover ? [0, 1] : [1, 2], cardReward: 'random', discover,
+            ...(discover ? {} : { supplyCard: true }),
         };
     }
     return sites;
@@ -230,7 +236,7 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
         lampPassage: { type: 'battle', title: '悬灯窄道', icon: 'battle', enemyId: 'ash-moth' },
         fallenShelves: { type: 'scavenge', title: '倒架储室', icon: 'scavenge', cost: 0, supplies: [2, 3], cardReward: 'random', discover: true },
         ashGallery: { type: 'battle', title: '灰烬长廊', icon: 'battle', enemyId: 'stone-claw' },
-        serviceDuct: { type: 'scavenge', title: '检修暗槽', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random' },
+        serviceDuct: { type: 'scavenge', title: '检修暗槽', icon: 'scavenge', cost: 0, supplies: [1, 2], cardReward: 'random', supplyCard: true },
         abandonedStall: { type: 'scavenge', title: '空置货摊', icon: 'supply', cost: 0, supplies: [2, 2], cardReward: 'random', discover: true },
         edgeCache: { type: 'scavenge', title: '门缝暗格', icon: 'scavenge', cost: 0, supplies: [0, 1], cardReward: 'random', discover: true },
         tinLocker: { type: 'scavenge', title: '铁皮储柜', icon: 'supply', cost: 0, supplies: [1, 2], cardReward: 'random', discover: true },

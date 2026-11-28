@@ -9,7 +9,7 @@ for(const variant of ['primary','secondary','quiet','danger']){
  const g=new Graph(file,'Button_'+variant);g.root=1;button(g,'Button_'+variant,{primary:'继续探索',secondary:'返回',quiet:'查看记录',danger:'放弃物品'}[variant],0,0,180,48,variant);g.graph[g.root]._parent=null;g.save();
 }
 const primaryIds=new Set(['journal-start','end-turn','rewards-done','rest-done','shelter-done','modal-confirm']);
-function variantFor(id){if(id==='restart'||id.startsWith('discard-'))return 'danger';if(primaryIds.has(id))return 'primary';if(['help','log','audio','modal-cancel','modal-close','bag-prev','bag-next'].includes(id))return 'quiet';return 'secondary';}
+function variantFor(id){if(id==='restart'||id.startsWith('discard-'))return 'danger';if(primaryIds.has(id))return 'primary';if(['help','audio','modal-cancel','modal-close','bag-prev','bag-next'].includes(id))return 'quiet';return 'secondary';}
 let migrated=0;
 function adopt(folder){for(const item of fs.readdirSync(folder,{withFileTypes:true})){const file=path.join(folder,item.name);if(item.isDirectory()){if(item.name!=='buttons')adopt(file);continue;}if(!/\.(prefab|scene)$/.test(item.name)||item.name==='ButtonDesignReview.scene')continue;
  const relative=path.relative(root,file).replaceAll('\\','/'),data=read(relative),g=new Graph(relative,'Existing');g.graph=data;g.root=g.prefab?data[0].data.__id__:data.findIndex(o=>o.__type__==='cc.Node'&&o._name==='Canvas');let dirty=false;

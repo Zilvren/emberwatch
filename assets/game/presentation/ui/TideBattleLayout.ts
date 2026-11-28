@@ -1,52 +1,44 @@
 import { Color, Graphics, Node, UITransform, Vec3 } from 'cc';
 import { ActorPresentation } from '../actors/ActorPresentation';
+import { HandPresentation } from '../cards/HandPresentation';
+import { SceneAtmosphere } from '../effects/SceneAtmosphere';
+import { battleWindowLayout } from './BattleWindowLayout';
 
-/** Register the HUD against the low buoy or the hovering rotor, using the same native inputs and labels. */
+/** Position the encounter HUD against the active actor's resting pose. */
 export class TideBattleLayout {
-    private readonly originals = new Map<
-        Node,
-        { position: Vec3; scale: Vec3; width: number; height: number }
-    >();
-    private plaque: Node | null = null;
+    private readonly originalActors = new Map<Node, { position: Vec3; scale: Vec3 }>();
     private instrumentIcon: Node | null = null;
-    private mode = 'legacy';
+    private mode = '';
+    private frame = battleWindowLayout(1440, 900);
+    private enemy: ActorPresentation | null = null;
+    private field = false;
+    private labyrinth = false;
     constructor(private readonly screen: Node) {}
-    show(field: boolean, rotor: boolean, labyrinth = false): void {
-        const mode = labyrinth ? 'labyrinth' : field ? (rotor ? 'rotor' : 'buoy') : 'legacy';
+    fitWindow(frame: ReturnType<typeof battleWindowLayout>): void {
+        if (frame.width === this.frame.width && frame.height === this.frame.height && frame.scale === this.frame.scale) return;
+        this.screen.getChildByName('Hand')!.getComponent(HandPresentation)!.cancelGestures();
+        this.frame = frame;
+        this.placeInWindow();
+    }
+    show(enemy: ActorPresentation, field: boolean, labyrinth: boolean): void {
+        const mode = (labyrinth ? 'labyrinth/' : field ? 'tide/' : 'legacy/') + enemy.actorId;
         if (mode === this.mode) return;
         this.mode = mode;
-        for (const [node, before] of this.originals) {
+        this.enemy = enemy;
+        this.field = field;
+        this.labyrinth = labyrinth;
+        for (const [node, before] of this.originalActors) {
             node.setPosition(before.position);
             node.setScale(before.scale);
-            node.getComponent(UITransform)?.setContentSize(before.width, before.height);
         }
+        const slot = this.screen.getChildByName('WeaponSlot')!;
+        const oldIcon = slot.getChildByName('Pixel icon')!;
+        oldIcon.active = !field;
         if (!field) {
-            if (this.plaque) this.plaque.active = false;
             if (this.instrumentIcon) this.instrumentIcon.active = false;
-            this.screen.getChildByName('WeaponSlot')!.getChildByName('Pixel icon')!.active = true;
+            this.placeInWindow();
             return;
         }
-        const place = (name: string, x: number, y: number, width?: number, height?: number) => {
-            const node = this.screen.getChildByName(name)!;
-            this.remember(node);
-            node.setPosition(x, y, 0);
-            if (width && height) node.getComponent(UITransform)!.setContentSize(width, height);
-            return node;
-        };
-        const y = labyrinth ? 309 : rotor ? 315 : 177;
-        place('banner-text1', 272, y, 162, 33);
-        place('battle-text5', 438, y, 153, 28);
-        place('enemyTrack', 350, y - 20, 308, 4);
-        place('enemyFill', 350, y - 20);
-        place('battle-text0', 265, y - 44, 152, 30);
-        place('battle-text1', 430, y - 44, 172, 28);
-        if (labyrinth) place('enemy-target', 325, 22, 390, 380);
-        else place('enemy-target', 350, rotor ? 20 : -68, rotor ? 278 : 303, rotor ? 398 : 213);
-        place('Hand', 0, -306).setScale(0.93, 0.93, 1);
-        place('battle-text9', 0, -151);
-        const slot = place('WeaponSlot', 23, 170);
-        const oldIcon = slot.getChildByName('Pixel icon')!;
-        oldIcon.active = false;
         if (!this.instrumentIcon) {
             this.instrumentIcon = new Node('TideInstrument');
             this.instrumentIcon.layer = slot.layer;
@@ -66,8 +58,9 @@ export class TideBattleLayout {
         this.instrumentIcon.active = true;
         const world = this.screen.getChildByName('World')!;
         for (const actor of world.getComponentsInChildren(ActorPresentation)) {
-            this.remember(actor.node);
-            const original = this.originals.get(actor.node)!.position;
+            if (!this.originalActors.has(actor.node))
+                this.originalActors.set(actor.node, { position: actor.node.position.clone(), scale: actor.node.scale.clone() });
+            const original = this.originalActors.get(actor.node)!.position;
             if (labyrinth) {
                 if (actor.actorId === 'player') {
                     actor.node.setPosition(-320, -168, original.z);
@@ -76,45 +69,50 @@ export class TideBattleLayout {
             } else if (['player', 'wanderer', 'brute'].indexOf(actor.actorId) >= 0)
                 actor.node.setPosition(original.x, original.y + (actor.actorId === 'brute' ? 39 : 28), original.z);
         }
-        if (!this.plaque) {
-            this.plaque = new Node('IntentPlaque');
-            this.plaque.layer = this.screen.layer;
-            this.plaque.parent = this.screen;
-            this.plaque.setSiblingIndex(world.getSiblingIndex() + 1);
-            this.plaque.addComponent(Graphics);
-        }
-        const g = this.plaque.getComponent(Graphics)!;
-        g.clear();
-        g.fillColor = labyrinth ? new Color(35, 28, 45, 239) : new Color(30, 37, 49, 226);
-        g.strokeColor = labyrinth ? new Color(132, 108, 122, 230) : new Color(172, 179, 172, 165);
-        g.lineWidth = 1;
-        g.moveTo(-164, 20);
-        g.lineTo(159, 20);
-        g.lineTo(170, 10);
-        g.lineTo(170, -53);
-        g.lineTo(159, -63);
-        g.lineTo(-158, -63);
-        g.lineTo(-170, -51);
-        g.lineTo(-170, 13);
-        g.close();
-        g.fill();
-        g.stroke();
-        g.strokeColor = labyrinth ? new Color(215, 171, 131, 240) : new Color(116, 200, 186, 230);
-        g.lineWidth = 2;
-        g.moveTo(-164, 10);
-        g.lineTo(-164, -17);
-        g.stroke();
-        this.plaque.active = true;
-        this.plaque.setPosition(350, y, 0);
+        this.placeInWindow();
     }
-    private remember(node: Node): void {
-        if (this.originals.has(node)) return;
-        const ui = node.getComponent(UITransform);
-        this.originals.set(node, {
-            position: node.position.clone(),
-            scale: node.scale.clone(),
-            width: ui?.width ?? 0,
-            height: ui?.height ?? 0,
-        });
+    private placeInWindow(): void {
+        const enemy = this.enemy;
+        if (!enemy) return;
+        const f = this.frame, a = f.actorScale;
+        const child = (name: string) => this.screen.getChildByName(name)!;
+        const root = this.screen.getComponent(UITransform)!;
+        this.screen.setScale(f.scale, f.scale, 1);
+        root.setContentSize(f.width, f.height);
+        child('SceneEdgeShade').getComponent(UITransform)!.setContentSize(f.width, f.height);
+        const world = child('World'), atmosphere = world.getComponent(SceneAtmosphere)!;
+        world.setScale(a, a, 1);
+        atmosphere.setRestingHeight(f.worldY);
+        atmosphere.fitBackdrop(f.width / a, f.height / a, -f.worldY / a, -168);
+
+        const side = enemy.node.getChildByName('VitalsAnchor');
+        const hpX = side ? Math.min(f.healthX, root.convertToNodeSpaceAR(side.worldPosition).x) : f.healthX;
+        child('PlayerVitals').setPosition(-hpX, f.healthY);
+        child('EnemyVitals').setPosition(hpX, f.healthY);
+        const crown = enemy.node.getChildByName('IntentAnchor');
+        const intent = child('EnemyIntent'), rotor = enemy.actorId === 'brute';
+        if (crown) intent.setWorldPosition(crown.worldPosition);
+        else intent.setPosition(enemy.node.position.x * a, f.worldY + (this.field && !rotor ? 102 : 266) * a);
+        const target = child('enemy-target');
+        const box = this.labyrinth ? [enemy.node.position.x + 15, 22, 390, 380]
+            : this.field ? [350, rotor ? 20 : -68, rotor ? 278 : 303, rotor ? 398 : 213]
+            : [350, 45, 380, 520];
+        target.setPosition(box[0] * a, box[1] * a + f.worldY);
+        target.getComponent(UITransform)!.setContentSize(box[2] * a, box[3] * a);
+
+        child('drawPile').setPosition(-f.pileX, f.pileY);
+        child('discardPile').setPosition(f.pileX, f.pileY);
+        child('StaminaGauge').setPosition(f.energyX, f.actionY);
+        child('end-turn').setPosition(f.endX, f.actionY);
+        const hand = child('Hand'), handScale = this.field ? .93 : 1;
+        hand.setPosition(f.handX, f.handY);
+        hand.setScale(handScale, handScale, 1);
+        hand.getComponent(HandPresentation)!.fitWidth(f.handWidth / handScale);
+        const playArea = child('PlayArea'), bottom = f.handY + 132, top = f.height / 2 - 85;
+        playArea.setPosition(0, (bottom + top) / 2);
+        playArea.getComponent(UITransform)!.setContentSize(f.width - 32, top - bottom);
+        child('banner-text2').setPosition(-f.width / 2 + 354, f.height / 2 - 137);
+        const weaponY = f.stacked ? f.height / 2 - 146 : this.field ? 170 : 0;
+        child('WeaponSlot').setPosition(720 - f.width / 2 + (this.field ? 23 : 0), weaponY);
     }
 }

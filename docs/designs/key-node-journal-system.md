@@ -1,5 +1,9 @@
 # The end 关键节点日志与探索时间
 
+## 2026-11-28 · 战斗行动记录下线
+
+《The end》已按用户要求移除「本日行动记录」及写入存档的行动流水。营地剧情继续保存关键节点、固定文案 ID、发生天数和已读标记。旧探索续局时沿用这些字段及原有战斗牌序。兼容读取见 `assets/game/core/state/GameState.ts`，节点触发见 `assets/game/core/systems/JournalRules.ts`，恢复回归见 `tests/session-save.test.cjs`。
+
 ## 2026-11-22 · 血量与失败返营
 
 已确认并实装。血量归零当次即进入失败页，正式探索推进一天并保留已记录的关键日志，教学失败仍留在第 1 天。从失败页返营时重新获得初始血量、物资和牌组。版本 3 的存档保留旧日志的实际日期与已读情况。当前实现见 `assets/game/core/SurvivalGame.ts` 和 `assets/game/application/GameSession.ts`，验证见 `docs/game-studios-evidence.json`。
@@ -7,7 +11,7 @@
 - 项目：The end，`D:/qsrizhi/emberwatch`。
 - 日期：2026-11-16，Asia/Hong_Kong。
 - 状态：循环与失败恢复规则已由用户确认；已实现，验收见 `docs/core-loop-verification.json`。现有文案是首批内容，后续剧情尚未定稿。
-- 归档目标：`viking://~/resources/projects/the-end/designs/key-node-journal-system.md`。OpenViking 无可调用的检索工具，诊断确认无客户端配置、127.0.0.1:1933 拒绝连接，本次未同步；待办见 `docs/openviking-sync-pending.json`。
+- 归档于 `viking://~/resources/projects/the-end/designs/key-node-journal-system.md`。2026-11-28 已回读核对全文。
 
 ## 已确认规则
 

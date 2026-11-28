@@ -65,7 +65,7 @@ export function bindRecipeEditor({ getDraft, renderValidation, escape, confirm }
             const group = (side, title) => `
                 <fieldset class="recipe-side"><legend>${title}</legend>
                   ${recipe[side].map(({ card, count }, index) => {
-                      const choices = draft.cards.filter(definition => !definition.chapter && isBattleCard(definition) && (side === 'products' || definition.canSynthesize));
+                      const choices = draft.cards.filter(definition => !definition.chapter && definition.fist?.type !== 'finisher' && isBattleCard(definition) && (side === 'products' || definition.canSynthesize));
                       const invalid = card && !choices.some(choice => choice.id === card);
                       return `<div class="recipe-input-row" data-side="${side}" data-row="${index}">
                         <label class="field"><span>${title}卡牌</span><select aria-label="${title}卡牌" data-recipe-field="card">

@@ -1,6 +1,5 @@
 import { _decorator, Component, instantiate, Node, Prefab, UITransform } from 'cc';
 import type { GameReadModel } from '../../core/GameReadModel';
-import { Battle } from '../../core/SurvivalGame';
 import { CardInteraction } from './CardInteraction';
 import { CardPresentation } from './CardPresentation';
 const { ccclass, property } = _decorator;
@@ -15,6 +14,7 @@ export class HandPresentation extends Component {
     @property hoverScale = 1.025;
     private cards = new Map<string, CardPresentation>();
     private layoutKey = '';
+    private availableWidth = Infinity;
     private game: GameReadModel | null = null;
     private selected = '';
     private locked = false;
@@ -42,7 +42,7 @@ export class HandPresentation extends Component {
                 card.node.destroy();
                 this.cards.delete(id);
             }
-        hand.forEach((entry, i) => {
+        hand.forEach(entry => {
             let card = this.cards.get(entry.id);
             if (!card) {
                 if (!this.cardTemplate) throw new Error('Hand card prefab is not assigned.');
@@ -84,19 +84,30 @@ export class HandPresentation extends Component {
             );
             card.setSelected(selected === entry.id);
             card.node.getComponent(CardInteraction)?.sync();
-            if (key !== this.layoutKey) {
-                const size = card.node.getComponent(UITransform)!.contentSize,
-                    mid = (hand.length - 1) / 2;
-                card.node.setParent(this.node);
-                card.node.setPosition(
-                    (i - mid) * (size.width + this.spacing),
-                    -Math.abs(i - mid) * this.fanCurve,
-                    0
-                );
-                card.node.angle = (mid - i) * this.fanAngle;
-            }
         });
+        if (key !== this.layoutKey) this.arrange();
         this.layoutKey = key;
+    }
+    fitWidth(width: number): void {
+        if (this.availableWidth === width) return;
+        this.availableWidth = width;
+        this.arrange();
+    }
+    cancelGestures(): void {
+        for (const card of this.cards.values()) card.getComponent(CardInteraction)?.cancelGesture();
+    }
+    private arrange(): void {
+        const hand = this.game?.battle?.hand ?? [], middle = (hand.length - 1) / 2;
+        hand.forEach((entry, i) => {
+            const card = this.cards.get(entry.id);
+            if (!card) return;
+            card.getComponent(CardInteraction)?.cancelGesture();
+            const width = card.node.getComponent(UITransform)!.width;
+            const step = Math.min(width + this.spacing, (this.availableWidth - width - 22) / Math.max(1, hand.length - 1));
+            card.node.setParent(this.node);
+            card.node.setPosition((i - middle) * step, -Math.abs(i - middle) * this.fanCurve);
+            card.node.angle = (middle - i) * this.fanAngle;
+        });
     }
     getCard(id: string): CardPresentation | null {
         return this.cards.get(id) ?? null;

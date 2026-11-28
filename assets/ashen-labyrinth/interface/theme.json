@@ -16,6 +16,14 @@
     "danger": "#f2aa8e",
     "disabled": "#312833"
   },
+  "paintedControls": {
+    "normal": "#f5eff2",
+    "hover": "#ffffff",
+    "focus": "#ffffff",
+    "pressed": "#d7c8d4",
+    "disabled": "#a69aaa",
+    "ink": "#382b3b"
+  },
   "button": {
     "height": 48,
     "compactHeight": 38,

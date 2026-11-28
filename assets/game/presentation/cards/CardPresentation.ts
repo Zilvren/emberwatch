@@ -4,10 +4,12 @@ import {
     AnimationClip,
     Color,
     Component,
+    instantiate,
     JsonAsset,
     Label,
     Mask,
     Node,
+    Prefab,
     ScrollView,
     Sprite,
     SpriteAtlas,
@@ -16,6 +18,7 @@ import {
 } from 'cc';
 import { CARD, CardDefinition, CardKind, titleColor } from '../../core/content/CardCatalog';
 import { PaperPanel } from '../primitives/PaperPanel';
+import { SupplyCardFace } from './SupplyCardFace';
 import { CardDisplayModel, type CardViewOptions, cardReferenceViewModel, cardViewModel } from './CardViewModel';
 import type { CardDesignReference } from './CardDesignReference';
 const { ccclass, property } = _decorator;
@@ -43,6 +46,8 @@ export class CardPresentation extends Component {
     @property(PaperPanel) panel: PaperPanel | null = null;
     @property(JsonAsset) theme: JsonAsset | null = null;
     @property(Node) frontContent: Node | null = null;
+    @property(Prefab) supplyFacePrefab: Prefab | null = null;
+    private supplyFace: SupplyCardFace | null = null;
     @property(Node) detailsViewport: Node | null = null;
     @property(Label) detailsLabel: Label | null = null;
     @property({
@@ -116,6 +121,21 @@ export class CardPresentation extends Component {
     }
     private showModel(model: CardDisplayModel, blocked: string, caption: string, id: string): void {
         const material = this.labyrinthTheme?.json ?? this.theme?.json;
+        const supply = model.supplyWeight !== undefined;
+        if (supply && !this.supplyFace && this.supplyFacePrefab && this.visualRoot) {
+            const node = instantiate(this.supplyFacePrefab);
+            node.parent = this.visualRoot;
+            const paper = this.panel!.getComponent(UITransform)!;
+            const face = node.getComponent(UITransform)!;
+            node.setScale(paper.width / face.width, paper.height / face.height, 1);
+            this.supplyFace = node.getComponent(SupplyCardFace)!;
+        }
+        if (this.supplyFace) this.supplyFace.node.active = supply;
+        const separateFace = !!this.supplyFace?.node.active;
+        const footer = this.visualRoot?.getChildByName('FooterRule');
+        if (footer) footer.active = !separateFace;
+        if (this.titleLabel) this.titleLabel.node.active = !separateFace;
+        if (this.statusLabel) this.statusLabel.node.active = !separateFace;
         this.kind = model.id;
         this.cardId = id;
         this.blocked = blocked;
@@ -153,21 +173,23 @@ export class CardPresentation extends Component {
         if (this.weightLabel) this.weightLabel.string = model.weight;
         if (this.artwork)
             this.artwork.spriteFrame =
-                this.labyrinthArt?.getSpriteFrame(model.id) ??
+                this.labyrinthArt?.getSpriteFrame(model.artKey ?? model.id) ??
                 this.labyrinthArt?.getSpriteFrame(model.art) ??
                 (this.fieldFace && this.tideIllustrations
-                    ? this.tideIllustrations.getSpriteFrame(model.id)
+                    ? this.tideIllustrations.getSpriteFrame(model.artKey ?? model.id)
                     : null) ??
                 this.illustrations[model.artIndex] ??
                 this.illustrations[2];
         this.showKeywords(
             this.compact || this.labyrinthTheme
                 ? model.keywords.filter(
-                      (word) => word === '可作为合成材料' || word === '已有搭配 · 缺此材料'
+                      (word) => word === '可作为合成材料' || word === '已有搭配 · 缺此材料' ||
+                          word === '拳流派' || word === '本场临时' || word === '连击'
                   )
                 : model.keywords
         );
-        if (this.typeLabel) this.typeLabel.node.active = !this.compact;
+        if (separateFace) this.supplyFace!.show(model, this.artwork?.spriteFrame ?? null, blocked);
+        if (this.typeLabel) this.typeLabel.node.active = !separateFace && !this.compact;
         if (this.weightLabel) this.weightLabel.node.active = !this.compact && !!model.weight;
         if (this.disabledOverlay) this.disabledOverlay.active = !!blocked;
         this.applyAppearance();
@@ -243,9 +265,10 @@ export class CardPresentation extends Component {
     setExpanded(value: boolean): void {
         const changed = this.expanded !== value;
         this.expanded = value;
-        if (this.frontContent) this.frontContent.active = !value;
-        if (this.detailsViewport) this.detailsViewport.active = value;
-        if (value && this.detailsLabel && this.detailsViewport)
+        const supply = !!this.supplyFace?.node.active;
+        if (this.frontContent) this.frontContent.active = !supply && !value;
+        if (this.detailsViewport) this.detailsViewport.active = !supply && value;
+        if (value && !supply && this.detailsLabel && this.detailsViewport)
             this.detailsLabel.node.setPosition(
                 0,
                 this.detailsViewport.getComponent(UITransform)!.height / 2
@@ -269,7 +292,7 @@ export class CardPresentation extends Component {
                 .filter((label) => label.node.parent?.active)
                 .map((label) => label.string),
             effect: this.effectLabel?.string,
-            weight: this.weightLabel?.string,
+            weight: this.supplyFace?.node.active ? this.supplyFace.weight.string : this.weightLabel?.string,
             illustration: this.artwork?.spriteFrame?.name,
             fullDescription: this.detailsLabel?.string,
             detailsHeight: this.detailsLabel?.node.getComponent(UITransform)?.height,

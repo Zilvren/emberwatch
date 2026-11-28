@@ -25,6 +25,7 @@ export class CardInteraction extends Component {
     private hovering = false;
     private parent: Node | null = null;
     private position = new Vec3();
+    private restingScale = new Vec3(1, 1, 1);
     private angle = 0;
     private held = false;
     private scrolled = false;
@@ -53,7 +54,7 @@ export class CardInteraction extends Component {
         this.node.on(Node.EventType.TOUCH_START, this.onPointerDown, this);
         this.node.on(Node.EventType.TOUCH_MOVE, this.onPointerMove, this);
         this.node.on(Node.EventType.TOUCH_END, this.onPointerUp, this);
-        this.node.on(Node.EventType.TOUCH_CANCEL, this.onPointerCancel, this);
+        this.node.on(Node.EventType.TOUCH_CANCEL, this.cancelGesture, this);
         this.node.on('card-expanded', this.onExpanded, this);
     }
     sync(): void {
@@ -126,6 +127,7 @@ export class CardInteraction extends Component {
         this.scheduleOnce(this.showDetails, 0.45);
         this.parent = this.node.parent;
         this.position = this.node.position.clone();
+        this.restingScale.set(this.node.scale);
         this.angle = this.node.angle;
         this.enter();
     }
@@ -184,19 +186,21 @@ export class CardInteraction extends Component {
         if (this.parent?.isValid) {
             this.node.setParent(this.parent);
             this.node.setPosition(this.position);
+            this.node.setScale(this.restingScale);
             this.node.angle = this.angle;
         }
         this.hovering = false;
         this.card.setHovered(false);
         this.pose(this.context.selected());
     }
-    private onPointerCancel(): void {
+    cancelGesture(): void {
+        if (!this.down) return;
         this.unschedule(this.showDetails);
         this.down = null;
         this.restore();
     }
     update(): void {
-        if (this.down && !this.context.enabled()) this.onPointerCancel();
+        if (this.down && !this.context.enabled()) this.cancelGesture();
     }
     onDestroy(): void {
         if (this.visual?.isValid) Tween.stopAllByTarget(this.visual);

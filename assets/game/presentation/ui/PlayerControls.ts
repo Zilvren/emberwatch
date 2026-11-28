@@ -4,19 +4,20 @@ import { ButtonAction } from './ButtonAction';
 import { ButtonPresentation } from './ButtonPresentation';
 
 const symbols: Record<string, string> = {
-    settings: 'settings', help: 'help', 'rules-help': 'info', restart: 'restart', log: 'journal',
-    map: 'map', bag: 'cards', 'recipe-open': 'craft', 'rest-synthesis': 'craft',
+    settings: 'settings', help: 'help', 'rules-help': 'info', restart: 'restart',
+    map: 'map', bag: 'cards', 'supply-bag': 'bag', 'recipe-open': 'craft', 'rest-synthesis': 'craft',
     'camp-keeper': 'keeper', 'camp-bench': 'heal', 'camp-warehouse': 'warehouse', 'camp-fire': 'fire',
     'camp-depart': 'open', 'camp-find-keeper': 'keeper', 'camp-deck': 'cards', 'camp-repair': 'heal',
+    'camp-stock': 'inventory', 'camp-stock-next': 'next', 'camp-stock-back': 'back', 'camp-redeem': 'coins',
     'camp-prev': 'prev', 'camp-next': 'next', 'entry-confirm': 'check', 'journal-start': 'go',
     'modal-cancel': 'back', 'modal-close': 'close', 'modal-confirm': 'check',
-    'end-turn': 'turn', 'map-enter': 'go', 'rest-done': 'go', 'shelter-done': 'go',
+    'map-enter': 'go', 'rest-done': 'go', 'shelter-done': 'go',
     'rest-cash': 'drop', 'rest-bag': 'cards', 'reward-confirm': 'check',
     'discover-confirm': 'check', 'resolve-choice-confirm': 'check',
     'draw-pile': 'draw', 'discard-pile': 'discard', 'pile-prev': 'prev', 'pile-next': 'next',
     'bag-prev': 'prev', 'bag-next': 'next', 'bag-reader-close': 'back', 'bag-details': 'detail',
     'bag-filter-all': 'inventory', 'bag-filter-deck': 'cards', 'bag-filter-found': 'gift',
-    'bag-filter-overflow': 'bag', 'bag-mode': 'bookmark', 'bag-sort': 'sort',
+    'bag-filter-overflow': 'bag', 'bag-filter-supplies': 'bag', 'bag-mode': 'bookmark', 'bag-sort': 'sort',
     'recipe-prev': 'prev', 'recipe-next': 'next', 'recipe-category': 'filter', 'recipe-sort': 'sort',
     'recipe-craft': 'craft', 'recipe-undo': 'undo', 'discard-supply': 'drop',
 };
@@ -25,7 +26,7 @@ function symbolFor(action: ButtonAction, caption: string): string | undefined {
     const id = action.actionId;
     if (id === 'audio') return /关闭|声音关|已静音/.test(caption) ? 'muted' : 'sound';
     if (id === 'shelter-repair') return caption.indexOf('兑换') >= 0 ? 'coins' : 'heal';
-    if (id === 'rewards-done') return /略过|放弃/.test(caption) ? 'skip' : 'next';
+    if (id === 'rewards-done') return caption === '取消出牌' ? 'back' : /略过|放弃/.test(caption) ? 'skip' : 'next';
     if (id === 'claim-supplies') return caption === '上一页' ? 'prev' : 'supplies';
     if (id === 'reward-bag') return caption === '下一页' ? 'next' : 'bag';
     if (id === 'recipe-filter') return action.payload === 'ready' ? 'check' : action.payload === 'partial' ? 'clock' : 'filter';
@@ -37,6 +38,8 @@ function symbolFor(action: ButtonAction, caption: string): string | undefined {
 
 interface ControlVisual {
     icon: Sprite;
+    painted: boolean;
+    shadow?: UITransform;
     number: Label;
     surface: Node;
     energy?: { icon: Sprite; number: Label };
@@ -49,6 +52,8 @@ export class PlayerControls {
     private readonly tipText: Label;
     private readonly tipPaper: Graphics;
     private tipOwner: ButtonAction | null = null;
+    private windowWidth = 1440;
+    private windowHeight = 900;
 
     constructor(private readonly root: Node, private readonly atlas: SpriteAtlas) {
         this.tip = this.child(root, 'ControlHint');
@@ -99,11 +104,18 @@ export class PlayerControls {
                 continue;
             }
             if (!visual) {
-                const surface = action.getComponent(ButtonPresentation)?.surface ?? action.node;
-                const icon = this.child(surface, 'ControlGlyph').addComponent(Sprite);
+                const style = action.getComponent(ButtonPresentation);
+                const surface = style?.surface ?? action.node;
+                const icon = style?.paintedIcon ?? this.child(surface, 'ControlGlyph').addComponent(Sprite);
                 icon.sizeMode = Sprite.SizeMode.CUSTOM;
                 const number = this.number(surface, 'ControlQuantity');
-                visual = {surface, icon, number};
+                const shadow = surface.getChildByName('GlyphShadow')?.getComponent(UITransform) ?? undefined;
+                visual = {surface, icon, number, painted: !!style?.paintedIcon, shadow};
+                if (visual.painted) {
+                    number.enableOutline = true;
+                    number.outlineWidth = 2;
+                    number.outlineColor = new Color(60, 48, 66);
+                }
                 this.visuals.set(action, visual);
                 action.node.on(Node.EventType.MOUSE_ENTER, () => this.hint(action), this);
                 action.node.on(Node.EventType.MOUSE_LEAVE, () => this.hide(action), this);
@@ -113,9 +125,11 @@ export class PlayerControls {
             const {surface, icon, number} = visual;
             action.caption.enabled = false;
             icon.node.active = true;
-            const frame = this.atlas.getSpriteFrame('ic-' + key);
-            if (icon.spriteFrame !== frame) icon.spriteFrame = frame;
-            icon.color = action.caption.color;
+            if (!visual.painted) {
+                const frame = this.atlas.getSpriteFrame('ic-' + key);
+                if (icon.spriteFrame !== frame) icon.spriteFrame = frame;
+                icon.color = action.caption.color;
+            }
             if (tier) {
                 if (!visual.energy) {
                     const glyph = this.child(surface, 'EnergyGlyph').addComponent(Sprite);
@@ -138,10 +152,12 @@ export class PlayerControls {
                 place(energy.icon, energy.number, -16, tier.stamina);
                 continue;
             }
-            const quantity = ['bag', 'camp-deck', 'camp-repair', 'entry-confirm', 'shelter-repair'].indexOf(action.actionId) >= 0
+            const quantity = ['bag', 'camp-deck', 'camp-repair', 'camp-redeem', 'entry-confirm', 'shelter-repair'].indexOf(action.actionId) >= 0
                 ? caption.match(/\d+/)?.[0] ?? '' : '';
             const size = surface.getComponent(UITransform)!;
             const pile = action.actionId === 'draw-pile' || action.actionId === 'discard-pile';
+            // The illustrated covers carry the pile symbol. Keep the native caption for hover and focus.
+            icon.node.active = !pile;
             const width = pile ? size.width : Math.min(size.width, quantity ? 94 : 57);
             if (surface !== action.node && size.width !== width) {
                 size.width = width;
@@ -150,9 +166,15 @@ export class PlayerControls {
                 const ring = style?.focusRing;
                 if (ring) { ring.node.getComponent(UITransform)!.width = width + 8; ring.redraw(); }
             }
-            const side = Math.min(pile ? 26 : 31, Math.max(16, size.height - 11), width - 6);
+            const side = visual.painted
+                ? Math.min(43, size.height - 2, width - 4)
+                : Math.min(pile ? 26 : 31, Math.max(16, size.height - 11), width - 6);
             icon.node.getComponent(UITransform)!.setContentSize(side, side);
             icon.node.setPosition(quantity ? -Math.min(17, width * .2) : 0, pile ? 3 : 0);
+            if (visual.shadow) {
+                visual.shadow.setContentSize(side + 2, side + 2);
+                visual.shadow.node.setPosition(icon.node.position.x, icon.node.position.y - 2);
+            }
             number.node.active = !!quantity;
             if (quantity) {
                 number.string = quantity;
@@ -164,6 +186,12 @@ export class PlayerControls {
         if (this.tipOwner && this.tip.active) this.hint(this.tipOwner);
     }
 
+    fitWindow(width: number, height: number): void {
+        this.windowWidth = width;
+        this.windowHeight = height;
+        if (this.tipOwner && this.tip.active) this.hint(this.tipOwner);
+    }
+
     private hint(action: ButtonAction): void {
         const visual = this.visuals.get(action), caption = action.caption?.string;
         if (!visual || !caption || !action.node.activeInHierarchy) return;
@@ -172,10 +200,13 @@ export class PlayerControls {
         const width = Math.min(450, Math.max(70, Array.from(label).length * 17 + 26));
         const size = this.root.getComponent(UITransform)!;
         const base = size.convertToNodeSpaceAR(visual.surface.worldPosition);
-        const clearance = Math.max(41, visual.surface.getComponent(UITransform)!.height / 2 + 22);
+        const scale = visual.surface.worldScale.y / this.root.worldScale.y;
+        const clearance = Math.max(41, visual.surface.getComponent(UITransform)!.height / 2 + 22) * scale;
+        const limit = Math.max(0, (this.windowWidth - width * scale) / 2 - 5);
+        this.tip.setScale(scale, scale, 1);
         this.tip.setPosition(
-            Math.max(-size.width / 2 + width / 2 + 5, Math.min(size.width / 2 - width / 2 - 5, base.x)),
-            base.y > size.height / 2 - clearance - 16 ? base.y - clearance : base.y + clearance, 0);
+            Math.max(-limit, Math.min(limit, base.x)),
+            base.y > this.windowHeight / 2 - clearance - 16 * scale ? base.y - clearance : base.y + clearance, 0);
         this.tip.getComponent(UITransform)!.setContentSize(width, 32);
         this.tipText.node.getComponent(UITransform)!.setContentSize(width - 14, 31);
         this.tipText.string = label;

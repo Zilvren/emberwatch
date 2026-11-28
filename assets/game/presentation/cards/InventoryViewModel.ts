@@ -2,21 +2,20 @@ import type { GameReadModel } from '../../core/GameReadModel';
 import type { OwnedCard } from '../../core/SurvivalGame';
 import { effectSummary } from '../../core/content/CardCatalog';
 
-export type BagFilter = 'all' | 'deck' | 'overflow' | 'found';
+export type BagFilter = 'all' | 'deck' | 'overflow' | 'found' | 'supplies';
 export type BagSort = 'original' | 'name' | 'cost';
 export function visibleInventory(
     game: GameReadModel,
     filter: BagFilter,
     sort: BagSort
 ): Readonly<OwnedCard>[] {
-    const source = game.scenario.runDeck && filter !== 'deck' ? game.carriedCards : game.cards;
+    const source = filter === 'supplies' || (game.scenario.runDeck && filter !== 'deck')
+        ? game.carriedCards : game.cards;
     const cards = source.filter(
         (card) =>
-            filter === 'all' ||
+            filter === 'all' || filter === 'supplies' ||
             (game.scenario.fieldDeck
-                ? filter === 'found'
-                    ? card.found
-                    : !card.found
+                ? game.content.cards[card.kind].role !== 'supply' && (filter === 'found' ? card.found : !card.found)
                 : filter === 'overflow'
                   ? card.zone === 'overflow'
                   : card.zone === 'base' && card.selected && card.kind !== 'cash')
@@ -33,7 +32,7 @@ export function visibleInventory(
 }
 export function inventoryCardView(card: Readonly<OwnedCard>, game: GameReadModel) {
     const definition = game.content.cards[card.kind];
-    if (game.scenario.runDeck) {
+    if (game.scenario.runDeck || (game.scenario.labyrinth && definition.role === 'supply')) {
         const carried = definition.role === 'supply';
         const canDiscard = carried && (game.phase === 'rewards' || game.phase === 'rest');
         return {
@@ -42,7 +41,7 @@ export function inventoryCardView(card: Readonly<OwnedCard>, game: GameReadModel
             effect: effectSummary(definition, game.content.cards),
             canToggle: false,
             toggleLabel: '',
-            toggleHint: carried
+            toggleHint: card.zone === 'overflow' ? '返营前需要腾出行囊空间，否则这张卡会遗留在迷宫。' : carried
                 ? '探索完成后将行囊中的物资卡带回避难所。'
                 : '整套本局卡组都会进入战斗。',
             canDiscard,

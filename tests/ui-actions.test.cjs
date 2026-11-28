@@ -45,6 +45,33 @@ function fixedRewards() {
     c.session.execute({ type: 'enter-node' });
     return c;
 }
+test('the supply backpack reads only carried supply cards and inspection leaves the checkpoint intact', () => {
+    const { battlePileEntries } = load(path.join(root, 'assets/game/presentation/cards/BattlePileModel.ts'));
+    const c = setup();
+    c.game.cards = c.game.cards.filter(card => c.game.content.cards[card.kind].role !== 'supply');
+    c.game.storedSupplies = {salvage_rope: 7};
+    c.click('supply-bag');
+    assert.equal(c.ui.overlay, 'supply-bag');
+    assert.deepEqual(battlePileEntries(c.session.view,'supply-bag'), []);
+    c.click('modal-close');
+    for (const id of ['first','second'])
+        c.game.cards.push({id,kind:'salvage_rope',found:true,selected:false,zone:'base'});
+    const before = c.game.exportState();
+    c.click('supply-bag');
+    assert.deepEqual(battlePileEntries(c.session.view,'supply-bag'),
+        [{kind:'salvage_rope',count:2,temporary:false,packedWeight:c.game.content.cards.salvage_rope.weight}]);
+    c.click('pile-inspect-0');
+    assert.equal(c.ui.pileSelection,0);
+    c.click('modal-cancel');
+    assert.equal(c.ui.overlay,null);
+    assert.deepEqual(c.game.exportState(),before);
+    const current = c.game.content.cards.salvage_rope.weight;
+    const original = current === 1 ? 2 : 1;
+    c.game.cards.push({id:'earlier',kind:'salvage_rope',found:true,selected:false,zone:'base',packedWeight:original});
+    const groups = battlePileEntries(c.session.view,'supply-bag');
+    assert.equal(groups.find(group => group.packedWeight === original).count, 1);
+    assert.equal(groups.find(group => group.packedWeight === current).count, 2);
+});
 test('leaving unclaimed rewards requires confirmation and cancel preserves the whole checkpoint', () => {
     const c = fixedRewards(),
         before = c.game.exportState();

@@ -6,7 +6,7 @@ import { GameArt, ArtName } from './GameArt';
 import { GameAudio } from './GameAudio';
 import { cardFace, bindHandCard } from './BattleCard';
 const { ccclass, executeInEditMode } = _decorator;
-type Overlay = 'bag' | 'help' | 'restart' | 'discard' | 'repair-risk' | 'log' | null;
+type Overlay = 'bag' | 'help' | 'restart' | 'discard' | 'repair-risk' | null;
 type Hit = {
     id: string;
     x: number;
@@ -227,7 +227,6 @@ export class SurvivalView extends Component {
             u.rect(599 + i * 14, 57, 10, 5, i < g.armor ? P.green : P.line);
         this.button('bag', '背包 ' + g.baseWeight + '/30', 801, 22, 175, 38, () => { this.overlay = 'bag'; this.page = 0; this.render(); });
         u.text(g.overflowWeight ? `暂存 +${g.overflowWeight}` : '暂无溢出', 985, 23, 123, 35, 16, g.overflowWeight ? P.orange : P.muted);
-        this.button('log', '记录', 1114, 22, 70, 38, () => { this.overlay = 'log'; this.render(); });
         this.button('help', '?', 1194, 22, 44, 38, () => { this.overlay = 'help'; this.render(); });
         this.button('audio', this.audio.muted ? '静音' : '声音', 1248, 22, 70, 38, () => { this.audio.muted = !this.audio.muted; this.render(); });
         this.button('restart', '重开', 1328, 22, 88, 38, () => { this.overlay = 'restart'; this.render(); });
@@ -657,10 +656,10 @@ export class SurvivalView extends Component {
             return;
         }
         u.frame(325, 180, 790, 564, '#302831', P.amber);
-        if (this.overlay === 'help' || this.overlay === 'log') {
-            u.text(this.overlay === 'help' ? '生存手册' : '本日行动记录', 365, 211, 710, 52, 32, P.white, true);
-            const content = this.overlay === 'help' ? '攻击牌：点击卡牌后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n物资是出牌费用，也占负重。基础负重 30，溢出 10。\n溢出卡不能战斗，释放空间后按顺序转入。\n护甲到 0 不立即失败，再次实际受伤才失败。\n格挡仅在当前回合有效，完全格挡可保护感染临界者。\n奖励处理后才检查物资是否归零。\n每日 1 点物资在结算最后处理。' : this.game.logs.slice(0, 9).join('\n\n');
-            u.text(content, 365, 285, 710, 355, this.overlay === 'log' ? 17 : 21, P.paper);
+        if (this.overlay === 'help') {
+            u.text('生存手册', 365, 211, 710, 52, 32, P.white, true);
+            const content = '攻击牌：点击卡牌后选择敌人，或拖向敌人。\n防御、修复、武器牌：点击即可使用。\n\n物资是出牌费用，也占负重。基础负重 30，溢出 10。\n溢出卡不能战斗，释放空间后按顺序转入。\n护甲到 0 不立即失败，再次实际受伤才失败。\n格挡仅在当前回合有效，完全格挡可保护感染临界者。\n奖励处理后才检查物资是否归零。\n每日 1 点物资在结算最后处理。';
+            u.text(content, 365, 285, 710, 355, 21, P.paper);
             this.button('modal-close', '返回游戏', 838, 674, 237, 43, () => { this.overlay = null; this.render(); }, 'primary');
             return;
         }

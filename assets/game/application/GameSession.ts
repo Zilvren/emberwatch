@@ -30,6 +30,7 @@ export type GameCommand =
     | { type: 'choose-route'; route: Route }
     | { type: 'play-card' | 'discard-card' | 'toggle-card'; id: string }
     | { type: 'claim-card'; index: number }
+    | { type: 'redeem-supply'; kind: string }
     | { type: 'discover'; kind: string | null }
     | { type: 'resolve-combat-choice'; id: string | null }
     | { type: 'discard-supplies'; amount: number }
@@ -172,6 +173,9 @@ export class GameSession {
                 break;
             case 'redeem-supplies':
                 result = g.redeemAllSupplies();
+                break;
+            case 'redeem-supply':
+                result = g.redeemSupply(command.kind);
                 break;
             case 'new-game':
                 g.reset(this.defaultScenario);

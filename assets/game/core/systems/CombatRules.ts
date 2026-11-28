@@ -1,5 +1,6 @@
 import { CardSet } from '../content/ContentRegistry';
-import { GameScenario, MAX_HEALTH } from '../content/GameScenario';
+import { GameScenario, MAX_HEALTH, supportsFistCombos } from '../content/GameScenario';
+import { fistTargetMatches } from '../content/FistCards';
 import { Random } from '../Random';
 import { ActionResult, CardKind, CombatCard, OwnedCard } from '../RulesTypes';
 import {
@@ -11,11 +12,14 @@ import {
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, CombatState } from './RuleContext';
 import { entryTier } from '../content/EntryTiers';
+import { FistCombat } from './FistCombat';
 import {
     advanceCalmRound, applyLabyrinthEffect, consumeCalibration, consumeDiscount,
     initialCalm, labyrinthDamage, staminaCost,
 } from './LabyrinthCombat';
 export class CombatRules {
+    private readonly fist: FistCombat;
+
     constructor(
         private readonly state: CombatState,
         private readonly feedback: RuleFeedback,
@@ -26,8 +30,13 @@ export class CombatRules {
         private readonly fail: (reason: string) => void,
         private readonly scenario: GameScenario,
         private readonly currentNode: () => string,
-        private readonly collectSupplies: (source: string, amount: number, discoveries?: number) => void
-    ) {}
+        private readonly completeBattle: (source: string, amount: number, choices: number, unlocked: readonly CardKind[]) => void
+    ) {
+        this.fist = new FistCombat(state, content, random, newId);
+    }
+    private get fistEnabled(): boolean {
+        return !!this.content.fist && supportsFistCombos(this.scenario);
+    }
     private get expandedCombat(): boolean {
         return this.scenario.runDeck === true;
     }
@@ -138,16 +147,8 @@ export class CombatRules {
             this.state.health = Math.min(MAX_HEALTH, this.state.health + effect.amount);
         if (b.hp > 0 && (effect.type === 'draw' || effect.extraDraw))
             this.drawCards(effect.type === 'draw' ? effect.amount : effect.extraDraw!);
-        if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count),
-            (message) => this.feedback.log(message));
-    }
-    private rewardChoices(count: number): CardKind[] {
-        const boosts = this.state.synthesisRewardBoosts ?? {};
-        return this.random.weightedSample(
-            this.content.rewardPool,
-            (kind) => (this.content.rewardWeights[kind] ?? 1) * (boosts[kind] ?? 1),
-            count
-        );
+        if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count));
+        if (this.fistEnabled) this.fist.applyFinisher(b, definition);
     }
     get incomingDamage(): number {
         const b = this.state.battle;
@@ -204,7 +205,6 @@ export class CombatRules {
                 this.state.battle.hand.push(card);
             }
         }
-        this.feedback.log(`${definition.title}出现。你先行动，敌人意图已公开。`);
     }
     private offerDiscovery(): void {
         const options: string[] = [];
@@ -229,7 +229,6 @@ export class CombatRules {
             return this.feedback.result(false, '这次发现已处理或不包含该牌。');
         delete b.discovery;
         if (kind === null) {
-            this.feedback.log('略过战场发现，维持当前牌组。');
             return this.feedback.result(true, '已略过发现。');
         }
         const card = this.combatCard(this.inventory.addDiscovery(kind));
@@ -237,7 +236,6 @@ export class CombatRules {
         if (inHand) b.hand.push(card);
         else b.draw.unshift(card);
         const message = `${this.content.cards[kind].name}已${inHand ? '入手' : '放到抽牌堆顶'}，本次探索可用。`;
-        this.feedback.log(message);
         return this.feedback.result(true, message);
     }
     attackDamage(kind: string, enhanced = true): number {
@@ -250,7 +248,8 @@ export class CombatRules {
                 : effect.bonusWhen === 'behind-cover' && (b?.block ?? 0) >= 4;
         const rage = enhanced ? this.chargedEffect(effect) : undefined;
         const base = rage?.damage ?? (effect.amount + (triggered ? (effect.bonus ?? 0) : 0));
-        const damage = (base + this.strength) * (effect.hits ?? 1);
+        const factionBonus = card.fist ? (b?.fist?.damageBonus ?? 0) : 0;
+        const damage = (base + this.strength + factionBonus) * (effect.hits ?? 1);
         if (!b) return damage;
         const extra = rage?.damagePercentMaxHp ? Math.ceil(b.maxHp * rage.damagePercentMaxHp) : 0;
         return labyrinthDamage(b, card, damage) + extra;
@@ -272,16 +271,34 @@ export class CombatRules {
             }
             if (!pending || !replacement)
                 return this.feedback.result(false, '请选择要替换的武器。');
-            const definition = this.content.cards[pending.kind], cost = this.cardCost(pending.kind);
+            const cost = this.cardCost(pending.kind);
             if (this.state.battle!.stamina < cost)
                 return this.feedback.result(false, '体力不足，无法替换武器。');
-            battle.hand.splice(battle.hand.indexOf(pending), 1);
-            battle.stamina -= cost;
-            this.equipCard(battle, pending, replacement.id);
             delete battle.pendingEquip;
             delete battle.cardChoice;
-            this.feedback.log(`使用${definition.name}替换${this.content.cards[replacement.kind].name}。`);
-            return this.feedback.result(true, `${definition.name}已装备。`);
+            return this.commitPlay(battle, pending, cost, { replaceWeapon: replacement.id });
+        }
+        if (choice.mode === 'deck-discovery' || choice.mode === 'fist-discovery') {
+            const message = id === null ? '已略过连击发现。'
+                : this.fist.resolveDiscovery(battle, choice.mode, id, this.handLimit);
+            if (!message) return this.feedback.result(false, '这张牌已移动。');
+            delete battle.cardChoice;
+            return this.feedback.result(true, message);
+        }
+        if (choice.mode === 'switch-stance' || choice.mode === 'recover-stamina') {
+            if (id === null) {
+                delete battle.cardChoice;
+                return this.feedback.result(true, '已取消出牌。');
+            }
+            const pending = battle.hand.find((card) => card.id === choice.sourceId);
+            const target = battle.hand.find((card) => card.id === id);
+            if (!pending || !target || !fistTargetMatches(choice.mode, this.content.cards[target.kind]))
+                return this.feedback.result(false, '这张基础招式已不可选。');
+            const cost = this.cardCost(pending.kind);
+            if (battle.stamina < cost)
+                return this.feedback.result(false, '体力不足。');
+            delete battle.cardChoice;
+            return this.commitPlay(battle, pending, cost, { targetId: target.id });
         }
         if (id !== null) {
             const source = choice.mode === 'discard-to-top' ? battle.discard : battle.hand;
@@ -309,6 +326,7 @@ export class CombatRules {
     beginPlayerTurn(draw = true): void {
         const b = this.state.battle!;
         b.stamina = b.maxStamina;
+        this.fist.resetTurn(b);
         if (this.scenario.fieldDeck) b.attackedThisTurn = false;
         const weapons = this.weapons(b);
         for (const weapon of weapons) {
@@ -320,9 +338,10 @@ export class CombatRules {
         if (draw) this.drawCards(this.turnDraw);
     }
     cardBlocked(card: CombatCard): string {
-        if (this.state.battle?.discovery) return '先处理本场发现';
-        if (this.state.battle?.cardChoice) return '先完成出牌后的选择';
-        const effect = this.content.cards[card.kind].effect;
+        const battle = this.state.battle;
+        if (battle?.discovery) return '先处理本场发现';
+        if (battle?.cardChoice) return '先完成选牌';
+        const definition = this.content.cards[card.kind], effect = definition.effect;
         const stamina = this.scenario.battleResource === 'stamina';
         if (
             (stamina ? (this.state.battle?.stamina ?? 0) : this.state.supplies) <
@@ -337,6 +356,10 @@ export class CombatRules {
             if (slots > 2 || (slots === 2 && used > 2)) return '武器槽不足';
         } else if (effect.type === 'equip' && this.state.battle?.weapon) return '武器槽已占用';
         if (effect.type === 'heal' && this.state.health === MAX_HEALTH) return '血量已满';
+        if (definition.fist) {
+            if (!this.fistEnabled || !battle) return '当前章节没有拳流派规则';
+            return this.fist.blocked(battle, definition);
+        }
         return '';
     }
     play(id: string): ActionResult {
@@ -359,17 +382,37 @@ export class CombatRules {
             b.cardChoice = { mode: 'replace-weapon', ids: this.weapons(b).map((weapon) => weapon.id) };
             return this.feedback.result(true, '请选择要替换的武器。');
         }
+        if (definition.fist) {
+            const choice = this.fist.targetChoice(b, card);
+            if (choice) {
+                b.cardChoice = choice;
+                return this.feedback.result(true, '请选择要使用的基础招式。');
+            }
+        }
+        return this.commitPlay(b, card, cost);
+    }
+
+    private commitPlay(
+        b: NonNullable<CombatState['battle']>,
+        card: CombatCard,
+        cost: number,
+        options: { targetId?: string; replaceWeapon?: string } = {}
+    ): ActionResult {
+        const definition = this.content.cards[card.kind], effect = definition.effect;
+        const index = b.hand.indexOf(card);
         b.hand.splice(index, 1);
-        if (b.calm?.retained === id) b.calm.retained = null;
+        if (b.calm?.retained === card.id) b.calm.retained = null;
         if (this.scenario.battleResource === 'stamina') b.stamina -= cost;
         else this.inventory.spend(cost);
         consumeDiscount(definition, b.calm);
+        let message = `${definition.name}已生效。`;
         if (effect.type === 'equip') {
-            if (this.expandedCombat) this.equipCard(b, card);
+            if (this.expandedCombat) this.equipCard(b, card, options.replaceWeapon);
             else {
                 b.weapon = card;
                 b.equippedTurn = b.turn;
             }
+            if (options.replaceWeapon) message = `${definition.name}已装备。`;
         } else {
             if (effect.type === 'damage') {
                 const rage = this.chargedEffect(effect);
@@ -393,17 +436,19 @@ export class CombatRules {
                 b.gainedStrength = (b.gainedStrength ?? 0) + effect.amount;
             if (b.hp > 0 && (effect.type === 'draw' || effect.extraDraw))
                 this.drawCards(effect.type === 'draw' ? effect.amount : effect.extraDraw!);
-            if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count),
-                (message) => this.feedback.log(message));
+            if (b.hp > 0) applyLabyrinthEffect(b, definition, (count) => this.drawCards(count));
             if (hasBlockEffect(effect)) b.lastDefenseCardKind = card.kind;
-            if (!definition.oncePerBattle &&
-                (!card.temporary || (!this.expandedCombat && !this.scenario.fieldDeck)) &&
-                effect.type !== 'power' && effect.labyrinth?.rule !== 'gain-stamina')
-                b.discard.push(card);
+            if (definition.fist?.type === 'support')
+                message = this.fist.applySupport(b, definition, this.handLimit, options.targetId) || message;
         }
-        this.feedback.log(
-            `第 ${b.turn} 回合 · 使用${definition.name}，消耗 ${cost} ${this.scenario.battleResource === 'stamina' ? '体力' : '物资'}。`
-        );
+        if (this.fistEnabled) {
+            const combo = this.fist.afterPlay(b, card, this.handLimit);
+            if (combo) message = `${definition.name} · ${combo}。`;
+        }
+        if (effect.type !== 'equip' && !definition.oncePerBattle &&
+            (!card.temporary || (!this.expandedCombat && !this.scenario.fieldDeck)) &&
+            effect.type !== 'power' && effect.labyrinth?.rule !== 'gain-stamina')
+            b.discard.push(card);
         if (b.hp === 0) {
             const enemy = this.scenario.enemies[b.enemy];
             this.winBattle();
@@ -420,10 +465,9 @@ export class CombatRules {
         ) {
             b.coreExposed = true;
             this.offerDiscovery();
-            this.feedback.log('闸轮失压，核心暴露。获得一次战场发现。');
             return this.feedback.result(true, '闸轮失压 · 获得一次发现');
         }
-        return this.feedback.result(true, `${this.content.cards[card.kind].name}已生效。`);
+        return this.feedback.result(true, message);
     }
     endTurn(): ActionResult {
         if (this.state.phase !== 'battle' || !this.state.battle)
@@ -432,17 +476,16 @@ export class CombatRules {
         if (b.discovery || b.cardChoice) return this.feedback.result(false, '先完成选择。');
         b.stamina = 0;
         const retained = b.calm?.retained;
-        b.discard.push(...b.hand.filter((card) => card.id !== retained && (!this.scenario.fieldDeck || !card.temporary)));
+        b.discard.push(...b.hand.filter((card) => card.id !== retained &&
+            (!this.scenario.fieldDeck || !card.temporary || !!this.content.cards[card.kind].fist)));
         b.hand = b.hand.filter((card) => card.id === retained);
         if (b.calm?.deferred === 'scheduled') {
             this.nextTurn(b);
             return this.feedback.result(true, '敌人原定动作暂缓，进入额外回合。');
         }
+        let counterDamage = 0;
         if (b.intent === 'attack') {
-            const damage = Math.max(0, this.incomingDamage - b.block);
-            this.feedback.log(
-                `敌人攻击 ${this.incomingDamage}，格挡 ${b.block}，实际伤害 ${damage}。`
-            );
+            const incoming = this.incomingDamage, damage = Math.max(0, incoming - b.block);
             this.state.health = Math.max(0, this.state.health - damage);
             if (this.state.health === 0) {
                 this.fail('血量耗尽，本次探索失败。');
@@ -453,12 +496,14 @@ export class CombatRules {
                         : '探索失败，已撤回避难所。'
                 );
             }
-            if (damage === 0 && b.calm?.deferred === 'extra-turn' && b.calm.counter) {
-                b.hp = Math.max(0, b.hp - b.calm.counter);
-                this.feedback.log(`回流盾完全接下暂缓的攻击，反击 ${b.calm.counter} 伤害。`);
+            const fistCounter = this.fist.counterDamage(b, incoming, damage === 0);
+            const calmCounter = damage === 0 && b.calm?.deferred === 'extra-turn' ? b.calm.counter : 0;
+            counterDamage = fistCounter + calmCounter;
+            if (counterDamage) {
+                b.hp = Math.max(0, b.hp - counterDamage);
                 if (b.hp === 0) {
                     this.winBattle();
-                    return this.feedback.result(true, '回流盾反击击败敌人。');
+                    return this.feedback.result(true, fistCounter ? `反击 ${counterDamage} 点，击败敌人。` : '回流盾反击击败敌人。');
                 }
             }
             b.boosted = false;
@@ -466,10 +511,9 @@ export class CombatRules {
         } else {
             b.boosted = true;
             b.intent = 'attack';
-            this.feedback.log(`敌人正在准备，下次攻击为 ${b.strongAttack}。`);
         }
         this.nextTurn(b);
-        return this.feedback.result(true, `第 ${b.turn} 回合，你先行动。`);
+        return this.feedback.result(true, `${counterDamage ? `反击 ${counterDamage} 点 · ` : ''}第 ${b.turn} 回合，你先行动。`);
     }
     private nextTurn(battle: NonNullable<CombatState['battle']>): void {
         if (battle.calm) advanceCalmRound(battle.calm);
@@ -478,22 +522,9 @@ export class CombatRules {
         this.beginPlayerTurn();
     }
     winBattle(): void {
-        const enemy = this.state.battle!.enemy,
-            definition = this.scenario.enemies[enemy];
+        const battle = this.state.battle!, definition = this.scenario.enemies[battle.enemy];
         this.state.battle = null;
-        if (this.scenario.fieldDeck) {
-            this.feedback.log(`击败${definition.title}。`);
-            this.collectSupplies(this.currentNode(), definition.rewardSupplies, definition.rewardChoices);
-            return;
-        }
-        this.state.phase = 'rewards';
-        this.state.rewards = {
-            source: this.currentNode(),
-            supplies: definition.rewardSupplies,
-            cards: this.rewardChoices(definition.rewardChoices),
-            supplyTaken: false,
-            cardTaken: false,
-        };
-        this.feedback.log(`击败${definition.title}。战斗结束，临时牌与装备已清除。`);
+        this.completeBattle(this.currentNode(), definition.rewardSupplies, definition.rewardChoices,
+            battle.fist?.unlockedHere ?? []);
     }
 }

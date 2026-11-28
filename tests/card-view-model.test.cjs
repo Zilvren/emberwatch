@@ -33,6 +33,17 @@ test('card fronts keep key effect data and long descriptions remain available in
     assert.equal(vm.cost, String(def.cost));
     assert.equal(vm.weight, '');
 });
+test('a supply face keeps the complete name and description with its unit value and carried weight', () => {
+    const item = { ...catalog.CARD.cash, role: 'supply', name: '门前仓储站签发的旧城配给证明',
+        text: '配给证明的背面写着粮站的地址，旁边还有前任持有者按下的一枚手印。', weight: 30, supplyValue: 999 };
+    const preview = cardViewModel(item);
+    assert.equal(preview.displayTitle, item.name);
+    assert.equal(preview.description, item.text);
+    assert.equal(preview.effect, '价值 999 物资点');
+    assert.equal(preview.supplyWeight, 30);
+    assert.equal(cardViewModel(item, catalog.CARD, '体力', { packedWeight: 1 }).supplyWeight, 1);
+    assert.equal(cardViewModel(catalog.CARD.attack).supplyWeight, undefined);
+});
 test('equipment presents generated card separately from its start timing', () => {
     const vm = cardViewModel(catalog.CARD.knife);
     assert.equal(vm.effect, '生成「' + catalog.CARD.slash.name + '」');

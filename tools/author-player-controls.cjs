@@ -42,13 +42,27 @@ function button(g,parent,id,caption,x,y,w=56,h=44,variant='secondary') {
 function actionRef(g,n) {
     return g.graph[n]._components.find(r=>g.graph[r.__id__].__type__ === N.script('ButtonAction'));
 }
+const hudArt = require('./battle-hud-art.cjs');
+function identifyHudBranch(g, id, path) {
+    const owner = g.graph[id];
+    const seed = g.file + ':hud:' + path;
+    owner._id = N.identifier(seed);
+    g.graph[owner._prefab.__id__].fileId = N.identifier(seed + ':node');
+    for (const ref of owner._components) {
+        const component = g.graph[ref.__id__];
+        component._id = N.identifier(seed + ':' + component.__type__);
+        g.graph[component.__prefab.__id__].fileId = N.identifier(seed + ':component:' + component.__type__);
+    }
+    for (const ref of owner._children)
+        identifyHudBranch(g, ref.__id__, path + '/' + g.graph[ref.__id__]._name);
+}
 function hud() {
     const g = edit('assets/prefabs/ui/HUD.prefab');
     const bar = comp(g,g.root,N.script('StatusBar'));
     const backing = child(g,g.root,'StatusPaper');
-    if (backing !== undefined) g.graph[backing]._active = false;
+    if (backing !== undefined) g.graph[backing]._active = true;
     g.graph[g.root]._components = g.graph[g.root]._components.filter(r=>g.graph[r.__id__].__type__!=='cc.BlockInputEvents');
-    bar.presentation = 'floating';
+    bar.presentation = 'strip';
     const get = id => g.graph.findIndex(o=>o.__type__==='cc.Node' && o._name===id);
     const forget = new Set([get('help'),get('audio')]);
     g.graph[g.root]._children=g.graph[g.root]._children.filter(r=>!forget.has(r.__id__));
@@ -59,16 +73,18 @@ function hud() {
         g.graph[act.caption.__id__]._string='设置';
         comp(g,gear,N.script('ButtonPresentation')).variant='quiet';
     }
-    bar.utilities=[get('map'),get('log'),gear].map(N.ref);
+    const backpack = child(g, g.root, 'supply-bag') ?? button(g,g.root,'supply-bag','物资背包',0,0,58,44,'quiet');
+    bar.utilities=[backpack,get('map'),gear].map(N.ref);
     bar.icons=N.asset(atlas.uuid,'cc.SpriteAtlas');
     const [identity,day,supplies,health]=bar.sections.map(r=>r.__id__);
     for(const name of ['Brand','SaveState','DayTitle','SuppliesTitle','SuppliesHint','HealthTitle','CarryHint']){
         const n=get(name); if(n>=0) g.graph[n]._active=false;
     }
     for(const key of ['brand','save','suppliesHint','healthTitle','carryHint']) delete bar[key];
-    glyph(g,identity,'StatusGlyph','gate',-3,0,34,'e1c39c');
+    hudArt.crest(g,identity);
     glyph(g,identity,'SaveGlyph','saved',16,-11,14,'ccba9e');
-    glyph(g,day,'StatusGlyph','day',0,0,28,'dfba84');
+    const sun = child(g,day,'StatusGlyph');
+    if (sun !== undefined) g.graph[sun]._active = false;
     glyph(g,supplies,'StatusGlyph','supplies',0,0,28,'d7b78f');
     glyph(g,health,'StatusGlyph','health',0,0,28,'ee9c9b');
     for(const property of ['day','supplies','health']){
@@ -77,7 +93,11 @@ function hud() {
             _enableOutline:true,_outlineColor:N.color('221c2a',220),_outlineWidth:2});
         comp(g,l.node.__id__,'cc.UITransform')._anchorPoint={__type__:'cc.Vec2',x:0,y:.5};
     }
-    g.save();
+    hudArt.roundLabel(g,bar);
+    hudArt.navigation(g,bar);
+    identifyHudBranch(g,backpack,'backpack');
+    identifyHudBranch(g,g.graph[bar.round.__id__].node.__id__,'round');
+    fs.writeFileSync(g.file, JSON.stringify(g.graph,null,2)+'\n');
 }
 function modal(file,name,key,w,h) {
     const g=new N.Graph(file,name);g.root=g.node(name,null);
@@ -90,6 +110,15 @@ function modal(file,name,key,w,h) {
         innerLine:N.color('705d68',150),corner:9,lineWidth:1.2});
     g.component(panel,'cc.BlockInputEvents');
     const close=button(g,panel,'modal-close','关闭',w/2-42,h/2-40,44,40,'quiet');
+    if (key === 'settings' || key === 'battle-pile') {
+        g.graph[close]._lpos = N.vec(w/2-46,h/2-46);
+        const style = comp(g,close,N.script('ButtonPresentation'));
+        style.variant = 'secondary';
+        const ring = g.graph[style.focusRing.__id__].node.__id__;
+        for (const [node,width,height] of [[close,84,84],[style.surface.__id__,54,50],[ring,60,56]]) {
+            Object.assign(comp(g,node,'cc.UITransform')._contentSize,{width,height});
+        }
+    }
     g.component(g.root,N.script('ModalPanel'),{backdrop:N.ref(back),closeAction:'modal-close',closeOnBackdrop:true,closeOnEscape:true});
     g.component(g.root,N.script('ButtonFocusGroup'),{modal:true,buttons:[],initialButton:N.ref(close)});
     return {g,panel};
@@ -100,6 +129,7 @@ function settings() {
     button(g,panel,'audio','声音开',-118,-32,80,70);
     button(g,panel,'help','帮助',0,-32,80,70);
     button(g,panel,'restart','重新开始',118,-32,80,70,'danger');
+    hudArt.tablet(g,panel,true);
     g.save();
 }
 function piles() {
@@ -112,51 +142,39 @@ function piles() {
     const next=button(g,panel,'pile-next','下一页',108,-256);
     g.component(panel,N.script('BattlePilePanel'),{cardPrefab:N.asset(N.uuid('assets/prefabs/cards/SelectableCard.prefab'),'cc.Prefab'),
         holders:holders.map(N.ref), title:N.ref(title.label),hint:N.ref(hint.label),pageLabel:N.ref(page.label),
-        previous:actionRef(g,prev),next:actionRef(g,next)});
+        previous:actionRef(g,prev),next:actionRef(g,next),emptyBag:N.ref(hudArt.emptyBag(g,panel)),
+        closeButton:N.ref(child(g,panel,'modal-close'))});
+    hudArt.tablet(g,panel);
     g.save();
 }
 function stacks() {
     const g=edit('assets/prefabs/screens/BattleScreen.prefab');
     for(const [name,id,caption] of [['drawPile','draw-pile','查看抽牌堆'],['discardPile','discard-pile','查看弃牌堆']]){
         const base=child(g,g.root,name);
-        const old=child(g,base,name+'-text1'); if(old!==undefined)g.graph[old]._active=false;
+        const old=child(g,base,name+'-text1'); if(old!==undefined)g.graph[old]._active=true;
         const n=child(g,base,id) ?? button(g,base,id,caption,0,0,72,106,'quiet');
         const presentation=comp(g,n,N.script('ButtonPresentation'));
         const surface=presentation.surface.__id__;
         const focus=g.graph[presentation.focusRing.__id__].node.__id__;
-        Object.assign(comp(g,n,'cc.UITransform')._contentSize,{width:88,height:116});
-        Object.assign(comp(g,surface,'cc.UITransform')._contentSize,{width:72,height:106});
-        Object.assign(comp(g,focus,'cc.UITransform')._contentSize,{width:76,height:108});
+        Object.assign(comp(g,n,'cc.UITransform')._contentSize,{width:156,height:166});
+        Object.assign(comp(g,surface,'cc.UITransform')._contentSize,{width:124,height:126});
+        Object.assign(comp(g,focus,'cc.UITransform')._contentSize,{width:154,height:158});
         g.graph[surface]._lpos=g.graph[focus]._lpos=N.vec(0,0);
         comp(g,surface,'cc.Graphics')._enabled=true;
         presentation.transparentSurface=true;
     }
     for (const [node, symbol, x, y, tint] of [
-        ['battle-text3', 'health', -55, 0, 'ee9c9b'],
-        ['battle-text4', 'block', -24, 0, 'a9bcaf'],
-        ['battle-text5', 'health', -55, 0, 'ee9c9b'],
         ['CriticalWarning', 'warning', 0, 0, 'ee9c9b'],
     ]) {
-        const owner = child(g, g.root, node);
+        const owner = g.graph.findIndex(o => o.__type__ === 'cc.Node' && o._name === node);
         glyph(g, owner, 'StatIcon', symbol, x, y, 24, tint);
         if (node === 'CriticalWarning') comp(g, owner, 'cc.Label')._enabled = false;
     }
-    const intent = child(g, g.root, 'battle-text0');
+    const intent = g.graph.findIndex(o => o.__type__ === 'cc.Node' && o._name === 'battle-text0');
     glyph(g, intent, 'AttackGlyph', 'attack', -29, 0, 26, 'f1b786');
     glyph(g, intent, 'PrepareGlyph', 'clock', 0, 0, 22, 'dbc39e');
-    const gauge = child(g, g.root, 'StaminaGauge');
-    const staminaTitle = child(g, gauge, 'StaminaTitle');
-    if (staminaTitle !== undefined) {
-        comp(g, staminaTitle, 'cc.Label')._enabled = false;
-        glyph(g, staminaTitle, 'EnergyGlyph', 'energy', 0, 0, 21, 'e6ba85');
-    }
-    const staminaHint = child(g, gauge, 'StaminaHint');
-    if (staminaHint !== undefined) g.graph[staminaHint]._active = false;
-    const meter=g.graph.find(o=>o.__type__===N.script('UIProgress')&&o.key==='health');
-    if(meter)meter.filledColor=N.color('de9998');
-    const fill=child(g,g.root,'healthFill');
-    if(fill!==undefined)comp(g,fill,N.script('ShapeGraphic')).fill=N.color('de9998');
-    g.save();
+    hudArt.battle(g);
+    fs.writeFileSync(g.file, JSON.stringify(g.graph,null,2)+'\n');
 }
 function bind() {
     const g=new N.Graph(sceneFile,'TheEnd'),director=g.graph.find(o=>o.__type__===N.script('GameDirector'));
@@ -172,6 +190,9 @@ function bind() {
     }
     fs.writeFileSync(path.join(N.root,sceneFile),JSON.stringify(g.graph,null,2)+'\n');
 }
-settings(); piles();
-for(const file of [settingsFile,pilesFile])N.ensureMeta(file,'prefab');
-hud(); stacks(); bind();
+if (require.main === module) {
+    settings(); piles();
+    for(const file of [settingsFile,pilesFile])N.ensureMeta(file,'prefab');
+    hud(); stacks(); bind();
+}
+module.exports = { hud, piles, stacks };

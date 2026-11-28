@@ -1,9 +1,11 @@
 import { CardKind } from './content/CardCatalog';
+import type { FistMove } from './content/FistCards';
 import { NodeKind, TUTORIAL_SCENARIO } from './content/GameScenario';
 export type { CardDefinition, CardKind } from './content/CardCatalog';
 export type { NodeKind, Route } from './content/GameScenario';
 export type { Phase } from './state/GamePhase';
 export const ROUTES = TUTORIAL_SCENARIO.routes;
+export const MAX_SUPPLY_POINTS = 1_000_000_000;
 /** Compatibility export for tools that inspect the first chapter. Runtime views use scenario.nodes. */
 export const NODE_NAMES: Record<NodeKind, string> = {};
 for (const id of Object.keys(TUTORIAL_SCENARIO.nodes))
@@ -12,6 +14,7 @@ export interface OwnedCard {
     id: string;
     kind: CardKind;
     zone: 'base' | 'overflow';
+    packedWeight?: number;
     selected: boolean;
     found: boolean;
 }
@@ -21,6 +24,22 @@ export interface CombatCard {
     origin?: string;
     temporary: boolean;
 }
+export type CombatCardChoice =
+    | { mode: 'discard-to-top' | 'retain-hand' | 'replace-weapon'; ids: string[] }
+    | { mode: 'deck-discovery' | 'fist-discovery'; ids: string[] }
+    | { mode: 'switch-stance' | 'recover-stamina'; ids: string[]; sourceId: string };
+
+export interface FistBattle {
+    moves: FistMove[];
+    finisherId?: string;
+    lastPlayed?: Pick<CombatCard, 'kind' | 'temporary'>;
+    unlockedHere: CardKind[];
+    damageBonus: number;
+    blockBonus: number;
+    counters: CardKind[];
+    recoveredStamina: boolean;
+}
+
 export interface Battle {
     stamina: number;
     maxStamina: number;
@@ -49,7 +68,8 @@ export interface Battle {
     attackedThisTurn?: boolean;
     coreExposed?: boolean;
     calm?: CalmBattle;
-    cardChoice?: { mode: 'discard-to-top' | 'retain-hand' | 'replace-weapon'; ids: string[] };
+    fist?: FistBattle;
+    cardChoice?: CombatCardChoice;
 }
 export interface CalmBattle {
     persistent: number;
@@ -72,6 +92,7 @@ export interface Rewards {
     supplyTaken: boolean;
     cardTaken: boolean;
     discovery?: true;
+    guaranteedFinisher?: CardKind;
 }
 export interface ActionResult {
     ok: boolean;

@@ -31,7 +31,6 @@ export type GameReadModel = ReadonlyValue<
         | 'battle'
         | 'rewards'
         | 'settlement'
-        | 'logs'
         | 'failureReason'
         | 'revision'
         | 'run'

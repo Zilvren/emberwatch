@@ -17,6 +17,7 @@ interface CampAction {
     id: string;
     caption: string;
     enabled?: boolean;
+    payload?: string;
 }
 export interface CampDetail {
     context: string;
@@ -26,7 +27,7 @@ export interface CampDetail {
     secondary?: CampAction;
 }
 
-export function campDetail(game: GameReadModel, station: CampStation, page: number): CampDetail {
+export function campDetail(game: GameReadModel, station: CampStation, page: number, warehouseKind = ''): CampDetail {
     switch (station) {
         case 'camp-keeper':
             return {
@@ -38,17 +39,40 @@ export function campDetail(game: GameReadModel, station: CampStation, page: numb
                 primary: { id: 'camp-depart', caption: '选择入场补给' },
             };
         case 'camp-warehouse': {
+            const stored = game.storedSupplies ?? {};
+            const kinds = Object.keys(stored);
+            const index = kinds.indexOf(warehouseKind);
+            if (index >= 0) {
+                const card = game.content.cards[warehouseKind];
+                const value = card.supplyValue ?? 1;
+                const next = kinds[index + 1];
+                return {
+                    context: `仓库 · 物资卡　${index + 1} / ${kinds.length}`,
+                    title: `${card.name}　×${stored[warehouseKind]}`,
+                    body: `每张可兑换 ${value} 物资点　·　现有 ${game.supplies} 点\n${card.text}`,
+                    primary: { id: 'camp-redeem', payload: warehouseKind, caption: `兑换一张 · +${value} 点` },
+                    secondary: next ? { id: 'camp-stock-next', caption: '下一种物资卡', payload: next }
+                        : { id: 'camp-stock-back', caption: '返回仓库总览' },
+                };
+            }
+            const count = kinds.reduce((sum, kind) => sum + stored[kind], 0);
             const affordable = ENTRY_TIER_IDS.map(id => ENTRY_TIERS[id])
                 .filter(tier => tier.cost <= game.supplies)
                 .map(tier => `${tier.name} ${tier.cost}`).join('　');
-            const ledger = game.settlement
-                ? `上次返营结存 ${game.settlement.returnedSupplies} 份，已用于治疗 ${game.settlement.treatmentSpent} 份。`
-                : '确认进门时，守门人会从仓库支取所选的补给。';
+            const settlement = game.settlement;
+            const receipt = settlement
+                ? `\n上次返营结存 ${settlement.returnedSupplies} 点 · 治疗 ${settlement.treatmentSpent} 点` +
+                    (settlement.lostOverflow.length ? ` · 遗失暂存卡 ${settlement.lostOverflow.length} 张` : '')
+                : '';
+            const keeper = { id: 'camp-find-keeper', caption: '找守门人备货' };
             return {
                 context: '仓库',
-                title: `库存物资　${game.supplies} 份`,
-                body: ledger + '\n当前可备的补给（份）　' + affordable,
-                primary: { id: 'camp-find-keeper', caption: '找守门人备货' },
+                title: `库存物资　${game.supplies} 点`,
+                body: (count ? `物资卡已存放 ${kinds.length} 种，共 ${count} 张。可继续留存或按张兑换。`
+                    : '仓库里还没有物资卡。迷宫里搜到的物资卡，成功带回后会存放在这里。') +
+                    receipt + '\n可备补给　' + affordable,
+                primary: count ? { id: 'camp-stock', caption: '查看物资卡', payload: kinds[0] } : keeper,
+                secondary: count ? keeper : undefined,
             };
         }
         case 'camp-bench': {

@@ -5,7 +5,7 @@ import type { UiState } from './UiState';
 import { entryTier, affordableEntryTier } from '../../core/content/EntryTiers';
 import { initialRecipeBrowse, recipeBrowse } from './RecipePanelModel';
 import { atGateCamp, isCampStation } from './CampViewModel';
-import { battlePileEntries, PILE_PAGE_SIZE } from '../cards/BattlePileModel';
+import { battlePileEntries, isCardPile, PILE_PAGE_SIZE } from '../cards/BattlePileModel';
 export type UiSound = 'tap' | 'loot' | 'heal';
 export interface UiActions {
     act(command: GameCommand, sound?: UiSound): void;
@@ -28,8 +28,7 @@ export class UiActionRouter {
         if (this.ui.busy || !this.session.view) return;
         const id = event.id,
             g = this.session.view;
-        if (this.ui.overlay === 'draw-pile' || this.ui.overlay === 'discard-pile' ||
-            id === 'draw-pile' || id === 'discard-pile') {
+        if (isCardPile(this.ui.overlay) || isCardPile(id)) {
             this.pileAction(id);
             return;
         }
@@ -56,7 +55,7 @@ export class UiActionRouter {
             return;
         }
         if (id.startsWith('camp-')) {
-            this.campAction(id);
+            this.campAction(id, event.payload);
             return;
         }
         if (isCampStation(this.ui.overlay) && id !== 'modal-close' && id !== 'modal-cancel') return;
@@ -86,7 +85,8 @@ export class UiActionRouter {
             this.ui.overlay = 'bag';
             this.ui.page = 0;
             this.ui.deckEdit = id === 'rest-bag' && !g.scenario.runDeck && !g.scenario.fieldDeck;
-            if (g.scenario.runDeck) this.ui.bagFilter = id === 'rest-bag' ? 'deck' : 'all';
+            if (g.scenario.runDeck) this.ui.bagFilter = id === 'reward-bag' ? 'all' : 'deck';
+            if (id === 'reward-bag' && g.scenario.labyrinth && g.rewards?.discovery) this.ui.bagFilter = 'supplies';
             if (this.ui.deckEdit) this.ui.bagFilter = 'all';
             this.ui.bagReader = false;
             this.ui.bagDetails = false;
@@ -100,7 +100,8 @@ export class UiActionRouter {
                 filter === 'all' ||
                 filter === 'deck' ||
                 filter === 'overflow' ||
-                (filter === 'found' && g.scenario.fieldDeck)
+                (filter === 'found' && g.scenario.fieldDeck) ||
+                (filter === 'supplies' && g.scenario.labyrinth)
             )
                 this.ui.bagFilter = filter;
         } else if (id === 'bag-sort' && this.ui.overlay === 'bag') {
@@ -165,7 +166,7 @@ export class UiActionRouter {
             this.actions.refresh();
             return;
         } else if (id === 'rules-help') this.ui.overlay = 'help';
-        else if (id === 'help' || id === 'log' || id === 'restart') this.ui.overlay = id;
+        else if (id === 'help' || id === 'restart') this.ui.overlay = id;
         else if (id === 'audio') this.actions.toggleAudio();
         else if (
             (id === 'modal-close' || id === 'modal-cancel') &&
@@ -259,13 +260,13 @@ export class UiActionRouter {
     }
     private pileAction(id: string): void {
         const g = this.session.view, active = this.ui.overlay;
-        if (!g.battle || g.phase !== 'battle' || g.battle.cardChoice || g.battle.discovery) return;
-        if (id === 'draw-pile' || id === 'discard-pile') {
-            if (active && active !== 'draw-pile' && active !== 'discard-pile') return;
+        if (isCardPile(id)) {
+            if (active) return;
+            if (id !== 'supply-bag' && (!g.battle || g.phase !== 'battle' || g.battle.cardChoice || g.battle.discovery)) return;
             this.ui.overlay = id;
             this.ui.pilePage = 0;
             this.ui.pileSelection = -1;
-        } else if (active === 'draw-pile' || active === 'discard-pile') {
+        } else if (isCardPile(active)) {
             if (id === 'modal-close' || id === 'modal-cancel') this.ui.overlay = null;
             else {
                 const entries = battlePileEntries(g, active);
@@ -283,12 +284,20 @@ export class UiActionRouter {
         this.actions.sound('tap');
         this.actions.refresh();
     }
-    private campAction(id: string): void {
+    private campAction(id: string, kind: string): void {
         const g = this.session.view;
         if (!atGateCamp(g)) return;
         if (isCampStation(id) && !this.ui.overlay) {
             this.ui.overlay = id;
+            if (id === 'camp-warehouse') this.ui.warehouseKind = '';
             if (id === 'camp-fire') this.ui.campJournalPage = Math.max(0, g.journalEntries.length - 1);
+        } else if ((id === 'camp-stock' || id === 'camp-stock-next') && this.ui.overlay === 'camp-warehouse' && (g.storedSupplies?.[kind] ?? 0) > 0) {
+            this.ui.warehouseKind = kind;
+        } else if (id === 'camp-stock-back' && this.ui.overlay === 'camp-warehouse') {
+            this.ui.warehouseKind = '';
+        } else if (id === 'camp-redeem' && this.ui.overlay === 'camp-warehouse' && kind && kind === this.ui.warehouseKind) {
+            this.actions.act({ type: 'redeem-supply', kind }, 'loot');
+            return;
         } else if (id === 'camp-find-keeper' && this.ui.overlay === 'camp-warehouse') {
             this.ui.overlay = 'camp-keeper';
         } else if (id === 'camp-depart' && this.ui.overlay === 'camp-keeper') {

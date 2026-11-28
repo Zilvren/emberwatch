@@ -66,13 +66,13 @@ export class SurvivalGame {
     pathIndex = 0;
     visited: NodeKind[] = [];
     discoveryPool?: string[];
+    fistUnlocks?: CardKind[];
     synthesisRewardBoosts: Record<string, number> = {};
     synthesisBoostedRecipes: string[] = [];
     synthesisMaterialBoostedRecipes: string[] = [];
     battle: Battle | null = null;
     rewards: Rewards | null = null;
     settlement: Settlement | null = null;
-    logs: string[] = [];
     failureReason = '';
     revision = 0;
     run = 0;
@@ -126,7 +126,7 @@ export class SurvivalGame {
             fail,
             this.scenario,
             () => this.currentNode,
-            collectSupplies
+            (source, amount, count, unlocked) => this.rewardRules.collectBattleRewards(source, amount, count, unlocked)
         );
         this.shelterRules = new ShelterRules(
             this,
@@ -181,13 +181,13 @@ export class SurvivalGame {
                 pathIndex: this.pathIndex,
                 visited: this.visited,
                 discoveryPool: this.discoveryPool,
+                fistUnlocks: this.fistUnlocks,
                 synthesisRewardBoosts: this.synthesisRewardBoosts,
                 synthesisBoostedRecipes: this.synthesisBoostedRecipes,
                 synthesisMaterialBoostedRecipes: this.synthesisMaterialBoostedRecipes,
                 battle: this.battle,
                 rewards: this.rewards,
                 settlement: this.settlement,
-                logs: this.logs,
                 failureReason: this.failureReason,
                 revision: this.revision,
                 run: this.run,
@@ -237,6 +237,7 @@ export class SurvivalGame {
         this.pathIndex = 0;
         this.visited = [];
         this.discoveryPool = undefined;
+        this.fistUnlocks = undefined;
         this.synthesisRewardBoosts = {};
         this.synthesisBoostedRecipes = [];
         this.synthesisMaterialBoostedRecipes = [];
@@ -245,13 +246,9 @@ export class SurvivalGame {
         this.settlement = null;
         this.failureReason = '';
         this.returnElapsed = 0;
-        this.logs = [];
         this.run++;
         this.synthesis.close();
         this.inventoryRules.restoreStarter();
-        this.feedback.log(
-            `第 ${this.day} 天 · 血量 ${this.health}，物资 ${this.supplies}，基础牌组 ${this.usableCards.length} 张。`
-        );
         this.journalRules.record('campaign-started');
         this.revision++;
     }
@@ -384,31 +381,26 @@ export class SurvivalGame {
         return this.shelterRules.healAtShelter();
     }
     redeemAllSupplies(): ActionResult {
-        return this.shelterRules.redeemAllSupplies();
+        return this.shelterRules.redeemSupplies();
+    }
+    redeemSupply(kind: CardKind): ActionResult {
+        if (!kind) return this.feedback.result(false, '请选择要兑换的物资卡。');
+        return this.shelterRules.redeemSupplies(kind);
     }
     private fail(reason: string): void {
         const defeated = this.health === 0;
         const day = this.day,
             milestones = this.milestones,
             journalEntries = this.journalEntries,
-            storedSupplies = this.storedSupplies,
-            logs = this.logs;
+            storedSupplies = this.storedSupplies;
         this.reset();
         this.day = this.scenario.kind === 'tutorial' ? this.scenario.initialDay : day + 1;
         this.milestones = milestones;
         this.journalEntries = journalEntries;
         this.storedSupplies = storedSupplies;
-        this.logs = logs;
         this.phase = 'failure';
         if (defeated) this.health = 0;
         this.failureReason = reason;
         if (this.scenario.runDeck) this.cards = [];
-        this.feedback.log(
-            this.scenario.kind === 'tutorial'
-                ? '教学失败：探索已重置，仍为第 1 天。'
-                : this.scenario.runDeck
-                  ? `探索失败：时间推进至第 ${this.day} 天，本局卡组和行囊已清空。`
-                  : `探索失败：时间推进至第 ${this.day} 天，已备好返营补给与牌组。`
-        );
     }
 }

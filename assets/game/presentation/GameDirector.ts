@@ -33,6 +33,8 @@ import { PlayerControls } from './ui/PlayerControls';
 import { MapPointPresentation } from './map/MapPointPresentation';
 import { ButtonAction } from './ui/ButtonAction';
 import { StatusBar } from './ui/StatusBar';
+import { battleWindowLayout } from './ui/BattleWindowLayout';
+import { ModalPanel } from './ui/ModalPanel';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { launchPulse, ringImpact } from './effects/TideResonance';
 import { playLabyrinthCardAction } from './actors/LabyrinthCardAction';
@@ -78,9 +80,7 @@ export class GameDirector extends Component {
         }
         this.controls?.refresh();
         this.syncActorMotionPreference();
-        // Keep transient feedback clear of overlay headings and the map's paper sheet.
-        const toastY = this.ui.overlay ? 388 : this.game.phase === 'map' ? -416 : 345;
-        this.toastRoot?.setPosition(0, toastY, 0);
+        this.placeToast();
     }
     private refreshBattle(screen: Node): void {
         this.renderer.renderBattle(screen);
@@ -202,7 +202,7 @@ export class GameDirector extends Component {
         this.scene = bindScene(this.hud, this.screenRoots, this.popupRoots, this.game.scenario);
         if (this.controlIcons) this.controls = new PlayerControls(this.node, this.controlIcons);
         if (this.interfaceTheme)
-            installLabyrinthInterface(this.scene, this.interfaceTheme, this.shelterArtwork, this.labyrinthPaper);
+            installLabyrinthInterface(this.scene, this.interfaceTheme, this.shelterArtwork);
         this.hand = this.scene.screens.battle.getComponentInChildren(HandPresentation);
         if (this.hand) this.hand.dragLayer = this.dragLayer;
         this.renderer = new GameRenderer(
@@ -235,6 +235,8 @@ export class GameDirector extends Component {
         this.node.on(ACTION_EVENT, this.onActionInput, this);
         this.node.on(CARD_DROP_EVENT, this.onDropInput, this);
         this.refresh();
+        this.fitHudToWindow();
+        view.on('canvas-resize', this.fitHudToWindow, this);
         this.message(this.session.startupMessage);
         Object.assign(globalThis, {
             __survivalGame: this.session.game,
@@ -242,10 +244,36 @@ export class GameDirector extends Component {
         });
     }
     onDestroy(): void {
+        view.off('canvas-resize', this.fitHudToWindow, this);
         this.node.off(ACTION_EVENT, this.onActionInput, this);
         this.node.off(CARD_DROP_EVENT, this.onDropInput, this);
         this.motionQuery?.removeEventListener('change', this.motionChanged);
         this.audio.dispose();
+    }
+    private fitHudToWindow(): void {
+        const bounds = view.getViewportRect(), design = view.getVisibleSize();
+        const scaleX = view.getScaleX(), scaleY = view.getScaleY();
+        if (scaleX <= 0 || scaleY <= 0) return;
+        const width = design.width + 2 * bounds.x / scaleX;
+        const height = design.height + 2 * bounds.y / scaleY;
+        if (width <= 0 || height <= 0) return;
+        const frame = battleWindowLayout(width, height);
+        this.renderer.fitBattleWindow(frame);
+        const hud = this.scene.hud.getComponent(UITransform)!;
+        hud.node.setScale(frame.scale, frame.scale, 1);
+        hud.width = frame.width;
+        hud.node.setPosition(0, (height - hud.height * frame.scale) / 2);
+        this.controls?.fitWindow(width, height);
+        this.placeToast();
+        for (const modal of this.popupRoot?.getComponentsInChildren(ModalPanel) ?? [])
+            modal.backdrop?.getComponent(UITransform)?.setContentSize(width, height);
+    }
+    private placeToast(): void {
+        const hud = this.scene.hud.getComponent(UITransform)!;
+        const belowHud = hud.node.position.y - (hud.height / 2 + 29) * hud.node.scale.y;
+        const y = this.ui.overlay ? 388 : this.game.phase === 'map' ? -416 :
+            this.game.phase === 'battle' ? belowHud : 345;
+        this.toastRoot?.setPosition(0, y);
     }
     update(dt: number): void {
         if (!this.renderer) return;
@@ -441,9 +469,10 @@ export class GameDirector extends Component {
                     damage ? `−${damage}` : '完全格挡'
                 );
             } else this.effect('block', this.enemy, '正在蓄势');
-            counterKill = !!(attacking && !damage && b.calm?.deferred === 'extra-turn' && b.calm.counter && !g.battle);
-            if (counterKill)
-                this.effect('attack', this.enemy, `−${oldHp}`);
+            const counterDamage = oldHp - b.hp;
+            counterKill = counterDamage > 0 && !g.battle && g.phase !== 'failure';
+            if (counterDamage > 0)
+                this.effect('attack', this.enemy, `−${counterDamage}`);
             this.message(result.message);
         };
         if (this.enemy)

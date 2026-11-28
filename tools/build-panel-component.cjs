@@ -41,7 +41,7 @@ for(const [name,width,height,confirm]of [['InfoPanel',760,580,false],['ConfirmPa
 }
 // Preserve existing UIValue, ButtonAction and fileIds while replacing the old popup chrome.
 const adopted=[];
-for(const name of ['HelpPopup','LogPopup','ConfirmPopup']){
+for(const name of ['HelpPopup','ConfirmPopup']){
  const file='assets/prefabs/ui/'+name+'.prefab',g=new Graph(file,name);g.graph=read(file);g.root=g.graph[0].data.__id__;
  if(g.graph.some(c=>c.__type__===script('CommonPanel')))continue;
  const values=g.graph.filter(c=>c.__type__===script('UIValue')),findLabel=key=>values.find(c=>c.key===key)?.node.__id__,labelAt=node=>g.graph[node]._components.map(r=>g.graph[r.__id__]).findIndex(c=>c.__type__==='cc.Label');

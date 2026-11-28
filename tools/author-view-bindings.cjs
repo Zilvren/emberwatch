@@ -13,9 +13,10 @@ function tag(nodeRef,key){const node=scene[nodeRef.__id__], info=node._prefab?sc
  if(info?.asset?.__uuid__){const file=prefabs.get(info.asset.__uuid__);if(!file)throw Error('Unknown prefab UUID');const g=new N.Graph(file,key);g.graph=N.read(file);g.root=g.graph[0].data.__id__;if(g.graph.some(o=>o.__type__===N.script('GameView')))throw Error('Duplicate tag '+file);g.component(g.root,N.script('GameView'),{key});g.save();}
  else main.component(nodeRef.__id__,N.script('GameView'),{key});
 }
-const phases=['journal','map','battle','rewards','rest','shelter','day2','failure'],popups=['inventory','help','log','confirmation','map','entry'];
+const phases=['journal','map','battle','rewards','rest','shelter','day2','failure'],popups=['inventory','help','confirmation','map','entry'];
+if(director.popups.length===6)director.popups.splice(2,1); // Discard the retired action-history view in older layouts.
 director.screens.forEach((ref,i)=>tag(ref,phases[i]));director.popups.forEach((ref,i)=>tag(ref,popups[i]));
 // Deliberately change serialized ordering: routing must follow keys, never numeric positions.
 director.screenRoots=[...director.screens].reverse();director.popupRoots=[...director.popups].reverse();delete director.screens;delete director.popups;main.save();
 for(const [file,id]of [['PlayerActor','player'],['WandererActor','wanderer'],['BruteActor','brute']]){const path='assets/prefabs/actors/'+file+'.prefab',g=N.read(path);g.find(o=>o.__type__===N.script('ActorPresentation')).actorId=id;N.write(path,g);}
-console.log('Tagged 8 screens and 6 popups; migrated arrays in reverse order; bound native actor identities.');
+console.log('Tagged 8 screens and 5 popups; migrated arrays in reverse order; bound native actor identities.');

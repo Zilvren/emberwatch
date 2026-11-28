@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Graphics, JsonAsset, Node, Sprite, SpriteFrame, UITransform } from 'cc';
+import { _decorator, Color, Component, Graphics, JsonAsset, Node, Sprite, UITransform } from 'cc';
 const { ccclass, property, requireComponent, executeInEditMode } = _decorator;
 
 /** The deck is a small stack of worn cards, using the same ink and canvas as the actors. */
@@ -7,20 +7,16 @@ const { ccclass, property, requireComponent, executeInEditMode } = _decorator;
 @requireComponent(Graphics)
 export class DeckStackGraphic extends Component {
     @property(JsonAsset) theme: JsonAsset | null = null;
-    private painted: Node | null = null;
-    setPaintedBack(frame: SpriteFrame): void {
-        if (!this.painted) {
-            const cover = new Node('PaintedBack');
-            cover.layer = this.node.layer;
-            this.node.addChild(cover);
-            cover.setSiblingIndex(0);
-            cover.addComponent(UITransform);
-            this.painted = cover;
-        }
-        const sprite = this.painted.getComponent(Sprite) ?? this.painted.addComponent(Sprite);
-        sprite.sizeMode = Sprite.SizeMode.CUSTOM;
-        sprite.spriteFrame = frame;
-        this.redraw();
+    @property(Sprite) painted: Sprite | null = null;
+    @property(Node) rearLeaf: Node | null = null;
+    @property(Node) middleLeaf: Node | null = null;
+    private count = -1;
+    setCount(count: number): void {
+        if (this.count === count) return;
+        this.count = count;
+        if (this.rearLeaf) this.rearLeaf.active = count >= 3;
+        if (this.middleLeaf) this.middleLeaf.active = count >= 2;
+        if (this.painted) this.painted.color = count ? Color.WHITE : new Color(201, 185, 204);
     }
     onEnable(): void {
         this.node.on(Node.EventType.SIZE_CHANGED, this.redraw, this);
@@ -33,18 +29,14 @@ export class DeckStackGraphic extends Component {
         const g = this.getComponent(Graphics),
             size = this.getComponent(UITransform)?.contentSize;
         if (!g || !size) return;
-        if (this.painted) {
-            g.clear();
-            this.painted.getComponent(UITransform)!.setContentSize(size.width - 5, size.height - 5);
-            return;
-        }
+        g.clear();
+        if (this.painted) return;
         const w = size.width / 2 - 5,
             h = size.height / 2 - 5,
             colors = this.theme?.json.colors,
             paper = new Color().fromHEX(colors?.paper ?? '#e2dac7'),
             shade = new Color().fromHEX(colors?.paperShade ?? '#c7c1af'),
             ink = new Color().fromHEX(colors?.line ?? '#727263');
-        g.clear();
         for (let layer = 2; layer >= 0; layer--) {
             const x = layer * 2,
                 y = layer * 2;

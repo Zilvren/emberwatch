@@ -1,5 +1,18 @@
 # The end 素材生产与原生接入规格
 
+## 2026-11-28 · 战斗 HUD 石材插画
+
+《The end》本轮已接入十五张分离的手绘风格 SpriteFrame。ImageGen 参照石廊与沉灯庭背景生成插画，独立原图保存在 `art-source/ashen-labyrinth/combat-ui/`。运行图位于 `assets/ashen-labyrinth/interface/`，按透明边界居中，采用线性采样。
+
+| 用途 | 资源 | 运行像素 |
+| --- | --- | --- |
+| 城堡、能量盘、护甲 | `citadel-crest`、`stamina-seal`、`guard-shield` | 前两张 256 × 256，盾牌 160 × 192 |
+| 抽牌、弃牌、空背包 | `draw-gate`、`discard-descent`、`supply-satchel` | 牌背 240 × 352，行囊 512 × 512 |
+| 导航小像与物资 | `nav-deck`、`nav-satchel`、`nav-map`、`nav-recipes`、`nav-settings`、`nav-stores` | 112 × 112 |
+| 顶栏、回合按钮、弹窗 | `nav-lintel`、`turn-plaque`、`field-tablet` | 1152 × 98、448 × 144、480 × 320 |
+
+顶栏和弹窗使用九宫格缩放，固定角点纹样。导航小像保留原画颜色，回合按钮的响应色列在 `assets/ashen-labyrinth/interface/theme.json`。生命、格挡、能量、堆数和按键文案使用原生 Label。资源绑定在 `HUD.prefab`、`BattleScreen.prefab`、`SettingsPopup.prefab` 与 `BattlePilePopup.prefab`。
+
 ## 2026-11-27 · 焦土迷宫执灯人战斗角色
 
 本版已接入 Pink/Cocos 主场景。用户确定长布披风的方向，配色、剪裁和动作观感待试玩审阅。内置 ImageGen 以执灯人原有面具与站姿为人物依据，以求生者、灰灯蛾和石廊战斗画面为画风参照。1024×1536 透明原画、1254×1254 九件拆件与两份生成提示词保存在 `art-source/ashen-labyrinth/lantern-keeper/`。各动作共用同一足底坐标。

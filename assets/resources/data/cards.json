@@ -1,160 +1,6 @@
 {
   "version": 1,
   "fixedReward": "heavy",
-  "recipes": [
-    {
-      "id": "knife_and_long_wood_stick",
-      "materials": [
-        {
-          "card": "knife",
-          "count": 1
-        },
-        {
-          "card": "long_wood_stick",
-          "count": 1
-        }
-      ],
-      "products": [
-        {
-          "card": "rough_spear",
-          "count": 1
-        }
-      ]
-    },
-    {
-      "id": "rough_spear_and_scrap_blade",
-      "materials": [
-        {
-          "card": "rough_spear",
-          "count": 1
-        },
-        {
-          "card": "scrap_blade",
-          "count": 1
-        }
-      ],
-      "products": [
-        {
-          "card": "steel_spear",
-          "count": 1
-        }
-      ]
-    },
-    {
-      "id": "steel_spear_and_metal_guard",
-      "materials": [
-        {
-          "card": "steel_spear",
-          "count": 1
-        },
-        {
-          "card": "metal_guard",
-          "count": 1
-        }
-      ],
-      "products": [
-        {
-          "card": "shield_spear",
-          "count": 1
-        },
-        {
-          "card": "shield_spear_charge",
-          "count": 2
-        },
-        {
-          "card": "shield_spear_guard",
-          "count": 1
-        }
-      ]
-    },
-    {
-      "id": "sharpen_knife",
-      "materials": [
-        {
-          "card": "knife",
-          "count": 1
-        },
-        {
-          "card": "whetstone_1",
-          "count": 1
-        }
-      ],
-      "products": [
-        {
-          "card": "sharpened_knife",
-          "count": 1
-        }
-      ]
-    },
-    {
-      "id": "hone_knife",
-      "materials": [
-        {
-          "card": "sharpened_knife",
-          "count": 1
-        },
-        {
-          "card": "whetstone_2",
-          "count": 1
-        }
-      ],
-      "products": [
-        {
-          "card": "honed_knife",
-          "count": 1
-        }
-      ]
-    },
-    {
-      "id": "forge_dragon_slayer",
-      "materials": [
-        {
-          "card": "honed_knife",
-          "count": 1
-        },
-        {
-          "card": "whetstone_3",
-          "count": 1
-        },
-        {
-          "card": "dragon_blood",
-          "count": 1
-        }
-      ],
-      "products": [
-        {
-          "card": "dragon_slayer",
-          "count": 1
-        }
-      ]
-    }
-  ],
-  "expedition": {
-    "starter": { "attack": 5, "dodge": 5, "heavy": 3, "evade": 3, "knife": 1, "repair": 1, "rummage": 2 },
-    "discoveryGroups": [["follow_up", "shield_push"], ["scrap_shiv", "rummage"], ["heavy", "evade"]],
-    "faces": {
-      "attack": { "name": "压掌", "text": "零体力的起手攻击。" },
-      "dodge": { "name": "滑步", "text": "格挡在敌方行动后清空。" },
-      "knife": { "name": "读潮环", "text": "占用仪器槽，本场持续生效。" },
-      "slash": { "name": "发振", "text": "打出或回合结束时消失。" },
-      "evade": { "name": "折光屏", "text": "格挡可以挡住临界时的伤害。" },
-      "heavy": { "name": "沉锚", "text": "以压舱锚块击穿目标。" },
-      "repair": { "name": "盐封修补", "text": "护甲已满或降到 0 时无法使用。" },
-      "follow_up": { "name": "追波", "text": "先打攻击牌，再用此牌多造成 4 伤害。" },
-      "shield_push": { "name": "返压", "text": "已有 4 格挡时额外造成 3 伤害。" },
-      "scrap_shiv": { "name": "叠响", "text": "两枚共鸣环送回一次回声。" },
-      "rummage": { "name": "开匣", "text": "最多持有 6 张手牌，多余的留在牌堆。" }
-    }
-  },
-  "labyrinth": {
-    "starter": {"lab_press":4,"lab_step":4,"lab_anchor":1,"lab_screen":1,"lab_cell":1,"lab_open":1},
-    "decks": [
-      {"id":"shared","name":"共用配合","cards":["lab_bypass","lab_probe","lab_damper","lab_pulse","lab_test_hit","lab_crust","lab_loop_box","lab_reading","lab_relief"]},
-      {"id":"calibration","name":"蓄压倍率","cards":["lab_valve","lab_calibration","lab_bracelet"]},
-      {"id":"defer","name":"快速暂缓","cards":["lab_vent","lab_opening","lab_steady","lab_clip","lab_return_shield"]}
-    ],
-    "enabledDecks": ["shared","calibration","defer"]
-  },
   "cards": [
     {
       "id": "attack",
@@ -202,8 +48,8 @@
       "role": "normal",
       "initialCount": 0,
       "reward": true,
-      "canSynthesize": true,
       "weaponSlots": 1,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -265,28 +111,77 @@
       }
     },
     {
-      "id": "follow_up", "name": "追击", "tag": "攻击 · 连击", "cost": 1, "weight": 0,
-      "text": "本回合先打过攻击牌，再用此牌多造成 4 点伤害。", "color": "#b66f51", "art": "slash",
-      "role": "normal", "initialCount": 0, "reward": false,
-      "effect": { "type": "damage", "amount": 2, "bonusWhen": "after-attack", "bonus": 4 }
+      "id": "follow_up",
+      "name": "追击",
+      "tag": "攻击 · 连击",
+      "cost": 1,
+      "weight": 0,
+      "text": "本回合先打过攻击牌，再用此牌多造成 4 点伤害。",
+      "color": "#b66f51",
+      "art": "slash",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "effect": {
+        "type": "damage",
+        "amount": 2,
+        "bonusWhen": "after-attack",
+        "bonus": 4
+      }
     },
     {
-      "id": "shield_push", "name": "借势反击", "tag": "攻击 · 掩体", "cost": 1, "weight": 0,
-      "text": "已有至少 4 格挡时，多造成 3 点伤害。格挡保留。", "color": "#788e78", "art": "evade",
-      "role": "normal", "initialCount": 0, "reward": false,
-      "effect": { "type": "damage", "amount": 3, "bonusWhen": "behind-cover", "bonus": 3 }
+      "id": "shield_push",
+      "name": "借势反击",
+      "tag": "攻击 · 掩体",
+      "cost": 1,
+      "weight": 0,
+      "text": "已有至少 4 格挡时，多造成 3 点伤害。格挡保留。",
+      "color": "#788e78",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "effect": {
+        "type": "damage",
+        "amount": 3,
+        "bonusWhen": "behind-cover",
+        "bonus": 3
+      }
     },
     {
-      "id": "scrap_shiv", "name": "废铁短刃", "tag": "攻击 · 过牌", "cost": 1, "weight": 0,
-      "text": "先打出短刃腾出手位，再从牌堆抽牌。", "color": "#ad825b", "art": "knife",
-      "role": "normal", "initialCount": 0, "reward": false,
-      "effect": { "type": "damage", "amount": 3, "extraDraw": 1 }
+      "id": "scrap_shiv",
+      "name": "废铁短刃",
+      "tag": "攻击 · 过牌",
+      "cost": 1,
+      "weight": 0,
+      "text": "先打出短刃腾出手位，再从牌堆抽牌。",
+      "color": "#ad825b",
+      "art": "knife",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "effect": {
+        "type": "damage",
+        "amount": 3,
+        "extraDraw": 1
+      }
     },
     {
-      "id": "rummage", "name": "翻找行囊", "tag": "技能 · 过牌", "cost": 1, "weight": 0,
-      "text": "最多持有 6 张手牌。放不下的牌留在牌堆。", "color": "#9a9566", "art": "cash",
-      "role": "normal", "initialCount": 0, "reward": false,
-      "effect": { "type": "draw", "amount": 2 }
+      "id": "rummage",
+      "name": "翻找行囊",
+      "tag": "技能 · 过牌",
+      "cost": 1,
+      "weight": 0,
+      "text": "最多持有 6 张手牌。放不下的牌留在牌堆。",
+      "color": "#9a9566",
+      "art": "cash",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "effect": {
+        "type": "draw",
+        "amount": 2
+      }
     },
     {
       "id": "cash",
@@ -830,8 +725,8 @@
       "initialCount": 0,
       "reward": true,
       "rewardWeight": 1,
-      "canSynthesize": true,
       "weaponSlots": 1,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -870,8 +765,8 @@
       "initialCount": 0,
       "reward": true,
       "rewardWeight": 1,
-      "canSynthesize": true,
       "weaponSlots": 1,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -911,8 +806,8 @@
       "initialCount": 0,
       "reward": true,
       "rewardWeight": 1,
-      "canSynthesize": true,
       "weaponSlots": 1,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -950,8 +845,8 @@
       "role": "normal",
       "initialCount": 0,
       "reward": false,
-      "canSynthesize": true,
       "weaponSlots": 1,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -973,8 +868,8 @@
       "role": "normal",
       "initialCount": 0,
       "reward": false,
-      "canSynthesize": true,
       "weaponSlots": 1,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -997,8 +892,8 @@
       "role": "normal",
       "initialCount": 0,
       "reward": false,
-      "canSynthesize": true,
       "weaponSlots": 2,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -1061,15 +956,15 @@
       "cost": 1,
       "weight": 0,
       "text": "",
+      "color": "#96866e",
+      "art": "evade",
       "role": "normal",
       "initialCount": 0,
       "reward": true,
-      "synthesisOnly": true,
-      "color": "#96866e",
-      "art": "evade",
       "rewardWeight": 2.5,
-      "canSynthesize": true,
+      "synthesisOnly": true,
       "oncePerBattle": true,
+      "canSynthesize": true,
       "effect": {
         "type": "strength",
         "amount": 1
@@ -1082,15 +977,15 @@
       "cost": 1,
       "weight": 0,
       "text": "",
+      "color": "#94776a",
+      "art": "evade",
       "role": "normal",
       "initialCount": 0,
       "reward": true,
-      "synthesisOnly": true,
-      "color": "#94776a",
-      "art": "evade",
       "rewardWeight": 1.7,
-      "canSynthesize": true,
+      "synthesisOnly": true,
       "oncePerBattle": true,
+      "canSynthesize": true,
       "effect": {
         "type": "strength",
         "amount": 1
@@ -1103,15 +998,15 @@
       "cost": 1,
       "weight": 0,
       "text": "",
+      "color": "#ab7064",
+      "art": "evade",
       "role": "normal",
       "initialCount": 0,
       "reward": true,
-      "synthesisOnly": true,
-      "color": "#ab7064",
-      "art": "evade",
       "rewardWeight": 0.75,
-      "canSynthesize": true,
+      "synthesisOnly": true,
       "oncePerBattle": true,
+      "canSynthesize": true,
       "effect": {
         "type": "strength",
         "amount": 2
@@ -1124,15 +1019,15 @@
       "cost": 1,
       "weight": 0,
       "text": "",
+      "color": "#b45150",
+      "art": "repair",
       "role": "normal",
       "initialCount": 0,
       "reward": true,
-      "synthesisOnly": true,
-      "color": "#b45150",
-      "art": "repair",
       "rewardWeight": 0.35,
-      "canSynthesize": true,
+      "synthesisOnly": true,
       "oncePerBattle": true,
+      "canSynthesize": true,
       "effect": {
         "type": "heal",
         "amount": 10
@@ -1145,14 +1040,14 @@
       "cost": 2,
       "weight": 0,
       "text": "占用 1 个武器槽。",
+      "color": "#bc925f",
+      "art": "knife",
       "role": "normal",
       "initialCount": 0,
       "reward": false,
       "synthesisOnly": true,
-      "color": "#bc925f",
-      "art": "knife",
-      "canSynthesize": true,
       "weaponSlots": 1,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -1169,14 +1064,14 @@
       "cost": 2,
       "weight": 0,
       "text": "占用 1 个武器槽。",
+      "color": "#c49857",
+      "art": "knife",
       "role": "normal",
       "initialCount": 0,
       "reward": false,
       "synthesisOnly": true,
-      "color": "#c49857",
-      "art": "knife",
-      "canSynthesize": true,
       "weaponSlots": 1,
+      "canSynthesize": true,
       "effect": {
         "type": "equip",
         "amount": 0,
@@ -1193,12 +1088,12 @@
       "cost": 2,
       "weight": 0,
       "text": "占用 1 个武器槽。",
+      "color": "#d39a52",
+      "art": "knife",
       "role": "normal",
       "initialCount": 0,
       "reward": false,
       "synthesisOnly": true,
-      "color": "#d39a52",
-      "art": "knife",
       "weaponSlots": 1,
       "effect": {
         "type": "equip",
@@ -1216,12 +1111,12 @@
       "cost": 1,
       "weight": 0,
       "text": "打出后移出本场，战斗结束时消失。",
+      "color": "#bc925f",
+      "art": "slash",
       "role": "temporary",
       "initialCount": 0,
       "reward": false,
       "synthesisOnly": true,
-      "color": "#bc925f",
-      "art": "slash",
       "effect": {
         "type": "damage",
         "amount": 7
@@ -1234,12 +1129,12 @@
       "cost": 1,
       "weight": 0,
       "text": "打出后移出本场，战斗结束时消失。",
+      "color": "#c49857",
+      "art": "slash",
       "role": "temporary",
       "initialCount": 0,
       "reward": false,
       "synthesisOnly": true,
-      "color": "#c49857",
-      "art": "slash",
       "effect": {
         "type": "damage",
         "amount": 10
@@ -1252,16 +1147,723 @@
       "cost": 1,
       "weight": 0,
       "text": "打出后移出本场，战斗结束时消失。",
+      "color": "#d39a52",
+      "art": "slash",
       "role": "temporary",
       "initialCount": 0,
       "reward": false,
       "synthesisOnly": true,
-      "color": "#d39a52",
-      "art": "slash",
       "effect": {
         "type": "damage",
         "amount": 20
       }
+    },
+    {
+      "id": "salvage_rope",
+      "name": "旧麻绳",
+      "tag": "物资 · 工具",
+      "cost": 0,
+      "weight": 4,
+      "text": "磨毛的绳头打过好几次结，中间那段还能承重。",
+      "color": "#b79b72",
+      "art": "rope",
+      "role": "supply",
+      "initialCount": 0,
+      "reward": true,
+      "rewardWeight": 6,
+      "supplyValue": 2,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "none",
+        "amount": 0
+      }
+    },
+    {
+      "id": "sealed_battery",
+      "name": "封装电池",
+      "tag": "物资 · 电料",
+      "cost": 0,
+      "weight": 6,
+      "text": "铜触点上的封蜡很完整，壳上还能辨出出厂日期。",
+      "color": "#87a895",
+      "art": "battery",
+      "role": "supply",
+      "initialCount": 0,
+      "reward": true,
+      "rewardWeight": 3,
+      "supplyValue": 4,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "none",
+        "amount": 0
+      }
+    },
+    {
+      "id": "ration_voucher",
+      "name": "旧城配给券",
+      "tag": "物资 · 票据",
+      "cost": 0,
+      "weight": 1,
+      "text": "薄纸上盖着旧城粮站的红章，右下角的编号还在。",
+      "color": "#bd927e",
+      "art": "cash",
+      "role": "supply",
+      "initialCount": 0,
+      "reward": true,
+      "rewardWeight": 1,
+      "supplyValue": 6,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "none",
+        "amount": 0
+      }
+    },
+    {
+      "id": "supply_1",
+      "name": "新物资卡",
+      "tag": "物资",
+      "cost": 0,
+      "weight": 1,
+      "text": "",
+      "color": "#9aaf8c",
+      "art": "cash",
+      "role": "supply",
+      "initialCount": 0,
+      "reward": true,
+      "supplyValue": 5,
+      "chapter": "ashen-labyrinth",
+      "effect": {
+        "type": "none",
+        "amount": 0
+      }
+    },
+    {
+      "id": "fist_left_hook",
+      "name": "左勾拳",
+      "tag": "拳流派 · 攻击 · 连击",
+      "cost": 0,
+      "weight": 0,
+      "text": "",
+      "color": "#bf8160",
+      "art": "attack",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "move",
+        "move": "left-hook"
+      },
+      "effect": {
+        "type": "damage",
+        "amount": 1,
+        "extraDraw": 1
+      }
+    },
+    {
+      "id": "fist_right_hook",
+      "name": "右勾拳",
+      "tag": "拳流派 · 攻击 · 连击",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#bf8160",
+      "art": "attack",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "move",
+        "move": "right-hook"
+      },
+      "effect": {
+        "type": "damage",
+        "amount": 3
+      }
+    },
+    {
+      "id": "fist_uppercut",
+      "name": "上勾拳",
+      "tag": "拳流派 · 攻击 · 连击",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#bf8160",
+      "art": "heavy",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "move",
+        "move": "uppercut"
+      },
+      "effect": {
+        "type": "damage",
+        "amount": 4
+      }
+    },
+    {
+      "id": "fist_straight",
+      "name": "直拳",
+      "tag": "拳流派 · 攻击 · 连击",
+      "cost": 0,
+      "weight": 0,
+      "text": "",
+      "color": "#bf8160",
+      "art": "attack",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "move",
+        "move": "straight"
+      },
+      "effect": {
+        "type": "damage",
+        "amount": 2
+      }
+    },
+    {
+      "id": "fist_parry",
+      "name": "招架",
+      "tag": "拳流派 · 防御 · 连击",
+      "cost": 0,
+      "weight": 0,
+      "text": "",
+      "color": "#759995",
+      "art": "dodge",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "move",
+        "move": "parry"
+      },
+      "effect": {
+        "type": "block",
+        "amount": 3
+      }
+    },
+    {
+      "id": "fist_one_two",
+      "name": "组合拳",
+      "tag": "拳流派 · 二连收招",
+      "cost": 1,
+      "weight": 0,
+      "text": "",
+      "color": "#bf8160",
+      "art": "attack",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "fist": {
+        "type": "finisher",
+        "combo": "strike-two",
+        "temporaryCost": 0
+      },
+      "effect": {
+        "type": "damage",
+        "amount": 2,
+        "hits": 2
+      }
+    },
+    {
+      "id": "fist_parry_counter",
+      "name": "招架反击",
+      "tag": "拳流派 · 二连收招",
+      "cost": 1,
+      "weight": 0,
+      "text": "本回合敌人下次攻击时，全挡则反弹全部伤害，否则反击 2 点。",
+      "color": "#759995",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "fist": {
+        "type": "finisher",
+        "combo": "parry-two",
+        "temporaryCost": 0,
+        "counter": {
+          "partial": 2,
+          "extra": 0
+        }
+      },
+      "effect": {
+        "type": "block",
+        "amount": 2
+      }
+    },
+    {
+      "id": "fist_triple",
+      "name": "三连拳",
+      "tag": "拳流派 · 三连收招",
+      "cost": 2,
+      "weight": 0,
+      "text": "",
+      "color": "#bf8160",
+      "art": "attack",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "fist": {
+        "type": "finisher",
+        "combo": "hooks-three",
+        "temporaryCost": 0
+      },
+      "effect": {
+        "type": "damage",
+        "amount": 2,
+        "hits": 3
+      }
+    },
+    {
+      "id": "fist_straight_three",
+      "name": "直拳三连",
+      "tag": "拳流派 · 三连收招",
+      "cost": 2,
+      "weight": 0,
+      "text": "",
+      "color": "#bf8160",
+      "art": "heavy",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "fist": {
+        "type": "finisher",
+        "combo": "straight-three",
+        "temporaryCost": 1
+      },
+      "effect": {
+        "type": "damage",
+        "amount": 8
+      }
+    },
+    {
+      "id": "fist_chain_counter",
+      "name": "连环反击",
+      "tag": "拳流派 · 三连收招",
+      "cost": 2,
+      "weight": 0,
+      "text": "本回合敌人下次攻击时，全挡则反弹全部伤害，否则反击 2 点。随后再反击 2 点。",
+      "color": "#759995",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "fist": {
+        "type": "finisher",
+        "combo": "parry-three",
+        "temporaryCost": 0,
+        "counter": {
+          "partial": 2,
+          "extra": 2
+        }
+      },
+      "effect": {
+        "type": "block",
+        "amount": 4
+      }
+    },
+    {
+      "id": "fist_straight_four",
+      "name": "直拳四连",
+      "tag": "拳流派 · 四连收招",
+      "cost": 3,
+      "weight": 0,
+      "text": "本场战斗中，拳流派攻击每段伤害 +1，可叠加。",
+      "color": "#bf8160",
+      "art": "heavy",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "fist": {
+        "type": "finisher",
+        "combo": "straight-four",
+        "temporaryCost": 0,
+        "damagePerHit": 1
+      },
+      "effect": {
+        "type": "damage",
+        "amount": 6,
+        "hits": 2
+      }
+    },
+    {
+      "id": "fist_parry_four",
+      "name": "招架四连",
+      "tag": "拳流派 · 四连收招",
+      "cost": 3,
+      "weight": 0,
+      "text": "本回合敌人下次攻击时，全挡则反弹全部伤害，否则反击 2 点。随后再反击 2 点。本场之后每打出一张拳流派牌，多获得 1 点格挡。可叠加。",
+      "color": "#759995",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": false,
+      "fist": {
+        "type": "finisher",
+        "combo": "parry-four",
+        "temporaryCost": 0,
+        "counter": {
+          "partial": 2,
+          "extra": 2
+        },
+        "blockPerCard": 1
+      },
+      "effect": {
+        "type": "block",
+        "amount": 4
+      }
+    },
+    {
+      "id": "fist_stance",
+      "name": "摆架",
+      "tag": "拳流派 · 辅助",
+      "cost": 0,
+      "weight": 0,
+      "text": "从抽牌堆随机拿入 1 张手中没有的勾拳。",
+      "color": "#a49370",
+      "art": "dodge",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "support",
+        "action": "fetch-hook"
+      },
+      "effect": {
+        "type": "skill",
+        "amount": 0
+      }
+    },
+    {
+      "id": "fist_switch",
+      "name": "变招",
+      "tag": "拳流派 · 辅助",
+      "cost": 0,
+      "weight": 0,
+      "text": "弃掉一张直拳或招架，获得另一种招式的临时牌。",
+      "color": "#a49370",
+      "art": "evade",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "support",
+        "action": "switch-stance"
+      },
+      "effect": {
+        "type": "skill",
+        "amount": 0
+      }
+    },
+    {
+      "id": "fist_follow",
+      "name": "乘势",
+      "tag": "拳流派 · 辅助",
+      "cost": 1,
+      "weight": 0,
+      "text": "紧接一张临时收招使用。",
+      "color": "#a49370",
+      "art": "attack",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "support",
+        "action": "after-finisher"
+      },
+      "effect": {
+        "type": "draw",
+        "amount": 3
+      }
+    },
+    {
+      "id": "fist_breath",
+      "name": "换气",
+      "tag": "拳流派 · 辅助",
+      "cost": 0,
+      "weight": 0,
+      "text": "移出手中 1 张基础招式，本回合回 1 体力。临时招式回 2 体力。每回合限用一次。",
+      "color": "#a49370",
+      "art": "battery",
+      "role": "normal",
+      "initialCount": 0,
+      "reward": true,
+      "fist": {
+        "type": "support",
+        "action": "recover-stamina"
+      },
+      "effect": {
+        "type": "skill",
+        "amount": 0
+      }
     }
-  ]
+  ],
+  "recipes": [
+    {
+      "id": "knife_and_long_wood_stick",
+      "materials": [
+        {
+          "card": "knife",
+          "count": 1
+        },
+        {
+          "card": "long_wood_stick",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "rough_spear",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "rough_spear_and_scrap_blade",
+      "materials": [
+        {
+          "card": "rough_spear",
+          "count": 1
+        },
+        {
+          "card": "scrap_blade",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "steel_spear",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "steel_spear_and_metal_guard",
+      "materials": [
+        {
+          "card": "steel_spear",
+          "count": 1
+        },
+        {
+          "card": "metal_guard",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "shield_spear",
+          "count": 1
+        },
+        {
+          "card": "shield_spear_charge",
+          "count": 2
+        },
+        {
+          "card": "shield_spear_guard",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "sharpen_knife",
+      "materials": [
+        {
+          "card": "knife",
+          "count": 1
+        },
+        {
+          "card": "whetstone_1",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "sharpened_knife",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "hone_knife",
+      "materials": [
+        {
+          "card": "sharpened_knife",
+          "count": 1
+        },
+        {
+          "card": "whetstone_2",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "honed_knife",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "forge_dragon_slayer",
+      "materials": [
+        {
+          "card": "honed_knife",
+          "count": 1
+        },
+        {
+          "card": "whetstone_3",
+          "count": 1
+        },
+        {
+          "card": "dragon_blood",
+          "count": 1
+        }
+      ],
+      "products": [
+        {
+          "card": "dragon_slayer",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "expedition": {
+    "starter": {
+      "attack": 5,
+      "dodge": 5,
+      "heavy": 3,
+      "evade": 3,
+      "knife": 1,
+      "repair": 1,
+      "rummage": 2
+    },
+    "discoveryGroups": [
+      [
+        "follow_up",
+        "shield_push"
+      ],
+      [
+        "scrap_shiv",
+        "rummage"
+      ],
+      [
+        "heavy",
+        "evade"
+      ]
+    ],
+    "faces": {
+      "attack": {
+        "name": "压掌",
+        "text": "零体力的起手攻击。"
+      },
+      "dodge": {
+        "name": "滑步",
+        "text": "格挡在敌方行动后清空。"
+      },
+      "knife": {
+        "name": "读潮环",
+        "text": "占用仪器槽，本场持续生效。"
+      },
+      "slash": {
+        "name": "发振",
+        "text": "打出或回合结束时消失。"
+      },
+      "evade": {
+        "name": "折光屏",
+        "text": "格挡可以挡住临界时的伤害。"
+      },
+      "heavy": {
+        "name": "沉锚",
+        "text": "以压舱锚块击穿目标。"
+      },
+      "repair": {
+        "name": "盐封修补",
+        "text": "护甲已满或降到 0 时无法使用。"
+      },
+      "follow_up": {
+        "name": "追波",
+        "text": "先打攻击牌，再用此牌多造成 4 伤害。"
+      },
+      "shield_push": {
+        "name": "返压",
+        "text": "已有 4 格挡时额外造成 3 伤害。"
+      },
+      "scrap_shiv": {
+        "name": "叠响",
+        "text": "两枚共鸣环送回一次回声。"
+      },
+      "rummage": {
+        "name": "开匣",
+        "text": "最多持有 6 张手牌，多余的留在牌堆。"
+      }
+    }
+  },
+  "labyrinth": {
+    "starter": {
+      "lab_press": 4,
+      "lab_step": 4,
+      "lab_anchor": 1,
+      "lab_screen": 1,
+      "lab_cell": 1,
+      "lab_open": 1
+    },
+    "decks": [
+      {
+        "id": "shared",
+        "name": "共用配合",
+        "cards": [
+          "lab_bypass",
+          "lab_probe",
+          "lab_damper",
+          "lab_pulse",
+          "lab_test_hit",
+          "lab_crust",
+          "lab_loop_box",
+          "lab_reading",
+          "lab_relief"
+        ]
+      },
+      {
+        "id": "calibration",
+        "name": "蓄压倍率",
+        "cards": [
+          "lab_valve",
+          "lab_calibration",
+          "lab_bracelet"
+        ]
+      },
+      {
+        "id": "defer",
+        "name": "快速暂缓",
+        "cards": [
+          "lab_vent",
+          "lab_opening",
+          "lab_steady",
+          "lab_clip",
+          "lab_return_shield"
+        ]
+      },
+      {
+        "id": "fist-combos",
+        "name": "拳流派",
+        "cards": [
+          "fist_left_hook",
+          "fist_right_hook",
+          "fist_uppercut",
+          "fist_straight",
+          "fist_parry",
+          "fist_stance",
+          "fist_switch",
+          "fist_follow",
+          "fist_breath"
+        ]
+      }
+    ],
+    "enabledDecks": [
+      "shared",
+      "calibration",
+      "defer",
+      "fist-combos"
+    ]
+  }
 }

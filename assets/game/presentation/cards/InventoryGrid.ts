@@ -40,6 +40,7 @@ export class InventoryGrid extends Component {
         if (!this.content || !this.cardPrefab) return;
         const field = !!game.scenario.fieldDeck;
         const runBattleDeck = !!game.scenario.runDeck && ui.bagFilter === 'deck';
+        const supplyBag = ui.bagFilter === 'supplies';
         const cards = visibleInventory(game, ui.bagFilter, ui.bagSort);
         const missing = runBattleDeck
             ? missingSynthesisMaterials(game.content.catalog.recipes, game.usableCards)
@@ -73,7 +74,8 @@ export class InventoryGrid extends Component {
                 state.status,
                 true,
                 '',
-                missing.has(card.kind)
+                missing.has(card.kind),
+                card.packedWeight
             );
         });
         this.content.getComponent(UITransform)!.height = Math.max(
@@ -85,24 +87,29 @@ export class InventoryGrid extends Component {
             this.scroll?.scrollToTop(0);
             this.filterKey = key;
         }
-        if (this.summary)
-            this.summary.string = field
-                ? `随行牌组 ${game.cards.length} 张 · 本次发现 ${game.cards.filter((card) => card.found).length} 张`
+        if (this.summary) {
+            if (supplyBag) {
+                const packed = cards.filter((card) => card.zone === 'base').length;
+                this.summary.string = `行囊 ${packed} 张 · 暂存 ${cards.length - packed} 张`;
+            } else this.summary.string = field
+                ? `随行牌组 ${game.usableCards.length} 张 · 本次发现 ${game.usableCards.filter((card) => card.found).length} 张` +
+                    (game.scenario.labyrinth ? ` · 物资卡 ${game.carriedCards.length} 张` : '')
                 : runBattleDeck
                   ? `${game.usableCards.length} 张战斗牌 · 本局使用`
                   : `共 ${cards.length} 张`;
+        }
         if (this.hint)
             this.hint.string = runBattleDeck
                 ? '滚动浏览 · 在配方表查看材料搭配'
                 : ui.deckEdit
                   ? '营地编组：点击卡牌加入或移出出战牌组'
-                  : field
+                  : supplyBag ? '行囊里的物资卡成功返营后入库，暂存卡需先腾出空间。' : field
                     ? '点击查看牌面 · 本次发现保留至返家'
                     : '滚动浏览 · 点击卡牌查看大图与操作';
         if (this.emptyLabel) {
             this.emptyLabel.node.active = cards.length === 0 && !ui.bagReader;
             this.emptyLabel.string =
-                ui.bagFilter === 'found'
+                supplyBag ? '行囊里还没有物资卡' : ui.bagFilter === 'found'
                     ? '这次探索还没有拿取发现牌'
                     : ui.bagFilter === 'overflow'
                       ? '暂存区是空的\n切换「全部卡牌」查看行囊'
@@ -110,12 +117,16 @@ export class InventoryGrid extends Component {
                         ? '当前没有出战牌\n切换「全部卡牌」查看可编组的牌'
                         : '行囊里暂时没有卡牌';
         }
-        this.modeButton?.setText(ui.deckEdit ? '结束编组' : '整理出战牌');
-        if (this.modeButton) this.modeButton.node.active = !field && !game.scenario.runDeck;
-        this.modeButton?.setEnabled(game.phase === 'rest');
+        if (this.modeButton) {
+            this.modeButton.node.active = !!game.scenario.labyrinth || (!field && !game.scenario.runDeck);
+            this.modeButton.actionId = game.scenario.labyrinth ? 'bag-filter-supplies' : 'bag-mode';
+            this.modeButton.setText(game.scenario.labyrinth ? '物资行囊' : ui.deckEdit ? '结束编组' : '整理出战牌');
+            this.modeButton.setEnabled(!!game.scenario.labyrinth || game.phase === 'rest');
+            if (game.scenario.labyrinth) this.modeButton.setVariant(supplyBag ? 'primary' : 'quiet');
+        }
         const title = this.node.getChildByName('InventoryTitle')?.getComponent(Label);
         if (title)
-            title.string = field ? '随行牌组' : runBattleDeck ? '本局卡组' : '行囊 / 本次探索';
+            title.string = supplyBag ? '物资行囊' : field ? '随行牌组' : runBattleDeck ? '本局卡组' : '行囊 / 本次探索';
         this.sortButton?.setText(
             '排序：' +
                 { original: '获得顺序', name: '名称', cost: '费用' }[ui.bagSort]
@@ -151,12 +162,13 @@ export class InventoryGrid extends Component {
             state.status,
             false,
             '',
-            missing.has(selected.kind)
+            missing.has(selected.kind),
+            selected.packedWeight
         );
         readerView?.card?.setExpanded(ui.bagDetails);
         if (this.readerTitle) this.readerTitle.string = state.name;
         if (this.readerBody)
-            this.readerBody.string = field
+            this.readerBody.string = field && game.content.cards[selected.kind].role !== 'supply'
                 ? `${state.status} · ${game.content.cards[selected.kind].cost} 体力\n\n${state.effect}\n${game.content.cards[selected.kind].text}`
                 : `${state.status}\n\n${state.effect}\n\n${state.toggleHint}`;
         if (this.toggle) {
@@ -166,11 +178,14 @@ export class InventoryGrid extends Component {
             this.toggle.setEnabled(state.canToggle);
         }
         if (this.discard) {
-            this.discard.node.active = !field && !runBattleDeck;
+            this.discard.node.active = (!field && !runBattleDeck) || (game.content.cards[selected.kind].role === 'supply' && state.canDiscard);
             this.discard.actionId = 'discard-' + selected.id;
             this.discard.setText(state.discardLabel);
             this.discard.setEnabled(state.canDiscard);
         }
-        this.detailsButton?.setText(ui.bagDetails ? '查看卡面' : '完整说明');
+        if (this.detailsButton) {
+            this.detailsButton.node.active = game.content.cards[selected.kind].role !== 'supply';
+            this.detailsButton.setText(ui.bagDetails ? '查看卡面' : '完整说明');
+        }
     }
 }

@@ -8,6 +8,7 @@ import {
     JsonAsset,
     Label,
     Node,
+    Sprite,
     Tween,
     tween,
     UITransform,
@@ -32,6 +33,8 @@ export class ButtonPresentation extends Component {
     @property(PaperPanel) panel: PaperPanel | null = null;
     @property(PaperPanel) focusRing: PaperPanel | null = null;
     @property(Label) caption: Label | null = null;
+    @property(Sprite) paintedIcon: Sprite | null = null;
+    @property(Sprite) paintedSurface: Sprite | null = null;
     @property variant: ButtonVariant = 'secondary';
     @property previewState = '';
     @property darkSurface = false;
@@ -92,6 +95,7 @@ export class ButtonPresentation extends Component {
     resize(width: number, height: number): void {
         this.getComponent(UITransform)?.setContentSize(width, height);
         this.surface?.getComponent(UITransform)?.setContentSize(width, height);
+        this.paintedSurface?.getComponent(UITransform)?.setContentSize(width, height);
         this.focusRing?.getComponent(UITransform)?.setContentSize(width + 8, height + 8);
         this.caption
             ?.getComponent(UITransform)
@@ -189,8 +193,14 @@ export class ButtonPresentation extends Component {
         if (this.transparentSurface) this.panel.line.a = 0;
         this.panel.innerLine.a = this.panel.metalTrim && this.panel.fill.a ? 105 : 0;
         this.panel.redraw();
+        const artwork = this.paintedSurface ?? this.paintedIcon;
+        if (artwork) {
+            const tone = this.theme.json.paintedControls;
+            artwork.color = new Color().fromHEX(tone?.[state] ?? '#ffffff');
+        }
         if (this.caption) {
-            this.caption.color = new Color().fromHEX(palette.text);
+            const ink = this.paintedSurface && this.theme.json.paintedControls?.ink;
+            this.caption.color = new Color().fromHEX(ink || palette.text);
             // A scene outline helps transparent HUD labels, but muddies ink on a solid button.
             this.caption.enableOutline = this.captionOutline && palette.fillAlpha === 0;
         }

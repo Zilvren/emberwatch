@@ -2,6 +2,7 @@
  * Formal display references are kept separate until the formal resource rules are implemented.
  */
 import { RecipeDefinition, validateRecipes } from './RecipeCatalog';
+import { isFistBattleReward, validateFistCard, validateFistSet, withFistVariants, type FistCard } from './FistCards';
 
 export type CardKind = string;
 export type EffectType = 'damage' | 'block' | 'heal' | 'equip' | 'draw' | 'strength' | 'skill' | 'power' | 'none';
@@ -64,6 +65,7 @@ export interface CardDefinition {
     synthesisOnly?: true;
     oncePerBattle?: true;
     chapter?: 'ashen-labyrinth';
+    fist?: FistCard;
     effect: {
         type: EffectType;
         amount: number;
@@ -94,8 +96,8 @@ export interface Catalog {
 export function isBattleCard(card: Pick<CardDefinition, 'role'>): boolean {
     return card.role === 'basic' || card.role === 'normal';
 }
-export function carriedWeight(card: Pick<CardDefinition, 'role' | 'weight'>): number {
-    return card.role === 'supply' ? card.weight : 0;
+export function carriedWeight(card: Pick<CardDefinition, 'role' | 'weight'>, packedWeight?: number): number {
+    return card.role === 'supply' ? packedWeight ?? card.weight : 0;
 }
 
 /** Keep the authored v1 catalog available for old save signatures. Only supply
@@ -108,7 +110,7 @@ export function playableCard(card: CardDefinition): CardDefinition {
         ? '血量已满时无法使用。' : card.text.replace(/护甲/g, '血量');
     return { ...card, weight, name, text };
 }
-export const ART_IDS = ['attack', 'dodge', 'knife', 'evade', 'repair', 'heavy', 'slash', 'cash'];
+export const ART_IDS = ['attack', 'dodge', 'knife', 'evade', 'repair', 'heavy', 'slash', 'cash', 'rope', 'battery'];
 export const EFFECT_NAMES: Record<EffectType, string> = {
     damage: '伤害',
     block: '格挡',
@@ -197,9 +199,9 @@ export function validateCatalog(raw: unknown): Catalog {
             issues.push(`${label}：奖励权重需为 0.01～100 的数值。`);
         if (card.weaponSlots !== undefined && !integer(card.weaponSlots, 1, 2))
             issues.push(`${label}：武器槽占用数需为 1～2 的整数。`);
-        if (card.chapter !== undefined &&
-            (card.chapter !== 'ashen-labyrinth' || card.role !== 'normal' || card.initialCount !== 0 || card.reward))
-            issues.push(`${label}：焦土迷宫牌仅由章节的起手和发现牌组投放。`);
+        if (card.chapter !== undefined && (card.chapter !== 'ashen-labyrinth' || card.initialCount !== 0 ||
+            !(card.role === 'supply' || (card.role === 'normal' && !card.reward))))
+            issues.push(`${label}：焦土迷宫战斗牌通过起手和发现牌组投放，物资卡通过搜刮投放。`);
         if (ART_IDS.indexOf(card.art) < 0) issues.push(`${label}：请选择现有插画。`);
         if (typeof card.color !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(card.color))
             issues.push(`${label}：颜色格式无效。`);
@@ -249,6 +251,7 @@ export function validateCatalog(raw: unknown): Catalog {
         if (effect.equippedStrength !== undefined &&
             (effect.type !== 'equip' || !integer(effect.equippedStrength, 1, 999)))
             issues.push(`${label}：武器的装备力量需为 1～999 的整数。`);
+        const fist = validateFistCard(card, issues);
         const addition = effect.labyrinth;
         if (addition !== undefined) {
             const types = addition && Object.prototype.hasOwnProperty.call(LABYRINTH_RULES, addition.rule)
@@ -258,7 +261,7 @@ export function validateCatalog(raw: unknown): Catalog {
                 !integer(addition?.amount, 1, 12) ||
                 (addition.rule === 'calm-block' ? !integer(addition.threshold, 1, 12) : addition.threshold !== undefined))
                 issues.push(`${label}：焦土迷宫的附加效果、数值或条件无效。`);
-        } else if (effect.type === 'skill' || effect.type === 'power')
+        } else if ((effect.type === 'skill' || effect.type === 'power') && !fist)
             issues.push(`${label}：技能和能力需要配置可执行的效果。`);
         if (
             (effect.bonusWhen !== undefined || effect.bonus !== undefined) &&
@@ -300,6 +303,8 @@ export function validateCatalog(raw: unknown): Catalog {
             issues.push(`${label}：只有普通牌和物资牌能进入奖励池。`);
         if (card.role === 'supply' && (card.initialCount || card.cost || effect.type !== 'none'))
             issues.push(`${label}：物资牌只从搜刮获得，初始数量和费用为 0，效果请选择“无”。`);
+        if (card.role === 'supply' && !integer(card.weight, 1, 30))
+            issues.push(`${label}：物资卡重量需为 1～30 的整数。`);
         if (card.role === 'supply' && !integer(card.supplyValue ?? 1, 1, 999))
             issues.push(`${label}：物资牌必须设置 1～999 点兑换值。`);
         if (effect.type === 'none' && card.role !== 'cash' && card.role !== 'supply')
@@ -347,6 +352,7 @@ export function validateCatalog(raw: unknown): Catalog {
             ...(card.role === 'supply' ? { supplyValue: card.supplyValue ?? 1 } : {}),
             ...(card.canSynthesize === true ? { canSynthesize: true } : {}),
             ...(card.chapter ? { chapter: card.chapter } : {}),
+            ...(fist ? { fist } : {}),
             effect: {
                 type: effect.type,
                 amount: effect.amount,
@@ -376,6 +382,7 @@ export function validateCatalog(raw: unknown): Catalog {
         if (!seen.has(id)) issues.push(`系统卡牌「${id}」不能删除。`);
     const definitions: Record<string, CardDefinition> = Object.create(null);
     for (const card of cards) definitions[card.id] = card;
+    validateFistSet(cards, issues);
     for (const card of cards) {
         if (card.effect.type !== 'equip') continue;
         const generated = generatedCards(card.effect);
@@ -387,7 +394,7 @@ export function validateCatalog(raw: unknown): Catalog {
                 issues.push(`${card.name}：装备必须引用存在的临时牌「${id}」。`);
     }
     if (typeof input.fixedReward !== 'string' || definitions[input.fixedReward]?.role !== 'normal' ||
-        definitions[input.fixedReward]?.chapter || definitions[input.fixedReward]?.synthesisOnly)
+        definitions[input.fixedReward]?.chapter || definitions[input.fixedReward]?.synthesisOnly || definitions[input.fixedReward]?.fist)
         issues.push('固定搜刮奖励必须引用一张存在的普通牌。');
     if (!cards.some((card) => card.role === 'normal' && card.reward))
         issues.push('奖励池至少需要一张普通牌。');
@@ -397,7 +404,7 @@ export function validateCatalog(raw: unknown): Catalog {
     const field = input.expedition;
     if (field !== undefined) {
         const eligible = (id: string) =>
-            !definitions[id]?.chapter && ['basic', 'normal'].indexOf(definitions[id]?.role) >= 0;
+            !definitions[id]?.chapter && !definitions[id]?.fist && ['basic', 'normal'].indexOf(definitions[id]?.role) >= 0;
         if (
             !field?.starter ||
             typeof field.starter !== 'object' ||
@@ -416,7 +423,7 @@ export function validateCatalog(raw: unknown): Catalog {
                 (group: unknown) =>
                     !Array.isArray(group) ||
                     !group.length ||
-                    group.some((id) => definitions[id]?.role !== 'normal' || !!definitions[id]?.chapter)
+                    group.some((id) => definitions[id]?.role !== 'normal' || !!definitions[id]?.chapter || !!definitions[id]?.fist)
             )
         )
             issues.push('发现牌池须包含 1～3 组有效普通牌。');
@@ -437,7 +444,8 @@ export function validateCatalog(raw: unknown): Catalog {
     const labyrinth = input.labyrinth;
     if (labyrinth !== undefined) {
         const eligible = (value: unknown) =>
-            typeof value === 'string' && definitions[value]?.chapter === 'ashen-labyrinth';
+            typeof value === 'string' && definitions[value]?.chapter === 'ashen-labyrinth' &&
+            definitions[value].role === 'normal';
         const starter = labyrinth?.starter;
         if (!starter || typeof starter !== 'object' || Array.isArray(starter) ||
             !Object.keys(starter).length ||
@@ -452,7 +460,8 @@ export function validateCatalog(raw: unknown): Catalog {
             if (!deck || typeof deck.id !== 'string' || !/^[a-z][a-z0-9-]{1,39}$/.test(deck.id) ||
                 ids.has(deck.id) || typeof deck.name !== 'string' || !deck.name.trim() || deck.name.length > 24 ||
                 !Array.isArray(deck.cards) || new Set(deck.cards).size !== deck.cards.length ||
-                !deck.cards.every(eligible)) {
+                !deck.cards.every((id: unknown) => eligible(id) ||
+                    (typeof id === 'string' && definitions[id] && isFistBattleReward(definitions[id])))) {
                 issues.push('发现牌组的 ID、名称或卡牌引用无效。');
                 continue;
             }
@@ -499,9 +508,9 @@ export function installCatalog(raw: unknown): Catalog {
     for (const id of Object.keys(CARD)) delete CARD[id];
     REWARD_POOL.length = 0;
     INITIAL_DECK.length = 0;
-    for (const card of next.cards) {
+    for (const card of withFistVariants(next.cards)) {
         CARD[card.id] = playableCard(card);
-        if (card.reward) REWARD_POOL.push(card.id);
+        if (card.reward && card.role !== 'supply' && !card.fist) REWARD_POOL.push(card.id);
         for (let count = 0; count < card.initialCount; count++) INITIAL_DECK.push(card.id);
     }
     current = next;
@@ -525,6 +534,7 @@ export function effectSummary(
     if (effect.type === 'draw') primary = `抽 ${effect.amount} 张牌`;
     if (effect.type === 'block') primary = `获得 ${effect.amount} 点格挡`;
     if (effect.type === 'strength') primary = `本场获得 ${effect.amount} 点力量`;
+    if (effect.type === 'skill' && card.fist?.type === 'support') return card.text;
     if (effect.labyrinth) {
         const { rule, amount, threshold } = effect.labyrinth;
         const effects: Record<LabyrinthRule, string> = {
@@ -555,7 +565,7 @@ export function effectSummary(
         const strength = effect.equippedStrength ? `装备时提供 ${effect.equippedStrength} 点力量。` : '';
         return `${strength}下回合起每回合生成「${generated.join('」「')}」`;
     }
-    return card.role === 'supply' ? `带回避难所兑换 ${card.supplyValue ?? 1} 物资点` : '只能在休整时丢弃';
+    return card.role === 'supply' ? `可兑换 ${card.supplyValue ?? 1} 物资点` : '只能在休整时丢弃';
 }
 /** Dark ink derived from the chosen accent keeps names legible on the paper card. */
 export function titleColor(accent: string): string {
@@ -576,6 +586,7 @@ export function cardReferences(catalog: Catalog, id: string): string[] {
         refs: string[] = [];
     if (card?.initialCount) refs.push(`初始卡组 ${card.initialCount} 张`);
     if (card?.reward) refs.push('随机奖励池');
+    if (card?.fist?.type === 'move' || card?.fist?.type === 'finisher') refs.push('拳流派连段');
     if (catalog.expedition?.starter[id])
         refs.push(`探索基础牌组 ${catalog.expedition.starter[id]} 张`);
     if (catalog.expedition?.discoveryGroups.some((group) => group.indexOf(id) >= 0))

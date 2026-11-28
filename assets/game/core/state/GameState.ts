@@ -1,5 +1,6 @@
 import { CARD, CardDefinition, carriedWeight, isBattleCard } from '../content/CardCatalog';
-import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO, type GameScenario } from '../content/GameScenario';
+import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO, supportsFistCombos, type GameScenario } from '../content/GameScenario';
+import { FIST_MOVES, fistFinisherFor, fistMove, fistSupport, fistTargetMatches, isFistBattleReward } from '../content/FistCards';
 import { ASHEN_MAP_LAST_LAYER, ASHEN_MAP_OUTER_LANE, nextMapNodes, type ExpeditionMap } from '../content/ExpeditionMap';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
 import { isPhase } from './GamePhase';
@@ -11,6 +12,7 @@ import {
     validMilestoneId,
 } from '../content/JournalCatalog';
 import type { Battle, CombatCard, OwnedCard, Phase, Rewards, Settlement } from '../RulesTypes';
+import { MAX_SUPPLY_POINTS } from '../RulesTypes';
 import { CALM_LIMIT, CALM_PER_TURN, MAX_CALM_LIMIT, MAX_BONUS_STAMINA } from '../systems/LabyrinthCombat';
 export interface GameState {
     schemaVersion: 4;
@@ -34,13 +36,13 @@ export interface GameState {
     pathIndex: number;
     visited: NodeKind[];
     discoveryPool?: string[];
+    fistUnlocks?: string[];
     synthesisRewardBoosts?: Record<string, number>;
     synthesisBoostedRecipes?: string[];
     synthesisMaterialBoostedRecipes?: string[];
     battle: Battle | null;
     rewards: Rewards | null;
     settlement: Settlement | null;
-    logs: string[];
     failureReason: string;
     revision: number;
     run: number;
@@ -67,6 +69,68 @@ function text(value: unknown, name: string, max = 5000): void {
 }
 function list(value: unknown, max: number, name: string): void {
     requireValue(value, Array.isArray(value) && value.length <= max, name);
+}
+
+function validateFistBattle(
+    battle: Battle,
+    definitions: Readonly<Record<string, CardDefinition>>,
+    unlocks: readonly string[],
+    allowed: boolean
+): void {
+    const fist = battle.fist;
+    if (fist === undefined) return;
+    object(fist, 'fist battle');
+    requireValue(fist, allowed, 'fist scenario');
+    list(fist.moves, 3, 'fist moves');
+    requireValue(fist.moves, new Set(fist.moves).size === fist.moves.length &&
+        fist.moves.every((move) => FIST_MOVES.indexOf(move) >= 0) &&
+        !(fist.moves.indexOf('straight') >= 0 && fist.moves.indexOf('parry') >= 0), 'fist sequence');
+    const combo = fistFinisherFor(fist.moves);
+    if (combo) {
+        const finisher = [...battle.hand, ...battle.draw].find((card) => card.id === fist.finisherId);
+        const definition = finisher && definitions[finisher.kind];
+        requireValue(fist.finisherId, definition?.role === 'temporary' &&
+            definition.fist?.type === 'finisher' && definition.fist.combo === combo, 'live fist finisher');
+    } else requireValue(fist.finisherId, fist.finisherId === undefined, 'idle fist sequence');
+    if (fist.lastPlayed !== undefined) {
+        object(fist.lastPlayed, 'last played card');
+        const card = definitions[fist.lastPlayed.kind];
+        flag(fist.lastPlayed.temporary, 'last played temporary');
+        requireValue(fist.lastPlayed.kind, !!card &&
+            (!card.fist || fist.lastPlayed.temporary === (card.role === 'temporary')), 'last played kind');
+    }
+    list(fist.unlockedHere, 7, 'battle finisher unlocks');
+    requireValue(fist.unlockedHere, new Set(fist.unlockedHere).size === fist.unlockedHere.length &&
+        fist.unlockedHere.every((kind) => unlocks.indexOf(kind) >= 0), 'battle finisher unlocks');
+    integer(fist.damageBonus, 0, Number.MAX_SAFE_INTEGER, 'fist damage bonus');
+    integer(fist.blockBonus, 0, Number.MAX_SAFE_INTEGER, 'fist block bonus');
+    flag(fist.recoveredStamina, 'fist recovered stamina');
+    list(fist.counters, 10000, 'fist counters');
+    requireValue(fist.counters, fist.counters.every((kind) => {
+        const card = definitions[kind]?.fist;
+        return card?.type === 'finisher' && !!card.counter;
+    }), 'fist counter kinds');
+}
+
+function isFistChoiceValid(battle: Battle, definitions: Readonly<Record<string, CardDefinition>>): boolean {
+    const choice = battle.cardChoice!;
+    if (battle.discovery) return false;
+    if (choice.mode === 'fist-discovery')
+        return !!battle.fist && choice.ids.length === 3 && choice.ids.every((kind) =>
+            definitions[kind]?.role === 'temporary' && !!fistMove(definitions[kind]));
+    if (choice.mode === 'deck-discovery') {
+        const available = [...battle.draw, ...battle.discard];
+        return !!battle.fist && choice.ids.length <= 3 && choice.ids.every((id) =>
+            available.some((card) => card.id === id && !card.temporary && !!card.origin));
+    }
+    if (choice.mode === 'switch-stance' || choice.mode === 'recover-stamina') {
+        const mode = choice.mode;
+        return (mode !== 'recover-stamina' || !battle.fist?.recoveredStamina) &&
+            battle.hand.some((card) => card.id === choice.sourceId && fistSupport(definitions[card.kind]) === mode) &&
+            choice.ids.every((id) => battle.hand.some((card) =>
+                card.id === id && fistTargetMatches(mode, definitions[card.kind])));
+    }
+    return false;
 }
 
 function validateExpeditionMap(state: GameState, scenario: GameScenario): ExpeditionMap | null {
@@ -140,6 +204,7 @@ export function validateGameState(
     text(s.scenarioId, 'scenarioId', 80);
     integer(s.scenarioVersion, 1, 100000, 'scenarioVersion');
     const scenario = getScenario(s.scenarioId, s.scenarioVersion);
+    const fistEnabled = supportsFistCombos(scenario);
     integer(s.seed, 0, 0xffffffff, 'seed');
     integer(s.randomState, 1, 0xffffffff, 'randomState');
     integer(s.nextId, 0, 1000000000, 'nextId');
@@ -171,7 +236,7 @@ export function validateGameState(
         (s.phase === 'journal') === s.journalEntries.some((entry) => !entry.read),
         'journal phase'
     );
-    integer(s.supplies, 0, 1000000000, 'supplies');
+    integer(s.supplies, 0, MAX_SUPPLY_POINTS, 'supplies');
     const savedTier = s.entryTier ?? null;
     if (scenario.battleResource === 'stamina') {
         requireValue(savedTier, savedTier === null || !!entryTier(savedTier), 'entry tier');
@@ -192,8 +257,6 @@ export function validateGameState(
         'returnElapsed'
     );
     text(s.failureReason, 'failureReason');
-    list(s.logs, 36, 'logs');
-    s.logs.forEach((v) => text(v, 'log'));
     list(s.visited, 100, 'visited');
     s.visited.forEach((v) => requireValue(v, hasId(scenario.nodes, v), 'visited node'));
     if (s.storedSupplies !== undefined) {
@@ -209,9 +272,19 @@ export function validateGameState(
         list(s.discoveryPool, 200, 'discovery pool');
         requireValue(s.discoveryPool, !!scenario.labyrinth &&
             new Set(s.discoveryPool).size === s.discoveryPool.length &&
-            s.discoveryPool.every((kind) => typeof kind === 'string' && definitions[kind]?.chapter === 'ashen-labyrinth'),
+            s.discoveryPool.every((kind) => typeof kind === 'string' && !!definitions[kind] &&
+                ((definitions[kind].chapter === 'ashen-labyrinth' && isBattleCard(definitions[kind])) ||
+                    isFistBattleReward(definitions[kind]))),
             'discovery pool references');
     }
+    if (s.fistUnlocks !== undefined) {
+        list(s.fistUnlocks, 7, 'run finisher unlocks');
+        requireValue(s.fistUnlocks, fistEnabled &&
+            new Set(s.fistUnlocks).size === s.fistUnlocks.length &&
+            s.fistUnlocks.every((kind) => definitions[kind]?.role === 'normal' &&
+                definitions[kind].fist?.type === 'finisher'), 'run finisher unlocks');
+    }
+    const fistUnlocks = s.fistUnlocks ?? [];
     if (s.synthesisRewardBoosts !== undefined) {
         object(s.synthesisRewardBoosts, 'synthesis reward boosts');
         for (const kind of Object.keys(s.synthesisRewardBoosts))
@@ -237,7 +310,8 @@ export function validateGameState(
     }
     list(s.cards, scenario.runDeck ? Number.MAX_SAFE_INTEGER : scenario.fieldDeck ? 10000 : 100, 'cards');
     const owned = new Set<string>(),
-        combat = new Set<string>();
+        combat = new Set<string>(),
+        ownedKinds = new Map<string, string>();
     let highestId = 0;
     const identity = (card: any, collection: Set<string>, temporary: boolean) => {
         object(card, 'card');
@@ -254,19 +328,35 @@ export function validateGameState(
         );
         if (temporary) {
             flag(card.temporary, 'temporary');
+            requireValue(card.kind, definitions[card.kind].role !== 'supply', 'supply in battle');
             if (card.origin !== undefined)
                 requireValue(card.origin, owned.has(card.origin), 'card origin');
+            if (definitions[card.kind].fist) {
+                requireValue(card, fistEnabled &&
+                    (definitions[card.kind].role === 'temporary'
+                        ? card.temporary && card.origin === undefined
+                        : !card.temporary && card.origin === card.id && ownedKinds.get(card.id) === card.kind),
+                    'fist combat card');
+            }
         }
     };
     s.cards.forEach((card) => {
         identity(card, owned, false);
+        ownedKinds.set(card.id, card.kind);
+        const definition = definitions[card.kind];
+        if (definition.fist)
+            requireValue(card, fistEnabled && definition.role === 'normal' &&
+                (definition.fist.type !== 'finisher' || fistUnlocks.indexOf(card.kind) >= 0), 'owned fist card');
         flag(card.selected, 'selected');
         flag(card.found, 'found');
+        if (card.packedWeight !== undefined) {
+            requireValue(card.kind, definitions[card.kind].role === 'supply', 'packed item');
+            integer(card.packedWeight, 1, 30, 'packed weight');
+        }
         requireValue(card.zone, card.zone === 'base' || card.zone === 'overflow', 'zone');
         if (definitions[card.kind].role !== 'supply') requireValue(card.zone, card.zone === 'base', 'weightless card zone');
         else requireValue(card, !card.selected, 'supply item');
         if (scenario.runDeck) {
-            const definition = definitions[card.kind];
             requireValue(
                 card,
                 definition.role === 'supply'
@@ -279,22 +369,22 @@ export function validateGameState(
     if (scenario.runDeck && (s.settlement || s.phase === 'shelter' || s.phase === 'failure'))
         requireValue(s.cards, s.cards.length === 0, 'closed run cards');
     const baseWeight = s.cards.filter(c => c.zone === 'base')
-        .reduce((n, c) => n + carriedWeight(definitions[c.kind]), 0);
+        .reduce((n, c) => n + carriedWeight(definitions[c.kind], c.packedWeight), 0);
     const overflowWeight = s.cards
         .filter((c) => c.zone === 'overflow')
-        .reduce((n, c) => n + carriedWeight(definitions[c.kind]), 0);
+        .reduce((n, c) => n + carriedWeight(definitions[c.kind], c.packedWeight), 0);
     if (scenario.fieldDeck) {
         requireValue(
             s.cards,
             s.cards.every(
-                (c) =>
-                    c.selected &&
-                    c.zone === 'base' &&
-                    (definitions[c.kind].role === 'normal' || definitions[c.kind].role === 'basic')
+                (c) => definitions[c.kind].role === 'supply'
+                    ? !!scenario.labyrinth && c.found && ['map', 'rewards', 'battle', 'rest'].indexOf(s.phase) >= 0
+                    : c.selected && c.zone === 'base' && isBattleCard(definitions[c.kind])
             ),
             'field deck'
         );
-    } else requireValue(baseWeight, baseWeight <= 30 && overflowWeight <= 10, 'inventory weight');
+    }
+    requireValue(baseWeight, baseWeight <= 30 && overflowWeight <= 10, 'inventory weight');
     requireValue(s.battle, (s.phase === 'battle') === (s.battle !== null), 'battle phase');
     if (s.battle) {
         const b = s.battle;
@@ -310,7 +400,7 @@ export function validateGameState(
         if (scenario.battleResource === 'stamina') {
             const budget = entryTier(savedTier)!.stamina;
             integer(b.maxStamina, budget, budget, 'maxStamina');
-            integer(b.stamina, 0, scenario.labyrinth ? MAX_BONUS_STAMINA : budget, 'stamina');
+            integer(b.stamina, 0, scenario.labyrinth ? MAX_BONUS_STAMINA : budget + (fistEnabled ? 2 : 0), 'stamina');
         } else {
             integer(b.maxStamina ?? 0, 0, 0, 'legacy maxStamina');
             integer(b.stamina ?? 0, 0, 0, 'legacy stamina');
@@ -403,22 +493,18 @@ export function validateGameState(
             requireValue(calm.deferred, [null, 'scheduled', 'extra-turn'].indexOf(calm.deferred) >= 0, 'defer state');
             requireValue(calm.retained, calm.retained === null || b.hand.some((c) => c.id === calm.retained), 'retained hand card');
         } else requireValue(b.calm, b.calm === undefined, 'legacy combat effects');
+        validateFistBattle(b, definitions, fistUnlocks, fistEnabled);
         if (b.cardChoice !== undefined) {
             const choice = b.cardChoice;
             object(choice, 'combat card choice');
             list(choice.ids, 10000, 'combat choice ids');
-            requireValue(
-                choice.mode,
-                choice.mode === 'replace-weapon' ? !!scenario.runDeck : scenario.labyrinth &&
-                    (choice.mode === 'discard-to-top' || choice.mode === 'retain-hand'),
-                'combat choice mode'
-            );
             const choices = choice.mode === 'discard-to-top' ? b.discard
                 : choice.mode === 'retain-hand' ? b.hand
                 : choice.mode === 'replace-weapon' ? (b.weapons ?? []) : null;
-            requireValue(choice.ids, !!choices && choice.ids.length > 0 &&
-                new Set(choice.ids).size === choice.ids.length &&
-                choice.ids.every((id) => choices.some((c) => c.id === id)), 'combat choice');
+            requireValue(choice.ids, choice.ids.length > 0 && new Set(choice.ids).size === choice.ids.length &&
+                (choices ? (choice.mode === 'replace-weapon' ? !!scenario.runDeck : !!scenario.labyrinth) &&
+                    choice.ids.every((id) => choices.some((c) => c.id === id))
+                    : fistEnabled && isFistChoiceValid(b, definitions)), 'combat choice');
             if (choice.mode === 'replace-weapon')
                 requireValue(
                     b.pendingEquip,
@@ -437,14 +523,28 @@ export function validateGameState(
         flag(r.supplyTaken, 'supplyTaken');
         flag(r.cardTaken, 'cardTaken');
         list(r.cards, 3, 'reward cards');
-        if (scenario.labyrinth)
-            requireValue(r.discovery, r.discovery === true && r.supplyTaken && r.cards.length > 0 &&
-                new Set(r.cards).size === r.cards.length && r.cards.every((kind) => (s.discoveryPool?.indexOf(kind) ?? -1) >= 0),
+        if (scenario.labyrinth) {
+            const room = scenario.nodes[r.source];
+            const pool = s.discoveryPool ?? [];
+            const allowed = room.type === 'scavenge' && room.supplyCard
+                ? r.cards.length === 1 && definitions[r.cards[0]]?.role === 'supply'
+                : r.cards.every((kind) => room.type === 'battle'
+                    ? pool.indexOf(kind) >= 0 || fistUnlocks.indexOf(kind) >= 0
+                    : pool.indexOf(kind) >= 0 && !definitions[kind]?.fist);
+            requireValue(r.discovery, r.discovery === true && !r.cardTaken && r.supplyTaken && r.cards.length > 0 &&
+                new Set(r.cards).size === r.cards.length && allowed,
                 'labyrinth reward candidates');
+        }
+        if (r.guaranteedFinisher !== undefined)
+            requireValue(r.guaranteedFinisher, fistEnabled && r.cards[0] === r.guaranteedFinisher &&
+                fistUnlocks.indexOf(r.guaranteedFinisher) >= 0 && scenario.nodes[r.source].type === 'battle',
+                'guaranteed finisher');
         r.cards.forEach((kind) =>
             requireValue(
                 kind,
-                Object.prototype.hasOwnProperty.call(definitions, kind),
+                Object.prototype.hasOwnProperty.call(definitions, kind) &&
+                    (!definitions[kind].fist || (fistEnabled && scenario.nodes[r.source].type === 'battle' &&
+                        (isFistBattleReward(definitions[kind]) || fistUnlocks.indexOf(kind) >= 0))),
                 'reward kind'
             )
         );
@@ -452,8 +552,8 @@ export function validateGameState(
     if (s.settlement !== null) {
         const t = s.settlement;
         object(t, 'settlement');
+        integer(t.returnedSupplies, 0, MAX_SUPPLY_POINTS, 'returnedSupplies');
         for (const key of [
-            'returnedSupplies',
             'returnedCards',
             'treatmentCost',
             'treatmentSpent',
@@ -490,6 +590,7 @@ export function validateGameState(
         pathIndex: s.pathIndex,
         visited: s.visited,
         ...(s.discoveryPool === undefined ? {} : { discoveryPool: s.discoveryPool }),
+        ...(s.fistUnlocks === undefined ? {} : { fistUnlocks: [...s.fistUnlocks] }),
         ...(s.synthesisRewardBoosts === undefined
             ? {}
             : { synthesisRewardBoosts: { ...s.synthesisRewardBoosts } }),
@@ -516,7 +617,6 @@ export function validateGameState(
                   treatmentSpent: s.settlement.treatmentSpent,
               }
             : null,
-        logs: s.logs,
         failureReason: s.failureReason,
         revision: s.revision,
         run: s.run,
@@ -563,12 +663,6 @@ export function migrateLegacyGameState(raw: unknown, definitions: Readonly<Recor
             }
         }
     }
-    if (Array.isArray(s.logs)) s.logs = s.logs.map((line: unknown) =>
-        typeof line === 'string'
-            ? line.replace(/护甲/g, '血量')
-                .replace(/，(?:负重 \d+ \/ \d+|释放 \d+ 负重)/g, '')
-                .replace(/超出负重的部分已放弃。/g, '其余物资已放弃。')
-            : line);
     return s;
 }
 

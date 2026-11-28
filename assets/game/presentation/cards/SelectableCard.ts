@@ -34,7 +34,8 @@ export class SelectableCard extends Component {
         status = '',
         enabled = true,
         blocked = '',
-        neededForSynthesis = false
+        neededForSynthesis = false,
+        packedWeight?: number
     ): void {
         this.card?.configure(
             kind,
@@ -43,7 +44,7 @@ export class SelectableCard extends Component {
             id,
             game.content.cards,
             game.scenario.battleResource === 'stamina' ? '体力' : '物资',
-            { field: game.scenario.fieldDeck, runDeck: game.scenario.runDeck, neededForSynthesis }
+            { field: game.scenario.fieldDeck, runDeck: game.scenario.runDeck, neededForSynthesis, packedWeight }
         );
         this.card?.setSelected(selected);
         if (this.badge) {
