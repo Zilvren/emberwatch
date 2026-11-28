@@ -13,6 +13,8 @@ export interface SpineRigContract {
     contactTip: readonly [number, number];
     contactBone: string;
     approachBone: string;
+    /** An attack may animate in place without a projectile or a melee approach. */
+    stationaryAttack?: boolean;
     /** In a ranged clip, release precedes the single impact event by this travel time. */
     flight?: number;
     parts?: readonly {

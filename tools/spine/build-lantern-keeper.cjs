@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { execFileSync } = require('node:child_process');
-const { PNG } = require('./bestiary-assets.cjs');
+const { PNG, identifyParts, extractPart } = require('./bestiary-assets.cjs');
 const { root } = require('../native-assets.cjs');
 const { motions, cardTimings, paperFragments } = require('./lantern-keeper-motion.cjs');
 const landing = require('./lantern-keeper-landing.cjs');
@@ -35,11 +35,16 @@ bone('Head', 'Chest', ...toWorld([580,278]));
 bone('CloakFront', 'Chest', ...toWorld([631,373]));
 bone('CloakFold', 'CloakFront', ...toWorld([388,600]));
 bone('CoatHem', 'Hips', -6, 178);
+bone('CoatFlap', 'CoatHem', ...toWorld([626,853]));
+bone('LiningHem', 'Hips', -38, 114);
 bone('CloakBack', 'Chest', -14, 327);
 bone('CloakBackMid', 'Hips', -47, 200);
 bone('CloakHem', 'CoatHem', -80, 111);
 bone('RestArm', 'Chest', ...toWorld(spec.nearArm.shoulder));
 bone('RestElbow', 'RestArm', ...toWorld(spec.nearArm.elbow));
+bone('RightWrist', 'RestElbow', ...toWorld(spec.nearArm.wrist));
+bone('RightFingers', 'RightWrist', ...toWorld([377,872]));
+bone('RightThumb', 'RightWrist', ...toWorld([407,853]));
 bone('CastArm', 'Chest', ...toWorld([687,450]));
 bone('CastElbow', 'CastArm', ...toWorld([775,575]));
 bone('Wrist', 'CastElbow', ...toWorld([876,454]));
@@ -59,6 +64,12 @@ bone('AttackTip', 'Wrist', 126, 347);
 bone('Approach', 'root', 0, 0);
 bone('FrontFoot', 'PoseRoot', 45, 10);
 bone('RearFoot', 'PoseRoot', -63, 10);
+for (const leg of landing.legs) {
+    bone(leg.thigh, 'Hips', ...toWorld(leg.hip));
+    bone(leg.shin, leg.thigh, ...toWorld(leg.knee));
+    bone(leg.cap, leg.shin, ...toWorld(leg.knee));
+}
+const ground=landing.groundRig({bones,bone,world,toWorld});
 
 // Bounds are in Spine world coordinates, measured from the ground. Lower leg weights
 // terminate at planted foot bones so shifting weight bends the knees without foot slide.
@@ -76,14 +87,21 @@ function blend(a, b, t) {
     if (eased > .9999) return [[b,1]];
     return [[a,1-eased],[b,eased]];
 }
-function weights(id, main, u, v, x, y) {
+function weights(id, main, u, v, x, y, kneeling) {
     const px = spec.origin[0]+x/unit, py = spec.origin[1]-y/unit;
     switch (id) {
         case 'head': return blend('Head','Chest',(py-223)/63);
-        case 'coat': return py < 785 ? blend('Chest','Hips',(py-515)/270) : blend('Hips','CoatHem',(py-785)/260);
+        case 'coat': {
+            if (py < 785) return blend('Chest','Hips',(py-515)/270);
+            if (!kneeling) return blend('Hips','CoatHem',(py-785)/260);
+            const hem=blend('CoatHem','CoatFlap',(px-535)/130);
+            return blend('Hips','CoatHem',(py-785)/260).flatMap(([name,w])=>
+                name==='CoatHem'?hem.map(([joint,fraction])=>[joint,w*fraction]):[[name,w]]);
+        }
+        case 'coat-lining': return blend('Hips','LiningHem',(py-788)/260);
         case 'cloak-back': return py < 785 ? blend('CloakBack','CloakBackMid',(py-515)/270) : blend('CloakBackMid','CloakHem',(py-785)/260);
         case 'cloak-front':
-            if (py < 515) return blend('CloakFront','CloakFold',(py-365)/150);
+            if (py < 515) return blend('CloakFront','CloakFold',(py-365)/150*(kneeling ? 1-clamp((px-623)/65) : 1));
             if (py < 785) return blend('CloakFold','CloakBackMid',(py-515)/270);
             return blend('CloakBackMid','CloakHem',(py-785)/260);
         case 'cast-hand': {
@@ -95,16 +113,31 @@ function weights(id, main, u, v, x, y) {
                 .filter(([,weight]) => weight > .0001);
         }
         case 'card': return u < .5 ? blend('PaperFoldLeft','CastOrigin',2*u) : blend('CastOrigin','PaperFoldRight',2*u-1);
-        case 'rest-arm': return blend('RestArm','RestElbow',(py-643)/95);
+        case 'rest-arm': {
+            if (!kneeling) return blend('RestArm','RestElbow',(py-643)/95);
+            if (py < 786) return blend('RestArm','RestElbow',(py-643)/95);
+            if (py < 832) return blend('RestElbow','RightWrist',(py-786)/46);
+            const thumb = clamp((px-401)/17);
+            const curl = blend('RightWrist','RightFingers',(py-(859-13*thumb))/41);
+            return curl.flatMap(([name,w]) => name === 'RightFingers'
+                ? [['RightFingers',w*(1-thumb)],['RightThumb',w*thumb]].filter(([,weight])=>weight>0)
+                : [[name,w]]);
+        }
         case 'rear-leg':
-        case 'front-leg': return blend('Hips',main,(py-1150)/230);
+        case 'front-leg': {
+            if (!kneeling) return blend('Hips',main,(py-1150)/230);
+            const leg = id === 'front-leg' ? landing.legs[0] : landing.legs[1];
+            if (py < leg.knee[1]) return blend(leg.thigh,leg.cap,(py-leg.knee[1]+113)/97);
+            if (py < leg.knee[1]+85) return blend(leg.cap,leg.shin,(py-leg.knee[1]-5)/80);
+            return blend(leg.shin,main,(py-1150)/230);
+        }
         default: return [[main,1]];
     }
 }
-function influence(part,u,v) {
+function influence(part,u,v,kneeling=false) {
     const {id,bounds:[left,bottom,w,h],joint:main} = part;
     const x=left+u*w, y=bottom+(1-v)*h;
-    const weighted = weights(id,main,u,v,x,y);
+    const weighted = weights(id,main,u,v,x,y,kneeling);
     const total = weighted.reduce((sum,entry)=>sum+entry[1],0);
     return weighted.map(([name,weight]) => {
         const joint = world.get(name);
@@ -230,6 +263,59 @@ for (let row=0;row<capeRows.length-1;row++) for (let col=0;col<capeColumns;col++
 attachments['cloak-lining']={'cloak-lining':{...cape,triangles:lining}};
 cape.triangles=outer;
 
+// Bending the joints uncovers the inner coat, shoulder and trouser tops.
+// Each backed part uses one fixed mesh/material for the entire fall.
+const backingImages=new Map();
+const backedSlots=[];
+const sleeveColumns=12, sleeveRows=28, sleeveSplit=6;
+for (const [id,registration] of Object.entries(registered.backings)) {
+    if (id==='rear-leg') continue; // The folded leg covers the entire boot.
+    const name=id+'-backed', image=PNG.sync.read(fs.readFileSync(path.join(cuts,name+'.png')));
+    backingImages.set(name,image);
+    const part={...registration,id:id==='cloak-back'?'coat-lining':id};
+    const sleeve=id==='rest-arm', leg=id.endsWith('-leg');
+    const [left,top,w,h]=registration.sourceRect;
+    const sleeveRow=(u,v)=>{
+        const seam=clamp((sleeveY(left+u*w)-top)/h), breakAt=sleeveSplit/sleeveRows;
+        return v<breakAt ? v*seam/breakAt : seam+(v-breakAt)*(1-seam)/(1-breakAt);
+    };
+    const mesh=makeMesh(name,image,sleeve?sleeveColumns:10,sleeve?sleeveRows:leg?40:22,(u,v)=>{
+        const values=influence(part,u,v,true);
+        return [values.length,...values.flat()];
+    },sleeve?sleeveRow:undefined);
+    attachments[id][name]=mesh;
+    backedSlots.push(id);
+    if (sleeve) {
+        const edge=sleeveSplit*sleeveColumns*6;
+        attachments['rest-upper']['rest-upper-backed']={...mesh,triangles:mesh.triangles.slice(0,edge)};
+        mesh.triangles=mesh.triangles.slice(edge);
+        backedSlots.push('rest-upper');
+    }
+}
+// The short front lapel stays at the clasp as the shoulder leans. Both
+// sides keep their original triangles, UVs and paint across the sleeve seam.
+const mantle=parts.find(p=>p.id==='cloak-front');
+const mantleVertices=[];
+for (let i=0;i<cape.uvs.length;i+=2) {
+    const values=influence(mantle,cape.uvs[i],cape.uvs[i+1],true);
+    mantleVertices.push(values.length,...values.flat());
+}
+for (const name of ['cloak-front','cloak-lining']) {
+    attachments[name][name+'-backed']={...attachments[name][name],vertices:mantleVertices};
+    backedSlots.push(name);
+}
+// The rear face of the cloak is fully painted in the costume parts sheet.
+// At rest it sits under the outer folds. The deep bend reveals its lining.
+const costume=PNG.sync.read(fs.readFileSync(path.join(source,'parts.png')));
+const pieces=identifyParts(costume,3,3);
+const reverse=extractPart(costume,pieces.ids,pieces.cells[8]).image;
+const reversePart={id:'cloak-front',joint:'CloakBack',bounds:[-112,139,120,165]};
+backingImages.set('mantle-reverse',reverse);
+attachments['mantle-reverse']={'mantle-reverse':makeMesh('mantle-reverse',reverse,12,24,(u,v)=>{
+    const weights=influence(reversePart,u,v,true);
+    return [weights.length,...weights.flat()];
+})};
+
 const slotBones = new Map(parts.map(({id,joint}) => [id,joint]));
 slotBones.set('rest-upper', slotBones.get('rest-arm'));
 slotBones.set('cast-fingers', slotBones.get('cast-hand'));
@@ -238,6 +324,7 @@ const slots = [
     'cloak-back', 'front-leg', 'rear-leg', 'cast-upper', 'coat', 'cloak-lining', 'cast-hand',
     'rest-upper', 'cloak-front', 'rest-arm', 'head', 'neck-wrap', 'card', 'cast-fingers',
 ].map(name => ({ name, bone: slotBones.get(name), attachment: name }));
+slots.unshift({name:'mantle-reverse',bone:'CloakBack'});
 for (const { name, size: [w,h] } of paperFragments) {
     slots.push({ name, bone: name });
     attachments[name] = { [name]: {
@@ -248,20 +335,26 @@ for (const { name, size: [w,h] } of paperFragments) {
 }
 
 const clips = motions();
-const landingSource=fs.readFileSync(path.join(source,'landing-poses.png'));
-const farArmCover=PNG.sync.read(fs.readFileSync(path.join(source,'landing-far-arm-cover.png')));
-const approach=PNG.sync.read(fs.readFileSync(path.join(source,'landing-right-arm-approach.png')));
-const fall=landing.addLanding({paint:PNG.sync.read(landingSource),cover:farArmCover,approach,
-    parts,slots,attachments,images,spec});
+const fall=landing.kneel({ bones, world, toWorld, backedSlots, rearLeg:registered.parts['rear-leg'], rearImage:images.get('rear-leg'),
+    driven:new Set(ground.transform.flatMap(constraint=>constraint.bones)) });
 clips.death=fall.clip;
+const profiles={...registered.backings};
+for(const [id,registration] of Object.entries(registered.profiles)) {
+    const image=PNG.sync.read(fs.readFileSync(path.join(cuts,id+'.png')));
+    backingImages.set(id,image);
+    profiles[id]={...registration,image};
+}
+landing.skinProfiles({bones,world,...fall,slots,attachments,profiles,makeMesh,toWorld,influence});
+clips.death.ik=ground.activeIk;
+clips.death.transform=ground.activeTransform;
 const doc = {
     skeleton:{spine:'3.8.75',images:'./',fps:30}, bones, slots,
+    ik:ground.ik,transform:ground.transform,
     skins:[{name:'default',attachments}],events:{impact:{}},animations:clips,
 };
 const contract = {
     schemaVersion:1,actor:'ashen-lantern-keeper',sourceSha256:registered.sourceSha256,baseline:0,boneNames:bones.map(b=>b.name),
-    landingSourceSha256:crypto.createHash('sha256').update(landingSource).digest('hex'),
-    landing:fall.registration,
+    landing:{ contact:landing.contact, rightWrist:'RightWrist', rearKnee:'RearShin', plantedFoot:'FrontFoot' },
     influences,triangles,neutralVertices,parts:registers,
     contactBone:'AttackTip',contactTip:[126,347],approachBone:'Approach',
     motions:{
@@ -302,10 +395,7 @@ function packPage(filename, entries) {
     }
     return { filename, atlas, text: lines.join('\n') };
 }
-const pages=[
-    packPage('lantern-keeper.png',[...images].filter(([id])=>id.startsWith('landing-'))),
-    packPage('lantern-keeper-standing.png',[...images].filter(([id])=>!id.startsWith('landing-'))),
-];
+const pages=[packPage('lantern-keeper.png',[...backingImages]),packPage('lantern-keeper-standing.png',[...images])];
 fs.mkdirSync(target,{recursive:true});
 write(path.join(target,'lantern-keeper.json'),doc);
 write(path.join(target,'lantern-keeper.contract.json'),contract);

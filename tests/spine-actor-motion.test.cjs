@@ -7,6 +7,27 @@ const geometry=load(path.join(root,'assets/game/presentation/actors/SpineRigGeom
 const {poseMatrices,point}=require('../tools/spine/rig-authoring.cjs');
 const read=f=>JSON.parse(fs.readFileSync(path.join(root,f),'utf8'));
 const ids=['survivor','wanderer','brute'];
+
+test('labyrinth enemies have no projectile and the idol keeps its original stationary attack', () => {
+ const {LABYRINTH_ENEMIES}=load(path.join(root,'assets/game/core/content/LabyrinthEnemies.ts'));
+ for(const actor of new Set(Object.values(LABYRINTH_ENEMIES).map(enemy=>enemy.actorId))){
+  const prefix='assets/ashen-labyrinth/'+actor+'/'+actor;
+  const rig=read(prefix+'.json'),contract=read(prefix+'.contract.json'),attack=rig.animations.attack;
+  assert.deepEqual(attack.events,[{time:contract.motions.attack.contact,name:'impact'}],actor);
+  assert.ok(!contract.flight,actor);
+  if(['veil-idol','charybdis','symplegades'].includes(actor)){
+   assert.equal(contract.stationaryAttack,true,actor);
+   assert.equal(attack.bones[contract.approachBone],undefined,actor);
+  }
+  if(actor==='veil-idol'){
+   const original=read('art-source/ashen-labyrinth/battle-bestiary/veil-idol/runtime/veil-idol.json');
+   assert.deepEqual(attack,original.animations.attack);
+   assert.ok(attack.bones['left-sleeve'].rotate.length>1);
+   assert.equal(contract.motions.attack.contact,.68);
+   assert.equal(contract.motions.attack.duration,1.24);
+  }
+ }
+});
 const hash=f=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex');
 function mesh(d){return d.skins.find(s=>s.name==='default').attachments.Artwork['master08-thin'];}
 function decode(data,attachment=mesh(data)){
@@ -173,7 +194,8 @@ test('the Lantern Keeper places the shoulder under the cape and the forearm over
             const vAt = u => upper.uvs[2*seam.find(i => upper.uvs[2*i] === u)+1];
             assert.ok(vAt(0) > vAt(1), 'The sleeve opening follows the diagonal cape edge');
         }
-        assert.deepEqual(rig.animations.death.slots[separated].attachment, [{ time: 0, name: null }]);
+        const fall=rig.animations.death.slots[separated];
+        if (fall?.attachment) assert.ok(fall.attachment.every(key=>key.name));
     }
 });
 test('the Lantern Keeper catches and crushes the paper in the left hand at the single impact event', () => {
@@ -222,146 +244,103 @@ test('the Lantern Keeper catches and crushes the paper in the left hand at the s
         for (const name of ['PaperFoldLeft','PaperFoldRight']) assert.equal(bones[name].rotate[0].angle, 0);
     }
 });
-test('the painted fall source keeps corrections on the named arms and preserves the supporting fist', () => {
-    const { PNG } = require('../tools/spine/bestiary-assets.cjs');
-    const { applyFarArmCover, applyRightArmApproach } = require('../tools/spine/lantern-keeper-landing.cjs');
-    const source = 'art-source/ashen-labyrinth/lantern-keeper/';
-    const png = file => PNG.sync.read(fs.readFileSync(path.join(root,file)));
-    const approved = fs.readFileSync(path.join(root,source,'landing-poses.png'));
-    const contract = read(keeperFile+'.contract.json');
-    assert.equal(crypto.createHash('sha256').update(approved).digest('hex'),contract.landingSourceSha256);
-    const sheet = PNG.sync.read(approved), base = Buffer.from(sheet.data);
-    const pixelDiff = (a,b,k) => a[k]!==b[k] || a[k+1]!==b[k+1] || a[k+2]!==b[k+2] || a[k+3]!==b[k+3];
-    applyFarArmCover(sheet,png(source+'landing-far-arm-cover.png'));
-    const coverRegions=[[167,769],[640,773],[1146,771]], coverCount=[0,0,0];
-    const freeGloves = [[216,877,262,954],[705,893,757,964],[1203,881,1253,956]];
-    const supportingFists = [[303,920,355,996],[763,920,817,996],[1267,920,1333,996]];
-    for(let k=0;k<sheet.data.length;k+=4){
-        if(!pixelDiff(base,sheet.data,k))continue;
-        const i=k/4,x=i%sheet.width,y=Math.floor(i/sheet.width);
-        const at=coverRegions.findIndex(([l,t])=>x>=l&&x<l+144&&y>=t&&y<t+210);
-        assert.ok(at>=0);
-        const inside=([l,t,r,b])=>x>=l&&x<r&&y>=t&&y<b;
-        assert.ok(!inside(supportingFists[at]),'The grounded fist changed');
-        if(base[k+3]!==sheet.data[k+3])assert.ok(inside(freeGloves[at]));
-        coverCount[at]++;
+test('the keeper falls on one articulated skin with the same head, mask, cloak and right hand', () => {
+    const doc=read(keeperFile+'.json'), clip=doc.animations.death, skin=doc.skins[0].attachments;
+    const atlas=fs.readFileSync(path.join(root,keeperFile+'.atlas'),'utf8');
+    assert.ok(!atlas.split(/\r?\n/).some(line=>line.startsWith('landing-')));
+    assert.ok(!doc.slots.some(slot=>slot.name==='landing-body'));
+    for (const slot of doc.slots) {
+        if (slot.name==='card' || slot.name.startsWith('paper-chip-')) continue;
+        const track=clip.slots?.[slot.name]?.attachment;
+        if (track) assert.equal(track.length,1,slot.name+' should hold one mesh');
+        if (track) assert.equal(track[0].time,0);
+        const attachment=skin[slot.name][track?.[0].name??slot.attachment];
+        assert.equal(attachment.type,'mesh');
+        if (slot.name==='head' || slot.name==='cloak-front' || slot.name==='cloak-lining')
+            assert.equal(attachment.path,skin[slot.name][slot.attachment].path);
     }
-    assert.ok(coverCount.every(n=>n>0));
-    const beforeApproach=Buffer.from(sheet.data);
-    applyRightArmApproach(sheet,png(source+'landing-right-arm-approach.png'));
-    const edits=[[601,154],[1127,207]], counts=[0,0];
-    for(let k=0;k<sheet.data.length;k+=4){
-        if(!pixelDiff(beforeApproach,sheet.data,k))continue;
-        const i=k/4,x=i%sheet.width,y=Math.floor(i/sheet.width);
-        const at=edits.findIndex(([l,t])=>x>=l&&x<l+348&&y>=t&&y<t+270);
-        assert.ok(at>=0,'The approach correction escaped the two arm regions');
-        counts[at]++;
+    const influences = name => {
+        const key=clip.slots[name].attachment[0].name;
+        const attachment=skin[name][key], vertices=decode(doc,attachment);
+        return [...new Set(attachment.triangles)].flatMap(i=>vertices[i].map(([index])=>doc.bones[index].name));
+    };
+    for (const joint of ['RestArm','RestElbow','RightWrist','RightFingers','RightThumb'])
+        assert.ok([...influences('rest-arm'),...influences('rest-upper')].includes(joint),joint);
+    for (const [name,prefix] of [['front-leg','Front'],['rear-leg','Rear']])
+        for (const joint of ['Thigh','Kneecap','Shin','Foot'])
+            assert.ok([...influences(name),...(name==='front-leg'?influences('raised-trousers'):[])].includes(prefix+joint),prefix+joint);
+    assert.equal(clip.bones.Head.scale,undefined);
+    assert.equal(clip.slots?.head,undefined);
+    assert.equal(clip.events,undefined);
+    assert.equal(clip.slots.card.attachment.at(-1).name,null);
+    const order=new Array(doc.slots.length), moved=new Set();
+    for (const {slot,offset} of clip.drawOrder.at(-1).offsets) {
+        const index=doc.slots.findIndex(s=>s.name===slot);
+        order[index+offset]=slot;
+        moved.add(slot);
     }
-    assert.ok(counts.every(n=>n>0));
+    const rest=doc.slots.map(s=>s.name).filter(name=>!moved.has(name));
+    for(let i=0;i<order.length;i++) if(!order[i]) order[i]=rest.shift();
+    for(const far of ['cast-upper','cast-hand','cast-fingers'])
+        assert.ok(order.indexOf(far)<order.indexOf('coat'),far+' stays behind the torso');
+    assert.ok(order.indexOf('rest-arm')>order.indexOf('cloak-front'));
 });
 
-test('the fall plays registered painted frames and holds the same three ground contacts', () => {
-    const {PNG}=require('../tools/spine/bestiary-assets.cjs');
-    const data=read(keeperFile+'.json'), contract=read(keeperFile+'.contract.json');
-    const {frames,contact}=contract.landing, clip=data.animations.death;
-    const exposure=clip.slots['landing-body'].attachment;
-    const regions=data.skins[0].attachments['landing-body'];
-    const atlas=fs.readFileSync(path.join(root,keeperFile+'.atlas'),'utf8');
-    const texture=PNG.sync.read(fs.readFileSync(path.join(root,keeperFile+'.png')));
-    const packed=new Map(Array.from(atlas.matchAll(/^([\w-]+)\s+rotate: false\s+xy: (\d+), (\d+)\s+size: (\d+), (\d+)/gm),
-        ([,name,...rect])=>[name,rect.map(Number)]));
-    assert.ok(texture.width<=2048 && texture.height<=2048);
-    assert.equal(clip.bones,undefined);
-    assert.deepEqual(exposure.slice(0,-1),frames.map(({name,time})=>({time,name})));
-    assert.deepEqual(exposure.at(-1),{time:contract.motions.death.duration,name:'settle'});
-    assert.equal(frames[0].time,0);
-    assert.ok(frames.length>=16 && new Set(frames.map(f=>f.name)).size===frames.length);
-    assert.deepEqual(clip.slots.card.attachment.at(-1),{time:.07,name:null});
-    const held=frames.filter(f=>f.time>=contact), settled=frames.at(-1);
-    assert.equal(held[0].name,'contact');
-    assert.deepEqual(settled.fist,[-42.4,4.4]);
-    assert.deepEqual(settled.toe,[96,2]);
-    function groundY(frame,center) {
-        const part=regions[frame.name];
-        const [ox,oy,w,h]=packed.get(part.path);
-        let low=Infinity;
-        for(let y=0;y<h;y++) for(let x=0;x<w;x++) {
-            const worldX=part.x+((x+.5)/w-.5)*part.width;
-            if(Math.abs(worldX-center)>5 || texture.data[4*((oy+y)*texture.width+ox+x)+3]<150) continue;
-            low=Math.min(low,part.y+(.5-(y+.5)/h)*part.height);
-        }
-        return low;
+test('ground controls remain independent of the hips and hold through the cape settling', () => {
+    const doc=read(keeperFile+'.json'), contract=read(keeperFile+'.contract.json'), clip=doc.animations.death;
+    function interpolate(track,t,field) {
+        if (!track) return 0;
+        let i=0;
+        while (i+1<track.length && track[i+1].time<=t) i++;
+        const a=track[i], b=track[i+1];
+        if (!b) return a[field];
+        let delta=b[field]-a[field];
+        if(field==='angle') delta=((delta+540)%360)-180;
+        return a[field]+Math.max(0,(t-a.time)/(b.time-a.time))*delta;
     }
-    function rgbaAt(frame,x,y) {
-        const [ox,oy,w,h]=packed.get(regions[frame.name].path);
-        const col=Math.floor((.5+(x-frame.x)/frame.width)*w);
-        const row=Math.floor((.5-(y-frame.y)/frame.height)*h);
-        const start=4*((oy+row)*texture.width+ox+col);
-        return texture.data.subarray(start,start+4);
+    function sample(t) {
+        const pose=Object.fromEntries(Object.entries(clip.bones).map(([name,track])=>[name,{
+            rotate:interpolate(track.rotate,t,'angle'),
+            x:interpolate(track.translate,t,'x'),y:interpolate(track.translate,t,'y'),
+        }]));
+        return poseMatrices(doc,pose);
     }
-    function lampShape(frame, sampleReference) {
-        const [ox,oy,w,h]=packed.get(regions[frame.name].path);
-        let energy=0, moment=0;
-        for(let y=0;y<h;y++) for(let x=0;x<w;x++) {
-            const dx=frame.x+((x+.5)/w-.5)*frame.width-frame.lamp[0];
-            const dy=frame.y+(.5-(y+.5)/h)*frame.height-frame.lamp[1];
-            const dist2=dx*dx+dy*dy;
-            if(dist2>9.5**2) continue;
-            const offset=4*((oy+y)*texture.width+ox+x);
-            const [r,g,b,a]=sampleReference
-                ? sampleReference(dx+frame.lamp[0],dy+frame.lamp[1],frame.width/w,frame.height/h)
-                : texture.data.subarray(offset,offset+4);
-            const amber=Math.min(1,Math.max(0,(r-b-42)/80));
-            const light=amber*Math.min(1,Math.max(0,(g-95)/112))*a/255;
-            energy+=light;moment+=dist2*light;
-        }
-        return {energy,radius:Math.sqrt(moment/energy)};
+    const {contact,plantedFoot}=contract.landing;
+    const rightHand='RightHandTarget', rearAnkle='RearAnkleTarget';
+    for(const [name,control] of [['FrontLegIK','FrontAnkleTarget'],['RearLegIK',rearAnkle],['RightArmIK',rightHand]]) {
+        const ik=doc.ik.find(constraint=>constraint.name===name);
+        assert.equal(ik.target,control);
+        assert.equal(ik.bones.length,2);
+        const [upper,lower]=ik.bones.map(name=>doc.bones.find(b=>b.name===name));
+        assert.ok(upper.length>25&&lower.length>25&&lower.parent===upper.name);
+        assert.equal(ik.mix,0);
+        assert.equal(clip.ik[name][0].mix,1);
+        assert.ok(clip.bones[upper.name]===undefined && clip.bones[lower.name]===undefined);
+        let bone=doc.bones.find(b=>b.name===control);
+        while(bone?.parent){assert.notEqual(bone.parent,'Hips');bone=doc.bones.find(b=>b.name===bone.parent);}
     }
-    const idleLamp=lampShape(frames[0]);
-    // This lamp is painted on the supplied master. Compare at the sampling
-    // density of the landing exposure, including its fractional registration.
-    const art='art-source/ashen-labyrinth/lantern-keeper/';
-    const spec=read(art+'standing-registration.json');
-    const reference=PNG.sync.read(fs.readFileSync(path.join(root,art,spec.reference)));
-    const sourceLamp=lampShape(frames[0],(x,y,dx,dy)=>{
-        const sum=[0,0,0,0], samples=6;
-        for(let j=0;j<samples;j++) for(let i=0;i<samples;i++){
-            const sx=Math.floor(spec.origin[0]+(x+((i+.5)/samples-.5)*dx)/spec.unitsPerPixel);
-            const sy=Math.floor(spec.origin[1]-(y+((j+.5)/samples-.5)*dy)/spec.unitsPerPixel);
-            const index=4*(sy*reference.width+sx), a=reference.data[index+3];
-            for(let c=0;c<3;c++) sum[c]+=reference.data[index+c]*a;
-            sum[3]+=a;
-        }
-        return [...sum.slice(0,3).map(c=>c/Math.max(1,sum[3])),sum[3]/(samples*samples)];
-    });
-    assert.ok(sourceLamp.energy>0 && Math.abs(idleLamp.energy/sourceLamp.energy-1)<.05);
-    assert.ok(Math.abs(idleLamp.radius-sourceLamp.radius)<.35);
-    // Compare painted pixels as well as the registration markers. A moving
-    // mesh or an incorrectly trimmed region can otherwise pass a marker test.
-    for(const [i,f] of frames.entries()) {
-        assert.equal(regions[f.name].type,'region');
-        assert.ok(packed.has(regions[f.name].path));
-        if(i) assert.ok(f.time>frames[i-1].time && f.time-frames[i-1].time<=.071);
-        if(f.time>.07 && f.time<=contact) assert.ok(f.fist[1]<frames[i-1].fist[1]);
-        if(f.time<=.07) assert.ok(Math.abs(f.fist[1]-frames[0].fist[1])<9);
-        const lamp=lampShape(f);
-        assert.ok(Math.abs(lamp.energy/idleLamp.energy-1)<.05,f.name+' changed the painted lamp intensity');
-        assert.ok(Math.abs(lamp.radius-idleLamp.radius)<.35,f.name+' changed the lamp halo');
+    assert.equal(clip.bones.RestArm,undefined);
+    assert.equal(clip.bones.FrontShin,undefined);
+    assert.ok(clip.bones.RightHandTarget.translate.length<=9);
+    const end=contract.motions.death.duration;
+    assert.equal(contract.motions.death.loop,false);
+    const start=sample(0), impact=sample(contact), held=sample(end);
+    for(const joint of [plantedFoot,rearAnkle,rightHand,'Head']) {
+        const bind=poseMatrices(doc)[joint];
+        assert.ok(Math.hypot(start[joint][4]-bind[4],start[joint][5]-bind[5])<.01,joint);
     }
-    assert.ok(frames.find(f=>f.name==='drop').fist[1]<80);
-    for(const f of held) {
-        for(let y=4;y<=12;y+=2) for(let x=-4;x<=4;x+=2) {
-            const pixel=rgbaAt(f,f.fist[0]+x,f.fist[1]+y);
-            assert.equal(pixel[3],255);
-            assert.deepEqual(pixel,rgbaAt(settled,settled.fist[0]+x,settled.fist[1]+y),'Changing planted glove in '+f.name);
-        }
-        for(const key of ['fist','rearKnee','toe']) {
-            assert.deepEqual(f[key],settled[key]);
-            const end=groundY(settled,settled[key][0]-2);
-            const at=groundY(f,f[key][0]-2);
-            assert.ok(Math.abs(at-end)<2 && Math.abs(at)<9,f.name+' '+key+' floor '+at);
-        }
+    let last=start[rightHand][5];
+    for(let i=1;i<=Math.ceil(end*120);i++) {
+        const t=Math.min(i/120,end), m=sample(t);
+        assert.ok(Math.hypot(m[plantedFoot][4]-start[plantedFoot][4],m[plantedFoot][5]-start[plantedFoot][5])<.1);
+        assert.ok(m[rightHand][5]<=last+.1);
+        last=m[rightHand][5];
+        if(t>=contact) for(const joint of [rearAnkle,rightHand])
+            assert.ok(Math.hypot(m[joint][4]-impact[joint][4],m[joint][5]-impact[joint][5])<.18,joint);
     }
+    assert.ok(impact[rightHand][5]<32 && impact[rearAnkle][5]<50);
+    assert.ok(impact[rearAnkle][4]<impact[rightHand][4] && impact[rightHand][4]<impact[plantedFoot][4]);
+    assert.ok(impact.CloakHem[5]>held.CloakHem[5]+9);
 });
 
 test('silhouette contact chooses the visible edge at the requested height',()=>{

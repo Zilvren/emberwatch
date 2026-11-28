@@ -75,6 +75,9 @@ export class SpineActorRig extends Component {
     get flight(): number {
         return this.data.flight ?? 0;
     }
+    get attacksInPlace(): boolean {
+        return this.data.stationaryAttack === true || this.flight > 0;
+    }
     get poseFamily(): string {
         return this.look === 'labyrinth' || this.data.actor.startsWith('ashen-')
             ? 'ashen-spine' : 'master08-spine';

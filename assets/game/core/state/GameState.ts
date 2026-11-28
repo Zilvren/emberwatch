@@ -3,7 +3,7 @@ import { getScenario, hasId, nodeDefinition, NodeKind, Route, STAMINA_SCENARIO, 
 import { FIST_MOVES, fistFinisherFor, fistMove, fistSupport, fistTargetMatches, isFistBattleReward } from '../content/FistCards';
 import { ASHEN_MAP_LAST_LAYER, ASHEN_MAP_OUTER_LANE, nextMapNodes, pointRoomId, type ExpeditionMap } from '../content/ExpeditionMap';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
-import { battleEnemies, hasLivingEnemy, validEnemyActions, type BattleEnemy } from '../content/LabyrinthEnemies';
+import { battleEnemies, hasLivingEnemy, labyrinthEncounterPool, validEnemyActions, type BattleEnemy } from '../content/LabyrinthEnemies';
 import { isPhase } from './GamePhase';
 import {
     getJournalCatalog,
@@ -161,9 +161,9 @@ function validateExpeditionMap(state: GameState, scenario: GameScenario): Expedi
     const entrance = map.points[0];
     requireValue(entrance, entrance?.id === scenario.fixedNodeId && entrance.layer === 0 &&
         pointRoomId(entrance) === scenario.fixedNodeId, 'map entrance');
-    const boss = points.get('lampCourt');
-    const lastLayer = boss?.layer;
-    requireValue(points, !!boss && pointRoomId(boss) === 'lampCourt' &&
+    const destination = points.get('lampCourt');
+    const lastLayer = destination?.layer;
+    requireValue(points, !!destination && pointRoomId(destination) === 'lampCourt' &&
         (lastLayer === ASHEN_MAP_LAST_LAYER || (lastLayer === 7 && map.version === undefined)),
         'map destination');
     for (const point of map.points) {
@@ -201,9 +201,11 @@ function validateExpeditionMap(state: GameState, scenario: GameScenario): Expedi
         const room = nodeDefinition(scenario, map.activeNode, map);
         if (phase === 'battle') {
             const battle = state.battle;
-            requireValue(room, room?.type === 'battle' && room.enemyId === battle?.enemy &&
-                (room.companions?.length ?? 0) === (battle.companions?.length ?? 0) &&
-                (room.companions ?? []).every((id, slot) => battle.companions?.[slot]?.enemy === id), 'active map battle');
+            requireValue(room, room?.type === 'battle' && !!battle &&
+                (battle.companions === undefined || Array.isArray(battle.companions)) &&
+                labyrinthEncounterPool(room.icon === 'elite').some(formation =>
+                    formation[0] === battle.enemy && formation.length === 1 + (battle.companions?.length ?? 0) &&
+                    formation.slice(1).every((id, i) => battle.companions?.[i]?.enemy === id)), 'active map battle');
         }
         if (phase === 'rewards') requireValue(room, !!room && map.activeNode === state.rewards?.source && room.type !== 'rest', 'active map reward');
         if (phase === 'rest') requireValue(room, room?.type === 'rest', 'active map rest');

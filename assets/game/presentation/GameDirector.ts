@@ -415,9 +415,7 @@ export class GameDirector extends Component {
                 () => {},
                 this.ui.reduced
             );
-            this.hero.playAction('attack', this.ui.reduced, impact, complete, actor, () =>
-                this.pulse(this.hero, actor)
-            );
+            this.hero.playAction('attack', this.ui.reduced, impact, complete, actor, () => this.playerPulse(actor));
         } else if (presentation) presentation.playAction(impact, complete, this.ui.reduced);
         else {
             impact();
@@ -487,23 +485,22 @@ export class GameDirector extends Component {
                 this.ui.reduced,
                 impact,
                 complete,
-                this.hero,
-                () => this.pulse(actor, this.hero)
+                this.hero
             );
         else {
             impact();
             complete();
         }
     }
-    private pulse(from: ActorPresentation | null, to: ActorPresentation | null): void {
-        const rig = from?.spineRig,
-            target = to?.spineRig,
+    private playerPulse(to: ActorPresentation): void {
+        const rig = this.hero?.spineRig,
+            target = to.spineRig,
             layer = this.effectsRoot;
         if (!rig?.flight || !target || !layer || this.ui.reduced) return;
         const ui = layer.getComponent(UITransform)!;
         const start = ui.convertToNodeSpaceAR(rig.contactWorld(new Vec3()));
         const end = ui.convertToNodeSpaceAR(target.aimWorld(new Vec3()));
-        launchPulse(layer, start, end, rig.flight, from === this.hero);
+        launchPulse(layer, start, end, rig.flight);
     }
     private effect(
         kind: 'attack' | 'block' | 'heal',
@@ -527,7 +524,7 @@ export class GameDirector extends Component {
             .getComponent(UITransform)!
             .convertToNodeSpaceAR(anchor.worldPosition);
         if (kind === 'attack' && this.game.scenario.fieldDeck) {
-            ringImpact(this.effectsRoot, position, actor !== this.hero, this.ui.reduced);
+            if (actor !== this.hero) ringImpact(this.effectsRoot, position, this.ui.reduced);
         } else {
             const effect = instantiate(template);
             effect.setPosition(position);

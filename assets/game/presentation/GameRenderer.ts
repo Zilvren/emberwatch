@@ -221,7 +221,8 @@ export class GameRenderer extends NativeViewWriter {
                     ? exits[0]
                     : g.scenario.routes[g.route!]?.[g.pathIndex + 1];
                 const next = nextId ? nodeDefinition(g.scenario, nextId, g.expeditionMap) : undefined;
-                const enemy = next?.type === 'battle' ? g.scenario.enemies[next.enemyId] : null;
+                const randomEncounter = next?.type === 'battle' && g.scenario.labyrinth && g.expeditionMap;
+                const enemy = next?.type === 'battle' && !randomEncounter ? g.scenario.enemies[next.enemyId] : null;
                 const enemyPlan = g.scenario.labyrinth && next?.type === 'battle' && isLabyrinthEnemy(next.enemyId)
                     ? g.content.catalog.labyrinth?.enemyActions?.[next.enemyId]
                     : undefined;
@@ -236,6 +237,8 @@ export class GameRenderer extends NativeViewWriter {
                         (g.scenario.labyrinth ? `随身物资卡 ${g.carriedCards.length} 张` : '下一场战斗会重新洗牌。'),
                     'rest/text4': exits.length > 1
                         ? `前方有 ${exits.length} 条路线 · 返回地图选择`
+                        : randomEncounter && next
+                          ? `下一站 · ${next.title}\n${next.icon === 'elite' ? '精英遭遇' : '随机普通遭遇'}`
                         : enemy
                           ? `下一站 · ${enemy.title}\n生命 ${enemy.hp} · 普攻 ${enemyPlan?.attack ?? enemy.attack} · 重击 ${enemyPlan?.strongAttack ?? enemy.strongAttack}`
                           : '下一站 · ' + (nextId ? nodeTitle(g.scenario, nextId, g.expeditionMap) : '避难所'),
@@ -306,10 +309,10 @@ export class GameRenderer extends NativeViewWriter {
             .some((weapon) => (g.content.cards[weapon.kind].weaponSlots ?? 1) === 2);
         const gauge = screen.getChildByName('StaminaGauge');
         if (gauge) gauge.active = g.scenario.battleResource === 'stamina';
-        const definition = g.scenario.enemies[b.enemy];
-        if (g.scenario.labyrinth)
-            world.getComponent(SceneAtmosphere)?.setRoom(expeditionRoomId(g.expeditionMap, g.currentNode),
-                definition.actorId === 'veil-idol' ? 'court' : 'labyrinth');
+        if (g.scenario.labyrinth) {
+            const room = expeditionRoomId(g.expeditionMap, g.currentNode);
+            world.getComponent(SceneAtmosphere)?.setRoom(room, room === 'lampCourt' ? 'court' : 'labyrinth');
+        }
         const actors = world.getComponentsInChildren(ActorPresentation);
         const members = battleEnemies(b);
         const formation: ActorPresentation[] = [];

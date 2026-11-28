@@ -51,7 +51,7 @@
     207.5222346156433
   ],
   "approachBone": "Approach",
-  "flight": 0.13,
+  "stationaryAttack": true,
   "parts": [
     {
       "name": "right-facet"

@@ -1,154 +1,63 @@
 
 lantern-keeper.png
-size: 2048,1456
+size: 2048,1008
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-landing-stand
+coat-backed
   rotate: false
   xy: 4, 4
-  size: 248, 384
-  orig: 248, 384
+  size: 715, 788
+  orig: 715, 788
   offset: 0, 0
   index: -1
-landing-inbetween-01
+front-leg-backed
   rotate: false
-  xy: 260, 4
-  size: 263, 383
-  orig: 263, 383
+  xy: 727, 4
+  size: 449, 694
+  orig: 449, 694
   offset: 0, 0
   index: -1
-landing-release
+rest-arm-backed
   rotate: false
-  xy: 531, 4
-  size: 270, 379
-  orig: 270, 379
+  xy: 1184, 4
+  size: 207, 569
+  orig: 207, 569
   offset: 0, 0
   index: -1
-landing-inbetween-03
+cloak-back-backed
   rotate: false
-  xy: 809, 4
-  size: 278, 375
-  orig: 278, 375
+  xy: 1399, 4
+  size: 596, 503
+  orig: 596, 503
   offset: 0, 0
   index: -1
-landing-inbetween-04
+folded-leg
   rotate: false
-  xy: 1095, 4
-  size: 283, 367
-  orig: 283, 367
+  xy: 1399, 515
+  size: 160, 480
+  orig: 160, 480
   offset: 0, 0
   index: -1
-landing-bend
+mantle-reverse
   rotate: false
-  xy: 1386, 4
-  size: 282, 359
-  orig: 282, 359
+  xy: 1567, 515
+  size: 411, 418
+  orig: 411, 418
   offset: 0, 0
   index: -1
-landing-inbetween-06
+raised-trousers
   rotate: false
-  xy: 1676, 4
-  size: 281, 348
-  orig: 281, 348
+  xy: 1184, 581
+  size: 160, 288
+  orig: 160, 288
   offset: 0, 0
   index: -1
-landing-inbetween-07
+closed-glove
   rotate: false
-  xy: 1676, 360
-  size: 286, 334
-  orig: 286, 334
-  offset: 0, 0
-  index: -1
-landing-inbetween-08
-  rotate: false
-  xy: 1095, 379
-  size: 297, 320
-  orig: 297, 320
-  offset: 0, 0
-  index: -1
-landing-drop
-  rotate: false
-  xy: 531, 391
-  size: 311, 308
-  orig: 311, 308
-  offset: 0, 0
-  index: -1
-landing-inbetween-10
-  rotate: false
-  xy: 4, 396
-  size: 314, 295
-  orig: 314, 295
-  offset: 0, 0
-  index: -1
-landing-inbetween-11
-  rotate: false
-  xy: 4, 699
-  size: 315, 285
-  orig: 315, 285
-  offset: 0, 0
-  index: -1
-landing-inbetween-12
-  rotate: false
-  xy: 1400, 702
-  size: 329, 269
-  orig: 329, 269
-  offset: 0, 0
-  index: -1
-landing-inbetween-13
-  rotate: false
-  xy: 327, 707
-  size: 337, 258
-  orig: 337, 258
-  offset: 0, 0
-  index: -1
-landing-contact
-  rotate: false
-  xy: 672, 707
-  size: 344, 249
-  orig: 344, 249
-  offset: 0, 0
-  index: -1
-landing-settle
-  rotate: false
-  xy: 1024, 707
-  size: 338, 243
-  orig: 338, 243
-  offset: 0, 0
-  index: -1
-landing-inbetween-15
-  rotate: false
-  xy: 1024, 958
-  size: 349, 242
-  orig: 349, 242
-  offset: 0, 0
-  index: -1
-landing-inbetween-16
-  rotate: false
-  xy: 327, 973
-  size: 353, 236
-  orig: 353, 236
-  offset: 0, 0
-  index: -1
-landing-inbetween-19
-  rotate: false
-  xy: 1381, 979
-  size: 348, 236
-  orig: 348, 236
-  offset: 0, 0
-  index: -1
-landing-inbetween-18
-  rotate: false
-  xy: 688, 1208
-  size: 353, 234
-  orig: 353, 234
-  offset: 0, 0
-  index: -1
-landing-compress
-  rotate: false
-  xy: 4, 1217
-  size: 355, 233
-  orig: 355, 233
+  xy: 1986, 515
+  size: 50, 46
+  orig: 50, 46
   offset: 0, 0
   index: -1
 

@@ -215,7 +215,7 @@ export class ActorPresentation extends Component {
             this.impact = impact ?? null;
             this.complete = complete ?? null;
             this.playingAction = !reduced;
-            if (kind === 'attack' && this.spineRig.flight && target?.spineRig)
+            if (kind === 'attack' && this.spineRig.attacksInPlace && target?.spineRig)
                 target.impactAnchor?.setWorldPosition(target.spineRig.aimWorld(new Vec3()));
             if (reduced) {
                 if (kind === 'death') this.spineRig.sample(kind, this.spineRig.duration(kind));
@@ -226,7 +226,7 @@ export class ActorPresentation extends Component {
                 done?.();
                 return;
             }
-            if (kind === 'attack' && target && !this.spineRig.flight) this.prepareMelee(target);
+            if (kind === 'attack' && target && !this.spineRig.attacksInPlace) this.prepareMelee(target);
             this.spineRig.play(
                 kind,
                 () => {

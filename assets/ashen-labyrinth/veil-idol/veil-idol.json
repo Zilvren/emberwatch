@@ -709,8 +709,7 @@
     }
   ],
   "events": {
-    "impact": {},
-    "release": {}
+    "impact": {}
   },
   "animations": {
     "attack": {
@@ -1232,10 +1231,6 @@
         }
       },
       "events": [
-        {
-          "time": 0.51,
-          "name": "release"
-        },
         {
           "time": 0.68,
           "name": "impact"

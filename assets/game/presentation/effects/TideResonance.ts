@@ -1,22 +1,21 @@
 import { Color, Graphics, Node, UIOpacity, Vec3, tween } from 'cc';
 
-function mark(layer: Node, name: string, position: Vec3, friendly: boolean): Graphics {
+function mark(layer: Node, name: string, position: Vec3): Graphics {
     const node = new Node(name);
     node.layer = layer.layer;
     node.parent = layer;
     node.setPosition(position);
     const ink = node.addComponent(Graphics);
-    ink.strokeColor = friendly ? new Color(100, 238, 224, 255) : new Color(255, 183, 76, 255);
+    ink.strokeColor = new Color(100, 238, 224, 255);
     return ink;
 }
 export function launchPulse(
     layer: Node,
     from: Vec3,
     to: Vec3,
-    seconds: number,
-    friendly: boolean
+    seconds: number
 ): void {
-    const ink = mark(layer, 'TidalPulse', from, friendly);
+    const ink = mark(layer, 'TidalPulse', from);
     ink.node.angle = (Math.atan2(to.y - from.y, to.x - from.x) * 180) / Math.PI;
     for (const offset of [-10, 0]) {
         ink.lineWidth = offset ? 2 : 4;
@@ -29,8 +28,8 @@ export function launchPulse(
         .call(() => ink.node.destroy())
         .start();
 }
-export function ringImpact(layer: Node, at: Vec3, friendly: boolean, reduced: boolean): void {
-    const ink = mark(layer, 'PressureImpact', at, friendly);
+export function ringImpact(layer: Node, at: Vec3, reduced: boolean): void {
+    const ink = mark(layer, 'PressureImpact', at);
     ink.lineWidth = 3;
     for (let i = 0; i < 3; i++) {
         const angle = (i * Math.PI * 2) / 3 + 0.24;

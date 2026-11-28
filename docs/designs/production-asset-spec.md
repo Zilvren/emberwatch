@@ -21,7 +21,7 @@
 | 卡律布狄斯 | 11 | 13 | 0.68 秒 | 涡喉、前后潮唇、泡沫带、基座与悬石 |
 | 相撞双岩 | 8 | 10 | 0.62 秒 | 两块主岩、磨亮的撞击面、岩足与碎片 |
 
-每种都有可编辑 `.spine`、独立 PNG、轴点登记、Spine 3.8.75 导出数据及 Cocos Prefab。五段动作沿用 `idle / prepare / attack / hurt / death`，待机循环，攻击按唯一的 `impact` 事件结算。涡潮与撞岩还在冲击到达前发出 `release`。地面基线为 Spine 的 0，原生点击区域来自中立姿势的可见像素边界。战斗与作者入口分别为 `assets/prefabs/screens/BattleScreen.prefab`、`tools/spine/bestiary-author.cjs` 和 `tools/spine/install-labyrinth-actors.cjs --mythic-bestiary`。
+每种都有可编辑 `.spine`、独立 PNG、轴点登记、Spine 3.8.75 导出数据及 Cocos Prefab。五段动作沿用 `idle / prepare / attack / hurt / death`，待机循环，攻击按唯一的 `impact` 事件结算。卡律布狄斯和相撞双岩原地完成吞吐与闭合动作。所有怪物用自身动作和主角受击显示攻击结果。地面基线为 Spine 的 0，原生点击区域来自中立姿势的可见像素边界。战斗与作者入口分别为 `assets/prefabs/screens/BattleScreen.prefab`、`tools/spine/bestiary-author.cjs` 和 `tools/spine/install-labyrinth-actors.cjs --mythic-bestiary`。
 
 ## 2026-11-28 · 战斗 HUD 石材插画
 
@@ -46,7 +46,7 @@
 
 本版已接入 Pink/Cocos 主场景。11 月 28 日用户提供的 `standing-reference.png` 是战斗站姿的逐像素依据。原始画稿和早期九件拆件保存在 `art-source/ashen-labyrinth/lantern-keeper/`。本版按 `standing-registration.json` 的可见边界从参考图切出独立纹理。1024×1536 画布以像素 (512, 1520) 对准游戏根节点，每个原图像素对应 0.2875 个 Spine 单位。
 
-运行资源位于 `assets/ashen-labyrinth/lantern-keeper/`，使用 Spine 3.8.75、31 根骨骼和 19 个绘制插槽。站姿拆件及纸牌使用一页原尺寸图集，力竭曝光帧使用另一页，两页边长均在 2048 像素以内。`cloak-front` 与 `cloak-lining` 共用原画布料、网格顶点和骨骼权重，沿画稿中的弧形褶边分置于近袖前后。`cloak-back` 绘制身后的衣料。手和衣摆遮住的布纹由相邻同类材质补足，重叠处按原画透明度计算。左手的 `GripThumb` 与 `GripFingers` 在出牌时维持绑定姿势，纸面由 `CastOrigin` 和两侧折痕骨骼变形。
+运行资源位于 `assets/ashen-labyrinth/lantern-keeper/`。2026-11-28 的角色使用 Spine 3.8.75、52 根骨骼、21 个插槽和两页部件图集。一页保存站姿原画拆件和悬牌，另一页保存深屈膝时露出的衣料、裤腿内侧和拳面。`cloak-front` 与 `cloak-lining` 沿袖口交界使用相同的顶点与权重，布料在手臂前后各有一层。头发、面具和灯纹共用站姿的头部纹理。
 
 使用 `node tools/spine/build-lantern-keeper.cjs` 生成资源，`npm run build:web` 导出游戏。`tools/spine/capture-lantern-keeper-pixels.cjs` 在主场景读取实际玩家骨架，固定待机零时刻，将游戏额外显示的悬牌移出比对。黑白两次同姿势读回得到颜色和覆盖率，再由 `tools/spine/compare-lantern-keeper-pixels.py` 逐像素计算全图、可见披风、铜扣、袖口和翻边的差异。
 
@@ -56,11 +56,11 @@
 | 攻击出牌 | 0.66 秒 | 左手保持张开，纸在掌中折起，0.42 秒碎裂并结算攻击 |
 | 格挡准备 | 0.58 秒 | 左手收回身前，0.28 秒捏碎并结算牌效 |
 | 受击 | 0.38 秒 | 髋、胸、头依次后撤，再随披肩回稳 |
-| 力竭 | 1.02 秒 | 腰侧右手收拳下击，0.60 秒右拳接地，后膝与前脚落稳。失败页定格在第 21 张画面 |
+| 力竭 | 1.02 秒 | 近侧右手握拳，0.60 秒触地。前脚承重，后膝跪下，披风随后回落。失败页保持骨架终姿 |
 
-力竭动作使用 21 张注册在同一地面上的透明画面。起始衣料来自站姿拆件，弯身与跪姿使用对应原画中的披肩、袖根、内衬和下摆。关节、铜扣与衣摆落点配准中间画面。头部绕耳侧转动，灯光直接取自站姿参考像素。近侧右手从自然垂下收指，0.40 秒起沿用同一张闭合拳面，0.60 秒触地。前脚掌、后膝和拳峰在余下七张画面各自保持接触位置。
+力竭先按参考姿势确定站立、失衡、触地和压低回稳，再为肩、手腕和衣摆安排过渡。沿用 Spineboy 的做法，将脚部控制器置于髋骨层级之外。`FrontLegIK`、`RearLegIK` 与 `RightArmIK` 是 Spine 原生双骨 IK。移动髋部时，两条腿按各自的踝目标弯曲。近侧右手指节逐步收拢，`RightHandTarget` 在触地后固定。肩部和披风的外层、内衬各自加权。两条裤腿使用固定的布料纹理，在深屈膝时用网格修正保住轮廓。[Spine 关键姿势与分层工作流](https://esotericsoftware.com/spine-animating#Pose-to-pose) · [Spineboy 腿部控制](https://esotericsoftware.com/spine-examples-spineboy#Legs) · [Erika 的披风绑定示范](https://www.youtube.com/watch?v=dDkIL9Xwm5E&t=4096s)
 
-运行时由 `death` 时间线在 `landing-body` 插槽逐张切换普通 Spine 区域附件。待机、出牌和受击使用现有骨骼。`tools/spine/lantern-keeper-frames.py` 编排画面，`lantern_keeper_layers.py` 负责持续可见部位的配准、收指和头部采样。显式重制素材需要 Python、Pillow、NumPy、SciPy 和 OpenCV。Pink 构建直接导入已生成的 PNG、atlas 和 JSON。
+`tools/spine/lantern-keeper-landing.cjs` 定义动作和原生约束，`tools/spine/lantern-keeper-reference.py` 按原画登记拆件与遮挡区域。`art-source/ashen-labyrinth/lantern-keeper/kneel-registration.json` 记录屈膝后可见布面的配准点。Spine Professional 3.8.75 已完成工程导入和回导。可编辑工程及其部件图位于 `art-source/ashen-labyrinth/lantern-keeper/lantern-keeper-spine-3.8.75.zip`。
 
 `tools/spine/lantern-keeper-motion.cjs` 编排掌中纸面折皱和纸屑。碎裂帧隐藏整张牌、露出四片碎纸并发出一次 `impact`。碎纸在约 0.18 秒内淡出。待机与受击显式还原纸面展开的姿势。`SpineActorRig.ts` 转发动画事件，`GameDirector.ts` 提交现有 `play-card` 命令。
 
@@ -124,7 +124,7 @@ R3 把左手腕、纸牌夹持点登记到同一坐标系，拇指在牌前，�
 | --- | ---: | ---: | --- |
 | 灰灯蛾 | 16（1 张衬层） | 17 | 收翼后俯冲，0.43 秒接触 |
 | 叩石螯 | 14（2 张衬层） | 16 | 抬螯、合指，0.55 秒接触，两条近侧腿使用 IK |
-| 垂幡守像 | 18（4 张衬层） | 16 | 收袖后挥臂，0.68 秒接触，两条垂幡以加权网格弯曲 |
+| 垂幡守像 | 18（4 张衬层） | 16 | 石座固定，收袖后原地挥臂。原版攻击全长 1.24 秒，0.68 秒的 impact 结算一次伤害，垂幡随双段加权骨骼摆动。 |
 
 每只怪提供 Spine 3.8.75 编辑工程以及待机、预备、攻击、受击、死亡五段动作。资源包还包含折光回廊与沉灯井庭两张空场背景，构图保留左右站位及手牌区。原生播放记录见 [制作与播放核验](../../art-source/ashen-labyrinth/battle-bestiary/verification.json)，目录和使用方式见 [战斗素材包](../../art-source/ashen-labyrinth/battle-bestiary/README.md)。
 
@@ -132,7 +132,7 @@ R3 把左手腕、纸牌夹持点登记到同一坐标系，拇指在牌前，�
 
 已实装三幅场景原画、三张角色贴图及一张 4 列 × 3 行的卡图集。生产原稿位于 `art-source/tide/`，输出位于 `assets/resources/tide/`。普通构建直接读取已导入资源。更换角色原稿后，按原始画布像素调好注册点，再显式执行 `node tools/author-tide-art.cjs`。脚本导出 Spine 3.8 网格、骨骼、五段动作、事件、接触几何和卡图 plist。所有资源通过 Pink 生成的 .meta 与正式 Prefab 引用接入。
 
-主角和闸轮使用 release 与 impact 两个事件，巡标机采用实体接触点。角色、仪器和地面位置分别由网格、接触骨骼和基线控制。实际游戏中的判定见 `SpineActorRig.ts`、`ActorPresentation.ts` 与 `GameDirector.ts`。
+旧潮闸主角的远程动作使用 release 与 impact 两个事件。闸轮的历史工程保留事件，敌方攻击表现由自身动作和主角受击承担。巡标机采用实体接触点。角色、仪器和地面位置分别由网格、接触骨骼和基线控制。实际游戏中的判定见 `SpineActorRig.ts`、`ActorPresentation.ts` 与 `GameDirector.ts`。
 
 - 项目：The end，Pink/Cocos 4.0.0-beta.1，Web desktop。
 - 日期：2026-11-15，Asia/Shanghai。

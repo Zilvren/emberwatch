@@ -19,15 +19,15 @@ const gallery = {
     cyclops: { aim:'torso', contact:'pounding-fist', x:318, y:-178, scale:1, intentAnchor:[-5,328], vitalsAnchor:[222,75], shadowWidth:238 },
     minotaur: { aim:'chest', contact:'near-horn', x:324, y:-182, scale:1, intentAnchor:[-13,394], vitalsAnchor:[230,82], shadowWidth:252 },
     hydra: { aim:'mid-neck', contact:'mid-head', x:327, y:-180, scale:1, intentAnchor:[-12,387], vitalsAnchor:[236,76], shadowWidth:269 },
-    charybdis: { aim:'hollow', contact:'near-lip', flight:.18, x:325, y:-178, scale:1, intentAnchor:[33,373], vitalsAnchor:[211,74], shadowWidth:180 },
-    symplegades: { aim:'left-facet', contact:'left-rock', flight:.13, x:325, y:-180, scale:1, intentAnchor:[20,381], vitalsAnchor:[228,76], shadowWidth:287 },
+    charybdis: { aim:'hollow', contact:'near-lip', stationaryAttack:true, x:325, y:-178, scale:1, intentAnchor:[33,373], vitalsAnchor:[211,74], shadowWidth:180 },
+    symplegades: { aim:'left-facet', contact:'left-rock', stationaryAttack:true, x:325, y:-180, scale:1, intentAnchor:[20,381], vitalsAnchor:[228,76], shadowWidth:287 },
 };
 const enemies = {
     'ash-moth': { aim: 'thorax', contact: 'head', localTip: 23, x: 310, y: -119, scale: 1.02,
         intentAnchor: [-18, 341], vitalsAnchor: [312, 32] },
     'stone-claw': { aim: 'hull', contact: 'palm', localTip: 95, x: 324, y: -182, scale: .91,
         intentAnchor: [20, 255], vitalsAnchor: [292, 95] },
-    'veil-idol': { aim: 'robe', aimShift: 92, contact: 'left-hand', localTip: 49, x: 336, y: -189, scale: 1.05, flight: .17,
+    'veil-idol': { aim: 'robe', aimShift: 92, contact: 'left-hand', localTip: 49, stationaryAttack: true, x: 336, y: -189, scale: 1.05,
         intentAnchor: [-12, 400], vitalsAnchor: [196, 102] },
 };
 const absolute = (file) => path.join(root, file);
@@ -84,7 +84,7 @@ function markersAtImpact(doc, contact, tip, now) {
     return [f.x + tip * Math.cos(f.a), f.y + tip * Math.sin(f.a)];
 }
 
-function contractFile(target, name, doc, source, contact, tip, flight, parts, surface) {
+function contractFile(target, name, doc, source, contact, tip, stationaryAttack, parts, surface) {
     const motions = Object.fromEntries(motionNames.map((kind) => [kind, {
         duration: duration(doc.animations[kind]), loop: kind === 'idle',
         ...(kind === 'attack' ? { contact: doc.animations.attack.events.find((event) => event.name === 'impact').time } : {}),
@@ -106,7 +106,7 @@ function contractFile(target, name, doc, source, contact, tip, flight, parts, su
         schemaVersion: 1, actor: name === 'survivor-flick' ? 'ashen-survivor' : 'ashen-' + name,
         sourceSha256: hash(source), baseline: 0, boneNames: names, influences, triangles,
         neutralVertices: [], motions, contactBone: contact, contactTip: tip, approachBone: 'Approach',
-        ...(flight ? { flight } : {}), parts: parts.map((n) => ({ name: n })),
+        ...(stationaryAttack ? { stationaryAttack: true } : {}), parts: parts.map((n) => ({ name: n })),
     });
     return ensureMeta(file, 'json');
 }
@@ -140,7 +140,7 @@ function mythicHitArea(graph, actor, id, scale) {
         (registration.origin[1]-(top+bottom)/2)*unit, (right-left)*unit+8, (bottom-top)*unit+8);
 }
 
-function enemy(id, spec) {
+function enemy(id, spec, runtimeOnly = false) {
     const sourceFolder = art + '/' + id + '/runtime';
     const source = sourceFolder + '/' + id + '.json', doc = read(source);
     const attack = doc.animations.attack, hit = attack.events.find((event) => event.name === 'impact').time;
@@ -150,11 +150,7 @@ function enemy(id, spec) {
         { name: 'Aim', parent: spec.aim, x: spec.aimShift ?? 0 },
         { name: 'ContactTip', parent: spec.contact, x: localTip },
         { name: 'Approach', parent: 'root' });
-    if (spec.flight) {
-        doc.events.release ??= {};
-        attack.events.unshift({ time: +(hit - spec.flight).toFixed(3), name: 'release' });
-        attack.events.sort((a, b) => a.time - b.time);
-    } else {
+    if (!spec.stationaryAttack) {
         attack.bones.Approach = { translate: [
             { x: 0 }, { time: hit * .29, x: 0 }, { time: hit * .67, x: .48 },
             { time: hit, x: 1 }, { time: hit + .08, x: .96 }, { time: duration(attack), x: 0 },
@@ -163,9 +159,10 @@ function enemy(id, spec) {
     const folder = output + '/' + id;
     fs.mkdirSync(absolute(folder), { recursive: true });
     const skeleton = importSkeleton(sourceFolder, id, folder, doc);
-    const contract = contractFile(folder, id, doc, source, 'ContactTip', tip, spec.flight,
+    const contract = contractFile(folder, id, doc, source, 'ContactTip', tip, spec.stationaryAttack,
         Object.keys(doc.skins[0].attachments), []);
     const file = 'assets/prefabs/actors/' + id + '.prefab';
+    if (runtimeOnly) return file;
     const graph = new Graph(file, id);
     const actor = graph.node(id, null, 0, 0, 440, 440);
     const shadow = graph.shape('ContactShadow', 0, id === 'ash-moth' ? -51 : 3, spec.shadowWidth ?? (id === 'stone-claw' ? 240 : 163), 16, '302635', 108, true);
@@ -223,6 +220,14 @@ function battle(prefabs, backgrounds, placements = enemies) {
 }
 
 fs.mkdirSync(absolute(output), { recursive: true });
+if (process.argv[2] === '--refresh-runtime') {
+    for (const id of process.argv.slice(3)) {
+        const spec = enemies[id] ?? gallery[id];
+        if (!spec) throw Error('Unknown battle actor ' + id);
+        enemy(id, spec, true);
+    }
+    return;
+}
 if (process.argv.includes('--mythic-bestiary')) {
     const index = process.argv.indexOf('--actor');
     const ids = index < 0 ? Object.keys(gallery) : [process.argv[index + 1]];

@@ -2,6 +2,7 @@ import { CardSet } from '../content/ContentRegistry';
 import { generatedCards } from '../content/CardCatalog';
 import { ASHEN_LABYRINTH_SCENARIO, GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
 import { expeditionRoomId, generateAshenLabyrinthMap, nextMapNodes } from '../content/ExpeditionMap';
+import { labyrinthEncounterPool } from '../content/LabyrinthEnemies';
 import { Random } from '../Random';
 import { ActionResult, NodeKind, Route } from '../RulesTypes';
 import { CombatRules } from './CombatRules';
@@ -149,13 +150,15 @@ export class ExplorationRules {
                 supplyTaken: false,
                 cardTaken: false,
             };
-        } else {
-            if (definition.type === 'rest') {
-                this.state.phase = 'rest';
-                const restored = Math.min(definition.restoreHealth, 10 - this.state.health);
-                this.state.health += restored;
-            } else this.combat.startBattle(definition.enemyId, definition.companions);
-        }
+        } else if (definition.type === 'rest') {
+            this.state.phase = 'rest';
+            const restored = Math.min(definition.restoreHealth, 10 - this.state.health);
+            this.state.health += restored;
+        } else if (map && this.scenario.labyrinth) {
+            const pool = labyrinthEncounterPool(definition.icon === 'elite');
+            const [enemy, ...companions] = pool[this.random.int(0, pool.length - 1)];
+            this.combat.startBattle(enemy, companions);
+        } else this.combat.startBattle(definition.enemyId, definition.companions);
         return this.feedback.result(true, `进入${definition.title}。`);
     }
     finishRest(): ActionResult {

@@ -57,7 +57,7 @@
     228.58841243461694
   ],
   "approachBone": "Approach",
-  "flight": 0.17,
+  "stationaryAttack": true,
   "parts": [
     {
       "name": "far-sleeve-lining"

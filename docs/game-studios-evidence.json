@@ -1,5 +1,132 @@
 {
   "schemaVersion": 1,
+  "keeperSkeletalFall20261128": {
+    "project": "The end · 焦土迷宫",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "scope": "执灯人的 Spine 力竭动作、地面支点、披风遮挡与失败页终姿",
+    "engine": "Pink/Cocos Web Desktop，主场景 assets/TheEnd.scene",
+    "references": [
+      {
+        "source": "https://esotericsoftware.com/spine-animating#Pose-to-pose",
+        "use": "先确定站立、接地、压低与回稳，再调整动作间隔"
+      },
+      {
+        "source": "https://github.com/EsotericSoftware/spine-runtimes/blob/3.8/examples/spineboy/export/spineboy-pro.json",
+        "use": "髋骨与脚部目标分离，使用双骨 IK 控制大腿和小腿"
+      },
+      {
+        "source": "https://www.youtube.com/watch?v=dDkIL9Xwm5E&t=4096s",
+        "use": "Erika 的披肩、袖口、内衬网格和权重演示"
+      }
+    ],
+    "editor": {
+      "version": "Spine Professional 3.8.75",
+      "result": "导入 .spine 并回导 JSON，通过约束、网格、动作和图像引用核对",
+      "bones": 52,
+      "slots": 21,
+      "ik": [
+        "FrontLegIK",
+        "RearLegIK",
+        "RightArmIK"
+      ],
+      "partImages": 19,
+      "editable": "art-source/ashen-labyrinth/lantern-keeper/lantern-keeper-spine-3.8.75.zip"
+    },
+    "animation": {
+      "clip": "death",
+      "durationSeconds": 1.02,
+      "contactSeconds": 0.6,
+      "source": "tools/spine/lantern-keeper-landing.cjs",
+      "registration": "art-source/ashen-labyrinth/lantern-keeper/kneel-registration.json"
+    },
+    "native": {
+      "verification": "output/playwright/lantern-keeper-bone-fall/verification.json",
+      "measurements": "output/playwright/lantern-keeper-bone-fall/editor-and-motion.json",
+      "viewports": [
+        "1440×900",
+        "1024×768"
+      ],
+      "naturalEnding": "两次通过结束回合受到致命攻击，均保持单膝终姿并成功返营。小窗口存档刷新后恢复同一姿势",
+      "constraintProbe": "游戏里将髋部下移 3 个骨架单位，前膝移动 1.52，右腕保持贴合地面目标。将右手目标横移 4 个单位，右腕跟随 4 个单位",
+      "preview": "output/playwright/lantern-keeper-bone-fall/keeper-fall.webp",
+      "halfSpeed": "output/playwright/lantern-keeper-bone-fall/keeper-fall-half.webm",
+      "liveDefeat": "output/playwright/lantern-keeper-bone-fall/natural-defeat.webm",
+      "capture": "在游戏骨架上采样 42 个姿势作原速与半速近景。自然战败录像保留实际时间和战斗界面",
+      "consoleErrors": 0
+    },
+    "validation": {
+      "keeperTests": "5/5",
+      "typecheck": "通过",
+      "architecture": "通过",
+      "fullSuite": {
+        "tests": 238,
+        "passed": 222,
+        "failed": 16,
+        "comparison": "与修改前失败名单一致"
+      }
+    },
+    "visual": "已复核主游戏中的手臂前后层、屈膝轮廓和触地余势。动作观感供玩家试玩。"
+  },
+  "randomEncountersOriginalIdol20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "scope": "焦土迷宫的普通与精英遭遇，以及垂幡守像保留原版攻击并取消远程光波",
+    "engine": "Pink/Cocos 4.0.0-beta.1 Web Desktop",
+    "scene": "assets/TheEnd.scene",
+    "revision": "a3f3fe6 加当前工作区",
+    "buildLog": "temp/builder/log/web-desktop-build-1795873953958.log",
+    "rules": {
+      "ordinary": "9 种单怪和双鸟编组等权抽取，首次进入普通战斗房时使用存档随机状态",
+      "elite": "独立池，当前为镇闸石螯。地图当前布置 3 个精英房，自第 6 层起出现。",
+      "destination": "第 17 层沉灯庭为普通战斗，战后照常结算。",
+      "checks": "在首战、中段、终点对 10 个相同的随机状态分别验证全部普通编组。精英房只产生镇闸石螯。战中恢复保持原编组。"
+    },
+    "idol": {
+      "editableSpineSHA256": "1c1ebbdcb8ba3139554e6bc77cba339095ffb5c1732f330dd493cdef7f691825",
+      "originalSpineExportSHA256": "9414232082eb352205d33a236243a7570074dd4126643a4fbd6fa324d1c4da79",
+      "animation": "原版收袖挥臂，角色原地站定，全部姿势关键帧与原运行数据一致。",
+      "durationSeconds": 1.24,
+      "impactSeconds": 0.68,
+      "removedReleaseSeconds": 0.51,
+      "observedSeconds": 0.6863,
+      "rootTravel": 0,
+      "healthBefore": 10,
+      "healthAfter": 8,
+      "enemyActionCount": 1,
+      "effects": [
+        "FloatingText"
+      ],
+      "remoteWaves": 0
+    },
+    "native": "7 个浏览器场景覆盖首战守像、双鸟、吞潮、双岩、独立精英房、终点、减少动态效果。全部恢复了同一场战斗，无控制台或运行错误。沉灯庭抽到单鸟并完成战斗、奖励、地图，次日进入返营日志。",
+    "evidence": [
+      "output/playwright/random-encounters-idol/original-no-wave.json",
+      "output/playwright/random-encounters-idol/native-scenarios.json",
+      "output/playwright/random-encounters-idol/terminal-return.json",
+      "art-source/ashen-labyrinth/battle-bestiary/preview/veil-idol-attack.gif"
+    ],
+    "verification": {
+      "targetedTestsPassed": 7,
+      "typecheck": "通过",
+      "architecture": "通过",
+      "webBuild": "通过",
+      "fullSuite": {
+        "total": 238,
+        "passed": 222,
+        "failed": 16,
+        "baseline": "16 项与改动前失败项目同名，见 temp/mythic-room-background-tests.log 与 temp/random-encounter-unit-final.log"
+      }
+    },
+    "visual": "已查看正式战斗的关键帧，动图含 60 帧，时长 2 秒。设计依据为用户指定沿用原版攻击。",
+    "related": [
+      "assets/game/core/content/LabyrinthEnemies.ts",
+      "assets/game/core/systems/ExplorationRules.ts",
+      "assets/game/presentation/GameDirector.ts",
+      "tools/spine/install-labyrinth-actors.cjs"
+    ]
+  },
   "mythicRoomBackgrounds20261128": {
     "project": "The end / emberwatch",
     "date": "2026-11-28",

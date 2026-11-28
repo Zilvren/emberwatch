@@ -269,7 +269,7 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
             type: 'scavenge', title: '迷宫搜刮', icon: 'scavenge',
             cost: 0, supplies: [1, 2], cardReward: 'random', discover: true, supplyCard: true,
         },
-        lampCourt: { type: 'battle', title: '沉灯庭', icon: 'elite', enemyId: 'veil-idol' },
+        lampCourt: { type: 'battle', title: '沉灯庭', icon: 'battle', enemyId: 'veil-idol' },
         ...ashenScavengeSites({
             chartRoom: '旧测绘间', fallenTrestle: '断裂栈台', patchBay: '接线台', coldKiln: '冷却窑',
             siltedGate: '塞灰闸槽', signalCabinet: '信号柜', stampedDrawer: '编号抽屉',

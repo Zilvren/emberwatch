@@ -8,7 +8,9 @@ The end · 2026 年 11 月 19 日 · Spine 3.8.75 制作评审包
 
 六种演员已接入 Pink/Cocos 正式战斗，原始三怪在下图第一排。角色工程按 Spine 3.8.75 原生格式保存，各工程旁的 `parts/`、`parts-register.json`、`parts-sheet.png` 和 `runtime/` 用于改画、复核轴点和重新导出。[九种怪物同尺度对照](preview/mythic-lineup.png)
 
-| 遭遇 | 可编辑工程 | 动作读法 |
+所有演员均可在任一普通战斗房出现。表中地点为创作时采用的场景参考。
+
+| 场景参考 | 可编辑工程 | 动作读法 |
 | --- | --- | --- |
 | 风蚀栖台／双翼风廊 | [斯廷法洛斯鸟](stymphalian-bird/stymphalian-bird.spine) | 收起飞羽后俯冲，双鸟各自轮换普攻、蓄势和重击。 |
 | 断柱石场 | [独眼石巨人](cyclops/cyclops.spine) | 肩与前臂抬起蓄力，前拳落下。 |
@@ -37,7 +39,7 @@ The end · 2026 年 11 月 19 日 · Spine 3.8.75 制作评审包
 
 ## 看动画
 
-打开 [Cocos 实播动图](preview/battle-motion.gif)。第一段在折光回廊分别看三种起手和攻击，第二段在沉灯井庭看受击和死亡停姿。画面底部标有怪物与当前动作。
+垂幡守像沿用原版伸手动作，实机回合见[守像攻击动图](preview/veil-idol-attack.gif)。11 月 19 日三怪动作存档见 [Cocos 实播动图](preview/battle-motion.gif)。第一段在折光回廊分别看三种起手和攻击，第二段在沉灯井庭看受击和死亡停姿。画面底部标有怪物与当前动作。
 
 | 怪物 | 可编辑工程 | 拆件图 | 图像插槽 | 骨骼及控制 | 攻击接触 |
 | --- | --- | --- | ---: | ---: | ---: |
@@ -45,7 +47,7 @@ The end · 2026 年 11 月 19 日 · Spine 3.8.75 制作评审包
 | 叩石螯 | [stone-claw.spine](stone-claw/stone-claw.spine) | [部件图](stone-claw/parts-sheet.png) | 14 | 16 | 0.55 秒 |
 | 垂幡守像 | [veil-idol.spine](veil-idol/veil-idol.spine) | [部件图](veil-idol/parts-sheet.png) | 18 | 16 | 0.68 秒 |
 
-灰灯蛾在俯冲前先收前翅，后翅和触角晚半拍跟上。石螯先抬主螯，活动上指合向螯掌，两条近侧腿由 IK 锚定足尖。守像从袖口伸手，垂幡的末端沿两段骨骼加权弯曲，石座承担固定支点。
+灰灯蛾在俯冲前先收前翅，后翅和触角晚半拍跟上。石螯先抬主螯，活动上指合向螯掌，两条近侧腿由 IK 锚定足尖。守像在固定石座上收袖、伸手，垂幡末端随两段骨骼摆动。攻击全长 1.24 秒，主角在第 0.68 秒受击。原先用于发射远程光波的 release 事件已从游戏资源中移除。
 
 ## 在 Spine 中调整
 
@@ -65,4 +67,4 @@ The end · 2026 年 11 月 19 日 · Spine 3.8.75 制作评审包
 
 项目显式作者入口为 `tools/spine/bestiary-author.cjs`。在仓库根目录运行 `node tools/spine/bestiary-author.cjs prepare` 会重建拆件与 `.authoring.json`。设置 `SPINE_EXE` 后，`export` 可从作者数据制作新工程并打包运行资源。`--replace-projects` 会覆盖对应编辑工程，手工改过的动作请从 Spine 编辑器直接导出。命令行格式可查阅 [Spine 官方 CLI 文档](https://esotericsoftware.com/spine-command-line-interface)。
 
-已在项目的 Pink/Cocos 桌面预览加载三套运行资源。主游戏中的遭遇编排、数值和伤害结算属于后续玩法接入。造型依据已选定，动作节奏与战斗场景为本轮评审稿。
+已在项目的 Pink/Cocos 桌面预览加载三套运行资源。正式战斗按普通与精英遭遇池选择演员，伤害在各演员的 impact 事件结算。已选造型沿用，守像沿用的攻击动作可在上方主游戏动图查看。

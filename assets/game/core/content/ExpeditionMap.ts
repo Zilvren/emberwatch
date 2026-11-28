@@ -163,24 +163,23 @@ export function generateAshenLabyrinthMap(
         }
         start = end;
     }
-    const boss = cell(ASHEN_MAP_LAST_LAYER, 0);
-    start.next.push(boss);
-    cells.push(boss);
-    fixed.set(boss, { type: 'elite', room: 'lampCourt' });
-    ids.set(boss, 'lampCourt');
+    const destination = cell(ASHEN_MAP_LAST_LAYER, 0);
+    start.next.push(destination);
+    cells.push(destination);
+    fixed.set(destination, { type: 'battle', room: 'lampCourt' });
+    ids.set(destination, 'lampCourt');
     for (const point of cells)
         if (!ids.has(point)) ids.set(point, `room-${point.layer + 1}-${point.lane + ASHEN_MAP_OUTER_LANE + 1}`);
 
     const rooms = placeSpecialRooms(cells, fixed, random);
-    const earlyFights = ['lightCut', 'shutterGap', 'windPerch'].filter(id => definitions[id]?.type === 'battle');
-    const fights = [...earlyFights, 'hoistBridge', 'returnBridge', 'quarryHall', 'hornCourt', 'floodedVault', 'galeRoost', 'ebbWell', 'clashingPass']
+    const battleRooms = ['lightCut', 'shutterGap', 'windPerch', 'hoistBridge', 'returnBridge',
+        'quarryHall', 'hornCourt', 'floodedVault', 'galeRoost', 'ebbWell', 'clashingPass']
         .filter(id => definitions[id]?.type === 'battle');
     const points: ExpeditionMapPoint[] = cells.map((point) => {
         const id = ids.get(point)!;
         const position = { id, layer: point.layer, lane: point.lane, next: point.next.map((next) => ids.get(next)!) };
         const placement = rooms.get(point);
-        const candidates = point.layer < 5 ? earlyFights : fights;
-        const room = placement?.room ?? candidates[random.int(0, candidates.length - 1)];
+        const room = placement?.room ?? battleRooms[random.int(0, battleRooms.length - 1)];
         return room === id ? position : { ...position, room };
     });
     return { seed, points, activeNode: null, version: 2 };

@@ -54,7 +54,7 @@
     167.72557925808968
   ],
   "approachBone": "Approach",
-  "flight": 0.18,
+  "stationaryAttack": true,
   "parts": [
     {
       "name": "near-lip"

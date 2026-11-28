@@ -12,6 +12,19 @@ export const LABYRINTH_ENEMIES = {
 };
 
 export type LabyrinthEnemyId = keyof typeof LABYRINTH_ENEMIES;
+type Encounter = readonly [LabyrinthEnemyId, ...LabyrinthEnemyId[]];
+
+const regularEncounters: readonly Encounter[] = [
+    ['ash-moth'], ['stone-claw'], ['veil-idol'], ['stymphalian-bird'], ['cyclops'],
+    ['minotaur'], ['hydra'], ['charybdis'], ['symplegades'], ['stymphalian-bird', 'stymphalian-bird'],
+];
+const eliteEncounters: readonly Encounter[] = [['gate-warden']];
+
+/** One entry is one equally likely formation, in front-to-back acting order. */
+export function labyrinthEncounterPool(elite: boolean): readonly Encounter[] {
+    return elite ? eliteEncounters : regularEncounters;
+}
+
 export const ENEMY_ACTION_LABELS = { attack: '普攻', prepare: '蓄势', heavy: '重击' };
 export type EnemyAction = keyof typeof ENEMY_ACTION_LABELS;
 export const DEFAULT_ENEMY_ACTIONS: readonly EnemyAction[] = ['attack', 'prepare', 'heavy'];

@@ -7,6 +7,7 @@ const from = (file) => load(path.join(root, 'assets/game', file + '.ts'));
 const catalog = from('core/content/CardCatalog');
 const { ASHEN_LABYRINTH_SCENARIO, FIELD_SCENARIO, RUN_DECK_SCENARIO } = from('core/content/GameScenario');
 const { GameSession } = from('application/GameSession');
+const { SurvivalGame } = from('core/SurvivalGame');
 const { enterEncounterPreview } = from('presentation/dev/EncounterPreview');
 const { SaveRepository } = from('infrastructure/SaveRepository');
 const { ASHEN_ROOM_TARGETS, generateAshenLabyrinthMap, nextMapNodes, pointRoomId } = from('core/content/ExpeditionMap');
@@ -112,17 +113,10 @@ function resolveRoom(s) {
 function enterBirdPair() {
     install();
     const disk = store();
-    const session = start(new GameSession(31, new SaveRepository(disk)));
-    const map = session.view.expeditionMap;
-    const path = walkablePaths(map).find(route => route.some(id =>
-        pointRoomId(map.points.find(point => point.id === id)) === 'galeRoost'));
-    assert.ok(path, 'expected a reachable flock');
-    for (const id of path.slice(1)) {
-        ok(session.execute({ type: 'enter-node', id }));
-        if (session.view.battle?.companions) return { session, disk };
-        resolveRoom(session);
-    }
-    assert.fail('expected a flock encounter');
+    const session = start(new GameSession(10, new SaveRepository(disk)));
+    enter(session, 'battle');
+    assert.deepEqual(session.view.battle.companions?.map(bird => bird.enemy), ['stymphalian-bird']);
+    return { session, disk };
 }
 
 test('both targets have independent health, survive reload and grant a single room reward', () => {
@@ -465,7 +459,8 @@ test('maps place room quotas across connected routes, with public room types on 
         assert.ok(model.points.every(point => point.title === room(point.id).title));
         assert.deepEqual(new Set(model.points.map(point => point.icon)), new Set(['scavenge', 'battle', 'elite', 'rest']));
         assert.equal(model.points.filter(p => p.icon === 'rest').length, ASHEN_ROOM_TARGETS.rest + 2);
-        assert.equal(model.points.filter(p => p.icon === 'elite').length, ASHEN_ROOM_TARGETS.elite + 1);
+        assert.equal(model.points.filter(p => p.icon === 'elite').length, ASHEN_ROOM_TARGETS.elite);
+        assert.equal(room('lampCourt').icon, 'battle');
         assert.equal(model.points.filter(p => p.icon === 'scavenge').length, ASHEN_ROOM_TARGETS.salvage + 1);
         assert.ok(map.points.slice(1).filter(point => point.next.length > 1).length >= 2);
         assert.ok(map.points.filter(p => p.layer === 1).every(p => room(p.id).icon === 'battle'));
@@ -484,6 +479,41 @@ test('maps place room quotas across connected routes, with public room types on 
         }
     }
     assert.ok(counts.size > 1);
+});
+
+test('the same ten ordinary formations can open, interrupt or end a run, while elites have a separate pool', () => {
+    install();
+    const seeds = [1, 2, 4, 8, 10, 14, 18, 22, 24, 28];
+    const draws = seeds.map(seed => start(new GameSession(seed)).game.exportState().randomState);
+    const checkpoint = start(new GameSession(1)).game.exportState();
+    const map = checkpoint.expeditionMap;
+    const paths = walkablePaths(map);
+    const nodes = ASHEN_LABYRINTH_SCENARIO.nodes;
+    const middle = map.points.find(p => p.layer >= 6 && p.layer <= 12 && nodes[pointRoomId(p)].icon === 'battle');
+    const elite = map.points.find(p => nodes[pointRoomId(p)].icon === 'elite');
+    const singles = ['ash-moth', 'stone-claw', 'veil-idol', 'stymphalian-bird', 'cyclops',
+        'minotaur', 'hydra', 'charybdis', 'symplegades'];
+    const ordinary = new Set([...singles, 'stymphalian-bird,stymphalian-bird']);
+    for (const id of ['lampPassage', middle.id, 'lampCourt', elite.id]) {
+        const path = paths.find(route => route.includes(id));
+        const encountered = new Set();
+        for (const randomState of draws) {
+            const before = structuredClone(checkpoint);
+            before.visited = path.slice(0, path.indexOf(id));
+            delete before.expeditionMap.deferredRewards;
+            before.randomState = randomState;
+            const game = SurvivalGame.fromState(before);
+            ok(game.enterNode(id));
+            const saved = game.exportState();
+            const battle = saved.battle;
+            encountered.add([battle.enemy, ...(battle.companions ?? []).map(bird => bird.enemy)].join(','));
+            assert.deepEqual(SurvivalGame.fromState(saved).exportState(), saved);
+            const invalid = structuredClone(saved);
+            invalid.battle.enemy = id === elite.id ? 'stone-claw' : 'gate-warden';
+            assert.throws(() => SurvivalGame.fromState(invalid), /active map battle/);
+        }
+        assert.deepEqual(encountered, id === elite.id ? new Set(['gate-warden']) : ordinary);
+    }
 });
 
 test('the hearth previews the saved connections in the rest and map screens without changing them', () => {
@@ -793,7 +823,7 @@ test('each enemy uses its configured sequence and the current step survives defe
     configured.labyrinth.enemyActions = { 'ash-moth': plan };
     catalog.installCatalog(configured);
     const disk = store();
-    const session = start(new GameSession(17, new SaveRepository(disk)));
+    const session = start(new GameSession(1, new SaveRepository(disk)));
     enter(session, 'battle');
     assert.equal(session.view.battle.enemy, 'ash-moth');
     assert.equal(session.view.incomingDamage, 3);
@@ -822,7 +852,7 @@ test('each enemy uses its configured sequence and the current step survives defe
     assert.equal(resumed.view.incomingDamage, 0);
     assert.equal(resumed.view.battle.enemySequence.index, 1);
 
-    const fresh = start(new GameSession(17));
+    const fresh = start(new GameSession(1));
     enter(fresh, 'battle');
     assert.equal(fresh.view.incomingDamage, 2);
     assert.deepEqual(fresh.view.battle.enemySequence.actions, ['attack']);
