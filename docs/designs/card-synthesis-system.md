@@ -63,6 +63,10 @@
 - 卡牌目录配置盾矛和屠龙宝刀两条路线。编辑器中加入奖励池的物资牌后，可投放至合成探索的随机搜刮。物资卡可兑换物资点，归入行囊。
 - 相关代码为 `assets/game/core/content/RecipeCatalog.ts`、`assets/game/core/systems/SynthesisRules.ts`、`assets/game/application/GameSession.ts`、`assets/prefabs/ui/RecipePopup.prefab` 和 `tools/card-editor/recipes.js`。
 
+### 2026-11-28 · 焦土迷宫使用原卡牌与武器规则
+
+已实装。用户选定的 23 张普通牌现在通过焦土迷宫的单一奖励池投放，其中包括盾矛和屠龙宝刀。焦土迷宫战斗使用原有双武器槽、装备力量和盾矛蓄势规则。工坊各页的试玩统一进入焦土迷宫。上文的合成探索、配方取得路径和地图合成开关记录旧版接入。当前投放见 `assets/resources/data/cards.json` 与 `docs/game-systems.md`。
+
 ## 8. 物资卡与新版避难所
 
 - 物资卡是卡牌目录中的独立身份，只能通过搜刮进入本局行囊，不进入本局战斗卡组。

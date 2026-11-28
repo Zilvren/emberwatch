@@ -4259,10 +4259,6 @@
     "detailsLabel": {
       "__id__": 156
     },
-    "tideIllustrations": {
-      "__uuid__": "3599dee8-73a2-45a5-85f2-cc013b6a0cf9",
-      "__expectedType__": "cc.SpriteAtlas"
-    },
     "illustrations": [
       {
         "__uuid__": "2bd957db-4670-441c-baf9-1566aeaa46e8@90ef5",

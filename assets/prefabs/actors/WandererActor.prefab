@@ -1389,8 +1389,6 @@
     "skeleton": {
       "__id__": 58
     },
-    "tideSkeleton": { "__uuid__": "91bddfeb-f360-4cea-9aa1-8404cb6bf561", "__expectedType__": "sp.SkeletonData" },
-    "tideContract": { "__uuid__": "ec6c2eed-f084-4832-bd4d-43257da547ec", "__expectedType__": "cc.JsonAsset" },
     "contract": {
       "__uuid__": "0abcca76-5a8b-4de6-95d7-cc46f02bd100",
       "__expectedType__": "cc.JsonAsset"

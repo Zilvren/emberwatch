@@ -1,5 +1,5 @@
 import { CardSet } from '../content/ContentRegistry';
-import { activeDiscoveryCards, generatedCards } from '../content/CardCatalog';
+import { generatedCards } from '../content/CardCatalog';
 import { ASHEN_LABYRINTH_SCENARIO, GameScenario, currentNodeId, hasId, nodeTitle } from '../content/GameScenario';
 import { generateAshenLabyrinthMap, nextMapNodes } from '../content/ExpeditionMap';
 import { Random } from '../Random';
@@ -57,7 +57,7 @@ export class ExplorationRules {
         this.state.rewards = null;
         this.state.fistUnlocks = undefined;
         this.state.discoveryPool = this.scenario.labyrinth
-            ? activeDiscoveryCards(this.content.catalog.labyrinth!)
+            ? this.content.catalog.labyrinth!.discoveryPool.slice()
             : undefined;
         this.state.settlement = null;
         this.state.failureReason = '';

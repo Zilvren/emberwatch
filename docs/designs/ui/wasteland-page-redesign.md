@@ -28,6 +28,12 @@
 
 布局与数据绑定见 `assets/prefabs/screens/BattleScreen.prefab`、`assets/prefabs/ui/HUD.prefab`、`assets/prefabs/ui/BattlePilePopup.prefab`、`assets/game/presentation/GameRenderer.ts` 和 `assets/game/presentation/cards/BattlePileModel.ts`。设置关闭与敌人锚点分别在 `assets/prefabs/ui/SettingsPopup.prefab` 和 `assets/prefabs/actors/`。
 
+## 2026-11-28 · 领取前悬停查看完整牌效
+
+候选卡默认显示插画、基础数值和简述。鼠标停在卡上时，在这张卡内显示详细描述与规则数值，卡名和费用继续可见。长说明可以用滚轮在卡内阅读。移出卡面后恢复简述。玩家可以直接悬停比较候选，点选并确认后领取。
+
+卡牌工坊的「简述」写入 `summary`，「详细描述」写入 `text`。简述留空时使用已有牌面文案，详情基于基础效果与原说明。显示模型保留输入的文字长度。奖励入口见 `RewardSelection.ts` 和 `SelectableCard.ts`，说明区域沿用 `CardPresentation.ts` 的原生滚动视图。设计已按用户确认的悬停交互实装。
+
 ## 2026-11-27 · 余温壁炉岔口的战斗提示
 
 《The end》已实装。玩家在第 6 层余温壁炉选择下一站时，问号下方直接显示「第 10 层遇战」或「第 9、10 层连战」。某个分支兼有两种走法时显示「第 9、10 层可能连战」。提示沿存档里的实际路线算到下一处休整，读取公开战斗类型。未知房间继续显示问号，物资和选牌在进房间后揭示。

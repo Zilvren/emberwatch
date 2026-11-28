@@ -5,6 +5,7 @@ import { Node } from 'cc';
 import type { GameReadModel } from '../core/GameReadModel';
 import { nodeTitle } from '../core/content/GameScenario';
 import { nextMapNodes } from '../core/content/ExpeditionMap';
+import { isLabyrinthEnemy } from '../core/content/LabyrinthEnemies';
 import type { SceneBindings } from './ui/GameView';
 import { ActorPresentation } from './actors/ActorPresentation';
 import { HandPresentation } from './cards/HandPresentation';
@@ -31,7 +32,7 @@ export class GameRenderer extends NativeViewWriter {
     enemy: ActorPresentation | null = null;
     activeScreen: Node | null = null;
     revision = -1;
-    private look: 'legacy' | 'tide' | 'labyrinth' | null = null;
+    private look: 'legacy' | 'labyrinth' | null = null;
     private hiddenCombatUi: Node[] = [];
     private readonly battleLayout: TideBattleLayout;
     fitBattleWindow(frame: ReturnType<typeof battleWindowLayout>): void {
@@ -70,7 +71,7 @@ export class GameRenderer extends NativeViewWriter {
     render(): void {
         const g = this.game;
         const discovery = !!g.battle?.discovery || !!g.battle?.cardChoice;
-        const look = g.scenario.labyrinth ? 'labyrinth' : g.scenario.fieldDeck ? 'tide' : 'legacy';
+        const look = g.scenario.labyrinth ? 'labyrinth' : 'legacy';
         if (this.look !== look) {
             this.look = look;
             for (const key of Object.keys(this.scene.screens)) {
@@ -217,6 +218,9 @@ export class GameRenderer extends NativeViewWriter {
                     : g.scenario.routes[g.route!]?.[g.pathIndex + 1];
                 const next = nextId ? g.scenario.nodes[nextId] : undefined;
                 const enemy = next?.type === 'battle' ? g.scenario.enemies[next.enemyId] : null;
+                const enemyPlan = g.scenario.labyrinth && next?.type === 'battle' && isLabyrinthEnemy(next.enemyId)
+                    ? g.content.catalog.labyrinth?.enemyActions?.[next.enemyId]
+                    : undefined;
                 this.text(screen, {
                     'banner/text1': nodeTitle(g.scenario, g.currentNode),
                     'banner/text2': g.scenario.labyrinth ? '岩壁挡住了风。可以在这里恢复血量。'
@@ -229,7 +233,7 @@ export class GameRenderer extends NativeViewWriter {
                     'rest/text4': exits.length > 1
                         ? `前方有 ${exits.length} 条路线 · 返回地图选择`
                         : enemy
-                          ? `下一站 · ${enemy.title}\n生命 ${enemy.hp} · 普攻 ${enemy.attack} · 蓄势后 ${enemy.strongAttack}`
+                          ? `下一站 · ${enemy.title}\n生命 ${enemy.hp} · 普攻 ${enemyPlan?.attack ?? enemy.attack} · 重击 ${enemyPlan?.strongAttack ?? enemy.strongAttack}`
                           : '下一站 · ' + (next?.title ?? '避难所'),
                     'rest/text5': '',
                 });

@@ -299,7 +299,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "84c6cd46-0869-469b-b1c5-889623e6c8d2@49047",
+      "__uuid__": "5a9a0925-babf-43b1-b5a8-98ccf1479ce5@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -1674,10 +1674,6 @@
     "_enabled": true,
     "__prefab": {
       "__id__": 96
-    },
-    "tideBackdrop": {
-      "__uuid__": "477ad9a1-86e3-4100-90c6-e331de081c98@f9941",
-      "__expectedType__": "cc.SpriteFrame"
     },
     "backdrop": {
       "__id__": 3

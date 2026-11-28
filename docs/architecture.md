@@ -1,10 +1,10 @@
 # The end 当前架构
 
-## 2026-11-27 · 焦土迷宫主角的战斗表现
+## 2026-11-28 · 焦土迷宫主角的战斗表现
 
-本轮将角色动作与飞牌的衔接放入 `assets/game/presentation/actors/LabyrinthCardAction.ts`。`PlayerActor.prefab` 绑定人物的 Spine 骨骼和动作配置，`ActorPresentation` 负责切换待机、攻击、防御准备、受击和倒下。`GameDirector` 从玩家输入建立一次出牌请求，将命中与完成回调交给表现层。
+`PlayerActor.prefab` 绑定执灯人的 Spine 骨骼和动作配置。`ActorPresentation` 负责切换待机、攻击、防御准备、受击和倒下。`GameDirector` 从玩家输入建立一次出牌请求，将命中与完成回调交给表现层。
 
-普通速度下，攻击的 `release` 事件从施术手的挂点发出飞牌，牌抵达时执行一次 `play-card`。角色收势、飞牌结束和目标反馈完成后恢复输入。支援牌由 `prepare` 动作触发结算。减少动态模式走同一个命中回调。
+普通速度下，攻击和支援牌分别启动 `attack` 与 `prepare`。左手保持张开的指形，纸面在掌心折裂。Spine 的 `impact` 事件执行一次 `play-card`，同一时间轴显示掌边碎纸。角色收势和目标反馈完成后恢复输入。减少动态模式直接调用同一个命中回调。
 
 参考了 Alchyr 角色 Mod 模板按角色登记资源、BaseLib 为攻击和受击配置回到待机的后继状态，以及 MzmChar 将地影、角色视图与反馈锚点独立布置的做法。The end 在原生 Cocos 预制体和 Spine 契约中实现这些职责。 [角色定义](https://github.com/Alchyr/ModTemplate-StS2/blob/48151e01a97be713286f27c7f00511d4dc1cacec/content/CharacterModTemplate/CharModCode/Character/CharMod.cs) · [动作状态](https://github.com/Alchyr/BaseLib-StS2/blob/6fc4adb72556f2f30a57e540dbe7722ce0827aa8/Abstracts/CustomCharacterModel.cs#L139-L203) · [角色场景](https://github.com/FFTYYY/sts2-MzmChar-mod/blob/435a3a7980af23c9099b0b1ae0564c6e0aa5670f/pack/MzmChar/scenes/visuals.tscn)
 

@@ -1,5 +1,38 @@
 {
   "schemaVersion": 1,
+  "stashResolution20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "24 个 stash 恢复冲突已逐项合并。合并后的 Web 实机回归通过。全量单测仍有 16 个合并前已失败的用例。",
+    "base": "cd4bbb9240b34ddfc6c49ed6c6e277250fef3f30",
+    "upstream": "3ce23eae408ce59b68a752ebd37298bbc0cdc912",
+    "stash": "84b899df3674d9af6b388c26a874e683f1ed62b8",
+    "resolvedFiles": 24,
+    "unmergedIndexEntries": 0,
+    "changes": [
+      "保留本地勾选的 23 张奖励牌，接入上游启用的 9 张拳法。默认可发现 32 张，收招在战斗内解锁，物资在搜刮时出现。",
+      "编辑器支持普通奖励池、物资投放与怪物动作。新旧存档按各自的卡库签名校验，并保留探索中已经确定的牌池和拾取负重。"
+    ],
+    "saveVerification": {
+      "scenarios": ["焦土迷宫", "合成探索", "盐原探索", "教学"],
+      "upstreamRestored": 4,
+      "stashRestored": 4,
+      "originalSaveBytesPreserved": 8,
+      "legacyDifference": "四份本地旧档恢复后，内存快照只移除了已退役的 logs 战斗流水字段。",
+      "report": "output/playwright/stash-resolution-3ce23ea/cross-save.json"
+    },
+    "checks": {
+      "typecheck": true,
+      "architecture": true,
+      "build": "temp/builder/log/web-desktop-build-1795851750639.log",
+      "before": { "tests": 208, "passed": 191, "failed": 17 },
+      "after": { "tests": 228, "passed": 212, "failed": 16, "newFailureNames": [] },
+      "browser": { "passed": true, "actions": 260, "routeALayers": 17, "routeBLayers": 17, "runtimeErrors": 0, "consoleErrors": 0 },
+      "browserCoverage": ["两条路线与续档", "背包满载时丢弃再拾取", "奖励池保存与清空", "物资卡新建、重载与实机拾取", "战败恢复"],
+      "browserReport": "output/playwright/stash-resolution-3ce23ea/verification.json",
+      "heroRegression": "主场景待机零时刻与参考图 1572864 个预乘像素全部相同；左手捏碎攻击与格挡各结算一次，见 lanternKeeperReferencePixels20261128。"
+    }
+  },
   "stoneCourtHud20261128": {
     "project": "The end / emberwatch",
     "date": "2026-11-28",
@@ -134,6 +167,552 @@
     "gallery": "viking://~/resources/projects/the-end/docs/combat-hud-20261127/",
     "galleryIndex": "原件已写入。OpenViking 缺少本地嵌入模型，语义索引待恢复后重建。"
   },
+  "lanternKeeperReferencePixels20261128": {
+    "project": "The end",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "revision": "cd4bbb9 加当前工作区",
+    "scope": "按用户所给站姿逐像素修正披风内外层，出牌期间左手保持张开的指形",
+    "scene": "assets/TheEnd.scene",
+    "reference": "art-source/ashen-labyrinth/lantern-keeper/standing-reference.png",
+    "referenceSha256": "18da20c64ce939b47f5f7467d83a0b0adb785dfbbabb017e22e4122e9621a4fb",
+    "method": "取主战斗实际玩家骨架的待机零时刻，隐藏额外悬牌，在相同的 1024×1536 注册画布上做黑白双底原生读回。比较 8 位预乘 RGB 和覆盖率，另行检查还原成普通 PNG 后的 RGB。",
+    "checks": [
+      {"claim": "整个站姿与可见披风的颜色和透明度", "status": "SUPPORTED", "wholeCanvasPixels": 1572864, "differentPixelsBefore": 787903, "differentPixelsAfter": 0, "cloakPixels": 270507, "differentCloakPixelsBefore": 270483, "differentCloakPixelsAfter": 0, "missingOrExtraSilhouettePixelsAfter": 0},
+      {"claim": "普通 PNG 读回的反预乘舍入", "status": "SUPPORTED", "differentPixels": 1362, "maxChannelDelta": 1, "equalsReferenceCalibration": true},
+      {"claim": "出牌期间指形相对左腕固定", "status": "SUPPORTED", "fingertips": 4, "samplesPerMotion": 41, "attackMaxSourcePixels": 0.000067, "supportMaxSourcePixels": 0.000063},
+      {"claim": "攻击和格挡在碎裂时各结算一次", "status": "SUPPORTED", "evidence": "正常点击后攻击使敌人生命从 8 到 0，格挡从 0 到 4。每次推进一次规则版本，掌边各出现四片碎纸，回到待机时纸面展开。"}
+    ],
+    "verification": {"webBuild":"PASS","typecheck":"PASS","architecture":"PASS","spineTests":{"passed":13,"failed":0},"fullSuite":{"passed":191,"failed":17,"remaining":"历史存档、牌库配置、合成和旧流程等用例"},"browserErrors":0},
+    "visualAcceptance": "执行者复看了原图、修前修后实机、原尺寸翻边、受击和落地曝光帧。用户指定了站姿参考与固定指形，最终动态观感待用户试玩。",
+    "artifacts": {
+      "report": "output/playwright/lantern-keeper-reference-pixels/pixel-comparison.json",
+      "comparison": "output/playwright/lantern-keeper-reference-pixels/comparison.png",
+      "unscaledHem": "output/playwright/lantern-keeper-reference-pixels/cloak-edge-1to1.png",
+      "difference": "output/playwright/lantern-keeper-reference-pixels/after-difference.png",
+      "gameplay": "output/playwright/lantern-keeper-reference-pixels/combat/verification.json",
+      "buildLog": "temp/builder/log/web-desktop-build-1795849722971.log",
+      "reportUri": "viking://~/resources/projects/the-end/docs/lantern-keeper-reference-pixels.json"
+    }
+  },
+  "lanternKeeperLayersAndCrush20261128": {
+    "project": "The end",
+    "date": "2026-11-28",
+    "revision": "cd4bbb9 加当前工作区",
+    "scene": "assets/TheEnd.scene",
+    "engine": "Pink/Cocos 4.0.0-beta.1，Web Desktop",
+    "scope": "执灯人全身绘制层次与左手捏碎悬牌",
+    "status": "FAILED",
+    "visualAcceptance": "用户指出这版披风层次仍有误。后续原尺寸测量发现画布中有 787903 个可见颜色或透明度不匹配的像素。最新站姿和用户要求的固定指形见 lanternKeeperReferencePixels20261128。",
+    "checks": [
+      {
+        "claim": "肩披风、袖口和裤腿按近远遮挡分层",
+        "status": "FAILED",
+        "evidence": "插槽顺序和共有接缝检查通过。披风素材取自重新绘制的拆件，其可见褶线、翻边和下摆未对齐用户参考。"
+      },
+      {
+        "claim": "左手捏碎与出牌结算同帧触发",
+        "status": "SUPPORTED",
+        "evidence": "种子 17 的无存档 Web 战斗通过真实鼠标输入，攻击与格挡各推进一次规则版本，分别造成 8 点伤害与获得 4 点格挡。两段动作的碎裂帧各出现 4 片纸屑。受击实测生命 10 到 9，回待机后牌面骨骼恢复平整。"
+      }
+    ],
+    "verification": {
+      "typecheck": "PASS",
+      "architecture": "PASS",
+      "webBuild": "PASS",
+      "spineTests": { "passed": 12, "failed": 0 },
+      "fullSuite": { "passed": 190, "failed": 17, "remaining": "历史存档、卡牌配置、合成和旧流程等用例" },
+      "visualViewports": ["1440×900", "1024×768"],
+      "runtimeErrors": 0,
+      "failedRequests": 0
+    },
+    "artifacts": {
+      "report": "output/playwright/lantern-keeper-draw-order/verification.json",
+      "idle": "output/playwright/lantern-keeper-draw-order/idle-layers.png",
+      "pinch": "output/playwright/lantern-keeper-draw-order/attack-pinch.png",
+      "fragments": "output/playwright/lantern-keeper-draw-order/attack-fragments.png",
+      "discovery": "output/playwright/lantern-keeper-draw-order/discovery-layers.png",
+      "video": "output/playwright/lantern-keeper-draw-order/left-hand-card-crush.webm",
+      "textureSha256": "011042c62ca22b5bafd35512456814212371db562b6958c0d759a1286e944d7f"
+    }
+  },
+  "rewardCardDetails20261128": {
+    "project": "The end",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "scope": "奖励候选悬停读完整牌效、工坊两字段保存及悬停时点选",
+    "revision": "cd4bbb9 加当前工作区",
+    "scene": "assets/TheEnd.scene",
+    "engine": "Pink/Cocos 4.0.0-beta.1，Web Desktop",
+    "skills": [
+      "ux-design",
+      "test-evidence-review"
+    ],
+    "nativeLog": "temp/builder/log/web-desktop-build-1795844313706.log",
+    "bundleSha256": "cb443219e70c01442695cacc20f52aa9978bc2b922d3a881bdc8a45c34850737",
+    "normalSeed": 17,
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        1024,
+        768
+      ]
+    ],
+    "checks": [
+      "通过玩家入口进入首场战斗并击败灰灯蛾。默认显示简述，悬停时在当前卡内显示完整条件，移出还原牌面，移动到另一张卡可查看它的详细描述。",
+      "分别在两种窗口里悬停、点选当前详情区并改选。阅读、移开和改选时，牌组和存档内容与进入奖励页时一致。确认改选的候选后，牌组增加一张。",
+      "在独立卡牌工坊中保存 32 字简述和 75 字详细描述，重载后两字段各自完整。Pink 使用工坊试玩入口读入测试配置，滚轮定位到悬停卡的末行。项目牌库的测试数据单独存放。",
+      "专项测试覆盖两段文案、完整蓄势条件、工坊存储和已有存档签名兼容。类型检查、架构检查和 Web 导出通过。全量 190/207 通过，17 项失败与修改前同名。"
+    ],
+    "evidence": {
+      "report": "output/playwright/reward-hover-20261128/verification.json",
+      "front": "output/playwright/reward-hover-20261128/brief-1024.png",
+      "hover": "output/playwright/reward-hover-20261128/hover-1024.png",
+      "longScrollBottom": "output/playwright/reward-hover-20261128/hover-bottom-1024-long.png",
+      "editor": "output/playwright/reward-hover-20261128/workshop-fields.png",
+      "testLog": "temp/reward-hover-20261128/release-suite.log"
+    }
+  },
+  "legacyMapCleanupAndStartup20261128": {
+    "project": "The end",
+    "date": "2026-11-28",
+    "status": "SUPPORTED",
+    "scope": "灰烬街区与退潮盐原的专用素材、Pink TypeScript 诊断及焦土迷宫的初始化画面",
+    "engine": "Pink/Cocos 4.0.0-beta.1，桌面 Web",
+    "checkedPaths": [
+      "tsconfig.json",
+      "assets/TheEnd.scene",
+      "assets/prefabs/screens/",
+      "assets/prefabs/cards/",
+      "assets/prefabs/actors/",
+      "tests/native-bindings.test.cjs"
+    ],
+    "checks": [
+      {
+        "claim": "工程类型检查和 Web 构建",
+        "status": "SUPPORTED",
+        "evidence": "引擎 TypeScript 5.9.3 与 Pink TypeScript 6.0.3 的项目检查均通过。Pink 重新打开工程后问题计数为零。npm run build:web 正常退出。"
+      },
+      {
+        "claim": "游戏数据到达后的首帧",
+        "status": "SUPPORTED",
+        "evidence": "延迟牌库请求并观察 12 个动画帧。修改前 JournalScreen 和 HUD 已显示。修改后 Pink 实时预览与 Web 包均在等待期间只显示加载提示，首次渲染显示焦土迷宫营地。",
+        "reports": [
+          "output/playwright/legacy-map-cleanup-20261128/before.json",
+          "output/playwright/legacy-map-cleanup-20261128/pink.json",
+          "output/playwright/legacy-map-cleanup-20261128/web.json"
+        ]
+      },
+      {
+        "claim": "旧地图专用美术退役",
+        "status": "SUPPORTED",
+        "evidence": "删除 75 个专用资源、原稿、元数据及制作脚本，更新 14 个预制体，核对原生资源引用和新包的资源路径。清理 16 个旧本地构建或压缩包。"
+      },
+      {
+        "claim": "从营地出发到首战奖励",
+        "status": "SUPPORTED",
+        "evidence": "Pink 实时预览与 Web 包在独立无存档浏览器中以种子 17 完成七次鼠标操作，看到 33 个地点，载入 23 张奖励池卡牌，操作执灯人击败灰灯蛾后获得三选一奖励。两次均无运行时错误和失败请求。",
+        "screenshots": [
+          "output/playwright/legacy-map-cleanup-20261128/pink-camp.png",
+          "output/playwright/legacy-map-cleanup-20261128/pink-battle.png",
+          "output/playwright/legacy-map-cleanup-20261128/pink-rewards.png"
+        ]
+      }
+    ],
+    "suite": { "total": 204, "passed": 187, "existingFailures": 17, "newFailures": 0 }
+  },
+  "fullGameSkillReview20261128": {
+    "project": "The end",
+    "date": "2026-11-28",
+    "timezone": "Asia/Shanghai",
+    "status": "PIVOT",
+    "scope": "焦土迷宫当前默认新局整局评审",
+    "skills": [
+      "vertical-slice",
+      "ux-review",
+      "test-evidence-review"
+    ],
+    "revision": "cd4bbb9240b34ddfc6c49ed6c6e277250fef3f30",
+    "workingTree": "当前未提交版本，评审开始与结束时玩法脚本、牌库、场景及主角贴图的组合摘要一致",
+    "sourceSha256": "4510190e194507fd0d5b97235f63db493861d6c617d673446fd1d9095af39da2",
+    "engine": "Pink/Cocos 4.0.0-beta.1 / Web Desktop",
+    "scene": "assets/TheEnd.scene",
+    "nativeBuild": "temp/skill-game-review-20261128/web",
+    "nativeLog": "temp/builder/log/web-desktop-build-1795797068459.log",
+    "catalogSha256": "99b8c5ace04063cc5cde49cb911e21334680bfba1624d1c94f55bfffeac5c8b1",
+    "evidenceRoot": "output/playwright/skill-game-review-20261128",
+    "privatePacket": "viking://~/resources/projects/the-end/docs/game-review-20261128/",
+    "commands": {
+      "build": "passed",
+      "npm run typecheck": "passed",
+      "npm run check:architecture": {
+        "files": 107,
+        "runtimeEdges": 221,
+        "failures": 0
+      },
+      "npm test": {
+        "total": 203,
+        "passed": 186,
+        "failed": 17,
+        "skipped": 0
+      }
+    },
+    "normal": {
+      "inputCount": 106,
+      "floors": 17,
+      "fights": 7,
+      "offers": 12,
+      "taken": 11,
+      "turns": [
+        1,
+        1,
+        2,
+        2,
+        3,
+        1,
+        3
+      ],
+      "home": {
+        "phase": "shelter",
+        "day": 2,
+        "health": 8,
+        "cards": 12,
+        "supplies": 21,
+        "found": []
+      },
+      "checks": {
+        "cancelReset": {
+          "unchanged": true
+        },
+        "cancelEntry": {
+          "unchanged": true
+        },
+        "scroll": {
+          "from": 2324,
+          "to": 1699,
+          "unchanged": true
+        },
+        "mapReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "map",
+          "node": null
+        },
+        "forkReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "map",
+          "node": null
+        },
+        "battleReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "battle",
+          "node": "lampPassage"
+        },
+        "cancelTarget": {
+          "unchanged": true,
+          "selected": "card-9"
+        },
+        "rewardReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "rewards",
+          "node": "lampPassage"
+        },
+        "restOverlay": {
+          "unchanged": true
+        },
+        "homeReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "shelter",
+          "node": null
+        },
+        "nextMap": {
+          "old": 2654435752,
+          "next": 1013904227,
+          "newGraph": true
+        }
+      },
+      "errors": []
+    },
+    "base": {
+      "inputCount": 86,
+      "floors": 17,
+      "fights": 7,
+      "offers": 12,
+      "taken": 0,
+      "turns": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "home": {
+        "phase": "shelter",
+        "day": 2,
+        "health": 8,
+        "cards": 12,
+        "supplies": 22,
+        "found": []
+      },
+      "checks": {
+        "cancelReset": {
+          "unchanged": true
+        },
+        "cancelEntry": {
+          "unchanged": true
+        },
+        "scroll": {
+          "from": 2324,
+          "to": 1699,
+          "unchanged": true
+        },
+        "mapReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "map",
+          "node": null
+        },
+        "forkReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "map",
+          "node": null
+        },
+        "battleReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "battle",
+          "node": "lampPassage"
+        },
+        "cancelTarget": {
+          "unchanged": true,
+          "selected": "card-9"
+        },
+        "flight": {
+          "frames": 53,
+          "airborne": 14,
+          "allPhases": [
+            "battle",
+            "rewards"
+          ],
+          "seenRelease": true
+        },
+        "rewardReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "rewards",
+          "node": "lampPassage"
+        },
+        "restOverlay": {
+          "unchanged": true
+        },
+        "homeReload": {
+          "equal": true,
+          "keys": [],
+          "phase": "shelter",
+          "node": null
+        },
+        "nextMap": {
+          "old": 2654435752,
+          "next": 1013904227,
+          "newGraph": true
+        }
+      },
+      "errors": []
+    },
+    "failure": {
+      "width": 1024,
+      "home": {
+        "phase": "shelter",
+        "day": 2,
+        "health": 10,
+        "cards": 12,
+        "supplies": 10
+      },
+      "observedFailure": {
+        "day": 2,
+        "health": 0,
+        "visited": []
+      },
+      "errors": []
+    },
+    "map": {
+      "seed": 17,
+      "points": 33,
+      "routes": 160,
+      "battleCountRange": [
+        4,
+        7
+      ],
+      "hearth": [
+        {
+          "id": "fallenShelves",
+          "kind": "fallenShelves",
+          "title": "未知地点",
+          "icon": "scavenge",
+          "layer": 6,
+          "x": -201.9727049579167,
+          "y": -1808,
+          "state": "available",
+          "action": "enter-fallenShelves",
+          "decisionHint": "第 10 层遇战"
+        },
+        {
+          "id": "stampedDrawer",
+          "kind": "stampedDrawer",
+          "title": "未知地点",
+          "icon": "scavenge",
+          "layer": 6,
+          "x": 192.36366119209242,
+          "y": -1808,
+          "state": "available",
+          "action": "enter-stampedDrawer",
+          "decisionHint": "第 9、10 层连战"
+        }
+      ]
+    },
+    "claims": [
+      {
+        "status": "SUPPORTED",
+        "claim": "两趟正常营地入口、完整 17 层、返营、再次出发，五处同版重载及独立战败恢复",
+        "files": [
+          "run.json",
+          "base.json",
+          "loss.json"
+        ]
+      },
+      {
+        "status": "FAILED",
+        "claim": "两类旧章节可在新版继续",
+        "files": [
+          "legacy.json",
+          "upgrade-salt.json",
+          "upgrade-synthesis.json",
+          "upgrade-salt-startup.png"
+        ]
+      },
+      {
+        "status": "FAILED",
+        "claim": "终战发现能在本趟后续战斗产生使用机会",
+        "files": [
+          "run-boss-confirm.png",
+          "run-return.png",
+          "run.json"
+        ]
+      },
+      {
+        "status": "FAILED",
+        "claim": "玩家在发现牌确认前可读到盾矛护阵完整触发效果",
+        "files": [
+          "card.json",
+          "card-selected-1024.png"
+        ]
+      },
+      {
+        "status": "SUPPORTED",
+        "claim": "在指定固定进攻策略、标准档、总战斗数最多路线及连续 128 个种子中，12 张基础牌跳过全部发现并全程不格挡，可全部通关",
+        "files": [
+          "baseline-deck.json",
+          "base.json"
+        ]
+      },
+      {
+        "status": "NEEDS EVIDENCE",
+        "claim": "真人首次上手的胜率、主动构筑偏好、长期可玩性和视觉最终认可"
+      }
+    ],
+    "unassessed": [
+      "真人平衡",
+      "移动与手柄",
+      "音质",
+      "长期留存",
+      "硬件性能基准"
+    ]
+  },
+  "ashenLabyrinthCardMigration20261128": {
+    "project": "The end",
+    "date": "2026-11-28",
+    "timezone": "Asia/Shanghai",
+    "status": "SUPPORTED",
+    "sourceRevision": "cd4bbb9 加当前项目工作区",
+    "scope": "用户此前勾选的 23 张普通牌迁入焦土迷宫及武器规则",
+    "cards": [
+      "knife",
+      "evade",
+      "repair",
+      "heavy",
+      "follow_up",
+      "shield_push",
+      "scrap_shiv",
+      "rummage",
+      "long_wood_stick",
+      "scrap_blade",
+      "metal_guard",
+      "rough_spear",
+      "steel_spear",
+      "shield_spear",
+      "shield_spear_charge",
+      "shield_spear_guard",
+      "whetstone_1",
+      "whetstone_2",
+      "whetstone_3",
+      "dragon_blood",
+      "sharpened_knife",
+      "honed_knife",
+      "dragon_slayer"
+    ],
+    "catalogSha256": "99b8c5ace04063cc5cde49cb911e21334680bfba1624d1c94f55bfffeac5c8b1",
+    "checks": {
+      "cardPlays": 23,
+      "focusedTests": 8,
+      "typecheck": "passed",
+      "architecture": "passed",
+      "fullSuite": {
+        "passed": 186,
+        "failed": 17,
+        "baselineFailureNamesMatched": true
+      }
+    },
+    "native": {
+      "engine": "Pink/Cocos 4.0.0-beta.1",
+      "build": "build/web-desktop",
+      "buildLog": "temp/builder/log/web-desktop-build-1795795114458.log",
+      "edge": "158.0.4370.45",
+      "viewport": "1440×900",
+      "seed": 17,
+      "origin": "http://127.0.0.1:7460",
+      "rewards": [
+        "rough_spear",
+        "scrap_blade",
+        "dragon_slayer"
+      ],
+      "claimed": "rough_spear",
+      "weaponChoiceCancelKeepsStamina": true,
+      "resumedPendingReplacement": true,
+      "shieldSpearGenerated": [
+        "slash",
+        "club_hit",
+        "thrust",
+        "cover"
+      ]
+    },
+    "screenshots": [
+      "output/playwright/labyrinth-migrated-cards-20261128/migrated-pool-23.png",
+      "output/playwright/labyrinth-migrated-cards-20261128/migrated-native-loot.png",
+      "output/playwright/labyrinth-migrated-cards-20261128/migrated-native-replace.png",
+      "output/playwright/labyrinth-migrated-cards-20261128/migrated-native-shield-spear.png"
+    ],
+    "screenshotArchive": "viking://~/resources/projects/the-end/docs/labyrinth-migrated-cards-20261128/"
+  },
   "ashenLabyrinthHearthFork20261127": {
     "project": "The end",
     "date": "2026-11-27",
@@ -258,11 +837,11 @@
   },
   "ashenLabyrinthLanternKeeper20261127": {
     "project": "The end",
-    "date": "2026-11-27",
-    "baseline": "4641d19 与本次工作区改动",
-    "scope": "执灯人单膝落地时近侧右拳支撑、远侧左臂被躯干和披风遮挡",
+    "date": "2026-11-28",
+    "baseline": "cd4bbb9 与本次工作区角色改动",
+    "scope": "执灯人单膝落地的披风、近侧右手、头发和面具颊灯一致性",
     "status": "SUPPORTED",
-    "visualAcceptance": "六帧姿势按用户选定的原图，用户指出的远近遮挡已在主游戏复核，最终观感待试玩",
+    "visualAcceptance": "采用用户选定的单膝跪姿。站姿与低头采用同一母版，动态观感待用户试玩。",
     "scene": "assets/TheEnd.scene",
     "actor": "assets/prefabs/actors/PlayerActor.prefab",
     "skeletonUuid": "0d6fad44-f837-4439-a3ea-45bdc9373a0d",
@@ -270,41 +849,56 @@
     "approvedLandingSha256": "980943bde7ccee5189ee326ee4a5a2c00c432ef1c246b3a79cb7ace6480c1336",
     "commands": [
       {
+        "command": "node tools/spine/build-lantern-keeper.cjs",
+        "exit": 0,
+        "atlas": [
+          2048,
+          1776
+        ],
+        "bones": 23,
+        "slots": 12,
+        "fallFrames": 21
+      },
+      {
+        "command": "node --test tests/spine-actor-motion.test.cjs",
+        "exit": 0,
+        "passed": 11
+      },
+      {
         "command": "npm run typecheck",
         "exit": 0
       },
       {
         "command": "npm test",
-        "exit": 0,
-        "passed": 182
+        "exit": 1,
+        "total": 203,
+        "passed": 186,
+        "failed": 17
       },
       {
         "command": "npm run build:web",
         "exit": 0,
-        "log": "temp/builder/log/web-desktop-build-1795785414854.log"
+        "log": "temp/builder/log/web-desktop-build-1795795774786.log"
       }
     ],
     "checks": [
-      "逐像素对比用户确认的六帧原图。上排三帧一致。下排只在远侧左臂原先露出的范围内补绘披风、衣摆和后膝，三帧分别改动 17460、15769、16721 个像素。三个撑地右拳区域均为零像素改动。",
-      "观察实机落地段，并在 Cocos 中按时间采样。0.4 秒时远臂仍随原图显示，0.43、0.465、0.49 秒依次出现遮袖、遮腕、遮手的前景布边。0.55 秒起进入已经遮住左臂的触地绘图。触地、下沉、收势三张网格均已排除远侧左手的控制点。",
-      "在 1440×900 及 1024×768 主场景中，经实际鼠标操作打出攻击和格挡，第 11 回合生命耗尽后依次显示六个落地姿势。失败页在 1.02 秒定格，画面只露出近侧的撑地右拳。返回避难所后生命恢复至 10。"
+      "力竭沿用 21 张逐帧运行画面。斗篷前襟、后摆与铜扣始终按站姿原画的同一组纹理坐标配准，逐帧核对两片披风可见区域的三角形朝向。袖口绑带沿同一幅近侧右臂原画下落，0.40 秒起使用同一张闭合拳面。第 0.60 秒至末帧，实装贴图中的拳面取样像素完全相同，三处支点在地面保持稳定。",
+      "头部、面具和颊灯使用同一张站姿头部原画，只做平移和旋转。把灯心周围固定半径内的琥珀色像素按亮度加权求和，21 张运行贴图相对首张的最大偏差为 1.8%；在 1440×900 的原生游戏截图上为 1.4%。另检查了光晕半径及同倍率头部对照。",
+      "主场景实测攻击、格挡、承受致命伤、末帧停留和正常返回。两种窗口均在第 7 回合触发战败并返回避难所恢复到 10 血。1440×900 与 1024×768 分别实时采集到 19、21 张不同姿势，另在每个窗口逐张取样出全部 21 张。浏览器没有报错，两次实际加载的贴图摘要均与工程相同。",
+      "角色专项 11 项通过。全量测试通过 186/203；其余 17 项均为卡牌、合成、规则与存档相关断言，逐项核对与上版失败名称相同。"
     ],
     "evidence": {
-      "report": "output/playwright/lantern-keeper-far-arm/verification.json",
-      "pixelComparison": "output/playwright/lantern-keeper-far-arm/art-check.json",
-      "video": "output/playwright/lantern-keeper-far-arm/landing-live.webm",
-      "videoDecodedFrames": 75,
-      "videoSeconds": 3,
-      "halfSpeed": "output/playwright/lantern-keeper-far-arm/landing-half-speed.gif",
-      "correctedSheet": "output/playwright/lantern-keeper-far-arm/landing-sheet.png",
-      "nativeTerminal": "output/playwright/lantern-keeper-far-arm/landing-detail.png",
-      "screenshots": [
-        "output/playwright/lantern-keeper-far-arm/defeat-1440.png",
-        "output/playwright/lantern-keeper-far-arm/defeat-1024.png"
-      ],
-      "previousCostumeReview": "output/playwright/lantern-keeper-cloak/verification.json"
+      "report": "output/playwright/lantern-keeper-continuity/verification.json",
+      "preview": "output/playwright/lantern-keeper-continuity/kneel-detail.webp",
+      "headComparison": "output/playwright/lantern-keeper-continuity/mask-light.png",
+      "video": "output/playwright/lantern-keeper-continuity/battle-fall.webm",
+      "videoDecodedFrames": 45,
+      "videoSeconds": 1.8,
+      "terminal": "output/playwright/lantern-keeper-continuity/key-settle.png",
+      "textureSha256": "de3db4758bb1787592ebb266322d248942031fa824f1e127a1b25feb670f0e9c"
     },
-    "runtimeTextureSha256": "6301eac4fb7abcaf8e3b038de6553e8faaf33e10d4d76d1a184c7444ea5c4d25"
+    "runtimeTextureSha256": "de3db4758bb1787592ebb266322d248942031fa824f1e127a1b25feb670f0e9c",
+    "approachSourceSha256": "693e98af379c00831778fccdf7d96d1f2ed3effb7fd7a7c6659a3e3803adf2ed"
   },
   "ashenLabyrinthParchment20261127": {
     "project": "The end",

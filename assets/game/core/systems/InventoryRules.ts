@@ -59,8 +59,10 @@ export class InventoryRules {
         }
     }
     addDiscovery(kind: CardKind, zone: OwnedCard['zone'] = 'base'): OwnedCard {
-        delete this.state.synthesisRewardBoosts?.[kind];
-        this.boostCompanionMaterial(kind);
+        if (!this.scenario.labyrinth) {
+            delete this.state.synthesisRewardBoosts?.[kind];
+            this.boostCompanionMaterial(kind);
+        }
         const card = this.owned(kind, true, zone);
         this.state.cards.push(card);
         return card;

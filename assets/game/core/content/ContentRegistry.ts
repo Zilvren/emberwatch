@@ -66,12 +66,16 @@ export function createCardSet(raw: Catalog = getCatalog()): CardSet {
     }
     if (catalog.labyrinth) {
         Object.freeze(catalog.labyrinth.starter);
-        for (const deck of catalog.labyrinth.decks) {
-            Object.freeze(deck.cards);
-            Object.freeze(deck);
+        Object.freeze(catalog.labyrinth.discoveryPool);
+        const enemyActions = catalog.labyrinth.enemyActions;
+        if (enemyActions) {
+            for (const id of Object.keys(enemyActions) as (keyof typeof enemyActions)[]) {
+                const plan = enemyActions[id]!;
+                Object.freeze(plan.actions);
+                Object.freeze(plan);
+            }
+            Object.freeze(enemyActions);
         }
-        Object.freeze(catalog.labyrinth.decks);
-        Object.freeze(catalog.labyrinth.enabledDecks);
         Object.freeze(catalog.labyrinth);
     }
     if (catalog.expedition) {

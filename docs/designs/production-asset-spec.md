@@ -13,23 +13,33 @@
 
 顶栏和弹窗使用九宫格缩放，固定角点纹样。导航小像保留原画颜色，回合按钮的响应色列在 `assets/ashen-labyrinth/interface/theme.json`。生命、格挡、能量、堆数和按键文案使用原生 Label。资源绑定在 `HUD.prefab`、`BattleScreen.prefab`、`SettingsPopup.prefab` 与 `BattlePilePopup.prefab`。
 
+## 2026-11-28 · 旧地图专用素材与启动画面
+
+《The end》已实装。正式新局的地图是焦土迷宫。灰烬街区的旧场景背景与退潮盐原的背景、角色、卡图集及原画已从工程移除。复用的原生界面预制体采用焦土迷宫的避难所和石廊背景，卡面使用迷宫插画图集。历史场景存档仍由现有读取器处理，旧角色骨骼由共用预制体提供。
+
+`assets/TheEnd.scene` 的日志页和 HUD 初始隐藏。牌库与日志数据就绪后，由 `assets/game/presentation/GameRenderer.ts` 的首次渲染显示当前存档或新局对应的原生界面。首帧约束由 `tests/native-bindings.test.cjs` 检查。
+
 ## 2026-11-27 · 焦土迷宫执灯人战斗角色
 
-本版已接入 Pink/Cocos 主场景。用户确定长布披风的方向，配色、剪裁和动作观感待试玩审阅。内置 ImageGen 以执灯人原有面具与站姿为人物依据，以求生者、灰灯蛾和石廊战斗画面为画风参照。1024×1536 透明原画、1254×1254 九件拆件与两份生成提示词保存在 `art-source/ashen-labyrinth/lantern-keeper/`。各动作共用同一足底坐标。
+本版已接入 Pink/Cocos 主场景。11 月 28 日用户提供的 `standing-reference.png` 是战斗站姿的逐像素依据。原始画稿和早期九件拆件保存在 `art-source/ashen-labyrinth/lantern-keeper/`。本版按 `standing-registration.json` 的可见边界从参考图切出独立纹理。1024×1536 画布以像素 (512, 1520) 对准游戏根节点，每个原图像素对应 0.2875 个 Spine 单位。
 
-运行资源位于 `assets/ashen-labyrinth/lantern-keeper/`，采用 Spine 3.8.75、40 根骨骼及姿势控制、13 个绘制插槽与 1536×2016 图集。披风前襟和后片使用独立网格，亚麻领巾的前缘绘制在颈部之前。浅色悬牌复用 `assets/ashen-labyrinth/paper-back.png`。`OpenPalm` 跟随手掌位置，`CastOrigin` 控制悬浮。素材制作命令为 `node tools/spine/build-lantern-keeper.cjs`，游戏导出命令为 `npm run build:web`。
+运行资源位于 `assets/ashen-labyrinth/lantern-keeper/`，使用 Spine 3.8.75、31 根骨骼和 19 个绘制插槽。站姿拆件及纸牌使用一页原尺寸图集，力竭曝光帧使用另一页，两页边长均在 2048 像素以内。`cloak-front` 与 `cloak-lining` 共用原画布料、网格顶点和骨骼权重，沿画稿中的弧形褶边分置于近袖前后。`cloak-back` 绘制身后的衣料。手和衣摆遮住的布纹由相邻同类材质补足，重叠处按原画透明度计算。左手的 `GripThumb` 与 `GripFingers` 在出牌时维持绑定姿势，纸面由 `CastOrigin` 和两侧折痕骨骼变形。
+
+使用 `node tools/spine/build-lantern-keeper.cjs` 生成资源，`npm run build:web` 导出游戏。`tools/spine/capture-lantern-keeper-pixels.cjs` 在主场景读取实际玩家骨架，固定待机零时刻，将游戏额外显示的悬牌移出比对。黑白两次同姿势读回得到颜色和覆盖率，再由 `tools/spine/compare-lantern-keeper-pixels.py` 逐像素计算全图、可见披风、铜扣、袖口和翻边的差异。
 
 | 动作 | 时长 | 表演与事件 |
 | --- | --- | --- |
 | 待机 | 2.50 秒循环 | 双脚固定，胸口、手腕与披风后摆错开呼吸 |
-| 攻击出牌 | 0.66 秒 | 0.23 秒释放悬牌，0.47 秒动作事件结算攻击 |
-| 格挡准备 | 0.58 秒 | 肩部向前、掌心回收，0.13 秒释牌，0.16 秒动作事件结算牌效 |
+| 攻击出牌 | 0.66 秒 | 左手保持张开，纸在掌中折起，0.42 秒碎裂并结算攻击 |
+| 格挡准备 | 0.58 秒 | 左手收回身前，0.28 秒捏碎并结算牌效 |
 | 受击 | 0.38 秒 | 髋、胸、头依次后撤，再随披肩回稳 |
-| 力竭 | 1.02 秒 | 悬牌收起，披风遮住远侧左臂，近侧右拳、后膝与前脚落稳。失败页定格在第六帧 |
+| 力竭 | 1.02 秒 | 腰侧右手收拳下击，0.60 秒右拳接地，后膝与前脚落稳。失败页定格在第 21 张画面 |
 
-力竭底稿 `landing-poses.png` 保存用户确认的 1536×1024 六帧原图。`landing-far-arm-cover.png` 包含四块 144×210 的配准素材。前三块补齐下排姿势中遮住远侧左臂的披风、长衣和膝褶。第四块是第三帧转入触地时使用的前景布边，在 0.422 到 0.5 秒之间从袖部扫至手部。触地、下沉、收势三帧的可见网格由身体和披风控制点驱动，右拳的位置与原图一致。`tools/spine/lantern-keeper-landing.cjs` 用前脚掌定位六帧，以 17 个控制点衔接姿势。
+力竭动作使用 21 张注册在同一地面上的透明画面。起始衣料来自站姿拆件，弯身与跪姿使用对应原画中的披肩、袖根、内衬和下摆。关节、铜扣与衣摆落点配准中间画面。头部绕耳侧转动，灯光直接取自站姿参考像素。近侧右手从自然垂下收指，0.40 秒起沿用同一张闭合拳面，0.60 秒触地。前脚掌、后膝和拳峰在余下七张画面各自保持接触位置。
 
-`SpineActorRig.ts` 从悬牌骨骼求出起飞位置、倾角与大小。`FlyingCardBack.ts` 使用同一个牌背，向前移动约 4.8 张牌宽，向上约 1.6 张牌高。飞行持续 0.38 秒，后半段从纸张下沿收窄并淡出，在角色一侧自行消散。轨迹只依赖悬牌的初始姿态和尺寸。`LabyrinthCardAction.ts` 用角色的动作事件触发实际牌效和回位。角色模块参考 BaseLib 为自定义角色提供独立表现与动作入口的做法，项目内通过 Cocos Prefab 和 Spine 时间线完成绑定。 [BaseLib 自定义角色源码](https://github.com/Alchyr/BaseLib-StS2/blob/master/Abstracts/CustomCharacterModel.cs)
+运行时由 `death` 时间线在 `landing-body` 插槽逐张切换普通 Spine 区域附件。待机、出牌和受击使用现有骨骼。`tools/spine/lantern-keeper-frames.py` 编排画面，`lantern_keeper_layers.py` 负责持续可见部位的配准、收指和头部采样。显式重制素材需要 Python、Pillow、NumPy、SciPy 和 OpenCV。Pink 构建直接导入已生成的 PNG、atlas 和 JSON。
+
+`tools/spine/lantern-keeper-motion.cjs` 编排掌中纸面折皱和纸屑。碎裂帧隐藏整张牌、露出四片碎纸并发出一次 `impact`。碎纸在约 0.18 秒内淡出。待机与受击显式还原纸面展开的姿势。`SpineActorRig.ts` 转发动画事件，`GameDirector.ts` 提交现有 `play-card` 命令。
 
 ## 2026-11-26 · 焦土迷宫羊皮纸底图
 

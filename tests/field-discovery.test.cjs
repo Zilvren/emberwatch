@@ -144,10 +144,9 @@ test('an actual pre-field catalog checksum can resume an old in-progress expedit
         old = JSON.parse(JSON.stringify(raw));
     delete old.expedition;
     delete old.labyrinth;
-    old.cards = old.cards.filter(
-        (c) => !c.chapter && !c.synthesisOnly && !c.fist &&
-            !['follow_up', 'shield_push', 'scrap_shiv', 'rummage'].includes(c.id)
-    );
+    old.cards = old.cards
+        .filter((c) => !c.chapter && !c.synthesisOnly && !c.fist && !['follow_up', 'shield_push', 'scrap_shiv', 'rummage'].includes(c.id))
+        .map(({ summary, ...card }) => card);
     const oldIds = new Set(old.cards.map(({ id }) => id));
     old.recipes = old.recipes.filter(({ materials, products }) =>
         [...materials, ...products].every(({ card }) => oldIds.has(card))

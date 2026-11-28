@@ -54,10 +54,6 @@ function displayModel(input: DisplayInput) {
         ...input,
         cost: input.cost === null ? '—' : String(input.cost),
         displayTitle: input.supplyWeight === undefined && input.title.length > 7 ? input.title.slice(0, 6) + '…' : input.title,
-        description:
-            input.supplyWeight === undefined && input.description.length > 24
-                ? input.description.slice(0, 23) + '…'
-                : input.description,
         fullDescription:
             (input.title.length > 7 ? input.title + '\n\n' : '') +
             input.fullDescription +
@@ -80,6 +76,7 @@ export function supplyPictureLayout(description: string, artRatio: number, block
 
 export interface CardViewOptions {
     field?: boolean;
+    labyrinth?: boolean;
     runDeck?: boolean;
     neededForSynthesis?: boolean;
     packedWeight?: number;
@@ -96,9 +93,13 @@ export function cardViewModel(
     options: CardViewOptions = {}
 ): CardDisplayModel {
     data = playableCard(data);
-    const { field, damage, cost } = options;
+    const { field, labyrinth, damage, cost } = options;
+    const instrument = field && !labyrinth && data.effect.type === 'equip';
     const effect = effectSummary(data, definitions);
-    const detail = data.text === effect ? '' : data.text;
+    const [lead, ...continuation] = data.text.split('。');
+    const detail = lead.replace(/\s/g, '') === effect.replace(/\s/g, '')
+        ? continuation.join('。').trim()
+        : data.text;
     const [baseEffect, ...additional] = data.effect.labyrinth ? effect.split('，') : [effect];
     const generated = generatedCards(data.effect).map((id) => definitions[id]?.name ?? id);
     const hits = data.effect.hits ?? 1;
@@ -132,9 +133,9 @@ export function cardViewModel(
             : data.role === 'basic'
               ? ['basic']
               : data.effect.type === 'equip'
-                ? [field ? 'instrument' : 'weapon']
+                ? [instrument ? 'instrument' : 'weapon']
                 : [];
-    if (data.canSynthesize) {
+    if (data.canSynthesize && !labyrinth) {
         keywords.push('synthesis');
         if (options.neededForSynthesis) keywords.push('synthesis-needed');
     }
@@ -147,15 +148,19 @@ export function cardViewModel(
     return displayModel({
         id: data.id,
         title: data.name,
-        tag: field && data.effect.type === 'equip' ? '仪器 · 持续' : data.tag,
+        tag: instrument ? '仪器 · 持续' : labyrinth
+            ? data.tag.split('·').map(part => part.trim())
+                .filter(part => part !== '合成产物' && part !== '合成材料').join(' · ')
+            : data.tag,
         cost: cost ?? data.cost,
         costUnit,
         showCost: data.role !== 'cash' && data.role !== 'supply',
         effect: data.role === 'supply' ? `价值 ${data.supplyValue ?? 1} 物资点` : primary,
         description:
-            fieldTemporary
+            data.role === 'supply' ? data.text : data.summary ??
+            (fieldTemporary
                 ? '打出或回合结束时消失。'
-                : weaponDescription + context,
+                : weaponDescription + context),
         fullDescription:
             effect +
             (fieldTemporary

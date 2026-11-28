@@ -36,7 +36,6 @@ export class CardPresentation extends Component {
     @property(Label) statusLabel: Label | null = null;
     @property(Label) weightLabel: Label | null = null;
     @property(Sprite) artwork: Sprite | null = null;
-    @property(SpriteAtlas) tideIllustrations: SpriteAtlas | null = null;
     @property(SpriteAtlas) labyrinthArt: SpriteAtlas | null = null;
     @property(JsonAsset) labyrinthTheme: JsonAsset | null = null;
     private fieldFace = false;
@@ -175,9 +174,6 @@ export class CardPresentation extends Component {
             this.artwork.spriteFrame =
                 this.labyrinthArt?.getSpriteFrame(model.artKey ?? model.id) ??
                 this.labyrinthArt?.getSpriteFrame(model.art) ??
-                (this.fieldFace && this.tideIllustrations
-                    ? this.tideIllustrations.getSpriteFrame(model.artKey ?? model.id)
-                    : null) ??
                 this.illustrations[model.artIndex] ??
                 this.illustrations[2];
         this.showKeywords(
@@ -262,19 +258,21 @@ export class CardPresentation extends Component {
             this.applyAppearance();
         }
     }
-    setExpanded(value: boolean): void {
+    setExpanded(value: boolean, expandedHint = '点击收起说明'): void {
         const changed = this.expanded !== value;
         this.expanded = value;
         const supply = !!this.supplyFace?.node.active;
         if (this.frontContent) this.frontContent.active = !supply && !value;
         if (this.detailsViewport) this.detailsViewport.active = !supply && value;
-        if (value && !supply && this.detailsLabel && this.detailsViewport)
+        if (changed && value && !supply && this.detailsLabel && this.detailsViewport) {
+            this.detailsViewport.getComponent(ScrollView)?.stopAutoScroll();
             this.detailsLabel.node.setPosition(
                 0,
                 this.detailsViewport.getComponent(UITransform)!.height / 2
             );
+        }
         if (this.statusLabel)
-            this.statusLabel.string = this.blocked || (value ? '点击收起说明' : this.caption);
+            this.statusLabel.string = this.blocked || (value ? expandedHint : this.caption);
         if (changed) this.node.emit('card-expanded', value);
     }
     inspect(): object {

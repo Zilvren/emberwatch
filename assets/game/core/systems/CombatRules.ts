@@ -1,6 +1,7 @@
 import { CardSet } from '../content/ContentRegistry';
-import { GameScenario, MAX_HEALTH, supportsFistCombos } from '../content/GameScenario';
+import { GameScenario, MAX_HEALTH, supportsFistCombos, supportsWeaponSlots } from '../content/GameScenario';
 import { fistTargetMatches } from '../content/FistCards';
+import { DEFAULT_ENEMY_ACTIONS, isLabyrinthEnemy, nextEnemyAction, nextEnemyStep } from '../content/LabyrinthEnemies';
 import { Random } from '../Random';
 import { ActionResult, CardKind, CombatCard, OwnedCard } from '../RulesTypes';
 import {
@@ -40,6 +41,9 @@ export class CombatRules {
     private get expandedCombat(): boolean {
         return this.scenario.runDeck === true;
     }
+    private get weaponSlotsEnabled(): boolean {
+        return supportsWeaponSlots(this.scenario);
+    }
     private get handLimit(): number {
         return this.expandedCombat ? 10 : 6;
     }
@@ -69,17 +73,18 @@ export class CombatRules {
     }
     private chargedEffect(effect: CardDefinition['effect']) {
         const battle = this.state.battle, rage = effect.rage;
-        return battle && rage && this.expandedCombat && this.shieldSpearEquipped(battle) &&
+        return battle && rage && this.weaponSlotsEnabled && this.shieldSpearEquipped(battle) &&
             (battle.rage ?? 0) >= rage.threshold ? rage : undefined;
     }
     private addRage(b: NonNullable<CombatState['battle']>, amount = 1): void {
-        if (!this.expandedCombat || !this.shieldSpearEquipped(b) || !amount) return;
+        if (!this.weaponSlotsEnabled || !this.shieldSpearEquipped(b) || !amount) return;
         b.rage = Math.min(5, (b.rage ?? 0) + amount);
     }
     private consumeRage(b: NonNullable<CombatState['battle']>): void {
         b.rage = 0;
     }
     private discardReplacedWeapon(b: NonNullable<CombatState['battle']>, card: CombatCard): void {
+        delete b.weaponTurns?.[card.id];
         b.discard.push(card);
     }
     private equipCard(
@@ -89,6 +94,8 @@ export class CombatRules {
     ): void {
         const slots = this.weaponSlots(card.kind);
         const current = this.weapons(b);
+        const turns = b.weaponTurns ?? (b.weaponTurns = {});
+        for (const equipped of current) turns[equipped.id] ??= b.equippedTurn;
         if (slots === 2) {
             for (const previous of current) this.discardReplacedWeapon(b, previous);
             current.splice(0, current.length);
@@ -107,8 +114,7 @@ export class CombatRules {
         b.weapons = current;
         b.weapon = card;
         b.equippedTurn = b.turn;
-        b.weaponTurns ??= {};
-        b.weaponTurns[card.id] = b.turn;
+        turns[card.id] = b.turn;
     }
     private generatedCard(b: NonNullable<CombatState['battle']>, kind: CardKind): void {
         const generated: CombatCard = {
@@ -117,7 +123,7 @@ export class CombatRules {
             temporary: true,
         };
         if (b.hand.length < this.handLimit) b.hand.push(generated);
-        else b.discard.push(generated);
+        else if (!this.scenario.labyrinth) b.discard.push(generated);
     }
     private applyDamage(
         amount: number,
@@ -160,6 +166,10 @@ export class CombatRules {
     startBattle(enemy: string): void {
         const definition = this.scenario.enemies[enemy];
         if (!definition) throw new Error('缺少敌人定义：' + enemy);
+        const plan = this.scenario.labyrinth && isLabyrinthEnemy(enemy)
+            ? this.content.catalog.labyrinth?.enemyActions?.[enemy]
+            : undefined;
+        const firstAction = plan?.actions[0] ?? DEFAULT_ENEMY_ACTIONS[0];
         this.state.phase = 'battle';
         this.state.battle = {
             stamina: 0,
@@ -170,16 +180,17 @@ export class CombatRules {
             enemy,
             hp: definition.hp,
             maxHp: definition.hp,
-            attack: definition.attack,
-            strongAttack: definition.strongAttack,
+            attack: plan?.attack ?? definition.attack,
+            strongAttack: plan?.strongAttack ?? definition.strongAttack,
             turn: 1,
-            intent: 'attack',
-            boosted: false,
+            intent: firstAction === 'prepare' ? 'prepare' : 'attack',
+            boosted: firstAction === 'heavy',
+            ...(plan ? { enemySequence: { actions: plan.actions.slice(), index: 0, loopStart: plan.loopStart } } : {}),
             block: 0,
             draw: this.random.shuffle(this.inventory.usableCards.map((c) => this.combatCard(c))),
             hand: [],
             discard: [],
-            ...(this.expandedCombat ? { weapons: [], weaponTurns: {}, rage: 0 } : {}),
+            ...(this.weaponSlotsEnabled ? { weapons: [], weaponTurns: {}, rage: 0 } : {}),
             weapon: null,
             equippedTurn: 0,
             ...(this.scenario.labyrinth ? { calm: initialCalm() } : {}),
@@ -263,7 +274,7 @@ export class CombatRules {
             return this.feedback.result(false, '这次选牌已结束或卡牌不可选。');
         if (choice.mode === 'replace-weapon') {
             const pending = battle.pendingEquip && battle.hand.find((card) => card.id === battle.pendingEquip);
-            const replacement = id && (battle.weapons ?? []).find((card) => card.id === id);
+            const replacement = id && this.weapons(battle).find((card) => card.id === id);
             if (id === null) {
                 delete battle.pendingEquip;
                 delete battle.cardChoice;
@@ -327,6 +338,7 @@ export class CombatRules {
         const b = this.state.battle!;
         b.stamina = b.maxStamina;
         this.fist.resetTurn(b);
+        delete b.lastDefenseCardKind;
         if (this.scenario.fieldDeck) b.attackedThisTurn = false;
         const weapons = this.weapons(b);
         for (const weapon of weapons) {
@@ -349,7 +361,7 @@ export class CombatRules {
         )
             return stamina ? '体力不足' : '物资不足';
         if (effect.type === 'none') return '遗物不能在战斗中使用';
-        if (effect.type === 'equip' && this.expandedCombat) {
+        if (effect.type === 'equip' && this.weaponSlotsEnabled) {
             const slots = this.weaponSlots(card.kind), used = this.usedWeaponSlots(this.state.battle!);
             if (slots === 2 && used === 2 && card.kind === this.state.battle?.weapon?.kind)
                 return '这件武器已经装备。';
@@ -374,7 +386,7 @@ export class CombatRules {
         if (reason) return this.feedback.result(false, reason);
         if (
             effect.type === 'equip' &&
-            this.expandedCombat &&
+            this.weaponSlotsEnabled &&
             this.weaponSlots(card.kind) === 1 &&
             this.usedWeaponSlots(b) === 2
         ) {
@@ -407,7 +419,7 @@ export class CombatRules {
         consumeDiscount(definition, b.calm);
         let message = `${definition.name}已生效。`;
         if (effect.type === 'equip') {
-            if (this.expandedCombat) this.equipCard(b, card, options.replaceWeapon);
+            if (this.weaponSlotsEnabled) this.equipCard(b, card, options.replaceWeapon);
             else {
                 b.weapon = card;
                 b.equippedTurn = b.turn;
@@ -506,12 +518,11 @@ export class CombatRules {
                     return this.feedback.result(true, fistCounter ? `反击 ${counterDamage} 点，击败敌人。` : '回流盾反击击败敌人。');
                 }
             }
-            b.boosted = false;
-            b.intent = 'prepare';
-        } else {
-            b.boosted = true;
-            b.intent = 'attack';
         }
+        const nextAction = nextEnemyAction(b);
+        if (b.enemySequence) b.enemySequence.index = nextEnemyStep(b.enemySequence);
+        b.intent = nextAction === 'prepare' ? 'prepare' : 'attack';
+        b.boosted = nextAction === 'heavy';
         this.nextTurn(b);
         return this.feedback.result(true, `${counterDamage ? `反击 ${counterDamage} 点 · ` : ''}第 ${b.turn} 回合，你先行动。`);
     }

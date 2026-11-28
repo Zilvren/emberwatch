@@ -60,6 +60,7 @@ test('deleting an ordinary definition removes it from initial decks and reward p
     delete catalog.expedition.starter.evade;
     delete catalog.expedition.faces.evade;
     catalog.expedition.discoveryGroups = catalog.expedition.discoveryGroups.map(group => group.filter(id => id !== 'evade'));
+    catalog.labyrinth.discoveryPool = catalog.labyrinth.discoveryPool.filter(id => id !== 'evade');
     const { SurvivalGame, CARD, REWARD_POOL } = gameWith(catalog), game = new SurvivalGame(1);
     assert.equal(CARD.evade, undefined); assert.ok(!REWARD_POOL.includes('evade')); assert.ok(!game.cards.some(card => card.kind === 'evade'));
 });
@@ -95,7 +96,9 @@ test('HTTP saves persist, retain a backup, reject conflicts and leave disk intac
         fs.rmSync(target, { recursive: true });
     });
     const url = `http://127.0.0.1:${server.address().port}/api/cards`;
-    const first = await (await fetch(url)).json(); first.catalog.cards.push(newCard());
+    const first = await (await fetch(url)).json();
+    const added = { ...newCard(), summary: '简短效果', text: '用来确认工坊分别保存卡面简述和悬停时显示的详细说明。' };
+    first.catalog.cards.push(added);
     const put = (input, headers = {}) => fetch(url, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(input) });
     const savedResponse = await put(first); assert.equal(savedResponse.status, 200);
     const saved = await savedResponse.json(); assert.notEqual(saved.revision, first.revision);
@@ -107,5 +110,8 @@ test('HTTP saves persist, retain a backup, reject conflicts and leave disk intac
     assert.equal((await put(invalid)).status, 422); assert.equal(fs.readFileSync(catalogFile, 'utf8'), before);
     assert.equal((await put(saved, { Origin: 'https://example.invalid' })).status, 403);
     const fresh = await (await fetch(url)).json(); const { SurvivalGame } = gameWith(fresh.catalog);
+    const stored = fresh.catalog.cards.find(card => card.id === added.id);
+    assert.equal(stored.summary, added.summary);
+    assert.equal(stored.text, added.text);
     assert.ok(new SurvivalGame(1).cards.some(card => card.kind === 'editor_test'));
 });

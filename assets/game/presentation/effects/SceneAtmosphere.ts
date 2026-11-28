@@ -18,19 +18,14 @@ const { ccclass, property } = _decorator;
 export class SceneAtmosphere extends Component {
     @property(Node) backdrop: Node | null = null;
     @property(Graphics) dust: Graphics | null = null;
-    @property(SpriteFrame) tideBackdrop: SpriteFrame | null = null;
     @property(SpriteFrame) labyrinthBackdrop: SpriteFrame | null = null;
     @property(SpriteFrame) labyrinthCourt: SpriteFrame | null = null;
     private previousBackdrop: SpriteFrame | null = null;
-    setFieldLook(field: boolean): void {
-        this.setLook(field ? 'tide' : 'legacy');
-    }
-    setLook(look: 'tide' | 'labyrinth' | 'court' | 'legacy'): void {
+    setLook(look: 'labyrinth' | 'court' | 'legacy'): void {
         const sprite = this.backdrop?.getComponent(Sprite);
         if (!sprite) return;
         if (!this.previousBackdrop) this.previousBackdrop = sprite.spriteFrame;
-        sprite.spriteFrame = (look === 'tide' ? this.tideBackdrop
-            : look === 'court' ? this.labyrinthCourt
+        sprite.spriteFrame = (look === 'court' ? this.labyrinthCourt
             : look === 'labyrinth' ? this.labyrinthBackdrop : null) ?? this.previousBackdrop;
     }
     private elapsed = 0;

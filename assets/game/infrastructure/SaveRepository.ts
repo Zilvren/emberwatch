@@ -22,11 +22,23 @@ class SaveReadError extends Error {
 }
 
 const tideCards = new Set(['follow_up', 'shield_push', 'scrap_shiv', 'rummage']);
+// These existing IDs gained the legacy reward flag alongside the editable
+// labyrinth pool. Recreate that one earlier signature with all other fields intact.
+const promotedRewardIds = new Set([
+    'follow_up', 'shield_push', 'scrap_shiv', 'rummage', 'rough_spear', 'steel_spear',
+    'shield_spear', 'shield_spear_charge', 'shield_spear_guard', 'sharpened_knife',
+    'honed_knife', 'dragon_slayer',
+]);
+function beforeRewardMigration<T extends { id: string; reward: boolean }>(cards: T[]): T[] {
+    return cards.map(card => card.reward && promotedRewardIds.has(card.id) ? { ...card, reward: false } : card);
+}
 
 /** Platform adapter. Storage writes are atomic per key; the previous valid save is retained. */
 export class SaveRepository implements RunPersistence {
     readonly content = createCardSet();
-    private readonly runDeckCards = this.content.catalog.cards.filter((card) => !card.chapter);
+    // Face summaries are presentation text. Keep old catalog signatures stable.
+    private readonly signedCards = this.content.catalog.cards.map(({ summary, ...card }) => card);
+    private readonly runDeckCards = this.signedCards.filter((card) => !card.chapter);
     private readonly legacyCards = this.runDeckCards.filter((card) => !card.fist);
     private readonly previousCards = this.legacyCards.filter((card) => !card.synthesisOnly);
     private readonly previousRecipes = this.content.catalog.recipes.filter((recipe) =>
@@ -41,10 +53,12 @@ export class SaveRepository implements RunPersistence {
             : card
     );
     private readonly priorTideHashes = this.content.catalog.expedition
-        ? [this.fieldHash(), this.fieldHash(this.originalFieldCards)]
+        ? [this.fieldHash(), this.fieldHash(this.originalFieldCards),
+            this.fieldHash(beforeRewardMigration(this.fieldCards)), this.fieldHash(beforeRewardMigration(this.originalFieldCards))]
         : [];
     private readonly previousRunDeckHash = this.runDeckHash(this.previousCards, this.previousRecipes);
     private readonly preFistRunDeckHash = this.runDeckHash(this.legacyCards);
+    private readonly preRewardMigrationRunDeckHash = this.runDeckHash(beforeRewardMigration(this.runDeckCards));
     private readonly upstreamHash = this.runDeckHash(
         this.previousCards.filter((card) => !tideCards.has(card.id)), this.previousRecipes
     );
@@ -60,11 +74,12 @@ export class SaveRepository implements RunPersistence {
         const { version, fixedReward } = this.content.catalog;
         return hash(JSON.stringify({ version, fixedReward, cards, recipes }));
     }
-    private catalogHash(scenario: GameScenario, state: GameState): string {
+    private catalogHash(scenario: GameScenario, state: GameState, chapterOnly = false): string {
         if (scenario.runDeck) return this.runDeckHash();
         if (!scenario.labyrinth) return this.fieldHash();
         // The save already carries the active discovery pool and the candidates on screen.
-        const { version, labyrinth, cards } = this.content.catalog;
+        const { version, labyrinth } = this.content.catalog;
+        const cards = this.signedCards;
         // Unrelated loot, prices and drop rates can be edited while a campaign is saved.
         // Protect the identities in this save and the weights that its bag was packed with.
         const carried = new Map(state.cards.map(card => [card.kind, card.packedWeight ?? this.content.cards[card.kind]?.weight]));
@@ -76,7 +91,9 @@ export class SaveRepository implements RunPersistence {
         return hash(JSON.stringify({
             version,
             starter: labyrinth?.starter,
-            cards: cards.filter((card) => card.chapter === 'ashen-labyrinth' && card.role !== 'supply'),
+            cards: cards.filter(card => chapterOnly
+                ? card.chapter === 'ashen-labyrinth' && card.role !== 'supply'
+                : !card.fist && (card.role === 'normal' || card.role === 'temporary')),
             ...(supplies.length ? { supplies } : {}),
             ...(usesFistCards ? { fistCards: cards.filter((card) => !!card.fist) } : {}),
         }));
@@ -90,8 +107,21 @@ export class SaveRepository implements RunPersistence {
     ) {}
     private matchesCatalog(catalogHash: string, scenario: GameScenario, state: GameState): boolean {
         if (catalogHash === this.catalogHash(scenario, state)) return true;
-        if (scenario.labyrinth) return false;
+        if (scenario.labyrinth) {
+            // The prior upstream signature covered chapter cards and the same
+            // run-specific supply/fist fields. That format could not carry
+            // migrated non-chapter combat cards in its discovery pool.
+            const migrated = (kind: string) => {
+                const card = this.content.cards[kind];
+                return card?.role === 'normal' && !card.chapter && !card.fist;
+            };
+            return !(state.discoveryPool ?? []).some(migrated) &&
+                !state.cards.some(card => migrated(card.kind)) &&
+                !(state.rewards?.cards ?? []).some(migrated) &&
+                catalogHash === this.catalogHash(scenario, state, true);
+        }
         if (scenario.runDeck) {
+            if (catalogHash === this.preRewardMigrationRunDeckHash) return true;
             if (catalogHash === this.preFistRunDeckHash && !state.fistUnlocks &&
                 !state.cards?.some((card) => this.content.cards[card.kind]?.fist) &&
                 !state.rewards?.cards?.some((kind) => this.content.cards[kind]?.fist))

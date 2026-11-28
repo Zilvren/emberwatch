@@ -29,7 +29,7 @@ await screenshot('03-discovery');
 await click('discover-confirm');
 let battle = await state();
 assert(battle.hand.length === 6 && battle.stamina === 3 && battle.cards.length === 21, 'Taking a card did not add it to hand for free.');
-assert(battle.heroRig?.actor === 'surveyor', 'The old protagonist was still bound.');
+assert(battle.heroRig?.actor === 'survivor', 'The legacy save should use the shared actor rig.');
 await quiet();
 await screenshot('04-combat');
 await page.setViewportSize({width:1024,height:768});

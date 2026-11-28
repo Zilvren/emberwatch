@@ -191,14 +191,15 @@ test('early rewards include every material and card descriptions distinguish use
 });
 
 test('a configured save without sharpening cards or recipes resumes the older map', () => {
+    const oldCards = catalog.cards.filter(({ synthesisOnly, fist }) => !synthesisOnly && !fist);
+    const oldIds = new Set(oldCards.map(card => card.id));
     const oldCatalog = {
         ...catalog,
-        cards: catalog.cards.filter(({ synthesisOnly, fist }) => !synthesisOnly && !fist),
+        cards: oldCards,
         recipes: catalog.recipes.filter(({ id }) => !steps.some(([recipeId]) => id === recipeId)),
         labyrinth: {
             ...catalog.labyrinth,
-            decks: catalog.labyrinth.decks.filter(({ id }) => id !== 'fist-combos'),
-            enabledDecks: catalog.labyrinth.enabledDecks.filter((id) => id !== 'fist-combos'),
+            discoveryPool: catalog.labyrinth.discoveryPool.filter(id => oldIds.has(id)),
         },
     };
     const disk = storage();

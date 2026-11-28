@@ -1,7 +1,7 @@
-import { validateCatalog, activeDiscoveryCards, cardReferences, SYSTEM_ROLES, EFFECT_NAMES, ART_IDS, isBattleCard } from '/shared/catalog.js';
-import { isFistBattleReward } from '/shared/fist-cards.js';
+import { validateCatalog, cardReferences, SYSTEM_ROLES, EFFECT_NAMES, ART_IDS, isBattleCard, isLabyrinthRewardCard } from '/shared/catalog.js';
 import { cardViewModel, supplyPictureLayout } from '/shared/card-view.js';
 import { bindRecipeEditor } from '/recipes.js';
+import { LABYRINTH_ENEMIES, DEFAULT_ENEMY_ACTIONS, DEFAULT_ENEMY_LOOP_START, ENEMY_ACTION_LABELS } from '/shared/labyrinth-enemies.js';
 
 const $ = selector => document.querySelector(selector);
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -9,6 +9,21 @@ const fixedRewardCard = card => card.role === 'normal' && !card.chapter && !card
 const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
 const artNames = { attack: '基础攻击', dodge: '基础躲避', knife: '刀具', evade: '强化躲避', repair: '修复', heavy: '重击', slash: '挥砍', cash: '现金', rope: '绳子', battery: '电池' };
 const roleNames = { basic: '基础牌', normal: '普通牌', temporary: '战斗临时牌', cash: '旧版现金', supply: '物资牌' };
+const effectSearchTerms = { damage: '攻击', block: '防御', heal: '治疗 回复', equip: '武器', draw: '抽卡' };
+const cardTypes = [
+    ['all', '全部类型'],
+    ...Object.entries(EFFECT_NAMES).map(([id, name]) => [id, name, effectSearchTerms[id] ?? '']),
+    ['supply', '物资卡', roleNames.supply],
+    ['labyrinth', '焦土迷宫'],
+    ['basic', roleNames.basic],
+    ['normal', roleNames.normal],
+    ['temporary', roleNames.temporary],
+];
+const typeSearch = $('#type-search'), typeOptions = $('#type-options');
+const rewardWorkspace = $('#reward-workspace'), rewardGrid = $('#reward-grid');
+const rewardFilter = $('#reward-filter');
+const enemyWorkspace = $('#enemy-workspace'), enemyEditor = $('#enemy-editor'), enemySelector = $('#enemy-selector');
+for (const [id, enemy] of Object.entries(LABYRINTH_ENEMIES)) enemySelector.add(new Option(enemy.title, id));
 let draft, baseline, revision, selectedId, selectedIndex = 0, saving = false, lastSaved = '', noticeTimer;
 let newCards = new WeakSet();
 let previewedCard, previewExpanded = false;
@@ -47,29 +62,28 @@ async function loadVisualAssets() {
     uiArt = isCardAtlas(artResponse.value) ? artResponse.value : null;
     itemArt = itemResponse.value;
     if (hasTheme) {
-        const { style } = $('#preview-card');
         for (const [name, value] of Object.entries(theme.colors)) {
-            style.setProperty('--card-' + name.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase()), value);
+            const property = '--card-' + name.replace(/[A-Z]/g, letter => '-' + letter.toLowerCase());
+            $('#preview-card').style.setProperty(property, value);
+            rewardWorkspace.style.setProperty(property, value);
         }
-        style.setProperty('--card-type-text', theme.card.typeText);
+        $('#preview-card').style.setProperty('--card-type-text', theme.card.typeText);
     }
     $('#preview-asset-note').hidden = !!hasTheme && !!uiArt;
 }
 
-function renderDecks() {
-    const profile = draft?.labyrinth;
-    $('#discovery-decks').hidden = !profile || supplyPage();
-    if (!profile) return;
-    const names = definitions();
-    $('#deck-options').innerHTML = profile.decks.map(deck => `
-        <label class="deck-option">
-          <input type="checkbox" data-deck="${escape(deck.id)}" ${profile.enabledDecks.includes(deck.id) ? 'checked' : ''}>
-          <span><strong>${escape(deck.name)}</strong><small>${deck.cards.map(id => escape(names[id]?.name ?? id)).join('、') || '暂未收录卡牌'}</small></span>
-          <span class="deck-size">${deck.cards.length} 张</span>
-        </label>`).join('');
-    const count = activeDiscoveryCards(profile).length;
-    $('#discovery-count').textContent = count ? `发现池 ${count} 种 · 每次最多出现 ${Math.min(3, count)} 张` : '战斗发现池为空。补给点仍可搜到物资卡。';
-    $('#save-decks').disabled = saving || !dirty();
+function canJoinRewardPool(card) {
+    return !!draft.labyrinth && isLabyrinthRewardCard(card);
+}
+function inRewardPool(card) {
+    return canJoinRewardPool(card) && draft.labyrinth.discoveryPool.includes(card.id);
+}
+function setRewardMembership(card, included) {
+    if (!canJoinRewardPool(card)) return;
+    const profile = draft.labyrinth;
+    if (included) {
+        if (!profile.discoveryPool.includes(card.id)) profile.discoveryPool.push(card.id);
+    } else profile.discoveryPool = profile.discoveryPool.filter(id => id !== card.id);
 }
 
 function artMarkup(art, cardId) {
@@ -115,26 +129,178 @@ function field(label, key, value, options = {}) {
 function select(label, key, value, items, disabled = false) {
     return `<label class="field"><span>${label}</span><select aria-label="${label}" data-field="${key}" ${disabled ? 'disabled' : ''}>${items.map(([id, name]) => `<option value="${escape(id)}" ${id === value ? 'selected' : ''}>${escape(name)}</option>`).join('')}</select></label>`;
 }
+function matchingCardTypes(query) {
+    const term = query.trim().toLowerCase();
+    if (!term) return cardTypes;
+    const exact = cardTypes.find(([id, name]) => term === id || term === name.toLowerCase());
+    return exact ? [exact] : cardTypes.filter(option =>
+        option[0] !== 'all' && option.some(text => text.toLowerCase().includes(term))
+    );
+}
+function closeTypeOptions() {
+    typeOptions.hidden = true;
+    typeSearch.setAttribute('aria-expanded', 'false');
+    typeSearch.removeAttribute('aria-activedescendant');
+}
+function showTypeOptions(options = cardTypes) {
+    if (!options.length) return closeTypeOptions();
+    const matches = matchingCardTypes(typeSearch.value);
+    const selected = typeSearch.value.trim() ? matches.length === 1 && matches[0][0] : 'all';
+    typeOptions.innerHTML = options.map(([id, name]) => `
+        <button type="button" class="type-option" id="type-option-${id}" data-card-type="${id}"
+          role="option" tabindex="-1" aria-selected="${id === selected}">${escape(name)}</button>`).join('');
+    typeOptions.hidden = false;
+    typeOptions.scrollTop = 0;
+    typeSearch.removeAttribute('aria-activedescendant');
+    typeSearch.setAttribute('aria-expanded', 'true');
+}
+function chooseCardType(id) {
+    const [, name] = cardTypes.find(option => option[0] === id);
+    typeSearch.value = id === 'all' ? '' : name;
+    typeSearch.focus();
+    closeTypeOptions();
+    renderList();
+}
+function clearCardFilters() {
+    $('#search').value = '';
+    typeSearch.value = '';
+    closeTypeOptions();
+}
 function renderList() {
     if (!draft) return;
-    const query = $('#search').value.trim().toLowerCase(), filter = supplyPage() ? 'all' : $('#filter').value;
+    const query = $('#search').value.trim().toLowerCase();
+    const types = !supplyPage() && typeSearch.value.trim() ? matchingCardTypes(typeSearch.value).map(([id]) => id) : ['all'];
     const library = supplyPage() ? draft.cards.filter(card => card.role === 'supply') : draft.cards;
     const cards = library.filter(card => {
-        const matchesFilter = filter === 'all' ||
-            (filter === 'supply' ? card.role === 'supply' : filter === 'labyrinth' ? !!card.chapter || !!card.fist : card.effect.type === filter);
+        const matchesFilter = types.includes('all') || types.includes(card.effect.type) ||
+            types.includes(card.role) || (types.includes('labyrinth') && (card.chapter === 'ashen-labyrinth' || !!card.fist));
         return (!query || `${card.id} ${card.name}`.toLowerCase().includes(query)) && matchesFilter;
     });
-    $('#card-count').textContent = library.length;
+    $('#card-count').textContent = cards.length;
     $('#card-list').innerHTML = cards.length ? cards.map(card => {
         const supply = card.role === 'supply';
-        const detail = supply ? `负重 ${card.weight} · 兑换 ${card.supplyValue ?? 1} 点` :
-            [card.initialCount ? `初始 ×${card.initialCount}` : '', card.reward ? '奖励池' : ''].filter(Boolean).join('　');
-        return `<div role="listitem"><button class="card-row ${card === current() ? 'selected' : ''}" data-select="${draft.cards.indexOf(card)}" aria-label="选择卡牌：${escape(card.name)}" aria-current="${card === current()}">
-            <span class="row-art art-crop">${artMarkup(card.art, card.id)}</span>
-            <span class="row-info"><strong>${escape(card.name)}</strong><small>${escape(card.id)} · ${supply ? '物资卡' : escape(EFFECT_NAMES[card.effect.type])}</small>
-            ${detail ? `<span class="row-indicator">${detail}</span>` : ''}</span>
-            <span class="row-cost">${supply ? (card.reward ? '投放中' : '未投放') : card.cost}</span></button></div>`;
+        const details = [
+            supply ? `负重 ${card.weight} · 兑换 ${card.supplyValue ?? 1} 物资点` : card.initialCount ? `初始 ×${card.initialCount}` : '',
+            inRewardPool(card) ? '奖励池' : '',
+        ].filter(Boolean).join('　');
+        return `<div role="listitem"><button class="card-row ${card === current() ? 'selected' : ''}" data-select="${draft.cards.indexOf(card)}"
+          aria-label="选择卡牌：${escape(card.name)}" aria-current="${card === current()}">
+          <span class="row-art art-crop">${artMarkup(card.art, card.id)}</span>
+          <span class="row-info"><strong>${escape(card.name)}</strong>
+          <small>${escape(card.id)} · ${supply ? '物资卡' : escape(EFFECT_NAMES[card.effect.type])}</small>
+          ${details ? `<span class="row-indicator">${details}</span>` : ''}</span>
+          <span class="row-cost">${supply ? (card.reward ? '投放中' : '未投放') : card.cost}</span>
+        </button></div>`;
     }).join('') : '<p class="empty-list">没有找到匹配的卡牌</p>';
+}
+function rewardSettings(card) {
+    if (!canJoinRewardPool(card)) return '';
+    const starterCount = draft.labyrinth.starter[card.id];
+    return `<div class="reward-settings">
+      ${starterCount ? `<p class="field-note">焦土迷宫基础牌组 ×${starterCount}</p>` : ''}
+      <label class="reward-option">
+        <input type="checkbox" aria-label="加入随机奖励池" data-field="reward" ${inRewardPool(card) ? 'checked' : ''}>
+        <strong>加入随机奖励池</strong>
+        <span class="reward-status" aria-hidden="true"><span class="reward-joined">已加入</span><span class="reward-unjoined">未加入</span></span>
+      </label>
+    </div>`;
+}
+function rewardCards() {
+    return draft.cards.filter(canJoinRewardPool);
+}
+function renderRewardCount(cards) {
+    const included = cards.filter(inRewardPool).length;
+    $('#reward-pool-count').textContent = `已加入 ${included} / ${cards.length} 张`;
+}
+function rewardCardMarkup(card, cardDefinitions) {
+    const face = cardViewModel(card, cardDefinitions, '体力', { field: true, labyrinth: true });
+    const name = face.title || '未命名卡牌';
+    return `<label class="reward-card">
+      <span class="reward-face" aria-hidden="true">
+        <span class="reward-face-header">
+          <span class="reward-face-title">
+            <strong title="${escape(name)}">${escape(name)}</strong>
+            <small>${escape(face.tag)}</small>
+          </span>
+          ${face.showCost ? `<span class="reward-face-cost"><strong>${escape(face.cost)}</strong>
+            <small>${escape(face.costUnit)}</small></span>` : ''}
+        </span>
+        <span class="reward-face-art art-crop">${artMarkup(face.art, card.id)}</span>
+        <span class="reward-face-text">
+          <strong>${escape(face.effect)}</strong>
+          ${face.description ? `<small>${escape(face.description)}</small>` : ''}
+        </span>
+      </span>
+      <span class="reward-card-choice">
+        <input type="checkbox" data-reward-card="${escape(card.id)}" aria-label="${escape('将' + name + '加入奖励池')}"
+          ${inRewardPool(card) ? 'checked' : ''}>
+        <span class="reward-card-status" aria-hidden="true"><span class="reward-joined">已加入</span><span class="reward-unjoined">未加入</span></span>
+      </span>
+    </label>`;
+}
+function renderRewardGrid(resetScroll = false) {
+    if (!draft) return;
+    const cards = rewardCards(), filter = rewardFilter.value;
+    const visible = cards.filter(card => filter === 'all' || inRewardPool(card) === (filter === 'included'));
+    const cardDefinitions = definitions();
+    rewardGrid.innerHTML = visible.map(card => rewardCardMarkup(card, cardDefinitions)).join('');
+    renderRewardCount(cards);
+    const empty = $('#reward-empty');
+    empty.hidden = visible.length > 0;
+    empty.textContent = filter === 'included' ? '当前奖励池为空。' :
+        filter === 'excluded' ? '可选卡牌已全部加入。' : '焦土迷宫暂无可加入的卡牌。';
+    if (resetScroll) $('#reward-scroll').scrollTop = 0;
+}
+function currentEnemyPlan() {
+    const enemy = LABYRINTH_ENEMIES[enemySelector.value];
+    const plan = draft.labyrinth.enemyActions?.[enemySelector.value];
+    return plan ? { ...plan, actions: [...plan.actions] } :
+        { attack: enemy.attack, strongAttack: enemy.strongAttack, actions: [...DEFAULT_ENEMY_ACTIONS], loopStart: DEFAULT_ENEMY_LOOP_START };
+}
+function renderEnemyEditor() {
+    if (!draft) return;
+    enemySelector.disabled = !draft.labyrinth;
+    if (!draft.labyrinth) {
+        enemyEditor.innerHTML = '<p class="field-note">当前牌库没有焦土迷宫配置。</p>';
+        return;
+    }
+    const plan = currentEnemyPlan();
+    const kinds = Object.entries(ENEMY_ACTION_LABELS);
+    enemyEditor.innerHTML = `
+      <div class="enemy-damage">
+        ${field('普攻伤害', 'attack', plan.attack, { type: 'number', min: 0, max: 100000 })}
+        ${field('重击伤害', 'strongAttack', plan.strongAttack, { type: 'number', min: 0, max: 100000 })}
+      </div>
+      <div class="enemy-sequence-heading">
+        <div><h2>行动顺序</h2><p class="enemy-hint">开场执行第 1 步，最后一步之后回到循环起点。</p></div>
+        ${select('循环起点', 'loopStart', String(plan.loopStart),
+            plan.actions.map((_, index) => [String(index), `第 ${index + 1} 步`]))}
+      </div>
+      <ol class="enemy-steps">${plan.actions.map((action, index) => `
+        <li class="enemy-step">
+          ${select(`第 ${index + 1} 步`, 'step-' + index, action, kinds)}
+          <div class="enemy-step-buttons">
+            <button type="button" class="button outline" data-enemy-edit="up" data-index="${index}"
+              aria-label="上移第 ${index + 1} 步" ${index === 0 ? 'disabled' : ''}>↑</button>
+            <button type="button" class="button outline" data-enemy-edit="down" data-index="${index}"
+              aria-label="下移第 ${index + 1} 步" ${index === plan.actions.length - 1 ? 'disabled' : ''}>↓</button>
+            <button type="button" class="button outline" data-enemy-edit="remove" data-index="${index}"
+              aria-label="移除第 ${index + 1} 步" ${plan.actions.length === 1 ? 'disabled' : ''}>移除</button>
+          </div>
+        </li>`).join('')}</ol>
+      <div class="enemy-controls">
+        <button type="button" class="button outline" data-enemy-edit="add">＋ 添加动作</button>
+        <button type="button" class="button quiet" data-enemy-edit="reset">恢复默认</button>
+      </div>`;
+}
+function updateEnemyPlan(plan) {
+    const profile = draft.labyrinth;
+    const plans = { ...profile.enemyActions };
+    if (plan) plans[enemySelector.value] = plan;
+    else delete plans[enemySelector.value];
+    if (Object.keys(plans).length) profile.enemyActions = plans;
+    else delete profile.enemyActions;
+    renderVisual();
 }
 function renderInspector() {
     const card = current();
@@ -145,9 +311,12 @@ function renderInspector() {
     const fist = card.fist;
     const fistFinisher = fist?.type === 'finisher';
     const fixedType = chapter || !!fist;
+    const fixedEffect = !!fist || (chapter && (saved || !!card.effect.labyrinth));
     const supply = card.role === 'supply';
+    const artLabel = uiArt && Object.hasOwn(uiArt.cards, card.id) ? '备用插画' : '卡牌插画';
     const allowedEffects = card.id === 'attack' || card.id === 'slash' ? ['damage'] : card.id === 'dodge' ? ['block'] : card.role === 'cash' || supply ? ['none'] : card.role === 'temporary' ? ['damage', 'block', 'heal'] : ['damage', 'block', 'heal', 'equip', 'draw', 'strength'];
     $('#inspector-content').innerHTML = `
+      ${rewardSettings(card)}
       <fieldset class="property-group"><legend>${supply ? '物资属性' : '基本资料'}</legend><div>
         ${field('卡牌名称', 'name', card.name, { maxlength: 18 })}
         ${supply ? `<div class="field-grid">${field('物资卡重量', 'weight', card.weight, { type: 'number', min: 1, max: 30 })}${field('兑换物资点', 'supplyValue', card.supplyValue ?? 1, { type: 'number', min: 1, max: 999 })}</div>` : ''}
@@ -155,32 +324,30 @@ function renderInspector() {
         ${field('分类说明', 'tag', card.tag, { maxlength: 32 })}
         <div class="field-grid">${select('卡牌身份', 'role', card.role, system || fixedType || supplyPage() ? [[card.role, roleNames[card.role]]] : [['normal', '普通牌'], ['temporary', '战斗临时牌'], ['supply', '物资牌']], system || fixedType || supplyPage())}${field('标识色', 'color', card.color, { type: 'color' })}</div>
         ${chapter || supply || fistFinisher ? '' : `<label class="check-field"><input type="checkbox" data-field="canSynthesize" ${card.canSynthesize ? 'checked' : ''} ${isBattleCard(card) ? '' : 'disabled'}>可作为合成材料</label>`}
-        <span class="field-label">卡牌插画</span><div class="art-options">${ART_IDS.map(art => `<label class="art-option"><input type="radio" name="illustration" data-field="art" value="${art}" ${card.art === art ? 'checked' : ''} aria-label="插画：${artNames[art]}"><span class="art-crop">${artMarkup(art)}</span><small>${artNames[art]}</small></label>`).join('')}</div>
+        <div class="illustration-field">
+          ${select(artLabel, 'art', card.art, ART_IDS.map(art => [art, artNames[art] ?? art]))}
+          <span id="illustration-thumbnail" class="illustration-thumbnail art-crop" aria-hidden="true"></span>
+        </div>
       </div></fieldset>
       <fieldset class="property-group"><legend>${supply ? '物品说明' : '战斗效果'}</legend><div>
         ${supply ? '' : `
         ${field('体力费用', 'cost', card.cost, { type: 'number', min: 0, max: 99, readonly: card.role === 'basic' || card.role === 'cash' })}
         ${fistFinisher ? field('临时版体力费用', 'fist.temporaryCost', fist.temporaryCost, { type: 'number', min: 0, max: 98, hint: '低于奖励版费用' }) : ''}
-        ${select('效果类型', 'effect.type', card.effect.type, (fixedType ? [card.effect.type] : allowedEffects).map(type => [type, EFFECT_NAMES[type]]), fixedType)}
+        ${select('效果类型', 'effect.type', card.effect.type, (fixedEffect ? [card.effect.type] : allowedEffects).map(type => [type, EFFECT_NAMES[type]]), fixedEffect)}
         ${card.effect.type === 'equip' ? `${field('每回合生成牌', 'effect.generatedCardsText', (card.effect.generatedCards ?? (card.effect.generatedCard ? [card.effect.generatedCard] : [])).join(', '), { hint: '填写临时牌 ID，用逗号分隔' })}${field('占用武器槽', 'weaponSlots', card.weaponSlots ?? 1, { type: 'number', min: 1, max: 2 })}` : card.effect.type === 'none' ? '<p class="field-note">现金可以在营地丢弃。</p>' : card.effect.amount ? field('效果数值', 'effect.amount', card.effect.amount, { type: 'number', min: 1, max: 999 }) : ''}`}
         ${card.effect.type === 'damage' ? field('同时获得格挡', 'effect.block', card.effect.block ?? 0, { type: 'number', min: 0, max: 999, hint: '0 表示没有额外格挡' }) : ''}
         ${card.effect.type === 'damage' ? field('攻击段数', 'effect.hits', card.effect.hits ?? 1, { type: 'number', min: 1, max: 20 }) : ''}
         ${card.effect.type === 'equip' ? field('装备力量', 'effect.equippedStrength', card.effect.equippedStrength ?? 0, { type: 'number', min: 0, max: 999 }) : ''}
         ${isBattleCard(card) && ['heal', 'strength'].includes(card.effect.type) ? `<label class="check-field"><input type="checkbox" data-field="oncePerBattle" ${card.oncePerBattle ? 'checked' : ''}>每张每场限用一次</label>` : ''}
-        <label class="field"><span>补充说明<small>效果数值会自动生成</small></span><textarea aria-label="补充说明" data-field="text" maxlength="80" rows="2">${escape(card.text)}</textarea></label>
+        ${supply ? '' : field('简述', 'summary', card.summary ?? '', { hint: '默认显示在卡面' })}
+        <label class="field"><span>详细描述<small>悬停时阅读，基础数值自动生成</small></span><textarea aria-label="详细描述" data-field="text" maxlength="80" rows="3">${escape(card.text)}</textarea></label>
       </div></fieldset>
-      <fieldset class="property-group"><legend>${supply ? '搜刮投放' : '卡牌投放'}</legend><div>
-        ${supply ? `<label class="check-field"><input type="checkbox" aria-label="加入随机奖励池" data-field="reward" ${card.reward ? 'checked' : ''}>加入搜刮物资池</label>
-            ${field('奖励权重', 'rewardWeight', card.rewardWeight ?? 1, { type: 'number', min: 0.01, max: 100, step: 'any', hint: '数值越大，越容易搜到' })}` : fistFinisher ? '<p class="field-note">首次在战斗中生成临时版后，解锁本局的奖励版。</p>' : chapter || isFistBattleReward(card) ?
-            `<p class="field-note">${draft.labyrinth?.starter[card.id] ? `焦土迷宫基础牌组 ×${draft.labyrinth.starter[card.id]}` : '选择此牌归属的发现牌组。'} </p>
-            ${draft.labyrinth?.decks.map(deck => `<label class="check-field"><input type="checkbox" data-membership="${escape(deck.id)}" ${deck.cards.includes(card.id) ? 'checked' : ''}>${escape(deck.name)}${draft.labyrinth.enabledDecks.includes(deck.id) ? '' : '（未启用）'}</label>`).join('') ?? ''}`
-            : `
+      ${supply ? `<fieldset class="property-group"><legend>搜刮投放</legend><div><label class="check-field"><input type="checkbox" aria-label="加入随机奖励池" data-field="reward" ${card.reward ? 'checked' : ''}>加入搜刮物资池</label>
+            ${field('奖励权重', 'rewardWeight', card.rewardWeight ?? 1, { type: 'number', min: 0.01, max: 100, step: 'any', hint: '数值越大，越容易搜到' })}</div></fieldset>` : fistFinisher ? '<p class="field-note">首次在战斗中生成临时版后，解锁本局的奖励版。</p>' : chapter || fist ? '' : `<fieldset class="property-group"><legend>旧版配置</legend><div>
         ${field('初始携带数量', 'initialCount', card.initialCount, { type: 'number', min: card.role === 'basic' ? 1 : 0, max: 8, readonly: !isBattleCard(card) || card.synthesisOnly })}
-        <label class="check-field"><input type="checkbox" aria-label="加入随机奖励池" data-field="reward" ${card.reward ? 'checked' : ''} ${card.role === 'normal' || supply ? '' : 'disabled'}>加入随机奖励池</label>
-        ${card.role === 'normal' && card.reward ? field('奖励权重', 'rewardWeight', card.rewardWeight ?? 1, { type: 'number', min: 0.01, max: 100, step: 'any', hint: '合成路线会临时提高材料权重' }) : ''}
         ${select('固定搜刮奖励', 'fixedReward', draft.fixedReward, draft.cards.filter(fixedRewardCard).map(card => [card.id, card.name]))}
-        <p class="field-note">${card.synthesisOnly ? '本牌仅在合成探索中获得。' : '这些投放设置用于焦土迷宫以外的章节。'}</p>`}
-      </div></fieldset>
+        <p class="field-note">供兼容存档使用。焦土迷宫的掉落在「奖励池」页管理。</p>
+      </div></fieldset>`}
       <div id="references" class="references"></div><div id="validation" class="validation" role="status"></div>`;
     $('#duplicate').disabled = !!fist;
     $('#delete').disabled = system || !!draft.labyrinth?.starter[card.id] || (!!fist && fist.type !== 'support');
@@ -190,7 +357,8 @@ function renderInspector() {
 function renderVisual() {
     const card = current();
     if (!card) return;
-    const model = cardViewModel(card, definitions(), '体力', { field: !!card.chapter, runDeck: !card.chapter });
+    const mazeCard = !!card.chapter || !!card.fist || canJoinRewardPool(card);
+    const model = cardViewModel(card, definitions(), '体力', { field: mazeCard, labyrinth: mazeCard, runDeck: !mazeCard });
     const supply = model.supplyWeight !== undefined;
     const face = $('#preview-card');
     if (previewedCard !== card) { previewedCard = card; previewExpanded = false; }
@@ -230,20 +398,24 @@ function renderVisual() {
         face.style.setProperty('--art-height', `${height / 340 * 100}%`);
         face.style.setProperty('--heading-shift', `${headingShift / 340 * 100}%`);
     }
+    const illustrationThumbnail = $('#illustration-thumbnail');
+    illustrationThumbnail.hidden = !uiArt;
+    illustrationThumbnail.innerHTML = artMarkup(card.art);
     $('#preview-card').style.setProperty('--card-accent', card.color);
     const fixedReward = $('[data-field="fixedReward"]');
     if (fixedReward) fixedReward.innerHTML = draft.cards.filter(fixedRewardCard).map(entry => `<option value="${escape(entry.id)}" ${entry.id === draft.fixedReward ? 'selected' : ''}>${escape(entry.name)}</option>`).join('');
     const count = draft.cards.filter(isBattleCard).reduce((count, card) => count + card.initialCount, 0);
-    const profile = card.chapter || card.fist ? draft.labyrinth : null;
-    $('#starter-label').textContent = profile ? '焦土迷宫起手' : '合成探索起手';
-    $('#middle-label').textContent = profile ? '启用牌组' : '配方';
-    $('#pool-label').textContent = profile ? '发现池' : '旧章节奖励池';
+    const profile = draft.labyrinth;
+    const rewardCheckbox = $('[data-field="reward"]');
+    if (rewardCheckbox) rewardCheckbox.checked = supply ? card.reward : inRewardPool(card);
+    $('#starter-label').textContent = profile ? '焦土迷宫起手' : '基础牌组';
+    $('#middle-label').textContent = profile ? '可选奖励牌' : '配方';
+    $('#pool-label').textContent = profile ? '焦土迷宫奖励池' : '奖励池';
     $('#deck-count').textContent = `${profile ? Object.values(profile.starter).reduce((sum, n) => sum + n, 0) : count} 张`;
-    $('#deck-weight').textContent = profile ? `${profile.enabledDecks.length} / ${profile.decks.length}` : `${draft.recipes.length} 条`;
-    $('#reward-count').textContent = `${profile ? activeDiscoveryCards(profile).length : draft.cards.filter(card => card.reward).length} 种`;
-    $('#weight-fill').parentElement.hidden = !profile;
-    if (profile) $('#weight-fill').style.width = `${profile.enabledDecks.length / profile.decks.length * 100}%`;
-    const refs = cardReferences(draft, card.id);
+    $('#deck-weight').textContent = profile ? `${rewardCards().length} 张` : `${draft.recipes.length} 条`;
+    $('#reward-count').textContent = `${profile?.discoveryPool.length ?? 0} 种`;
+    const refs = cardReferences(draft, card.id).map(reference =>
+        reference === '随机奖励池' ? (supply ? '搜刮物资池' : '旧版投放') : reference);
     $('#references').innerHTML = `<b>此卡牌用于</b><br>${refs.length ? refs.map(escape).join(' · ') : '尚未加入卡组或奖励池'}`;
     renderSaveState();
 }
@@ -253,6 +425,12 @@ function renderSaveState() {
     const validation = $('#validation');
     if (validation) validation.textContent = issues.slice(0, 5).join('\n');
     $('#recipe-validation').textContent = issues.slice(0, 5).join('\n');
+    const rewardValidation = $('#reward-validation');
+    rewardValidation.textContent = issues[0] ?? '';
+    rewardValidation.hidden = issues.length === 0;
+    const enemyValidation = $('#enemy-validation');
+    enemyValidation.textContent = issues[0] ?? '';
+    enemyValidation.hidden = issues.length === 0;
     $('#save').disabled = saving || !dirty() || issues.length > 0;
     $('#play').disabled = saving || issues.length > 0;
     $('#play').textContent = dirty() ? '▷ 保存并试玩' : '▷ 试玩游戏';
@@ -276,8 +454,9 @@ function render() {
         $('#inspector-content').innerHTML = '<p class="empty-list">点击「＋物资卡」创建第一张物资卡。</p>';
         renderSaveState();
     } else renderInspector();
-    renderDecks();
     recipes.render();
+    if (!rewardWorkspace.hidden) renderRewardGrid();
+    if (!enemyWorkspace.hidden) renderEnemyEditor();
 }
 
 async function load() {
@@ -290,10 +469,19 @@ async function load() {
         selectedIndex = Math.max(0, draft.cards.findIndex(card => card.id === (selectedId ?? Object.keys(draft.labyrinth?.starter ?? {})[0])));
         selectedId = draft.cards[selectedIndex].id;
         $('#workspace').setAttribute('aria-busy', 'false');
+        rewardWorkspace.setAttribute('aria-busy', 'false');
+        enemyWorkspace.setAttribute('aria-busy', 'false');
+        rewardFilter.disabled = false;
         render();
     } catch (error) {
         $('#save-state').textContent = '连接失败';
         $('#save-state').className = 'save-state offline';
+        if (!draft) {
+            rewardWorkspace.setAttribute('aria-busy', 'false');
+            $('#reward-empty').textContent = '卡牌读取失败，可点「重新载入」。';
+            enemyWorkspace.setAttribute('aria-busy', 'false');
+            enemyEditor.textContent = '配置读取失败，可点「重新载入」。';
+        }
         notify(`无法读取配置：${error.message}`, true);
     }
 }
@@ -303,6 +491,8 @@ async function save() {
     saving = true;
     $('#workspace').inert = true;
     $('#recipe-workspace').inert = true;
+    rewardWorkspace.inert = true;
+    enemyWorkspace.inert = true;
     $('#reload').disabled = true;
     renderSaveState();
     try {
@@ -317,7 +507,15 @@ async function save() {
         notify('已保存到项目。重新打开试玩后生效。');
         return true;
     } catch (error) { notify(`保存失败：${error.message}`, true); return false; }
-    finally { saving = false; $('#workspace').inert = false; $('#recipe-workspace').inert = false; $('#reload').disabled = false; render(); }
+    finally {
+        saving = false;
+        $('#workspace').inert = false;
+        $('#recipe-workspace').inert = false;
+        rewardWorkspace.inert = false;
+        enemyWorkspace.inert = false;
+        $('#reload').disabled = false;
+        render();
+    }
 }
 function nextId(base = 'card') {
     base = base.slice(0, 38);
@@ -328,7 +526,12 @@ function nextId(base = 'card') {
 function add(copy = false) {
     if (!draft || saving) return;
     const source = current();
-    const card = copy ? clone(source) : { id: nextId(), name: '新卡牌', tag: '技能 · 攻击', cost: 1, weight: 0, text: '', color: '#c29060', art: 'heavy', role: 'normal', initialCount: 0, reward: true, effect: { type: 'damage', amount: 3 } };
+    const card = copy ? clone(source) : {
+        id: nextId(), name: '新卡牌', tag: '技能 · 攻击', cost: 1, weight: 0, text: '',
+        color: '#c29060', art: 'heavy', role: 'normal', initialCount: 0, reward: !draft.labyrinth,
+        ...(draft.labyrinth ? { chapter: 'ashen-labyrinth' } : {}),
+        effect: { type: 'damage', amount: 3 },
+    };
     if (copy) {
         card.id = nextId(source.id + '_copy');
         card.name = (source.name + '副本').slice(0, 18);
@@ -342,8 +545,7 @@ function add(copy = false) {
     newCards.add(card);
     selectedIndex = draft.cards.length - 1;
     selectedId = card.id;
-    $('#search').value = '';
-    $('#filter').value = 'all';
+    clearCardFilters();
     render();
     const input = $('[data-field="name"]'); input.focus(); input.select();
 }
@@ -369,8 +571,7 @@ function addSupply() {
     newCards.add(card);
     selectedIndex = draft.cards.length - 1;
     selectedId = card.id;
-    $('#search').value = '';
-    $('#filter').value = 'all';
+    clearCardFilters();
     render();
     const input = $('[data-field="name"]'); input.focus(); input.select();
 }
@@ -393,7 +594,7 @@ async function remove() {
         draft.expedition.discoveryGroups = draft.expedition.discoveryGroups
             .map(group => group.filter(id => id !== card.id)).filter(group => group.length);
     }
-    for (const deck of draft.labyrinth?.decks ?? []) deck.cards = deck.cards.filter(id => id !== card.id);
+    if (canJoinRewardPool(card)) setRewardMembership(card, false);
     draft.cards.splice(index, 1);
     selectedIndex = Math.min(index, draft.cards.length - 1);
     selectedId = draft.cards[selectedIndex].id;
@@ -409,17 +610,11 @@ $('#card-list').addEventListener('click', event => {
 });
 $('#inspector-content').addEventListener('input', event => {
     const input = event.target, field = input.dataset.field, card = current();
-    if (input.dataset.membership && card && (card.chapter || isFistBattleReward(card)) && !saving) {
-        const deck = draft.labyrinth.decks.find(group => group.id === input.dataset.membership);
-        deck.cards = input.checked ? [...new Set([...deck.cards, card.id])] : deck.cards.filter(id => id !== card.id);
-        renderVisual();
-        renderDecks();
-        return;
-    }
     if (!field || !card || saving || input.disabled || input.readOnly) return;
     const value = input.type === 'checkbox' ? input.checked : input.type === 'number' ? Number(input.value) : input.value;
     if (field === 'fixedReward') draft.fixedReward = value;
     else if (field === 'fist.temporaryCost') card.fist.temporaryCost = value;
+    else if (field === 'reward' && card.role !== 'supply') setRewardMembership(card, value);
     else if (field === 'effect.generatedCardsText') {
         card.effect.generatedCards = String(value).split(',').map(id => id.trim()).filter(Boolean);
         delete card.effect.generatedCard;
@@ -450,10 +645,11 @@ $('#inspector-content').addEventListener('input', event => {
                 }
                 draft.expedition.discoveryGroups = draft.expedition.discoveryGroups.map(group => group.map(id => id === previousId ? value : id));
             }
-            for (const deck of draft.labyrinth?.decks ?? [])
-                deck.cards = deck.cards.map(id => id === previousId ? value : id);
+            if (draft.labyrinth)
+                draft.labyrinth.discoveryPool = draft.labyrinth.discoveryPool.map(id => id === previousId ? value : id);
         }
-        if ((field === 'canSynthesize' || field === 'oncePerBattle') && !value) delete card[field];
+        if ((field === 'canSynthesize' || field === 'oncePerBattle' || field === 'summary') && !value)
+            delete card[field];
     }
     if (field === 'effect.type') {
         if (value !== 'damage') {
@@ -500,25 +696,106 @@ $('#inspector-content').addEventListener('input', event => {
     }
     if (field === 'role' && value !== 'supply') delete card.supplyValue;
     if (field === 'role' && value === 'normal' && card.effect.type === 'none') card.effect = { type: 'damage', amount: 1 };
+    if (field === 'role' && !isLabyrinthRewardCard(card) && draft.labyrinth)
+        draft.labyrinth.discoveryPool = draft.labyrinth.discoveryPool.filter(id => id !== card.id);
     renderList();
     if (field === 'effect.type' || field === 'role') renderInspector(); else renderVisual();
 });
 $('#search').addEventListener('input', renderList);
+typeSearch.addEventListener('input', () => {
+    showTypeOptions(matchingCardTypes(typeSearch.value));
+    renderList();
+});
+typeSearch.addEventListener('click', () => {
+    if (typeOptions.hidden) showTypeOptions();
+});
+typeSearch.addEventListener('keydown', event => {
+    if (event.isComposing || event.keyCode === 229) return;
+    if (event.key === 'Escape' || event.key === 'Tab') {
+        if (!typeOptions.hidden && event.key === 'Escape') event.preventDefault();
+        closeTypeOptions();
+        return;
+    }
+    if (event.key === 'Enter' && !typeOptions.hidden) {
+        const choice = typeOptions.querySelector('[data-active]') ??
+            (typeOptions.childElementCount === 1 ? typeOptions.firstElementChild : null);
+        if (choice) chooseCardType(choice.dataset.cardType);
+        return;
+    }
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    event.preventDefault();
+    if (typeOptions.hidden) showTypeOptions();
+    const options = [...typeOptions.children];
+    const active = options.findIndex(option => option.hasAttribute('data-active'));
+    const next = event.key === 'ArrowDown' ? (active + 1) % options.length :
+        (active <= 0 ? options.length - 1 : active - 1);
+    options[active]?.removeAttribute('data-active');
+    const option = options[next];
+    option.setAttribute('data-active', '');
+    typeSearch.setAttribute('aria-activedescendant', option.id);
+    option.scrollIntoView({ block: 'nearest' });
+});
+typeOptions.addEventListener('mousedown', event => {
+    if (event.target.closest('[data-card-type]')) event.preventDefault();
+});
+typeOptions.addEventListener('click', event => {
+    const option = event.target.closest('[data-card-type]');
+    if (option) chooseCardType(option.dataset.cardType);
+});
+document.addEventListener('pointerdown', event => {
+    if (!typeOptions.hidden && !event.target.closest('.card-type-filter')) closeTypeOptions();
+});
 $('#preview-detail-toggle').addEventListener('click', () => setPreviewExpanded(!previewExpanded));
-$('#filter').addEventListener('change', renderList);
-$('#filter').add(new Option('焦土迷宫', 'labyrinth'));
-$('#filter').add(new Option('获得力量', 'strength'));
-$('#discovery-decks').addEventListener('click', () => { renderDecks(); $('#deck-dialog').showModal(); });
-$('#close-decks').addEventListener('click', () => $('#deck-dialog').close());
-$('#save-decks').addEventListener('click', async () => { if (await save()) $('#deck-dialog').close(); });
-$('#deck-options').addEventListener('change', event => {
-    const id = event.target.dataset.deck;
-    if (!id || saving) return;
-    const profile = draft.labyrinth;
-    profile.enabledDecks = profile.decks.filter(deck => deck.id === id ? event.target.checked : profile.enabledDecks.includes(deck.id)).map(deck => deck.id);
+rewardFilter.addEventListener('change', () => renderRewardGrid(true));
+rewardGrid.addEventListener('change', event => {
+    const input = event.target;
+    if (!input.dataset.rewardCard || !draft || saving) return;
+    const card = rewardCards().find(candidate => candidate.id === input.dataset.rewardCard);
+    if (!card) return;
+    setRewardMembership(card, input.checked);
+    renderList();
     renderVisual();
-    renderDecks();
-    [...$('#deck-options').querySelectorAll('[data-deck]')].find(input => input.dataset.deck === id)?.focus();
+    if (rewardFilter.value === 'all') {
+        renderRewardCount(rewardCards());
+    } else {
+        const previousIndex = [...rewardGrid.children].indexOf(input.closest('.reward-card'));
+        renderRewardGrid();
+        const next = rewardGrid.children[Math.min(previousIndex, rewardGrid.children.length - 1)]?.querySelector('input');
+        (next ?? $('#reward-scroll')).focus();
+    }
+});
+enemySelector.addEventListener('change', renderEnemyEditor);
+enemyEditor.addEventListener('input', event => {
+    const field = event.target.dataset.field;
+    if (!field || !draft?.labyrinth || saving) return;
+    const plan = currentEnemyPlan();
+    if (field === 'attack' || field === 'strongAttack' || field === 'loopStart') plan[field] = Number(event.target.value);
+    else plan.actions[Number(field.slice(5))] = event.target.value;
+    updateEnemyPlan(plan);
+});
+enemyEditor.addEventListener('click', event => {
+    const button = event.target.closest('[data-enemy-edit]');
+    if (!button || button.disabled || !draft?.labyrinth || saving) return;
+    const operation = button.dataset.enemyEdit;
+    const plan = currentEnemyPlan(), index = Number(button.dataset.index);
+    let focusIndex = index;
+    if (operation === 'add') {
+        focusIndex = plan.actions.length;
+        plan.actions.push('attack');
+    } else if (operation === 'remove') {
+        plan.actions.splice(index, 1);
+        focusIndex = Math.min(index, plan.actions.length - 1);
+        if (plan.loopStart > index) plan.loopStart--;
+        else if (plan.loopStart === index) plan.loopStart = focusIndex;
+    } else if (operation !== 'reset') {
+        focusIndex = index + (operation === 'up' ? -1 : 1);
+        [plan.actions[focusIndex], plan.actions[index]] = [plan.actions[index], plan.actions[focusIndex]];
+        if (plan.loopStart === index) plan.loopStart = focusIndex;
+        else if (plan.loopStart === focusIndex) plan.loopStart = index;
+    }
+    updateEnemyPlan(operation === 'reset' ? null : plan);
+    renderEnemyEditor();
+    (operation === 'reset' ? $('[data-enemy-edit="reset"]') : $(`[data-field="step-${focusIndex}"]`))?.focus();
 });
 $('#add').addEventListener('click', () => add());
 $('#add-supply').addEventListener('click', addSupply);
@@ -532,12 +809,6 @@ $('#reload').addEventListener('click', async () => {
 });
 function gameURL() {
     const query = new URLSearchParams({ cards: 'live', save: 'off', seed: '17', revision, t: Date.now() });
-    const mapCraft = !supplyPage() && $('#map-craft-test').checked;
-    if (location.pathname === '/recipes' || mapCraft) {
-        query.set('scenario', 'synthesis');
-        query.delete('seed');
-    }
-    if (mapCraft) query.set('mapCraft', '1');
     return '/play/?' + query;
 }
 $('#play').addEventListener('click', async () => {
@@ -551,24 +822,31 @@ $('#close-game').addEventListener('click', () => $('#game-dialog').close());
 $('#game-dialog').addEventListener('close', () => { $('#game-frame').src = 'about:blank'; });
 window.addEventListener('beforeunload', event => { if (dirty()) { event.preventDefault(); event.returnValue = ''; } });
 window.addEventListener('keydown', event => { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') { event.preventDefault(); if (!$('#save').disabled) void save(); } });
+function activePage() {
+    if (supplyPage()) return 'supplies';
+    if (location.pathname === '/recipes') return 'recipes';
+    const page = new URLSearchParams(location.search).get('page');
+    return page === 'rewards' || page === 'enemies' ? page : 'cards';
+}
 function showPage() {
-    const inRecipes = location.pathname === '/recipes';
-    const supplies = supplyPage();
-    $('#workspace').hidden = inRecipes;
-    $('#recipe-workspace').hidden = !inRecipes;
+    const page = activePage();
+    const supplies = page === 'supplies';
+    $('#workspace').hidden = page !== 'cards' && !supplies;
     $('#library-title').textContent = supplies ? '物资卡库' : '卡牌库';
     $('#add').hidden = supplies;
-    $('#filter').hidden = supplies;
-    $('.map-craft-test').hidden = supplies;
-    $('#search').value = '';
+    $('.card-type-filter').hidden = supplies;
+    clearCardFilters();
+    $('#recipe-workspace').hidden = page !== 'recipes';
+    rewardWorkspace.hidden = page !== 'rewards';
+    enemyWorkspace.hidden = page !== 'enemies';
     for (const link of document.querySelectorAll('[data-page]')) {
-        if (link.pathname === location.pathname) link.setAttribute('aria-current', 'page');
+        if (link.dataset.page === page) link.setAttribute('aria-current', 'page');
         else link.removeAttribute('aria-current');
         link.onclick = event => {
             if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
             event.preventDefault();
-            if (location.pathname === link.pathname) return;
-            history.pushState(null, '', link.pathname);
+            if (activePage() === link.dataset.page) return;
+            history.pushState(null, '', link.pathname + link.search);
             showPage();
         };
     }

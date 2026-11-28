@@ -1,8 +1,9 @@
-import { CARD, CardDefinition, carriedWeight, isBattleCard } from '../content/CardCatalog';
-import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO, supportsFistCombos, type GameScenario } from '../content/GameScenario';
+import { CARD, CardDefinition, carriedWeight, isBattleCard, isLabyrinthRewardCard } from '../content/CardCatalog';
+import { getScenario, hasId, NodeKind, Route, STAMINA_SCENARIO, supportsFistCombos, supportsWeaponSlots, type GameScenario } from '../content/GameScenario';
 import { FIST_MOVES, fistFinisherFor, fistMove, fistSupport, fistTargetMatches, isFistBattleReward } from '../content/FistCards';
 import { ASHEN_MAP_LAST_LAYER, ASHEN_MAP_OUTER_LANE, nextMapNodes, type ExpeditionMap } from '../content/ExpeditionMap';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
+import { validEnemyActions } from '../content/LabyrinthEnemies';
 import { isPhase } from './GamePhase';
 import {
     getJournalCatalog,
@@ -272,9 +273,7 @@ export function validateGameState(
         list(s.discoveryPool, 200, 'discovery pool');
         requireValue(s.discoveryPool, !!scenario.labyrinth &&
             new Set(s.discoveryPool).size === s.discoveryPool.length &&
-            s.discoveryPool.every((kind) => typeof kind === 'string' && !!definitions[kind] &&
-                ((definitions[kind].chapter === 'ashen-labyrinth' && isBattleCard(definitions[kind])) ||
-                    isFistBattleReward(definitions[kind]))),
+            s.discoveryPool.every((kind) => typeof kind === 'string' && isLabyrinthRewardCard(definitions[kind])),
             'discovery pool references');
     }
     if (s.fistUnlocks !== undefined) {
@@ -432,6 +431,16 @@ export function validateGameState(
             );
         }
         requireValue(b.intent, b.intent === 'attack' || b.intent === 'prepare', 'intent');
+        if (b.enemySequence !== undefined) {
+            const sequence = b.enemySequence;
+            object(sequence, 'enemy action sequence');
+            requireValue(sequence, !!scenario.labyrinth && validEnemyActions(sequence.actions), 'enemy actions');
+            integer(sequence.index, 0, sequence.actions.length - 1, 'enemy action index');
+            integer(sequence.loopStart ?? 0, 0, sequence.actions.length - 1, 'enemy loop start');
+            const action = sequence.actions[sequence.index];
+            requireValue(b.intent, b.intent === (action === 'prepare' ? 'prepare' : 'attack') &&
+                b.boosted === (action === 'heavy'), 'enemy action intent');
+        }
         for (const [name, cards] of [
             ['draw', b.draw],
             ['hand', b.hand],
@@ -500,9 +509,9 @@ export function validateGameState(
             list(choice.ids, 10000, 'combat choice ids');
             const choices = choice.mode === 'discard-to-top' ? b.discard
                 : choice.mode === 'retain-hand' ? b.hand
-                : choice.mode === 'replace-weapon' ? (b.weapons ?? []) : null;
+                : choice.mode === 'replace-weapon' ? (b.weapons ?? (b.weapon ? [b.weapon] : [])) : null;
             requireValue(choice.ids, choice.ids.length > 0 && new Set(choice.ids).size === choice.ids.length &&
-                (choices ? (choice.mode === 'replace-weapon' ? !!scenario.runDeck : !!scenario.labyrinth) &&
+                (choices ? (choice.mode === 'replace-weapon' ? supportsWeaponSlots(scenario) : !!scenario.labyrinth) &&
                     choice.ids.every((id) => choices.some((c) => c.id === id))
                     : fistEnabled && isFistChoiceValid(b, definitions)), 'combat choice');
             if (choice.mode === 'replace-weapon')
@@ -601,7 +610,16 @@ export function validateGameState(
             ? {}
             : { synthesisMaterialBoostedRecipes: [...s.synthesisMaterialBoostedRecipes] }),
         battle: s.battle
-            ? { ...s.battle, stamina: s.battle.stamina ?? 0, maxStamina: s.battle.maxStamina ?? 0 }
+            ? {
+                  ...s.battle,
+                  stamina: s.battle.stamina ?? 0,
+                  maxStamina: s.battle.maxStamina ?? 0,
+                  ...(s.battle.enemySequence ? { enemySequence: {
+                      actions: [...s.battle.enemySequence.actions],
+                      index: s.battle.enemySequence.index,
+                      loopStart: s.battle.enemySequence.loopStart ?? 0,
+                  } } : {}),
+              }
             : null,
         rewards: s.rewards,
         settlement: s.settlement

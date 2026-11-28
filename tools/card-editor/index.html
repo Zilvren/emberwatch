@@ -12,17 +12,36 @@
 <body>
   <header class="topbar">
     <a class="brand" href="/" aria-label="the end 卡牌工坊首页"><span class="brand-symbol" aria-hidden="true">▰</span><span><strong>the end<span class="brand-separator">/</span>卡牌工坊</strong></span></a>
-    <div class="toolbar"><span id="save-state" class="save-state" role="status">正在连接…</span><button id="reload" class="button quiet">重新载入</button><button id="discovery-decks" class="button outline" hidden>发现牌组</button><button id="play" class="button outline" disabled>▷ 试玩游戏</button><button id="save" class="button primary" disabled>保存到项目 <kbd>Ctrl S</kbd></button></div>
+    <div class="toolbar"><span id="save-state" class="save-state" role="status">正在连接…</span><button id="reload" class="button quiet">重新载入</button><button id="play" class="button outline" disabled>▷ 试玩游戏</button><button id="save" class="button primary" disabled>保存到项目 <kbd>Ctrl S</kbd></button></div>
   </header>
   <nav class="workshop-nav" aria-label="工坊页面">
     <a href="/" data-page="cards">卡牌编辑</a>
     <a href="/supplies" data-page="supplies">物资卡</a>
     <a href="/recipes" data-page="recipes">配方编辑</a>
-    <label class="map-craft-test"><input id="map-craft-test" type="checkbox"> 试玩时解锁地图合成</label>
+    <a href="/?page=rewards" data-page="rewards">奖励池</a>
+    <a href="/?page=enemies" data-page="enemies">怪物动作</a>
   </nav>
   <main id="workspace" class="workspace" aria-busy="true">
     <aside class="library" aria-label="卡牌库">
-      <div class="library-header"><span class="eyebrow">COLLECTION</span><div class="section-line"><h1><span id="library-title">卡牌库</span> <span id="card-count" class="count">0</span></h1><div class="library-actions"><button id="add" class="icon-button" aria-label="新增卡牌" title="新增普通卡牌">＋</button><button id="add-supply" class="button quiet supply-add" aria-label="新增物资卡" title="新增物资卡">＋物资卡</button></div></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="搜索卡牌" placeholder="搜索名称或 ID" autocomplete="off"></label><label class="sr-only" for="filter">筛选卡牌</label><select id="filter"><option value="all">全部卡牌</option><option value="supply">物资卡</option><option value="damage">伤害</option><option value="block">格挡</option><option value="heal">修复</option><option value="equip">装备</option><option value="none">遗物</option></select></div>
+      <div class="library-header">
+        <span class="eyebrow">COLLECTION</span>
+        <div class="section-line">
+          <h1><span id="library-title">卡牌库</span> <span id="card-count" class="count" aria-live="polite">0</span></h1>
+          <div class="library-actions">
+            <button id="add" class="icon-button" aria-label="新增卡牌" title="新增普通卡牌">＋</button>
+            <button id="add-supply" class="button quiet supply-add" aria-label="新增物资卡" title="新增物资卡">＋物资卡</button>
+          </div>
+        </div>
+        <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="搜索卡牌" placeholder="搜索名称或 ID" autocomplete="off"></label>
+        <div class="card-type-filter">
+          <label class="search card-type-search">
+            <span aria-hidden="true">⌕</span>
+            <input id="type-search" type="search" role="combobox" aria-label="搜索卡牌类型" placeholder="搜索卡牌类型"
+              autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="type-options">
+          </label>
+          <div id="type-options" class="type-options" role="listbox" aria-label="卡牌类型" hidden></div>
+        </div>
+      </div>
       <div id="card-list" class="card-list" role="list" aria-label="卡牌列表"></div>
       <div class="library-footer"><span class="connection-dot"></span> 本地项目已连接<span id="library-note">项目配置</span></div>
     </aside>
@@ -42,7 +61,7 @@
         <div class="preview-caption"><span id="preview-id">—</span><span>编辑器预览 · 效果与游戏共用</span></div>
         <p id="preview-asset-note" class="preview-asset-note" role="status" hidden>部分卡面资源暂不可用。可继续配置牌组，或点击「重新载入」恢复预览。</p>
       </div>
-      <div class="deck-summary"><div><span><span id="starter-label">基础牌组</span><strong id="deck-count">—</strong></span></div><div><span id="middle-label">发现牌组</span><strong id="deck-weight">—</strong><div class="weight-track"><i id="weight-fill"></i></div></div><div><span><span id="pool-label">发现池</span><strong id="reward-count">—</strong></span></div></div>
+      <div class="deck-summary"><div><span id="starter-label">基础牌组</span><strong id="deck-count">—</strong></div><div><span id="middle-label">卡牌</span><strong id="deck-weight">—</strong></div><div><span id="pool-label">奖励池</span><strong id="reward-count">—</strong></div></div>
       <p class="preview-hint">保存后重新打开试玩，即可使用新的卡牌配置。当前对局会保持原样。</p>
     </section>
     <aside class="inspector" aria-label="卡牌属性编辑">
@@ -64,12 +83,38 @@
       <div id="recipe-tree"></div>
     </section>
   </main>
+  <main id="reward-workspace" class="reward-workspace" aria-labelledby="reward-title" aria-busy="true" hidden>
+    <div class="reward-toolbar">
+      <div class="reward-heading">
+        <h1 id="reward-title">焦土迷宫奖励池</h1>
+        <p id="reward-pool-count" role="status"></p>
+      </div>
+      <div class="reward-filters">
+        <label class="reward-filter">
+          <span class="sr-only">加入状态</span>
+          <select id="reward-filter" disabled>
+            <option value="all">全部卡牌</option>
+            <option value="included">已加入</option>
+            <option value="excluded">未加入</option>
+          </select>
+        </label>
+      </div>
+      <p id="reward-validation" class="validation reward-validation" role="status" hidden></p>
+    </div>
+    <div id="reward-scroll" class="reward-scroll" role="region" aria-label="奖励池卡牌" tabindex="0">
+      <div id="reward-grid" class="reward-grid"></div>
+      <p id="reward-empty" class="reward-empty">正在载入卡牌…</p>
+    </div>
+  </main>
+  <main id="enemy-workspace" class="enemy-workspace" aria-labelledby="enemy-title" aria-busy="true" hidden>
+    <div class="enemy-toolbar">
+      <h1 id="enemy-title">怪物动作</h1>
+      <label class="field enemy-selector"><span>焦土迷宫怪物</span><select id="enemy-selector" disabled></select></label>
+    </div>
+    <section id="enemy-editor" class="enemy-editor" aria-label="怪物动作配置"><p class="field-note">正在载入配置…</p></section>
+    <p id="enemy-validation" class="validation" role="status" hidden></p>
+  </main>
   <div id="notice" class="notice" role="status" hidden></div>
-  <dialog id="deck-dialog" class="deck-dialog" aria-labelledby="deck-title">
-    <div class="deck-dialog-header"><div><h2 id="deck-title">焦土迷宫发现牌组</h2><p>勾选牌组后，战后和指定搜刮点从这些牌组合并抽取。</p></div><button id="close-decks" class="icon-button" aria-label="关闭发现牌组">×</button></div>
-    <div id="deck-options" class="deck-options"></div>
-    <div class="deck-dialog-footer"><p id="discovery-count" role="status"></p><button id="save-decks" class="button primary">保存到项目</button></div>
-  </dialog>
   <dialog id="confirm-dialog"><form method="dialog"><span class="eyebrow">CONFIRM CHANGE</span><h2 id="confirm-title"></h2><p id="confirm-body"></p><div class="dialog-actions"><button value="cancel" class="button outline">取消</button><button value="confirm" id="confirm-action" class="button primary">确认</button></div></form></dialog>
   <dialog id="game-dialog" class="game-dialog"><div class="game-dialog-header"><strong>the end <span>游戏试玩</span></strong><div><button id="reload-game" class="button outline">重新载入</button><button id="close-game" class="button quiet">关闭试玩 ×</button></div></div><iframe id="game-frame" title="游戏试玩" allow="autoplay; fullscreen"></iframe></dialog>
   <script type="module" src="/editor.js"></script>

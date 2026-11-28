@@ -3,6 +3,7 @@
  */
 import { RecipeDefinition, validateRecipes } from './RecipeCatalog';
 import { isFistBattleReward, validateFistCard, validateFistSet, withFistVariants, type FistCard } from './FistCards';
+import { isLabyrinthEnemy, validEnemyActions, type EnemyActionPlan, type LabyrinthEnemyId } from './LabyrinthEnemies';
 
 export type CardKind = string;
 export type EffectType = 'damage' | 'block' | 'heal' | 'equip' | 'draw' | 'strength' | 'skill' | 'power' | 'none';
@@ -30,15 +31,10 @@ export interface LabyrinthEffect {
     amount: number;
     threshold?: number;
 }
-export interface DiscoveryDeck {
-    id: string;
-    name: string;
-    cards: string[];
-}
 export interface LabyrinthCatalog {
     starter: Record<string, number>;
-    decks: DiscoveryDeck[];
-    enabledDecks: string[];
+    discoveryPool: string[];
+    enemyActions?: Partial<Record<LabyrinthEnemyId, EnemyActionPlan>>;
 }
 export interface RageEffect {
     threshold: number;
@@ -53,6 +49,7 @@ export interface CardDefinition {
     cost: number;
     weight: number;
     text: string;
+    summary?: string;
     color: string;
     art: string;
     role: CardRole;
@@ -95,6 +92,9 @@ export interface Catalog {
 }
 export function isBattleCard(card: Pick<CardDefinition, 'role'>): boolean {
     return card.role === 'basic' || card.role === 'normal';
+}
+export function isLabyrinthRewardCard(card?: CardDefinition): boolean {
+    return card?.role === 'normal' && (!card.fist || isFistBattleReward(card));
 }
 export function carriedWeight(card: Pick<CardDefinition, 'role' | 'weight'>, packedWeight?: number): number {
     return card.role === 'supply' ? packedWeight ?? card.weight : 0;
@@ -155,6 +155,37 @@ export class CatalogError extends Error {
     }
 }
 
+function legacyDiscoveryPool(
+    profile: { decks?: unknown; enabledDecks?: unknown } | undefined,
+    eligible: (id: unknown) => boolean,
+    issues: string[]
+): string[] {
+    const decks = profile?.decks;
+    if (!Array.isArray(decks)) {
+        issues.push('焦土迷宫的旧奖励配置格式无效。');
+        return [];
+    }
+    const byId = new Map<string, string[]>();
+    for (const deck of decks) {
+        if (!deck || typeof deck.id !== 'string' || !/^[a-z][a-z0-9-]{1,39}$/.test(deck.id) ||
+            byId.has(deck.id) || typeof deck.name !== 'string' || !deck.name.trim() || deck.name.length > 24 ||
+            !Array.isArray(deck.cards) || new Set(deck.cards).size !== deck.cards.length || !deck.cards.every(eligible)) {
+            issues.push('旧发现牌组的 ID、名称或卡牌引用无效。');
+            continue;
+        }
+        byId.set(deck.id, deck.cards);
+    }
+    const enabled = profile?.enabledDecks;
+    if (!Array.isArray(enabled) || new Set(enabled).size !== enabled.length || !enabled.every(id => byId.has(id))) {
+        issues.push('旧发现牌组的启用配置无效。');
+        return [];
+    }
+    const selected = new Set(enabled), pool = new Set<string>();
+    for (const [id, cards] of byId)
+        if (selected.has(id)) for (const card of cards) pool.add(card);
+    return [...pool];
+}
+
 export function validateCatalog(raw: unknown): Catalog {
     const issues: string[] = [];
     if (!raw || typeof raw !== 'object') throw new CatalogError(['卡牌配置必须是对象。']);
@@ -188,7 +219,9 @@ export function validateCatalog(raw: unknown): Catalog {
         if (typeof card.tag !== 'string' || card.tag.length > 32)
             issues.push(`${label}：分类说明不能超过 32 个字符。`);
         if (typeof card.text !== 'string' || card.text.length > 80)
-            issues.push(`${label}：补充说明不能超过 80 个字符。`);
+            issues.push(`${label}：详细描述需为 80 字以内的文本。`);
+        if (card.summary !== undefined && typeof card.summary !== 'string')
+            issues.push(`${label}：简述需为文本。`);
         if (!integer(card.cost, 0, 99)) issues.push(`${label}：费用需为 0～99 的整数。`);
         if (!integer(card.weight, 0, 30)) issues.push(`${label}：重量需为 0～30 的整数。`);
         if (!integer(card.initialCount, 0, 8)) issues.push(`${label}：初始数量需为 0～8 的整数。`);
@@ -340,6 +373,9 @@ export function validateCatalog(raw: unknown): Catalog {
             cost: card.cost,
             weight: card.weight,
             text: card.text,
+            ...(typeof card.summary === 'string' && card.summary.trim()
+                ? { summary: card.summary.trim() }
+                : {}),
             color: card.color,
             art: card.art,
             role: card.role,
@@ -441,35 +477,47 @@ export function validateCatalog(raw: unknown): Catalog {
                 issues.push('探索牌面的卡牌引用或说明无效。');
         }
     }
-    const labyrinth = input.labyrinth;
-    if (labyrinth !== undefined) {
-        const eligible = (value: unknown) =>
-            typeof value === 'string' && definitions[value]?.chapter === 'ashen-labyrinth' &&
-            definitions[value].role === 'normal';
-        const starter = labyrinth?.starter;
+    const rawLabyrinth = input.labyrinth;
+    let labyrinth: LabyrinthCatalog | undefined;
+    if (rawLabyrinth !== undefined) {
+        const eligibleStarter = (value: unknown) =>
+            typeof value === 'string' && definitions[value]?.chapter === 'ashen-labyrinth' && definitions[value].role === 'normal';
+        const eligibleReward = (value: unknown) =>
+            typeof value === 'string' && isLabyrinthRewardCard(definitions[value]);
+        const starter = rawLabyrinth?.starter;
         if (!starter || typeof starter !== 'object' || Array.isArray(starter) ||
             !Object.keys(starter).length ||
-            Object.keys(starter).some((id) => !eligible(id) || !integer(starter[id], 1, 20)) ||
+            Object.keys(starter).some((id) => !eligibleStarter(id) || !integer(starter[id], 1, 20)) ||
             !Object.keys(starter).some((id) => definitions[id]?.effect.type === 'damage'))
             issues.push('焦土迷宫的基础牌组无效，至少需要一张攻击牌。');
-        const decks = labyrinth?.decks;
-        const ids = new Set<string>();
-        if (!Array.isArray(decks) || !decks.length || decks.length > 12) {
-            issues.push('焦土迷宫需要 1～12 个可配置发现牌组。');
-        } else for (const deck of decks) {
-            if (!deck || typeof deck.id !== 'string' || !/^[a-z][a-z0-9-]{1,39}$/.test(deck.id) ||
-                ids.has(deck.id) || typeof deck.name !== 'string' || !deck.name.trim() || deck.name.length > 24 ||
-                !Array.isArray(deck.cards) || new Set(deck.cards).size !== deck.cards.length ||
-                !deck.cards.every((id: unknown) => eligible(id) ||
-                    (typeof id === 'string' && definitions[id] && isFistBattleReward(definitions[id])))) {
-                issues.push('发现牌组的 ID、名称或卡牌引用无效。');
-                continue;
+        const discoveryPool = rawLabyrinth?.discoveryPool === undefined
+            ? legacyDiscoveryPool(rawLabyrinth, id => eligibleStarter(id) ||
+                (typeof id === 'string' && !!definitions[id] && isFistBattleReward(definitions[id])), issues)
+            : rawLabyrinth.discoveryPool;
+        if (!Array.isArray(discoveryPool) || new Set(discoveryPool).size !== discoveryPool.length ||
+            !discoveryPool.every(eligibleReward))
+            issues.push('焦土迷宫奖励池需要引用不同的普通战斗牌。');
+        else labyrinth = { starter: { ...starter }, discoveryPool: [...discoveryPool] };
+        const actions = rawLabyrinth?.enemyActions;
+        if (actions !== undefined) {
+            if (!actions || typeof actions !== 'object' || Array.isArray(actions)) {
+                issues.push('焦土迷宫的怪物动作配置无效。');
+            } else {
+                const plans: NonNullable<LabyrinthCatalog['enemyActions']> = {};
+                for (const id of Object.keys(actions)) {
+                    const plan = actions[id] as EnemyActionPlan;
+                    const loopStart = plan?.loopStart ?? 0;
+                    if (!isLabyrinthEnemy(id) || !plan || !integer(plan.attack, 0, 100000) ||
+                        !integer(plan.strongAttack, 0, 100000) || !validEnemyActions(plan.actions) ||
+                        !integer(loopStart, 0, plan.actions.length - 1)) {
+                        issues.push(`${id} 的动作或伤害数值无效。`);
+                        continue;
+                    }
+                    plans[id] = { attack: plan.attack, strongAttack: plan.strongAttack, actions: [...plan.actions], loopStart };
+                }
+                if (labyrinth && Object.keys(plans).length) labyrinth.enemyActions = plans;
             }
-            ids.add(deck.id);
         }
-        const enabled = labyrinth?.enabledDecks;
-        if (!Array.isArray(enabled) || new Set(enabled).size !== enabled.length || !enabled.every((id) => ids.has(id)))
-            issues.push('所选发现牌组无效。');
     }
     if (issues.length) throw new CatalogError(issues);
     return {
@@ -488,19 +536,8 @@ export function validateCatalog(raw: unknown): Catalog {
                   },
               }
             : {}),
-        ...(labyrinth ? { labyrinth: {
-            starter: { ...labyrinth.starter },
-            decks: labyrinth.decks.map(({ id, name, cards }: DiscoveryDeck) => ({ id, name, cards: [...cards] })),
-            enabledDecks: [...labyrinth.enabledDecks],
-        } } : {}),
+        ...(labyrinth ? { labyrinth } : {}),
     };
-}
-
-export function activeDiscoveryCards(profile: LabyrinthCatalog): string[] {
-    const enabled = new Set(profile.enabledDecks), cards = new Set<string>();
-    for (const deck of profile.decks)
-        if (enabled.has(deck.id)) for (const card of deck.cards) cards.add(card);
-    return [...cards];
 }
 
 export function installCatalog(raw: unknown): Catalog {
@@ -592,8 +629,7 @@ export function cardReferences(catalog: Catalog, id: string): string[] {
     if (catalog.expedition?.discoveryGroups.some((group) => group.indexOf(id) >= 0))
         refs.push('战斗发现池');
     if (catalog.labyrinth?.starter[id]) refs.push(`焦土迷宫基础牌组 ${catalog.labyrinth.starter[id]} 张`);
-    for (const deck of catalog.labyrinth?.decks ?? [])
-        if (deck.cards.indexOf(id) >= 0) refs.push(deck.name);
+    if ((catalog.labyrinth?.discoveryPool.indexOf(id) ?? -1) >= 0) refs.push('焦土迷宫奖励池');
     if (catalog.fixedReward === id) refs.push('固定搜刮奖励');
     for (const source of catalog.cards)
         if (generatedCards(source.effect).indexOf(id) >= 0) refs.push(`${source.name}的生成牌`);

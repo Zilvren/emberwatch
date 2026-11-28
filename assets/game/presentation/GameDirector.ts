@@ -37,7 +37,6 @@ import { battleWindowLayout } from './ui/BattleWindowLayout';
 import { ModalPanel } from './ui/ModalPanel';
 import { SceneAtmosphere } from './effects/SceneAtmosphere';
 import { launchPulse, ringImpact } from './effects/TideResonance';
-import { playLabyrinthCardAction } from './actors/LabyrinthCardAction';
 import { enterEncounterPreview } from './dev/EncounterPreview';
 import {
     FIELD_SCENARIO,
@@ -366,6 +365,10 @@ export class GameDirector extends Component {
                 this.message(result.message);
                 return;
             }
+            if (g.battle?.pendingEquip === id) {
+                this.message(result.message);
+                return;
+            }
             if (this.attackKind(card.kind)) {
                 if (this.enemy) {
                     pending++;
@@ -386,7 +389,7 @@ export class GameDirector extends Component {
                     'block',
                     this.hero,
                     this.game.content.cards[card.kind].effect.type === 'equip'
-                        ? g.scenario.fieldDeck
+                        ? g.scenario.fieldDeck && !g.scenario.labyrinth
                             ? '仪器就绪'
                             : '武器就绪'
                         : `+${(g.battle?.block ?? oldBlock) - oldBlock} 格挡`
@@ -403,10 +406,12 @@ export class GameDirector extends Component {
         );
         if (g.scenario.labyrinth && this.hero) {
             presentation?.playAction(() => {}, () => {}, this.ui.reduced);
-            playLabyrinthCardAction({
-                hero: this.hero, effects: this.effectsRoot, cardBack: this.labyrinthPaper,
-                attack: this.attackKind(card.kind), reduced: this.ui.reduced, impact, complete,
-            });
+            this.hero.playAction(
+                this.attackKind(card.kind) ? 'attack' : 'prepare',
+                this.ui.reduced,
+                impact,
+                complete
+            );
         } else if (this.attackKind(card.kind) && this.hero) {
             presentation?.playAction(
                 () => {},
@@ -611,7 +616,6 @@ export class GameDirector extends Component {
             enemyMotion: this.enemy?.motion,
             enemyRig: this.enemy?.inspectRig(),
             routeMap: this.scene.screens.map.getComponentInChildren(RouteMap)?.inspect(),
-            flyingCard: this.effectsRoot?.getChildByName('FlyingCardBack')?.activeInHierarchy ?? false,
             effects: this.effectsRoot?.children.length ?? 0,
             hits,
         };

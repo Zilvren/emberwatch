@@ -21,15 +21,18 @@ class LegacySession extends GameSession {
     }
 }
 const { SaveRepository } = load(path.join(root, 'assets/game/infrastructure/SaveRepository.ts'));
-test('card fronts keep key effect data and long descriptions remain available in full', () => {
+test('authored card summaries and detailed descriptions are independent and retain their text', () => {
+    const summary = '这是一段超过二十四个字符的卡面简述，直到最后一个字符都保留。';
     const def = {
         ...catalog.CARD.attack,
+        summary,
         text: '这是一段用于验证较长卡牌说明的文字。完整内容不能因为卡面空间有限而丢失。'.repeat(4),
     };
     const vm = cardViewModel(def);
-    assert.ok(vm.description.length <= 24);
-    assert.ok(vm.description.endsWith('…'));
+    assert.equal(vm.description, summary);
     assert.ok(vm.fullDescription.includes(def.text));
+    assert.ok(!vm.fullDescription.includes(summary));
+    assert.equal(cardViewModel({ ...def, summary: undefined }).description, def.text);
     assert.equal(vm.cost, String(def.cost));
     assert.equal(vm.weight, '');
 });
@@ -43,6 +46,27 @@ test('a supply face keeps the complete name and description with its unit value 
     assert.equal(preview.supplyWeight, 30);
     assert.equal(cardViewModel(item, catalog.CARD, '体力', { packedWeight: 1 }).supplyWeight, 1);
     assert.equal(cardViewModel(catalog.CARD.attack).supplyWeight, undefined);
+});
+test('reward rules keep the complete condition without repeating the base shield-spear effect', () => {
+    const vm = cardViewModel(catalog.CARD.shield_spear_guard, catalog.CARD, '体力', { labyrinth: true });
+    assert.equal(vm.description, '满蓄势时复制防御效果 3 次');
+    assert.equal(vm.fullDescription, '造成 1 点伤害，获得 5 点格挡\n\n满蓄势时，复制本回合最近一次防御牌的完整效果3次。');
+});
+test('adding card summaries is compatible with an earlier catalog save', () => {
+    const data = new Map();
+    const storage = { getItem: (key) => data.get(key) ?? null, setItem: (key, value) => data.set(key, value) };
+    catalog.installCatalog({ ...source, cards: source.cards.map(({ summary, ...card }) => card) });
+    try {
+        const earlier = new GameSession(17, new SaveRepository(storage));
+        assert.ok(earlier.execute({ type: 'start', tier: 'standard' }).ok);
+        catalog.installCatalog(source);
+        const resumed = new GameSession(17, new SaveRepository(storage));
+        assert.ok(resumed.restored, resumed.startupMessage);
+        assert.deepEqual(resumed.game.exportState(), earlier.game.exportState());
+        assert.equal(resumed.view.content.cards.shield_spear_guard.summary, '满蓄势时复制防御效果 3 次');
+    } finally {
+        catalog.installCatalog(source);
+    }
 });
 test('equipment presents generated card separately from its start timing', () => {
     const vm = cardViewModel(catalog.CARD.knife);

@@ -133,10 +133,7 @@ export class ActorPresentation extends Component {
             if (!this.playingAction) this.playIdle();
         }
     }
-    setFieldLook(value: boolean): void {
-        if (this.spineRig?.setFieldLook(value) && this.enabledInHierarchy) this.playIdle();
-    }
-    setLook(look: 'legacy' | 'tide' | 'labyrinth'): void {
+    setLook(look: 'legacy' | 'labyrinth'): void {
         if (this.spineRig?.setLook(look) && this.enabledInHierarchy) this.playIdle();
     }
     setReducedMotion(value: boolean): void {

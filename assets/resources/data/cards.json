@@ -117,11 +117,12 @@
       "cost": 1,
       "weight": 0,
       "text": "本回合先打过攻击牌，再用此牌多造成 4 点伤害。",
+      "summary": "本回合先出攻击牌，本牌 +4 伤害",
       "color": "#b66f51",
       "art": "slash",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "effect": {
         "type": "damage",
         "amount": 2,
@@ -136,11 +137,12 @@
       "cost": 1,
       "weight": 0,
       "text": "已有至少 4 格挡时，多造成 3 点伤害。格挡保留。",
+      "summary": "格挡达到 4 时额外造成 3 点伤害",
       "color": "#788e78",
       "art": "evade",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "effect": {
         "type": "damage",
         "amount": 3,
@@ -155,11 +157,12 @@
       "cost": 1,
       "weight": 0,
       "text": "先打出短刃腾出手位，再从牌堆抽牌。",
+      "summary": "抽 1 张牌",
       "color": "#ad825b",
       "art": "knife",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "effect": {
         "type": "damage",
         "amount": 3,
@@ -173,11 +176,12 @@
       "cost": 1,
       "weight": 0,
       "text": "最多持有 6 张手牌。放不下的牌留在牌堆。",
+      "summary": "手牌上限 6 张",
       "color": "#9a9566",
       "art": "cash",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "effect": {
         "type": "draw",
         "amount": 2
@@ -840,11 +844,12 @@
       "cost": 2,
       "weight": 0,
       "text": "占用1个武器槽。下回合起每回合生成挥砍和棍击。",
+      "summary": "占用 1 槽，下回合起生效",
       "color": "#c29060",
       "art": "knife",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "weaponSlots": 1,
       "canSynthesize": true,
       "effect": {
@@ -863,11 +868,12 @@
       "cost": 2,
       "weight": 0,
       "text": "占用1个武器槽。下回合起每回合生成挥砍、棍击和刺击。",
+      "summary": "占用 1 槽，下回合起生效",
       "color": "#a9a28e",
       "art": "knife",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "weaponSlots": 1,
       "canSynthesize": true,
       "effect": {
@@ -887,11 +893,12 @@
       "cost": 2,
       "weight": 0,
       "text": "占用2个武器槽。下回合起每回合生成挥砍、棍击、刺击和掩护。",
+      "summary": "占用 2 槽，下回合起生效",
       "color": "#788e78",
       "art": "evade",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "weaponSlots": 2,
       "canSynthesize": true,
       "effect": {
@@ -912,11 +919,12 @@
       "cost": 1,
       "weight": 0,
       "text": "造成5点伤害。满蓄势时，造成10点伤害并额外造成敌人最大生命值5%的伤害。",
+      "summary": "满蓄势时强化伤害",
       "color": "#b66f51",
       "art": "heavy",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "effect": {
         "type": "damage",
         "amount": 5,
@@ -934,11 +942,12 @@
       "cost": 1,
       "weight": 0,
       "text": "造成1点伤害，获得5点格挡。满蓄势时，复制本回合最近一次防御牌的完整效果3次。",
+      "summary": "满蓄势时复制防御效果 3 次",
       "color": "#788e78",
       "art": "evade",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "effect": {
         "type": "damage",
         "amount": 1,
@@ -1040,11 +1049,12 @@
       "cost": 2,
       "weight": 0,
       "text": "占用 1 个武器槽。",
+      "summary": "装备时获得 1 力量",
       "color": "#bc925f",
       "art": "knife",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "synthesisOnly": true,
       "weaponSlots": 1,
       "canSynthesize": true,
@@ -1064,11 +1074,12 @@
       "cost": 2,
       "weight": 0,
       "text": "占用 1 个武器槽。",
+      "summary": "装备时获得 2 力量",
       "color": "#c49857",
       "art": "knife",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "synthesisOnly": true,
       "weaponSlots": 1,
       "canSynthesize": true,
@@ -1088,11 +1099,12 @@
       "cost": 2,
       "weight": 0,
       "text": "占用 1 个武器槽。",
+      "summary": "装备时获得 4 力量",
       "color": "#d39a52",
       "art": "knife",
       "role": "normal",
       "initialCount": 0,
-      "reward": false,
+      "reward": true,
       "synthesisOnly": true,
       "weaponSlots": 1,
       "effect": {
@@ -1807,63 +1819,60 @@
       "lab_cell": 1,
       "lab_open": 1
     },
-    "decks": [
-      {
-        "id": "shared",
-        "name": "共用配合",
-        "cards": [
-          "lab_bypass",
-          "lab_probe",
-          "lab_damper",
-          "lab_pulse",
-          "lab_test_hit",
-          "lab_crust",
-          "lab_loop_box",
-          "lab_reading",
-          "lab_relief"
-        ]
-      },
-      {
-        "id": "calibration",
-        "name": "蓄压倍率",
-        "cards": [
-          "lab_valve",
-          "lab_calibration",
-          "lab_bracelet"
-        ]
-      },
-      {
-        "id": "defer",
-        "name": "快速暂缓",
-        "cards": [
-          "lab_vent",
-          "lab_opening",
-          "lab_steady",
-          "lab_clip",
-          "lab_return_shield"
-        ]
-      },
-      {
-        "id": "fist-combos",
-        "name": "拳流派",
-        "cards": [
-          "fist_left_hook",
-          "fist_right_hook",
-          "fist_uppercut",
-          "fist_straight",
-          "fist_parry",
-          "fist_stance",
-          "fist_switch",
-          "fist_follow",
-          "fist_breath"
-        ]
-      }
+    "discoveryPool": [
+      "knife",
+      "evade",
+      "repair",
+      "heavy",
+      "follow_up",
+      "shield_push",
+      "scrap_shiv",
+      "rummage",
+      "long_wood_stick",
+      "scrap_blade",
+      "metal_guard",
+      "rough_spear",
+      "steel_spear",
+      "shield_spear",
+      "shield_spear_charge",
+      "shield_spear_guard",
+      "whetstone_1",
+      "whetstone_2",
+      "whetstone_3",
+      "dragon_blood",
+      "sharpened_knife",
+      "honed_knife",
+      "dragon_slayer",
+      "fist_left_hook",
+      "fist_right_hook",
+      "fist_uppercut",
+      "fist_straight",
+      "fist_parry",
+      "fist_stance",
+      "fist_switch",
+      "fist_follow",
+      "fist_breath"
     ],
-    "enabledDecks": [
-      "shared",
-      "calibration",
-      "defer",
-      "fist-combos"
-    ]
+    "enemyActions": {
+      "ash-moth": {
+        "attack": 1,
+        "strongAttack": 2,
+        "actions": [
+          "attack",
+          "heavy"
+        ],
+        "loopStart": 1
+      },
+      "veil-idol": {
+        "attack": 2,
+        "strongAttack": 4,
+        "actions": [
+          "attack",
+          "heavy",
+          "attack"
+        ],
+        "loopStart": 1
+      }
+    }
   }
 }

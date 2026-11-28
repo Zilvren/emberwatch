@@ -366,7 +366,7 @@ async function oneRoute(browser, url, lane) {
         const enemies = [], options = [], collected = [];
         const supplies = new Map(JSON.parse(fs.readFileSync(source, 'utf8')).cards
             .filter(card => card.role === 'supply').map(card => [card.id, card]));
-        let flew = false, choiceReload = false, battleReload = false, forkReload = false;
+        let crushed = false, choiceReload = false, battleReload = false, forkReload = false;
         let nextHand = false, chosen = null, laterFork = null, nextDeparture = null;
         const normalEnemyTurns = [];
         for (let i = 0; i < 300; i++) {
@@ -519,7 +519,7 @@ async function oneRoute(browser, url, lane) {
                         report.piles = { drawGrouped: true, discardNewestFirst: true, emptyPile: true, checkpointUnchanged: true };
                     }
                     normalEnemyTurns.push(b.enemy);
-                    if (flew) await page.emulateMedia({ reducedMotion: 'reduce' });
+                    if (crushed) await page.emulateMedia({ reducedMotion: 'reduce' });
                     continue;
                 }
             }
@@ -549,22 +549,24 @@ async function oneRoute(browser, url, lane) {
             await native.click('card-' + move.id);
             if (!move.attack) continue;
             assert.deepEqual(await native.save(), before, 'Selecting alone settled an attack.');
-            assert.equal((await native.state()).flyingCard, false);
-            if (lane === 'A' && !flew) {
-                const [flight] = await Promise.all([
+            assert.deepEqual((await native.state()).heroRig.paper, { visible: true, fragments: 0 });
+            if (lane === 'A' && !crushed) {
+                const [crush] = await Promise.all([
                     page.waitForFunction(() => {
                         const state = globalThis.__emberUI.snapshot();
-                        return state.flyingCard && { motion: state.heroMotion, rig: state.heroRig.motion };
+                        const paper = state.heroRig.paper;
+                        return paper && !paper.visible && paper.fragments > 0 &&
+                            { motion: state.heroMotion, rig: state.heroRig.motion };
                     }),
                     native.click('enemy-target', false),
                 ]);
-                assert.deepEqual(await flight.jsonValue(), { motion: 'attack', rig: 'attack' });
-                await flight.dispose();
-                await image(page, '04-flying-back');
+                assert.deepEqual(await crush.jsonValue(), { motion: 'attack', rig: 'attack' });
+                await crush.dispose();
+                await image(page, '04-left-hand-paper-crush');
                 await native.idle();
                 const after = await native.save();
                 assert.ok(!after.battle || (after.battle.hp < before.battle.hp && !after.battle.hand.some((c) => c.id === move.id)));
-                flew = true;
+                crushed = true;
                 await page.setViewportSize({ width: 1024, height: 768 });
                 await page.waitForTimeout(180);
                 await image(page, '05-smaller-viewport');
@@ -578,7 +580,7 @@ async function oneRoute(browser, url, lane) {
         assert.deepEqual(beforeReturn.visited, plan);
         assert.equal(beforeReturn.settlement.discoveredCards, lane === 'A' ? 1 : 0);
         if (lane === 'A') {
-            assert.ok(flew && choiceReload && nextHand && battleReload && forkReload);
+            assert.ok(crushed && choiceReload && nextHand && battleReload && forkReload);
             assert.deepEqual(normalEnemyTurns, ['ash-moth', 'stone-claw', 'veil-idol']);
         }
         await native.click('journal-start');
@@ -654,7 +656,7 @@ async function oneRoute(browser, url, lane) {
             nextDeparture = { day: fresh.day, seed: fresh.expeditionMap.seed };
         }
         return { lane, enemies, options, initialHealth: 10, finalHealth: returned.health,
-            visited: returned.visited.length, flew, nextHand, choiceReload, restoredReturn: true, normalEnemyTurns,
+            visited: returned.visited.length, crushed, nextHand, choiceReload, restoredReturn: true, normalEnemyTurns,
             map: { seed: graph.seed, availablePaths: paths.length, laterFork, forkReload, battleReload, nextDeparture } };
     } catch (error) {
         await image(page, 'failure-' + lane).catch(() => {});
@@ -729,13 +731,22 @@ async function editor(browser, url) {
             json: { width: 1536, height: 1024, frames: { attack: { x: 0, y: 0, width: 120, height: 120 } } },
         }));
         await page.goto(url);
-        const deckButton = page.getByRole('button', { name: '发现牌组', exact: true });
-        const decks = page.locator('#deck-dialog');
+        const rewardLink = page.getByRole('link', { name: '奖励池', exact: true });
+        const grid = page.locator('#reward-grid');
+        const toggles = grid.getByRole('checkbox');
+        const savePool = async () => {
+            await page.getByRole('button', { name: /保存到项目/ }).click();
+            await page.waitForFunction(() => document.querySelector('#save-state').textContent.startsWith('已保存'));
+        };
         await page.locator('#preview-asset-note').waitFor();
-        await deckButton.click();
-        assert.equal(await decks.getByRole('checkbox').count(), 3);
-        await page.locator('#close-decks').click();
         assert.equal(await page.locator('#preview-art .painted-tile').count(), 0);
+        await rewardLink.click();
+        assert.ok(await toggles.count() > 5);
+        const fallbackArt = await grid.locator('.painted-tile').evaluateAll(tiles =>
+            tiles.map(tile => tile.style.backgroundImage));
+        assert.ok(fallbackArt.every(image => image.includes('/art/materials.png')),
+            '章节图集不可用时，只有独立物资图集提供的插画可以显示');
+        await page.getByRole('link', { name: '卡牌编辑', exact: true }).click();
         await page.unroute(oldAtlasUrl);
         await page.getByRole('button', { name: '重新载入', exact: true }).click();
         await page.locator('#preview-art .painted-tile').waitFor();
@@ -813,18 +824,19 @@ async function editor(browser, url) {
             savedDisabled: true, enabledTrialPickup: picked.kind };
         await page.getByRole('link', { name: '卡牌编辑', exact: true }).click();
 
-        await deckButton.click();
-        await image(page, '09-deck-editor');
-        await decks.getByRole('checkbox', { name: /共用配合/ }).uncheck();
-        await decks.getByRole('checkbox', { name: /快速暂缓/ }).uncheck();
-        assert.match(await page.locator('#discovery-count').textContent(), /3 种/);
-        await page.locator('#save-decks').click();
-        await decks.waitFor({ state: 'hidden' });
+        await rewardLink.click();
+        await image(page, '09-reward-pool');
+        const selected = ['lab_bracelet', 'lab_calibration', 'lab_valve'];
+        for (const toggle of await toggles.all()) {
+            const id = await toggle.getAttribute('data-reward-card');
+            if (await toggle.isChecked() !== selected.includes(id)) await toggle.click();
+        }
+        assert.match(await page.locator('#reward-pool-count').textContent(), /已加入 3 \/ /);
+        await savePool();
         await page.reload();
-        await deckButton.click();
-        assert.equal(await decks.getByRole('checkbox', { name: /蓄压倍率/ }).isChecked(), true);
-        assert.equal(await decks.locator('input:checked').count(), 1);
-        await page.locator('#close-decks').click();
+        await toggles.first().waitFor();
+        assert.deepEqual(await grid.locator('input:checked').evaluateAll(inputs =>
+            inputs.map(input => input.dataset.rewardCard).sort()), selected);
         await page.getByRole('button', { name: /试玩游戏/ }).click();
         await page.waitForFunction(() => document.querySelector('#game-frame').contentWindow?.__emberUI?.snapshot().ready);
         const frame = page.frames().find((f) => f.url().includes('/play/'));
@@ -840,13 +852,13 @@ async function editor(browser, url) {
         };
         await visitDiscoverySite(native);
         const offered = (await native.save()).rewards.cards;
-        assert.deepEqual(offered.slice().sort(), ['lab_bracelet', 'lab_calibration', 'lab_valve']);
+        assert.deepEqual(offered.slice().sort(), selected);
         await image(page, '10-filtered-test-run');
         await page.locator('#close-game').click();
-        await page.locator('#discovery-decks').click();
-        await decks.getByRole('checkbox', { name: /蓄压倍率/ }).uncheck();
-        assert.match(await page.locator('#discovery-count').textContent(), /发现池为空/);
-        await page.locator('#save-decks').click();
+        while (await grid.locator('input:checked').count()) await grid.locator('input:checked').first().click();
+        await page.getByRole('combobox', { name: '加入状态' }).selectOption('included');
+        assert.match(await page.locator('#reward-empty').textContent(), /奖励池为空/);
+        await savePool();
         await page.getByRole('button', { name: /试玩游戏/ }).click();
         await page.waitForFunction(() => document.querySelector('#game-frame').contentWindow?.__emberUI?.snapshot().ready);
         const empty = input(page, page.frames().find((f) => f.url().includes('/play/')));
@@ -854,7 +866,7 @@ async function editor(browser, url) {
         assert.equal((await empty.state()).phase, 'map');
         assert.equal((await empty.save()).rewards, null);
         return { mismatchedAtlasKeptControls: true, correctAtlasRecoveredOnReload: true,
-            selectionPersistedAfterReload: true, selectedOneDeck: offered, deselectAllSkippedOffer: true };
+            selectionPersistedAfterReload: true, selectedCards: offered, deselectAllSkippedOffer: true };
     } catch (error) {
         await image(page, 'failure-editor').catch(() => {});
         throw error;
@@ -932,9 +944,13 @@ async function defeat(browser, url) {
 async function main() {
     const temporary = fs.mkdtempSync(path.join(root, 'temp/labyrinth-browser-'));
     const working = path.join(temporary, 'cards.json');
-    fs.copyFileSync(source, working);
-    const server = createEditorServer({ catalogFile: working, backupDirectory: path.join(temporary, 'backups'),
-        buildDirectory: process.env.CARD_EDITOR_BUILD_DIR });
+    const catalog = JSON.parse(fs.readFileSync(source, 'utf8'));
+    catalog.labyrinth = {
+        starter: catalog.labyrinth.starter,
+        discoveryPool: ['lab_probe', 'lab_bypass', 'lab_bracelet', 'lab_calibration', 'lab_valve', 'lab_vent'],
+    };
+    fs.writeFileSync(working, JSON.stringify(catalog, null, 2) + '\n');
+    const server = createEditorServer({ catalogFile: working, backupDirectory: path.join(temporary, 'backups'), buildDirectory: process.env.CARD_EDITOR_BUILD_DIR });
     server.listen(0, '127.0.0.1');
     await once(server, 'listening');
     const url = 'http://127.0.0.1:' + server.address().port;

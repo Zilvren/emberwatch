@@ -1,4 +1,5 @@
 import { nextMapNodes, type ExpeditionMap } from './ExpeditionMap';
+import { LABYRINTH_ENEMIES } from './LabyrinthEnemies';
 
 /** Stable authored IDs also appear in saves. Display names and behavior belong to definitions. */
 export type Route = string;
@@ -58,6 +59,10 @@ export interface GameScenario {
 
 export function supportsFistCombos(scenario: GameScenario): boolean {
     return scenario.battleResource === 'stamina' && (!!scenario.runDeck || !!scenario.labyrinth);
+}
+
+export function supportsWeaponSlots(scenario: Pick<GameScenario, 'runDeck' | 'labyrinth'>): boolean {
+    return !!(scenario.runDeck || scenario.labyrinth);
 }
 
 // Existing teaching content is the first authored scenario, not a global game limit.
@@ -272,11 +277,7 @@ export const ASHEN_LABYRINTH_SCENARIO: GameScenario = {
         A: '悬灯道 · 多两场战斗，可多发现两次',
         B: '检修道 · 绕开前段战斗，先搜刮补给',
     },
-    enemies: {
-        'ash-moth': { title: '灰灯蛾', actorId: 'ash-moth', hp: 8, attack: 1, strongAttack: 2, rewardSupplies: 1, rewardChoices: 3 },
-        'stone-claw': { title: '叩石螯', actorId: 'stone-claw', hp: 11, attack: 2, strongAttack: 3, rewardSupplies: 2, rewardChoices: 3 },
-        'veil-idol': { title: '垂幡守像', actorId: 'veil-idol', hp: 14, attack: 2, strongAttack: 4, rewardSupplies: 3, rewardChoices: 3 },
-    },
+    enemies: LABYRINTH_ENEMIES,
 };
 export function hasId(definitions: Readonly<Record<string, unknown>>, id: unknown): id is string {
     return typeof id === 'string' && Object.prototype.hasOwnProperty.call(definitions, id);

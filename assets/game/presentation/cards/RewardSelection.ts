@@ -20,7 +20,7 @@ export class RewardSelection extends Component {
         const fieldDiscovery = !!game.rewards?.discovery;
         const mode = battleChoice?.mode;
         const battle = game.battle;
-        const pile = mode === 'replace-weapon' ? battle?.weapons
+        const pile = mode === 'replace-weapon' ? (battle?.weapons ?? (battle?.weapon ? [battle.weapon] : []))
             : mode === 'discard-to-top' ? battle?.discard
             : mode === 'deck-discovery' ? [...battle!.draw, ...battle!.discard] : battle?.hand;
         const cards = battleChoice
@@ -52,6 +52,7 @@ export class RewardSelection extends Component {
             if (!kind) return;
             const view = holder.getComponentInChildren(SelectableCard);
             if (!view) throw new Error('Reward candidate holder has no SelectableCard instance.');
+            view.revealDetailsOnHover = true;
             view.show(
                 kind,
                 game,
@@ -97,7 +98,7 @@ export class RewardSelection extends Component {
                     : (game.rewardZone(cards[0]) === 'overflow'
                     ? '行囊空间不足，可先放入暂存区。返营前需腾出行囊空间。'
                     : '可放入行囊。成功返营后存入仓库，兑换时才获得物资点。')
-                : unlockHint || (fieldDiscovery ? '收下后加入本趟牌组，从下一场战斗开始可抽到。'
+                : unlockHint || (fieldDiscovery ? (kind ? '收下后加入本趟牌组，从下一场战斗开始可抽到。' : '悬停查看详细描述，选中后确认领取。')
                 : discovery
                 ? kind
                     ? `拿取后${game.battle!.hand.length < 6 ? '立即入手' : '置于牌堆顶'} · 使用消耗 ${game.content.cards[kind].cost} 体力`

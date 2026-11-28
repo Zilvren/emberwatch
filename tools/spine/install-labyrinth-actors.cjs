@@ -108,7 +108,6 @@ function protagonist() {
     const rig = legacy.find((item) => item.__type__ === script('SpineActorRig'));
     rig.labyrinthSkeleton = asset(uuid(model + '.json'), 'sp.SkeletonData');
     rig.labyrinthContract = asset(uuid(model + '.contract.json'), 'cc.JsonAsset');
-    rig.thrownCard = asset(uuid(output + '/paper-back.png') + '@f9941', 'cc.SpriteFrame');
     const visual = legacy[legacy[rig.node.__id__]._parent.__id__];
     rig.labyrinthScale = 1 / visual._lscale.y;
     rig.labyrinthOffset = vec(0, -visual._lpos.y / visual._lscale.y, 0);

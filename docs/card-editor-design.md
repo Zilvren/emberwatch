@@ -12,6 +12,28 @@
 
 点击试玩后打开真实 COCOS 游戏弹窗。首次构建后，保存卡牌数据并重开试玩即可生效，当前对局保持原配置。测试验证了新增扣费 2 / 伤害 3，修改后扣费 1 / 伤害 4，删除后新对局无该 ID。
 
+## 2026-11-27 · 卡牌编辑页控件
+
+《The end》已实装。左栏名称／ID 和卡牌类型两个输入同时筛选。类型候选由共用效果名称、卡牌身份和焦土迷宫章节构成，支持直接输入、点选或用上下键与 Enter 确认。左栏数字显示当前结果数。
+
+焦土迷宫卡牌的奖励池状态位于属性区顶部，整行可勾选。插画使用名称下拉框，右侧显示当前选中图的小缩略图。带专用图的卡牌把该字段标为「备用插画」，专用图用于中栏卡面。实现位于 `tools/card-editor/index.html`、`tools/card-editor/editor.js` 和 `tools/card-editor/editor.css`。
+
+## 2026-11-27 · 奖励池编辑页
+
+《The end》已实装。卡牌工坊的「奖励池」页配置正式地图焦土迷宫，沿用游戏行囊的整卡网格。桌面每行五张，窄屏自动减列。卡牌区可纵向滚动，加入状态筛选和保存操作留在上方。点卡牌或用键盘切换加入状态。「卡牌编辑」右侧和奖励池页共用同一份待存配置。工坊各页试玩进入焦土迷宫。
+
+焦土迷宫使用 `labyrinth.discoveryPool` 存储单一奖励池，允许空名单。旧配置读取时合并先前已启用牌组中的卡牌，按原顺序去重，保存时写入新格式。远征出发时复制当前名单，已出发的存档按其中的快照恢复。规则见 `assets/game/core/content/CardCatalog.ts`、`assets/game/core/content/ContentRegistry.ts`、`assets/game/core/systems/ExplorationRules.ts`。历史卡牌的 `reward` 字段供兼容存档读取。
+
+## 2026-11-27 · 怪物动作编辑页
+
+《The end》已实装。工坊可为焦土迷宫的三只怪物配置现有三种动作的顺序、循环起点和两种攻击伤害。页面入口为 `/?page=enemies`，配置位于 `labyrinth.enemyActions`。默认值取自 `assets/game/core/content/LabyrinthEnemies.ts`，同一模块提供游戏与网页共用的怪物信息。
+
+战斗开始时把已配动作复制到战斗状态。实际执行后推进步骤。镇静暂缓期间保留当前步骤与意图。原无序列的战斗继续按开场普攻、后续蓄势与重击交替运行。游戏表现层根据战斗意图播放已有攻击和蓄势动画。`CombatRules.ts` 执行动作，`GameState.ts` 验证已保存序列，`GameRenderer.ts` 显示下一招。
+
+## 2026-11-28 · 普通战斗牌共用焦土迷宫奖励池
+
+《The end》已实装。奖励池编辑以普通战斗牌身份校验投放资格。23 张迁入牌采用原 ID 和原效果，工坊统一编辑 `labyrinth.discoveryPool`。存档记录当趟名单，支持原先只校验焦土迷宫原生牌定义的存档签名。新版签名加入可用普通牌及其战斗临时牌定义。相关实现位于 `assets/game/core/content/CardCatalog.ts`、`assets/game/infrastructure/SaveRepository.ts` 及 `tools/card-editor/editor.js`。
+
 ## 数据来源与规则
 
 原有八种 ID、数值、初始卡组、奖励池和装备生成关系曾写在规则代码里，卡面另有一份效果说明。本次将它们统一到 assets/resources/data/cards.json，避免只改文案而不改变效果。

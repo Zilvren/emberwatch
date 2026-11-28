@@ -189,6 +189,7 @@ test('parry finisher reflects full incoming damage or uses fixed damage, and onl
     }
     const { session } = encounter();
     const b = deal(session, [temporary('parry_counter')]);
+    b.enemySequence = { actions: ['prepare', 'attack'], index: 0, loopStart: 0 };
     b.intent = 'prepare';
     play(session, temporary('parry_counter'));
     endTurn(session);
@@ -280,8 +281,8 @@ test('the highest finisher unlock is guaranteed on a counter win and the reward 
 test('a synthesis exploration saved with the pre-fist catalog resumes with the new catalog', () => {
     const previous = structuredClone(source);
     previous.cards = previous.cards.filter((card) => !card.fist);
-    previous.labyrinth.decks = previous.labyrinth.decks.filter(({ id }) => id !== 'fist-combos');
-    previous.labyrinth.enabledDecks = previous.labyrinth.enabledDecks.filter((id) => id !== 'fist-combos');
+    const previousIds = new Set(previous.cards.map(card => card.id));
+    previous.labyrinth.discoveryPool = previous.labyrinth.discoveryPool.filter(id => previousIds.has(id));
     installCatalog(previous);
     const disk = storage();
     const old = new GameSession(53, new SaveRepository(disk), SYNTHESIS_SCENARIO);

@@ -1,132 +1,236 @@
 
 lantern-keeper.png
-size: 1536,2016
+size: 2048,1456
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-landing-release
+landing-stand
   rotate: false
   xy: 4, 4
-  size: 385, 548
-  orig: 385, 548
+  size: 248, 384
+  orig: 248, 384
+  offset: 0, 0
+  index: -1
+landing-inbetween-01
+  rotate: false
+  xy: 260, 4
+  size: 263, 383
+  orig: 263, 383
+  offset: 0, 0
+  index: -1
+landing-release
+  rotate: false
+  xy: 531, 4
+  size: 270, 379
+  orig: 270, 379
+  offset: 0, 0
+  index: -1
+landing-inbetween-03
+  rotate: false
+  xy: 809, 4
+  size: 278, 375
+  orig: 278, 375
+  offset: 0, 0
+  index: -1
+landing-inbetween-04
+  rotate: false
+  xy: 1095, 4
+  size: 283, 367
+  orig: 283, 367
   offset: 0, 0
   index: -1
 landing-bend
   rotate: false
-  xy: 397, 4
-  size: 403, 530
-  orig: 403, 530
+  xy: 1386, 4
+  size: 282, 359
+  orig: 282, 359
+  offset: 0, 0
+  index: -1
+landing-inbetween-06
+  rotate: false
+  xy: 1676, 4
+  size: 281, 348
+  orig: 281, 348
+  offset: 0, 0
+  index: -1
+landing-inbetween-07
+  rotate: false
+  xy: 1676, 360
+  size: 286, 334
+  orig: 286, 334
+  offset: 0, 0
+  index: -1
+landing-inbetween-08
+  rotate: false
+  xy: 1095, 379
+  size: 297, 320
+  orig: 297, 320
   offset: 0, 0
   index: -1
 landing-drop
   rotate: false
-  xy: 808, 4
-  size: 465, 470
-  orig: 465, 470
+  xy: 531, 391
+  size: 311, 308
+  orig: 311, 308
   offset: 0, 0
   index: -1
-rest-arm
+landing-inbetween-10
   rotate: false
-  xy: 1281, 4
-  size: 165, 426
-  orig: 165, 426
+  xy: 4, 396
+  size: 314, 295
+  orig: 314, 295
   offset: 0, 0
   index: -1
-coat
+landing-inbetween-11
   rotate: false
-  xy: 4, 560
-  size: 259, 425
-  orig: 259, 425
+  xy: 4, 699
+  size: 315, 285
+  orig: 315, 285
   offset: 0, 0
   index: -1
-cloak-back
+landing-inbetween-12
   rotate: false
-  xy: 271, 560
-  size: 411, 418
-  orig: 411, 418
+  xy: 1400, 702
+  size: 329, 269
+  orig: 329, 269
   offset: 0, 0
   index: -1
-rear-leg
+landing-inbetween-13
   rotate: false
-  xy: 690, 560
-  size: 230, 411
-  orig: 230, 411
-  offset: 0, 0
-  index: -1
-cloak-front
-  rotate: false
-  xy: 928, 560
-  size: 378, 411
-  orig: 378, 411
-  offset: 0, 0
-  index: -1
-front-leg
-  rotate: false
-  xy: 4, 993
-  size: 228, 403
-  orig: 228, 403
-  offset: 0, 0
-  index: -1
-head
-  rotate: false
-  xy: 240, 993
-  size: 356, 398
-  orig: 356, 398
-  offset: 0, 0
-  index: -1
-cast-hand
-  rotate: false
-  xy: 604, 993
-  size: 328, 388
-  orig: 328, 388
+  xy: 327, 707
+  size: 337, 258
+  orig: 337, 258
   offset: 0, 0
   index: -1
 landing-contact
   rotate: false
-  xy: 940, 993
-  size: 458, 388
-  orig: 458, 388
+  xy: 672, 707
+  size: 344, 249
+  orig: 344, 249
   offset: 0, 0
   index: -1
 landing-settle
   rotate: false
-  xy: 4, 1404
-  size: 482, 377
-  orig: 482, 377
+  xy: 1024, 707
+  size: 338, 243
+  orig: 338, 243
+  offset: 0, 0
+  index: -1
+landing-inbetween-15
+  rotate: false
+  xy: 1024, 958
+  size: 349, 242
+  orig: 349, 242
+  offset: 0, 0
+  index: -1
+landing-inbetween-16
+  rotate: false
+  xy: 327, 973
+  size: 353, 236
+  orig: 353, 236
+  offset: 0, 0
+  index: -1
+landing-inbetween-19
+  rotate: false
+  xy: 1381, 979
+  size: 348, 236
+  orig: 348, 236
+  offset: 0, 0
+  index: -1
+landing-inbetween-18
+  rotate: false
+  xy: 688, 1208
+  size: 353, 234
+  orig: 353, 234
   offset: 0, 0
   index: -1
 landing-compress
   rotate: false
-  xy: 494, 1404
-  size: 489, 351
-  orig: 489, 351
+  xy: 4, 1217
+  size: 355, 233
+  orig: 355, 233
   offset: 0, 0
   index: -1
-cast-upper
+
+lantern-keeper-standing.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cloak-front
   rotate: false
-  xy: 991, 1404
-  size: 286, 346
-  orig: 286, 346
+  xy: 4, 4
+  size: 788, 1317
+  orig: 788, 1317
+  offset: 0, 0
+  index: -1
+coat
+  rotate: false
+  xy: 800, 4
+  size: 774, 813
+  orig: 774, 813
+  offset: 0, 0
+  index: -1
+front-leg
+  rotate: false
+  xy: 1582, 4
+  size: 449, 654
+  orig: 449, 654
+  offset: 0, 0
+  index: -1
+cast-hand
+  rotate: false
+  xy: 1582, 666
+  size: 252, 583
+  orig: 252, 583
+  offset: 0, 0
+  index: -1
+rear-leg
+  rotate: false
+  xy: 800, 825
+  size: 247, 572
+  orig: 247, 572
+  offset: 0, 0
+  index: -1
+rest-arm
+  rotate: false
+  xy: 1055, 825
+  size: 216, 449
+  orig: 216, 449
+  offset: 0, 0
+  index: -1
+cloak-back
+  rotate: false
+  xy: 1279, 1257
+  size: 691, 380
+  orig: 691, 380
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 4, 1329
+  size: 717, 310
+  orig: 717, 310
   offset: 0, 0
   index: -1
 card
   rotate: false
-  xy: 1285, 1404
+  xy: 1842, 666
   size: 170, 256
   orig: 170, 256
   offset: 0, 0
   index: -1
-landing-cloak-cover
+cast-upper
   rotate: false
-  xy: 4, 1789
-  size: 144, 210
-  orig: 144, 210
+  xy: 1279, 825
+  size: 211, 250
+  orig: 211, 250
   offset: 0, 0
   index: -1
 neck-wrap
   rotate: false
-  xy: 156, 1789
-  size: 120, 70
-  orig: 120, 70
+  xy: 1842, 930
+  size: 167, 107
+  orig: 167, 107
   offset: 0, 0
   index: -1

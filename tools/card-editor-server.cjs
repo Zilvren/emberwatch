@@ -10,6 +10,7 @@ const sharedCardModules = {
     '/shared/catalog.js': 'CardCatalog',
     '/shared/recipes.js': 'RecipeCatalog',
     '/shared/fist-cards.js': 'FistCards',
+    '/shared/labyrinth-enemies.js': 'LabyrinthEnemies',
 };
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.wasm': 'application/wasm', '.ttf': 'font/ttf', '.ico': 'image/x-icon' };
 
@@ -70,7 +71,8 @@ function createEditorServer(options = {}) {
                 const file = path.join(path.dirname(schemaPath), sharedModule + '.ts');
                 const source = fs.readFileSync(file, 'utf8')
                     .replace(/from ['"]\.\/RecipeCatalog['"]/g, "from '/shared/recipes.js'")
-                    .replace(/from ['"]\.\/FistCards['"]/g, "from '/shared/fist-cards.js'");
+                    .replace(/from ['"]\.\/FistCards['"]/g, "from '/shared/fist-cards.js'")
+                    .replace(/from ['"]\.\/LabyrinthEnemies['"]/g, "from '/shared/labyrinth-enemies.js'");
                 response.writeHead(200, { 'Content-Type': mime['.js'], 'Cache-Control': 'no-store' });
                 return response.end(ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ES2020 } }).outputText);
             }

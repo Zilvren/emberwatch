@@ -1,6 +1,6 @@
 # the end
 
-The end 是用 Pink/Cocos 制作的架空废土卡牌游戏。2026-11-22 起，正式新局进入焦土迷宫。玩家扮演青年求生者，从 12 张基础牌起步，在十个地点组成的地图上选路。战后与指定搜刮点可以补充随行牌组。返家后恢复基础牌组，可继续下一趟探索。
+The end 是用 Pink/Cocos 制作的架空废土卡牌游戏。正式地图为焦土迷宫。玩家从 12 张基础牌起步，在 17 层地图上选路。战后与指定搜刮点可以补充随行牌组。返家后恢复基础牌组，可继续下一趟探索。
 
 ## 本地卡牌编辑器
 
@@ -8,7 +8,7 @@ The end 是用 Pink/Cocos 制作的架空废土卡牌游戏。2026-11-22 起，�
 npm run cards
 ```
 
-打开 <http://127.0.0.1:7460/>，点击「发现牌组」。共用配合、蓄压倍率和快速暂缓初始全选。保存并试玩后，发现候选来自所选牌组的去重并集，每次最多三张。全关时直接结算物资。
+打开 <http://127.0.0.1:7460/?page=rewards>，逐张点牌设置奖励池。卡牌横向成排，可以向下滚动。焦土迷宫的战后或指定搜刮点每次最多抽三张，空池直接结算物资。
 
 首次试玩或修改游戏脚本后先执行 `npm run build:web`。之后修改卡牌数据时，点击「保存并试玩」即可读取最新数据，不需要反复构建；当前对局保持原配置，独立预览与发布版本使用构建中打包的数据。
 
@@ -47,7 +47,7 @@ GameRoot (GameDirector)
 | 迷宫牌面、避难所绘画和 UI 色板 | `assets/ashen-labyrinth/interface/` |
 | 待机、攻击、受击、发牌、出牌和飘字关键帧 | `assets/animations/` |
 | 伤害、格挡、修复和飘字效果 | `assets/prefabs/effects/` |
-| 像素插画及可直接选用的 SpriteFrame | `assets/resources/art/` 下的 PNG 与 `*-frames.plist` |
+| 迷宫场景背景和原生 SpriteFrame | `assets/ashen-labyrinth/`、`assets/ashen-survivor/light-cut-passage.png` |
 
 迷宫四个战斗角色由 Spine 3.8 驱动。主角确认出牌后由独立牌背投射物承接出牌结算。怪物通过 Spine 命中与完成事件结算动作。原生演员和插画的制作命令见 `tools/spine/install-labyrinth-actors.cjs`、`tools/author-labyrinth-interface.py`。`HandPresentation` 负责手牌交互。
 
@@ -96,7 +96,7 @@ node tools/mcp-check.cjs
 npm test
 ```
 
-用 `npm run typecheck` 检查引擎类型。运行主游戏预览后，`npm run test:tide-browser` 可用独立浏览器检查首图、发现、取消和读档。`?seed=17&save=off` 提供独立的固定种子试玩。
+用 `npm run typecheck` 检查引擎类型。`node tools/check-labyrinth-browser.cjs` 在独立浏览器中检查焦土迷宫的营地、路线、发现和存档。`?seed=17&save=off` 提供独立的固定种子试玩。
 
 焦土迷宫的图文评审见 `docs/vertical-slice.md`，验证报告与截图位于 `output/playwright/ashen-labyrinth/`。普通构建直接使用已导入的原生资源。
 

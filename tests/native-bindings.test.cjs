@@ -1,6 +1,29 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const N=require('../tools/native-assets.cjs');
 const byUUID=new Map();function files(dir){for(const e of fs.readdirSync(path.join(N.root,dir),{withFileTypes:true})){const p=dir+'/'+e.name;if(e.isDirectory())files(p);else if(p.endsWith('.prefab'))byUUID.set(N.uuid(p),p);}}files('assets/prefabs');
+function initialActivity(scene, ref) {
+    const node = scene[ref.__id__];
+    const info = scene[node._prefab?.__id__];
+    if (!info?.asset) return node._active;
+
+    const prefab = N.read(byUUID.get(info.asset.__uuid__));
+    const root = prefab[prefab[0].data.__id__];
+    const rootId = prefab[root._prefab.__id__].fileId;
+    const instance = scene[info.instance?.__id__];
+    const activeOverride = instance?.propertyOverrides.map(ref => scene[ref.__id__]).find(override => {
+        const target = scene[override.targetInfo.__id__].localID;
+        return override.propertyPath.length === 1 && override.propertyPath[0] === '_active' &&
+            target.length === 1 && target[0] === rootId;
+    });
+    return activeOverride?.value ?? root._active;
+}
+test('the main scene holds its screens, HUD and popups until the first render', () => {
+    const scene = N.read('assets/TheEnd.scene');
+    const director = scene.find(value => value.__type__ === N.script('GameDirector'));
+    for (const ref of [director.hud, ...director.screenRoots, ...director.popupRoots]) {
+        assert.equal(initialActivity(scene, ref), false, `Scene node ${ref.__id__} is active before loading.`);
+    }
+});
 function descriptors(graph,id,component){
  const node=graph[id],out=(node._components??[]).map(r=>graph[r.__id__]).filter(o=>o.__type__===N.script(component));
  const info=node._prefab?graph[node._prefab.__id__]:null;

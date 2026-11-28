@@ -269,7 +269,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "41c6c23c-ea4f-4af4-8991-66831295ca39@49047",
+      "__uuid__": "2fc4ad83-bd3f-4c8b-bfbc-55f36e924494@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -763,7 +763,6 @@
     "__prefab": {
       "__id__": 36
     },
-    "tideBackdrop": { "__uuid__": "b2e8e8aa-6472-4fd7-b6f7-2914d5cd8e23@f9941", "__expectedType__": "cc.SpriteFrame" },
     "backdrop": {
       "__id__": 3
     },

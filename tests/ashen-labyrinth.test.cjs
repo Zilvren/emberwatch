@@ -14,9 +14,9 @@ const { routeMapModel } = from('presentation/map/RouteMapModel');
 const source = require('../assets/resources/data/cards.json');
 const ok = (value) => assert.ok(value.ok, value.message);
 
-function install(enabled) {
-    const next = structuredClone(source);
-    next.labyrinth.enabledDecks = enabled ?? next.labyrinth.enabledDecks;
+function install(discoveryPool) {
+    const next = catalog.validateCatalog(source);
+    if (discoveryPool) next.labyrinth.discoveryPool = [...discoveryPool];
     return catalog.installCatalog(next);
 }
 function start(s, tier = 'standard', route = 'A') {
@@ -31,8 +31,8 @@ function enter(s, kind) {
     assert.ok(target, `Expected a reachable ${kind} from ${s.view.currentNode}`);
     ok(s.execute({ type: 'enter-node', id: target.kind }));
 }
-function encounter(enabled) {
-    install(enabled);
+function encounter(discoveryPool) {
+    install(discoveryPool);
     const s = start(new GameSession(17));
     enter(s, 'battle');
     return s;
@@ -105,7 +105,7 @@ test('labyrinth stock has positive carry weight and stays outside the combat dis
     assert.ok(goods.every(card => card.weight > 0 && !catalog.REWARD_POOL.includes(card.id)));
     for (const invalid of [
         raw => { raw.cards.find(card => card.role === 'supply').weight = 0; },
-        raw => { raw.labyrinth.decks[0].cards.push(goods[0].id); },
+        raw => { raw.labyrinth.discoveryPool.push(goods[0].id); },
     ]) {
         const raw = structuredClone(data);
         invalid(raw);
@@ -289,7 +289,7 @@ function hash(data) {
 }
 
 test('both lower-risk and combat-heavy routes clear all seventeen layers and a new day rolls a fresh map', () => {
-    install();
+    install(['lab_probe', 'lab_bypass', 'lab_bracelet']);
     for (const opening of ['serviceDuct', 'lampPassage']) {
         const s = new GameSession(17);
         assert.equal(s.view.scenario.id, 'ashen-labyrinth');
@@ -428,13 +428,41 @@ test('a map saved by the first generator keeps its exact topology with the expan
         ['lightCut', 'serviceDuct']);
 });
 
-test('only the union of checked decks is offered after victory and an empty selection skips the offer', () => {
-    for (const enabled of [[], ['calibration'], ['shared', 'defer']]) {
-        const s = encounter(enabled);
-        const pool = catalog.activeDiscoveryCards(s.game.content.catalog.labyrinth);
+test('old editor selections migrate to the same ordered, deduplicated reward pool', () => {
+    const next = structuredClone(source);
+    next.labyrinth = {
+        starter: next.labyrinth.starter,
+        decks: [
+            { id: 'shared', name: '共用配合', cards: ['lab_probe', 'lab_bypass'] },
+            { id: 'calibration', name: '蓄压倍率', cards: ['lab_bypass', 'lab_valve'] },
+            { id: 'defer', name: '快速暂缓', cards: ['lab_vent'] },
+        ],
+        enabledDecks: ['calibration', 'shared'],
+    };
+    const migrated = catalog.validateCatalog(next);
+    assert.deepEqual(migrated.labyrinth, {
+        starter: next.labyrinth.starter,
+        discoveryPool: ['lab_probe', 'lab_bypass', 'lab_valve'],
+    });
+    assert.deepEqual(catalog.validateCatalog(migrated), migrated);
+    next.labyrinth.enabledDecks = [];
+    assert.deepEqual(catalog.validateCatalog(next).labyrinth.discoveryPool, []);
+    next.labyrinth.decks = [];
+    assert.deepEqual(catalog.validateCatalog(next).labyrinth.discoveryPool, []);
+    migrated.labyrinth.discoveryPool = ['knife', 'dragon_slayer'];
+    assert.deepEqual(catalog.validateCatalog(migrated).labyrinth.discoveryPool, ['knife', 'dragon_slayer']);
+    for (const invalid of [['lab_bypass', 'lab_bypass'], ['slash'], ['cash'], ['missing']]) {
+        migrated.labyrinth.discoveryPool = invalid;
+        assert.throws(() => catalog.validateCatalog(migrated), /焦土迷宫奖励池/);
+    }
+});
+
+test('only cards selected for the reward pool are offered, and an empty pool skips the offer', () => {
+    for (const pool of [[], ['lab_valve', 'lab_bracelet'], ['lab_bypass', 'lab_probe', 'lab_clip', 'lab_vent']]) {
+        const s = encounter(pool);
         assert.equal(s.view.battle.discovery, undefined);
         finishBattle(s);
-        if (!enabled.length) {
+        if (!pool.length) {
             assert.equal(s.view.phase, 'map');
             continue;
         }
@@ -457,8 +485,101 @@ test('only the union of checked decks is offered after victory and an empty sele
     }
 });
 
+test('migrated weapons can be discovered and resume from the Maze autosave', () => {
+    const pool = ['knife', 'shield_spear', 'dragon_slayer'];
+    install(pool);
+    const disk = store();
+    const s = start(new GameSession(17, new SaveRepository(disk)));
+    ok(s.execute({ type: 'enter-node', id: 'serviceDuct' }));
+    if (s.view.rewards) {
+        assert.ok(s.view.rewards.cards.every(id => s.view.content.cards[id].role === 'supply'));
+        ok(s.execute({ type: 'discover', kind: null }));
+    }
+    const room = nextMapNodes(s.view.expeditionMap, 'serviceDuct')[0];
+    ok(s.execute({ type: 'enter-node', id: room }));
+    assert.deepEqual(s.view.rewards.cards.slice().sort(), [...pool].sort());
+    ok(s.execute({ type: 'discover', kind: 'dragon_slayer' }));
+    const snapshot = s.game.exportState();
+    assert.ok(snapshot.cards.some(card => card.kind === 'dragon_slayer' && card.found));
+    const resumed = new GameSession(18, new SaveRepository(disk));
+    assert.ok(resumed.restored, resumed.startupMessage);
+    assert.deepEqual(resumed.game.exportState(), snapshot);
+});
+
+test('the Maze keeps two weapon slots and resumes a paid or cancelled replacement safely', () => {
+    install();
+    const disk = store();
+    let s = start(new GameSession(17, new SaveRepository(disk)));
+    enter(s, 'battle');
+    const hand = (kind) => {
+        const owned = s.game.inventoryRules.addDiscovery(kind);
+        s.game.battle.hand.push(s.game.combatRules.combatCard(owned));
+        return owned.id;
+    };
+    const equip = (kind) => {
+        const id = hand(kind);
+        ok(s.execute({ type: 'play-card', id }));
+        return id;
+    };
+    s.game.battle.hand = [];
+    s.game.battle.stamina = 20;
+    const knife = equip('knife');
+    const dragon = equip('dragon_slayer');
+    assert.deepEqual(s.view.battle.weapons.map(card => card.kind), ['knife', 'dragon_slayer']);
+    assert.equal(s.view.strength, 4);
+    assert.equal(s.game.attackDamage('slash_dragon'), 24);
+    const remaining = s.view.battle.stamina;
+    const guard = equip('metal_guard');
+    assert.deepEqual(s.view.battle.cardChoice.ids, [knife, dragon]);
+    assert.equal(s.view.battle.stamina, remaining);
+    ok(s.execute({ type: 'resolve-combat-choice', id: null }));
+    assert.equal(s.view.battle.stamina, remaining);
+    assert.ok(s.view.battle.hand.some(card => card.id === guard));
+    ok(s.execute({ type: 'play-card', id: guard }));
+    const pending = s.game.exportState();
+    s = new GameSession(19, new SaveRepository(disk));
+    assert.ok(s.restored, s.startupMessage);
+    assert.deepEqual(s.game.exportState(), pending);
+    ok(s.execute({ type: 'resolve-combat-choice', id: knife }));
+    assert.deepEqual(s.view.battle.weapons.map(card => card.kind), ['dragon_slayer', 'metal_guard']);
+    assert.equal(s.view.battle.stamina, remaining - s.view.content.cards.metal_guard.cost);
+    ok(s.execute({ type: 'end-turn' }));
+    assert.ok(s.view.battle.hand.some(card => card.kind === 'slash_dragon' && card.temporary));
+    assert.ok(s.view.battle.hand.some(card => card.kind === 'cover' && card.temporary));
+    assert.ok(s.view.battle.hand.length <= 6);
+});
+
+test('shield-spear rage works alongside the Maze turn and defense rules', () => {
+    const s = encounter();
+    const b = s.game.battle;
+    b.hp = b.maxHp = 100;
+    b.hand = [];
+    b.stamina = 60;
+    const use = (kind) => {
+        const entry = { id: 'slash-' + ++fixtureId, kind, temporary: false };
+        b.hand.push(entry);
+        ok(s.execute({ type: 'play-card', id: entry.id }));
+    };
+    use('shield_spear');
+    assert.deepEqual(b.weapons.map((item) => item.kind), ['shield_spear']);
+    for (let index = 0; index < 5; index++) use('lab_press');
+    assert.equal(b.rage, 5);
+    const hp = b.hp;
+    use('shield_spear_charge');
+    assert.equal(b.hp, hp - 15);
+    assert.equal(b.rage, 1);
+    use('lab_step');
+    assert.equal(b.lastDefenseCardKind, 'lab_step');
+    b.rage = 5;
+    const block = b.block;
+    use('shield_spear_guard');
+    assert.equal(b.block, block + 5 + 3 * s.view.content.cards.lab_step.effect.amount);
+    ok(s.execute({ type: 'end-turn' }));
+    assert.equal(b.lastDefenseCardKind, undefined);
+});
+
 test('an open offer and the in-progress pool resume when the editor selection changes', () => {
-    install(['calibration']);
+    install(['lab_valve', 'lab_bracelet']);
     const disk = store();
     const s = start(new GameSession(22, new SaveRepository(disk)));
     enter(s, 'battle');
@@ -468,7 +589,7 @@ test('an open offer and the in-progress pool resume when the editor selection ch
     assert.deepEqual(restoredBattle.game.exportState(), battle);
     finishBattle(s);
     const pending = s.game.exportState();
-    install(['defer']);
+    install(['lab_vent', 'lab_clip']);
     const resumed = new GameSession(4, new SaveRepository(disk));
     assert.ok(resumed.restored);
     assert.deepEqual(resumed.game.exportState(), pending);
@@ -481,19 +602,69 @@ test('an open offer and the in-progress pool resume when the editor selection ch
     assert.ok(!resumed.game.discoveryPool.includes('lab_valve'));
 });
 
+test('each enemy uses its configured sequence and the current step survives deferral and catalog changes', () => {
+    const configured = install();
+    const plan = { attack: 1, strongAttack: 3, actions: ['heavy', 'prepare', 'prepare', 'attack'], loopStart: 1 };
+    configured.labyrinth.enemyActions = { 'ash-moth': plan };
+    catalog.installCatalog(configured);
+    const disk = store();
+    const session = start(new GameSession(17, new SaveRepository(disk)));
+    enter(session, 'battle');
+    assert.equal(session.view.battle.enemy, 'ash-moth');
+    assert.equal(session.view.incomingDamage, 3);
+    session.game.battle.calm.deferred = 'scheduled';
+    ok(session.execute({ type: 'end-turn' }));
+    assert.equal(session.view.battle.enemySequence.index, 0);
+    assert.equal(session.view.incomingDamage, 3);
+    assert.equal(session.view.health, 10);
+    ok(session.execute({ type: 'end-turn' }));
+    assert.equal(session.view.battle.enemySequence.index, 1);
+    assert.equal(session.view.battle.intent, 'prepare');
+    assert.equal(session.view.health, 7);
+    const saved = session.game.exportState();
+
+    configured.labyrinth.enemyActions['ash-moth'] = { attack: 2, strongAttack: 4, actions: ['attack'], loopStart: 0 };
+    catalog.installCatalog(configured);
+    const resumed = new GameSession(18, new SaveRepository(disk));
+    assert.ok(resumed.restored, resumed.startupMessage);
+    assert.deepEqual(resumed.game.exportState(), saved);
+    ok(resumed.execute({ type: 'end-turn' }));
+    assert.equal(resumed.view.battle.enemySequence.index, 2);
+    assert.equal(resumed.view.battle.intent, 'prepare');
+    ok(resumed.execute({ type: 'end-turn' }));
+    assert.equal(resumed.view.incomingDamage, 1);
+    ok(resumed.execute({ type: 'end-turn' }));
+    assert.equal(resumed.view.incomingDamage, 0);
+    assert.equal(resumed.view.battle.enemySequence.index, 1);
+
+    const fresh = start(new GameSession(17));
+    enter(fresh, 'battle');
+    assert.equal(fresh.view.incomingDamage, 2);
+    assert.deepEqual(fresh.view.battle.enemySequence.actions, ['attack']);
+    configured.labyrinth.enemyActions['ash-moth'].actions = [];
+    assert.throws(() => catalog.validateCatalog(configured), /动作或伤害数值无效/);
+});
+
 test('a version-three labyrinth checkpoint follows its saved route, then receives a generated map', () => {
-    install();
+    const currentCatalog = install();
     const disk = store(), repo = new SaveRepository(disk);
     start(new GameSession(17, repo));
     const { checksum, ...legacy } = JSON.parse(disk.getItem(repo.key));
     legacy.version = legacy.state.schemaVersion = 3;
     delete legacy.state.expeditionMap;
     legacy.state.route = 'B';
+    legacy.state.discoveryPool = ['lab_bypass'];
+    legacy.catalogHash = hash({
+        version: currentCatalog.version,
+        starter: currentCatalog.labyrinth.starter,
+        cards: currentCatalog.cards.filter(card => card.chapter === 'ashen-labyrinth' && card.role !== 'supply'),
+    });
     disk.setItem(repo.key, JSON.stringify({ ...legacy, checksum: hash(legacy) }));
 
     const resumed = new GameSession(222, new SaveRepository(disk));
     assert.ok(resumed.restored, resumed.startupMessage);
     assert.equal(resumed.view.expeditionMap, null);
+    assert.deepEqual(resumed.view.discoveryPool, ['lab_bypass']);
     while (resumed.view.currentNode !== 'return') {
         ok(resumed.execute({ type: 'enter-node' }));
         resolveRoom(resumed);
@@ -503,6 +674,7 @@ test('a version-three labyrinth checkpoint follows its saved route, then receive
     ok(resumed.execute({ type: 'continue-journal' }));
     assert.equal(resumed.view.day, 2);
     ok(resumed.execute({ type: 'start', tier: 'standard' }));
+    assert.deepEqual(resumed.view.discoveryPool, currentCatalog.labyrinth.discoveryPool);
     assert.deepEqual(resumed.view.expeditionMap, generateAshenLabyrinthMap(17, 2, ASHEN_LABYRINTH_SCENARIO.nodes));
 });
 
@@ -563,6 +735,7 @@ test('temporary and persistent calm share the cap, preserve the original intent 
     assert.equal(b.calm.persistent, 2);
     b.intent = 'attack';
     b.boosted = true;
+    b.enemySequence = { actions: ['heavy', 'prepare'], index: 0, loopStart: 0 };
     b.stamina = 30;
     play(s, 'vent');
     assert.equal(b.calm.deferred, 'scheduled');

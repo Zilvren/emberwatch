@@ -69,6 +69,7 @@ export class HandPresentation extends Component {
                 {
                     field: game.scenario.fieldDeck,
                     runDeck: game.scenario.runDeck,
+                    labyrinth: game.scenario.labyrinth,
                     damage: game.content.cards[entry.kind].effect.type === 'damage' &&
                         !(game.battle?.rage !== undefined &&
                             !!game.content.cards[entry.kind].effect.rage &&

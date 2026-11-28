@@ -1,4 +1,4 @@
-import { _decorator, Component, director, Director, JsonAsset, sp, SpriteFrame, UITransform, Vec3 } from 'cc';
+import { _decorator, Component, director, Director, JsonAsset, sp, Vec3 } from 'cc';
 import {
     silhouetteAtHeight,
     skinVertex,
@@ -20,17 +20,14 @@ type MotionRequest = {
 export class SpineActorRig extends Component {
     @property(sp.Skeleton) skeleton: sp.Skeleton | null = null;
     @property(JsonAsset) contract: JsonAsset | null = null;
-    @property(sp.SkeletonData) tideSkeleton: sp.SkeletonData | null = null;
-    @property(JsonAsset) tideContract: JsonAsset | null = null;
     @property(sp.SkeletonData) labyrinthSkeleton: sp.SkeletonData | null = null;
     @property(JsonAsset) labyrinthContract: JsonAsset | null = null;
-    @property(SpriteFrame) thrownCard: SpriteFrame | null = null;
     @property(Vec3) labyrinthOffset = new Vec3();
     @property labyrinthScale = 1;
     private legacySkeleton: sp.SkeletonData | null = null;
     private legacyContract: JsonAsset | null = null;
     private home: { position: Vec3; scale: Vec3 } | null = null;
-    private look: 'legacy' | 'tide' | 'labyrinth' = 'legacy';
+    private look: 'legacy' | 'labyrinth' = 'legacy';
     private pending: MotionRequest | null = null;
     private generation = 0;
     private action: SpineMotion = 'idle';
@@ -51,14 +48,11 @@ export class SpineActorRig extends Component {
     get ready(): boolean {
         return !!this.skeleton?.findBone('PoseRoot');
     }
-    setFieldLook(field: boolean): boolean {
-        return this.setLook(field ? 'tide' : 'legacy');
-    }
-    setLook(look: 'legacy' | 'tide' | 'labyrinth'): boolean {
+    setLook(look: 'legacy' | 'labyrinth'): boolean {
         if (this.look === look || !this.skeleton) return false;
-        const data = look === 'labyrinth' ? this.labyrinthSkeleton : look === 'tide' ? this.tideSkeleton : this.legacySkeleton;
-        const contract = look === 'labyrinth' ? this.labyrinthContract : look === 'tide' ? this.tideContract : this.legacyContract;
-        if (look !== 'legacy' && (!data || !contract)) return this.setLook('legacy');
+        const data = look === 'labyrinth' ? this.labyrinthSkeleton : this.legacySkeleton;
+        const contract = look === 'labyrinth' ? this.labyrinthContract : this.legacyContract;
+        if (look === 'labyrinth' && (!data || !contract)) return false;
         if (!this.legacySkeleton) {
             this.legacySkeleton = this.skeleton.skeletonData;
             this.legacyContract = this.contract;
@@ -83,7 +77,7 @@ export class SpineActorRig extends Component {
     }
     get poseFamily(): string {
         return this.look === 'labyrinth' || this.data.actor.startsWith('ashen-')
-            ? 'ashen-spine' : this.look === 'tide' ? 'tide-spine' : 'master08-spine';
+            ? 'ashen-spine' : 'master08-spine';
     }
     aimWorld(out: Vec3): Vec3 {
         this.syncWorldPose();
@@ -91,20 +85,6 @@ export class SpineActorRig extends Component {
         return aim
             ? Vec3.transformMat4(out, new Vec3(aim.worldX, aim.worldY, 0), this.node.worldMatrix)
             : out.set(this.node.worldPosition);
-    }
-    cardReleasePose(layer: UITransform) {
-        this.syncWorldPose();
-        const bone = this.skeleton?.findBone(this.data.releaseBone ?? 'float-guard');
-        const toLayer = (x: number, y: number) => layer.convertToNodeSpaceAR(
-            Vec3.transformMat4(new Vec3(), new Vec3(x, y, 0), this.node.worldMatrix)
-        );
-        const position = bone ? toLayer(bone.worldX, bone.worldY) : layer.convertToNodeSpaceAR(this.aimWorld(new Vec3()));
-        const size = this.data.releaseSize;
-        if (!bone || !size) return { position, angle: 0, width: 24, height: 33 };
-        const right = toLayer(bone.worldX + bone.a * size[0], bone.worldY + bone.c * size[0]);
-        const top = toLayer(bone.worldX + bone.b * size[1], bone.worldY + bone.d * size[1]);
-        const angle = Math.atan2(right.y - position.y, right.x - position.x) * 180 / Math.PI;
-        return { position, angle, width: Vec3.distance(position, right), height: Vec3.distance(position, top) };
     }
     get approach(): number {
         return this.skeleton?.findBone(this.data.approachBone)?.x ?? 0;
@@ -273,12 +253,13 @@ export class SpineActorRig extends Component {
     }
     inspect(): object {
         const markers: Record<string, object | null> = {};
-        for (const name of ['Head', 'Hips', 'FrontFoot', 'RearFoot', 'AttackTip']) {
+        for (const name of ['Head', 'Hips', 'FrontFoot', 'RearFoot', 'AttackTip', 'CastOrigin', 'PaperFoldLeft', 'PaperFoldRight']) {
             const bone = this.skeleton?.findBone(name);
             markers[name] = bone
                 ? { x: bone.worldX, y: bone.worldY, a: bone.a, b: bone.b, c: bone.c, d: bone.d }
                 : null;
         }
+        const card = this.skeleton?.findSlot('card');
         return {
             renderer: 'spine-3.8',
             actor: this.data.actor,
@@ -292,6 +273,11 @@ export class SpineActorRig extends Component {
             independentParts: this.data.parts?.length ?? 0,
             source: this.data.sourceSha256,
             approach: this.approach,
+            paper: card ? {
+                visible: !!card.getAttachment(),
+                fragments: this.data.boneNames.filter(name => name.startsWith('paper-chip-') &&
+                    this.skeleton?.findSlot(name)?.getAttachment()).length,
+            } : null,
             markers,
         };
     }

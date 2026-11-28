@@ -1,5 +1,6 @@
 import { CardKind } from './content/CardCatalog';
 import type { FistMove } from './content/FistCards';
+import type { EnemySequence } from './content/LabyrinthEnemies';
 import { NodeKind, TUTORIAL_SCENARIO } from './content/GameScenario';
 export type { CardDefinition, CardKind } from './content/CardCatalog';
 export type { NodeKind, Route } from './content/GameScenario';
@@ -51,6 +52,7 @@ export interface Battle {
     turn: number;
     intent: 'attack' | 'prepare';
     boosted: boolean;
+    enemySequence?: EnemySequence;
     block: number;
     draw: CombatCard[];
     hand: CombatCard[];

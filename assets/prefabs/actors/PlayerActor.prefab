@@ -1395,14 +1395,6 @@
     "skeleton": {
       "__id__": 58
     },
-    "tideSkeleton": {
-      "__uuid__": "c0c2e6a2-e00a-46e1-b144-58b8d65e8138",
-      "__expectedType__": "sp.SkeletonData"
-    },
-    "tideContract": {
-      "__uuid__": "a4f396c8-4d7b-4aa5-816e-4090ad682021",
-      "__expectedType__": "cc.JsonAsset"
-    },
     "contract": {
       "__uuid__": "d38d9f7b-f98f-4bc8-ad69-74bb37402b3a",
       "__expectedType__": "cc.JsonAsset"
@@ -1414,10 +1406,6 @@
     "labyrinthContract": {
       "__uuid__": "aedc4e73-e8e5-4a25-8c6a-7bbaf0f690af",
       "__expectedType__": "cc.JsonAsset"
-    },
-    "thrownCard": {
-      "__uuid__": "6f2df90d-7fd1-4bf4-95e0-4ef0ae2e4e95@f9941",
-      "__expectedType__": "cc.SpriteFrame"
     },
     "labyrinthScale": 0.5523809523809524,
     "labyrinthOffset": {
