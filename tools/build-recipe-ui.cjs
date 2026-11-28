@@ -51,6 +51,15 @@ function prefabWithName(file, name) {
     return graph;
 }
 
+// The map keeps its chapter-specific recipe book when the battle bar is hidden.
+const map = prefabWithName('assets/prefabs/screens/MapScreen.prefab', 'MapScreen');
+if (!map.graph.some(item => item.actionId === 'recipe-open')) {
+    const book = control(map, 'recipe-open', '配方表', 618, -346, 80, 54, 'secondary');
+    map.graph[book.node]._active = false;
+    map.save();
+}
+if (process.argv.includes('--map-entry-only')) return;
+
 ensureMeta(popupFile, 'prefab');
 const graph = new Graph(popupFile, 'RecipePopup');
 graph.root = graph.node('RecipePopup', null, 0, 0, 1440, 900);

@@ -4,7 +4,7 @@ export function battleWindowLayout(frameWidth: number, frameHeight: number) {
     const width = frameWidth / scale, height = frameHeight / scale;
     const stacked = width < 1160;
     const edge = width / 2, bottom = -height / 2;
-    const actorScale = Math.min(1, width / 1200);
+    const actorScale = Math.min(1, width / 1320);
     const healthY = stacked ? Math.max(bottom + 510, -height * .14) : -124;
     const rightInset = stacked ? 24 : 234;
     // In the single row the round energy seal needs less room than the turn button.
@@ -14,8 +14,8 @@ export function battleWindowLayout(frameWidth: number, frameHeight: number) {
         // The actors' authored floor and both health bars move as one across aspect ratios.
         worldY: healthY + 124 * actorScale,
         healthX: Math.min(edge - 134, 580),
-        pileX: edge - 85,
-        pileY: bottom + 100,
+        pileX: edge - 66,
+        pileY: bottom + 82,
         energyX: stacked ? -edge + 229 : -edge + 110,
         endX: stacked ? edge - 266 : edge - 130,
         actionY: bottom + (stacked ? 100 : 224),

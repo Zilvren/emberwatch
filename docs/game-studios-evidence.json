@@ -1,5 +1,47 @@
 {
   "schemaVersion": 1,
+  "gateCampStashIntegration20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "timezone": "Asia/Hong_Kong",
+    "status": "已确认。6 个 stash 恢复冲突已解决，Web 实机回归通过。全量单测的 16 个失败用例与主线基线相同。",
+    "base": "3ce23eae408ce59b68a752ebd37298bbc0cdc912",
+    "upstream": "a3f3fe6af65019142246f2ef231cd332cb780ddd",
+    "stash": "e4e0df1932701d7011489eb1b43f6eab1a21f69c",
+    "unmergedIndexEntries": 0,
+    "resolvedFiles": [
+      "assets/game/core/content/CardCatalog.ts",
+      "assets/game/core/state/GameState.ts",
+      "assets/game/presentation/cards/RewardSelection.ts",
+      "assets/prefabs/screens/MapScreen.prefab",
+      "tools/check-labyrinth-browser.cjs",
+      "docs/game-studios-evidence.json"
+    ],
+    "rules": "守门人从当前勾选的奖励池筛选货品。发行卡库保留 32 张奖励牌，实测初始货摊出售左勾拳，3 点买入，重载后剩余 7 点且牌组中有 1 张。营地训练与交易用例在独立测试卡库中启用阻尼片。",
+    "presentation": "地图保留主线背景和营地分支的配方入口。奖励候选保留悬停详情和所选拳法的规则提示。",
+    "saveCompatibility": {
+      "implementation": "assets/game/infrastructure/SaveRepository.ts",
+      "scenarios": ["焦土迷宫", "合成探索", "退潮盐原", "教学"],
+      "upstreamRestored": 4,
+      "stashRestored": 4,
+      "identicalStates": 8,
+      "originalSaveBytesPreserved": 8,
+      "details": "兼容 5 张拳法牌旧插画对应的卡库签名。营地技能、购入的牌及在途战斗均可恢复。另有回归用例验证费用变动仍会拦截不兼容读档。"
+    },
+    "checks": {
+      "typecheck": true,
+      "architecture": true,
+      "nativeAssetsParsed": 118,
+      "build": "temp/builder/log/web-desktop-build-1795855709987.log",
+      "nativeStartup": "首次导出报告缺少 5 个脚本类，游戏未能启动。重新执行同一 Web 构建后，缺失类警告为零，正式包和工坊试玩入口均已实测。",
+      "unitBefore": { "tests": 228, "passed": 212, "failed": 16 },
+      "unitAfter": { "tests": 233, "passed": 217, "failed": 16, "newFailures": 0 },
+      "browser": { "passed": true, "actions": 287, "routeLengths": [17, 17], "runtimeErrors": 0, "consoleErrors": 0 }
+    },
+    "reports": "output/playwright/merge-a3f3fe6-k2c33ia9/",
+    "archive": "viking://~/resources/projects/the-end/docs/stash-integration-a3f3fe6-20261128/",
+    "archiveReadback": "四份 JSON 报告均已回读并逐项与本地比对相同。OpenViking 缺少本地嵌入模型，向量索引失败。"
+  },
   "stashResolution20261128": {
     "project": "The end / emberwatch",
     "date": "2026-11-28",
@@ -32,6 +74,204 @@
       "browserReport": "output/playwright/stash-resolution-3ce23ea/verification.json",
       "heroRegression": "主场景待机零时刻与参考图 1572864 个预乘像素全部相同；左手捏碎攻击与格挡各结算一次，见 lanternKeeperReferencePixels20261128。"
     }
+  },
+  "campAmbienceAndInscriptions20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "现有混音已获玩家认可。入营自动播放、场景字迹和石门居中已实装并实测，调整后的观感待玩家试玩。",
+    "scene": "assets/TheEnd.scene",
+    "build": "temp/builder/log/web-desktop-build-1795854358556.log",
+    "implementation": [
+      "assets/game/presentation/audio/GameAudio.ts",
+      "assets/game/presentation/GameDirector.ts",
+      "assets/prefabs/screens/GateCampScreen.prefab",
+      "assets/ashen-labyrinth/interface/gate-camp.effect",
+      "tools/author-gate-camp.cjs",
+      "tools/check-labyrinth-browser.cjs"
+    ],
+    "automaticPlayback": {
+      "heardBeforeInput": true,
+      "steadyRms": 0.00116025,
+      "workshopInGamePointerDowns": 0,
+      "heardAfterLoadingInteraction": true,
+      "strictFirstVisitPrepared": true,
+      "heardAfterNoninteractiveWallClick": true,
+      "mutedRms": 0,
+      "outsideCampRms": 0
+    },
+    "recording": {
+      "seconds": 8.46,
+      "trustedInputs": 0,
+      "channels": 2,
+      "rms": 0.00119563,
+      "peak": 0.00760242,
+      "waveResponses": [
+        200
+      ],
+      "sameSource": true
+    },
+    "centeredDoor": {
+      "1440x900": [
+        720,
+        450
+      ],
+      "1024x768": [
+        512,
+        384
+      ],
+      "1021x452": [
+        510.5,
+        226
+      ]
+    },
+    "paintedOpeningMaxHorizontalErrorPx": 0.5,
+    "touchStations": 5,
+    "reducedMotionPixelIdentical": true,
+    "fullRoutes": [
+      17,
+      17
+    ],
+    "browserActions": 286,
+    "runtimeErrors": 0,
+    "consoleErrors": 0,
+    "checks": {
+      "typecheck": true,
+      "architecture": true,
+      "webBuild": true,
+      "suitePassed": 207,
+      "suiteFailed": 15,
+      "newFailures": 0
+    },
+    "capture": "output/playwright/camp-in-world-20261128/arrival.webm",
+    "wideScreenshot": "output/playwright/camp-in-world-20261128/camp-wide.png",
+    "archive": "viking://~/resources/projects/the-end/docs/camp-in-world-20261128"
+  },
+  "guidedGateCamp20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "玩家已确认营地入口、安静的柴火与环境音、使用物资学习永久技能。实机通过，技能与商品定价、视觉和听感待试玩。",
+    "scene": "assets/TheEnd.scene",
+    "build": "temp/builder/log/web-desktop-build-1795852263532.log",
+    "implementation": ["assets/prefabs/screens/GateCampScreen.prefab", "assets/prefabs/ui/CampStationPopup.prefab", "assets/game/core/content/GateCamp.ts", "assets/game/presentation/ui/CampSkillTree.ts", "assets/resources/audio/campfire.wav", "tools/mix-camp-audio.py"],
+    "checks": {
+      "typecheck": true, "architecture": true, "webBuild": true,
+      "viewports": ["1440×900", "1024×768", "1021×452"], "touchStationsOpened": 5, "bottomPlaqueClearancePx": 20.63,
+      "keyboardFirstStation": "camp-gate", "reducedMotionPixelIdentical": true, "fireTipSpanPxAcross15Frames": [5.36, 4],
+      "audioLoop": {"seconds": 30, "sampleRate": 24000, "channels": 2, "ambientToFireDb": -17, "gain": 0.021, "fadeInSeconds": 2, "loadedOnce": true, "sameSourceInJournal": true},
+      "recording": {"decodedSeconds": 12, "previousRms": 0.00537277, "rms": 0.00126043, "peak": 0.00721704, "changeDb": -12.59, "peakChangeDb": -12.62, "mutedRms": 0, "outsideCampRms": 0, "campTonalCues": 0},
+      "trainingAndTrade": {"initialSupplies": 10, "purchased": "lab_damper", "suppliesAfterPurchase": 8, "learned": ["footing","guard"], "suppliesAfterTraining": 0, "reloaded": true, "openingBlock": 3, "purchasedCardInBattle": true, "sold": "salvage_rope", "salePrice": 2},
+      "fullRoutes": [17, 17], "browserActions": 286, "runtimeErrors": 0, "consoleErrors": 0,
+      "fullSuite": {"passed": 207, "failed": 15, "newFailures": 0}
+    },
+    "evidenceDirectory": "output/playwright/guided-camp-20261128/",
+    "reports": ["motion-and-audio.json", "recording.json", "fire-motion.json", "routes/verification.json"],
+    "recording": "output/playwright/guided-camp-20261128/campfire.webm",
+    "gallery": "viking://~/resources/projects/the-end/docs/guided-camp-20261128/",
+    "archiveReadback": "录屏、五张实机截图和四份测量或流程报告已取回，十个文件的 SHA-256 均与本地一致。"
+  },
+  "quietGateCamp20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "安静、温暖的营地方向已确认，主场景实测通过，当前混音与火焰观感待玩家试玩",
+    "scene": "assets/TheEnd.scene",
+    "build": "temp/builder/log/web-desktop-build-1795849670624.log",
+    "implementation": ["assets/resources/audio/campfire.wav", "assets/game/presentation/audio/GameAudio.ts", "assets/game/presentation/audio/CampfireLoop.ts", "assets/ashen-labyrinth/interface/gate-camp.effect", "assets/game/presentation/effects/CampAtmosphere.ts"],
+    "source": {"title": "Fireplace Burning", "author": "AugustSandberg", "license": "CC0-1.0", "url": "https://freesound.org/people/AugustSandberg/sounds/508844/"},
+    "checks": {
+      "typecheck": true, "architecture": true, "webBuild": true,
+      "nativeLoopSeconds": 30, "loadRequestsPerSession": 1, "sameSourceAcrossCampPanels": true,
+      "recordingSeconds": 11.95, "decodedRms": 0.005373, "previousDecodedRms": 0.032432,
+      "rmsChangeDb": -15.6, "peakChangeDb": -20.2, "campTonalCues": 0,
+      "mutedRms": 0, "outsideCampRms": 0, "lateDecodeStaysSilentOnMuteOrDeparture": true,
+      "deviceResumeRestoresFire": true, "combatTonePreserved": true,
+      "tipSpanDesignPx": {"previous": [35.71, 23], "current": [4.65, 3], "framesCompared": [9, 15]},
+      "reducedMotionPixelIdentical": true, "touchStationsVerified": 4, "campAndBattleActions": 41,
+      "runtimeErrors": 0, "fullSuite": {"passed": 204, "failed": 15, "newFailures": 0}
+    },
+    "evidenceDirectory": "output/playwright/quiet-camp-20261128/",
+    "reports": ["motion-and-audio.json", "recording.json", "visual-comparison.json", "lifecycle.json", "route/verification.json"],
+    "recording": "output/playwright/quiet-camp-20261128/campfire.webm",
+    "gallery": "viking://~/resources/projects/the-end/docs/quiet-camp-20261128/",
+    "archiveReadback": "录屏、实机截图与六份测量记录均从归档取回，八个文件的 SHA-256 校验一致。"
+  },
+  "livingGateCamp20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "主场景、交互和声音实测通过，画面与音色待玩家审阅",
+    "scene": "assets/TheEnd.scene",
+    "prefab": "assets/prefabs/screens/GateCampScreen.prefab",
+    "build": "temp/builder/log/web-desktop-build-1795848631141.log",
+    "checks": {
+      "typecheck": true, "architecture": true, "webBuild": true,
+      "viewports": ["1440×900", "1024×768", "1021×452"],
+      "wordlessStations": 4, "visibleCampLabels": 0, "touchStationsVerified": 4,
+      "keyboardOpenAndReturn": true, "releaseOutsideCancels": true, "reducedMotionPixelIdentical": true,
+      "audioRms": {"burning": 0.03545, "muted": 0, "unmuted": 0.02847, "outsideCamp": 0},
+      "recordingSeconds": 7.39, "routesCompleted": [17, 17], "routeActions": 268,
+      "runtimeErrors": 0, "consoleErrors": 0,
+      "fullSuite": {"passed": 203, "failed": 15, "newFailures": 0}
+    },
+    "reports": ["output/playwright/camp-20261128/motion-and-audio.json", "output/playwright/camp-20261128/routes/verification.json"],
+    "recording": "output/playwright/camp-20261128/campfire.webm"
+  },
+  "paintedEnemyIntent20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "已通过原生导出与实机复核，造型待玩家试玩审阅",
+    "scene": "assets/TheEnd.scene",
+    "scope": "assets/prefabs/screens/BattleScreen.prefab / EnemyIntent",
+    "build": "temp/builder/log/web-desktop-build-1795847781743.log",
+    "checks": {
+      "typecheck": true, "architecture": true, "webBuild": true, "runtimeErrors": 0,
+      "viewports": ["1440×900", "613×767", "390×844 DPR2"],
+      "scenes": ["石廊", "沉灯庭"], "nativeFrames": ["intent-attack", "intent-prepare", "intent-delay"],
+      "turnSequence": ["攻击 1", "蓄势 2", "强化攻击 2"],
+      "deferSequence": ["打出折光屏", "行动暂缓 1", "进入额外回合", "恢复此前攻击意图"],
+      "inspection": ["鼠标悬停与移开", "触屏按住与松手"],
+      "beforeAfterPairs": 9, "outsideIntentMaxRgbDelta": 1, "outsideIntentPrefabChanges": 0,
+      "battleWindowTestsPassed": 4, "fullSuite": {"passed": 204, "failed": 15, "newFailures": 0}
+    },
+    "report": "output/playwright/painted-intents-20261128/report.json",
+    "gallery": "viking://~/resources/projects/the-end/docs/painted-intents-20261128/",
+    "archive": "六张截图和实机报告已从归档取回，SHA-256 校验通过。归档服务缺少本地嵌入模型，截图语义索引失败。"
+  },
+  "compactBattlePiles20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "玩家指定的两张原画已恢复，运行与实拍复核通过，新摆位待试玩审阅",
+    "scope": ["抽牌堆", "弃牌堆", "战斗镇静读数"],
+    "scene": "assets/TheEnd.scene",
+    "build": "temp/builder/log/web-desktop-build-1795846264377.log",
+    "checks": {
+      "typecheck": true, "webBuild": true, "runtimeErrors": 0,
+      "viewports": ["1440×900", "1024×768", "613×767", "390×844"],
+      "originalPngsByteIdentical": true, "frontCard": [62, 91], "hitBox": [110, 132],
+      "outsideTargetScreenshotMaxRgbDelta": 1, "outsideTargetPrefabChanges": 0,
+      "actualPlays": ["折光屏", "滑步"], "calmAfterPlays": 1, "discardCountAfterPlays": 2,
+      "fullSuite": {"passed": 203, "failed": 15, "newFailures": 0}
+    },
+    "report": "output/playwright/compact-piles-20261128/report.json",
+    "gallery": "viking://~/resources/projects/the-end/docs/compact-piles-20261128/",
+    "archive": "四张截图和实机报告已从 OpenViking 取回，SHA-256 校验通过。由于嵌入模型缺失，语义索引失败。"
+  },
+  "battleWindow20261128": {
+    "project": "The end / emberwatch",
+    "date": "2026-11-28",
+    "status": "Pink/Cocos 主场景已实装，运行与画面复核通过，造型待玩家审阅",
+    "scene": "assets/TheEnd.scene",
+    "build": "temp/builder/log/web-desktop-build-1795844984446.log",
+    "implementation": ["assets/game/presentation/ui/BattleWindowLayout.ts", "assets/game/presentation/ui/TideBattleLayout.ts", "assets/prefabs/screens/BattleScreen.prefab", "assets/game/presentation/primitives/DeckStackGraphic.ts", "art-source/ashen-labyrinth/combat-ui/"],
+    "checks": {
+      "typecheck": true, "architecture": true, "focusedPassed": 16,
+      "fullSuite": {"passed": 203, "failed": 15, "newFailures": 0},
+      "chromeViewports": ["613×767", "1024×768", "1440×900", "840×470", "390×844", "1920×720", "800×800"],
+      "at613x767": {"nearBlackRowsBefore": 297, "nearBlackRowsAfter": 0, "healthDeltaBeforePx": 11.92, "healthDeltaAfterPx": 0},
+      "nativeInteractions": ["空堆与非空堆点阅", "拖牌与拖牌中缩放", "六张手牌、结束回合、格挡与扣血", "DPR 2 触屏模拟中点牌堆、关闭设置并结束回合"],
+      "runtimeErrors": 0
+    },
+    "report": "output/playwright/battle-window-20261128/report.json",
+    "gallery": "viking://~/resources/projects/the-end/docs/battle-window-20261128/",
+    "archive": "八张截图与实机报告均已从 OpenViking 取回并校验 SHA-256。语义索引因本地嵌入模型缺失而失败。"
   },
   "stoneCourtHud20261128": {
     "project": "The end / emberwatch",

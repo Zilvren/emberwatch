@@ -1,5 +1,37 @@
 # The end 素材生产与原生接入规格
 
+## 2026-11-28 · 营地火光和燃木声
+
+《The end》已接入主场景。玩家确认当前营地混音，新增场景字迹和构图待试玩。`GateCampScreen.prefab` 的绘景沿用 1440 × 900 的原始 SpriteFrame 和 `gate-camp.mtl`。门缝在原画中的中心取样点为 (777, 450)。宽 1326 设计单位的原生遮罩将这个点、门上字迹和交互区中心一并对准视口的几何中心。绘景、火星、暗角和点击区域共同向左平移 57 单位。窗口缩放保持字迹、受光、火盆和实物的相对位置。火焰取样固定在盆沿上方，火尖的横向与纵向偏移随高度增大。使用独立纹理坐标，原画禁止动态合图。实物受光范围按同一画板描在 `art-source/ashen-labyrinth/interface/gate-camp-light.svg`，以半尺寸导出为 `gate-camp-light.png`。原生组件 `CampAtmosphere.ts` 把五个交互区与局部灯光联系起来。减少动态效果时保留静态受光与选中反馈。
+
+两件营地道具由 ImageGen 绘制，透明原稿位于 `art-source/ashen-labyrinth/interface/camp-journal.png` 和 `camp-countercloth.png`。裁去透明空边并等比缩至 256 像素宽，运行图位于 `assets/ashen-labyrinth/interface/` 同名路径。手记为 256 × 99，SpriteFrame 为 `99c3cd82-c94f-475d-bce7-1b3707a3c252@f9941`。手记翻转后摆在左木墩，页边朝向右方火光。摊布为 256 × 77，SpriteFrame 为 `81a98741-2641-40bc-b2fe-da098ec9c20c@f9941`。两者及五处原生楷体字迹均挂在 `CampPainting/Inscriptions`，对应位置由 `tools/author-gate-camp.cjs` 装配。
+
+<details><summary>两件营地道具的生成提示</summary>
+
+手记原稿
+
+> A single small open traveller’s field journal to sit flat on a low wooden stool just to the right of a quietly burning brazier in a hand-painted dusk camp. Production game environment prop, isolated on a true transparent background, no floor or stool. Near-frontal camera from about 23 degrees above, landscape silhouette roughly 2.5:1, slightly rotated in perspective with the left front corner closer, softly bowed ochre paper, visible centre fold, humble worn dark umber leather cover, a few faint charcoal notes and a tiny sketched route in the left-hand margin, no readable text. Keep most of each leaf quiet. Hand-painted broad angular gouache shapes and softly broken edges as in a muted dusty violet, old-wood and amber fantasy environment painting. Very soft warm firelight from the left on the page edge; shadowed paper is dusty tan, matte, never white. No ornate clasps, props, border, emblem, or ambient glow, no long cast shadow. Whole book visible, clear modest silhouette legible at 80 pixels wide.
+
+摊布原稿
+
+> Single hand-painted game environment prop cutout on genuine transparent alpha. A small, well-used piece of faded aubergine and red-brown canvas folded over the near horizontal rail of a modest trader's table. ONLY the cloth is visible. Viewed almost straight on from slightly above. Wide and low silhouette, roughly three widths to one height. The narrow folded top catches a little warm lamplight at the left. The fabric hangs under its own weight with a softly sagging irregular lower hem, a couple of small nicks and loose short threads, subtle vertical folds at the far edges. The middle of the fabric has gently mottled mid-dark warm umber pigment, kept quiet for later pale handwritten merchant lettering. Brush-painted matte gouache, soft broad planes and dusty violet shadows for a medieval dusk camp painting. Natural subdued values even in the highlights. Asymmetric, handmade cloth, no rod, strings, poles, signboard, hard border, print, lettering, emblem, brass trim, tassels or cast shadow. All edges visible.
+
+</details>
+
+木柴主声来自 AugustSandberg 以 CC0 公开的松木壁炉录音。从高质量预览取 2.0–18.5 秒和 21.25–36.75 秒，交接与循环接缝各做 1 秒等功率交叉淡化，削减 85 Hz 以下的隆隆声和 4.4 kHz 以上的尖响，压软最响的爆裂。处理后的单声道声源保存在 `art-source/ashen-labyrinth/audio/hearth-mono.wav`。[原始录音《Fireplace Burning》](https://freesound.org/people/AugustSandberg/sounds/508844/)
+
+`tools/mix-camp-audio.py` 将炉火放在中央，以循环滤波噪声合成微风和三次轻柔篷布声，环境层的均方根电平比柴火低 17 dB。运行时音轨 `assets/resources/audio/campfire.wav` 为 30 秒、24 kHz、16 位立体声 PCM。`CampfireLoop.ts` 通过 Pink 资源包读取。`GameDirector.onLoad` 在异步加载前注册页面输入监听，进入营地即由 `GameAudio.ts` 请求播放、解码音轨并排入一个循环声源。获准后以 0.021 增益、2 秒淡入播放。各营地面板共用此声源，切换静音、离营和回到页面时按营地状态同步输出。
+
+## 2026-11-28 · 战斗意图的透明插画
+
+《The end》已接入三张独立 SpriteFrame。ImageGen 原稿保存在 `art-source/ashen-labyrinth/combat-ui/`。导出时按透明轮廓裁切，保留抗锯齿边缘，等比居中至 128 × 128。Pink 从 `assets/ashen-labyrinth/interface/intent-attack.png`、`intent-prepare.png` 和 `intent-delay.png` 导入帧，使用线性采样。攻击和蓄势在场景中为 42 × 42 设计单位，暂缓为 38 × 38。双道石刻轮廓较实，略小的显示尺寸使它与前两种图标接近。三个 Sprite 均用白色顶点色还原原画。节点装配在 `tools/battle-hud-art.cjs`，状态绑定在 `assets/game/presentation/ui/EnemyIntent.ts`。
+
+## 2026-11-28 · 两种可变厚度的战斗牌堆
+
+《The end》战斗主场景已接回玩家指定的石拱门原画。抽牌背原画为 300 × 440，弃牌背为 302 × 440，源文件位于 `art-source/ashen-labyrinth/combat-ui/`。运行图 `draw-gate.png` 与 `discard-descent.png` 沿用 240 × 352 的 SpriteFrame 和既有 UUID。两张运行图已与上一版石廊导出的 PNG 逐字节校验。可在 `assets/ashen-labyrinth/interface/` 取图。
+
+`BattleScreen.prefab` 中正面为 62 × 91，朝手牌倾斜 7°。第二、三张分别倾斜 4.5° 和 2°，最多错开 7 个横向设计单位。0 张时牌面略暗，1 张显示正面，2 张露出第二张，3 张及以上露出第三张。数量画在原图底部的数字槽，名称排在牌下。110 × 132 的原生命中区覆盖图像和名称。数量由 `DeckStackGraphic.setCount` 接收，资源装配见 `tools/battle-hud-art.cjs` 和 `tools/author-player-controls.cjs`。
+
 ## 2026-11-28 · 战斗 HUD 石材插画
 
 《The end》本轮已接入十五张分离的手绘风格 SpriteFrame。ImageGen 参照石廊与沉灯庭背景生成插画，独立原图保存在 `art-source/ashen-labyrinth/combat-ui/`。运行图位于 `assets/ashen-labyrinth/interface/`，按透明边界居中，采用线性采样。

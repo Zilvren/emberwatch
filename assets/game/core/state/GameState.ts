@@ -4,6 +4,7 @@ import { FIST_MOVES, fistFinisherFor, fistMove, fistSupport, fistTargetMatches, 
 import { ASHEN_MAP_LAST_LAYER, ASHEN_MAP_OUTER_LANE, nextMapNodes, type ExpeditionMap } from '../content/ExpeditionMap';
 import { EntryTierId, entryTier } from '../content/EntryTiers';
 import { validEnemyActions } from '../content/LabyrinthEnemies';
+import { CAMP_SKILLS } from '../content/GateCamp';
 import { isPhase } from './GamePhase';
 import {
     getJournalCatalog,
@@ -27,6 +28,7 @@ export interface GameState {
     milestones: Record<string, number>;
     journalEntries: JournalRecord[];
     supplies: number;
+    campSkills?: string[];
     entryTier: EntryTierId | null;
     health: number;
     cards: OwnedCard[];
@@ -206,6 +208,13 @@ export function validateGameState(
     integer(s.scenarioVersion, 1, 100000, 'scenarioVersion');
     const scenario = getScenario(s.scenarioId, s.scenarioVersion);
     const fistEnabled = supportsFistCombos(scenario);
+    if (s.campSkills !== undefined) {
+        list(s.campSkills, CAMP_SKILLS.length, 'camp skills');
+        const learned = new Set(s.campSkills);
+        requireValue(s.campSkills, !!scenario.labyrinth && learned.size === s.campSkills.length &&
+            s.campSkills.every(id => CAMP_SKILLS.some(skill => skill.id === id &&
+                (!skill.requires || learned.has(skill.requires)))), 'camp skill prerequisites');
+    }
     integer(s.seed, 0, 0xffffffff, 'seed');
     integer(s.randomState, 1, 0xffffffff, 'randomState');
     integer(s.nextId, 0, 1000000000, 'nextId');
@@ -589,6 +598,7 @@ export function validateGameState(
         milestones: { ...s.milestones },
         journalEntries: s.journalEntries.map(({ id, day, read }) => ({ id, day, read })),
         supplies: s.supplies,
+        ...(s.campSkills === undefined ? {} : { campSkills: [...s.campSkills] }),
         entryTier: savedTier,
         health: s.health,
         cards: s.cards,

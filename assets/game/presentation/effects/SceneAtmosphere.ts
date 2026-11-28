@@ -34,7 +34,7 @@ export class SceneAtmosphere extends Component {
     private home = new Vec3();
     private backdropHome = new Vec3();
     private authoredBackdrop: { height: number; y: number; x: number } | null = null;
-    /** Preserve the painted floor under the actors while covering the whole visible window. */
+    /** Keep the painted floor near the actors within a full-bleed, aspect-preserving crop. */
     fitBackdrop(width: number, height: number, centerY = 0, floorY = 0): void {
         const node = this.backdrop, frame = node?.getComponent(Sprite)?.spriteFrame;
         const ui = node?.getComponent(UITransform);
@@ -44,11 +44,12 @@ export class SceneAtmosphere extends Component {
         const base = this.authoredBackdrop;
         const aspect = frame.originalSize.width / frame.originalSize.height;
         const floorFraction = Math.max(.1, Math.min(.9, .5 + (floorY - base.y) / base.height));
-        const coverHeight = Math.max(base.height, (width + 16 + 2 * Math.abs(base.x)) / aspect,
-            (height / 2 + floorY - centerY + 4) / floorFraction,
-            (height / 2 + centerY - floorY + 4) / (1 - floorFraction));
+        const coverHeight = Math.max(base.height, (width + 16 + 2 * Math.abs(base.x)) / aspect, height + 8);
+        const slack = (coverHeight - height) / 2 - 4;
+        const preferredY = floorY + (.5 - floorFraction) * coverHeight;
+        const y = Math.max(centerY - slack, Math.min(centerY + slack, preferredY));
         ui.setContentSize(coverHeight * aspect / node.scale.x, coverHeight / node.scale.y);
-        this.backdropHome.set(base.x, floorY + (.5 - floorFraction) * coverHeight, node.position.z);
+        this.backdropHome.set(base.x, y, node.position.z);
         node.setPosition(this.backdropHome);
     }
     setRestingHeight(y: number): void {

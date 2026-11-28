@@ -13,6 +13,7 @@ import {
 import { InventoryRules } from './InventoryRules';
 import { RuleFeedback, CombatState } from './RuleContext';
 import { entryTier } from '../content/EntryTiers';
+import { CAMP_SKILLS } from '../content/GateCamp';
 import { FistCombat } from './FistCombat';
 import {
     advanceCalmRound, applyLabyrinthEffect, consumeCalibration, consumeDiscount,
@@ -199,6 +200,13 @@ export class CombatRules {
             this.drawCards(4);
             this.beginPlayerTurn(false);
         } else this.beginPlayerTurn();
+        if (this.scenario.labyrinth && this.state.campSkills?.length) {
+            for (const skill of CAMP_SKILLS) {
+                if (this.state.campSkills.indexOf(skill.id) < 0) continue;
+                this.state.battle.block += skill.openingBlock ?? 0;
+                if (skill.openingDraw) this.drawCards(skill.openingDraw);
+            }
+        }
         if (this.scenario.fieldDeck && !this.scenario.labyrinth) this.offerDiscovery();
         if (
             !this.scenario.fieldDeck &&

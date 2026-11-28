@@ -6,10 +6,7 @@ import { ButtonPresentation } from './ButtonPresentation';
 const symbols: Record<string, string> = {
     settings: 'settings', help: 'help', 'rules-help': 'info', restart: 'restart',
     map: 'map', bag: 'cards', 'supply-bag': 'bag', 'recipe-open': 'craft', 'rest-synthesis': 'craft',
-    'camp-keeper': 'keeper', 'camp-bench': 'heal', 'camp-warehouse': 'warehouse', 'camp-fire': 'fire',
-    'camp-depart': 'open', 'camp-find-keeper': 'keeper', 'camp-deck': 'cards', 'camp-repair': 'heal',
-    'camp-stock': 'inventory', 'camp-stock-next': 'next', 'camp-stock-back': 'back', 'camp-redeem': 'coins',
-    'camp-prev': 'prev', 'camp-next': 'next', 'entry-confirm': 'check', 'journal-start': 'go',
+    'entry-confirm': 'check', 'journal-start': 'go',
     'modal-cancel': 'back', 'modal-close': 'close', 'modal-confirm': 'check',
     'map-enter': 'go', 'rest-done': 'go', 'shelter-done': 'go',
     'rest-cash': 'drop', 'rest-bag': 'cards', 'reward-confirm': 'check',
@@ -24,7 +21,7 @@ const symbols: Record<string, string> = {
 
 function symbolFor(action: ButtonAction, caption: string): string | undefined {
     const id = action.actionId;
-    if (id === 'audio') return /关闭|声音关|已静音/.test(caption) ? 'muted' : 'sound';
+    if (id === 'audio' || id === 'camp-audio') return /关闭|声音关|已静音/.test(caption) ? 'muted' : 'sound';
     if (id === 'shelter-repair') return caption.indexOf('兑换') >= 0 ? 'coins' : 'heal';
     if (id === 'rewards-done') return caption === '取消出牌' ? 'back' : /略过|放弃/.test(caption) ? 'skip' : 'next';
     if (id === 'claim-supplies') return caption === '上一页' ? 'prev' : 'supplies';
@@ -152,7 +149,7 @@ export class PlayerControls {
                 place(energy.icon, energy.number, -16, tier.stamina);
                 continue;
             }
-            const quantity = ['bag', 'camp-deck', 'camp-repair', 'camp-redeem', 'entry-confirm', 'shelter-repair'].indexOf(action.actionId) >= 0
+            const quantity = ['bag', 'entry-confirm', 'shelter-repair'].indexOf(action.actionId) >= 0
                 ? caption.match(/\d+/)?.[0] ?? '' : '';
             const size = surface.getComponent(UITransform)!;
             const pile = action.actionId === 'draw-pile' || action.actionId === 'discard-pile';

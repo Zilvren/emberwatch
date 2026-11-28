@@ -47,6 +47,7 @@ import {
 import { RouteMap } from './map/RouteMap';
 import { installLabyrinthInterface } from './ui/LabyrinthInterface';
 import { UiActionRouter } from './ui/UiActionRouter';
+import { atGateCamp } from '../core/content/GateCamp';
 import { ACTION_EVENT, ActionInputEvent, CARD_DROP_EVENT, CardDropInputEvent } from './ui/UIEvents';
 import { initialUiState } from './ui/UiState';
 const { ccclass, property } = _decorator;
@@ -68,6 +69,9 @@ export class GameDirector extends Component {
     private refresh(): void {
         const previousScreen = this.renderer.activeScreen;
         this.renderer.render();
+        const camp = this.renderer.activeScreen === this.scene.screens.camp;
+        this.audio.setCampAmbience(camp);
+        if (camp && !this.ui.overlay) this.message(this.session.saveWarning);
         if (previousScreen && previousScreen !== this.renderer.activeScreen) {
             for (const effect of this.effectsRoot?.children ?? []) {
                 Tween.stopAllByTarget(effect);
@@ -135,6 +139,7 @@ export class GameDirector extends Component {
     };
     private hand: HandPresentation | null = null;
     onLoad(): void {
+        this.audio.listenForActivation();
         this.message('正在读取卡牌配置…');
         void this.initialize().catch((error) => {
             this.message(`游戏初始化失败：${String(error)}`);
@@ -236,7 +241,7 @@ export class GameDirector extends Component {
         this.refresh();
         this.fitHudToWindow();
         view.on('canvas-resize', this.fitHudToWindow, this);
-        this.message(this.session.startupMessage);
+        if (!this.scene.screens.camp.active) this.message(this.session.startupMessage);
         Object.assign(globalThis, {
             __survivalGame: this.session.game,
             __emberUI: { snapshot: () => this.snapshot() },
@@ -256,6 +261,11 @@ export class GameDirector extends Component {
         const width = design.width + 2 * bounds.x / scaleX;
         const height = design.height + 2 * bounds.y / scaleY;
         if (width <= 0 || height <= 0) return;
+        const camp = this.scene.screens.camp;
+        // Keep the door in the middle, with enough height for the notes on the camp furniture.
+        const campScale = Math.min(width / camp.getComponent(UITransform)!.width, height / 570);
+        camp.setScale(campScale, campScale, 1);
+        camp.setPosition(0, 0);
         const frame = battleWindowLayout(width, height);
         this.renderer.fitBattleWindow(frame);
         const hud = this.scene.hud.getComponent(UITransform)!;
@@ -304,7 +314,7 @@ export class GameDirector extends Component {
         const result = this.session.execute(command);
         this.audio.play(result.ok ? sound : 'tap');
         this.message(result.message);
-        if (this.game.phase === 'failure' || this.game.phase === 'journal') this.ui.overlay = null;
+        if (this.game.phase === 'failure' || (this.game.phase === 'journal' && !atGateCamp(this.game))) this.ui.overlay = null;
         this.ui.selectedCard = '';
         this.refresh();
     }

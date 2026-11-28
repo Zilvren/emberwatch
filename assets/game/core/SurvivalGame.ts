@@ -28,6 +28,7 @@ import {
     validateJournalCatalog,
 } from './content/JournalCatalog';
 import { EntryTierId } from './content/EntryTiers';
+import { atGateCamp, CAMP_SKILLS, keeperOffers, trainingBlocked } from './content/GateCamp';
 import { CombatRules } from './systems/CombatRules';
 import { ExplorationRules } from './systems/ExplorationRules';
 import { InventoryRules } from './systems/InventoryRules';
@@ -55,6 +56,7 @@ export class SurvivalGame {
     milestones: Record<string, number> = {};
     journalEntries: JournalRecord[] = [];
     supplies = 10;
+    campSkills?: string[];
     entryTier: EntryTierId | null = null;
     health = 10;
     get lowHealth(): boolean { return this.health <= 2; }
@@ -171,6 +173,7 @@ export class SurvivalGame {
                 milestones: this.milestones,
                 journalEntries: this.journalEntries,
                 supplies: this.supplies,
+                campSkills: this.campSkills,
                 entryTier: this.entryTier,
                 health: this.health,
                 cards: this.cards,
@@ -228,6 +231,7 @@ export class SurvivalGame {
         this.milestones = {};
         this.journalEntries = [];
         this.supplies = this.scenario.initialSupplies;
+        this.campSkills = undefined;
         this.storedSupplies = undefined;
         this.entryTier = null;
         this.health = this.scenario.initialHealth;
@@ -380,6 +384,29 @@ export class SurvivalGame {
     healAtShelter(): ActionResult {
         return this.shelterRules.healAtShelter();
     }
+    learnCampSkill(id: string): ActionResult {
+        if (!atGateCamp(this)) return this.feedback.result(false, '请在营地的技能树学习。');
+        const skill = CAMP_SKILLS.find(candidate => candidate.id === id);
+        if (!skill) return this.feedback.result(false, '没有这项技能。');
+        const learned = this.campSkills ?? [];
+        const blocked = trainingBlocked(skill, learned, this.supplies);
+        if (blocked) return this.feedback.result(false, blocked);
+        this.inventoryRules.spend(skill.cost);
+        this.campSkills = [...learned, skill.id];
+        return this.feedback.result(true, `已永久学会「${skill.name}」。`);
+    }
+    buyKeeperCard(kind: CardKind): ActionResult {
+        if (!atGateCamp(this)) return this.feedback.result(false, '请回营地与守门人交易。');
+        const offer = keeperOffers(this.content.catalog.labyrinth?.discoveryPool).find(item => item.kind === kind);
+        if (!offer) return this.feedback.result(false, '守门人的牌摊上没有这张牌。');
+        if (this.supplies < offer.price) return this.feedback.result(false, '物资不足。');
+        if (this.cards.some(card => card.found && card.kind === kind))
+            return this.feedback.result(false, '这张牌已经备入本趟牌组。');
+        const card = this.inventoryRules.owned(kind, true);
+        this.inventoryRules.spend(offer.price);
+        this.cards.push(card);
+        return this.feedback.result(true, `「${this.content.cards[kind].name}」已加入本趟牌组。`);
+    }
     redeemAllSupplies(): ActionResult {
         return this.shelterRules.redeemSupplies();
     }
@@ -392,12 +419,14 @@ export class SurvivalGame {
         const day = this.day,
             milestones = this.milestones,
             journalEntries = this.journalEntries,
-            storedSupplies = this.storedSupplies;
+            storedSupplies = this.storedSupplies,
+            campSkills = this.campSkills;
         this.reset();
         this.day = this.scenario.kind === 'tutorial' ? this.scenario.initialDay : day + 1;
         this.milestones = milestones;
         this.journalEntries = journalEntries;
         this.storedSupplies = storedSupplies;
+        this.campSkills = campSkills;
         this.phase = 'failure';
         if (defeated) this.health = 0;
         this.failureReason = reason;

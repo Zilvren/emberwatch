@@ -16,7 +16,7 @@ export class DeckStackGraphic extends Component {
         this.count = count;
         if (this.rearLeaf) this.rearLeaf.active = count >= 3;
         if (this.middleLeaf) this.middleLeaf.active = count >= 2;
-        if (this.painted) this.painted.color = count ? Color.WHITE : new Color(201, 185, 204);
+        if (this.painted) this.painted.color = count ? Color.WHITE : new Color(228, 220, 224);
     }
     onEnable(): void {
         this.node.on(Node.EventType.SIZE_CHANGED, this.redraw, this);

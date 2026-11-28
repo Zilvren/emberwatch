@@ -100,8 +100,7 @@ export class GameRenderer extends NativeViewWriter {
                 phase === screenKey || (discovery && phase === 'battle');
         this.activeScreen = this.scene.screens[screenKey];
         const screen = this.activeScreen;
-        this.scene.hud.active = true;
-        this.renderStatusBar();
+        this.scene.hud.active = screenKey === 'battle';
         const actors = (discovery ? this.scene.screens.battle : screen).getComponentsInChildren(ActorPresentation);
         this.hero = actors.find((actor) => actor.actorId === 'player') ?? null;
         this.hero?.setArmed(g.phase === 'battle' && !!g.battle?.weapon);
@@ -138,6 +137,8 @@ export class GameRenderer extends NativeViewWriter {
             );
         }
         if (g.phase === 'map') {
+            const recipes = screen.getChildByName('recipe-open');
+            if (recipes) recipes.active = !g.scenario.labyrinth;
             const initial = g.scenario.nodes[g.scenario.fixedNodeId];
             const fee =
                 initial.type === 'scavenge'
@@ -294,7 +295,7 @@ export class GameRenderer extends NativeViewWriter {
         });
     }
     renderBattle(screen: Node): void {
-        this.renderStatusBar();
+        if (this.scene.hud.active) this.renderStatusBar();
         const g = this.game,
             b = g.battle!,
             world = screen.getChildByName('World')!;
@@ -313,13 +314,11 @@ export class GameRenderer extends NativeViewWriter {
         if (!this.enemy) throw new Error('缺少敌人表现绑定：' + definition.actorId);
         this.battleLayout.show(this.enemy, !!g.scenario.fieldDeck, !!g.scenario.labyrinth);
         const calm = b.calm;
-        const calmText = calm ? `镇静 ${calm.persistent + calm.temporary} / ${calm.limit}` +
-            (calm.temporary ? ` · 临时 ${calm.temporary}` : '') +
-            (calm.freeSkill ? ' · 下张技能免费' : '') + (calm.calibrated ? ' · 已校准' : '') : '';
         const strength = g.strength;
         const fists = b.fist;
         const status = [
-            calmText,
+            calm?.freeSkill ? '下张技能免费' : '',
+            calm?.calibrated ? '已校准' : '',
             shieldSpearEquipped && b.rage !== undefined
                 ? `盾矛蓄势 ${'●'.repeat(b.rage)}${'○'.repeat(5 - b.rage)}`
                 : '',

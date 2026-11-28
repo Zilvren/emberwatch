@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <!-- Light-receiving surfaces registered to the gate-camp painting. -->
+  <rect width="1440" height="900" fill="black"/>
+  <g fill="white" stroke-linejoin="round">
+    <!-- Shoulder plate, tools, openable book and the workbench lip. -->
+    <path d="M96 566 Q106 544 121 526 Q137 507 154 511 Q172 511 192 522 Q205 529 202 532 L189 539 Q188 553 202 570 L209 578 L195 579 L180 566 L169 542 Q157 549 151 563 Q148 573 140 569 L110 559 Z"/>
+    <path d="M226 553 L236 549 L261 547 L272 553 L254 557 L290 568 Q299 573 293 580 L284 581 L252 567 L237 573 L225 569 Z"/>
+    <path d="M298 535 L353 535 L379 565 L381 577 L324 580 L300 552 Z"/>
+    <path fill="#888" d="M64 582 L422 579 L425 583 L423 593 L67 598 Z"/>
+    <!-- Keeper, sleeve, hands, lantern and trestle table. -->
+    <path d="M879 488 Q879 479 887 476 Q901 471 904 488 L907 488 Q913 491 917 496 Q931 500 938 511 Q944 522 946 547 Q952 574 945 582 L940 581 L937 606 Q933 610 927 610 L907 609 L891 611 L882 608 L880 586 L884 565 L892 559 L875 552 L863 553 L859 548 L862 536 L868 530 Q874 511 883 505 L879 498 Z"/>
+    <path d="M830 537 L834 534 Q836 524 840 530 L842 534 L845 537 L844 557 L830 557 Z"/>
+    <path fill="#bcbcbc" d="M818 558 L899 557 L905 561 L903 566 L820 567 Z"/>
+    <!-- The stationary iron rim and body below the moving flame. -->
+    <path d="M579 638 Q645 630 710 637 L713 641 L705 646 L701 739 Q696 756 645 763 Q601 766 585 757 L588 740 L588 647 L579 644 Z"/>
+    <!-- Sun-facing panels, fitted lids and iron latches of the two chests. -->
+    <path d="M1099 587 L1105 582 L1138 575 L1230 575 L1263 580 L1268 585 L1268 607 L1248 610 L1232 628 L1232 691 L1207 694 L1100 689 Z"/>
+    <path d="M1232 630 L1246 611 L1266 607 L1352 607 L1340 628 L1336 666 L1325 700 L1232 697 Z"/>
+  </g>
+</svg>

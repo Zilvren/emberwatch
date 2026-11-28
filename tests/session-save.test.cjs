@@ -11,7 +11,8 @@ const original = JSON.parse(
 catalog.installCatalog(original);
 const { SurvivalGame } = load(path.join(root, 'assets/game/core/SurvivalGame.ts'));
 const { GameSession } = load(path.join(root, 'assets/game/application/GameSession.ts'));
-const { TUTORIAL_SCENARIO } = load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
+const { TUTORIAL_SCENARIO, ASHEN_LABYRINTH_SCENARIO, SYNTHESIS_SCENARIO } =
+    load(path.join(root, 'assets/game/core/content/GameScenario.ts'));
 class LegacySession extends GameSession {
     constructor(seed, saves) {
         super(seed, saves, TUTORIAL_SCENARIO);
@@ -59,6 +60,34 @@ test('battle roundtrip preserves random generator, piles, equipment and future d
         ok(g.endTurn());
         ok(loaded.endTurn());
         assert.deepEqual(loaded.exportState(), g.exportState());
+    }
+});
+test('labyrinth and synthesis saves accept the previous fist artwork and still check card costs', (t) => {
+    t.after(() => catalog.installCatalog(original));
+    const previous = structuredClone(original);
+    const oldArt = {
+        fist_uppercut: 'heavy', fist_parry: 'dodge', fist_straight_three: 'heavy',
+        fist_straight_four: 'heavy', fist_stance: 'dodge',
+    };
+    for (const [id, art] of Object.entries(oldArt)) previous.cards.find(card => card.id === id).art = art;
+    previous.labyrinth.discoveryPool = ['fist_left_hook'];
+    const changed = structuredClone(original);
+    changed.cards.find(card => card.id === 'fist_left_hook').cost += 1;
+
+    for (const scenario of [ASHEN_LABYRINTH_SCENARIO, SYNTHESIS_SCENARIO]) {
+        catalog.installCatalog(previous);
+        const storage = memory();
+        const oldRepo = new SaveRepository(storage);
+        const session = new GameSession(17, oldRepo, scenario);
+        ok(session.execute({ type: 'start', tier: 'standard' }));
+        const saved = storage.getItem(oldRepo.key);
+        catalog.installCatalog(original);
+        assert.deepEqual(new SaveRepository(storage).load().state, session.game.exportState());
+        catalog.installCatalog(changed);
+        const rejected = new SaveRepository(storage).load();
+        assert.equal(rejected.state, null);
+        assert.match(rejected.warning, /卡牌配置/);
+        assert.equal(storage.getItem(oldRepo.key), saved);
     }
 });
 test('older battle checkpoints discard action history while retaining the deck and key journals', () => {

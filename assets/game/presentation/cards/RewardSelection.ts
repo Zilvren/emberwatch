@@ -74,6 +74,8 @@ export class RewardSelection extends Component {
             : '可以略过。';
         const unlocked = game.rewards?.guaranteedFinisher;
         const unlockHint = unlocked && !taken && !kind ? `本场解锁「${game.content.cards[unlocked].name}」的奖励版。` : '';
+        const selected = kind && game.content.cards[kind];
+        const selectedRules = selected && selected.fist && !taken ? selected.text : '';
         if (this.confirm) {
             this.confirm.actionId = battleChoice ? 'resolve-choice-confirm' : discovery || fieldDiscovery
                 ? 'discover-confirm'
@@ -98,7 +100,7 @@ export class RewardSelection extends Component {
                     : (game.rewardZone(cards[0]) === 'overflow'
                     ? '行囊空间不足，可先放入暂存区。返营前需腾出行囊空间。'
                     : '可放入行囊。成功返营后存入仓库，兑换时才获得物资点。')
-                : unlockHint || (fieldDiscovery ? (kind ? '收下后加入本趟牌组，从下一场战斗开始可抽到。' : '悬停查看详细描述，选中后确认领取。')
+                : unlockHint || selectedRules || (fieldDiscovery ? (kind ? '收下后加入本趟牌组，从下一场战斗开始可抽到。' : '悬停查看详细描述，选中后确认领取。')
                 : discovery
                 ? kind
                     ? `拿取后${game.battle!.hand.length < 6 ? '立即入手' : '置于牌堆顶'} · 使用消耗 ${game.content.cards[kind].cost} 体力`

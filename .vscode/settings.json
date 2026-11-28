@@ -6,5 +6,6 @@
         "editor.insertSpaces": true,
         "editor.detectIndentation": false
     },
-    "prettier.requireConfig": true
+    "prettier.requireConfig": true,
+    "simpleBrowser.focusLockIndicator.enabled": false
 }

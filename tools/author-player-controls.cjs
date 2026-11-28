@@ -156,9 +156,9 @@ function stacks() {
         const presentation=comp(g,n,N.script('ButtonPresentation'));
         const surface=presentation.surface.__id__;
         const focus=g.graph[presentation.focusRing.__id__].node.__id__;
-        Object.assign(comp(g,n,'cc.UITransform')._contentSize,{width:156,height:166});
-        Object.assign(comp(g,surface,'cc.UITransform')._contentSize,{width:124,height:126});
-        Object.assign(comp(g,focus,'cc.UITransform')._contentSize,{width:154,height:158});
+        Object.assign(comp(g,n,'cc.UITransform')._contentSize,{width:110,height:132});
+        Object.assign(comp(g,surface,'cc.UITransform')._contentSize,{width:80,height:106});
+        Object.assign(comp(g,focus,'cc.UITransform')._contentSize,{width:88,height:128});
         g.graph[surface]._lpos=g.graph[focus]._lpos=N.vec(0,0);
         comp(g,surface,'cc.Graphics')._enabled=true;
         presentation.transparentSurface=true;
@@ -170,9 +170,6 @@ function stacks() {
         glyph(g, owner, 'StatIcon', symbol, x, y, 24, tint);
         if (node === 'CriticalWarning') comp(g, owner, 'cc.Label')._enabled = false;
     }
-    const intent = g.graph.findIndex(o => o.__type__ === 'cc.Node' && o._name === 'battle-text0');
-    glyph(g, intent, 'AttackGlyph', 'attack', -29, 0, 26, 'f1b786');
-    glyph(g, intent, 'PrepareGlyph', 'clock', 0, 0, 22, 'dbc39e');
     hudArt.battle(g);
     fs.writeFileSync(g.file, JSON.stringify(g.graph,null,2)+'\n');
 }

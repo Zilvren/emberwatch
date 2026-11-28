@@ -42,7 +42,7 @@ const actorTemplate = read('assets/prefabs/actors/PlayerActor.prefab');
 const labelTemplate = read('assets/prefabs/effects/FloatingText.prefab').find(o => o.__type__ === 'cc.Label');
 const spriteTemplate = actorTemplate.find(o => o.__type__ === 'cc.Sprite' || o.__type__ === script('StableActorSprite'));
 const buttonTemplate = read('assets/prefabs/ui/HUD.prefab').find(o => o.__type__ === 'cc.Button');
-const graphicTemplate = read('assets/prefabs/ui/HUD.prefab').find(o => o.__type__ === 'cc.Graphics');
+const graphicTemplate = read('assets/prefabs/ui/HUD.prefab').find(o => o.__type__ === 'cc.Graphics' && o._enabled);
 const cleanComponent = template => { const result = copy(template); delete result.__type__; delete result.node; delete result.__prefab; delete result._id; return result; };
 
 class Graph {

@@ -39,8 +39,7 @@ function input(page, view = page) {
         }
     }
     async function depart(tier) {
-        await click('camp-keeper');
-        await click('camp-depart');
+        await click('camp-gate');
         if (tier) await click('entry-tier-' + tier);
         await click('entry-confirm');
     }
@@ -59,12 +58,13 @@ function assertVerticalMap({ points, edges }) {
 
 async function visitScrollableMap(page, native, name) {
     const before = await native.save();
-    await native.click('map');
-    assert.equal((await native.state()).overlay, 'map');
+    const fromBattle = before.phase === 'battle';
+    if (fromBattle) await native.click('map');
+    assert.equal((await native.state()).overlay, fromBattle ? 'map' : null);
     const overview = await page.evaluate(() => {
         const scene = cc.director.getScene();
         const map = scene.getComponentsInChildren('RouteMap')
-            .find(view => view.node.activeInHierarchy && view.close?.node.activeInHierarchy);
+            .find(view => view.node.activeInHierarchy);
         if (!map) return null;
         const director = scene.getComponentInChildren('GameDirector');
         const model = map.inspect();
@@ -112,22 +112,34 @@ async function visitScrollableMap(page, native, name) {
     }
     await image(page, name);
     const rect = await page.locator('#GameCanvas').boundingBox();
-    assert.ok(overview.readOnlyTarget);
-    const hit = overview.readOnlyTarget, scale = Math.min(rect.width / 1440, rect.height / 900);
-    await page.mouse.click(rect.x + (rect.width - 1440 * scale) / 2 + (hit.x + hit.width / 2) * scale,
-        rect.y + (rect.height - 900 * scale) / 2 + (hit.y + hit.height / 2) * scale);
-    await native.idle();
-    assert.equal((await native.state()).overlay, 'map');
+    if (fromBattle) {
+        assert.ok(overview.readOnlyTarget);
+        const hit = overview.readOnlyTarget, scale = Math.min(rect.width / 1440, rect.height / 900);
+        await page.mouse.click(rect.x + (rect.width - 1440 * scale) / 2 + (hit.x + hit.width / 2) * scale,
+            rect.y + (rect.height - 900 * scale) / 2 + (hit.y + hit.height / 2) * scale);
+        await native.idle();
+        assert.equal((await native.state()).overlay, 'map');
+    }
     assert.deepEqual(await native.save(), before);
     await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height / 2);
     const offset = overview.scrollOffset.y;
     await page.mouse.wheel(0, Math.abs(offset) > overview.verticalScrollRange / 2 ? -520 : 520);
     await page.waitForFunction(initial => {
         const map = cc.director.getScene().getComponentsInChildren('RouteMap')
-            .find(view => view.node.activeInHierarchy && view.close?.node.activeInHierarchy);
+            .find(view => view.node.activeInHierarchy);
         return Math.abs(map.inspect().scrollOffset.y - initial) > 5;
     }, offset, { timeout: 5000 });
-    await page.keyboard.press('Escape');
+    if (fromBattle) await page.keyboard.press('Escape');
+    else {
+        // Continue the route at the same place on the playable map.
+        await page.evaluate(y => {
+            const map = cc.director.getScene().getComponentsInChildren('RouteMap').find(m => m.node.activeInHierarchy);
+            map.scroll.stopAutoScroll();
+            const offset = map.scroll.getScrollOffset();
+            offset.y = y;
+            map.scroll.scrollToOffset(offset, 0);
+        }, offset);
+    }
     await native.idle();
     assert.deepEqual(await native.save(), before);
 }
@@ -166,13 +178,14 @@ async function visitSettings(page, native) {
     const hud = await page.evaluate(() => {
         const bar = cc.director.getScene().getComponentInChildren('StatusBar');
         return {
-            visibleBacking: bar.paper.node.activeInHierarchy,
+            visibleBacking: bar.lintel.node.activeInHierarchy,
             labels: bar.node.getComponentsInChildren('cc.Label')
                 .filter(label => label.enabledInHierarchy && label.string).map(label => label.string),
         };
     });
     assert.equal(hud.visibleBacking, true);
-    assert.deepEqual(hud.labels.sort(), ['第 1 天', '10', '10 / 10', '12'].sort());
+    assert.deepEqual(hud.labels.sort(), [`第 ${before.day} 天`, String(before.supplies),
+        `第 ${before.battle.turn} 回合`, String(snapshot.statusBar.input.deckCount)].sort());
     await native.click('supply-bag');
     assert.equal((await native.state()).overlay, 'supply-bag');
     const bag = await page.evaluate(() => {
@@ -260,53 +273,83 @@ async function visitPile(page, native, id) {
     assert.deepEqual(await native.save(), before);
 }
 
+async function clickCampArt(page, x, y) {
+    const point = await page.evaluate(([x,y]) => {
+        const d = cc.director.getScene().getComponentInChildren('GameDirector');
+        const art = d.bounds(d.scene.screens.camp.getChildByName('CampPainting'));
+        const rect = document.querySelector('#GameCanvas').getBoundingClientRect();
+        const scale = Math.min(rect.width / 1440, rect.height / 900);
+        return [rect.left + (rect.width - 1440 * scale) / 2 + (art.x + art.width * x / 1440) * scale,
+            rect.top + (rect.height - 900 * scale) / 2 + (art.y + art.height * y / 900) * scale];
+    }, [x,y]);
+    await page.mouse.click(...point);
+}
 async function visitCamp(page, native) {
     const initial = await native.save();
     const snapshot = await native.state();
-    const stations = [
-        ['camp-keeper', 'ic-keeper'], ['camp-bench', 'ic-heal'],
-        ['camp-warehouse', 'ic-warehouse'], ['camp-fire', 'ic-fire'],
-    ];
-    for (const [id, icon] of stations) {
-        assert.ok(snapshot.hits.some(hit => hit.enabled && hit.id === id), id);
-        const marker = await page.evaluate(stationId => {
-            const action = cc.director.getScene().getComponentsInChildren('ButtonAction')
-                .find(item => item.node.activeInHierarchy && item.actionId === stationId);
-            const style = action.getComponent('ButtonPresentation');
-            return { fill: style.panel.fill.a, line: style.panel.line.a, icon: style.surface
-                .getChildByName('ControlGlyph').getComponent('cc.Sprite').spriteFrame.name };
-        }, id);
-        assert.deepEqual(marker, { fill: 0, line: 0, icon }, id);
-    }
+    const stations = ['camp-gate', 'camp-keeper', 'camp-skills', 'camp-warehouse', 'camp-fire'];
+    assert.deepEqual(snapshot.hits.filter(hit => hit.enabled).map(hit => hit.id).sort(), [...stations].sort());
+    await page.waitForFunction(() => !!cc.director.getScene().getComponentInChildren('GameDirector').audio.fire?.loop);
+    const scene = await page.evaluate(() => {
+        const d = cc.director.getScene().getComponentInChildren('GameDirector');
+        const camp = d.scene.screens.camp, painting = camp.getChildByName('CampPainting');
+        return { hud: d.hud.activeInHierarchy,
+            backgroundLoop: !!d.audio.fire?.loop && !!d.audio.fireBuffer,
+            plates: camp.getComponentsInChildren('PaperPanel').length,
+            labels: painting.getComponentsInChildren('cc.Label').filter(l => l.enabledInHierarchy)
+                .map(l => l.string.replace(/　/g, '')).sort() };
+    });
+    assert.deepEqual(scene, { hud: false, plates: 0, backgroundLoop: true, labels: ['进入迷宫','技能树','仓库','日志','交谈 · 交易'].sort() });
     await image(page, 'camp-arrival');
 
     // At design size click the artwork itself, away from its nameplate.
-    await page.mouse.click(903, 548);
+    await clickCampArt(page, 903, 548);
     await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-keeper');
+    const ambience = await page.waitForFunction(() => cc.director.getScene().getComponentInChildren('GameDirector').audio.fire);
     await image(page, 'camp-keeper');
+    await native.click('camp-talk');
+    const firstLine = (await campText(page)).body;
+    await native.click('camp-talk-next');
+    assert.notEqual((await campText(page)).body, firstLine);
+    await native.click('camp-trade');
+    assert.match((await campText(page)).context, /牌摊/);
+    await image(page, 'camp-trade');
     await native.click('modal-close');
-    await page.mouse.click(1213, 605);
+    await clickCampArt(page, 1213, 605);
     await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-warehouse');
     assert.match((await campText(page)).title, new RegExp(String(initial.supplies)));
     await image(page, 'camp-warehouse');
     await native.click('camp-find-keeper');
-    assert.equal((await campText(page)).title, '守门人');
+    assert.match((await campText(page)).context, /牌摊/);
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !globalThis.__emberUI.snapshot().overlay);
-    await page.mouse.click(235, 556);
-    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-bench');
+    await clickCampArt(page, 235, 556);
+    await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-skills');
+    await native.click('camp-select-initiative');
+    assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-learn' && h.enabled));
+    await image(page, 'camp-skills');
+    await native.click('camp-equipment');
     assert.match((await campText(page)).body, /血量已满/);
     await native.click('camp-deck');
     assert.equal((await native.state()).overlay, 'bag');
     await native.click('modal-close');
-    await page.mouse.click(646, 637);
+    await clickCampArt(page, 646, 637);
     await page.waitForFunction(() => globalThis.__emberUI.snapshot().overlay === 'camp-fire');
     assert.equal((await campText(page)).title, '灰里的门槛');
+    const continuous = await page.evaluate(source => source.loop &&
+        source === cc.director.getScene().getComponentInChildren('GameDirector').audio.fire, ambience);
+    await ambience.dispose();
+    assert.ok(continuous, 'Camp panels should share one continuous fireplace recording');
+    await native.click('camp-audio');
+    assert.deepEqual(await controlGlyph(page, 'camp-audio'), { textShown: false, symbol: 'ic-muted' });
+    assert.equal(await page.evaluate(() => cc.director.getScene().getComponentInChildren('GameDirector').audio.fire), null);
+    await native.click('camp-audio');
+    await page.waitForFunction(() => !!cc.director.getScene().getComponentInChildren('GameDirector').audio.fire);
     await native.click('modal-close');
     await page.keyboard.press('Tab');
     const nextFocus = await page.evaluate(() => cc.director.getScene().getChildByName('Canvas')
         .getChildByName('GameRoot').getComponent('ButtonFocusGroup').inspect().focused);
-    assert.ok(['camp-bench', 'camp-fire', 'camp-keeper', 'camp-warehouse', 'bag', 'supply-bag', 'map', 'settings'].includes(nextFocus));
+    assert.ok(stations.includes(nextFocus));
     await page.keyboard.press('Enter');
     await page.waitForFunction(() => !!globalThis.__emberUI.snapshot().overlay);
     await page.keyboard.press('Escape');
@@ -317,12 +360,82 @@ async function visitCamp(page, native) {
     await native.click('camp-keeper');
     assert.equal((await campText(page)).title, '守门人');
     await image(page, 'camp-keeper-small');
-    await native.click('camp-depart');
+    await native.click('modal-close');
+    await native.click('camp-gate');
     assert.equal((await native.state()).overlay, 'entry');
     await native.click('entry-tier-low');
     await native.click('modal-close');
     assert.deepEqual(await native.save(), initial);
+    await page.setViewportSize({ width: 1021, height: 452 });
+    await page.waitForTimeout(180);
+    const framing = await page.evaluate(() => {
+        const d = cc.director.getScene().getComponentInChildren('GameDirector');
+        const camp = d.scene.screens.camp, painting = camp.getChildByName('CampPainting');
+        const rect = document.querySelector('#GameCanvas').getBoundingClientRect();
+        const scale = Math.min(rect.width / 1440, rect.height / 900);
+        const visible = painting.getComponentsInChildren('cc.Label').filter(label => {
+            const bounds = d.bounds(label.node);
+            const x = rect.left + (rect.width - 1440 * scale) / 2 + bounds.x * scale;
+            const y = rect.top + (rect.height - 900 * scale) / 2 + bounds.y * scale;
+            return x >= 8 && y >= 8 && x + bounds.width * scale <= innerWidth - 8 &&
+                y + bounds.height * scale <= innerHeight - 8;
+        }).length;
+        const art = d.bounds(painting);
+        const hit = d.bounds(camp.getChildByName('CampControls').getChildByName('camp-gate'));
+        const seam = art.x + art.width * 777 / 1440;
+        const ink = d.bounds(painting.getChildByName('Inscriptions').getChildByName('camp-gate-sign'));
+        const centered = [ink, hit].every(b => Math.abs(b.x + b.width / 2 - 720) < 1 &&
+            Math.abs(b.y + b.height / 2 - 450) < 1);
+        return { visible, centered: centered && Math.abs(seam - 720) < 1 };
+    });
+    assert.deepEqual(framing, { visible: stations.length, centered: true });
     await page.setViewportSize({ width: 1440, height: 900 });
+}
+async function campPurchases(browser, url) {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const native = input(page);
+    observe(page);
+    try {
+        await page.goto(url + '/play/?cards=live&seed=17&save=on');
+        await native.click('camp-keeper');
+        await native.click('camp-trade');
+        assert.equal((await campText(page)).title, '阻尼片');
+        await native.click('camp-exchange');
+        let save = await native.save();
+        const card = save.cards.find(c => c.kind === 'lab_damper' && c.found);
+        assert.ok(card && save.supplies === 8);
+        assert.equal((await campText(page)).title, '交易完成');
+        await image(page, 'trade-receipt');
+        await native.click('camp-trade-browse');
+        assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-exchange' && h.enabled));
+        await native.click('modal-close');
+        await native.click('camp-skills');
+        await native.click('camp-select-guard');
+        assert.ok(!(await native.state()).hits.some(h => h.id === 'camp-learn' && h.enabled));
+        await native.click('camp-select-footing');
+        await native.click('camp-learn');
+        assert.equal((await native.save()).supplies, 6);
+        await native.click('camp-select-guard');
+        await native.click('camp-learn');
+        assert.equal((await native.state()).overlay, 'camp-skills');
+        save = await native.save();
+        assert.deepEqual(save.campSkills, ['footing', 'guard']);
+        assert.equal(save.supplies, 0);
+        await image(page, 'skill-learned');
+        await page.reload();
+        await native.idle();
+        assert.deepEqual(await native.save(), save);
+        await native.depart('emergency');
+        await native.click('enter-threshold');
+        await native.click('enter-lampPassage');
+        const fight = (await native.save()).battle;
+        assert.ok([...fight.hand, ...fight.draw].some(c => c.origin === card.id));
+        assert.equal(fight.block, 3);
+        return { bought: card.kind, balanceAfterShop: 8, balanceAfterTraining: save.supplies,
+            learned: save.campSkills, reloadPreserved: true, openingBlock: fight.block, cardInCombat: true };
+    } finally {
+        await page.close();
+    }
 }
 async function oneRoute(browser, url, lane) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: lane === 'A' ? 'no-preference' : 'reduce' });
@@ -334,7 +447,6 @@ async function oneRoute(browser, url, lane) {
         assert.equal((await native.state()).scenario, 'ashen-labyrinth');
         assert.equal((await native.save()).cards.length, 12);
         if (lane === 'A') {
-            await visitSettings(page, native);
             await visitCamp(page, native);
         }
         await native.depart(lane === 'B' ? 'emergency' : 'standard');
@@ -364,6 +476,7 @@ async function oneRoute(browser, url, lane) {
             await visitScrollableMap(page, native, '02-scroll-map-1440');
         }
         const enemies = [], options = [], collected = [];
+        let inspectedSupplies = false;
         const supplies = new Map(JSON.parse(fs.readFileSync(source, 'utf8')).cards
             .filter(card => card.role === 'supply').map(card => [card.id, card]));
         let crushed = false, choiceReload = false, battleReload = false, forkReload = false;
@@ -433,13 +546,6 @@ async function oneRoute(browser, url, lane) {
                     assert.equal(packed.supplies, save.supplies);
                     assert.equal(packed.cards.at(-1).kind, loot.id);
                     if (packed.cards.at(-1).zone === 'base') collected.push(loot.id);
-                    if (collected.length === 1) {
-                        await native.click('bag');
-                        await native.click('bag-filter-supplies');
-                        assert.equal((await native.state()).inventoryFilter, 'supplies');
-                        await image(page, 'supply-bag');
-                        await native.click('modal-close');
-                    }
                     continue;
                 }
                 assert.equal(save.rewards.cards.length, 3);
@@ -460,6 +566,14 @@ async function oneRoute(browser, url, lane) {
                 continue;
             }
             assert.equal(snap.phase, 'battle');
+            if (collected.length && !inspectedSupplies) {
+                await native.click('bag');
+                await native.click('bag-filter-supplies');
+                assert.equal((await native.state()).inventoryFilter, 'supplies');
+                await image(page, 'supply-bag');
+                await native.click('modal-close');
+                inspectedSupplies = true;
+            }
             const b = save.battle;
             assert.ok(snap.heroRig.runtimeReady && snap.enemyRig.runtimeReady);
             assert.equal(snap.heroRig.actor, 'ashen-lantern-keeper');
@@ -470,6 +584,7 @@ async function oneRoute(browser, url, lane) {
                 await native.idle();
                 assert.deepEqual(await native.save(), save);
                 if ((await native.state()).hits.some(hit => hit.id === 'map' && hit.enabled)) {
+                    await visitSettings(page, native);
                     await visitScrollableMap(page, native, '05-map-during-combat');
                 }
                 battleReload = true;
@@ -618,6 +733,25 @@ async function oneRoute(browser, url, lane) {
             await native.idle();
             assert.deepEqual(await native.save(), paid);
             report.supplyCards = { collected, exchanged: kind, balance: paid.supplies, remaining: stock };
+            const saleKind = Object.keys(stock)[0];
+            if (saleKind) {
+                const sale = supplies.get(saleKind);
+                await native.click('camp-keeper');
+                await native.click('camp-trade');
+                for (let i = 0; i < kinds.length + 2 && (await campText(page)).title !== sale.name; i++)
+                    await native.click('camp-trade-next');
+                assert.equal((await campText(page)).title, sale.name);
+                await native.click('camp-exchange');
+                const sold = await native.save();
+                assert.equal(sold.supplies, paid.supplies + sale.supplyValue);
+                assert.equal(sold.storedSupplies[saleKind] ?? 0, stock[saleKind] - 1);
+                assert.equal((await campText(page)).title, '交易完成');
+                await image(page, 'keeper-sale');
+                await page.reload();
+                await native.idle();
+                assert.deepEqual(await native.save(), sold);
+                report.keeperSale = { kind: saleKind, price: sale.supplyValue, balance: sold.supplies, reloadPreserved: true };
+            }
         }
         if (lane === 'A') {
             await native.click('camp-fire');
@@ -627,7 +761,8 @@ async function oneRoute(browser, url, lane) {
             await native.click('camp-next');
             assert.match((await campText(page)).context, /第 2 天/);
             await native.click('modal-close');
-            await native.click('camp-bench');
+            await native.click('camp-skills');
+            await native.click('camp-equipment');
             const cost = returned.settlement.treatmentCost;
             assert.ok(cost > 0);
             await native.click('camp-repair');
@@ -640,11 +775,10 @@ async function oneRoute(browser, url, lane) {
             await native.click('camp-warehouse');
             assert.match((await campText(page)).title, new RegExp(String(returned.supplies - cost)));
             await native.click('modal-close');
-            await native.click('camp-keeper');
-            await native.click('camp-depart');
+            await native.click('camp-gate');
             assert.equal((await native.state()).overlay, 'entry');
             await native.click('modal-close');
-            report.camp = { paintedHotspots: 4, keyboardActivation: true, canceledDeparturePreservedSave: true,
+            report.camp = { paintedHotspots: 5, keyboardActivation: true, canceledDeparturePreservedSave: true,
                 journalsReopened: 2, nextDeparture: true, warehouseStock: returned.supplies - cost,
                 repairChargedOnce: cost, persistedHealth: 10, viewports: ['1440x900', '1024x768'] };
             await native.depart('standard');
@@ -739,6 +873,7 @@ async function editor(browser, url) {
             await page.waitForFunction(() => document.querySelector('#save-state').textContent.startsWith('已保存'));
         };
         await page.locator('#preview-asset-note').waitFor();
+        const live = await (await page.request.get(url + '/api/cards')).json();
         assert.equal(await page.locator('#preview-art .painted-tile').count(), 0);
         await rewardLink.click();
         assert.ok(await toggles.count() > 5);
@@ -754,7 +889,6 @@ async function editor(browser, url) {
 
         await page.getByRole('link', { name: '物资卡', exact: true }).click();
         assert.match(page.url(), /\/supplies$/);
-        const live = await (await page.request.get(url + '/api/cards')).json();
         const goods = live.catalog.cards.filter(card => card.role === 'supply');
         assert.equal(await page.locator('#card-list [data-select]').count(), goods.length);
         const example = goods.find(card => card.art === 'rope' || card.art === 'battery') ?? goods[0];
@@ -894,18 +1028,26 @@ async function legacy(browser, url) {
     }
 }
 
-async function defeat(browser, url) {
-    const page = await browser.newPage({ viewport: { width: 1024, height: 768 }, reducedMotion: 'reduce' });
+async function defeat(browser, url, reviewCamp = false) {
+    const page = await browser.newPage({ viewport: reviewCamp ? { width: 1440, height: 900 } : { width: 1024, height: 768 },
+        reducedMotion: reviewCamp ? 'no-preference' : 'reduce' });
     observe(page);
     const native = input(page);
     try {
         await page.goto(url + '/play/?cards=live&seed=19&save=off');
         await native.idle();
+        if (reviewCamp) await visitCamp(page, native);
         await native.depart('standard');
+        assert.equal(await page.evaluate(() => cc.director.getScene().getComponentInChildren('GameDirector').audio.fire), null);
+        assert.ok(!(await native.state()).hits.some(hit => hit.id === 'settings'));
         const firstMap = (await native.save()).expeditionMap;
         await native.click('enter-threshold');
         const firstBattle = (await native.state()).routeMap.points.find(p => p.state === 'available' && p.icon === 'battle');
         await native.click('enter-' + firstBattle.id);
+        if (reviewCamp) {
+            await visitSettings(page, native);
+            await image(page, 'battle-navigation');
+        }
         let previous;
         for (let turn = 0; turn < 20; turn++) {
             const state = await native.save();
@@ -931,6 +1073,8 @@ async function defeat(browser, url) {
         await image(page, 'controls-zero-health');
         await native.click('journal-start');
         assert.equal((await native.save()).health, 10);
+        assert.ok(!(await native.state()).hits.some(hit => hit.id === 'settings'));
+        await page.waitForFunction(() => !!cc.director.getScene().getComponentInChildren('GameDirector').audio.fire);
         await native.depart('standard');
         const retry = await native.save();
         assert.notEqual(retry.expeditionMap.seed, firstMap.seed);
@@ -947,7 +1091,7 @@ async function main() {
     const catalog = JSON.parse(fs.readFileSync(source, 'utf8'));
     catalog.labyrinth = {
         starter: catalog.labyrinth.starter,
-        discoveryPool: ['lab_probe', 'lab_bypass', 'lab_bracelet', 'lab_calibration', 'lab_valve', 'lab_vent'],
+        discoveryPool: ['lab_probe', 'lab_bypass', 'lab_bracelet', 'lab_calibration', 'lab_valve', 'lab_vent', 'lab_damper'],
     };
     fs.writeFileSync(working, JSON.stringify(catalog, null, 2) + '\n');
     const server = createEditorServer({ catalogFile: working, backupDirectory: path.join(temporary, 'backups'), buildDirectory: process.env.CARD_EDITOR_BUILD_DIR });
@@ -958,12 +1102,16 @@ async function main() {
     try {
         browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ?? undefined,
             args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
-        report.routes = [];
-        for (const lane of ['A', 'B']) report.routes.push(await oneRoute(browser, url, lane));
-        report.legacy = await legacy(browser, url);
-        report.supplyBagCapacity = await fullSupplyBag(browser, url);
-        report.editor = await editor(browser, url);
-        report.defeat = await defeat(browser, url);
+        const campOnly = process.argv.includes('--camp');
+        report.campPurchases = await campPurchases(browser, url);
+        if (!campOnly) {
+            report.routes = [];
+            for (const lane of ['A', 'B']) report.routes.push(await oneRoute(browser, url, lane));
+            report.legacy = await legacy(browser, url);
+            report.supplyBagCapacity = await fullSupplyBag(browser, url);
+            report.editor = await editor(browser, url);
+        }
+        report.defeat = await defeat(browser, url, campOnly);
         assert.deepEqual(report.runtimeErrors, []);
         assert.deepEqual(report.consoleErrors, []);
         report.passed = true;

@@ -176,14 +176,13 @@ export class CardPresentation extends Component {
                 this.labyrinthArt?.getSpriteFrame(model.art) ??
                 this.illustrations[model.artIndex] ??
                 this.illustrations[2];
-        this.showKeywords(
-            this.compact || this.labyrinthTheme
-                ? model.keywords.filter(
-                      (word) => word === '可作为合成材料' || word === '已有搭配 · 缺此材料' ||
-                          word === '拳流派' || word === '本场临时' || word === '连击'
-                  )
-                : model.keywords
-        );
+        const keywords = model.keywords.filter((word) => {
+            if (word === '本场临时') return this.compact;
+            if (word === '拳流派' || word === '连击') return this.compact || model.tag.indexOf(word) < 0;
+            return !this.compact && !this.labyrinthTheme ||
+                word === '可作为合成材料' || word === '已有搭配 · 缺此材料';
+        });
+        this.showKeywords(keywords);
         if (separateFace) this.supplyFace!.show(model, this.artwork?.spriteFrame ?? null, blocked);
         if (this.typeLabel) this.typeLabel.node.active = !separateFace && !this.compact;
         if (this.weightLabel) this.weightLabel.node.active = !this.compact && !!model.weight;

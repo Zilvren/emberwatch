@@ -33,11 +33,24 @@ function beforeRewardMigration<T extends { id: string; reward: boolean }>(cards:
     return cards.map(card => card.reward && promotedRewardIds.has(card.id) ? { ...card, reward: false } : card);
 }
 
+// These five atlas corrections changed card art in already-signed catalogs.
+const fistArtChanges: Record<string, { from: string; to: string }> = {
+    fist_uppercut: { from: 'heavy', to: 'attack' },
+    fist_parry: { from: 'dodge', to: 'evade' },
+    fist_straight_three: { from: 'heavy', to: 'attack' },
+    fist_straight_four: { from: 'heavy', to: 'attack' },
+    fist_stance: { from: 'dodge', to: 'attack' },
+};
+
 /** Platform adapter. Storage writes are atomic per key; the previous valid save is retained. */
 export class SaveRepository implements RunPersistence {
     readonly content = createCardSet();
     // Face summaries are presentation text. Keep old catalog signatures stable.
     private readonly signedCards = this.content.catalog.cards.map(({ summary, ...card }) => card);
+    private readonly signedCardVersions = [this.signedCards, this.signedCards.map(card => {
+        const change = fistArtChanges[card.id];
+        return change?.to === card.art ? { ...card, art: change.from } : card;
+    })];
     private readonly runDeckCards = this.signedCards.filter((card) => !card.chapter);
     private readonly legacyCards = this.runDeckCards.filter((card) => !card.fist);
     private readonly previousCards = this.legacyCards.filter((card) => !card.synthesisOnly);
@@ -58,7 +71,8 @@ export class SaveRepository implements RunPersistence {
         : [];
     private readonly previousRunDeckHash = this.runDeckHash(this.previousCards, this.previousRecipes);
     private readonly preFistRunDeckHash = this.runDeckHash(this.legacyCards);
-    private readonly preRewardMigrationRunDeckHash = this.runDeckHash(beforeRewardMigration(this.runDeckCards));
+    private readonly preRewardMigrationRunDeckHashes = this.signedCardVersions.map(cards =>
+        this.runDeckHash(beforeRewardMigration(cards.filter(card => !card.chapter))));
     private readonly upstreamHash = this.runDeckHash(
         this.previousCards.filter((card) => !tideCards.has(card.id)), this.previousRecipes
     );
@@ -74,12 +88,11 @@ export class SaveRepository implements RunPersistence {
         const { version, fixedReward } = this.content.catalog;
         return hash(JSON.stringify({ version, fixedReward, cards, recipes }));
     }
-    private catalogHash(scenario: GameScenario, state: GameState, chapterOnly = false): string {
-        if (scenario.runDeck) return this.runDeckHash();
+    private catalogHash(scenario: GameScenario, state: GameState, cards = this.signedCards, chapterOnly = false): string {
+        if (scenario.runDeck) return this.runDeckHash(cards.filter(card => !card.chapter));
         if (!scenario.labyrinth) return this.fieldHash();
         // The save already carries the active discovery pool and the candidates on screen.
         const { version, labyrinth } = this.content.catalog;
-        const cards = this.signedCards;
         // Unrelated loot, prices and drop rates can be edited while a campaign is saved.
         // Protect the identities in this save and the weights that its bag was packed with.
         const carried = new Map(state.cards.map(card => [card.kind, card.packedWeight ?? this.content.cards[card.kind]?.weight]));
@@ -106,7 +119,9 @@ export class SaveRepository implements RunPersistence {
         readonly key = 'the-end.run.v1'
     ) {}
     private matchesCatalog(catalogHash: string, scenario: GameScenario, state: GameState): boolean {
-        if (catalogHash === this.catalogHash(scenario, state)) return true;
+        const matches = (chapterOnly = false) => this.signedCardVersions.some(cards =>
+            catalogHash === this.catalogHash(scenario, state, cards, chapterOnly));
+        if (matches()) return true;
         if (scenario.labyrinth) {
             // The prior upstream signature covered chapter cards and the same
             // run-specific supply/fist fields. That format could not carry
@@ -118,10 +133,10 @@ export class SaveRepository implements RunPersistence {
             return !(state.discoveryPool ?? []).some(migrated) &&
                 !state.cards.some(card => migrated(card.kind)) &&
                 !(state.rewards?.cards ?? []).some(migrated) &&
-                catalogHash === this.catalogHash(scenario, state, true);
+                matches(true);
         }
         if (scenario.runDeck) {
-            if (catalogHash === this.preRewardMigrationRunDeckHash) return true;
+            if (this.preRewardMigrationRunDeckHashes.indexOf(catalogHash) >= 0) return true;
             if (catalogHash === this.preFistRunDeckHash && !state.fistUnlocks &&
                 !state.cards?.some((card) => this.content.cards[card.kind]?.fist) &&
                 !state.rewards?.cards?.some((kind) => this.content.cards[kind]?.fist))

@@ -14,6 +14,7 @@ import { RecipePanel } from './RecipePanel';
 import { rulesNotice } from './RulesNoticeModel';
 import { campDetail, isCampStation } from './CampViewModel';
 import { CampStationPanel } from './CampStationPanel';
+import { CampSkillTree } from './CampSkillTree';
 import { BattlePilePanel } from '../cards/BattlePilePanel';
 import { isCardPile } from '../cards/BattlePileModel';
 /** Overlay projection only; input decisions are owned by UiActionRouter. */
@@ -36,10 +37,15 @@ export class PopupPresenter {
         if (key === 'settings') this.view.button(this.popups.settings, 'audio', this.isMuted() ? '声音关' : '声音开');
         if (key === 'battle-pile' && isCardPile(this.ui.overlay))
             this.popups[key].getComponentInChildren(BattlePilePanel)?.render(g, this.ui.overlay, this.ui.pilePage, this.ui.pileSelection);
-        if (key === 'camp-station' && isCampStation(this.ui.overlay))
-            this.popups[key].getComponentInChildren(CampStationPanel)?.render(
-                campDetail(g, this.ui.overlay, this.ui.campJournalPage, this.ui.warehouseKind)
-            );
+        if (key === 'camp-station' && isCampStation(this.ui.overlay)) {
+            const sheet = this.popups[key].getComponentInChildren(CampStationPanel)!;
+            const tree = this.popups[key].getComponentInChildren(CampSkillTree)!;
+            tree.node.active = this.ui.overlay === 'camp-skills';
+            sheet.node.active = !tree.node.active;
+            if (this.ui.overlay === 'camp-skills') tree.render(g, this.ui.campSkill);
+            else sheet.render(campDetail(g, this.ui.overlay, this.ui),
+                this.ui.overlay === 'camp-fire' ? this.isMuted() : undefined);
+        }
         if (key === 'inventory') {
             const popup = this.popups.inventory,
                 max = Math.max(0, Math.ceil(g.cards.length / 6) - 1);
@@ -102,6 +108,7 @@ export class PopupPresenter {
                 body =
                     '累计天数、关键日志和当前探索进度将重置。\n初始物资、血量和卡牌恢复，随机内容重新生成。' +
                     (g.scenario.runDeck || g.scenario.labyrinth ? '\n仓库里的物资卡也会清空。' : '') +
+                    (g.campSkills?.length ? '\n已学会的营地技能也会清空。' : '') +
                     rulesNotice(
                         g.scenario.ruleset,
                         this.newGameRuleset(),

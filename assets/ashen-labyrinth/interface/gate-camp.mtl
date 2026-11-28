@@ -1,0 +1,20 @@
+{
+  "__type__": "cc.Material",
+  "_name": "GateCamp",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "50c7451b-c530-4684-924b-aadf49cb85ea",
+    "__expectedType__": "cc.EffectAsset"
+  },
+  "_techIdx": 0,
+  "_defines": [],
+  "_props": [
+    {
+      "lightMask": {
+        "__uuid__": "e6eb7a29-bd89-432e-8fd6-d5eeff4659f8@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      }
+    }
+  ]
+}

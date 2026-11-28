@@ -10,13 +10,18 @@ export class CampStationPanel extends Component {
     @property(Label) body: Label | null = null;
     @property(ButtonAction) primary: ButtonAction | null = null;
     @property(ButtonAction) secondary: ButtonAction | null = null;
+    @property(ButtonAction) sound: ButtonAction | null = null;
 
-    render(detail: CampDetail): void {
+    render(detail: CampDetail, fireMuted?: boolean): void {
         if (this.context) this.context.string = detail.context;
         if (this.title) this.title.string = detail.title;
         if (this.body) this.body.string = detail.body;
         this.show(this.primary, detail.primary ?? detail.secondary);
         this.show(this.secondary, detail.primary ? detail.secondary : undefined);
+        if (this.sound) {
+            this.sound.node.active = fireMuted !== undefined;
+            this.sound.setText(fireMuted ? '声音关闭' : '声音开启');
+        }
     }
 
     private show(button: ButtonAction | null, action: CampDetail['primary']): void {

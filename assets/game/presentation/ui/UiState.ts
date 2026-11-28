@@ -34,6 +34,10 @@ export interface UiState {
     entryTier: 'emergency' | 'low' | 'standard' | 'high';
     campJournalPage: number;
     warehouseKind: string;
+    campSkill: string;
+    campTopic: number;
+    tradeLot: string;
+    tradeReceipt: string;
     settingsReturn: boolean;
     pilePage: number;
     pileSelection: number;
@@ -60,6 +64,10 @@ export function initialUiState(): UiState {
         entryTier: 'standard',
         campJournalPage: 0,
         warehouseKind: '',
+        campSkill: 'footing',
+        campTopic: 0,
+        tradeLot: '',
+        tradeReceipt: '',
         settingsReturn: false,
         pilePage: 0,
         pileSelection: -1,

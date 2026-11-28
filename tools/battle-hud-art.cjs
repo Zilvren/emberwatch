@@ -146,11 +146,12 @@ function armor(g, player) {
 function paintedPile(g, name, art) {
     const pile = named(g,name), stack = child(g,pile,'CanvasDeck');
     const side = name === 'drawPile' ? 1 : -1;
-    place(g,stack,0,4,124,122);
-    const rear = sprite(g,stack,'RearLeaf',art,-18*side,-4,78,115);
-    const middle = sprite(g,stack,'MiddleLeaf',art,-7*side,0,80,117);
-    const front = sprite(g,stack,'Painted'+(side===1 ? 'Draw' : 'Discard')+'Cover',art,7*side,1,82,120);
-    for (const [id,angle,tint] of [[rear,22,'a49bad'],[middle,8,'c9bfca'],[front,-9,'ffffff']]) {
+    place(g,pile,-654*side,-368,110,132);
+    place(g,stack,0,8,76,100);
+    const rear = sprite(g,stack,'RearLeaf',art,-6*side,5,60,88);
+    const middle = sprite(g,stack,'MiddleLeaf',art,-3*side,2.5,61,90);
+    const front = sprite(g,stack,'Painted'+(side===1 ? 'Draw' : 'Discard')+'Cover',art,side,0,62,91);
+    for (const [id,angle,tint] of [[rear,-2,'afa7ad'],[middle,-4.5,'d7cfd0'],[front,-7,'ffffff']]) {
         const radians = angle * side * Math.PI / 180;
         g.graph[id]._euler = N.vec(0,0,angle*side);
         g.graph[id]._lrot = {__type__:'cc.Quat',x:0,y:0,z:Math.sin(radians/2),w:Math.cos(radians/2)};
@@ -161,20 +162,31 @@ function paintedPile(g, name, art) {
         painted:N.ref(g.graph.indexOf(component(g,front,'cc.Sprite'))),middleLeaf:N.ref(middle),rearLeaf:N.ref(rear),
     });
     const counter = child(g,pile,name+'-text0');
-    const badge = sprite(g,pile,name+'CountSeal','stamina-seal',side*32,-31,44,44);
-    component(g,badge,'cc.Sprite')._color=N.color(side===1?'d9d5c4':'d6bbc3');
-    before(g,pile,badge,counter);
-    place(g,counter,side*32,-31,39,32);
-    face(g,counter,24);
+    place(g,counter,-3*side,-24,46,26);
+    face(g,counter,22);
     const title = child(g,pile,name+'-text1');
-    place(g,title,0,-67,120,28);
-    face(g,title,18);
+    place(g,title,0,-53,80,24);
+    face(g,title,17);
     g.graph[title]._active=true;
 }
-function battle(g) {
+function paintedIntent(g) {
     const intent = named(g,'EnemyIntent');
     for (const owner of [intent,child(g,intent,'IntentDetail')])
         for (const type of ['cc.Graphics',N.script('PaperPanel')]) component(g,owner,type)._enabled=false;
+    Object.assign(component(g,intent,'cc.UITransform')._contentSize, {width:90,height:48});
+    const amount = child(g,intent,'battle-text0');
+    place(g,amount,35,0,45,42);
+    face(g,amount,27,'ffd6ae');
+    Object.assign(component(g,amount,'cc.Label'), {_horizontalAlign:0,_string:'1'});
+    const value = component(g,amount,N.script('UIValue'));
+    value.normalColor = N.color('f5e4ce');
+    value.alertColor = N.color('ffd6ae');
+    sprite(g,amount,'AttackGlyph','intent-attack',-49,0,42,42);
+    sprite(g,amount,'PrepareGlyph','intent-prepare',-47,0,42,42);
+    sprite(g,amount,'DelayGlyph','intent-delay',-47,0,38,38);
+}
+function battle(g) {
+    paintedIntent(g);
     for (const key of ['battle-text9','battle-text10']) {
         const old = named(g,key);
         g.graph[old]._active=false;
